@@ -1,0 +1,10 @@
+{
+    "name": "MyApp",
+    "version": "1.0.0",
+    "description": "MyApp",
+    "main": "index.js",
+    "background-color": "#ffffff",
+    "display": "standalone",
+    "orientation": "portrait",
+    "icons": [        ]
+}
