@@ -1,5 +1,7 @@
 import logo from "./assets/images/logo.svg";
 import React from "react";
+import Navbar from "./components/Navbar";
+import Header from "./components/Header";
 
 const styles = `
 .App {
@@ -60,6 +62,7 @@ function App(props) {
         </a>
       </header>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
+      <Header/>
     </div>
   );
 }
