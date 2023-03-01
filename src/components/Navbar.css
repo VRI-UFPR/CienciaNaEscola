@@ -1,9 +1,0 @@
-.navbar {
-  display: flex;
-  flex-direction: column;
-  width: 72px;
-  height: 45px;
-  color:#F59489;
-  position: relative;
-  cursor: pointer;
-  }
