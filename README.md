@@ -8,5 +8,5 @@
 
 #### Then just run the following ones:
 
-- 'npm install react'
+- 'npm install'
 - 'npm start'
