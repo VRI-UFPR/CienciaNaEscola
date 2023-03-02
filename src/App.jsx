@@ -3,6 +3,7 @@ import React from "react";
 import SplashPage from "./pages/SplashPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
+import InfoGerais from "./components/InfoGerais";
 
 const styles = `
 .App {
@@ -68,6 +69,7 @@ function App(props) {
                 />
                 <Route path="/splash" element={<SplashPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/info" element={<InfoGerais />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </BrowserRouter>
