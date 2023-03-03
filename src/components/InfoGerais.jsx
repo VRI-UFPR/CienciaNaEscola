@@ -14,7 +14,6 @@ const styles=
     }
 
     #form-label{
-        font-family: 'Filson Pro', sans-serif;
         font-weight: 700;
         font-size: 27px;
         color: #535353;
@@ -35,12 +34,12 @@ const styles=
 
 function InfoGerais(props){
     return (
-        <div className="BlocoInfoGerais">
+        <div className="BlocoInfoGerais shadow">
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row pb-4">
                     <div className="rounded p-4">
                         <div className="mb-1">
-                            <label for="infogerais" class="control-label" id="form-label mb-0">
+                            <label for="infogerais" class="control-label" id="form-label">
                             Informações Gerais:
                             </label>
                             <input type="text" name="infogerais" class="form-control" id="infogerais" placeholder="Adicionar descrição"/>
