@@ -2,6 +2,7 @@ import logo from "./assets/images/logo.svg";
 import React from "react";
 import SplashPage from "./pages/SplashPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -68,6 +69,7 @@ function App(props) {
                     }
                 />
                 <Route path="/splash" element={<SplashPage />} />
+                <Route path="/terms" element={<TermsPage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
             </Routes>
