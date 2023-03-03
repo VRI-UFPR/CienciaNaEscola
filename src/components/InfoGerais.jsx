@@ -1,31 +1,24 @@
 import React from "react";
 
 
-const styles= `
+const styles= 
+`
     .BlocoInfoGerais{
-        border-radius: 50px;
-        width: 400px;
+        border-top: 12px solid #F59489;
+        border-radius: 9px;
+        width: 624px;
         height: 150px;
-        border: 1px solid white;
+        border-left: 1px solid grey;
+        border-right: 1px solid grey;
+        border-bottom: 1px solid grey;
     }
 
-    .bg-orange {
-        background-color: #FF9551;
-    }
-
-    .border-cell{
-        height: 12px;
-    }
-
-    .form-label{
-        font-weight: 400;
+    #form-label{
+        font-family: 'Filson Pro', sans-serif;
+        font-weight: 700;
         font-size: 27px;
-        line-height: 38px;
         color: #535353;
-    }
-
-    .font-barlow {
-        font-family: 'Barlow', sans-serif;
+        line-height: 38px;
     }
 
     #infogerais{
@@ -43,9 +36,6 @@ const styles= `
 function InfoGerais(props){
     return (
         <div className="BlocoInfoGerais">
-            <div className="row w-100 p-0 m-0">
-                <div className="col border-cell bg-orange"></div>
-            </div>
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row pb-4">
                     <div className="rounded p-4">
@@ -58,7 +48,7 @@ function InfoGerais(props){
                     </div>
                 </div>
             </form>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style dangerouslySetInnerHTML={{ __html: styles }}/>
         </div>
     );
 }
