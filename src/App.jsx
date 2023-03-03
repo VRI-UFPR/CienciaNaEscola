@@ -2,6 +2,7 @@ import logo from "./assets/images/logo.svg";
 import React from "react";
 import SplashPage from "./pages/SplashPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
 
 const styles = `
@@ -67,6 +68,7 @@ function App(props) {
                     }
                 />
                 <Route path="/splash" element={<SplashPage />} />
+                <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
