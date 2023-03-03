@@ -40,7 +40,7 @@ function InfoGerais(props){
                     <div className="rounded p-4">
                         <div className="mb-1">
                             <label for="infogerais" class="control-label" id="form-label">
-                            Informações Gerais:
+                            Informações gerais:
                             </label>
                             <input type="text" name="infogerais" class="form-control" id="infogerais" placeholder="Adicionar descrição"/>
                         </div>
