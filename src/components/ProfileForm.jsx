@@ -41,81 +41,46 @@ function ProfileForm(props) {
 			<div className="row pb-4">
 				<div className="rounded p-4 bg-pastel-blue">
 					<div className="mb-1">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="nameinput" className="form-label mb-0">
 							Nome:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="nameinput"></input>
 					</div>
 					<div className="mb-1">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="emailinput" className="form-label mb-0">
 							E-mail:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="emailinput"></input>
 					</div>
 					<div className="mb-1">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="locationinput" className="form-label mb-0">
 							Cidade/país:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="locationinput"></input>
 					</div>
 					<div className="mb-1">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="institutioninput" className="form-label mb-0">
 							Instituição:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="institutioninput"></input>
 					</div>
 					<div className="mb-1">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="codeinput" className="form-label mb-0">
 							Código INEP:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="codeinput"></input>
 					</div>
 					<div className="mb-1">
-						<label for="exampleInputEmail1" className="form-label mb-0">
+						<label for="roleinput" className="form-label mb-0">
 							Papel:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="roleinput"></input>
 					</div>
 					<div className="mb-4">
-						<label labelfor="exampleInputEmail1" className="form-label mb-0">
+						<label labelfor="logininput" className="form-label mb-0">
 							Login:
 						</label>
-						<input
-							type="email"
-							className="form-control shadow-sm rounded-pill"
-							id="exampleInputEmail1"
-							aria-describedby="emailHelp"
-						></input>
+						<input type="text" className="form-control shadow-sm rounded-pill" id="logininput"></input>
 					</div>
 				</div>
 			</div>
