@@ -26,12 +26,16 @@ const styles = `
 	.btn:hover{
   		background-color: #000000 !important;
 	}
+
+	.buttons-row{
+		max-width: 100px;
+	}
 }
 `;
 
 function FormInputButtons(props) {
 	return (
-		<div className="row m-0">
+		<div className="row m-0 buttons-row">
 			<div className="col d-flex ps-1 p-0 align-items-start">
 				<button type="button" class="btn rounded-circle bg-gray w-100">
 					<img src={configButton} alt="Ícone" className="w-100"></img>

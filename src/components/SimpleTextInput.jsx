@@ -30,7 +30,7 @@ function SimpleTextInput(props) {
 						Qual a temperatura no momento?
 					</label>
 				</div>
-				<div className="col-3 ps-3 p-0">
+				<div className="col-3 d-flex justify-content-end ps-3 p-0">
 					<FormInputButtons />
 				</div>
 			</div>
