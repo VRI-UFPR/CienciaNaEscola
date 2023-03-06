@@ -6,6 +6,7 @@ import copyButton from "../assets/images/copyButton.svg";
 const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
+		border-color
     }
 
     .bg-gray {
@@ -21,6 +22,11 @@ const styles = `
         min-height: 0px;
         line-height: 0px;
     }
+
+	.btn:hover{
+  		background-color: #000000 !important;
+	}
+}
 `;
 
 function FormInputButtons(props) {
