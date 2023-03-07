@@ -6,6 +6,8 @@ import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
 import RadioButtonInput from "./components/RadioButtonInput";
+import SimpleTextInput from "./components/SimpleTextInput";
+import InfoGerais from "./components/InfoGerais";
 
 const styles = `
 .App {
@@ -49,35 +51,37 @@ const styles = `
 `;
 
 function App(props) {
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route
-					path="/"
-					element={
-						<div className="App">
-							<header className="App-header">
-								<img src={logo} className="App-logo" alt="logo" />
-								<p>
-									Edit <code>src/App.js</code> and save to reload.
-								</p>
-								<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-									Learn React
-								</a>
-							</header>
-							<style dangerouslySetInnerHTML={{ __html: styles }} />
-						</div>
-					}
-				/>
-				<Route path="/splash" element={<SplashPage />} />
-				<Route path="/terms" element={<TermsPage />} />
-				<Route path="/endprotocol" element={<EndProtocolPage />} />
-				<Route path="/profile" element={<ProfilePage />} />
-				<Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
-			</Routes>
-			<style dangerouslySetInnerHTML={{ __html: styles }} />
-		</BrowserRouter>
-	);
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <div className="App">
+                            <header className="App-header">
+                                <img src={logo} className="App-logo" alt="logo" />
+                                <p>
+                                    Edit <code>src/App.js</code> and save to reload.
+                                </p>
+                                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+                                    Learn React
+                                </a>
+                            </header>
+                            <style dangerouslySetInnerHTML={{ __html: styles }} />
+                        </div>
+                    }
+                />
+                <Route path="/splash" element={<SplashPage />} />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/endprotocol" element={<EndProtocolPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/simpletext" element={<SimpleTextInput />} />
+                <Route path="/info" element={<InfoGerais />} />
+                <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
+            </Routes>
+            <style dangerouslySetInnerHTML={{ __html: styles }} />
+        </BrowserRouter>
+    );
 }
 
 export default App;
