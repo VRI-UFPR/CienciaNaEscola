@@ -36,7 +36,7 @@ function RadioButtonInput({ options = [] }) {
 
 				return (
 					<div className="form-check ms-2 mb-2">
-						<input className="form-check-input" type="radio" name={optname + "option"} id={optname + "input"}></input>
+						<input className="form-check-input" type="radio" name="radiooptions" id={optname + "input"}></input>
 						<label className="form-check-label font-barlow" for={optname + "input"}>
 							{option}
 						</label>
