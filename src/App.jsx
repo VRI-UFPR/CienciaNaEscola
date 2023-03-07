@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
+import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
 
@@ -76,6 +77,7 @@ function App(props) {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/info" element={<InfoGerais />} />
+                <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </BrowserRouter>
