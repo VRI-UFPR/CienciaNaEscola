@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
+import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
 
 const styles = `
@@ -73,6 +74,7 @@ function App(props) {
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/info" element={<InfoGerais />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
