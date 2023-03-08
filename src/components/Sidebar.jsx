@@ -1,81 +1,86 @@
 import React from "react";
 import BuscarImg from "../assets/images/BuscarImg.svg";
+import PerfilImg from "../assets/images/PerfilImg.png";
+import Arrow from "../assets/images/SidebarArrow.svg";
 
 const styles = `
-    .sidebar-wrapper {
-        align-items: center;
-    }
-    .sidebar-perfil-image {
-        width: 100px;
-        height: 100px;
-        margin: 25px 0px;
+    .perfil-img {
         background-color: #FFFFFF;
         border-radius: 50%;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
     }
-    .sidebar-novo-button {
+    .btn {
         width: 80%;
         height: 45px;
-        margin: 0px 0px 5px 0px;
         border-radius: 8px;
         border: none;
-        box-shadow: 0px 1px #000000;
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+        transition-duration: 0.3s;
+    }
+    .fst-btn {
         background-color: #AAD390;
         color: #FFFFFF;
         font-size: 24px;
+        font-weight: 700;
     }
-    .sidebar-buscar-button {
-        width: 80%;
-        height: 45px;
-        margin: 5px 0px;
-        border-radius: 8px;
-        border: none;
-        box-shadow: 0px 1px #000000;
+    .snd-btn {
         background-color: #FFFFFF;
         color: #000000;
         font-size: 20px;
-    }
-    .sidebar-menu-wrapper {
-        display: flex;
-        align-items: start;
+        font-weight: 500;
     }
     .sidebar-titles {
+        align-items: start;
+        margin-top: 15px;
+        margin-left: 20px;
         color: #FFFFFF;
         opacity: 0.8;
-        margin-top: 15px;
-        margin-left: 18px;
-        align-items: start;
+        font-family: 'Century Gothic', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
     }
     .sidebar-list-items {
         text-decoration: none;
+        margin-left: 40px;
         color: #FFFFFF;
-        margin-left: 30px;
+        font-family: 'Barlow', sans-serif;
+        font-weight: 500;
     }
     .left-arrow {
-      width: 10px;
-      height: 10px;
-      align-itens: end;
-      background-color: #FFFFFF;
-      bottom: 10px;
-      position: fixed;
+        width: 32px;
+        height: 32px;
+        bottom: 10px;
+        left: 40%;
+        position: fixed;
+    }
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
+    }
+    .font-gothic {
+        font-family: 'Century Gothic', sans-serif;
     }
 `;
 
 function Sidebar(props) {
   return (
-    <div className="d-flex flex-column">
-      <div className="sidebar-wrapper d-flex flex-column">
-        <div className="sidebar-perfil-image d-flex"></div>
-        <button className="sidebar-novo-button btn" type="button">
+    <div className="sidebar-wrapper d-flex flex-column">
+      <div className="d-flex flex-column align-items-center">
+        <img
+          className="perfil-img my-4"
+          src={PerfilImg}
+          alt="Perfil"
+          style={{ width: "100px", height: "100px" }}
+        />
+        <button className="btn fst-btn font-gothic my-1" type="button">
           Novo
         </button>
-        <button className="sidebar-buscar-button d-flex flex-row btn">
+        <button className="btn snd-btn d-flex flex-row my-2">
           <img
             src={BuscarImg}
             alt="logo"
             style={{ width: "35px", paddingRight: "7px", paddingTop: "3px" }}
           />
-          <p>Buscar</p>
+          <p className="font-barlow">Buscar</p>
         </button>
       </div>
       <div className="sidebar-menu-wrapper d-flex flex-column">
@@ -99,7 +104,13 @@ function Sidebar(props) {
           Logout
         </a>
       </div>
-      <div className="left-arrow"></div>
+      <button
+        type="button"
+        data-bs-dismiss="offcanvas"
+        style={{ width: "0px", height: "0px", padding: "0px", border: "none" }}
+      >
+        <img src={Arrow} alt="" className="left-arrow" />
+      </button>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
     </div>
   );
