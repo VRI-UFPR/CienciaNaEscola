@@ -1,6 +1,5 @@
 import React from "react";
 import iconDate from "../assets/images/iconDate.svg";
-import FormInputButtons from "./FormInputButtons";
 
 const styles = `
     .font-barlow {
