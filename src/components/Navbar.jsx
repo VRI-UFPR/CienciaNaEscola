@@ -35,6 +35,10 @@ const styles = `
     .navbar {
         background-color: #4E9BB9;
     }
+
+    .offcanvas {
+        background-color: #F59489;
+  }
 `;
 
 function NavBar(props) {
@@ -82,12 +86,7 @@ function NavBar(props) {
                 </div>
             </nav>
 
-            <div
-                className="offcanvas offcanvas-start w-50"
-                tabindex="-1"
-                id="offcanvasExample"
-                aria-labelledby="offcanvasExampleLabel"
-            >
+            <div className="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                 <Sidebar />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
