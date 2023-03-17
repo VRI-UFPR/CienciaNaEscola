@@ -1,6 +1,7 @@
 import logo from "./assets/images/logo.svg";
 import React from "react";
 import SplashPage from "./pages/SplashPage";
+import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
@@ -9,6 +10,7 @@ import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
 import DateInput from "./components/DateInput";
+import TimeInput from "./components/TimeInput";
 
 const styles = `
 .App {
@@ -72,6 +74,7 @@ function App(props) {
 						</div>
 					}
 				/>
+        <Route path="/navbar" element={<Navbar />} />
 				<Route path="/splash" element={<SplashPage />} />
 				<Route path="/terms" element={<TermsPage />} />
 				<Route path="/endprotocol" element={<EndProtocolPage />} />
@@ -79,6 +82,7 @@ function App(props) {
 				<Route path="/simpletext" element={<SimpleTextInput />} />
 				<Route path="/info" element={<InfoGerais />} />
 				<Route path="/date" element={<DateInput />} />
+				<Route path="/time" element={<TimeInput />} />
 				<Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
 			</Routes>
 			<style dangerouslySetInnerHTML={{ __html: styles }} />
