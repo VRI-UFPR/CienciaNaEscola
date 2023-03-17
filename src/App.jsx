@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
+import DateInput from "./components/DateInput";
 import TimeInput from "./components/TimeInput";
 
 const styles = `
@@ -78,9 +79,10 @@ function App(props) {
 				<Route path="/terms" element={<TermsPage />} />
 				<Route path="/endprotocol" element={<EndProtocolPage />} />
 				<Route path="/profile" element={<ProfilePage />} />
-				<Route path="/time" element={<TimeInput />} />
 				<Route path="/simpletext" element={<SimpleTextInput />} />
 				<Route path="/info" element={<InfoGerais />} />
+				<Route path="/date" element={<DateInput />} />
+				<Route path="/time" element={<TimeInput />} />
 				<Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
 			</Routes>
 			<style dangerouslySetInnerHTML={{ __html: styles }} />
