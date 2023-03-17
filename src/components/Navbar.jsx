@@ -42,56 +42,56 @@ const styles = `
 `;
 
 function NavBar(props) {
-	return (
-		<div>
-			<nav className="navbar navbar-expand-sm navbar-light pt-0 d-flex flex-column">
-				<div className="container-fluid d-flex py-2 pt-3 px-0 mx-0">
-					<div className="row justify-content-between align-items-center px-1 mx-4 w-100">
-						<div className="col-2 d-flex p-0">
-							<img
-								alt=""
-								src={iconCE}
-								width="95%"
-								style={{
-									maxWidth: "100px",
-								}}
-							></img>
-						</div>
-						<div className="col-7 d-flex justify-content-center p-0">
-							<img
-								alt=""
-								src={titleCE}
-								width="100%"
-								style={{
-									maxWidth: "300px",
-								}}
-							></img>
-						</div>
-						<div className="col-2 p-0 d-flex justify-content-end">
-							<button
-								className="btn p-0 pt-1 shadow-none"
-								type="button"
-								data-bs-toggle="offcanvas"
-								data-bs-target="#offcanvasExample"
-								aria-controls="offcanvasExample"
-								style={{
-									maxWidth: "50px",
-									width: "80%",
-								}}
-							>
-								<img src={navToggler} width="100%" alt=""></img>
-							</button>
-						</div>
-					</div>
-				</div>
-			</nav>
+    return (
+        <div>
+            <nav className="navbar navbar-expand-sm navbar-light pt-0 d-flex flex-column">
+                <div className="container-fluid d-flex py-2 pt-3 px-0 mx-0">
+                    <div className="row justify-content-between align-items-center px-1 mx-4 w-100">
+                        <div className="col-2 d-flex p-0">
+                            <img
+                                alt=""
+                                src={iconCE}
+                                width="95%"
+                                style={{
+                                    maxWidth: "100px",
+                                }}
+                            ></img>
+                        </div>
+                        <div className="col-7 d-flex justify-content-center p-0">
+                            <img
+                                alt=""
+                                src={titleCE}
+                                width="100%"
+                                style={{
+                                    maxWidth: "300px",
+                                }}
+                            ></img>
+                        </div>
+                        <div className="col-2 p-0 d-flex justify-content-end">
+                            <button
+                                className="btn p-0 pt-1 shadow-none"
+                                type="button"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasExample"
+                                aria-controls="offcanvasExample"
+                                style={{
+                                    maxWidth: "50px",
+                                    width: "80%",
+                                }}
+                            >
+                                <img src={navToggler} width="100%" alt=""></img>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
 
-			<div className="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-				<Sidebar />
-			</div>
-			<style dangerouslySetInnerHTML={{ __html: styles }} />
-		</div>
-	);
+            <div className="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <Sidebar />
+            </div>
+            <style dangerouslySetInnerHTML={{ __html: styles }} />
+        </div>
+    );
 }
 
 export default NavBar;
