@@ -1,8 +1,8 @@
-import React from "react";
-import iconCE from "../assets/images/logo.svg";
-import titleCE from "../assets/images/logo.svg";
-import navToggler from "../assets/images/logo.svg";
-import Sidebar from "../components/Sidebar";
+import React from 'react';
+import iconCE from '../assets/images/logo.svg';
+import titleCE from '../assets/images/logo.svg';
+import navToggler from '../assets/images/logo.svg';
+import Sidebar from '../components/Sidebar';
 
 const styles = `
     .bg-coral-red {
@@ -53,7 +53,7 @@ function NavBar(props) {
                                 src={iconCE}
                                 width="95%"
                                 style={{
-                                    maxWidth: "100px",
+                                    maxWidth: '100px',
                                 }}
                             ></img>
                         </div>
@@ -63,7 +63,7 @@ function NavBar(props) {
                                 src={titleCE}
                                 width="100%"
                                 style={{
-                                    maxWidth: "300px",
+                                    maxWidth: '300px',
                                 }}
                             ></img>
                         </div>
@@ -75,8 +75,8 @@ function NavBar(props) {
                                 data-bs-target="#offcanvasExample"
                                 aria-controls="offcanvasExample"
                                 style={{
-                                    maxWidth: "50px",
-                                    width: "80%",
+                                    maxWidth: '50px',
+                                    width: '80%',
                                 }}
                             >
                                 <img src={navToggler} width="100%" alt=""></img>
@@ -89,7 +89,11 @@ function NavBar(props) {
             <div className="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                 <Sidebar />
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }

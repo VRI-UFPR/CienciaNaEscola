@@ -1,7 +1,7 @@
-import React from "react";
-import logoPicceCircular from "../assets/images/logoPicceCircular.svg";
-import logoPicceTextual from "../assets/images/logoPicceTextual.svg";
-import ColoredBorder from "../components/ColoredBorder";
+import React from 'react';
+import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
+import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
+import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .bg-coral-red {
@@ -49,7 +49,7 @@ function SplashPage(props) {
                                 src={logoPicceCircular}
                                 className="w-75"
                                 style={{
-                                    maxWidth: "250px",
+                                    maxWidth: '250px',
                                 }}
                                 alt="Logo Picce"
                             ></img>
@@ -58,8 +58,8 @@ function SplashPage(props) {
                             <div
                                 className="spinner-border text-secondary"
                                 style={{
-                                    width: "50px",
-                                    height: "50px",
+                                    width: '50px',
+                                    height: '50px',
                                 }}
                                 role="status"
                             >
@@ -72,15 +72,19 @@ function SplashPage(props) {
                     <img
                         src={logoPicceTextual}
                         style={{
-                            width: "35%",
-                            maxWidth: "200px",
+                            width: '35%',
+                            maxWidth: '200px',
                         }}
                         alt="Logo Picce"
                     ></img>
                 </div>
                 <ColoredBorder />
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }
