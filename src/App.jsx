@@ -1,6 +1,7 @@
 import logo from "./assets/images/logo.svg";
 import React from "react";
 import SplashPage from "./pages/SplashPage";
+import HomePage from "./pages/HomePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const styles = `
@@ -66,6 +67,7 @@ function App(props) {
                     }
                 />
                 <Route path="/splash" element={<SplashPage />} />
+                <Route path="/home" element={<HomePage />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </BrowserRouter>
