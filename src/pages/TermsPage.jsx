@@ -1,6 +1,6 @@
-import React from "react";
-import helpButton from "../assets/images/helpButton.svg";
-import NavBar from "../components/Navbar";
+import React from 'react';
+import helpButton from '../assets/images/helpButton.svg';
+import NavBar from '../components/Navbar';
 
 const styles = `
     .bg-coral-red {
@@ -73,17 +73,16 @@ function TermsPage(props) {
                 <div className="row d-flex py-4 px-1">
                     <h1 className="pb-2 font-century-gothic">Termos de uso</h1>
                     <h2>
-                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                        nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum
-                        dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia
-                        deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod
-                        tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem
-                        ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat
-                        cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor
-                        sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim
-                        ad minim veniam, quis nostrum exercitationem ullam corporis.
+                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
+                        commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem
+                        ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+                        enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
+                        consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+                        sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum
+                        dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad
+                        minim veniam, quis nostrum exercitationem ullam corporis.
                     </h2>
                 </div>
                 <div className="row pt-0 pb-4 mx-0 px-2 d-flex flex-grow-1 align-items-end">
@@ -102,8 +101,8 @@ function TermsPage(props) {
                                 data-bs-target="#offcanvasExample"
                                 aria-controls="offcanvasExample"
                                 style={{
-                                    width: "50%",
-                                    maxWidth: "40px",
+                                    width: '50%',
+                                    maxWidth: '40px',
                                 }}
                             >
                                 <img src={helpButton} width="100%" alt=""></img>
@@ -112,7 +111,11 @@ function TermsPage(props) {
                     </div>
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }
