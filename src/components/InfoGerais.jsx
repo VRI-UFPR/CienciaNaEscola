@@ -1,8 +1,6 @@
-import React from "react";
+import React from 'react';
 
-
-const styles= 
-`
+const styles = `
     .BlocoInfoGerais{
         border-top: 12px solid #F59489;
         border-radius: 9px;
@@ -32,7 +30,7 @@ const styles=
 
 `;
 
-function InfoGerais(props){
+function InfoGerais(props) {
     return (
         <div className="BlocoInfoGerais shadow">
             <form className="d-flex flex-column flex-grow-1">
@@ -40,14 +38,18 @@ function InfoGerais(props){
                     <div className="rounded p-4">
                         <div className="mb-1">
                             <label for="infogerais" class="control-label" id="form-label">
-                            Informações gerais:
+                                Informações gerais:
                             </label>
-                            <input type="text" name="infogerais" class="form-control" id="infogerais" placeholder="Adicionar descrição"/>
+                            <input type="text" name="infogerais" class="form-control" id="infogerais" placeholder="Adicionar descrição" />
                         </div>
                     </div>
                 </div>
             </form>
-            <style dangerouslySetInnerHTML={{ __html: styles }}/>
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }
