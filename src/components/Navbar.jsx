@@ -1,7 +1,7 @@
 import React from "react";
-import iconCE from "../assets/images/logo.svg";
-import titleCE from "../assets/images/logo.svg";
-import navToggler from "../assets/images/logo.svg";
+import iconCE from "../assets/images/iconCE.svg";
+import titleCE from "../assets/images/titleCE.svg";
+import navToggler from "../assets/images/navToggler.svg";
 import Sidebar from "../components/Sidebar";
 
 const styles = `
@@ -69,7 +69,7 @@ function NavBar(props) {
                         </div>
                         <div className="col-2 p-0 d-flex justify-content-end">
                             <button
-                                className="btn p-0 pt-1"
+                                className="btn p-0 pt-1 shadow-none"
                                 type="button"
                                 data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvasExample"
