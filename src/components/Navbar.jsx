@@ -1,8 +1,8 @@
-import React from "react";
-import iconCE from "../assets/images/iconCE.svg";
-import titleCE from "../assets/images/titleCE.svg";
-import navToggler from "../assets/images/navToggler.svg";
-import Sidebar from "../components/Sidebar";
+import React from 'react';
+import iconCE from '../assets/images/iconCE.svg';
+import titleCE from '../assets/images/titleCE.svg';
+import navToggler from '../assets/images/navToggler.svg';
+import Sidebar from '../components/Sidebar';
 
 const styles = `
     .bg-coral-red {

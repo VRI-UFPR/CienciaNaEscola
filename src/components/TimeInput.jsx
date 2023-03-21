@@ -46,7 +46,7 @@ function TimeInput(props) {
             <div className="row m-0 justify-content-between mb-1">
                 <div className="col-1 d-flex justify-content-end p-0 pt-1 icon-col">
                     <div className="col d-flex p-0 align-items-start">
-                        <button type="button" class="btn rounded-circle bg-coral w-100">
+                        <button type="button" className="btn rounded-circle bg-coral w-100">
                             <img src={iconTime} alt="Ícone" className="w-100"></img>
                         </button>
                     </div>
