@@ -1,5 +1,5 @@
 import React from 'react';
-import helpButton from '../assets/images/helpButton.svg';
+import helpIcon from '../assets/images/helpIcon.svg';
 
 const styles = `
     .bg-coral-red {
@@ -32,6 +32,11 @@ const styles = `
 
     .navbar {
         background-color: #4E9BB9;
+    }
+
+    .btn{
+        min-height: 0px;
+        line-height: 0px;
     }
 `;
 
@@ -85,26 +90,22 @@ function ProfileForm(props) {
                 </div>
             </div>
             <div className="row pt-0 pb-4 mx-0 px-0 d-flex flex-grow-1 align-items-end">
-                <div className="row px-0 mx-0 justify-content-between">
+                <div className="row d-flex px-0 mx-0 justify-content-between">
                     <div className="col-3"></div>
                     <div className="col-4 p-0 align-items-center">
                         <button type="submit" className="btn p-2 shadow w-100 green-button font-century-gothic">
                             Salvar
                         </button>
                     </div>
-                    <div className="col-3 d-flex align-items-center justify-content-end px-0">
+                    <div className="col-3 d-flex align-items-end justify-content-end px-0">
                         <button
-                            className="btn p-0 pt-1"
                             type="button"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasExample"
-                            aria-controls="offcanvasExample"
                             style={{
-                                maxWidth: '40px',
-                                width: '50%',
+                                maxWidth: '32px',
                             }}
+                            className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
                         >
-                            <img src={helpButton} width="100%" alt=""></img>
+                            <img src={helpIcon} alt="Ícone" className="w-100"></img>
                         </button>
                     </div>
                 </div>
