@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
+import Weather from "./components/Weather";
 
 const styles = `
 .App {
@@ -80,6 +81,7 @@ function App(props) {
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/info" element={<InfoGerais />} />
                 <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
+                <Route path="/weather" element={<Weather titles={["Sunny", "Cloudy"]} images={["Ola", "Mundo"]} />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </BrowserRouter>
