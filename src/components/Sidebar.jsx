@@ -1,7 +1,7 @@
-import React from "react";
-import BuscarImg from "../assets/images/BuscarImg.svg";
-import PerfilImg from "../assets/images/PerfilImg.png";
-import Arrow from "../assets/images/SidebarArrow.svg";
+import React from 'react';
+import BuscarImg from '../assets/images/BuscarImg.svg';
+import PerfilImg from '../assets/images/PerfilImg.png';
+import Arrow from '../assets/images/SidebarArrow.svg';
 
 const styles = `
     .perfil-img {
@@ -62,58 +62,74 @@ const styles = `
 `;
 
 function Sidebar(props) {
-  return (
-    <div className="sidebar-wrapper d-flex flex-column">
-      <div className="d-flex flex-column align-items-center">
-        <img
-          className="perfil-img my-4"
-          src={PerfilImg}
-          alt="Perfil"
-          style={{ width: "100px", height: "100px" }}
-        />
-        <button className="btn fst-btn font-gothic my-1" type="button">
-          Novo
-        </button>
-        <button className="btn snd-btn d-flex flex-row my-2">
-          <img
-            src={BuscarImg}
-            alt="logo"
-            style={{ width: "35px", paddingRight: "7px", paddingTop: "3px" }}
-          />
-          <p className="font-barlow">Buscar</p>
-        </button>
-      </div>
-      <div className="sidebar-menu-wrapper d-flex flex-column">
-        <h1 className="sidebar-titles">Menu</h1>
-        <a className="sidebar-list-items" href="/">
-          Protocolos
-        </a>
-        <a className="sidebar-list-items" href="/">
-          Usuários
-        </a>
-        <a className="sidebar-list-items" href="/">
-          Denúncias
-        </a>
-      </div>
-      <div className="sidebar-conta-wrapper d-flex flex-column">
-        <h1 className="sidebar-titles">Conta</h1>
-        <a className="sidebar-list-items" href="/">
-          Perfil
-        </a>
-        <a className="sidebar-list-items" href="/">
-          Logout
-        </a>
-      </div>
-      <button
-        type="button"
-        data-bs-dismiss="offcanvas"
-        style={{ width: "0px", height: "0px", padding: "0px", border: "none" }}
-      >
-        <img src={Arrow} alt="" className="left-arrow" />
-      </button>
-      <style dangerouslySetInnerHTML={{ __html: styles }} />
-    </div>
-  );
+    return (
+        <div className="sidebar-wrapper d-flex flex-column">
+            <div className="d-flex flex-column align-items-center">
+                <img
+                    className="perfil-img my-4"
+                    src={PerfilImg}
+                    alt="Perfil"
+                    style={{
+                        width: '100px',
+                        height: '100px',
+                    }}
+                />
+                <button className="btn fst-btn font-gothic my-1" type="button">
+                    Novo
+                </button>
+                <button className="btn snd-btn d-flex flex-row my-2">
+                    <img
+                        src={BuscarImg}
+                        alt="logo"
+                        style={{
+                            width: '35px',
+                            paddingRight: '7px',
+                            paddingTop: '3px',
+                        }}
+                    />
+                    <p className="font-barlow">Buscar</p>
+                </button>
+            </div>
+            <div className="sidebar-menu-wrapper d-flex flex-column">
+                <h1 className="sidebar-titles">Menu</h1>
+                <a className="sidebar-list-items" href="/">
+                    Protocolos
+                </a>
+                <a className="sidebar-list-items" href="/">
+                    Usuários
+                </a>
+                <a className="sidebar-list-items" href="/">
+                    Denúncias
+                </a>
+            </div>
+            <div className="sidebar-conta-wrapper d-flex flex-column">
+                <h1 className="sidebar-titles">Conta</h1>
+                <a className="sidebar-list-items" href="/">
+                    Perfil
+                </a>
+                <a className="sidebar-list-items" href="/">
+                    Logout
+                </a>
+            </div>
+            <button
+                type="button"
+                data-bs-dismiss="offcanvas"
+                style={{
+                    width: '0px',
+                    height: '0px',
+                    padding: '0px',
+                    border: 'none',
+                }}
+            >
+                <img src={Arrow} alt="" className="left-arrow" />
+            </button>
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
+        </div>
+    );
 }
 
 export default Sidebar;
