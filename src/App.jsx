@@ -78,7 +78,11 @@ function App(props) {
                                     Learn React
                                 </a>
                             </header>
-                            <style dangerouslySetInnerHTML={{ __html: styles }} />
+                            <style
+                                dangerouslySetInnerHTML={{
+                                    __html: styles,
+                                }}
+                            />
                         </div>
                     }
                 />
@@ -89,10 +93,16 @@ function App(props) {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/info" element={<InfoGerais />} />
+                <Route path="/date" element={<DateInput />} />
+                <Route path="/time" element={<TimeInput />} />
                 <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
                 <Route path="/weather" element={<Weather objects={[object1, object2, object3, object4]} />} />
             </Routes>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </BrowserRouter>
     );
 }
