@@ -1,20 +1,22 @@
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import logo from "./assets/images/logo.svg";
 import cloudy from "./assets/images/cloudy.svg";
 import rainy from "./assets/images/rainy.svg";
 import sunny from "./assets/images/sunny.svg";
 import windy from "./assets/images/windy.svg";
-import React from "react";
 import SplashPage from "./pages/SplashPage";
 import Navbar from "./components/Navbar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TermsPage from "./pages/TermsPage";
-import EndProtocolPage from "./pages/EndProtocolPage";
 import ProfilePage from "./pages/ProfilePage";
-import RadioButtonInput from "./components/RadioButtonInput";
-import SimpleTextInput from "./components/SimpleTextInput";
+import EndProtocolPage from "./pages/EndProtocolPage";
 import InfoGerais from "./components/InfoGerais";
+import DateInput from "./components/DateInput";
+import TimeInput from "./components/TimeInput";
 import Weather from "./components/Weather";
 import Location from "./components/Location";
+import SimpleTextInput from "./components/SimpleTextInput";
+import RadioButtonInput from "./components/RadioButtonInput";
 
 const styles = `
 .App {
@@ -66,39 +68,19 @@ function App(props) {
     return (
         <BrowserRouter>
             <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <div className="App">
-                            <header className="App-header">
-                                <img src={logo} className="App-logo" alt="logo" />
-                                <p>
-                                    Edit <code>src/App.js</code> and save to reload.
-                                </p>
-                                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                                    Learn React
-                                </a>
-                            </header>
-                            <style
-                                dangerouslySetInnerHTML={{
-                                    __html: styles,
-                                }}
-                            />
-                        </div>
-                    }
-                />
+                <Route path="/" element={<SplashPage />} />
                 <Route path="/navbar" element={<Navbar />} />
-                <Route path="/splash" element={<SplashPage />} />
                 <Route path="/terms" element={<TermsPage />} />
-                <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/simpletext" element={<SimpleTextInput />} />
+                <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/info" element={<InfoGerais />} />
                 <Route path="/date" element={<DateInput />} />
                 <Route path="/time" element={<TimeInput />} />
-                <Route path="/location" element={<Location />} />
-                <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
                 <Route path="/weather" element={<Weather objects={[object1, object2, object3, object4]} />} />
+                <Route path="/location" element={<Location />} />
+                <Route path="/simpletext" element={<SimpleTextInput />} />
+                <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
+                
             </Routes>
             <style
                 dangerouslySetInnerHTML={{
