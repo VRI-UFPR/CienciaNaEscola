@@ -1,5 +1,5 @@
 import React from 'react';
-import helpButton from '../assets/images/helpButton.svg';
+import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
@@ -95,17 +95,13 @@ function TermsPage(props) {
                         </div>
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <button
-                                className="btn p-0 pt-1"
                                 type="button"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasExample"
-                                aria-controls="offcanvasExample"
                                 style={{
-                                    width: '50%',
-                                    maxWidth: '40px',
+                                    maxWidth: '32px',
                                 }}
+                                className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
                             >
-                                <img src={helpButton} width="100%" alt=""></img>
+                                <img src={helpIcon} alt="Ícone" className="w-100"></img>
                             </button>
                         </div>
                     </div>
