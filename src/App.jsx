@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
+import Location from "./components/Location";
 
 const styles = `
 .App {
@@ -79,6 +80,7 @@ function App(props) {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/info" element={<InfoGerais />} />
+                <Route path="/location" element={<Location />} />
                 <Route path="/radiooptions" element={<RadioButtonInput options={["Área de plantação", "Jardim", "Praça", "Escola"]} />} />
             </Routes>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
