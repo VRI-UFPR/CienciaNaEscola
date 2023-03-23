@@ -1,6 +1,6 @@
-import React from "react";
-import helpButton from "../assets/images/helpButton.svg";
-import NavBar from "../components/Navbar";
+import React from 'react';
+import helpButton from '../assets/images/helpButton.svg';
+import NavBar from '../components/Navbar';
 
 const styles = `
     .bg-coral-red {
@@ -79,10 +79,7 @@ function EndProtocolPage(props) {
                         </div>
                         <div className="row p-4 pt-2 pb-2 mx-0">
                             <div className="col px-1">
-                                <button
-                                    type=" submit"
-                                    className="btn p-2 py-3 options-button bg-crimson font-century-gothic shadow w-100"
-                                >
+                                <button type=" submit" className="btn p-2 py-3 options-button bg-crimson font-century-gothic shadow w-100">
                                     Não
                                 </button>
                             </div>
@@ -107,8 +104,8 @@ function EndProtocolPage(props) {
                                 data-bs-target="#offcanvasExample"
                                 aria-controls="offcanvasExample"
                                 style={{
-                                    maxWidth: "40px",
-                                    width: "50%",
+                                    maxWidth: '40px',
+                                    width: '50%',
                                 }}
                             >
                                 <img src={helpButton} width="100%" alt=""></img>
@@ -117,7 +114,11 @@ function EndProtocolPage(props) {
                     </div>
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }
