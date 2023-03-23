@@ -1,5 +1,5 @@
 import React from 'react';
-import helpButton from '../assets/images/helpButton.svg';
+import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
@@ -63,7 +63,8 @@ const styles = `
     }
 
     .help-button {
-        padding-bottom: 2.5px;
+        min-height: 0px;
+        line-height: 0px;
     }
 `;
 
@@ -73,20 +74,23 @@ function EndProtocolPage(props) {
             <NavBar />
             <div className="container-fluid px-4 d-flex flex-column flex-grow-1">
                 <div className="row d-flex py-4 px-0 flex-grow-1 align-items-center justify-content-center">
-                    <div className="row px-0 py-4 w-75 shadow popup-warn">
+                    <div className="row mx-0 px-0 py-4 w-75 shadow popup-warn">
                         <div className="row p-4 pb-2 pt-2 mx-0">
                             <h1 className="font-century-gothic">Deseja finalizar o protocolo?</h1>
                         </div>
                         <div className="row p-4 pt-2 pb-2 mx-0">
-                            <div className="col px-1">
-                                <button type=" submit" className="btn p-2 py-3 options-button bg-crimson font-century-gothic shadow w-100">
+                            <div className="col px-1 d-flex">
+                                <button
+                                    type=" submit"
+                                    className="btn h-auto p-2 py-3 options-button bg-crimson font-century-gothic shadow w-100"
+                                >
                                     Não
                                 </button>
                             </div>
-                            <div className="col px-1">
+                            <div className="col px-1 d-flex">
                                 <button
                                     type=" submit"
-                                    className="btn p-2 py-3 shadow w-100 bg-lime-green font-century-gothic options-button"
+                                    className="btn p-2 py-3 h-auto shadow w-100 bg-lime-green font-century-gothic options-button"
                                 >
                                     Sim
                                 </button>
@@ -96,19 +100,15 @@ function EndProtocolPage(props) {
                 </div>
                 <div className="row pt-0 pb-4 mx-0 px-2 d-flex align-items-end">
                     <div className="row px-0 mx-0 justify-content-end">
-                        <div className="col-3 d-flex align-items-center justify-content-end px-0 help-button">
+                        <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <button
-                                className="btn p-0 pt-1"
                                 type="button"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasExample"
-                                aria-controls="offcanvasExample"
                                 style={{
-                                    maxWidth: '40px',
-                                    width: '50%',
+                                    maxWidth: '32px',
                                 }}
+                                className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100 help-button"
                             >
-                                <img src={helpButton} width="100%" alt=""></img>
+                                <img src={helpIcon} alt="Ícone" className="w-100"></img>
                             </button>
                         </div>
                     </div>
