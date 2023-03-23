@@ -23,7 +23,7 @@ const styles = `
 
 function Location(props) {
     return (
-        <div className="container overflow-hidden p-3 shadow rounded">
+        <div className="overflow-hidden p-3 shadow rounded">
             <div className="row mb-3">
                 <div className="col-2 d-flex justify-content-end">
                     <img src={LocationIcon} alt="Location Icon" />
@@ -47,7 +47,7 @@ function Location(props) {
                         Latitude
                     </label>
                     <input
-                        type="text"
+                        type="number"
                         className="form-control font-barlow p-0 lh-sm"
                         id="latitudeinput"
                         placeholder="Adicione a latitude"
@@ -61,7 +61,7 @@ function Location(props) {
                         Longitude
                     </label>
                     <input
-                        type="text"
+                        type="number"
                         className="form-control font-barlow p-0 lh-sm"
                         id="longitudeinput"
                         placeholder="Adicione a longitude"
