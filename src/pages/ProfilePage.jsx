@@ -1,6 +1,6 @@
-import React from "react";
-import NavBar from "../components/Navbar";
-import ProfileForm from "../components/ProfileForm";
+import React from 'react';
+import NavBar from '../components/Navbar';
+import ProfileForm from '../components/ProfileForm';
 
 const styles = `
     .bg-coral-red {
@@ -83,7 +83,11 @@ function ProfilePage(props) {
                     <ProfileForm />
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: styles,
+                }}
+            />
         </div>
     );
 }
