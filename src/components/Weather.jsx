@@ -40,8 +40,8 @@ function Weather(props) {
 
                     return (
                         <div className="d-flex flex-column ms-2 mb-2" key={ object.id }>
-                            <div>
-                                <input className="form-check-input" type="radio" name="radiooptions" id={objTitle + "input"}></input>
+                            <div className="d-flex align-items-center">
+                                <input className="form-check-input mt-0" type="radio" name="radiooptions" id={objTitle + "input"}></input>
                                 <label className="form-check-label font-barlow px-2 py-2">
                                     { object.title }
                                 </label>
