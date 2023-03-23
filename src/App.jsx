@@ -13,6 +13,8 @@ import ProfilePage from "./pages/ProfilePage";
 import RadioButtonInput from "./components/RadioButtonInput";
 import SimpleTextInput from "./components/SimpleTextInput";
 import InfoGerais from "./components/InfoGerais";
+import DateInput from "./components/DateInput";
+import TimeInput from "./components/TimeInput";
 import Weather from "./components/Weather";
 
 const styles = `
