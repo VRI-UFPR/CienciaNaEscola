@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import logo from "./assets/images/logo.svg";
 import cloudy from "./assets/images/cloudy.svg";
 import rainy from "./assets/images/rainy.svg";
 import sunny from "./assets/images/sunny.svg";
