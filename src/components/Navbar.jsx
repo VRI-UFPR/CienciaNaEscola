@@ -1,5 +1,4 @@
 import React from 'react';
-import iconCE from '../assets/images/iconCE.svg';
 import titleCE from '../assets/images/titleCE.svg';
 import navToggler from '../assets/images/navToggler.svg';
 import Sidebar from '../components/Sidebar';
@@ -47,29 +46,9 @@ function NavBar(props) {
             <nav className="navbar navbar-expand-sm navbar-light pt-0 d-flex flex-column">
                 <div className="container-fluid d-flex py-2 pt-3 px-0 mx-0">
                     <div className="row justify-content-between align-items-center px-1 mx-4 w-100">
-                        <div className="col-2 d-flex p-0">
-                            <img
-                                alt=""
-                                src={iconCE}
-                                width="95%"
-                                style={{
-                                    maxWidth: '100px',
-                                }}
-                            ></img>
-                        </div>
-                        <div className="col-7 d-flex justify-content-center p-0">
-                            <img
-                                alt=""
-                                src={titleCE}
-                                width="100%"
-                                style={{
-                                    maxWidth: '300px',
-                                }}
-                            ></img>
-                        </div>
-                        <div className="col-2 p-0 d-flex justify-content-end">
+                        <div className="col-2 p-0 d-flex justify-content-start">
                             <button
-                                className="btn p-0 pt-1 shadow-none"
+                                className="btn p-1 pt-1 shadow-none d-flex align-items-center"
                                 type="button"
                                 data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvasExample"
@@ -82,6 +61,17 @@ function NavBar(props) {
                                 <img src={navToggler} width="100%" alt=""></img>
                             </button>
                         </div>
+                        <div className="col-7 d-flex justify-content-center p-0">
+                            <img
+                                alt=""
+                                src={titleCE}
+                                width="100%"
+                                style={{
+                                    maxWidth: '300px',
+                                }}
+                            ></img>
+                        </div>
+                        <div className="col-2"></div>
                     </div>
                 </div>
             </nav>
