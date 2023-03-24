@@ -32,7 +32,7 @@ const styles = `
     }
 
     .navbar {
-        background-color: #4E9BB9;
+        background-color: rgba(78, 155, 185, 0.81);
     }
 
     .offcanvas {
