@@ -5,33 +5,6 @@ import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
 
 const styles = `
-    .bg-coral-red {
-        background-color: #F59489;
-    }
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-yellow-orange {
-        background-color: #FECF86;
-    }
-
-    .bg-steel-blue {
-        background-color: #4E9BB9;
-    }
-
-    .bg-crimson {
-        background-color: #EC6571;
-    }
-
-    .bg-lime-green {
-        background-color: #AAD390;
-    }
-
-    .border-cell {
-        height: 10px;
-    }
-
     .navbar {
         background-color: rgba(78, 155, 185, 0.81);
     }
