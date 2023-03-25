@@ -1,8 +1,8 @@
 import React from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import navToggler from '../assets/images/navToggler.svg';
-import Sidebar from '../components/Sidebar';
-import ColoredBorder from '../components/ColoredBorder';
+import Sidebar from './Sidebar';
+import ColoredBorder from './ColoredBorder';
 
 const styles = `
     .bg-coral-red {
