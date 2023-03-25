@@ -2,6 +2,7 @@ import React from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import navToggler from '../assets/images/navToggler.svg';
 import Sidebar from '../components/Sidebar';
+import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .bg-coral-red {
@@ -44,6 +45,7 @@ function NavBar(props) {
     return (
         <div>
             <nav className="navbar navbar-expand-sm navbar-light pt-0 d-flex flex-column">
+                <ColoredBorder />
                 <div className="container-fluid d-flex py-2 pt-3 px-0 mx-0">
                     <div className="row justify-content-between align-items-center px-1 mx-4 w-100">
                         <div className="col-2 p-0 d-flex justify-content-start">
