@@ -3,32 +3,8 @@ import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
-    .bg-coral-red {
-        background-color: #F59489;
-    }
-
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-yellow-orange {
-        background-color: #FECF86;
-    }
-
-    .bg-steel-blue {
-        background-color: #4E9BB9;
-    }
-
     .bg-crimson {
         background-color: #EC6571;
-    }
-
-    .bg-lime-green {
-        background-color: #AAD390;
-    }
-
-    .border-cell {
-        height: 10px;
     }
 
     .font-barlow {
@@ -50,14 +26,6 @@ const styles = `
         font-weight: 600;
         font-size: medium;
         text-align: justify;
-    }
-
-    .green-button {
-        border-radius: 10px;
-        background-color: #AAD390;
-        color: #FFF;
-        font-weight: 700;
-        font-size: 130%;
     }
 `;
 
@@ -82,13 +50,7 @@ function AboutPage(props) {
                     </h2>
                 </div>
                 <div className="row pt-0 pb-4 mx-0 px-2 d-flex flex-grow-1 align-items-end">
-                    <div className="row px-0 mx-0 justify-content-between">
-                        <div className="col-3"></div>
-                        <div className="col-4 p-0 align-items-center">
-                            <button type="submit" className="btn p-2 shadow w-100 green-button font-century-gothic">
-                                Aceitar
-                            </button>
-                        </div>
+                    <div className="row px-0 mx-0 justify-content-end">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <button
                                 type="button"
