@@ -5,6 +5,7 @@ import rainy from './assets/images/rainy.svg';
 import sunny from './assets/images/sunny.svg';
 import windy from './assets/images/windy.svg';
 import SplashPage from './pages/SplashPage';
+import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import TermsPage from './pages/TermsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -16,6 +17,7 @@ import Weather from './components/Weather';
 import Location from './components/Location';
 import SimpleTextInput from './components/SimpleTextInput';
 import RadioButtonInput from './components/RadioButtonInput';
+import AboutPage from './pages/AboutPage';
 
 const styles = `
 .App {
@@ -68,6 +70,7 @@ function App(props) {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<SplashPage />} />
+                <Route path="/home" element={<HomePage />} />
                 <Route path="/navbar" element={<Navbar />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
@@ -79,6 +82,7 @@ function App(props) {
                 <Route path="/location" element={<Location />} />
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/radiooptions" element={<RadioButtonInput options={['Área de plantação', 'Jardim', 'Praça', 'Escola']} />} />
+                <Route path="/about" element={<AboutPage />} />
             </Routes>
             <style
                 dangerouslySetInnerHTML={{
