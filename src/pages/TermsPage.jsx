@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
@@ -85,20 +86,20 @@ function TermsPage(props) {
                     <div className="row px-0 mx-0 justify-content-between">
                         <div className="col-3"></div>
                         <div className="col-4 p-0 align-items-center">
-                            <button type="submit" className="btn p-2 shadow w-100 green-button font-century-gothic">
+                            <Link to="/about" className="btn p-2 shadow w-100 green-button font-century-gothic">
                                 Aceitar
-                            </button>
+                            </Link>
                         </div>
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
-                            <button
-                                type="button"
+                            <Link
+                                to="/about"
                                 style={{
                                     maxWidth: '32px',
                                 }}
                                 className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
                             >
                                 <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

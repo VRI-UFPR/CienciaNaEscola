@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
@@ -52,15 +53,15 @@ function AboutPage(props) {
                 <div className="row pt-0 pb-4 mx-0 px-2 d-flex flex-grow-1 align-items-end">
                     <div className="row px-0 mx-0 justify-content-end">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
-                            <button
-                                type="button"
+                            <Link
+                                to="/about"
                                 style={{
                                     maxWidth: '32px',
                                 }}
                                 className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
                             >
                                 <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

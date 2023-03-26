@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import helpIcon from '../assets/images/helpIcon.svg';
 
 const styles = `
@@ -98,15 +99,15 @@ function ProfileForm(props) {
                         </button>
                     </div>
                     <div className="col-3 d-flex align-items-end justify-content-end px-0">
-                        <button
-                            type="button"
+                        <Link
+                            to="/about"
                             style={{
                                 maxWidth: '32px',
                             }}
                             className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
                         >
                             <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

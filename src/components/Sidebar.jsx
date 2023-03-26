@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import BuscarImg from '../assets/images/BuscarImg.svg';
 import PerfilImg from '../assets/images/PerfilImg.png';
 import Arrow from '../assets/images/SidebarArrow.svg';
@@ -92,9 +93,9 @@ function Sidebar(props) {
             </div>
             <div className="sidebar-menu-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Menu</h1>
-                <a className="sidebar-list-items" href="/">
+                <Link to="/home" className="sidebar-list-items">
                     Protocolos
-                </a>
+                </Link>
                 <a className="sidebar-list-items" href="/">
                     Usuários
                 </a>
@@ -104,9 +105,10 @@ function Sidebar(props) {
             </div>
             <div className="sidebar-conta-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Conta</h1>
-                <a className="sidebar-list-items" href="/">
+
+                <Link to="/profile" className="sidebar-list-items">
                     Perfil
-                </a>
+                </Link>
                 <a className="sidebar-list-items" href="/">
                     Logout
                 </a>

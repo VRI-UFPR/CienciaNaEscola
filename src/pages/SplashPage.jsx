@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
