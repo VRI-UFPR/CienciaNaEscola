@@ -39,10 +39,6 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .navbar {
-        background-color: #4E9BB9;
-    }
-
     .popup-warn {
         background-color: #D9D9D9;
         border-radius: 30px;
