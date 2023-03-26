@@ -1,5 +1,5 @@
-import React from "react";
-import LocationIcon from "../assets/images/LocationIcon.svg";
+import React from 'react';
+import LocationIcon from '../assets/images/LocationIcon.svg';
 
 const styles = `
     label{

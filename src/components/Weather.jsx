@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const styles = `
     .form-label, .form-check-label {
@@ -33,20 +33,18 @@ function Weather(props) {
                     <p className="form-label font-barlow lh-sm">Como você descreveria o tempo hoje?</p>
                 </div>
             </div>
-            
+
             <div className="form-row">
                 {props.objects.map((object) => {
-                    const objTitle = object.title.toLowerCase().replace(/\s/g, "");
+                    const objTitle = object.title.toLowerCase().replace(/\s/g, '');
 
                     return (
-                        <div className="d-flex flex-column ms-2 mb-2" key={ object.id }>
+                        <div className="d-flex flex-column ms-2 mb-2" key={object.id}>
                             <div className="d-flex align-items-center">
-                                <input className="form-check-input mt-0" type="radio" name="radiooptions" id={objTitle + "input"}></input>
-                                <label className="form-check-label font-barlow px-2 py-2">
-                                    { object.title }
-                                </label>
+                                <input className="form-check-input mt-0" type="radio" name="radiooptions" id={objTitle + 'input'}></input>
+                                <label className="form-check-label font-barlow px-2 py-2">{object.title}</label>
                             </div>
-                            <img className="form-img" src={ object.image } alt={ object.alt } />
+                            <img className="form-img" src={object.image} alt={object.alt} />
                         </div>
                     );
                 })}

@@ -39,10 +39,6 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .navbar {
-        background-color: #4E9BB9;
-    }
-
     h1 {
         color: #535353;
         font-weight: bold;
