@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import cloudy from './assets/images/cloudy.svg';
 import rainy from './assets/images/rainy.svg';
 import sunny from './assets/images/sunny.svg';
@@ -67,6 +67,7 @@ function App(props) {
     return (
         <Routes>
             <Route exact path="/" element={<SplashPage />} />
+            <Route exact path="/splash" element={<SplashPage />} />
             <Route path="/navbar" element={<Navbar />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
