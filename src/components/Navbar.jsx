@@ -51,7 +51,7 @@ function NavBar(props) {
                 </div>
             </nav>
 
-            <div className="offcanvas offcanvas-start w-50" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-start w-50" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                 <Sidebar />
             </div>
             <style
