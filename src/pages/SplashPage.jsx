@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
@@ -39,6 +39,19 @@ const styles = `
 `;
 
 function SplashPage(props) {
+    const [navigate, setNavigate] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setNavigate(true);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (navigate) {
+        return <Navigate to="/terms" />;
+    }
+
     return (
         <div className="SplashPage d-flex flex-column vh-100 font-barlow">
             <div className="container-fluid px-0 d-flex flex-column w-100 flex-grow-1">
@@ -66,11 +79,6 @@ function SplashPage(props) {
                             >
                                 <span className="sr-only"></span>
                             </div>
-                        </div>
-                        <div className="row justify-content-center pt-4">
-                            <Link to={'/profile'}>ProfilePage</Link>
-                            <Link to={'/terms'}>TermsPage</Link>
-                            <Link to={'/endprotocol'}>EndProtocolPage</Link>
                         </div>
                     </div>
                 </div>
