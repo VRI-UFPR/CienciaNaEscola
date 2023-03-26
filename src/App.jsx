@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
 import TermsPage from "./pages/TermsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProtocolPage from "./pages/ProtocolPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
 import InfoGerais from "./components/InfoGerais";
 import DateInput from "./components/DateInput";
@@ -73,6 +74,7 @@ function App(props) {
                 <Route path="/navbar" element={<Navbar />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/protocol" element={<ProtocolPage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/info" element={<InfoGerais />} />
                 <Route path="/date" element={<DateInput />} />
