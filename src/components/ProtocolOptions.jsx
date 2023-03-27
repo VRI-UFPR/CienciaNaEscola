@@ -11,14 +11,14 @@ const styles = `
     }
 
     img {
-        height: 25px;
+        height: 20px;
     }
 `;
 
 function ProtocolOptions(props) {
     return ( 
         <div>
-            <div className="wrapper d-flex justify-content-center">
+            <div className="wrapper d-flex justify-content-center py-1">
                 <button>
                     <img src={EyeIcon} alt="eye icon" />
                 </button>
