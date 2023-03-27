@@ -23,8 +23,8 @@ const styles = `
 
 function SimpleTextInput(props) {
     return (
-        <div className="p-3 shadow rounded pb-4">
-            <div className="row m-0 justify-content-between mb-1">
+        <div className="shadow rounded pb-4 p-3">
+            <div className="row justify-content-between mb-1 m-0">
                 <div className="col-8 p-0">
                     <label labelfor="simpletextinput" className="form-label font-barlow">
                         Qual a temperatura no momento?
@@ -36,11 +36,7 @@ function SimpleTextInput(props) {
             </div>
 
             <input type="text" className="form-control p-0 mb-4" id="simpletextinput" placeholder="Formato numérico inteiro"></input>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }

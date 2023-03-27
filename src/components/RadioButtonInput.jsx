@@ -43,12 +43,7 @@ function RadioButtonInput({ options = [] }) {
                     </div>
                 );
             })}
-
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }

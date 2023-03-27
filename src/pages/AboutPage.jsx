@@ -32,9 +32,9 @@ const styles = `
 
 function AboutPage(props) {
     return (
-        <div className="d-flex flex-column vh-100 font-barlow">
+        <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
-            <div className="container-fluid px-4 d-flex flex-column flex-grow-1">
+            <div className="container-fluid d-flex flex-column flex-grow-1 px-4">
                 <div className="row d-flex py-4 px-1">
                     <h1 className="pb-2 font-century-gothic">Sobre o aplicativo</h1>
                     <h2>
@@ -50,15 +50,15 @@ function AboutPage(props) {
                         minim veniam, quis nostrum exercitationem ullam corporis.
                     </h2>
                 </div>
-                <div className="row pt-0 pb-4 mx-0 px-2 d-flex flex-grow-1 align-items-end">
-                    <div className="row px-0 mx-0 justify-content-end">
+                <div className="row d-flex flex-grow-1 align-items-end pt-0 pb-4 mx-0 px-2">
+                    <div className="row justify-content-end px-0 mx-0">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <Link
                                 to="/about"
                                 style={{
                                     maxWidth: '32px',
                                 }}
-                                className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
+                                className="btn rounded-circle bg-crimson h-auto w-100 p-1"
                             >
                                 <img src={helpIcon} alt="Ícone" className="w-100"></img>
                             </Link>
@@ -66,11 +66,7 @@ function AboutPage(props) {
                     </div>
                 </div>
             </div>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }
