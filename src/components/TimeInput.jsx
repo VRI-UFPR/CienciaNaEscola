@@ -42,38 +42,37 @@ const styles = `
 
 function TimeInput(props) {
     return (
-        <div className="p-3 shadow rounded">
-            <div className="row m-0 justify-content-between mb-1">
-                <div className="col-1 d-flex justify-content-end p-0 pt-1 icon-col">
-                    <div className="col d-flex p-0 align-items-start">
+        <div className="shadow rounded p-3">
+            <div className="row justify-content-between mb-1 m-0">
+                <div className="col-1 icon-col d-flex justify-content-end p-0 pt-1">
+                    <div className="col d-flex align-items-start p-0">
                         <div type="button" className="time-icon rounded-circle bg-coral w-100">
                             <img src={iconTime} alt="Ícone" className="w-100"></img>
                         </div>
                     </div>
                 </div>
-                <div className="col p-0 ps-2 lh-sm">
+                <div className="col lh-sm p-0 ps-2">
                     <label labelfor="timeinput" className="form-label font-barlow lh-sm m-0">
                         Horário da coleta
                     </label>
                     <input
                         type="text"
-                        className="form-control p-0 lh-sm font-barlow"
+                        className="form-control font-barlow lh-sm p-0"
                         id="descriptioninput"
                         placeholder="Adicionar descrição"
                     ></input>
                 </div>
             </div>
-            <div className="row m-0 d-flex justify-content-end pt-2">
+            <div className="row d-flex justify-content-end pt-2 m-0">
                 <div className="col-1 icon-col"></div>
                 <div className="col ps-2">
                     <input
                         type="time"
-                        className="form-control date-control font-barlow p-0 lh-sm d-inline-block w-auto"
+                        className="form-control date-control d-inline-block font-barlow w-auto lh-sm p-0"
                         id="timeinput"
                     ></input>
                 </div>
             </div>
-
             <style>{styles}</style>
         </div>
     );

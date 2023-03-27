@@ -56,7 +56,7 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
-    .font-gothic {
+    .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
 `;
@@ -74,7 +74,7 @@ function Sidebar(props) {
                         height: '100px',
                     }}
                 />
-                <button className="btn fst-btn font-gothic my-1" type="button">
+                <button className="btn fst-btn font-century-gothic my-1" type="button">
                     Novo
                 </button>
                 <button className="btn snd-btn d-flex flex-row my-2">
@@ -113,21 +113,16 @@ function Sidebar(props) {
             </div>
             <button
                 type="button"
+                className="p-0 b-0"
                 data-bs-dismiss="offcanvas"
                 style={{
                     width: '0px',
                     height: '0px',
-                    padding: '0px',
-                    border: 'none',
                 }}
             >
                 <img src={Arrow} alt="" className="left-arrow" />
             </button>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }

@@ -1,7 +1,7 @@
-import React from "react";
-import EyeIcon from "../assets/images/eyeIcon.svg";
-import SettingsIcon from "../assets/images/settingsIcon.svg";
-import CollaboratorsIcon from "../assets/images/collaboratorsIcon.svg";
+import React from 'react';
+import EyeIcon from '../assets/images/eyeIcon.svg';
+import SettingsIcon from '../assets/images/settingsIcon.svg';
+import CollaboratorsIcon from '../assets/images/collaboratorsIcon.svg';
 
 const styles = `
     .options-button {
@@ -16,7 +16,7 @@ const styles = `
 `;
 
 function ProtocolOptions(props) {
-    return ( 
+    return (
         <div>
             <div className="wrapper d-flex justify-content-center py-1">
                 <button className="options-button">
@@ -29,7 +29,7 @@ function ProtocolOptions(props) {
                     <img className="options-img" src={CollaboratorsIcon} alt="collaborators icon" />
                 </button>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
     );
 }
