@@ -3,10 +3,6 @@ import LoginTitle from "../assets/images/loginTitle.svg";
 import Background from "../assets/images/loginPageBackground.png";
 
 const styles = `
-    .login-wrapper {
-    background-size: 100%;
-    background-repeat: repeat-y;
-    }
 
     .login-title{
         text-align: center;
@@ -51,10 +47,7 @@ const styles = `
 function LoginPage(props) {
     return (
         <div>
-            <div
-                className="login-wrapper d-flex flex-column"
-                style={{ width: "100%", height: "100vh", backgroundSize: "cover", backgroundImage: `url(${Background})` }}
-            >
+            <div className="d-flex flex-column vh-100 w-100" style={{ backgroundSize: "cover", backgroundImage: `url(${Background})` }}>
                 <div className="login-logo d-flex justify-content-center">
                     <img src={LoginTitle} alt="" style={{ width: "250px" }} />
                 </div>
@@ -74,7 +67,7 @@ function LoginPage(props) {
                     <button className="login-button"> Entrar </button>
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style> {styles}</style>
         </div>
     );
 }
