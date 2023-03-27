@@ -1,10 +1,10 @@
 import React from "react";
 import ProtocolOptions from "../components/ProtocolOptions";
+import NavBar from "../components/Navbar";
 
 const styles = `
     .row {
         width: 100%;
-        height: 0vh;
     }
 
     .protocol-wrapper {
@@ -19,7 +19,7 @@ const styles = `
 
     .input-name {
         border: 0px;
-        width: 150px;
+        width: 100%;
     }
 
     .font-barlow {
@@ -30,15 +30,16 @@ const styles = `
 function ProtocolPage(props) {
     return ( 
         <div>
-            <div className="protocol-wrapper d-flex px-4 py-4">
-                <div className="row align-items-center">
-                    <div className="col-3">
-                        <p className="protocol-number rounded shadow font-barlow m-0 p-2">N°</p>
+            <NavBar />
+            <div className="protocol-wrapper d-flex flex-column px-4 py-4">
+                <div className="row align-items-start m-0">
+                    <div className="col-3 p-0">
+                        <p className="protocol-number rounded shadow font-barlow m-0 p-2">N° prot.</p>
                     </div>
-                    <div className="col-6 d-flex justify-content-center ps-0">
+                    <div className="col-6 d-flex justify-content-center px-2">
                         <input className="input-name shadow rounded font-barlow p-2" type="text" placeholder="Insira seu nome"/>
                     </div>
-                    <div className="col-3 p-2">
+                    <div className="col-3 d-flex justify-content-end p-0">
                         <ProtocolOptions />
                     </div>
                 </div>
