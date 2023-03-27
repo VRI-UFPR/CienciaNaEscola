@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import TermsPage from './pages/TermsPage';
 import ProfilePage from './pages/ProfilePage';
 import EndProtocolPage from './pages/EndProtocolPage';
+import HelpPage from './pages/HelpPage';
 import InfoGerais from './components/InfoGerais';
 import DateInput from './components/DateInput';
 import TimeInput from './components/TimeInput';
@@ -75,6 +76,7 @@ function App(props) {
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
+                <Route path="/help" element={<HelpPage />}/>
                 <Route path="/info" element={<InfoGerais />} />
                 <Route path="/date" element={<DateInput />} />
                 <Route path="/time" element={<TimeInput />} />
