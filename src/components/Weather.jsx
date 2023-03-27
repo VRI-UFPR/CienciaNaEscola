@@ -19,6 +19,7 @@ const styles = `
         width: 50%;
         height: 50%;
     }
+
     .form-row {
         display: grid;
         grid-template-columns: 50% 50%;
@@ -27,8 +28,8 @@ const styles = `
 
 function Weather(props) {
     return (
-        <div className="d-flex flex-column p-3 shadow rounded pb-4">
-            <div className="row m-0 justify-content-between mb-2">
+        <div className="d-flex flex-column shadow rounded pb-4 p-3">
+            <div className="row justify-content-between mb-2 m-0">
                 <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm">Como você descreveria o tempo hoje?</p>
                 </div>
@@ -49,7 +50,7 @@ function Weather(props) {
                     );
                 })}
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
     );
 }

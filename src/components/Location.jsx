@@ -23,7 +23,7 @@ const styles = `
 
 function Location(props) {
     return (
-        <div className="overflow-hidden p-3 shadow rounded">
+        <div className="overflow-hidden shadow rounded p-3">
             <div className="row mb-3">
                 <div className="col-2 d-flex justify-content-end">
                     <img src={LocationIcon} alt="Location Icon" />

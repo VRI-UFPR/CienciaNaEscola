@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import pinkArrow from "../assets/images/pinkArrow.svg";
+import pinkArrow from '../assets/images/pinkArrow.svg';
 
 const styles = `
     .font-barlow {
@@ -33,22 +33,18 @@ const styles = `
 
 function HomeArrows(props) {
     return (
-        <div className="general d-flex container-fluid p-0 align-itens-center justify-content-between mt-3">
+        <div className="general d-flex container-fluid align-itens-center justify-content-between mt-3 p-0">
             <div className="d-flex align-items-center justify-content-center">
                 <img src={pinkArrow} alt="Seta" className="leftArrow"></img>
-                <span className="arrowText d-flex">
-                    Voltar
-                </span>
+                <span className="arrowText d-flex">Voltar</span>
             </div>
             <div className="d-flex align-items-center justify-content-center">
-                <span className="arrowText">
-                    Ver mais
-                </span>
+                <span className="arrowText">Ver mais</span>
                 <img src={pinkArrow} alt="Seta" className="rightArrow"></img>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
-    )
+    );
 }
 
 export default HomeArrows;

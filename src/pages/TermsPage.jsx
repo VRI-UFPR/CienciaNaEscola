@@ -4,32 +4,9 @@ import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
-    .bg-coral-red {
-        background-color: #F59489;
-    }
-
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-yellow-orange {
-        background-color: #FECF86;
-    }
-
-    .bg-steel-blue {
-        background-color: #4E9BB9;
-    }
 
     .bg-crimson {
         background-color: #EC6571;
-    }
-
-    .bg-lime-green {
-        background-color: #AAD390;
-    }
-
-    .border-cell {
-        height: 10px;
     }
 
     .font-barlow {
@@ -64,11 +41,11 @@ const styles = `
 
 function TermsPage(props) {
     return (
-        <div className="d-flex flex-column vh-100 font-barlow">
+        <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
-            <div className="container-fluid px-4 d-flex flex-column flex-grow-1">
+            <div className="container-fluid d-flex flex-column flex-grow-1 px-4">
                 <div className="row d-flex py-4 px-1">
-                    <h1 className="pb-2 font-century-gothic">Termos de uso</h1>
+                    <h1 className="font-century-gothic pb-2">Termos de uso</h1>
                     <h2>
                         Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
                         Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
@@ -82,8 +59,8 @@ function TermsPage(props) {
                         minim veniam, quis nostrum exercitationem ullam corporis.
                     </h2>
                 </div>
-                <div className="row pt-0 pb-4 mx-0 px-2 d-flex flex-grow-1 align-items-end">
-                    <div className="row px-0 mx-0 justify-content-between">
+                <div className="row d-flex flex-grow-1 align-items-end pt-0 pb-4 mx-0 px-2">
+                    <div className="row justify-content-between px-0 mx-0">
                         <div className="col-3"></div>
                         <div className="col-4 p-0 align-items-center">
                             <Link to="/about" className="btn p-2 shadow w-100 green-button font-century-gothic">
@@ -96,7 +73,7 @@ function TermsPage(props) {
                                 style={{
                                     maxWidth: '32px',
                                 }}
-                                className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100"
+                                className="btn bg-crimson rounded-circle h-auto w-100 p-1"
                             >
                                 <img src={helpIcon} alt="Ícone" className="w-100"></img>
                             </Link>
@@ -104,11 +81,7 @@ function TermsPage(props) {
                     </div>
                 </div>
             </div>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }

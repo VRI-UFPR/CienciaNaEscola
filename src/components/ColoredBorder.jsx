@@ -39,11 +39,7 @@ function ColoredBorder(props) {
             <div className="col border-cell bg-steel-blue"></div>
             <div className="col border-cell bg-crimson"></div>
             <div className="col border-cell bg-lime-green"></div>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }
