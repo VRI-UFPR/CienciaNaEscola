@@ -78,7 +78,7 @@ function App(props) {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/protocol" element={<ProtocolPage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
-                <Route path="/help" element={<HelpPage />}/>
+                <Route path="/help" element={<HelpPage />} />
                 <Route path="/info" element={<InfoGerais />} />
                 <Route path="/date" element={<DateInput />} />
                 <Route path="/time" element={<TimeInput />} />

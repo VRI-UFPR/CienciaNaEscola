@@ -17,13 +17,13 @@ const styles = `
 function NavBar(props) {
     return (
         <div>
-            <nav className="navbar navbar-expand-sm navbar-light pt-0 d-flex flex-column">
+            <nav className="navbar navbar-expand-sm navbar-light d-flex flex-column pt-0">
                 <ColoredBorder />
-                <div className="container-fluid d-flex py-2 pt-3 px-0 mx-0">
-                    <div className="row justify-content-between align-items-center px-1 mx-4 w-100">
-                        <div className="col-2 p-0 d-flex justify-content-start">
+                <div className="container-fluid d-flex pb-2 pt-3 p-0 mx-0">
+                    <div className="row justify-content-between align-items-center w-100 px-1 mx-4">
+                        <div className="col-2 d-flex justify-content-start p-0">
                             <button
-                                className="btn p-1 pt-1 shadow-none d-flex align-items-center"
+                                className="btn d-flex align-items-center shadow-none p-1 pt-1"
                                 type="button"
                                 data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvasExample"
@@ -54,11 +54,7 @@ function NavBar(props) {
             <div className="offcanvas offcanvas-start w-50" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                 <Sidebar />
             </div>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }
