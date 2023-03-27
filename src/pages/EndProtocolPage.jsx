@@ -3,32 +3,12 @@ import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
-    .bg-coral-red {
-        background-color: #F59489;
-    }
-
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-yellow-orange {
-        background-color: #FECF86;
-    }
-
-    .bg-steel-blue {
-        background-color: #4E9BB9;
-    }
-
     .bg-crimson {
         background-color: #EC6571;
     }
 
     .bg-lime-green {
         background-color: #AAD390;
-    }
-
-    .border-cell {
-        height: 10px;
     }
 
     .font-barlow {
@@ -66,27 +46,27 @@ const styles = `
 
 function EndProtocolPage(props) {
     return (
-        <div className="d-flex flex-column vh-100 font-barlow">
+        <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
-            <div className="container-fluid px-4 d-flex flex-column flex-grow-1">
-                <div className="row d-flex py-4 px-0 flex-grow-1 align-items-center justify-content-center">
-                    <div className="row mx-0 px-0 py-4 w-75 shadow popup-warn">
-                        <div className="row p-4 pb-2 pt-2 mx-0">
+            <div className="container-fluid d-flex flex-column flex-grow-1 px-4">
+                <div className="row d-flex flex-grow-1 align-items-center justify-content-center py-4 px-0">
+                    <div className="row shadow popup-warn w-75 mx-0 px-0 py-4">
+                        <div className="row p-4 py-2 mx-0">
                             <h1 className="font-century-gothic">Deseja finalizar o protocolo?</h1>
                         </div>
-                        <div className="row p-4 pt-2 pb-2 mx-0">
-                            <div className="col px-1 d-flex">
+                        <div className="row p-4 py-2 mx-0">
+                            <div className="col d-flex px-1">
                                 <button
-                                    type=" submit"
-                                    className="btn h-auto p-2 py-3 options-button bg-crimson font-century-gothic shadow w-100"
+                                    type="submit"
+                                    className="btn options-button bg-crimson shadow font-century-gothic h-auto w-100 p-2 py-3"
                                 >
                                     Não
                                 </button>
                             </div>
-                            <div className="col px-1 d-flex">
+                            <div className="col d-flex px-1">
                                 <button
-                                    type=" submit"
-                                    className="btn p-2 py-3 h-auto shadow w-100 bg-lime-green font-century-gothic options-button"
+                                    type="submit"
+                                    className="btn options-button bg-lime-green shadow font-century-gothic h-auto w-100 p-2 py-3"
                                 >
                                     Sim
                                 </button>
@@ -94,15 +74,15 @@ function EndProtocolPage(props) {
                         </div>
                     </div>
                 </div>
-                <div className="row pt-0 pb-4 mx-0 px-2 d-flex align-items-end">
-                    <div className="row px-0 mx-0 justify-content-end">
+                <div className="row d-flex align-items-end pt-0 pb-4 mx-0 px-2">
+                    <div className="row justify-content-end px-0 mx-0">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <button
                                 type="button"
                                 style={{
                                     maxWidth: '32px',
                                 }}
-                                className="btn h-auto p-0 rounded-circle bg-crimson p-1 w-100 help-button"
+                                className="btn help-button rounded-circle bg-crimson w-100 h-auto p-1"
                             >
                                 <img src={helpIcon} alt="Ícone" className="w-100"></img>
                             </button>
@@ -110,11 +90,7 @@ function EndProtocolPage(props) {
                     </div>
                 </div>
             </div>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }

@@ -1,6 +1,6 @@
-import React from "react";
-import ProtocolOptions from "../components/ProtocolOptions";
-import NavBar from "../components/Navbar";
+import React from 'react';
+import ProtocolOptions from '../components/ProtocolOptions';
+import NavBar from '../components/Navbar';
 
 const styles = `
     .row {
@@ -28,7 +28,7 @@ const styles = `
 `;
 
 function ProtocolPage(props) {
-    return ( 
+    return (
         <div>
             <NavBar />
             <div className="protocol-wrapper d-flex flex-column px-4 py-4">
@@ -37,15 +37,15 @@ function ProtocolPage(props) {
                         <p className="protocol-number rounded shadow font-barlow m-0 p-2">N° prot.</p>
                     </div>
                     <div className="col-6 d-flex justify-content-center px-2">
-                        <input className="input-name shadow rounded font-barlow p-2" type="text" placeholder="Insira seu nome"/>
+                        <input className="input-name shadow rounded font-barlow p-2" type="text" placeholder="Insira seu nome" />
                     </div>
                     <div className="col-3 d-flex justify-content-end p-0">
                         <ProtocolOptions />
                     </div>
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
-        </div> 
+            <style>{styles}</style>
+        </div>
     );
 }
 
