@@ -5,6 +5,7 @@ import rainy from './assets/images/rainy.svg';
 import sunny from './assets/images/sunny.svg';
 import windy from './assets/images/windy.svg';
 import SplashPage from './pages/SplashPage';
+import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import TermsPage from './pages/TermsPage';
@@ -72,6 +73,7 @@ function App(props) {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<SplashPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/navbar" element={<Navbar />} />
                 <Route path="/terms" element={<TermsPage />} />
@@ -88,11 +90,7 @@ function App(props) {
                 <Route path="/radiooptions" element={<RadioButtonInput options={['Área de plantação', 'Jardim', 'Praça', 'Escola']} />} />
                 <Route path="/about" element={<AboutPage />} />
             </Routes>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style> {styles} </style>
         </BrowserRouter>
     );
 }
