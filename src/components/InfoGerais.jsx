@@ -51,11 +51,7 @@ function InfoGerais(props) {
                     </div>
                 </div>
             </form>
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+            <style>{styles}</style>
         </div>
     );
 }
