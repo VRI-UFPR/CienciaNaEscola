@@ -1,13 +1,16 @@
 {
   "files": {
-    "main.js": "/CienciaNaEscola/static/js/main.a22446d3.js",
+    "main.js": "/CienciaNaEscola/static/js/main.153b2e20.js",
     "static/js/787.28cb0dcd.chunk.js": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js",
     "static/media/logoPicceCircular.svg": "/CienciaNaEscola/static/media/logoPicceCircular.58ee48f660f62a5b5669ec2e8b091a93.svg",
     "static/media/sunny.svg": "/CienciaNaEscola/static/media/sunny.0681a88d0d0a6a462c493003713deccf.svg",
     "static/media/windy.svg": "/CienciaNaEscola/static/media/windy.30bb78c583a5be5225335b7bcc2ff879.svg",
+    "static/media/eyeIcon.svg": "/CienciaNaEscola/static/media/eyeIcon.7a21ec4b14097e1d6a44490f24ca4a64.svg",
     "static/media/BuscarImg.svg": "/CienciaNaEscola/static/media/BuscarImg.784d77a025795b8dc2743af4d2c2b2ab.svg",
     "static/media/rainy.svg": "/CienciaNaEscola/static/media/rainy.47f69b78ce135a492eb9c4ce750eec2c.svg",
     "static/media/LocationIcon.svg": "/CienciaNaEscola/static/media/LocationIcon.3febe40d210036563d470316dc6f690a.svg",
+    "static/media/settingsIcon.svg": "/CienciaNaEscola/static/media/settingsIcon.eed7c76a45a1575913e37c71c1ad95a5.svg",
+    "static/media/collaboratorsIcon.svg": "/CienciaNaEscola/static/media/collaboratorsIcon.9d59c4eff9a3045868903d4fadc1c027.svg",
     "static/media/logoPicceTextual.svg": "/CienciaNaEscola/static/media/logoPicceTextual.80ee40ea8877de19bf411be8c25cfcc3.svg",
     "static/media/cloudy.svg": "/CienciaNaEscola/static/media/cloudy.4d74553e6bd592f4298adaee2c8ac886.svg",
     "static/media/navToggler.svg": "/CienciaNaEscola/static/media/navToggler.b80cf9e117cc598478294d92299e43d9.svg",
@@ -22,10 +25,10 @@
     "index.html": "/CienciaNaEscola/index.html",
     "static/media/pinkArrow.svg": "/CienciaNaEscola/static/media/pinkArrow.9713d1fb7b8b8b7be6f8acbd39d19ee6.svg",
     "static/media/copyButton.svg": "/CienciaNaEscola/static/media/copyButton.9425eeae44d4173767ec0476d2794f60.svg",
-    "main.a22446d3.js.map": "/CienciaNaEscola/static/js/main.a22446d3.js.map",
+    "main.153b2e20.js.map": "/CienciaNaEscola/static/js/main.153b2e20.js.map",
     "787.28cb0dcd.chunk.js.map": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.a22446d3.js"
+    "static/js/main.153b2e20.js"
   ]
 }
