@@ -1,6 +1,6 @@
 import React from "react";
 import LoginTitle from "../assets/images/loginTitle.svg";
-import Background from "../assets/images/paginaInicialLogin.svg";
+import Background from "../assets/images/loginPageBackground.png";
 
 const styles = `
     .login-wrapper {
@@ -10,6 +10,7 @@ const styles = `
 
     .login-title{
         text-align: center;
+        margin-bottom: 40px;
     }
 
     .login-input{
@@ -33,30 +34,44 @@ const styles = `
         color: #FFFFFF;
         border-radius: 50px;
         border: 0px;
+        margin-top: 40px;
 
+    }
+
+    .login-logo {
+        margin-top: 80px;
+        margin-bottom: 25px ;
+    }
+
+    a{
+        color: #91CAD6;
     }
 `;
 
 function LoginPage(props) {
     return (
         <div>
-            <div className="login-wrapper d-flex flex-column">
-                <div className="d-flex justify-content-center">
-                    <img src={LoginTitle} alt="" style={{ width: "250px", height: "250px" }} />
+            <div
+                className="login-wrapper d-flex flex-column"
+                style={{ width: "100%", height: "100vh", backgroundSize: "cover", backgroundImage: `url(${Background})` }}
+            >
+                <div className="login-logo d-flex justify-content-center">
+                    <img src={LoginTitle} alt="" style={{ width: "250px" }} />
                 </div>
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center mb-4 mt-4">
                     <span className="login-title">
                         Bem-vindo(a) ao <br /> Ciência Cidadã na <br />
                         Escola!
                     </span>
                 </div>
                 <div className=" d-flex flex-column align-items-center">
-                    <input className="login-input px-3" type="text" placeholder="Login" />
-                    <input className="login-input px-3" type="text" placeholder="Senha" />
+                    <input className="login-input px-3 mb-3" type="text" placeholder="Login" />
+                    <input className="login-input px-3 mb-1" type="text" placeholder="Senha" />
+                    <a href="/">Esqueci minha senha</a>
                 </div>
 
-                <div className="d-flex justify-content-center">
-                    <button className="login-button "> Entrar </button>
+                <div className="d-flex justify-content-center mt-5">
+                    <button className="login-button"> Entrar </button>
                 </div>
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
