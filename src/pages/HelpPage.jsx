@@ -1,6 +1,5 @@
 import React from "react";
 import NavBar from "../components/Navbar";
-import ColoredBorder from "../components/ColoredBorder";
 
 const styles = `
     .tab div {
@@ -49,7 +48,6 @@ const styles = `
 function HelpPage(props) {
     return ( 
         <div>
-            <ColoredBorder />
             <NavBar />
             <div className="d-flex flex-column mx-4">
                 <div>
