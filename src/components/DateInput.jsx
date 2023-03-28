@@ -42,7 +42,7 @@ const styles = `
 
 function DateInput(props) {
     return (
-        <div className="rounded shadow p-3">
+        <div className="rounded shadow p-3 bg-white">
             <div className="row justify-content-between mb-1 m-0">
                 <div className="col-1 icon-col d-flex justify-content-end p-0 pt-1">
                     <div className="col d-flex align-items-start p-0">

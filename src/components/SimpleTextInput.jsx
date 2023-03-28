@@ -23,7 +23,7 @@ const styles = `
 
 function SimpleTextInput(props) {
     return (
-        <div className="shadow rounded pb-4 p-3">
+        <div className="shadow rounded bg-white pb-4 p-3">
             <div className="row justify-content-between mb-1 m-0">
                 <div className="col-8 p-0">
                     <label labelfor="simpletextinput" className="form-label font-barlow">
