@@ -19,7 +19,7 @@ const styles = `
 
 function RadioButtonInput({ options = [] }) {
     return (
-        <div className="p-3 shadow rounded pb-4">
+        <div className="p-3 shadow rounded bg-white pb-4">
             <div className="row m-0 justify-content-between mb-2">
                 <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm">

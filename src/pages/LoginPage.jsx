@@ -1,6 +1,7 @@
 import React from "react";
 import LoginTitle from "../assets/images/loginTitle.svg";
 import Background from "../assets/images/loginPageBackground.png";
+import { Link } from "react-router-dom";
 
 const styles = `
 
@@ -24,6 +25,8 @@ const styles = `
     }
 
     .login-button {
+        text-decoration: none;
+        text-align: center;
         width: 70%;
         height: 30px;
         background-color: #AAD390;
@@ -64,7 +67,7 @@ function LoginPage(props) {
                 </div>
 
                 <div className="d-flex justify-content-center mt-5">
-                    <button className="login-button"> Entrar </button>
+                    <Link className="login-button pt-1" to="/home"> Entrar </Link>
                 </div>
             </div>
             <style> {styles}</style>
