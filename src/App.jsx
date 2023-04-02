@@ -21,6 +21,7 @@ import Location from './components/Location';
 import SimpleTextInput from './components/SimpleTextInput';
 import RadioButtonInput from './components/RadioButtonInput';
 import AboutPage from './pages/AboutPage';
+import LogoutPage from './pages/LogoutPage';
 
 const styles = `
 .App {
@@ -89,6 +90,7 @@ function App(props) {
                 <Route path="/simpletext" element={<SimpleTextInput />} />
                 <Route path="/radiooptions" element={<RadioButtonInput options={['Área de plantação', 'Jardim', 'Praça', 'Escola']} />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/logout" element={<LogoutPage/>} />
             </Routes>
             <style> {styles} </style>
         </BrowserRouter>
