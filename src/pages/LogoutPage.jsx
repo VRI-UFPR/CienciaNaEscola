@@ -26,31 +26,52 @@ const styles = `
         font-size: x-large;
     }
 
-    .center {
+    .container{
         border-radius: 30px;
+        padding: 20px;
         justify-content: center;
         align-items: center;
         text-align: center;
-        padding: 20px;
-        top: 50%;
+        width: 80%;
+        height: 18%;
+    }
+
+    .center {
+        position: absolute;
+        top: 40%;
+        left: 10%;
+    }
+
+    .centerb {
+        position: absolute;
+        top: 57%;
+        left: 11%;     
     }
 
     .red-button {
-        border-radius: 10px;
+        border-radius: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
         background-color: #EA636F;
         color: #FFF;
         font-weight: 700;
         font-size: 130%;
         font-family: 'Century Gothic', sans-serif;
+        border: none;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);;
     }
     .grey-button {
-        border-radius: 10px;
+        border-radius: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
         background-color: #787878;
         color: #FFF;
         font-weight: 700;
         font-size: 130%;
         margin-top: 10px;
         font-family: 'Century Gothic', sans-serif;
+        border: none;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 `;
 
@@ -59,11 +80,11 @@ function LogoutPage(props){
     return (
         <div className="d-flex flex-column vh-100 w-100 font-barlow">
             <NavBar />
-            <div className=" bg-grey center">
+            <div className=" bg-grey container center ">
                 <h1 className="font-century-gothic"> Tem certeza que deseja fazer logout? </h1>
                 <button className="grey-button"> Fazer Logout </button>
             </div>
-            <div className="cancelar center">
+            <div className="cancelar container centerb">
                 <button className="red-button"> Cancelar </button>
             </div>
             <style>{styles}</style>
