@@ -26,7 +26,7 @@ function RadioButtonInput({ options = [] }) {
                         Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Dastaque apenas um.
                     </p>
                 </div>
-                <div className="col-3 d-flex justify-content-end ps-3 p-0">
+                <div className="col-3 d-flex justify-content-end ps-3 pt-2 p-0">
                     <FormInputButtons />
                 </div>
             </div>

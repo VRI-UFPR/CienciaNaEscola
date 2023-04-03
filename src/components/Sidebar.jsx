@@ -79,7 +79,7 @@ function Sidebar(props) {
                 <button className="btn snd-btn d-flex flex-row my-2">
                     <img
                         src={BuscarImg}
-                        alt="logo"
+                        alt="Search Icon"
                         style={{
                             width: '35px',
                             paddingRight: '7px',
