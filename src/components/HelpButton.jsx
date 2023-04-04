@@ -13,7 +13,7 @@ const styles = `
     }
 `;
 
-function HomeArrows(props) {
+function HelpButton(props) {
     return (
         <div>
             <button
@@ -23,11 +23,11 @@ function HomeArrows(props) {
                 }}
                 className="btn help-button bg-crimson rounded-circle h-auto w-100 p-1"
             >
-                <img src={helpIcon} alt="Ícone" className="w-100"></img>
+                <img src={helpIcon} alt="Ícone do botão de ajuda" className="w-100"></img>
             </button>
             <style>{styles}</style>
         </div>
     );
 }
 
-export default HomeArrows;
+export default HelpButton;
