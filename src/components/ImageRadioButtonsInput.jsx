@@ -49,7 +49,7 @@ const styles = `
     }
 `;
 
-function RadioButtonInput({ options = [], images = [1, 2, 3, 4, 5, 6, 7, 8, 9] }) {
+function ImageRadioButtonsInput({ options = [], images = [] }) {
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
@@ -71,8 +71,8 @@ function RadioButtonInput({ options = [], images = [1, 2, 3, 4, 5, 6, 7, 8, 9] }
     }, []);
 
     return (
-        <div className="p-3 shadow rounded pb-2 row justify-content-center m-0">
-            <div className="row m-0 justify-content-between mb-3">
+        <div className="row justify-content-center shadow rounded m-0 p-3 pb-2">
+            <div className="row justify-content-between m-0 mb-3">
                 <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm m-0">
                         Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Destaque apenas um.
@@ -82,16 +82,16 @@ function RadioButtonInput({ options = [], images = [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                     <FormInputButtons />
                 </div>
             </div>
-            <div className="row m-0 p-0 position-relative" style={{ maxWidth: '1200px' }}>
+            <div className="row position-relative m-0 p-0" style={{ maxWidth: '1200px' }}>
                 {ImageVisibility ? (
                     slicedImages.map((images, index) => {
                         return (
-                            <div className="row m-0 justify-content-center mb-3 px-1" key={'row' + index}>
+                            <div className="row justify-content-center m-0 mb-3 px-1" key={'row' + index}>
                                 {images.map((image, index) => {
                                     return (
                                         <div className="col-4 p-0" key={image + index}>
                                             <div className={'squareParent rounded shadow mx-2'}>
-                                                <img src={image} className="square w-100" alt="Imagem recebida" />
+                                                <img src={image} className="square w-100" alt="Imagem submetida" />
                                             </div>
                                         </div>
                                     );
@@ -100,12 +100,12 @@ function RadioButtonInput({ options = [], images = [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                         );
                     })
                 ) : (
-                    <div className="row m-0 justify-content-center mb-3 px-1" style={{ maxWidth: '1200px' }}>
+                    <div className="row justify-content-center m-0 mb-3 px-1" style={{ maxWidth: '1200px' }}>
                         {slicedImages[0].map((image, index) => {
                             return (
                                 <div className="col-4 p-0" key={image + index}>
                                     <div className={'squareParent rounded shadow mx-2'}>
-                                        <img src={image} className="square w-100" alt="Imagem recebida" />
+                                        <img src={image} className="square w-100" alt="Imagem submetida" />
                                     </div>
                                 </div>
                             );
@@ -149,4 +149,4 @@ function RadioButtonInput({ options = [], images = [1, 2, 3, 4, 5, 6, 7, 8, 9] }
     );
 }
 
-export default RadioButtonInput;
+export default ImageRadioButtonsInput;

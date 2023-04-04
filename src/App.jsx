@@ -22,6 +22,7 @@ import SimpleTextInput from './components/SimpleTextInput';
 import RadioButtonInput from './components/RadioButtonInput';
 import AboutPage from './pages/AboutPage';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
+import TextImageInput from './components/TextImageInput';
 
 const styles = `
 .App {
@@ -91,17 +92,26 @@ function App(props) {
                 <Route path="/radiooptions" element={<RadioButtonInput options={['Área de plantação', 'Jardim', 'Praça', 'Escola']} />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route
-                    path="/textimage"
+                    path="/imageradio"
                     element={
                         <ImageRadioButtonsInput
                             options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
                             images={[
-                                'https://picsum.photos/118/142',
-                                'https://picsum.photos/118/142',
-                                'https://picsum.photos/118/142',
-                                'https://picsum.photos/118/142',
-                                'https://picsum.photos/118/142',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
                             ]}
+                        />
+                    }
+                />
+                <Route
+                    path="/textimage"
+                    element={
+                        <TextImageInput
+                            options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
+                            image={'https://picsum.photos/380/380'}
                         />
                     }
                 />
