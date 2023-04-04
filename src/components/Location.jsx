@@ -23,12 +23,12 @@ const styles = `
 
 function Location(props) {
     return (
-        <div className="overflow-hidden shadow rounded p-3">
-            <div className="row mb-3">
-                <div className="col-2 d-flex justify-content-end">
-                    <img src={LocationIcon} alt="Location Icon" />
+        <div className="overflow-hidden shadow rounded bg-white py-3 px-0">
+            <div className="row m-0 mb-3">
+                <div className="col-2 d-flex justify-content-center p-0">
+                    <img src={LocationIcon} alt="Location Icon" style={{ width: "30px" }}/>
                 </div>
-                <div className="col">
+                <div className="col p-0">
                     <label labelfor="adressinput" className="font-barlow lh-sm m-0">
                         Forneça sua localização
                     </label>
