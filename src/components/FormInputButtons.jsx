@@ -23,10 +23,6 @@ const styles = `
         line-height: 0px;
     }
 
-	.btn:hover{
-  		background-color: #000000 !important;
-	}
-
 	.buttons-row{
 		max-width: 100px;
 	}
