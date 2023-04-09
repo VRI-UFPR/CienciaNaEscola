@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
@@ -10,6 +11,19 @@ const styles = `
 `;
 
 function SplashPage(props) {
+    const [navigate, setNavigate] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setNavigate(true);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (navigate) {
+        return <Navigate to="/login" />;
+    }
+
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="container-fluid d-flex flex-column flex-grow-1 w-100 px-0">

@@ -23,11 +23,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <App />
-        <style
-            dangerouslySetInnerHTML={{
-                __html: styles,
-            }}
-        />
+        <style> {styles} </style>
     </React.StrictMode>
 );
 
