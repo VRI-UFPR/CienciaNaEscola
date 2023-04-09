@@ -1,26 +1,26 @@
 {
-    "short_name": "Ciência na Escola",
-    "name": "Picce Ciência na Escola",
-    "version": "1.0.0",
-    "description": "MyApp",
-    "main": "index.jsx",
-    "protocol_handlers": [
-        {
-            "protocol": "tel",
-            "url": "/tel_handler?url=%s"
-        }
-    ],
-    "icons": [
-        {
-            "src": "favicon.png",
-            "sizes": "64x64 32x32 24x24 16x16 192x192 512x512",
-            "type": "image/png"
-        }
-    ],
-    "start_url": ".",
-    "display": "standalone",
-    "orientation": "portrait",
-    "theme_color": "#000000",
-    "background_color": "#ffffff",
-    "splash_pages": null
+  "short_name": "Ciência na Escola",
+  "name": "Picce Ciência na Escola",
+  "version": "1.0.0",
+  "description": "MyApp",
+  "main": "index.jsx",
+  "protocol_handlers": [
+    {
+      "protocol": "tel",
+      "url": "/tel_handler?url=%s"
+    }
+  ],
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16 192x192 512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "splash_pages": null
 }
