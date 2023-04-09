@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import BuscarImg from '../assets/images/BuscarImg.svg';
 import PerfilImg from '../assets/images/PerfilImg.png';
 
@@ -91,33 +92,33 @@ function Sidebar(props) {
             </div>
             <div className="sidebar-menu-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Menu</h1>
-                <a className="sidebar-list-items" href="/home">
+                <Link className="sidebar-list-items" to="/home">
                     Protocolos
-                </a>
-                <a className="sidebar-list-items" href="/endprotocol">
+                </Link>
+                <Link className="sidebar-list-items" to="/endprotocol">
                     EndProtocol
-                </a>
-                <a className="sidebar-list-items" href="/terms">
+                </Link>
+                <Link className="sidebar-list-items" to="/terms">
                     Termos
-                </a>
-                <a className="sidebar-list-items" href="/about">
+                </Link>
+                <Link className="sidebar-list-items" to="/about">
                     Sobre o App
-                </a>
-                <a className="sidebar-list-items" href="/help">
+                </Link>
+                <Link className="sidebar-list-items" to="/help">
                     Ajuda
-                </a>
+                </Link>
             </div>
             <div className="sidebar-conta-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Conta</h1>
-                <a className="sidebar-list-items" href="/profile">
+                <Link className="sidebar-list-items" to="/profile">
                     Perfil
-                </a>
-                <a className="sidebar-list-items" href="/login">
+                </Link>
+                <Link className="sidebar-list-items" to="/login">
                     Login
-                </a>
-                <a className="sidebar-list-items" href="/">
+                </Link>
+                <Link className="sidebar-list-items" to="/">
                     Logout
-                </a>
+                </Link>
             </div>
             <style>{styles}</style>
         </div>
