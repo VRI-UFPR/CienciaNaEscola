@@ -21,7 +21,7 @@ function SplashPage(props) {
     }, []);
 
     if (navigate) {
-        return <Navigate to="/terms" />;
+        return <Navigate to="/login" />;
     }
 
     return (

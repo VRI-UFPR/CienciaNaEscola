@@ -93,25 +93,33 @@ function Sidebar(props) {
             </div>
             <div className="sidebar-menu-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Menu</h1>
-                <Link to="/home" className="sidebar-list-items">
+                <Link className="sidebar-list-items" to="/home">
                     Protocolos
                 </Link>
-                <a className="sidebar-list-items" href="/">
-                    Usuários
-                </a>
-                <a className="sidebar-list-items" href="/">
-                    Denúncias
-                </a>
+                <Link className="sidebar-list-items" to="/endprotocol">
+                    EndProtocol
+                </Link>
+                <Link className="sidebar-list-items" to="/terms">
+                    Termos
+                </Link>
+                <Link className="sidebar-list-items" to="/about">
+                    Sobre o App
+                </Link>
+                <Link className="sidebar-list-items" to="/help">
+                    Ajuda
+                </Link>
             </div>
             <div className="sidebar-conta-wrapper d-flex flex-column">
                 <h1 className="sidebar-titles">Conta</h1>
-
-                <Link to="/profile" className="sidebar-list-items">
+                <Link className="sidebar-list-items" to="/profile">
                     Perfil
                 </Link>
-                <a className="sidebar-list-items" href="/">
+                <Link className="sidebar-list-items" to="/login">
+                    Login
+                </Link>
+                <Link className="sidebar-list-items" to="/">
                     Logout
-                </a>
+                </Link>
             </div>
             <button
                 type="button"
