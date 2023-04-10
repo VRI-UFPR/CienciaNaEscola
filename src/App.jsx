@@ -8,14 +8,8 @@ import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
 import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
-import InfoGerais from './components/InfoGerais';
-import DateInput from './components/DateInput';
-import TimeInput from './components/TimeInput';
-import Weather from './components/Weather';
-import Location from './components/Location';
-import SimpleTextInput from './components/SimpleTextInput';
-import RadioButtonInput from './components/RadioButtonInput';
 import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
 
 function App(props) {
     return (
