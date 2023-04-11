@@ -1,12 +1,8 @@
 import React from 'react';
-//import logoutTitle from '../assets/images/helpIcon.svg';
+import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
 
 const styles = `
-
-    .bg-crimson {
-        background-color: #EC6571;
-    }
 
     .bg-grey {
         background-color: #D9D9D9;
@@ -45,8 +41,9 @@ const styles = `
     .centerb {
         position: absolute;
         top: 57%;
-        left: 11%;     
+        left: 10%;     
     }
+
 
     .red-button {
         border-radius: 30px;
@@ -78,15 +75,30 @@ const styles = `
 
 function LogoutPage(props){
     return (
-        <div className="d-flex flex-column vh-100 w-100 font-barlow">
+        <div className="d-flex flex-column font-barlow vh-100 align-center justify-content-center">
             <NavBar />
-            <div className=" bg-grey container center ">
+            <div className="d-flex flex-column bg-grey container center">
                 <h1 className="font-century-gothic"> Tem certeza que deseja fazer logout? </h1>
                 <button className="grey-button"> Fazer Logout </button>
             </div>
-            <div className="cancelar container centerb">
+            <div className="container centerb">
                 <button className="red-button"> Cancelar </button>
             </div>
+            <div className="row d-flex flex-grow-1 align-items-end pt-0 pb-4 mx-0 px-2">
+                <div className="row justify-content-end px-0 mx-0">
+                        <div className="col-3 d-flex align-items-center justify-content-end px-0">
+                            <button
+                                type="button"
+                                style={{
+                                    maxWidth: '32px',
+                                }}
+                                className="btn rounded-circle bg-crimson h-auto w-100 p-1"
+                            >
+                                <img src={helpIcon} alt="Ícone" className="w-100"></img>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             <style>{styles}</style>
         </div>
     )
