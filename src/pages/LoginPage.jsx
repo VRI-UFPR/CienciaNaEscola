@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
+import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +55,19 @@ function LoginPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        navigate('/home');
+        axios
+            .post('https://genforms.c3sl.ufpr.br/api/user/signIn', {
+                email,
+                hash: password,
+            })
+            .then((response) => {
+                if (response.data.token) {
+                    navigate('/home');
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
     };
 
     return (
