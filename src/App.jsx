@@ -10,6 +10,8 @@ import ProtocolPage from './pages/ProtocolPage';
 import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
+import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
+import TextImageInput from './components/TextImageInput';
 
 const styles = `
 .App {
@@ -66,6 +68,30 @@ function App(props) {
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/help" element={<HelpPage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route
+                    path="/imageradio"
+                    element={
+                        <ImageRadioButtonsInput
+                            options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
+                            images={[
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                                'https://picsum.photos/108/148',
+                            ]}
+                        />
+                    }
+                />
+                <Route
+                    path="/textimage"
+                    element={
+                        <TextImageInput
+                            options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
+                            image={'https://picsum.photos/380/380'}
+                        />
+                    }
+                />
             </Routes>
             <style> {styles} </style>
         </BrowserRouter>
