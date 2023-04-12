@@ -1,5 +1,5 @@
 import React from 'react';
-import helpIcon from '../assets/images/helpIcon.svg';
+import HelpButton from '../components/HelpButton';
 
 const styles = `
     .bg-pastel-blue {
@@ -82,15 +82,7 @@ function ProfileForm(props) {
                         </button>
                     </div>
                     <div className="col-3 d-flex align-items-end justify-content-end px-0">
-                        <button
-                            type="button"
-                            style={{
-                                maxWidth: '32px',
-                            }}
-                            className="btn bg-crimson rounded-circle w-100 h-auto p-1"
-                        >
-                            <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                        </button>
+                        <HelpButton />
                     </div>
                 </div>
             </div>

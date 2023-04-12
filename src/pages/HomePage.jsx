@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import HomeButtonList from '../components/HomeButtonList';
 import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
-
-import helpButton from '../assets/images/helpButton.svg';
+import HelpButton from '../components/HelpButton';
 
 const styles = `
     .protocol-info {
@@ -16,10 +15,8 @@ const styles = `
         position: absolute;
     }
 
-    .help-btn {
-        position: fixed;
-        bottom: 5%;
-        right: 10%;
+    .button-container{
+        padding: 24px 36px;
     }
     .home-button-link {
         text-decoration: none;
@@ -43,18 +40,8 @@ function HomePage(props) {
                     <HomeArrows />
                 </div>
             </div>
-
-            <div>
-                <button
-                    className="help-btn p-0 d-flex"
-                    type="button"
-                    style={{
-                        maxWidth: '40px',
-                        width: '50%',
-                    }}
-                >
-                    <img src={helpButton} width="100%" alt=""></img>
-                </button>
+            <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
+                <HelpButton />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </div>
