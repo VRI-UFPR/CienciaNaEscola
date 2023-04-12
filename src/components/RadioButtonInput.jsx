@@ -19,14 +19,14 @@ const styles = `
 
 function RadioButtonInput({ options = [] }) {
     return (
-        <div className="p-3 shadow rounded pb-4">
+        <div className="p-3 shadow rounded bg-white pb-4">
             <div className="row m-0 justify-content-between mb-2">
                 <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm">
                         Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Dastaque apenas um.
                     </p>
                 </div>
-                <div className="col-3 d-flex justify-content-end ps-3 p-0">
+                <div className="col-3 d-flex justify-content-end ps-3 pt-2 p-0">
                     <FormInputButtons />
                 </div>
             </div>
