@@ -1,10 +1,13 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import HomeButtonList from '../components/HomeButtonList';
 import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 import helpButton from '../assets/images/helpButton.svg';
+import HomeButton from '../components/HomeButton';
 
 const styles = `
     .protocol-info {
@@ -25,9 +28,30 @@ const styles = `
         text-decoration: none;
         color: #262626;
     }
+
+    .list-home-btn { 
+        display: flex;
+        justify-content: center;
+        margin-bottom: 13px;
+    }
 `;
 
 function HomePage(props) {
+    const [userForms, setUserForms] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios
+            .get('https://genforms.c3sl.ufpr.br/api/user/list/73')
+            .then((response) => {
+                console.log(response.data);
+                setUserForms(response.data);
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    }, []);
+
     return (
         <div className="general-container container-fluid d-flex flex-column font-barlow h-100 w-100 p-0">
             <NavBar />
@@ -36,9 +60,19 @@ function HomePage(props) {
                     <div>Protocolos recentes</div>
                     <div>Ultima modificação</div>
                 </div>
-                <Link className="home-button-link d-flex" to="/protocol">
-                    <HomeButtonList />
-                </Link>
+
+                <div className="d-flex container-fluid p-0">
+                    <ul className="container-fluid list-unstyled d-flex flex-column flex-grow-1 p-0 m-0">
+                        {userForms.map((userForm) => (
+                            <li>
+                                <Link className="list-home-btn" to={`/protocol/${userForm.id}`}>
+                                    <HomeButton title={userForm.title} />
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                    <style>{styles}</style>
+                </div>
                 <div className="d-flex">
                     <HomeArrows />
                 </div>
