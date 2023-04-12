@@ -36,10 +36,6 @@ const styles = `
         transform: translateX(-50%) translateY(-50%);
     }
 
-    .bg-crimson {
-        background-color: #EC6571;
-    }
-
     .toggle-button{
         min-height: 0px;
         line-height: 0px;
