@@ -1,0 +1,5 @@
+id;id_input_validation;placement;argument
+1; 1; 0;\d{5}-\d{3}
+2; 2; 0;10
+3; 8; 0;2
+4; 3; 0;8
