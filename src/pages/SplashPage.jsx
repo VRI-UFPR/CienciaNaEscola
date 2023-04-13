@@ -1,37 +1,9 @@
-import React from "react";
-import logoPicceCircular from "../assets/images/logoPicceCircular.svg";
-import logoPicceTextual from "../assets/images/logoPicceTextual.svg";
-import ColoredBorder from "../components/ColoredBorder";
+import React from 'react';
+import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
+import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
+import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
-    .bg-coral-red {
-        background-color: #F59489;
-    }
-
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-yellow-orange {
-        background-color: #FECF86;
-    }
-
-    .bg-steel-blue {
-        background-color: #4E9BB9;
-    }
-
-    .bg-crimson {
-        background-color: #EC6571;
-    }
-
-    .bg-lime-green {
-        background-color: #AAD390;
-    }
-
-    .border-cell {
-        height: 10px;
-    }
-
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
@@ -39,27 +11,27 @@ const styles = `
 
 function SplashPage(props) {
     return (
-        <div className="SplashPage d-flex flex-column vh-100 font-barlow">
-            <div className="container-fluid px-0 d-flex flex-column w-100 flex-grow-1">
+        <div className="d-flex flex-column font-barlow vh-100">
+            <div className="container-fluid d-flex flex-column flex-grow-1 w-100 px-0">
                 <ColoredBorder />
-                <div className="row mx-0 px-0 d-flex flex-grow-1 align-items-center">
-                    <div className="row mx-0 px-0 d-flex align-items-center justify-content-center h-50">
-                        <div className="row w-100 justify-content-center">
+                <div className="row d-flex flex-grow-1 align-items-center mx-0 px-0 ">
+                    <div className="row d-flex align-items-center justify-content-center h-50 mx-0 px-0">
+                        <div className="row justify-content-center w-100">
                             <img
                                 src={logoPicceCircular}
                                 className="w-75"
                                 style={{
-                                    maxWidth: "250px",
+                                    maxWidth: '250px',
                                 }}
-                                alt="Logo Picce"
+                                alt="Logo gráfico Picce"
                             ></img>
                         </div>
                         <div className="row justify-content-center pt-4">
                             <div
                                 className="spinner-border text-secondary"
                                 style={{
-                                    width: "50px",
-                                    height: "50px",
+                                    width: '50px',
+                                    height: '50px',
                                 }}
                                 role="status"
                             >
@@ -68,19 +40,19 @@ function SplashPage(props) {
                         </div>
                     </div>
                 </div>
-                <div className="row w-100 p-0 m-0 justify-content-center pb-4">
+                <div className="row justify-content-center w-100 pb-4 p-0 m-0">
                     <img
                         src={logoPicceTextual}
                         style={{
-                            width: "35%",
-                            maxWidth: "200px",
+                            width: '35%',
+                            maxWidth: '200px',
                         }}
-                        alt="Logo Picce"
+                        alt="Logo textual Picce"
                     ></img>
                 </div>
                 <ColoredBorder />
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
     );
 }
