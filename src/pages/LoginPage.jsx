@@ -1,8 +1,9 @@
-import { React, useState } from 'react';
+import { React, useContext, useState } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = `
 
@@ -51,6 +52,7 @@ const styles = `
 function LoginPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const loginHandler = (event) => {
@@ -62,6 +64,7 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.token) {
+                    login(response.data.id, response.data.token);
                     navigate('/home');
                 }
             })
