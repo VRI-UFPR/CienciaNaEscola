@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HomeArrows from '../components/HomeArrows';
@@ -6,6 +6,7 @@ import NavBar from '../components/Navbar';
 import helpButton from '../assets/images/helpButton.svg';
 import HomeButton from '../components/HomeButton';
 import SplashPage from './SplashPage';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = `
     .protocol-info {
@@ -37,18 +38,21 @@ const styles = `
 function HomePage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [userProtocols, setUserForms] = useState([]);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        axios
-            .get('https://genforms.c3sl.ufpr.br/api/user/list/73')
-            .then((response) => {
-                setUserForms(response.data);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
-    }, []);
+        if (user.id != undefined) {
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .then((response) => {
+                    setUserForms(response.data);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
+    }, [user]);
 
     if (isLoading) {
         return <SplashPage />;
