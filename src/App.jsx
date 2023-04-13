@@ -1,6 +1,7 @@
 import logo from "./assets/images/logo.svg";
 import React from "react";
 import SplashPage from "./pages/SplashPage";
+import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TermsPage from "./pages/TermsPage";
 import EndProtocolPage from "./pages/EndProtocolPage";
@@ -72,6 +73,7 @@ function App(props) {
 						</div>
 					}
 				/>
+        <Route path="/navbar" element={<Navbar />} />
 				<Route path="/splash" element={<SplashPage />} />
 				<Route path="/terms" element={<TermsPage />} />
 				<Route path="/endprotocol" element={<EndProtocolPage />} />
