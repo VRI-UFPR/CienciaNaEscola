@@ -1,9 +1,8 @@
 import React from 'react';
-import NavBar from '../components/Navbar';
 import HelpButton from '../components/HelpButton';
+import NavBar from '../components/Navbar';
 
 const styles = `
-
     .bg-crimson {
         background-color: #EC6571;
     }
@@ -28,23 +27,15 @@ const styles = `
         font-size: medium;
         text-align: justify;
     }
-
-    .green-button {
-        border-radius: 10px;
-        background-color: #AAD390;
-        color: #FFF;
-        font-weight: 700;
-        font-size: 130%;
-    }
 `;
 
-function TermsPage(props) {
+function AboutPage(props) {
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
             <div className="container-fluid d-flex flex-column flex-grow-1 px-4">
                 <div className="row d-flex py-4 px-1">
-                    <h1 className="font-century-gothic pb-2">Termos de uso</h1>
+                    <h1 className="pb-2 font-century-gothic">Sobre o aplicativo</h1>
                     <h2>
                         Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
                         Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
@@ -59,14 +50,8 @@ function TermsPage(props) {
                     </h2>
                 </div>
                 <div className="row d-flex flex-grow-1 align-items-end pt-0 pb-4 mx-0 px-2">
-                    <div className="row justify-content-between px-0 mx-0">
-                        <div className="col-3"></div>
-                        <div className="col-4 align-items-center p-0">
-                            <button type="submit" className="btn shadow green-button font-century-gothic w-100 p-2">
-                                Aceitar
-                            </button>
-                        </div>
-                        <div className="col-3 d-flex align-items-end justify-content-end px-0">
+                    <div className="row justify-content-end px-0 mx-0">
+                        <div className="col-3 d-flex align-items-center justify-content-end px-0">
                             <HelpButton />
                         </div>
                     </div>
@@ -77,4 +62,4 @@ function TermsPage(props) {
     );
 }
 
-export default TermsPage;
+export default AboutPage;
