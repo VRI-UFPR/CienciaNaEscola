@@ -17,28 +17,21 @@ const styles = `
     }
 `;
 
-function RadioButtonInput({ options = [] }) {
+function RadioButtonInput(props) {
     return (
         <div className="p-3 shadow rounded bg-white pb-4">
             <div className="row m-0 justify-content-between mb-2">
-                <div className="col-9 p-0">
-                    <p className="form-label font-barlow lh-sm">
-                        Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Dastaque apenas um.
-                    </p>
-                </div>
-                <div className="col-3 d-flex justify-content-end ps-3 pt-2 p-0">
-                    <FormInputButtons />
-                </div>
+                <p className="form-label font-barlow lh-sm px-0">{props.input.question}</p>
             </div>
 
-            {options.map((option) => {
-                const optname = option.toLowerCase().replace(/\s/g, '');
+            {props.input.sugestions.map((option) => {
+                const optname = option.value.toLowerCase().replace(/\s/g, '');
 
                 return (
-                    <div className="form-check ms-2 mb-2">
+                    <div key={optname + 'input'} className="form-check ms-2 mb-2">
                         <input className="form-check-input" type="radio" name="radiooptions" id={optname + 'input'}></input>
-                        <label className="form-check-label font-barlow" for={optname + 'input'}>
-                            {option}
+                        <label className="form-check-label font-barlow" htmlFor={optname + 'input'}>
+                            {option.value}
                         </label>
                     </div>
                 );

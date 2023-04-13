@@ -25,17 +25,12 @@ function SimpleTextInput(props) {
     return (
         <div className="shadow rounded bg-white pb-4 p-3">
             <div className="row justify-content-between mb-1 m-0">
-                <div className="col-8 p-0">
-                    <label labelfor="simpletextinput" className="form-label font-barlow">
-                        Qual a temperatura no momento?
-                    </label>
-                </div>
-                <div className="col-3 d-flex justify-content-end ps-3 pt-1 p-0">
-                    <FormInputButtons />
-                </div>
+                <label labelfor="simpletextinput" className="form-label font-barlow px-0">
+                    {props.input.question}
+                </label>
             </div>
 
-            <input type="text" className="form-control p-0 mb-4" id="simpletextinput" placeholder="Formato numérico inteiro"></input>
+            <input type="text" className="form-control p-0 mb-4" id="simpletextinput" placeholder="Digite sua resposta aqui"></input>
             <style>{styles}</style>
         </div>
     );
