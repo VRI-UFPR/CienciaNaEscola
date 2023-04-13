@@ -1,5 +1,4 @@
 import React from 'react';
-import FormInputButtons from './FormInputButtons';
 
 const styles = `
     .font-barlow {

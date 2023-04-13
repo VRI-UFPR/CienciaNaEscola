@@ -1,20 +1,20 @@
 import { React, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import cloudy from '../assets/images/cloudy.svg';
-import rainy from '../assets/images/rainy.svg';
-import sunny from '../assets/images/sunny.svg';
-import windy from '../assets/images/windy.svg';
+import RadioButtonInput from '../components/RadioButtonInput';
+import SimpleTextInput from '../components/SimpleTextInput';
+import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import ProtocolOptions from '../components/ProtocolOptions';
-import InfoGerais from '../components/InfoGerais';
-import DateInput from '../components/DateInput';
-import TimeInput from '../components/TimeInput';
-import RadioButtonInput from '../components/RadioButtonInput';
-import Weather from '../components/Weather';
-import SimpleTextInput from '../components/SimpleTextInput';
-import Location from '../components/Location';
-import SplashPage from './SplashPage';
+// import cloudy from '../assets/images/cloudy.svg';
+// import rainy from '../assets/images/rainy.svg';
+// import sunny from '../assets/images/sunny.svg';
+// import windy from '../assets/images/windy.svg';
+// import InfoGerais from '../components/InfoGerais';
+// import DateInput from '../components/DateInput';
+// import TimeInput from '../components/TimeInput';
+// import Weather from '../components/Weather';
+// import Location from '../components/Location';
 
 const styles = `
     .row {
