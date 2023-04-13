@@ -39,7 +39,7 @@ function HomePage(props) {
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        if (user.id !== undefined) {
+        if (user.id !== null && user.token !== null) {
             axios
                 .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
                 .then((response) => {
