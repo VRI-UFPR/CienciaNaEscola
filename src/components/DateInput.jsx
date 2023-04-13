@@ -40,14 +40,14 @@ function DateInput(props) {
                         <img src={iconDate} alt="" />
                     </div>
                 </div>
-                <div className="col py-3">
+                <div className="col py-3 px-3 pe-4">
                     <div className="row m-0">
-                        <label labelfor="dateinput" className="form-label date-label font-century-gothic m-0 ps-2 p-0">
+                        <label labelfor="dateinput" className="form-label date-label font-century-gothic m-0 p-0">
                             Data da coleta
                         </label>
                     </div>
                     <div className="row m-0">
-                        <input type="date" className="form-control date-input w-auto ps-2 pt-1 p-0" id="dateinput"></input>
+                        <input type="date" className="form-control date-input w-auto pt-1 p-0" id="dateinput"></input>
                     </div>
                 </div>
             </div>
