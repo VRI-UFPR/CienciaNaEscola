@@ -43,7 +43,7 @@ function TimeInput(props) {
                 <div className="col py-3">
                     <div className="row m-0">
                         <label labelfor="timeinput" className="form-label time-label font-century-gothic m-0 ps-2 p-0">
-                            Data da coleta
+                            Horário da coleta
                         </label>
                     </div>
                     <div className="row m-0">
