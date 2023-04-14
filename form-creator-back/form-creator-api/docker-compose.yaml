@@ -4,6 +4,7 @@ services:
         container_name: form-postgres
         image: postgres:11
         environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
             DB_USER: ${DB_USER}
             DB_PASSWORD: ${DB_PASSWORD}
             DB_NAME: ${DB_NAME}
@@ -17,6 +18,7 @@ services:
         environment:
             NODE_ENV: ${FORM_API_NODE_ENV}
             DB_HOST: form-postgres
+            POSTGRES_HOST_AUTH_METHOD: trust
             DB_USER: ${DB_USER}
             DB_PASSWORD: ${DB_PASSWORD}
             DB_NAME: ${DB_NAME}
