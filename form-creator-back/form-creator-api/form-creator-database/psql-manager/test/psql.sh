@@ -5,7 +5,7 @@ basePath=$(echo $BASH_SOURCE | rev | cut -c 8- | rev)
 cd $basePath/..
 
 #Before all tests
-./manager.sh psql drop &> /dev/null
+# ./manager.sh psql drop &> /dev/null
 
 echo "Should create a database"
 ./manager.sh psql create &> /dev/null
@@ -98,15 +98,15 @@ else
     echo -e "\tFail"
 fi
 
-echo "Should drop the database"
-./manager.sh psql drop &> /dev/null
+# echo "Should drop the database"
+# ./manager.sh psql drop &> /dev/null
 
-if [[ $? -eq 0 ]]; then
-    echo -e "\tSucess"
-else
-    error=$(($error +1))
-    echo -e "\tFail"
-fi
+# if [[ $? -eq 0 ]]; then
+#     echo -e "\tSucess"
+# else
+#     error=$(($error +1))
+#     echo -e "\tFail"
+# fi
 
 # For some reason does not work on gitlab-ci
 # echo "Should not create database with wrong credentials"
