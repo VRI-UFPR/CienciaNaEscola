@@ -75,7 +75,7 @@ export class EnumHandler {
      * @returns - Input Type as string.
      */
     public static stringifyInputType(a: InputType): string {
-        switch (a) {
+        switch (+a) {
             case InputType.TEXT:
                 return "text";
             case InputType.CHECKBOX:
@@ -120,7 +120,7 @@ export class EnumHandler {
      * @returns - Validation Type as string
      */
     public static stringifyValidationType(a: ValidationType): string {
-        switch (a) {
+        switch (+a) {
             case ValidationType.REGEX:
                 return "regex";
             case ValidationType.MANDATORY:
@@ -176,7 +176,7 @@ export class EnumHandler {
      * @returns - Update Type as string
      */
     public static stringifyUpdateType(a: UpdateType): string {
-        switch (a) {
+        switch (+a) {
             case UpdateType.ADD:
                 return "add";
             case UpdateType.REMOVE:
