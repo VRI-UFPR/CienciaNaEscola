@@ -57,6 +57,7 @@ function LoginPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
+        // .post('http://localhost:3333/user/signIn', {
         axios
             .post('https://genforms.c3sl.ufpr.br/api/user/signIn', {
                 email,
