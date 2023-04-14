@@ -31,7 +31,7 @@ services:
             - ./config/:/app/config/
             - ./script/:/app/script/
             - ./server/:/app/server/
-            - ./coverage/:/app/coverage/
+            # - ./coverage/:/app/coverage/
             - ./doc/:/app/doc/
             - ./src/:/app/src/
             - ./test/:/app/test/
