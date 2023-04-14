@@ -1,5 +1,5 @@
 import React from 'react';
-import helpIcon from '../assets/images/helpIcon.svg';
+import HelpButton from '../components/HelpButton';
 import NavBar from '../components/Navbar';
 
 const styles = `
@@ -25,10 +25,13 @@ const styles = `
     }
 
     h1 {
-        text-align: center;
         font-weight: 700;
         color: #535353;
         font-size: x-large;
+    }
+
+    .options-title {
+        text-align: center;
     }
 
     .options-button {
@@ -52,7 +55,7 @@ function EndProtocolPage(props) {
                 <div className="row d-flex flex-grow-1 align-items-center justify-content-center py-4 px-0">
                     <div className="row shadow popup-warn w-75 mx-0 px-0 py-4">
                         <div className="row p-4 py-2 mx-0">
-                            <h1 className="font-century-gothic">Deseja finalizar o protocolo?</h1>
+                            <h1 className="options-title font-century-gothic">Deseja finalizar o protocolo?</h1>
                         </div>
                         <div className="row p-4 py-2 mx-0">
                             <div className="col d-flex px-1">
@@ -77,15 +80,7 @@ function EndProtocolPage(props) {
                 <div className="row d-flex align-items-end pt-0 pb-4 mx-0 px-2">
                     <div className="row justify-content-end px-0 mx-0">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
-                            <button
-                                type="button"
-                                style={{
-                                    maxWidth: '32px',
-                                }}
-                                className="btn help-button rounded-circle bg-crimson w-100 h-auto p-1"
-                            >
-                                <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                            </button>
+                            <HelpButton />
                         </div>
                     </div>
                 </div>

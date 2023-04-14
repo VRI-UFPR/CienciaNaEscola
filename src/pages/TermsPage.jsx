@@ -1,6 +1,6 @@
 import React from 'react';
-import helpIcon from '../assets/images/helpIcon.svg';
 import NavBar from '../components/Navbar';
+import HelpButton from '../components/HelpButton';
 
 const styles = `
 
@@ -66,16 +66,8 @@ function TermsPage(props) {
                                 Aceitar
                             </button>
                         </div>
-                        <div className="col-3 d-flex align-items-center justify-content-end px-0">
-                            <button
-                                type="button"
-                                style={{
-                                    maxWidth: '32px',
-                                }}
-                                className="btn bg-crimson rounded-circle h-auto w-100 p-1"
-                            >
-                                <img src={helpIcon} alt="Ícone" className="w-100"></img>
-                            </button>
+                        <div className="col-3 d-flex align-items-end justify-content-end px-0">
+                            <HelpButton />
                         </div>
                     </div>
                 </div>
