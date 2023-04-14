@@ -1,57 +1,56 @@
 import React from 'react';
 import titleCE from '../assets/images/titleCE.svg';
-import navToggler from '../assets/images/navToggler.svg';
+import iconToggler from '../assets/images/navToggler.svg';
 import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
 
 const styles = `
-    .navbar {
+    .ce-navbar {
         background-color: rgba(78, 155, 185, 0.81);
     }
 
-    .offcanvas {
+    .bg-coral-red {
         background-color: #F59489;
-  }
+    }
+
+    .title-ce{
+        max-width: 300px;
+    }
+
+    .icon-toggler{
+        max-width: 50px;
+    }
+
+    .offcanvas-ce{
+        max-width: 400px;
+    }
 `;
 
 function NavBar(props) {
     return (
         <div>
-            <nav className="navbar navbar-expand-sm navbar-light d-flex flex-column pt-0">
+            <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
                 <ColoredBorder />
-                <div className="container-fluid d-flex pb-2 pt-3 p-0 mx-0">
-                    <div className="row justify-content-between align-items-center w-100 px-1 mx-4">
-                        <div className="col-2 d-flex justify-content-start p-0">
-                            <button
-                                className="btn d-flex align-items-center shadow-none p-1 pt-1"
-                                type="button"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasExample"
-                                aria-controls="offcanvasExample"
-                                style={{
-                                    maxWidth: '50px',
-                                    width: '80%',
-                                }}
-                            >
-                                <img src={navToggler} width="100%" alt=""></img>
-                            </button>
-                        </div>
-                        <div className="col-7 d-flex justify-content-center p-0">
-                            <img
-                                alt=""
-                                src={titleCE}
-                                width="100%"
-                                style={{
-                                    maxWidth: '300px',
-                                }}
-                            ></img>
-                        </div>
-                        <div className="col-2"></div>
+                <div className="row justify-content-between align-items-center w-100 px-4 py-3">
+                    <div className="col-2 d-flex justify-content-start p-0">
+                        <button
+                            className={'navbar-toggler icon-toggler btn h-auto shadow-none p-1' + (props.hideNav ? ' d-none' : '')}
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#sidebar"
+                            aria-controls="sidebar"
+                        >
+                            <img src={iconToggler} width="100%" alt="Ícone"></img>
+                        </button>
                     </div>
+                    <div className="col-7 d-flex justify-content-center p-0">
+                        <img alt="Programa Interinstitucional de Ciência Cidadã na Escola" src={titleCE} className="title-ce w-100"></img>
+                    </div>
+                    <div className="col-2"></div>
                 </div>
             </nav>
 
-            <div className="offcanvas offcanvas-start w-50" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
                 <Sidebar />
             </div>
             <style>{styles}</style>
