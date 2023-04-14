@@ -42,7 +42,7 @@ const styles = `
 
 function TimeInput(props) {
     return (
-        <div className="shadow rounded p-3">
+        <div className="shadow rounded bg-white p-3">
             <div className="row justify-content-between mb-1 m-0">
                 <div className="col-1 icon-col d-flex justify-content-end p-0 pt-1">
                     <div className="col d-flex align-items-start p-0">
