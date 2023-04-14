@@ -51,6 +51,7 @@ function ProtocolPage(props) {
     const { id } = useParams();
 
     useEffect(() => {
+        // .get(`http://localhost:3333/form/${id}`)
         axios
             .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
             .then((response) => {
