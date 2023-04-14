@@ -2,7 +2,8 @@ CREATE TABLE form (
     id SERIAL PRIMARY KEY,
     title TEXT,
     description TEXT,
-    times BOOLEAN
+    times BOOLEAN,
+    status BOOLEAN
 );
 
 CREATE TABLE input (
