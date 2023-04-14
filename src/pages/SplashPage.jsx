@@ -7,51 +7,37 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
+    .logo-picce-circular{
+        max-width: 350px;
+    }
+
+    .logo-picce-textual{
+        max-width: 200px;
+    }
+
+    .spinner-splash{
+        width: 50px;
+        height: 50px;
+    }
 `;
 
 function SplashPage(props) {
     return (
-        <div className="d-flex flex-column font-barlow vh-100">
-            <div className="container-fluid d-flex flex-column flex-grow-1 w-100 px-0">
-                <ColoredBorder />
-                <div className="row d-flex flex-grow-1 align-items-center mx-0 px-0 ">
-                    <div className="row d-flex align-items-center justify-content-center h-50 mx-0 px-0">
-                        <div className="row justify-content-center w-100">
-                            <img
-                                src={logoPicceCircular}
-                                className="w-75"
-                                style={{
-                                    maxWidth: '250px',
-                                }}
-                                alt="Logo gráfico Picce"
-                            ></img>
-                        </div>
-                        <div className="row justify-content-center pt-4">
-                            <div
-                                className="spinner-border text-secondary"
-                                style={{
-                                    width: '50px',
-                                    height: '50px',
-                                }}
-                                role="status"
-                            >
-                                <span className="sr-only"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row justify-content-center w-100 pb-4 p-0 m-0">
-                    <img
-                        src={logoPicceTextual}
-                        style={{
-                            width: '35%',
-                            maxWidth: '200px',
-                        }}
-                        alt="Logo textual Picce"
-                    ></img>
-                </div>
-                <ColoredBorder />
+        <div className="container-fluid d-flex flex-column font-barlow vh-100 px-0">
+            <ColoredBorder />
+            <div className="row flex-grow-1 align-items-end w-75 mx-auto ">
+                <img src={logoPicceCircular} className="mx-auto logo-picce-circular" alt="Logo gráfico Picce"></img>
             </div>
+            <div className="row h-25 w-50 mx-auto align-items-center">
+                <div className="spinner-border text-secondary mx-auto spinner-splash" role="status">
+                    <span className="sr-only"></span>
+                </div>
+            </div>
+            <div className="row h-25 w-50 mx-auto align-items-center">
+                <img src={logoPicceTextual} className="mx-auto logo-picce-textual" alt="Logo textual Picce"></img>
+            </div>
+            <ColoredBorder />
             <style>{styles}</style>
         </div>
     );
