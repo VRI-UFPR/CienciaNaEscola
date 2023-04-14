@@ -17,7 +17,32 @@
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# back
+*.log
+*.out
+*.pid
+*.map
+*.swp
+*.env
+*.swo
+/.trash
+/pids
+/vscode
+/logs
+/node_modules
+/doc
+/coverage
+/build
+/dist
+*.bak
+.env
+.editorconfig
+*~
+.#*
+*#
