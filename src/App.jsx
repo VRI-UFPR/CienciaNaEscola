@@ -4,12 +4,11 @@ import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
-import TermsPage from './pages/TermsPage';
+import InfosPage from './pages/InfosPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
 import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
-import AboutPage from './pages/AboutPage';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
 
@@ -62,12 +61,12 @@ function App(props) {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/navbar" element={<Navbar />} />
-                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/protocol" element={<ProtocolPage />} />
                 <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/help" element={<HelpPage />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                 <Route
                     path="/imageradio"
                     element={
