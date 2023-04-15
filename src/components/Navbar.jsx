@@ -31,7 +31,7 @@ function NavBar(props) {
         <div>
             <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
                 <ColoredBorder />
-                <div className="row justify-content-between align-items-center w-100 px-4 py-3">
+                <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
                     <div className="col-2 d-flex justify-content-start p-0">
                         <button
                             className={'navbar-toggler icon-toggler btn h-auto shadow-none p-1' + (props.hideNav ? ' d-none' : '')}
