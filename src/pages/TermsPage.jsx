@@ -43,14 +43,15 @@ const styles = `
 `;
 
 function TermsPage(props) {
+    const { showSidebar, showAccept, showNavToggler } = props;
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className="col-2 bg-coral-red d-none d-lg-flex">
+                <div className={`col-2 bg-coral-red d-none ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
-                    <NavBar hideNav={true} />
+                    <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
                             <h1 className="font-century-gothic pb-3 m-0">Termos de uso</h1>
@@ -67,11 +68,11 @@ function TermsPage(props) {
                         <div className="row justify-content-between mx-0">
                             <div className="col-3"></div>
                             <div className="col-4 align-items-center p-0">
-                                <button type="submit" className="btn shadow green-button font-century-gothic w-100 p-2 d-lg-none">
+                                <button className={`btn shadow green-button font-century-gothic w-100 p-2 ${showAccept ? '' : ' d-none'}`}>
                                     Aceitar
                                 </button>
                             </div>
-                            <div className="col-3 d-flex align-items-end justify-content-end px-0">
+                            <div className="col-3 d-flex align-items-end justify-content-end p-0">
                                 <HelpButton />
                             </div>
                         </div>
@@ -83,5 +84,11 @@ function TermsPage(props) {
         </div>
     );
 }
+
+TermsPage.defaultProps = {
+    showSidebar: true,
+    showAccept: true,
+    showNavToggler: true,
+};
 
 export default TermsPage;
