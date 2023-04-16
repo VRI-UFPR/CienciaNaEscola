@@ -24,7 +24,7 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    h1 {
+    .box h1 {
         color: #535353;
         font-weight: bold;
         font-size: x-large;
@@ -44,6 +44,10 @@ const styles = `
         border: none;
         border-radius: 30px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .buttons:active {
+        opacity: 0.75;
     }
 `;
 
