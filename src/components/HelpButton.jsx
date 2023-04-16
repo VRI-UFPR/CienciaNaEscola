@@ -4,8 +4,8 @@ import helpIcon from '../assets/images/helpIcon.svg';
 
 const styles = `
     .help-button{
-        min-height: 0px;
-        line-height: 0px;
+        max-height: 32px;
+        max-width: 32px;
     }
 
     .btn-crimson {
@@ -30,14 +30,8 @@ const styles = `
 
 function HelpButton(props) {
     return (
-        <div>
-            <button
-                type="button"
-                style={{
-                    maxWidth: '32px',
-                }}
-                className="btn btn-crimson help-button rounded-circle h-auto w-100 p-1"
-            >
+        <div className="ratio ratio-1x1 help-button">
+            <button type="button" className="btn d-flex btn-crimson rounded-circle w-100 h-100 p-1 ">
                 <img src={helpIcon} alt="Ícone do botão de ajuda" className="w-100"></img>
             </button>
             <style>{styles}</style>
