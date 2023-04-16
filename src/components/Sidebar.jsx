@@ -115,7 +115,7 @@ function Sidebar(props) {
                 <a className="sidebar-list-items" href="/login">
                     Login
                 </a>
-                <a className="sidebar-list-items" href="/">
+                <a className="sidebar-list-items" href="/logout">
                     Logout
                 </a>
             </div>
