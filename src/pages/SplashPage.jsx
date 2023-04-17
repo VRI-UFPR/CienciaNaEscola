@@ -4,54 +4,38 @@ import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
-    .font-barlow {
-        font-family: 'Barlow', sans-serif;
+    .logo-picce-circular{
+        max-width: 30%;
+    }
+
+    .logo-picce-textual{
+        max-width: 40%;
+    }
+
+    .spinner-splash{
+        width: 45px;
+        height: 45px;
     }
 `;
 
 function SplashPage(props) {
     return (
-        <div className="d-flex flex-column font-barlow vh-100">
-            <div className="container-fluid d-flex flex-column flex-grow-1 w-100 px-0">
-                <ColoredBorder />
-                <div className="row d-flex flex-grow-1 align-items-center mx-0 px-0 ">
-                    <div className="row d-flex align-items-center justify-content-center h-50 mx-0 px-0">
-                        <div className="row justify-content-center w-100">
-                            <img
-                                src={logoPicceCircular}
-                                className="w-75"
-                                style={{
-                                    maxWidth: '250px',
-                                }}
-                                alt="Logo gráfico Picce"
-                            ></img>
-                        </div>
-                        <div className="row justify-content-center pt-4">
-                            <div
-                                className="spinner-border text-secondary"
-                                style={{
-                                    width: '50px',
-                                    height: '50px',
-                                }}
-                                role="status"
-                            >
-                                <span className="sr-only"></span>
-                            </div>
-                        </div>
-                    </div>
+        <div className="d-flex flex-column align-items-center vh-100">
+            <ColoredBorder />
+            <div className="row flex-grow-1 align-items-end justify-content-center w-75 m-0">
+                <div className="ratio ratio-1x1 logo-picce-circular h-75">
+                    <img src={logoPicceCircular} className="w-100" alt="Logo gráfico Picce"></img>
                 </div>
-                <div className="row justify-content-center w-100 pb-4 p-0 m-0">
-                    <img
-                        src={logoPicceTextual}
-                        style={{
-                            width: '35%',
-                            maxWidth: '200px',
-                        }}
-                        alt="Logo textual Picce"
-                    ></img>
-                </div>
-                <ColoredBorder />
             </div>
+            <div className="row align-items-center justify-content-center h-25 m-0">
+                <div className="spinner-border text-secondary spinner-splash" role="status">
+                    <span className="sr-only"></span>
+                </div>
+            </div>
+            <div className="row align-items-center justify-content-center h-25 px-2 m-0">
+                <img src={logoPicceTextual} className="logo-picce-textual" alt="Logo textual Picce"></img>
+            </div>
+            <ColoredBorder />
             <style>{styles}</style>
         </div>
     );

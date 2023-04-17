@@ -1,11 +1,16 @@
 import React from 'react';
 
-const TextButtonStyles = (hue, sat, lig) => {
+import helpIcon from '../assets/images/helpIcon.svg';
+
+const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
+        .rounded-button{
+            max-height: ${size}px;
+            max-width: ${size}px;
+        }
+
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig} {
             color: #fff;
-            font-weight: 700;
-            font-size: 1.3rem;
             background-color: hsl(${hue}, ${sat}%, ${lig}%);
             border-color: hsl(${hue}, ${sat}%, ${lig}%);
         }
@@ -25,28 +30,33 @@ const TextButtonStyles = (hue, sat, lig) => {
     `;
 };
 
-function TextButton(props) {
+function RoundedButton(props) {
     const {
         hsl: [hue, sat, lig],
-        text,
-        className,
+        size,
+        icon,
+        alt,
     } = props;
     return (
-        <button
-            type="button"
-            className={`btn d-flex btn-${
-                'hsl-' + hue + '-' + sat + '-' + lig
-            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 p-2 ${className}`}
-        >
-            {text}
-            <style>{TextButtonStyles(hue, sat, lig)}</style>
-        </button>
+        <div className="ratio ratio-1x1 rounded-button">
+            <button
+                type="button"
+                className={`btn btn-${
+                    'hsl-' + hue + '-' + sat + '-' + lig
+                } d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1`}
+            >
+                <img src={icon} alt={alt} className="w-100"></img>
+            </button>
+            <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
+        </div>
     );
 }
 
-TextButton.defaultProps = {
-    hsl: [0, 0, 0],
-    text: 'Button',
+RoundedButton.defaultProps = {
+    hsl: [355, 78, 66],
+    size: 32,
+    icon: helpIcon,
+    alt: 'Ícone',
 };
 
-export default TextButton;
+export default RoundedButton;
