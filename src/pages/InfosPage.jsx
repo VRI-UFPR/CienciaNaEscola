@@ -4,13 +4,9 @@ import HelpButton from '../components/HelpButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 
-const styles = `
+const infosPageStyles = `
     .bg-coral-red {
         background-color: #F59489;
-    }
-
-    .bg-crimson {
-        background-color: #EC6571;
     }
 
     .font-barlow {
@@ -21,25 +17,17 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    h1 {
+    .infos-h1 {
         color: #535353;
         font-weight: bold;
         font-size: x-large;
     }
 
-    h2 {
+    .infos-h2 {
         color: #535353;
         font-weight: 600;
         font-size: medium;
         text-align: justify;
-    }
-
-    .green-button {
-        border-radius: 10px;
-        background-color: #AAD390;
-        color: #FFF;
-        font-weight: 700;
-        font-size: 130%;
     }
 `;
 
@@ -55,8 +43,8 @@ function InfosPage(props) {
                     <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="font-century-gothic pb-3 m-0">{title}</h1>
-                            <h2 className="pb-4 m-0">{content}</h2>
+                            <h1 className="infos-h1 font-century-gothic pb-3 m-0">{title}</h1>
+                            <h2 className="infos-h2 pb-4 m-0">{content}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-3"></div>
@@ -71,7 +59,7 @@ function InfosPage(props) {
                 </div>
             </div>
 
-            <style>{styles}</style>
+            <style>{infosPageStyles}</style>
         </div>
     );
 }
