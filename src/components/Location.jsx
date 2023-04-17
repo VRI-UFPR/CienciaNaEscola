@@ -1,5 +1,5 @@
 import React from 'react';
-import iconLocation from '../assets/images/iconLocation.png';
+import iconLocation from '../assets/images/iconLocation.svg';
 
 const styles = `
     .font-barlow {
