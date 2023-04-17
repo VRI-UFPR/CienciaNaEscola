@@ -4,12 +4,15 @@ import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
-import TermsPage from './pages/TermsPage';
+import InfosPage from './pages/InfosPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
 import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
+import { AuthProvider } from './contexts/AuthContext';
+import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
+import TextImageInput from './components/TextImageInput';
 
 const styles = `
 .App {
@@ -54,21 +57,47 @@ const styles = `
 
 function App(props) {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<SplashPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/navbar" element={<Navbar />} />
-                <Route path="/terms" element={<TermsPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/protocol" element={<ProtocolPage />} />
-                <Route path="/endprotocol" element={<EndProtocolPage />} />
-                <Route path="/help" element={<HelpPage />} />
-                <Route path="/about" element={<AboutPage />} />
-            </Routes>
-            <style> {styles} </style>
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<SplashPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/navbar" element={<Navbar />} />
+                    <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/protocol" element={<ProtocolPage />} />
+                    <Route path="/endprotocol" element={<EndProtocolPage />} />
+                    <Route path="/help" element={<HelpPage />} />
+                    <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
+                    <Route
+                        path="/imageradio"
+                        element={
+                            <ImageRadioButtonsInput
+                                options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
+                                images={[
+                                    'https://picsum.photos/108/148',
+                                    'https://picsum.photos/108/148',
+                                    'https://picsum.photos/108/148',
+                                    'https://picsum.photos/108/148',
+                                    'https://picsum.photos/108/148',
+                                ]}
+                            />
+                        }
+                    />
+                    <Route
+                        path="/textimage"
+                        element={
+                            <TextImageInput
+                                options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
+                                image={'https://picsum.photos/380/380'}
+                            />
+                        }
+                    />
+                </Routes>
+                <style> {styles} </style>
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 
