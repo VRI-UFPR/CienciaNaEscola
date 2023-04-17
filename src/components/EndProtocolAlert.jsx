@@ -1,7 +1,7 @@
 import React from 'react';
 import TextButton from './TextButton';
 
-const styles = `
+const endProtocolAlertStyles = `
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
@@ -17,7 +17,7 @@ const styles = `
     }
 `;
 
-function EndProtocolPage(props) {
+function EndProtocolAlert(props) {
     return (
         <div className="d-flex flex-column shadow bg-grey rounded-4 w-100 mx-0 px-0 py-4">
             <div className="row p-4 py-2 mx-0">
@@ -31,9 +31,9 @@ function EndProtocolPage(props) {
                     <TextButton hsl={[97, 43, 70]} text="Sim" />
                 </div>
             </div>
-            <style>{styles}</style>
+            <style>{endProtocolAlertStyles}</style>
         </div>
     );
 }
 
-export default EndProtocolPage;
+export default EndProtocolAlert;
