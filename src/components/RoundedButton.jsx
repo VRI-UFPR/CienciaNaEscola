@@ -4,7 +4,7 @@ import helpIcon from '../assets/images/helpIcon.svg';
 
 const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
-        .help-button{
+        .rounded-button{
             max-height: ${size}px;
             max-width: ${size}px;
         }
@@ -33,8 +33,8 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
 function RoundedButton(props) {
     const { hue, sat, lig, size, icon } = props;
     return (
-        <div className="ratio ratio-1x1 help-button">
-            <button type="button" className="btn d-flex btn-hsl rounded-circle w-100 h-100 align-items-center justify-content-center p-1 ">
+        <div className="ratio ratio-1x1 rounded-button">
+            <button type="button" className="btn btn-hsl d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1">
                 <img src={icon} alt="Ícone do botão de ajuda" className="w-100"></img>
             </button>
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
