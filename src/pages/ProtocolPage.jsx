@@ -71,7 +71,7 @@ function ProtocolPage(props) {
     return (
         <div className="min-vh-100 d-flex flex-column">
             <NavBar />
-            <div className="protocol-wrapper d-flex flex-column flex-grow-1 px-4 py-4">
+            <div className="protocol-wrapper d-flex flex-column h-100 px-4 py-4">
                 <div className="row align-items-start m-0">
                     <div className="col-3 p-0">
                         <p className="protocol-number rounded shadow font-barlow m-0 p-2">N° prot.</p>
