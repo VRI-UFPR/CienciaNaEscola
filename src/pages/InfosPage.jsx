@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from '../components/Navbar';
 import HelpButton from '../components/HelpButton';
 import Sidebar from '../components/Sidebar';
+import TextButton from '../components/TextButton';
 
 const styles = `
     .bg-coral-red {
@@ -60,9 +61,7 @@ function InfosPage(props) {
                         <div className="row justify-content-between mx-0">
                             <div className="col-3"></div>
                             <div className="col-4 align-items-center p-0">
-                                <button className={`btn shadow green-button font-century-gothic w-100 p-2 ${showAccept ? '' : ' d-none'}`}>
-                                    Aceitar
-                                </button>
+                                <TextButton className={showAccept ? '' : 'd-none'} hsl={[97, 43, 70]} text="Aceitar" />
                             </div>
                             <div className="col-3 d-flex align-items-end justify-content-end p-0">
                                 <HelpButton />
