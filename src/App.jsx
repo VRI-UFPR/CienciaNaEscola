@@ -7,7 +7,6 @@ import Navbar from './components/Navbar';
 import InfosPage from './pages/InfosPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
-import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
@@ -65,7 +64,7 @@ function App(props) {
                     <Route path="/navbar" element={<Navbar />} />
                     <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
                     <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/protocol" element={<ProtocolPage />} />
+                    <Route path="/protocol/:id" element={<ProtocolPage />} />
                     <Route path="/endprotocol" element={<EndProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
