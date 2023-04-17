@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 30%;
+        max-width: 350px;
+        max-height: 75%;
     }
 
     .logo-picce-textual{
