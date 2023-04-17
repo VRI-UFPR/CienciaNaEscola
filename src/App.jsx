@@ -65,7 +65,6 @@ function App(props) {
                     <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/protocol/:id" element={<ProtocolPage />} />
-                    <Route path="/endprotocol" element={<EndProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                     <Route
