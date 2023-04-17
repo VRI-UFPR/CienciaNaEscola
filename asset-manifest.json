@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/CienciaNaEscola/static/js/main.89da36f3.js",
+    "main.js": "/CienciaNaEscola/static/js/main.bce6f708.js",
     "static/js/787.28cb0dcd.chunk.js": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js",
     "static/media/logoPicceCircular.svg": "/CienciaNaEscola/static/media/logoPicceCircular.58ee48f660f62a5b5669ec2e8b091a93.svg",
     "static/media/loginPageBackground.png": "/CienciaNaEscola/static/media/loginPageBackground.0eae8c2ef4b67cf22b51.png",
@@ -15,15 +15,18 @@
     "static/media/loginTitle.svg": "/CienciaNaEscola/static/media/loginTitle.c88852f770423ccbdf5767f701001fd3.svg",
     "static/media/configButton.svg": "/CienciaNaEscola/static/media/configButton.04c4fc3afbd154fda63a4f039d87c4de.svg",
     "static/media/visibilityIcon.svg": "/CienciaNaEscola/static/media/visibilityIcon.32c1ba2e621153949c20934dfbb1f9e8.svg",
+    "static/media/iconLocation.svg": "/CienciaNaEscola/static/media/iconLocation.c189e723b484af08bb1ac6b2ed8a973c.svg",
     "static/media/helpIcon.svg": "/CienciaNaEscola/static/media/helpIcon.cc3345bb42e8f6f952729544a08175b5.svg",
+    "static/media/iconDate.svg": "/CienciaNaEscola/static/media/iconDate.516f3d4dd3fe66d6e99c27286b42cd71.svg",
     "static/media/deleteButton.svg": "/CienciaNaEscola/static/media/deleteButton.7f2fa136a1827b4fbdce4a53c1b7ff5c.svg",
     "index.html": "/CienciaNaEscola/index.html",
+    "static/media/iconTime.svg": "/CienciaNaEscola/static/media/iconTime.46b044f00309498d49e2161d5c3f761b.svg",
     "static/media/pinkArrow.svg": "/CienciaNaEscola/static/media/pinkArrow.9713d1fb7b8b8b7be6f8acbd39d19ee6.svg",
     "static/media/copyButton.svg": "/CienciaNaEscola/static/media/copyButton.9425eeae44d4173767ec0476d2794f60.svg",
-    "main.89da36f3.js.map": "/CienciaNaEscola/static/js/main.89da36f3.js.map",
+    "main.bce6f708.js.map": "/CienciaNaEscola/static/js/main.bce6f708.js.map",
     "787.28cb0dcd.chunk.js.map": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.89da36f3.js"
+    "static/js/main.bce6f708.js"
   ]
 }
