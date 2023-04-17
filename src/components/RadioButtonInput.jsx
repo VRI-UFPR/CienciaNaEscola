@@ -31,7 +31,7 @@ function RadioButtonInput(props) {
                             <input
                                 className="form-check-input radio-button-input"
                                 type="radio"
-                                name="radiooptions"
+                                name={'radiooptions' + props.input.id}
                                 id={optname + 'input'}
                             ></input>
                             <label className="form-check-label radio-button-label font-barlow" htmlFor={optname + 'input'}>
