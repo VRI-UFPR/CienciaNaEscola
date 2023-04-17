@@ -7,7 +7,7 @@ function AlertsPage(props) {
     return (
         <div>
             <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EndProtocolModal">
-                EndProtocolAlert
+                EndProtocol
             </button>
             <div className="modal fade" id="EndProtocolModal" tabindex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
