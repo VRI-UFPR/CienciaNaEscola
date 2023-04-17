@@ -1,5 +1,5 @@
 import React from 'react';
-import iconTime from '../assets/images/iconTime.png';
+import iconTime from '../assets/images/iconTime.svg';
 
 const styles = `
     .font-barlow {
