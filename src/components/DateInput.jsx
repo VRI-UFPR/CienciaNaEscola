@@ -1,5 +1,5 @@
 import React from 'react';
-import iconDate from '../assets/images/iconDate.png';
+import iconDate from '../assets/images/iconDate.svg';
 
 const styles = `
     .font-barlow {
@@ -37,7 +37,7 @@ function DateInput(props) {
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
                     <div class="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
-                        <img src={iconDate} alt="" />
+                        <svg src={iconDate} />
                     </div>
                 </div>
                 <div className="col p-3 pe-4">
