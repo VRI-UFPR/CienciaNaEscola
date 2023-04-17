@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/CienciaNaEscola/static/js/main.0203b332.js",
+    "main.js": "/CienciaNaEscola/static/js/main.7a738d5b.js",
     "static/js/787.28cb0dcd.chunk.js": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js",
     "static/media/logoPicceCircular.svg": "/CienciaNaEscola/static/media/logoPicceCircular.58ee48f660f62a5b5669ec2e8b091a93.svg",
     "static/media/loginPageBackground.png": "/CienciaNaEscola/static/media/loginPageBackground.0eae8c2ef4b67cf22b51.png",
@@ -13,14 +13,17 @@
     "static/media/SidebarArrow.svg": "/CienciaNaEscola/static/media/SidebarArrow.3afbfe261fe8cb2b903bd43531eec0c8.svg",
     "static/media/titleCE.svg": "/CienciaNaEscola/static/media/titleCE.8114ee559a66771a31bdbe2dc01e9e95.svg",
     "static/media/loginTitle.svg": "/CienciaNaEscola/static/media/loginTitle.c88852f770423ccbdf5767f701001fd3.svg",
-    "static/media/helpButton.svg": "/CienciaNaEscola/static/media/helpButton.c506be3b84bdd3b43437d0f9166dd007.svg",
+    "static/media/configButton.svg": "/CienciaNaEscola/static/media/configButton.04c4fc3afbd154fda63a4f039d87c4de.svg",
+    "static/media/visibilityIcon.svg": "/CienciaNaEscola/static/media/visibilityIcon.32c1ba2e621153949c20934dfbb1f9e8.svg",
     "static/media/helpIcon.svg": "/CienciaNaEscola/static/media/helpIcon.cc3345bb42e8f6f952729544a08175b5.svg",
+    "static/media/deleteButton.svg": "/CienciaNaEscola/static/media/deleteButton.7f2fa136a1827b4fbdce4a53c1b7ff5c.svg",
     "index.html": "/CienciaNaEscola/index.html",
     "static/media/pinkArrow.svg": "/CienciaNaEscola/static/media/pinkArrow.9713d1fb7b8b8b7be6f8acbd39d19ee6.svg",
-    "main.0203b332.js.map": "/CienciaNaEscola/static/js/main.0203b332.js.map",
+    "static/media/copyButton.svg": "/CienciaNaEscola/static/media/copyButton.9425eeae44d4173767ec0476d2794f60.svg",
+    "main.7a738d5b.js.map": "/CienciaNaEscola/static/js/main.7a738d5b.js.map",
     "787.28cb0dcd.chunk.js.map": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.0203b332.js"
+    "static/js/main.7a738d5b.js"
   ]
 }
