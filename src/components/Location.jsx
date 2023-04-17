@@ -45,7 +45,7 @@ export function Location(props) {
                         <img src={iconLocation} alt="" />
                     </div>
                 </div>
-                <div className="col py-4 my-1 px-3 pe-4">
+                <div className="col my-1 p-4 ps-3">
                     <div className="row m-0 mb-3">
                         <label labelfor="adressinput" className="form-label location-label font-barlow lh-sm m-0 p-0">
                             Forneça sua localização
