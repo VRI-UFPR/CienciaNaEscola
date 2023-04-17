@@ -1,5 +1,5 @@
 import React from 'react';
-import HelpButton from '../components/HelpButton';
+import RoundedButton from '../components/RoundedButton';
 import NavBar from '../components/Navbar';
 
 const styles = `
@@ -80,7 +80,7 @@ function EndProtocolPage(props) {
                 <div className="row d-flex align-items-end pt-0 pb-4 mx-0 px-2">
                     <div className="row justify-content-end px-0 mx-0">
                         <div className="col-3 d-flex align-items-center justify-content-end px-0">
-                            <HelpButton />
+                            <RoundedButton />
                         </div>
                     </div>
                 </div>

@@ -9,7 +9,6 @@ import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
 import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
-import AboutPage from './pages/AboutPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
