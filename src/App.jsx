@@ -7,7 +7,6 @@ import Navbar from './components/Navbar';
 import TermsPage from './pages/TermsPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
-import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
@@ -65,7 +64,6 @@ function App(props) {
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/protocol" element={<ProtocolPage />} />
-                <Route path="/endprotocol" element={<EndProtocolPage />} />
                 <Route path="/help" element={<HelpPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route
