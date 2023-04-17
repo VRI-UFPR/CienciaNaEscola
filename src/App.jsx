@@ -6,7 +6,6 @@ import Navbar from './components/Navbar';
 import InfosPage from './pages/InfosPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
-import EndProtocolPage from './pages/EndProtocolPage';
 import HelpPage from './pages/HelpPage';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
