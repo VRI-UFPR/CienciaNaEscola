@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from '../components/Navbar';
-import HelpButton from '../components/HelpButton';
+import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 
@@ -52,7 +52,7 @@ function InfosPage(props) {
                                 <TextButton className={showAccept ? '' : 'd-none'} hsl={[97, 43, 70]} text="Aceitar" />
                             </div>
                             <div className="col-3 d-flex align-items-end justify-content-end p-0">
-                                <HelpButton />
+                                <RoundedButton />
                             </div>
                         </div>
                     </div>

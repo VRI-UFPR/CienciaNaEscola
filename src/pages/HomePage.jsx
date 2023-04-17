@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
-import HelpButton from '../components/HelpButton';
+import RoundedButton from '../components/RoundedButton';
 import HomeButton from '../components/HomeButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
@@ -83,7 +83,7 @@ function HomePage(props) {
                 </div>
             </div>
             <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
-                <HelpButton />
+                <RoundedButton />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </div>
