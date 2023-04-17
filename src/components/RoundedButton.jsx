@@ -31,7 +31,11 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
 };
 
 function RoundedButton(props) {
-    const { hue, sat, lig, size, icon } = props;
+    const {
+        hsl: [hue, sat, lig],
+        size,
+        icon,
+    } = props;
     return (
         <div className="ratio ratio-1x1 rounded-button">
             <button type="button" className="btn btn-hsl d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1">
@@ -43,9 +47,7 @@ function RoundedButton(props) {
 }
 
 RoundedButton.defaultProps = {
-    hue: 355,
-    sat: 78,
-    lig: 66,
+    hsl: [355, 78, 66],
     size: 32,
     icon: helpIcon,
 };
