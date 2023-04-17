@@ -10,11 +10,11 @@ import ProtocolOptions from '../components/ProtocolOptions';
 // import rainy from '../assets/images/rainy.svg';
 // import sunny from '../assets/images/sunny.svg';
 // import windy from '../assets/images/windy.svg';
-// import InfoGerais from '../components/InfoGerais';
-// import DateInput from '../components/DateInput';
-// import TimeInput from '../components/TimeInput';
+import InfoGerais from '../components/InfoGerais';
+import DateInput from '../components/DateInput';
+import TimeInput from '../components/TimeInput';
 // import Weather from '../components/Weather';
-// import Location from '../components/Location';
+import Location from '../components/Location';
 
 const styles = `
     .row {
@@ -83,9 +83,10 @@ function ProtocolPage(props) {
                         <ProtocolOptions />
                     </div>
                 </div>
-                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
+                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>*/}
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div> */}
+                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:

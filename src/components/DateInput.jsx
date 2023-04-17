@@ -37,7 +37,7 @@ function DateInput(props) {
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
                     <div class="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
-                        <svg src={iconDate} />
+                        <img src={iconDate} alt="Ícone de data" />
                     </div>
                 </div>
                 <div className="col p-3 pe-4">
