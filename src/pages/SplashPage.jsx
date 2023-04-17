@@ -6,7 +6,8 @@ import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 30%;
+        max-width: 350px;
+        max-height: 75%;
     }
 
     .logo-picce-textual{
