@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from '../components/Navbar';
-import HelpButton from '../components/HelpButton';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
 
@@ -67,7 +67,7 @@ function TermsPage(props) {
                             </button>
                         </div>
                         <div className="col-3 d-flex align-items-end justify-content-end px-0">
-                            <HelpButton />
+                            <RoundedButton />
                         </div>
                     </div>
                 </div>
