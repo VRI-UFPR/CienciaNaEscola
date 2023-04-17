@@ -1,7 +1,9 @@
-import React from "react";
-import LoginTitle from "../assets/images/loginTitle.svg";
-import Background from "../assets/images/loginPageBackground.png";
-import { Link } from "react-router-dom";
+import { React, useContext, useState } from 'react';
+import LoginTitle from '../assets/images/loginTitle.svg';
+import axios from 'axios';
+import Background from '../assets/images/loginPageBackground.png';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = `
 
@@ -48,11 +50,35 @@ const styles = `
 `;
 
 function LoginPage(props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const loginHandler = (event) => {
+        event.preventDefault();
+        // .post('http://localhost:3333/user/signIn', {
+        axios
+            .post('https://genforms.c3sl.ufpr.br/api/user/signIn', {
+                email,
+                hash: password,
+            })
+            .then((response) => {
+                if (response.data.token) {
+                    login(response.data.id, response.data.token);
+                    navigate('/home');
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
+
     return (
         <div>
-            <div className="d-flex flex-column vh-100 w-100" style={{ backgroundSize: "cover", backgroundImage: `url(${Background})` }}>
+            <div className="d-flex flex-column vh-100 w-100" style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
                 <div className="login-logo d-flex justify-content-center">
-                    <img src={LoginTitle} alt="" style={{ width: "250px" }} />
+                    <img src={LoginTitle} alt="" style={{ width: '250px' }} />
                 </div>
                 <div className="d-flex justify-content-center mb-4 mt-4">
                     <span className="login-title">
@@ -60,15 +86,31 @@ function LoginPage(props) {
                         Escola!
                     </span>
                 </div>
-                <div className=" d-flex flex-column align-items-center">
-                    <input className="login-input px-3 mb-3" type="text" placeholder="Login" />
-                    <input className="login-input px-3 mb-1" type="text" placeholder="Senha" />
-                    <a href="/">Esqueci minha senha</a>
-                </div>
+                <form onSubmit={loginHandler}>
+                    <div className=" d-flex flex-column align-items-center">
+                        <input
+                            className="login-input px-3 mb-3"
+                            placeholder="Login"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            className="login-input px-3 mb-1"
+                            placeholder="Senha"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <a href="/">Esqueci minha senha</a>
+                    </div>
 
-                <div className="d-flex justify-content-center mt-5">
-                    <Link className="login-button pt-1" to="/home"> Entrar </Link>
-                </div>
+                    <div className="d-flex justify-content-center mt-5">
+                        <button className="login-button pt-1" type="submit">
+                            Entrar
+                        </button>
+                    </div>
+                </form>
             </div>
             <style> {styles}</style>
         </div>
