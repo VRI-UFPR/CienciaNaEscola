@@ -38,7 +38,7 @@ function RoundedButton(props) {
     } = props;
     return (
         <div className="ratio ratio-1x1 rounded-button">
-            <button type="button" className="btn btn-hsl d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1">
+            <button type="button" className="btn btn-hsl rounded-circle d-flex align-items-center justify-content-center w-100 h-100 p-1">
                 <img src={icon} alt="Ícone do botão de ajuda" className="w-100"></img>
             </button>
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
