@@ -25,10 +25,6 @@ const styles = `
         border: none;
     }
 
-	.btn:hover{
-  		background-color: #000000 !important;
-	}
-
 	.buttons-row{
 		max-width: 100px;
 	}
