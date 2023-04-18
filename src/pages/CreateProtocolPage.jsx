@@ -31,7 +31,8 @@ const CreateProtocolStyles = `
     }
 
     .icon-plus {
-        min-width: 30px;
+        min-width: 15px;
+        width: 20px;
     }
 `;
 
@@ -77,24 +78,24 @@ function CreateProtocolPage(props) {
                                 className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100"
                                 onClick={handleTextBoxAdd}
                             >
-                                <IconPlus width={30} className="icon-plus" />
-                                <span className="fs-4 fw-normal lh-1 ps-4">Caixa de texto</span>
+                                <IconPlus className="icon-plus" />
+                                <span className="fs-5 fw-normal lh-1 ps-3">Caixa de texto</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
-                                <IconPlus width={30} className="icon-plus" />
-                                <span className="fs-4 fw-normal lh-1 ps-4">Lista suspensa</span>
+                                <IconPlus className="icon-plus" />
+                                <span className="fs-5 fw-normal lh-1 ps-3">Lista suspensa</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
-                                <IconPlus width={30} className="icon-plus" />
-                                <span className="fs-4 fw-normal lh-1 ps-4">Múltipla escolha</span>
+                                <IconPlus className="icon-plus" />
+                                <span className="fs-5 fw-normal lh-1 ps-3">Múltipla escolha</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
-                                <IconPlus width={30} className="icon-plus" />
-                                <span className="fs-4 fw-normal lh-1 ps-4">Múltipla escolha</span>
+                                <IconPlus className="icon-plus" />
+                                <span className="fs-5 fw-normal lh-1 ps-3">Múltipla escolha</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
-                                <IconPlus width={30} className="icon-plus" />
-                                <span className="fs-4 fw-normal lh-1 ps-4 text-truncate">Subformulário</span>
+                                <IconPlus className="icon-plus" />
+                                <span className="fs-5 fw-normal lh-1 ps-2 text-truncate">Subformulário</span>
                             </button>
                         </div>
                     </div>
