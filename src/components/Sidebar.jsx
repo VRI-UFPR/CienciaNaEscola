@@ -3,119 +3,55 @@ import BuscarImg from '../assets/images/BuscarImg.svg';
 import PerfilImg from '../assets/images/PerfilImg.png';
 
 const styles = `
-    .perfil-img {
-        background-color: #FFFFFF;
-        border-radius: 50%;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
-    }
-    .btn {
-        width: 80%;
-        height: 45px;
-        border-radius: 8px;
-        border: none;
-        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
-        transition-duration: 0.3s;
-    }
-    .fst-btn {
-        background-color: #AAD390;
-        color: #FFFFFF;
-        font-size: 24px;
-        font-weight: 700;
-    }
-    .snd-btn {
-        background-color: #FFFFFF;
-        color: #000000;
-        font-size: 20px;
-        font-weight: 500;
-    }
-    .sidebar-titles {
-        align-items: start;
-        margin-top: 15px;
-        margin-left: 20px;
-        color: #FFFFFF;
-        opacity: 0.8;
-        font-family: 'Century Gothic', sans-serif;
-        font-size: 22px;
-        font-weight: 700;
-    }
-    .sidebar-list-items {
-        text-decoration: none;
-        margin-left: 40px;
-        color: #FFFFFF;
-        font-family: 'Barlow', sans-serif;
-        font-weight: 500;
-    }
-    .left-arrow {
-        width: 32px;
-        height: 32px;
-        bottom: 10px;
-        left: 40%;
-        position: fixed;
-    }
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
+
+    .sidebar-wrapper img {
+        width: 110px;
+        height: 110px;
+        border: 8px solid #AAD390;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar-wrapper h1{
+        opacity: 0.8;
+    }
+
+    .sidebar-wrapper a:hover {
+        background-color: #FFBCB5;
+    }
+
 `;
 
 function Sidebar(props) {
     return (
         <div className="sidebar-wrapper d-flex flex-column">
-            <div className="d-flex flex-column align-items-center">
-                <img
-                    className="perfil-img my-4"
-                    src={PerfilImg}
-                    alt="Perfil"
-                    style={{
-                        width: '100px',
-                        height: '100px',
-                    }}
-                />
-                <button className="btn fst-btn font-century-gothic my-1" type="button">
-                    Novo
-                </button>
-                <button className="btn snd-btn d-flex flex-row my-2">
-                    <img
-                        src={BuscarImg}
-                        alt="Search Icon"
-                        style={{
-                            width: '35px',
-                            paddingRight: '7px',
-                            paddingTop: '3px',
-                        }}
-                    />
-                    <p className="font-barlow">Buscar</p>
-                </button>
+            <div className="container d-flex flex-column align-items-center">
+                <img className="rounded-circle my-4" src={PerfilImg} alt="Perfil" />
             </div>
-            <div className="sidebar-menu-wrapper d-flex flex-column">
-                <h1 className="sidebar-titles">Menu</h1>
-                <a className="sidebar-list-items" href="/home">
+            <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
+                <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
+                <a className="text-white text-decoration-none ps-5 py-2" href="/home">
                     Protocolos
                 </a>
-                <a className="sidebar-list-items" href="/endprotocol">
-                    EndProtocol
-                </a>
-                <a className="sidebar-list-items" href="/terms">
-                    Termos
-                </a>
-                <a className="sidebar-list-items" href="/about">
+                <a className="text-white text-decoration-none ps-5 py-2" href="/about">
                     Sobre o App
                 </a>
-                <a className="sidebar-list-items" href="/help">
-                    Ajuda
+                <a className="text-white text-decoration-none ps-5 py-2" href="/terms">
+                    Termos de Uso
                 </a>
             </div>
-            <div className="sidebar-conta-wrapper d-flex flex-column">
-                <h1 className="sidebar-titles">Conta</h1>
-                <a className="sidebar-list-items" href="/profile">
+            <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
+                <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
+                <a className="text-white text-decoration-none ps-5 py-2" href="/profile">
                     Perfil
                 </a>
-                <a className="sidebar-list-items" href="/login">
-                    Login
-                </a>
-                <a className="sidebar-list-items" href="/">
+                <a className="text-white text-decoration-none ps-5 py-2" href="/">
                     Logout
                 </a>
             </div>
