@@ -10,7 +10,7 @@ import ProtocolOptions from '../components/ProtocolOptions';
 // import rainy from '../assets/images/rainy.svg';
 // import sunny from '../assets/images/sunny.svg';
 // import windy from '../assets/images/windy.svg';
-import InfoGerais from '../components/InfoGerais';
+// import InfoGerais from '../components/InfoGerais';
 import DateInput from '../components/DateInput';
 import TimeInput from '../components/TimeInput';
 // import Weather from '../components/Weather';

@@ -10,7 +10,7 @@ const styles = `
     }
 
     .logo-picce-textual{
-        max-width: 50%;
+        max-width: 200px;
     }
 
     .spinner-splash{
@@ -33,8 +33,8 @@ function SplashPage(props) {
                     <span className="sr-only"></span>
                 </div>
             </div>
-            <div className="row align-items-center justify-content-center h-25 px-2 m-0">
-                <img src={logoPicceTextual} className="logo-picce-textual" alt="Logo textual Picce"></img>
+            <div className="row align-items-center justify-content-center h-25 w-75 px-2 m-0">
+                <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
             </div>
             <ColoredBorder />
             <style>{styles}</style>
