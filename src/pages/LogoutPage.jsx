@@ -24,14 +24,14 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    h1 {
+    .box h1 {
         color: #535353;
         font-weight: bold;
         font-size: x-large;
     }
 
     .box {
-        width: 80%;
+        width: 75%;
         max-width: 350px;
         text-align: center;
         border-radius: 30px;
@@ -45,6 +45,10 @@ const styles = `
         border-radius: 30px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
+
+    .buttons:active {
+        opacity: 0.75;
+    }
 `;
 
 function LogoutPage(props) {
@@ -52,9 +56,9 @@ function LogoutPage(props) {
         <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
             <div className="d-flex flex-column justify-content-center flex-grow-1">
-                <div className="container box d-flex flex-column bg-grey px-4 py-3">
-                    <h1 className="font-century-gothic mb-3"> Tem certeza que deseja fazer logout? </h1>
-                    <button className="buttons font-century-gothic bg-dark-grey mx-4 py-1"> Fazer Logout </button>
+                <div className="container box d-flex flex-column bg-grey p-4">
+                    <h1 className="font-century-gothic my-3"> Tem certeza que deseja fazer logout? </h1>
+                    <button className="buttons font-century-gothic bg-dark-grey py-1 mb-3"> Fazer logout </button>
                 </div>
                 <div className="container box p-3">
                     <button className="buttons font-century-gothic bg-red px-5 py-1"> Cancelar </button>
