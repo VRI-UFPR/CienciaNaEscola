@@ -1,5 +1,5 @@
 import React from 'react';
-import HelpButton from '../components/HelpButton';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
     .bg-pastel-blue {
@@ -82,7 +82,7 @@ function ProfileForm(props) {
                         </button>
                     </div>
                     <div className="col-3 d-flex align-items-end justify-content-end px-0">
-                        <HelpButton />
+                        <RoundedButton />
                     </div>
                 </div>
             </div>
