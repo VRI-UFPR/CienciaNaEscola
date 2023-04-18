@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 58" width="58" height="58">
+	<title>Novo Projeto</title>
+	<defs>
+		<image  width="58" height="58" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAMAAADWZboaAAAAAXNSR0IB2cksfwAAADZQTFRFAAAA////////////////////////////////////////////////////////////////////8WPG/AAAABJ0Uk5TABBvv+//XyAw31Bwn0BggMCgJnmF/gAAAOZJREFUeJztl9kSgyAMRdki4AL0/3+2ah2LWCoXXzpTziucgTCQBMZycCEVKdnp7IwcxtIL26Omop0BMrWlCIOoY2ySBExOR4CjmhIViNYlqi9XfVOb+j8q752PkYkq40E38V3UoyKMcXv7BhVn7JqudIVJpBbXXs/7uC4/5ZJiBpYeZjGSVUW6oFitSXRn1epYw+m6FtMxXrljO9/Fvk5dC/ZQY24FTMNHFd7FWgtf/l69+FZufz43NbWpF9xo9NLnD7SXadZB+v/HwQyAmZQ/7NMRF10HmdHHQU2gOeOWL1IQPDf+BCePJBk+MSq1AAAAAElFTkSuQmCC"/>
+	</defs>
+	<style>
+	</style>
+	<use id="Camada 1" href="#img1" x="0" y="0"/>
+</svg>

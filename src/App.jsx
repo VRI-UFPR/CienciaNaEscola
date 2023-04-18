@@ -11,6 +11,7 @@ import HelpPage from './pages/HelpPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
+import CreateProtocolPage from './pages/CreateProtocolPage';
 
 const styles = `
 .App {
@@ -66,6 +67,7 @@ function App(props) {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/protocol/:id" element={<ProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
+                    <Route path="/createprotocol" element={<CreateProtocolPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                     <Route
                         path="/imageradio"
