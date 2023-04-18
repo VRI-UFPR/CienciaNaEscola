@@ -10,11 +10,11 @@ import ProtocolOptions from '../components/ProtocolOptions';
 // import rainy from '../assets/images/rainy.svg';
 // import sunny from '../assets/images/sunny.svg';
 // import windy from '../assets/images/windy.svg';
-// import InfoGerais from '../components/InfoGerais';
-// import DateInput from '../components/DateInput';
-// import TimeInput from '../components/TimeInput';
+import InfoGerais from '../components/InfoGerais';
+import DateInput from '../components/DateInput';
+import TimeInput from '../components/TimeInput';
 // import Weather from '../components/Weather';
-// import Location from '../components/Location';
+import Location from '../components/Location';
 
 const styles = `
     .row {
@@ -23,6 +23,7 @@ const styles = `
 
     .protocol-wrapper {
         background-color: rgba(234, 234, 234, 1);
+        height: 100vh;
     }
 
     .protocol-number {
@@ -70,7 +71,7 @@ function ProtocolPage(props) {
     return (
         <div className="min-vh-100 d-flex flex-column">
             <NavBar />
-            <div className="protocol-wrapper d-flex flex-column flex-grow-1 px-4 py-4">
+            <div className="protocol-wrapper d-flex flex-column h-100 flex-grow-1 px-4 py-4">
                 <div className="row align-items-start m-0">
                     <div className="col-3 p-0">
                         <p className="protocol-number rounded shadow font-barlow m-0 p-2">N° prot.</p>
@@ -82,9 +83,10 @@ function ProtocolPage(props) {
                         <ProtocolOptions />
                     </div>
                 </div>
-                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
+                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>*/}
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div> */}
+                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:

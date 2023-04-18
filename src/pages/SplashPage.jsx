@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React from 'react';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 350px;
+        max-width: 400px;
         max-height: 75%;
     }
 
     .logo-picce-textual{
-        max-width: 40%;
+        max-width: 50%;
     }
 
     .spinner-splash{
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
     }
 `;
 
