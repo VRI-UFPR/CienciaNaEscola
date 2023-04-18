@@ -43,7 +43,7 @@ function CreateTextBoxInput(props) {
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
-                    <label htmlFor="question" className="form-label fs-5">
+                    <label htmlFor="question" className="form-label fs-5 fw-medium">
                         Pergunta
                     </label>
                     <input
@@ -53,12 +53,12 @@ function CreateTextBoxInput(props) {
                         aria-describedby="questionHelp"
                         onChange={(event) => handleTextBoxChange(event, 'question')}
                     />
-                    <div id="questionHelp" className="form-text text-danger fs-6">
+                    <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                         *Este campo é obrigatório.
                     </div>
                 </div>
                 <div>
-                    <label htmlFor="description" className="form-label fs-5">
+                    <label htmlFor="description" className="form-label fs-5 fw-medium">
                         Descrição
                     </label>
                     <input

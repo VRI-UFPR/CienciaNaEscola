@@ -79,30 +79,30 @@ function CreateProtocolPage(props) {
                                 onClick={handleTextBoxAdd}
                             >
                                 <IconPlus className="icon-plus" />
-                                <span className="fs-5 fw-normal lh-1 ps-3 text-nowrap">Caixa de texto</span>
+                                <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
                                 <IconPlus className="icon-plus" />
-                                <span className="fs-5 fw-normal lh-1 ps-3 text-nowrap">Lista suspensa</span>
+                                <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
                                 <IconPlus className="icon-plus" />
-                                <span className="fs-5 fw-normal lh-1 ps-3 text-nowrap">Seleção única</span>
+                                <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
                                 <IconPlus className="icon-plus" />
-                                <span className="fs-5 fw-normal lh-1 ps-3 text-nowrap">Múltipla escolha</span>
+                                <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                             </button>
                             <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
                                 <IconPlus className="icon-plus" />
-                                <span className="fs-5 fw-normal lh-1 ps-3 text-nowrap">Subformulário</span>
+                                <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Subformulário</span>
                             </button>
                         </div>
                     </div>
                     <div className="col d-flex flex-column p-0 ps-lg-5">
                         <form className="d-flex flex-column flex-grow-1" onSubmit={handleSubmit}>
                             <div className="flex-grow-1 mb-3">
-                                <label htmlFor="title" className="form-label fs-5">
+                                <label htmlFor="title" className="form-label fs-5 fw-medium">
                                     Título do formulário
                                 </label>
                                 <textarea
@@ -112,7 +112,7 @@ function CreateProtocolPage(props) {
                                     value={title}
                                     onChange={(event) => setTitle(event.target.value)}
                                 ></textarea>
-                                <label htmlFor="description" className="form-label fs-5">
+                                <label htmlFor="description" className="form-label fs-5 fw-medium">
                                     Descrição do formulário
                                 </label>
                                 <textarea
