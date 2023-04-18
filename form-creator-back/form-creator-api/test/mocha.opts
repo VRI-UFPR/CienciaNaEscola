@@ -1,0 +1,11 @@
+--require ./test/global.ts
+--reporter spec
+--ui bdd
+--recursive
+--colors
+--timeout 60000
+--slow 300
+--check-leaks
+--globals expect
+--exit
+./src/**/*.spec.ts
