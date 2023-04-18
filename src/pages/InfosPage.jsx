@@ -25,7 +25,6 @@ const infosPageStyles = `
 
     .infos-h2 {
         color: #535353;
-        font-weight: 600;
         font-size: medium;
         text-align: justify;
     }
@@ -43,8 +42,8 @@ function InfosPage(props) {
                     <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="infos-h1 font-century-gothic pb-3 m-0">{title}</h1>
-                            <h2 className="infos-h2 pb-4 m-0">{content}</h2>
+                            <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
+                            <h2 className="infos-h2 pb-4 m-0 fw-medium">{content}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-3"></div>
