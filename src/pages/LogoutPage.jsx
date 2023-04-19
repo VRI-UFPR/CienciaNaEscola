@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from '../components/Navbar';
-import HelpButton from '../components/HelpButton';
+import HelpButton from '../components/RoundedButton';
 
 const styles = `
 

@@ -1,24 +1,25 @@
 import { React, useContext, useState } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
-import Background from '../assets/images/loginPageBackground.png';
+import Background from '../assets/images/backgroundLogin.png';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import TextButton from '../components/TextButton';
 
 const styles = `
 
     .login-title{
-        text-align: center;
-        margin-bottom: 40px;
+        color: #3C3A3A;
+    }
+
+    .font-century-gothic {
+        font-family: 'Century Gothic', sans-serif;
     }
 
     .login-input{
-        width: 70%;
-        height: 30px;
         background-color: #4E9BB9;
         color: #FFFFFF;
         font-size: 90%;
-        border-radius: 50px;
         border: 0px;
     }
 
@@ -29,19 +30,10 @@ const styles = `
     .login-button {
         text-decoration: none;
         text-align: center;
-        width: 70%;
-        height: 30px;
         background-color: #AAD390;
         color: #FFFFFF;
-        border-radius: 50px;
         border: 0px;
-        margin-top: 40px;
 
-    }
-
-    .login-logo {
-        margin-top: 80px;
-        margin-bottom: 25px ;
     }
 
     a{
@@ -75,43 +67,41 @@ function LoginPage(props) {
     };
 
     return (
-        <div>
-            <div className="d-flex flex-column vh-100 w-100" style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
-                <div className="login-logo d-flex justify-content-center">
-                    <img src={LoginTitle} alt="" style={{ width: '250px' }} />
-                </div>
-                <div className="d-flex justify-content-center mb-4 mt-4">
-                    <span className="login-title">
-                        Bem-vindo(a) ao <br /> Ciência Cidadã na <br />
-                        Escola!
-                    </span>
-                </div>
-                <form onSubmit={loginHandler}>
-                    <div className=" d-flex flex-column align-items-center">
-                        <input
-                            className="login-input px-3 mb-3"
-                            placeholder="Login"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <input
-                            className="login-input px-3 mb-1"
-                            placeholder="Senha"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <a href="/">Esqueci minha senha</a>
-                    </div>
-
-                    <div className="d-flex justify-content-center mt-5">
-                        <button className="login-button pt-1" type="submit">
-                            Entrar
-                        </button>
-                    </div>
-                </form>
+        <div
+            className="d-flex flex-column vh-100 w-100 font-century-gothic align-items-center"
+            style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
+        >
+            <div className="h-50 d-flex flex-column align-items-center justify-content-end">
+                <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '300px' }} />
+                <span className="login-title text-center pb-5 fs-5 w-50 fw-medium lh-sm">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
             </div>
+
+            <form className="h-50 row w-75 justify-content-center" onSubmit={loginHandler}>
+                <div className="h-50 col-12 col-lg-8 d-flex flex-column align-items-center">
+                    <input
+                        className="login-input px-3 py-2 mb-4 fs-5 text-center w-100 rounded-pill align-items-center"
+                        placeholder="Login"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        className="login-input px-3 py-2 mb-3 w-100 fs-5 text-center rounded-pill"
+                        placeholder="Senha"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <a href="/" className="fs-6">
+                        Esqueci minha senha
+                    </a>
+                </div>
+                <div className="row h-50 flex-column justify-content-start pt-lg-5 align-items-center">
+                    <div className="col-12 col-lg-6">
+                        <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                    </div>
+                </div>
+            </form>
             <style> {styles}</style>
         </div>
     );
