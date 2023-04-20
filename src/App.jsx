@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
+import AlertsPage from './pages/AlertsPage';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import InfosPage from './pages/InfosPage';
@@ -62,6 +63,7 @@ function App(props) {
                 <Routes>
                     <Route path="/" element={<SplashPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/alert" element={<AlertsPage />} />
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/navbar" element={<Navbar />} />
                     <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
