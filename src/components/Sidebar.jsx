@@ -11,7 +11,7 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .bg-pink {
+    .bg-coral-red {
         background-color: #F59489;
     }
 
