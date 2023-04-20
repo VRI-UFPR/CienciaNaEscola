@@ -75,25 +75,25 @@ function CreateProtocolPage(props) {
                             <h1 className="font-century-gothic fs-3 fw-bold text-white">Adicionar</h1>
                             <button
                                 type="button"
-                                className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
                                 onClick={handleTextBoxAdd}
                             >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
+                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
+                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
+                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none m-0 p-0 mb-3 d-flex align-items-center w-100">
+                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Subformulário</span>
                             </button>
