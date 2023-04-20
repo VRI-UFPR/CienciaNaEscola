@@ -47,7 +47,7 @@ function Sidebar(props) {
     return (
         <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
             <div className="container d-flex d-lg-none justify-content-end p-0">
-                <button type="button" className="btn btn-primary bg-pink rounded-circle border-0" data-bs-dismiss="offcanvas">
+                <button type="button" className="btn btn-transparent rounded-circle border-0" data-bs-dismiss="offcanvas">
                     <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
                 </button>
             </div>
