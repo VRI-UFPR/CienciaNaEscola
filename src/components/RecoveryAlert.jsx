@@ -18,7 +18,7 @@ function RecoveryAlert(props) {
     return (
         <div className="d-flex flex-column shadow bg-white rounded-4 w-100 mx-0 px-0 py-4">
             <div className="row p-4 py-2 mx-0">
-                <h1 className="end-protocol-h1 font-century-gothic text-center fs-3">
+                <h1 className="alert-protocol-h1 font-century-gothic text-center fs-3">
                     Acesse o e-mail cadastrado para recuperar sua senha
                 </h1>
             </div>
