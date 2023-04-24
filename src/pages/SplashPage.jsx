@@ -5,16 +5,17 @@ import ColoredBorder from '../components/ColoredBorder';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 30%;
+        max-width: 400px;
+        max-height: 75%;
     }
 
     .logo-picce-textual{
-        max-width: 40%;
+        max-width: 200px;
     }
 
     .spinner-splash{
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
     }
 `;
 
@@ -32,8 +33,8 @@ function SplashPage(props) {
                     <span className="sr-only"></span>
                 </div>
             </div>
-            <div className="row align-items-center justify-content-center h-25 px-2 m-0">
-                <img src={logoPicceTextual} className="logo-picce-textual" alt="Logo textual Picce"></img>
+            <div className="row align-items-center justify-content-center h-25 w-75 px-2 m-0">
+                <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
             </div>
             <ColoredBorder />
             <style>{styles}</style>

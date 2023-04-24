@@ -62,9 +62,10 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
-                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
+                {/* <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>*/}
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div> */}
+                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
