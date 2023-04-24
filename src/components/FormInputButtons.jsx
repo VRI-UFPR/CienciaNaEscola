@@ -1,5 +1,5 @@
 import React from 'react';
-import deleteButton from '../assets/images/deleteButton.svg';
+import iconTrash from '../assets/images/iconTrash.svg';
 import configButton from '../assets/images/configButton.svg';
 import copyButton from '../assets/images/copyButton.svg';
 
@@ -46,7 +46,7 @@ function FormInputButtons(props) {
             </div>
             <div className="col d-flex align-items-start ps-1 p-0">
                 <button type="button" className="btn btn-style rounded-circle bg-crimson w-100">
-                    <img src={deleteButton} alt="Ícone" className="w-100"></img>
+                    <img src={iconTrash} alt="Ícone" className="w-100"></img>
                 </button>
             </div>
             <style>{styles}</style>
