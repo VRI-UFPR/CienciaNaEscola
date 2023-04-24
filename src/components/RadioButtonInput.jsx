@@ -1,54 +1,47 @@
 import React from 'react';
-import FormInputButtons from './FormInputButtons';
 
 const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
 
-    .form-label, .form-check-label{
-        font-weight: 500;
+    .radio-button-label{
+        font-weight: 600;
         font-size: 90%;
         color: #535353;
     }
 
-    .form-check-input{
+    .radio-button-input{
         background-color: #D9D9D9
     }
 `;
 
-function RadioButtonInput({ options = [] }) {
+function RadioButtonInput(props) {
     return (
-        <div className="p-3 shadow rounded pb-4">
-            <div className="row m-0 justify-content-between mb-2">
-                <div className="col-9 p-0">
-                    <p className="form-label font-barlow lh-sm">
-                        Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Dastaque apenas um.
-                    </p>
-                </div>
-                <div className="col-3 d-flex justify-content-end ps-3 p-0">
-                    <FormInputButtons />
-                </div>
+        <div className="shadow rounded bg-white p-3">
+            <div className="row justify-content-between m-0">
+                <p className="form-label radio-button-label font-barlow lh-sm px-0">{props.input.question}</p>
             </div>
+            <div className="pt-2">
+                {props.input.sugestions.map((option) => {
+                    const optname = option.value.toLowerCase().replace(/\s/g, '');
 
-            {options.map((option) => {
-                const optname = option.toLowerCase().replace(/\s/g, '');
-
-                return (
-                    <div className="form-check ms-2 mb-2">
-                        <input className="form-check-input" type="radio" name="radiooptions" id={optname + 'input'}></input>
-                        <label className="form-check-label font-barlow" for={optname + 'input'}>
-                            {option}
-                        </label>
-                    </div>
-                );
-            })}
-
-            <style
-                dangerouslySetInnerHTML={{
-                    __html: styles,
-                }}
-            />
+                    return (
+                        <div key={optname + 'input'} className="form-check ms-2 mb-2">
+                            <input
+                                className="form-check-input radio-button-input"
+                                type="radio"
+                                name="radiooptions"
+                                id={optname + 'input'}
+                            ></input>
+                            <label className="form-check-label radio-button-label font-barlow" htmlFor={optname + 'input'}>
+                                {option.value}
+                            </label>
+                        </div>
+                    );
+                })}
+            </div>
+            <style>{styles}</style>
         </div>
     );
 }

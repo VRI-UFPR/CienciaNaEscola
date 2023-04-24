@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const styles = `
     .homeBtn {
@@ -16,21 +16,16 @@ const styles = `
     }
 `;
 
-
 function HomeButton(props) {
     return (
         <div className="homeBtn font-barlow d-flex align-items-center">
-            <div className="d-flex px-0 py-0 justify-content-between flex-fill">
-                <div>
-                    Template Exemplo
-                </div>
-                <div>
-                    17/09/2022
-                </div>
+            <div className="d-flex justify-content-between flex-fill px-0 py-0">
+                <div>{props.title}</div>
+                <div>17/09/2022</div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
-    )
+    );
 }
 
 export default HomeButton;

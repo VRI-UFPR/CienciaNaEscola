@@ -1,0 +1,10 @@
+.git
+.dockerignore
+docker-compose.yml
+docker-compose.yaml
+Dockerfile
+.env*
+package-lock.json
+node_modules
+*.bak
+.editorconfig
