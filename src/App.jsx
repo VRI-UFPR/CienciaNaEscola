@@ -9,11 +9,11 @@ import InfosPage from './pages/InfosPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtocolPage from './pages/ProtocolPage';
 import HelpPage from './pages/HelpPage';
-import LogoutPage from './pages/LogoutPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
 import CreateProtocolPage from './pages/CreateProtocolPage';
+import RecentProtocolsPage from './pages/RecentProtocols';
 
 const styles = `
 .App {
@@ -72,7 +72,7 @@ function App(props) {
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/createprotocol" element={<CreateProtocolPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
-                    <Route path="/logout" element={<LogoutPage />} />
+                    <Route path="/recent" element={<RecentProtocolsPage title="Protocolos Recentes" />} />
                     <Route
                         path="/imageradio"
                         element={
