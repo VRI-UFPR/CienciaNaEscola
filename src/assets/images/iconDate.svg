@@ -1,9 +1,25 @@
-<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 86" width="86" height="86">
-	<title>Novo Projeto</title>
-	<defs>
-		<image  width="86" height="86" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFYAAABWCAMAAABiiJHFAAAAAXNSR0IB2cksfwAAALdQTFRFAAAA////////////////////////////////////////////////////////////////////1uvwmM7YkcrWn9HbmM3Z5PL1weHoptTeu97l8vn6+Pz9weHn8fn6yOXr6/X3ut7mut7l8fj6ptXemM3Yu97m////6vX4////8vj6rdjh+Pv9z+ju3e/y1uzwz+jtrdfg////yOTq3e/z////weLos9rj+Pz8ptTdweHp////////0K1iDAAAAD10Uk5TACBggJ+/3+//r1AwbxB/QF+P////////////////////////////cP/A//////////+g//+w//////+Q4BGlO7oAAANXSURBVHictZl5e6IwEMZBTlHWC4q2tta1rrW6tt2j2139/p9rcwjmmEAC+P4XJ/k5zzBJJollVcruOK7nByFS4HtdJ+pVj6lC9j3C4xV4fbs+M/7iy8hcfk3ywFMzqbzoClDi8vAKUAIeaEPjri4Uy9WMcQR8+8aRiEdmUKxRXEW1S3KqxOGKQPQMA1BwS2fesCYVTbySAA/rQrGU3EZUJbduXHMFYHzr5QDHBfIhBqjjSZKkY4gAW3w5f6FZkCZINxBWYRmJ1A40OCEysQhLJRxYc2zAh8EVzNk0TbQ0u73jBnZZ6oCHzqd6TKp7biy7/gohmJlQkcdzZqyn/F5Gvkr+DhTOPpCuk0UmfxFRj0vKZbsW7kZ836+4Y7qqhmKtyKedQu4K++ET7qhJRdw1doL95eyuLXTE1G+61DBc4P7cLzR3NwD2WR+bSVgHyq5Q6lYhqb8PxaA5NrSBGLSA3ch50AYW54K01TTHBmgH0+hmikXBjXS6mWI7lnMNrGPJRWcLWFdOhNB0WQSwW2mOtYL15fxqAxtYcKwaYsNy7PQlfNzljTTb77+vQZMZlq66+YZJVvYDaDLD0i3ilQWFKWACsGWfjLYz2ljQ1g4wAZ+sLMHohvpGG+/UugZMQIKVTQdCekjZP1mAJnk6/CjBohI2+zkpWrfZr3eFSUD8Viw1phIQDlDYtoCN5B2yDWxPsek0wwaqLfKs2Wv2dqmfF4fDUmHiCVvVhk61w81VvgyQBPsATcCGDpYfVM+kfU7VP6TxuQZMUPkBFktsZ+PJS4olKXMv2BfSHtMGv9RwJgG7oedHJfaeBd3csSDOJGBtsGxmjk7odJQV8xUdRueX+cqZ/rLjt/Dx6SMxFldlFydJ3t2sGiOKPRL4qtOesbvciYS5reDd/TQ97rGDL85K7pr5O92zQ7nLQbESWy2f9JjpP/5U6LJUK254T1OEQLhXkcvcWpJul45tUI8iFbwCMhVwBWTZjcMLX2Be53pNcbukrw5MbchVUhG3/kVrCRXFt2Y+qOKa6zqX2Ch/a8yLY+WVOw6wocOB5huMLRenJerquEo10HZ4q//4oh8JQyhWVPlcVAOKZfdLXD45+jEFyOCj4bbJo+FZvcjpeif6xHnyXKejgfwPsV4SsCsYBNsAAAAASUVORK5CYII="/>
-	</defs>
-	<style>
-	</style>
-	<use id="Camada 1" href="#img1" x="0" y="0"/>
+<svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="21.5" cy="21.5" r="21.5" fill="white"/>
+<rect x="9" y="10" width="26" height="23" rx="4" fill="#91CAD6"/>
+<path d="M11 15C11 13.3431 12.3431 12 14 12H30C31.6569 12 33 13.3431 33 15V19H11V15Z" fill="white"/>
+<circle cx="15.6875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="15.6875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="15.6875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="22.6875" r="1.6875" fill="white"/>
+<circle cx="15.6875" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="15.6875" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="15.6875" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="22.4375" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="28.3125" r="1.6875" fill="white"/>
+<circle cx="29.1875" cy="28.3125" r="1.6875" fill="white"/>
+<path d="M14 9C14 8.44772 14.4477 8 15 8H16C16.5523 8 17 8.44772 17 9V11H14V9Z" fill="#91CAD6"/>
+<path d="M27 9C27 8.44772 27.4477 8 28 8H29C29.5523 8 30 8.44772 30 9V11H27V9Z" fill="#91CAD6"/>
 </svg>

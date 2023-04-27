@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SplashPage from './pages/SplashPage';
 import LoginPage from './pages/LoginPage';
+import AlertsPage from './pages/AlertsPage';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import InfosPage from './pages/InfosPage';
@@ -12,6 +13,7 @@ import LogoutPage from './pages/LogoutPage';
 import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
+import CreateProtocolPage from './pages/CreateProtocolPage';
 
 const styles = `
 .App {
@@ -61,12 +63,14 @@ function App(props) {
                 <Routes>
                     <Route path="/" element={<SplashPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/alert" element={<AlertsPage />} />
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/navbar" element={<Navbar />} />
                     <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/protocol/:id" element={<ProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
+                    <Route path="/createprotocol" element={<CreateProtocolPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                     <Route path="/logout" element={<LogoutPage />} />
                     <Route
