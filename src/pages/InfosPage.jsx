@@ -35,7 +35,7 @@ function InfosPage(props) {
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className={`col-2 bg-coral-red d-none ${showSidebar ? 'd-lg-flex' : ''}`}>
+                <div className={`col-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
