@@ -38,34 +38,64 @@ function SignUpPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConf, setPasswordConf] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleSuccessModalHide = () => {
-        navigate('/login');
+    const validateEmptyFields = (name, email, password) => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+
+    const validatePassword = (password, passwordConf) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        return password === passwordConf && password.match(passwordRegex);
+    };
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return email.trim() !== '' && emailRegex.test(email);
+    };
+
+    const showModal = (element, onHide = undefined) => {
+        if (onHide) {
+            document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
+        }
+        const modal = new window.bootstrap.Modal(document.getElementById(element));
+        modal.show();
     };
 
     const signUpHandler = (event) => {
         event.preventDefault();
+        if (!validateEmptyFields(name, email, password)) {
+            setAlertMessage('Falha no cadastro: preencha todos os campos');
+            showModal('SignUpModal');
+        } else if (!validateEmail(email)) {
+            setAlertMessage('Falha no cadastro: email inválido');
+            showModal('SignUpModal');
+        } else if (!validatePassword(password, passwordConf)) {
+            setAlertMessage('Falha no cadastro: falha de confirmação de senha');
+            showModal('SignUpModal');
+        } else {
+            axios
+                .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
+                    email,
+                    hash: password,
+                    name,
+                })
+                .then((response) => {
+                    if (response.data.message === 'User registered with sucess.') {
+                        setAlertMessage('Cadastrado com sucesso.');
+                        showModal('SignUpModal', () => {
+                            navigate('/login');
+                        });
+                    } else {
+                        setAlertMessage('Falha no cadastro: erro no servidor');
+                        showModal('SignUpModal');
+                    }
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
         //.post('http://localhost:3333/user/signUp', {
-        axios
-            .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
-                email,
-                hash: password,
-                name,
-            })
-            .then((response) => {
-                if (response.data.message == 'User registered with sucess.') {
-                    document.getElementById('SignUpSuccessModal').addEventListener('hidden.bs.modal', handleSuccessModalHide);
-                    const modal = new window.bootstrap.Modal(document.getElementById('SignUpSuccessModal'));
-                    modal.show();
-                } else {
-                    const modal = new window.bootstrap.Modal(document.getElementById('SignUpFailModal'));
-                    modal.show();
-                }
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
     };
 
     return (
@@ -97,7 +127,9 @@ function SignUpPage(props) {
                             </label>
                             <input
                                 id="email-input"
-                                className="ce-input bg-glacier-blue text-white rounded-pill text-center fs-5 border-0 p-2 w-100"
+                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                    validateEmail(email) ? 'text-white' : 'text-danger'
+                                }`}
                                 placeholder="Email"
                                 type="email"
                                 value={email}
@@ -123,7 +155,9 @@ function SignUpPage(props) {
                             </label>
                             <input
                                 id="password-conf-input"
-                                className="ce-input bg-glacier-blue text-white rounded-pill text-center fs-5 border-0 p-2 w-100"
+                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                    validatePassword(password, passwordConf) ? 'text-white' : 'text-danger'
+                                }`}
                                 placeholder="Confirme a senha"
                                 type="password"
                                 value={passwordConf}
@@ -143,17 +177,10 @@ function SignUpPage(props) {
                     </div>
                 </div>
             </div>
-            <div className="modal fade" id="SignUpSuccessModal" tabIndex="-1" aria-hidden="true">
+            <div className="modal fade" id="SignUpModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered p-5 p-md-1">
                     <div className="modal-content bg-transparent border-0">
-                        <EndProtocolAlert title="Cadastrado com sucesso" />
-                    </div>
-                </div>
-            </div>
-            <div className="modal fade" id="SignUpFailModal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered p-5 p-md-1">
-                    <div className="modal-content bg-transparent border-0">
-                        <EndProtocolAlert title="Falha no cadastro" />
+                        <EndProtocolAlert title={alertMessage} />
                     </div>
                 </div>
             </div>
