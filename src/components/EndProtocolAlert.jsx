@@ -18,10 +18,11 @@ const endProtocolAlertStyles = `
 `;
 
 function EndProtocolAlert(props) {
+    const { title } = props;
     return (
         <div className="d-flex flex-column shadow bg-grey rounded-4 w-100 mx-0 px-0 py-4">
             <div className="row p-4 py-2 mx-0">
-                <h1 className="end-protocol-h1 font-century-gothic text-center">Deseja finalizar o protocolo?</h1>
+                <h1 className="end-protocol-h1 font-century-gothic text-center">{title}</h1>
             </div>
             <div className="row p-4 py-2 mx-0">
                 <div className="col d-flex px-1">
@@ -35,5 +36,9 @@ function EndProtocolAlert(props) {
         </div>
     );
 }
+
+EndProtocolAlert.defaultProps = {
+    title: 'Deseja finalizar o protocolo?',
+};
 
 export default EndProtocolAlert;
