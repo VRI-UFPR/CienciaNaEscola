@@ -3,15 +3,16 @@ import NavBar from '../components/Navbar';
 
 const styles = `
     .color-lc-pink {
-        color: rgba(236, 101, 113, 1);
+        color: #EC6571;
     }
 
     .color-eerie-black {
-        color: rgba(38, 38, 38, 0.56);
+        color: #262626;
+        opacity: 80%;
     }
 
     .bg-gainsbor {
-        background-color: rgba(217, 217, 217, 1);
+        background-color: #D9D9D9;
     }
 
     .font-century-gothic {
