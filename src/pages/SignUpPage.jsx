@@ -2,6 +2,9 @@ import { React, useState } from 'react';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import EndProtocolAlert from '../components/EndProtocolAlert';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -35,6 +38,36 @@ function SignUpPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConf, setPasswordConf] = useState('');
+    const navigate = useNavigate();
+
+    const handleSuccessModalHide = () => {
+        navigate('/login');
+    };
+
+    const signUpHandler = (event) => {
+        event.preventDefault();
+        //.post('http://localhost:3333/user/signUp', {
+        axios
+            .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
+                email,
+                hash: password,
+                name,
+            })
+            .then((response) => {
+                if (response.data.message == 'User registered with sucess.') {
+                    document.getElementById('SignUpSuccessModal').addEventListener('hidden.bs.modal', handleSuccessModalHide);
+                    const modal = new window.bootstrap.Modal(document.getElementById('SignUpSuccessModal'));
+                    modal.show();
+                } else {
+                    const modal = new window.bootstrap.Modal(document.getElementById('SignUpFailModal'));
+                    modal.show();
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
+
     return (
         <div className="d-flex flex-column font-barlow min-vh-100">
             <NavBar showNavToggler={false} />
@@ -103,14 +136,27 @@ function SignUpPage(props) {
                 <div className="row justify-content-between w-100 mx-0">
                     <div className="col-2"></div>
                     <div className="col-auto align-items-center p-0">
-                        <TextButton className="px-5" hsl={[97, 43, 70]} text="Cadastre-se" />
+                        <TextButton className="px-5" hsl={[97, 43, 70]} text="Cadastre-se" onClick={signUpHandler} />
                     </div>
                     <div className="col-2 d-flex align-items-end justify-content-end p-0">
                         <RoundedButton />
                     </div>
                 </div>
             </div>
-
+            <div className="modal fade" id="SignUpSuccessModal" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered p-5 p-md-1">
+                    <div className="modal-content bg-transparent border-0">
+                        <EndProtocolAlert title="Cadastrado com sucesso" />
+                    </div>
+                </div>
+            </div>
+            <div className="modal fade" id="SignUpFailModal" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered p-5 p-md-1">
+                    <div className="modal-content bg-transparent border-0">
+                        <EndProtocolAlert title="Falha no cadastro" />
+                    </div>
+                </div>
+            </div>
             <style>{signUpPageStyles}</style>
         </div>
     );
