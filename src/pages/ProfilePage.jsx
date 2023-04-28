@@ -39,7 +39,7 @@ function ProfilePage(props) {
                     <Sidebar />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
-                    <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
+                    <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={!showSidebar} />
                     <div className="d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="pb-4">
                             <h1 className="color-dark-gray font-century-gothic fw-bold fs-3 pb-2 m-0">Seu perfil</h1>
@@ -107,7 +107,6 @@ function ProfilePage(props) {
 ProfilePage.defaultProps = {
     showSidebar: true,
     allowEdit: true,
-    showNavToggler: false,
 };
 
 export default ProfilePage;
