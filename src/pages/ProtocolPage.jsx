@@ -22,7 +22,7 @@ const styles = `
     }
 
     .gray-color {
-        color: rgba(120, 120, 120, 1);
+        color: #787878;
     }
 
     .font-barlow {
