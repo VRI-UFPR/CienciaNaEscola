@@ -41,17 +41,19 @@ function SignUpPage(props) {
     const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
 
-    const validateEmptyFields = (name, email, password) => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+    const validateEmptyFields = () => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
 
-    const validatePassword = (password, passwordConf) => {
+    const validatePasswordMatch = () => password === passwordConf;
+
+    const validatePassword = () => {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-        return password === passwordConf && password.match(passwordRegex);
+        return password.match(passwordRegex);
     };
 
-    const validateEmail = (email) => {
+    const validateEmail = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return email.trim() !== '' && emailRegex.test(email);
+        return email.trim() === '' || emailRegex.test(email);
     };
 
     const showModal = (element, onHide = undefined) => {
@@ -64,14 +66,19 @@ function SignUpPage(props) {
 
     const signUpHandler = (event) => {
         event.preventDefault();
-        if (!validateEmptyFields(name, email, password)) {
+        if (!validateEmptyFields()) {
             setAlertMessage('Falha no cadastro: preencha todos os campos');
             showModal('SignUpModal');
-        } else if (!validateEmail(email)) {
+        } else if (!validateEmail()) {
             setAlertMessage('Falha no cadastro: email inválido');
             showModal('SignUpModal');
-        } else if (!validatePassword(password, passwordConf)) {
-            setAlertMessage('Falha no cadastro: falha de confirmação de senha');
+        } else if (!validatePassword()) {
+            setAlertMessage(
+                'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula'
+            );
+            showModal('SignUpModal');
+        } else if (!validatePasswordMatch()) {
+            setAlertMessage('Falha no cadastro: as senhas não coincidem');
             showModal('SignUpModal');
         } else {
             axios
@@ -128,7 +135,7 @@ function SignUpPage(props) {
                             <input
                                 id="email-input"
                                 className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
-                                    validateEmail(email) ? 'text-white' : 'text-danger'
+                                    validateEmail() ? 'text-white' : 'text-danger'
                                 }`}
                                 placeholder="Email"
                                 type="email"
@@ -142,7 +149,9 @@ function SignUpPage(props) {
                             </label>
                             <input
                                 id="password-input"
-                                className="ce-input bg-glacier-blue text-white rounded-pill text-center fs-5 border-0 p-2 w-100"
+                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                    validatePassword() ? 'text-white' : 'text-danger'
+                                }`}
                                 placeholder="Senha"
                                 type="password"
                                 value={password}
@@ -156,7 +165,7 @@ function SignUpPage(props) {
                             <input
                                 id="password-conf-input"
                                 className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
-                                    validatePassword(password, passwordConf) ? 'text-white' : 'text-danger'
+                                    validatePasswordMatch() && validatePassword() ? 'text-white' : 'text-danger'
                                 }`}
                                 placeholder="Confirme a senha"
                                 type="password"
