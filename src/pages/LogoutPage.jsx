@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from '../components/Navbar';
-import HelpButton from '../components/HelpButton';
+// import HelpButton from '../components/HelpButton';
 
 const styles = `
 
@@ -64,9 +64,7 @@ function LogoutPage(props) {
                     <button className="buttons font-century-gothic bg-red px-5 py-1"> Cancelar </button>
                 </div>
             </div>
-            <div className="d-flex justify-content-end pe-4 pb-4">
-                <HelpButton />
-            </div>
+            <div className="d-flex justify-content-end pe-4 pb-4">{/* <HelpButton /> */}</div>
             <style>{styles}</style>
         </div>
     );
