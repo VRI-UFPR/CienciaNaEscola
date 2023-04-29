@@ -4,7 +4,7 @@ import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import EndProtocolAlert from '../components/EndProtocolAlert';
+import EndProtocolAlert from '../components/Alert';
 
 const signUpPageStyles = `
     .font-barlow {
