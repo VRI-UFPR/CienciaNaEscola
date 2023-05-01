@@ -176,7 +176,7 @@ function SignUpPage(props) {
                     </div>
                 </div>
 
-                <div className="row justify-content-between w-100 mx-0">
+                <div className="row justify-content-between w-100 mt-lg-5 mx-0">
                     <div className="col-2"></div>
                     <div className="col-auto align-items-center p-0">
                         <TextButton className="px-5" hsl={[97, 43, 70]} text="Cadastre-se" onClick={signUpHandler} />
