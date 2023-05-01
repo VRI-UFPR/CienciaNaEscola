@@ -35,7 +35,7 @@ function NavBar(props) {
                 <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
                     <div className="col-2 d-flex justify-content-start p-0">
                         <button
-                            className={`navbar-toggler icon-toggler btn h-auto shadow-none p-1 ${showNavToggler ? '' : 'd-none'}`}
+                            className={`navbar-toggler icon-toggler btn border-0 h-auto shadow-none p-1 ${showNavToggler ? '' : 'd-none'}`}
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#sidebar"
