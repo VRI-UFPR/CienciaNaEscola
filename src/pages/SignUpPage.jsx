@@ -112,7 +112,7 @@ function SignUpPage(props) {
                 <div className="row flex-column align-items-center flex-grow-1 w-100">
                     <div className="col-12 col-lg-8">
                         <div className="text-center w-100 mb-4 mb-lg-5">
-                            <h1 className="color-dark-gray font-century-gothic fs-3 pb-2 m-0 fw-bold">Cadastro de usuário</h1>
+                            <h1 className="color-dark-gray font-century-gothic fs-3 fw-bold pb-2 m-0">Cadastro de usuário</h1>
                             <h2 className="color-dark-gray fs-5 fw-medium m-0">Insira suas informações abaixo</h2>
                         </div>
                         <div className="text-center w-100 mb-3">
