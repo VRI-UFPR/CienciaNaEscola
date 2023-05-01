@@ -36,7 +36,6 @@ function TextButton(props) {
     return (
         <button
             type={type}
-            onClick={onClick}
             className={`btn d-flex btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig
             } rounded-4 font-century-gothic align-items-center justify-content-center w-100 p-2 ${className}`}

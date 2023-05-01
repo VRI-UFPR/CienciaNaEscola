@@ -5,6 +5,7 @@ import TextButton from '../components/TextButton';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import EndProtocolAlert from '../components/Alert';
+import { Modal } from 'bootstrap';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -60,7 +61,7 @@ function SignUpPage(props) {
         if (onHide) {
             document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
         }
-        const modal = window.bootstrap.Modal.getOrCreateInstance(document.getElementById(element));
+        const modal = Modal.getOrCreateInstance(document.getElementById(element));
         modal.show();
     };
 
