@@ -14,6 +14,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
 import CreateProtocolPage from './pages/CreateProtocolPage';
+import SignUpPage from './pages/SignUpPage';
 
 const styles = `
 .App {
@@ -73,6 +74,8 @@ function App(props) {
                     <Route path="/createprotocol" element={<CreateProtocolPage />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                     <Route path="/logout" element={<LogoutPage />} />
+                    <Route path="/logout" element={<LogoutPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
                     <Route
                         path="/imageradio"
                         element={

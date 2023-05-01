@@ -6,7 +6,7 @@ import ColoredBorder from './ColoredBorder';
 
 const styles = `
     .ce-navbar {
-        background-color: rgba(78, 155, 185, 0.81);
+        background-color: #78acc4;
     }
 
     .bg-coral-red {
