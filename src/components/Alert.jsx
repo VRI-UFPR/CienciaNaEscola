@@ -1,5 +1,6 @@
 import React from 'react';
 import TextButton from './TextButton';
+import { Modal } from 'bootstrap';
 
 const endProtocolAlertStyles = `
     .font-century-gothic {
@@ -16,7 +17,7 @@ const endProtocolAlertStyles = `
 `;
 
 const hideModal = (id) => {
-    window.bootstrap.Modal.getInstance(document.getElementById(id)).hide();
+    Modal.getInstance(document.getElementById(id)).hide();
 };
 
 const hideAndAction = (id, action) => {
