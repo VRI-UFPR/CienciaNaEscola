@@ -68,7 +68,7 @@ function App(props) {
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/navbar" element={<Navbar />} />
                     <Route path="/terms" element={<InfosPage title="Termos de uso" />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
                     <Route path="/protocol/:id" element={<ProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/createprotocol" element={<CreateProtocolPage />} />
