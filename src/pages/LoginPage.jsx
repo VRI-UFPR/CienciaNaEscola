@@ -1,24 +1,25 @@
 import { React, useContext, useState } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
-import Background from '../assets/images/loginPageBackground.png';
+import Background from '../assets/images/backgroundLogin.png';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import TextButton from '../components/TextButton';
 
 const styles = `
 
     .login-title{
-        text-align: center;
-        margin-bottom: 40px;
+        color: #3C3A3A;
+    }
+
+    .font-century-gothic {
+        font-family: 'Century Gothic', sans-serif;
     }
 
     .login-input{
-        width: 70%;
-        height: 30px;
         background-color: #4E9BB9;
         color: #FFFFFF;
         font-size: 90%;
-        border-radius: 50px;
         border: 0px;
     }
 
@@ -26,25 +27,7 @@ const styles = `
         color: #FFFFFF;
     }
 
-    .login-button {
-        text-decoration: none;
-        text-align: center;
-        width: 70%;
-        height: 30px;
-        background-color: #AAD390;
-        color: #FFFFFF;
-        border-radius: 50px;
-        border: 0px;
-        margin-top: 40px;
-
-    }
-
-    .login-logo {
-        margin-top: 80px;
-        margin-bottom: 25px ;
-    }
-
-    a{
+    .login-forgot-pw{
         color: #91CAD6;
     }
 `;
@@ -75,43 +58,41 @@ function LoginPage(props) {
     };
 
     return (
-        <div>
-            <div className="d-flex flex-column vh-100 w-100" style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}>
-                <div className="login-logo d-flex justify-content-center">
-                    <img src={LoginTitle} alt="" style={{ width: '250px' }} />
-                </div>
-                <div className="d-flex justify-content-center mb-4 mt-4">
-                    <span className="login-title">
-                        Bem-vindo(a) ao <br /> Ciência Cidadã na <br />
-                        Escola!
-                    </span>
-                </div>
-                <form onSubmit={loginHandler}>
-                    <div className=" d-flex flex-column align-items-center">
-                        <input
-                            className="login-input px-3 mb-3"
-                            placeholder="Login"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <input
-                            className="login-input px-3 mb-1"
-                            placeholder="Senha"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <a href="/">Esqueci minha senha</a>
-                    </div>
-
-                    <div className="d-flex justify-content-center mt-5">
-                        <button className="login-button pt-1" type="submit">
-                            Entrar
-                        </button>
-                    </div>
-                </form>
+        <div
+            className="d-flex flex-column align-items-center font-century-gothic vh-100 w-100"
+            style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
+        >
+            <div className="d-flex flex-column align-items-center justify-content-end h-50">
+                <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '300px' }} />
+                <span className="login-title text-center pb-5 fw-medium lh-sm fs-5 w-50">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
             </div>
+
+            <form className="row justify-content-center h-50 w-75" onSubmit={loginHandler}>
+                <div className="col-12 col-lg-8 d-flex flex-column align-items-center h-50">
+                    <input
+                        className="login-input align-items-center rounded-pill text-center fs-5 px-3 py-2 mb-4 w-100"
+                        placeholder="Login"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        className="login-input rounded-pill text-center fs-5 px-3 py-2 mb-3 w-100"
+                        placeholder="Senha"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <a href="/" className="login-forgot-pw fs-6">
+                        Esqueci minha senha
+                    </a>
+                </div>
+                <div className="row flex-column justify-content-start align-items-center pt-lg-5 h-50">
+                    <div className="col-12 col-lg-6">
+                        <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                    </div>
+                </div>
+            </form>
             <style> {styles}</style>
         </div>
     );
