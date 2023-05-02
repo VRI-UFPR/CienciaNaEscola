@@ -4,7 +4,7 @@ import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import EndProtocolAlert from '../components/EndProtocolAlert';
+import EndProtocolAlert from '../components/Alert';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -60,7 +60,7 @@ function SignUpPage(props) {
         if (onHide) {
             document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
         }
-        const modal = new window.bootstrap.Modal(document.getElementById(element));
+        const modal = window.bootstrap.Modal.getOrCreateInstance(document.getElementById(element));
         modal.show();
     };
 
@@ -109,7 +109,7 @@ function SignUpPage(props) {
         <div className="d-flex flex-column font-barlow min-vh-100">
             <NavBar showNavToggler={false} />
             <div className="d-flex flex-column flex-grow-1 p-4 p-lg-5">
-                <div className="row flex-column align-items-center flex-grow-1 w-100">
+                <div className="row flex-column align-items-center flex-grow-1 w-100 m-0">
                     <div className="col-12 col-lg-8">
                         <div className="text-center w-100 mb-4 mb-lg-5">
                             <h1 className="color-dark-gray font-century-gothic fs-3 fw-bold pb-2 m-0">Cadastro de usuário</h1>
@@ -186,13 +186,14 @@ function SignUpPage(props) {
                     </div>
                 </div>
             </div>
-            <div className="modal fade" id="SignUpModal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered p-5 p-md-1">
-                    <div className="modal-content bg-transparent border-0">
-                        <EndProtocolAlert title={alertMessage} />
-                    </div>
-                </div>
-            </div>
+
+            <EndProtocolAlert
+                id="SignUpModal"
+                title={alertMessage}
+                actionHsl={[355, 78, 66]}
+                actionText="Sair"
+                actionOnClick={() => navigate('/login')}
+            />
             <style>{signUpPageStyles}</style>
         </div>
     );
