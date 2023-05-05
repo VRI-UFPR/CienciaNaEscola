@@ -5,6 +5,8 @@ import Background from '../assets/images/backgroundLogin.png';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
+import Alert from '../components/Alert';
+import { Modal } from 'bootstrap';
 
 const styles = `
 
@@ -35,8 +37,22 @@ const styles = `
 function LoginPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+
+    const showModal = (element, onHide = undefined) => {
+        if (onHide) {
+            document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
+        }
+        const modal = Modal.getOrCreateInstance(document.getElementById(element));
+        modal.show();
+    };
+
+    const forgotPassword = () => {
+        setAlertMessage('Acesse o e-mail cadastrado para recuperar sua senha');
+        showModal('LoginModal');
+    };
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -50,10 +66,13 @@ function LoginPage(props) {
                 if (response.data.token) {
                     login(response.data.id, response.data.token);
                     navigate('/home');
+                } else {
+                    throw new Error('Something went wrong!');
                 }
             })
             .catch((error) => {
-                console.error(error.message);
+                setAlertMessage('Falha de autenticação. Certifique-se que email e senha estão corretos.');
+                showModal('LoginModal');
             });
     };
 
@@ -83,9 +102,9 @@ function LoginPage(props) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <a href="/" className="login-forgot-pw fs-6">
+                    <p className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer" onClick={forgotPassword}>
                         Esqueci minha senha
-                    </a>
+                    </p>
                 </div>
                 <div className="row flex-column justify-content-start align-items-center pt-lg-5 h-50">
                     <div className="col-12 col-lg-6">
@@ -93,6 +112,8 @@ function LoginPage(props) {
                     </div>
                 </div>
             </form>
+
+            <Alert id="LoginModal" title={alertMessage} />
             <style> {styles}</style>
         </div>
     );
