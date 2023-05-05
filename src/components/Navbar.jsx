@@ -3,6 +3,8 @@ import titleCE from '../assets/images/titleCE.svg';
 import iconToggler from '../assets/images/navToggler.svg';
 import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
+import Alert from './Alert';
+import { useNavigate } from 'react-router-dom';
 
 const styles = `
     .ce-navbar {
@@ -28,6 +30,7 @@ const styles = `
 
 function NavBar(props) {
     const { showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const navigate = useNavigate();
     return (
         <div>
             <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
@@ -56,6 +59,15 @@ function NavBar(props) {
             <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
                 <Sidebar />
             </div>
+            <Alert
+                id="NavbarModal"
+                title="Tem certeza que deseja fazer logout?"
+                dismissHsl={[355, 78, 66]}
+                dismissText="Não"
+                actionHsl={[97, 43, 70]}
+                actionText="Sim"
+                actionOnClick={() => navigate('/login')}
+            />
             <style>{styles}</style>
         </div>
     );
