@@ -4,7 +4,7 @@ import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import EndProtocolAlert from '../components/Alert';
+import Alert from '../components/Alert';
 import { Modal } from 'bootstrap';
 
 const signUpPageStyles = `
@@ -188,7 +188,7 @@ function SignUpPage(props) {
                 </div>
             </div>
 
-            <EndProtocolAlert
+            <Alert
                 id="SignUpModal"
                 title={alertMessage}
                 actionHsl={[355, 78, 66]}

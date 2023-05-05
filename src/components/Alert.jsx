@@ -25,7 +25,7 @@ const hideAndAction = (id, action) => {
     action();
 };
 
-function EndProtocolAlert(props) {
+function Alert(props) {
     const { title, id, dismissHsl, dismissText, actionHsl, actionOnClick, actionText } = props;
     return (
         <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
@@ -37,7 +37,7 @@ function EndProtocolAlert(props) {
                         <div className="row justify-content-center m-0">
                             <div className={`${actionHsl ? 'col' : 'col-auto'} d-flex px-1`}>
                                 <TextButton
-                                    className={`p-3 ${actionHsl ? '' : 'px-5'} p-md-4 fs-3`}
+                                    className={`p-3 ${actionHsl ? '' : 'px-5'} py-md-4 fs-3`}
                                     hsl={dismissHsl}
                                     text={dismissText}
                                     onClick={() => hideModal(id)}
@@ -60,7 +60,7 @@ function EndProtocolAlert(props) {
     );
 }
 
-EndProtocolAlert.defaultProps = {
+Alert.defaultProps = {
     id: 'Modal',
     title: 'Deseja finalizar o protocolo?',
     dismissHsl: [97, 43, 70],
@@ -70,4 +70,4 @@ EndProtocolAlert.defaultProps = {
     actionOnClick: undefined,
 };
 
-export default EndProtocolAlert;
+export default Alert;
