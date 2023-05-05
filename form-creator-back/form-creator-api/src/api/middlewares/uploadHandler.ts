@@ -1,19 +1,20 @@
-const express = require('express')
-	, app = express()
-	, multer = require('multer');
+import express = require('express');
+import multer = require('multer');
 
 // cria uma instância do middleware configurada
 // destination: lida com o destino
 // filenane: permite definir o nome do arquivo gravado
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // error first callback
-        cb(null, 'uploads/');
-    },
+    destination: "../uploads/",
+    // destino do arquivo no servidor
+    // req: informações sobre a requisição feita pelo usuário
+    // file: arquivo enviado
+    // cb: função de callback que será chamada após o processamento
+    // da requisição
     filename: function (req, file, cb) {
         // error first callback
         cb(null, file.fieldname + '-' + Date.now())
-    }
+    },
 });
 
 // cria uma instância do middleware configurada
