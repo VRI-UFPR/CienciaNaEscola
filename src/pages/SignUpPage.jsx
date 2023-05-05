@@ -3,7 +3,7 @@ import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EndProtocolAlert from '../components/Alert';
 import { Modal } from 'bootstrap';
 
@@ -31,6 +31,10 @@ const signUpPageStyles = `
     .ce-input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0 1000px #AAD390 inset !important;
         -webkit-text-fill-color: #535353 !important;
+    }
+
+    .login-forgot-pw{
+        color: #91CAD6;
     }
 `;
 
@@ -108,7 +112,7 @@ function SignUpPage(props) {
 
     return (
         <div className="d-flex flex-column font-barlow min-vh-100">
-            <NavBar showNavToggler={false} />
+            <NavBar showNavTogglerMobile={false} showNavTogglerDesktop={false} />
             <div className="d-flex flex-column flex-grow-1 p-4 p-lg-5">
                 <div className="row flex-column align-items-center flex-grow-1 w-100 m-0">
                     <div className="col-12 col-lg-8">
@@ -159,7 +163,7 @@ function SignUpPage(props) {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
-                        <div className="text-center w-100">
+                        <div className="text-center w-100 mb-3">
                             <label htmlFor="password-conf-input" className="form-label fs-5">
                                 Confirme a senha:
                             </label>
@@ -174,6 +178,11 @@ function SignUpPage(props) {
                                 onChange={(e) => setPasswordConf(e.target.value)}
                             />
                         </div>
+                        <div className="text-center w-100">
+                            <Link to={'/login'} className="login-forgot-pw pb-2 fs-6">
+                                Voltar para o login
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
@@ -183,7 +192,7 @@ function SignUpPage(props) {
                         <TextButton className="px-5" hsl={[97, 43, 70]} text="Cadastre-se" onClick={signUpHandler} />
                     </div>
                     <div className="col-1 d-flex align-items-end justify-content-end p-0">
-                        <RoundedButton />
+                        <RoundedButton role="link" onClick={() => navigate('/help')} />
                     </div>
                 </div>
             </div>
