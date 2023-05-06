@@ -76,11 +76,8 @@ function Sidebar(props) {
                     <a className="text-white text-decoration-none ps-5 py-2" href="/profile">
                         Perfil
                     </a>
-                    <a className="text-white text-decoration-none ps-5 py-2" href="/">
-                        Logout
-                    </a>
                     <button
-                        className="text-white text-decoration-none ps-5 py-2"
+                        className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         onClick={() => {
                             console.log('Deu');
                             modalRef.current.showModal({
