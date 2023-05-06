@@ -1,7 +1,7 @@
 import React from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/PerfilImg.png';
-import { Modal, Offcanvas } from 'bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const styles = `
     .font-barlow {
@@ -45,15 +45,8 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const showModal = (element, onHide = undefined) => {
-        if (onHide) {
-            document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
-        }
-        const modal = Modal.getOrCreateInstance(document.getElementById(element));
-        const offcanvas = Offcanvas.getOrCreateInstance(document.getElementById('sidebar'));
-        offcanvas.hide();
-        modal.show();
-    };
+    const { modalRef } = props;
+    const navigate = useNavigate();
 
     return (
         <div className="d-flex flex-column flex-grow-1">
@@ -86,7 +79,20 @@ function Sidebar(props) {
                     <a className="text-white text-decoration-none ps-5 py-2" href="/">
                         Logout
                     </a>
-                    <button className="text-white text-decoration-none ps-5 py-2" onClick={() => showModal('NavbarModal')}>
+                    <button
+                        className="text-white text-decoration-none ps-5 py-2"
+                        onClick={() => {
+                            console.log('Deu');
+                            modalRef.current.showModal({
+                                title: 'Tem certeza que deseja fazer logout?',
+                                dismissHsl: [355, 78, 66],
+                                dismissText: 'Não',
+                                actionHsl: [97, 43, 70],
+                                actionText: 'Sim',
+                                actionOnClick: () => navigate('/login'),
+                            });
+                        }}
+                    >
                         Logout
                     </button>
                 </div>
