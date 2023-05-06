@@ -1,8 +1,9 @@
-import { React, useState } from 'react';
+import { React, useState, useRef } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
+import Alert from '../components/Alert';
 
 const profilePageStyles = `
     .font-barlow {
@@ -30,13 +31,14 @@ function ProfilePage(props) {
     const [name, setName] = useState('Seu nome');
     const [email, setEmail] = useState('Seu email');
     const [password, setPassword] = useState('Sua senha');
+    const modalRef = useRef(null);
 
     const { showSidebar, allowEdit } = props;
     return (
         <div className="d-flex flex-column font-barlow min-vh-100">
             <div className="row flex-grow-1 m-0">
                 <div className={`col-2 bg-coral-red d-none ${showSidebar ? 'd-lg-flex' : ''} p-0`}>
-                    <Sidebar />
+                    <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={!showSidebar} />
@@ -98,7 +100,7 @@ function ProfilePage(props) {
                     </div>
                 </div>
             </div>
-
+            <Alert id="InfosModal" ref={modalRef} />
             <style>{profilePageStyles}</style>
         </div>
     );

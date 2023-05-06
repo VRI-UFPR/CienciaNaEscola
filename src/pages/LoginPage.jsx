@@ -1,4 +1,4 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useRef } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/backgroundLogin.png';
@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
-import { Modal } from 'bootstrap';
 
 const styles = `
 
@@ -37,22 +36,9 @@ const styles = `
 function LoginPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [alertMessage, setAlertMessage] = useState('');
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
-
-    const showModal = (element, onHide = undefined) => {
-        if (onHide) {
-            document.getElementById(element).addEventListener('hidden.bs.modal', onHide);
-        }
-        const modal = Modal.getOrCreateInstance(document.getElementById(element));
-        modal.show();
-    };
-
-    const forgotPassword = () => {
-        setAlertMessage('Acesse o e-mail cadastrado para recuperar sua senha');
-        showModal('LoginModal');
-    };
+    const modalRef = useRef(null);
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -71,8 +57,7 @@ function LoginPage(props) {
                 }
             })
             .catch((error) => {
-                setAlertMessage('Falha de autenticação. Certifique-se que email e senha estão corretos.');
-                showModal('LoginModal');
+                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que email e senha estão corretos.' });
             });
     };
 
@@ -102,7 +87,10 @@ function LoginPage(props) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <p className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer" onClick={forgotPassword}>
+                    <p
+                        className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
+                        onClick={() => modalRef.current.showModal({ title: 'Acesse o e-mail cadastrado para recuperar sua senha.' })}
+                    >
                         Esqueci minha senha
                     </p>
                 </div>
@@ -113,7 +101,7 @@ function LoginPage(props) {
                 </div>
             </form>
 
-            <Alert id="LoginModal" title={alertMessage} />
+            <Alert id="LoginModal" ref={modalRef} />
             <style> {styles}</style>
         </div>
     );

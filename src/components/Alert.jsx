@@ -19,23 +19,23 @@ const endProtocolAlertStyles = `
 const Alert = forwardRef((props, ref) => {
     const [modal, setModal] = useState(props);
 
-    const showModal = (props) => {
-        if (props) {
+    const showModal = (modalData) => {
+        if (modalData) {
             const alert = document.getElementById(modal.id);
             alert.removeEventListener('hidden.bs.modal', modal.onHide);
-            if (props.onHide) {
-                alert.addEventListener('hidden.bs.modal', props.onHide);
+            if (modalData.onHide) {
+                alert.addEventListener('hidden.bs.modal', modalData.onHide);
             }
 
             setModal({
                 id: modal.id,
-                title: props.title || modal.title,
-                dismissHsl: props.dismissHsl || modal.dismissHsl,
-                dismissText: props.dismissText || modal.dismissText,
-                actionHsl: props.actionHsl,
-                actionText: props.actionText,
-                actionOnClick: props.actionOnClick,
-                onHide: props.onHide,
+                title: modalData.title || modal.title,
+                dismissHsl: modalData.dismissHsl || modal.dismissHsl,
+                dismissText: modalData.dismissText || modal.dismissText,
+                actionHsl: modalData.actionHsl,
+                actionText: modalData.actionText,
+                actionOnClick: modalData.actionOnClick,
+                onHide: modalData.onHide,
             });
 
             Modal.getOrCreateInstance(alert).show();
