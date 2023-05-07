@@ -32,8 +32,15 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [protocol, setProtocol] = useState([]);
+    const [protocol, setProtocol] = useState();
+    const [answers, setAnswers] = useState({});
     const { id } = useParams();
+
+    const handleAnswerChange = (index, answer) => {
+        const updatedAnswers = answers;
+        updatedAnswers[index] = [answer];
+        setAnswers(updatedAnswers);
+    };
 
     useEffect(() => {
         axios
@@ -76,7 +83,7 @@ function ProtocolPage(props) {
                         case 0:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SimpleTextInput input={input} />}
+                                    {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
@@ -91,6 +98,13 @@ function ProtocolPage(props) {
                             return <p>ruim</p>;
                     }
                 })}
+                <button
+                    onClick={() => {
+                        console.log(JSON.stringify(answers));
+                    }}
+                >
+                    Clique-me!
+                </button>
             </div>
             <style>{styles}</style>
         </div>
