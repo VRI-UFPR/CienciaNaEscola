@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -36,6 +36,26 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
 
+    const initializeAnswers = useCallback(() => {
+        const initialAnswers = {};
+
+        if (!isLoading) {
+            protocol.inputs.forEach((input) => {
+                switch (input.type) {
+                    case 0:
+                        initialAnswers[input.id] = '';
+                        break;
+                    case 2:
+                        initialAnswers[input.id] = new Array(input.sugestions.length).fill('false');
+                        break;
+                    default:
+                        break;
+                }
+            });
+            setAnswers(initialAnswers);
+        }
+    }, [isLoading, protocol]);
+
     const handleAnswerChange = (index, answer) => {
         const updatedAnswers = { ...answers };
         updatedAnswers[index] = answer;
@@ -53,6 +73,10 @@ function ProtocolPage(props) {
                 console.error(error.message);
             });
     }, [id]);
+
+    useEffect(() => {
+        initializeAnswers();
+    }, [isLoading, initializeAnswers]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -98,13 +122,6 @@ function ProtocolPage(props) {
                             return <p>ruim</p>;
                     }
                 })}
-                <button
-                    onClick={() => {
-                        console.log(JSON.stringify(answers));
-                    }}
-                >
-                    Clique-me!
-                </button>
             </div>
             <style>{styles}</style>
         </div>
