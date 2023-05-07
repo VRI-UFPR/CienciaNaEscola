@@ -41,7 +41,7 @@ export function Location(props) {
         <div className="rounded-4 shadow bg-white overflow-hidden p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div class="location-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
+                    <div className="location-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
                         <img src={iconLocation} alt="" />
                     </div>
                 </div>

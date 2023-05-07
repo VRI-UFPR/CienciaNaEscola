@@ -36,7 +36,7 @@ function TimeInput(props) {
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div class="time-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
+                    <div className="time-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
                         <img src={iconTime} alt="Ícone de relógio" />
                     </div>
                 </div>

@@ -30,7 +30,7 @@ function InfoGerais(props) {
                 <div className="row m-0 pb-4">
                     <div className="rounded p-0">
                         <div className="mb-1">
-                            <label for="infogerais" className="control-label" id="form-label">
+                            <label htmlFor="infogerais" className="control-label" id="form-label">
                                 Informações gerais:
                             </label>
                             <input
