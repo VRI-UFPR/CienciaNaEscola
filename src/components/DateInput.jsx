@@ -36,13 +36,13 @@ function DateInput(props) {
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div class="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
+                    <div className="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
                         <img src={iconDate} alt="Ícone de calendário" />
                     </div>
                 </div>
                 <div className="col p-3 pe-4">
                     <div className="row m-0">
-                        <label labelfor="dateinput" className="form-label date-label font-century-gothic m-0 p-0">
+                        <label htmlFor="dateinput" className="form-label date-label font-century-gothic m-0 p-0">
                             Data da coleta
                         </label>
                     </div>
