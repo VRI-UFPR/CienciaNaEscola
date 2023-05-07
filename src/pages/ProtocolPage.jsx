@@ -37,8 +37,8 @@ function ProtocolPage(props) {
     const { id } = useParams();
 
     const handleAnswerChange = (index, answer) => {
-        const updatedAnswers = answers;
-        updatedAnswers[index] = [answer];
+        const updatedAnswers = { ...answers };
+        updatedAnswers[index] = answer;
         setAnswers(updatedAnswers);
     };
 
@@ -90,7 +90,7 @@ function ProtocolPage(props) {
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<RadioButtonInput input={input} />}
+                                    {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 

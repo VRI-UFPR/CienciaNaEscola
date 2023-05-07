@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React } from 'react';
 
 const styles = `
     .font-barlow {
@@ -27,10 +27,6 @@ const styles = `
 function SimpleTextInput(props) {
     const { onAnswerChange, input } = props;
 
-    useEffect(() => {
-        onAnswerChange(input.id, '');
-    }, [input.id, onAnswerChange]);
-
     return (
         <div className="shadow rounded bg-white p-3">
             <div className="row justify-content-between mb-1 m-0">
@@ -44,7 +40,7 @@ function SimpleTextInput(props) {
                 className="form-control font-barlow simple-text-input p-0 mb-4"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => onAnswerChange(input.id, e.target.value)}
+                onChange={(e) => onAnswerChange(input.id, [e.target.value])}
             ></input>
             <style>{styles}</style>
         </div>
