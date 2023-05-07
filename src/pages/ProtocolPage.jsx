@@ -62,6 +62,21 @@ function ProtocolPage(props) {
         setAnswers(updatedAnswers);
     };
 
+    const handleProtocolSubmit = () => {
+        axios
+            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
+            .then((response) => {
+                if (response.data.message === 'Answered') {
+                    console.log('Funcionou');
+                } else {
+                    console.log('Não funcionou');
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
+
     useEffect(() => {
         axios
             .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
