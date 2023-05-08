@@ -32,6 +32,14 @@ const styles = `
 `;
 
 function DateInput(props) {
+    const currentDate = () => {
+        const date = new Date();
+        const day = String(date.getDay()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear());
+        return year + '-' + month + '-' + day;
+    };
+
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
@@ -47,7 +55,12 @@ function DateInput(props) {
                         </label>
                     </div>
                     <div className="row m-0">
-                        <input type="date" className="form-control date-input w-auto pt-1 p-0" id="dateinput"></input>
+                        <input
+                            type="date"
+                            className="form-control date-input w-auto pt-1 p-0"
+                            id="dateinput"
+                            defaultValue={currentDate()}
+                        ></input>
                     </div>
                 </div>
             </div>
