@@ -32,6 +32,13 @@ const styles = `
 `;
 
 function TimeInput(props) {
+    const currentTime = () => {
+        const date = new Date();
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return hour + ':' + minutes;
+    };
+
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
@@ -47,7 +54,12 @@ function TimeInput(props) {
                         </label>
                     </div>
                     <div className="row m-0">
-                        <input type="time" className="form-control time-input w-auto ps-2 pt-1 p-0" id="timeinput"></input>
+                        <input
+                            type="time"
+                            className="form-control time-input w-auto ps-2 pt-1 p-0"
+                            id="timeinput"
+                            defaultValue={currentTime()}
+                        ></input>
                     </div>
                 </div>
             </div>
