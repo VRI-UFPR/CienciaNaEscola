@@ -3,6 +3,7 @@ import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
+import ProtocolCarousel from '../components/ProtocolCarousel';
 
 const recentProtocolStyles = `
     .bg-coral-red {
@@ -46,7 +47,7 @@ function RecentProtocolsPage(props) {
                                 <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
                             </div>
                             <div>
-                                <h2 className="infos-h2 pb-4 m-0 fw-medium">{content}</h2>
+                                <ProtocolCarousel></ProtocolCarousel>
                             </div>
                         </div>
                         <div className="row justify-content-between mx-0">
