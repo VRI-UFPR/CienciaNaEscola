@@ -7,7 +7,7 @@ import NavBar from '../components/Navbar';
 import InfoGerais from '../components/InfoGerais';
 import DateInput from '../components/DateInput';
 import TimeInput from '../components/TimeInput';
-import Location from '../components/Location';
+import LocationInput from '../components/LocationInput';
 
 import SimpleTextInput from '../components/SimpleTextInput';
 import RadioButtonInput from '../components/RadioButtonInput';
@@ -116,7 +116,7 @@ function ProtocolPage(props) {
                 <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<LocationInput />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
