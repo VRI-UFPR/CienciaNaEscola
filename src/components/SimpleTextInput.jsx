@@ -25,7 +25,7 @@ const styles = `
 `;
 
 function SimpleTextInput(props) {
-    const { onAnswerChange, input } = props;
+    const { onAnswerChange, input, answer } = props;
 
     return (
         <div className="shadow rounded bg-white p-3">
@@ -41,6 +41,8 @@ function SimpleTextInput(props) {
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
                 onChange={(e) => onAnswerChange(input.id, [e.target.value])}
+                value={answer ? answer[0].value : undefined}
+                disabled={answer !== undefined}
             ></input>
             <style>{styles}</style>
         </div>
