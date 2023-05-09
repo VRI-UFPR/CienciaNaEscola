@@ -75,6 +75,7 @@ function App(props) {
                     <Route path="/protocol/:id" element={<ProtocolPage />} />
                     <Route path="/help" element={<HelpPage />} />
                     <Route path="/createprotocol" element={<CreateProtocolPage />} />
+                    <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
                     <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} />} />
                     <Route path="/logout" element={<LogoutPage />} />
                     <Route path="/logout" element={<LogoutPage />} />
