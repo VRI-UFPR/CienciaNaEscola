@@ -1,8 +1,10 @@
-import { React, useState } from 'react';
+import { React, useState, useRef } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
+import Alert from '../components/Alert';
+import { useNavigate } from 'react-router-dom';
 
 const profilePageStyles = `
     .font-barlow {
@@ -41,8 +43,8 @@ const profilePageStyles = `
 function ProfilePage(props) {
     const [name, setName] = useState('Seu nome');
     const [email, setEmail] = useState('Seu email');
-
     const { showSidebar, allowEdit } = props;
+  
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
@@ -101,13 +103,13 @@ function ProfilePage(props) {
                                 <TextButton className={`px-5 ${allowEdit ? '' : 'd-none'}`} hsl={[97, 43, 70]} text="Salvar" />
                             </div>
                             <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                <RoundedButton />
+                                <RoundedButton role="link" onClick={() => navigate('/help')} />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <Alert id="InfosModal" ref={modalRef} />
             <style>{profilePageStyles}</style>
         </>
     );
