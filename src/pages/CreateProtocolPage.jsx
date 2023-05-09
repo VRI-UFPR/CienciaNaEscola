@@ -1,4 +1,4 @@
-import { React, useState, useContext } from 'react';
+import { React, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -6,6 +6,8 @@ import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
 import CreateTextBoxInput from '../components/CreateTextBoxInput';
 import { AuthContext } from '../contexts/AuthContext';
+import SplashPage from './SplashPage';
+import { useParams } from 'react-router-dom';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -42,7 +44,10 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
+    const { edit } = props;
+    const { id } = useParams();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -50,19 +55,34 @@ function CreateProtocolPage(props) {
         placedInputs.forEach((input, index) => {
             input['placement'] = index + 1;
         });
-        const protocol = { id: '', title, description, inputs: placedInputs };
-        axios
-            .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
+        const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
+        if (edit) {
+            axios
+                .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            axios
+                .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
         console.log(JSON.stringify(protocol));
     };
 
@@ -91,6 +111,29 @@ function CreateProtocolPage(props) {
         updateInputs[index] = input;
         setInputs(updateInputs);
     };
+
+    useEffect(() => {
+        if (edit) {
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+                .then((response) => {
+                    delete response.data.inputs.id;
+                    setInputs(response.data.inputs);
+                    setTitle(response.data.title);
+                    setDescription(response.data.description);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            setIsLoading(false);
+        }
+    }, [id, edit]);
+
+    if (isLoading) {
+        return <SplashPage />;
+    }
 
     return (
         <div className="d-flex flex-column min-vh-100">
@@ -179,5 +222,9 @@ function CreateProtocolPage(props) {
         </div>
     );
 }
+
+CreateProtocolPage.defaultProps = {
+    edit: false,
+};
 
 export default CreateProtocolPage;
