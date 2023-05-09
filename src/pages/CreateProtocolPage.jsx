@@ -4,6 +4,7 @@ import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
 import CreateTextBoxInput from '../components/CreateTextBoxInput';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -40,6 +41,7 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -138,7 +140,7 @@ function CreateProtocolPage(props) {
                                     <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
                                 </div>
                                 <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                    <RoundedButton />
+                                    <RoundedButton role="link" onClick={() => navigate('/help')} />
                                 </div>
                             </div>
                         </form>
