@@ -4,10 +4,6 @@ import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-import InfoGerais from '../components/InfoGerais';
-import DateInput from '../components/DateInput';
-import TimeInput from '../components/TimeInput';
-import LocationInput from '../components/LocationInput';
 
 import SimpleTextInput from '../components/SimpleTextInput';
 import RadioButtonInput from '../components/RadioButtonInput';
@@ -66,7 +62,14 @@ function AnswerPage(props) {
             <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
-                        <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
+                        <div className="btn-group w-100" role="group" aria-label="Basic example">
+                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="prev">
+                                Anterior
+                            </button>
+                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="next">
+                                Próxima
+                            </button>
+                        </div>
                     </div>
                     <div className="col-9 col-sm-10 pe-0">
                         <input
@@ -76,28 +79,36 @@ function AnswerPage(props) {
                         />
                     </div>
                 </div>
-                {protocolAnswer.map((answer, answerIndex) => {
-                    return answer.form.inputs.map((input, inputIndex) => {
-                        const inputAnswer = answer.inputAnswers[input.id];
-                        switch (input.type) {
-                            case 0:
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<SimpleTextInput input={input} answer={inputAnswer} />}
-                                    </div>
-                                );
-                            case 2:
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<RadioButtonInput input={input} answer={inputAnswer} />}
-                                    </div>
-                                );
+                <div id="answersCarousel" className="carousel slide carousel-fade" data-bs-touch="false">
+                    <div className="carousel-inner">
+                        {protocolAnswer.map((answer, answerIndex) => {
+                            return (
+                                <div key={answer.id} className={`carousel-item ${answerIndex === 0 ? 'active' : ''}`}>
+                                    {answer.form.inputs.map((input, inputIndex) => {
+                                        const inputAnswer = answer.inputAnswers[input.id];
+                                        switch (input.type) {
+                                            case 0:
+                                                return (
+                                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                        {<SimpleTextInput input={input} answer={inputAnswer} />}
+                                                    </div>
+                                                );
+                                            case 2:
+                                                return (
+                                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                        {<RadioButtonInput input={input} answer={inputAnswer} />}
+                                                    </div>
+                                                );
 
-                            default:
-                                return undefined;
-                        }
-                    });
-                })}
+                                            default:
+                                                return undefined;
+                                        }
+                                    })}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
             <style>{styles}</style>
         </div>
