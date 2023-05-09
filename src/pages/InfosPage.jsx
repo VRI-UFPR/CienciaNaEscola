@@ -1,8 +1,9 @@
-import React from 'react';
+import { React, useRef } from 'react';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
+import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 
 const infosPageStyles = `
@@ -34,11 +35,12 @@ const infosPageStyles = `
 function InfosPage(props) {
     const { title, content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
+    const modalRef = useRef(null);
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
                 <div className={`col-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
-                    <Sidebar />
+                    <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
@@ -78,7 +80,7 @@ function InfosPage(props) {
                     </div>
                 </div>
             </div>
-
+            <Alert id="InfosPageAlert" ref={modalRef} />
             <style>{infosPageStyles}</style>
         </div>
     );

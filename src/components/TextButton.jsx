@@ -40,7 +40,7 @@ function TextButton(props) {
             role={role}
             className={`btn d-flex btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig
-            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 p-2 ${className}`}
+            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 ${className}`}
             onClick={onClick}
         >
             {text}
