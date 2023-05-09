@@ -17,7 +17,7 @@ const styles = `
 `;
 
 function RadioButtonInput(props) {
-    const { onAnswerChange, input } = props;
+    const { onAnswerChange, input, answer } = props;
 
     const handleAnswerChange = (index) => {
         const array = new Array(input.sugestions.length).fill('false');
@@ -33,17 +33,25 @@ function RadioButtonInput(props) {
             <div className="pt-2">
                 {input.sugestions.map((option, index) => {
                     const optname = option.value.toLowerCase().replace(/\s/g, '');
-
                     return (
                         <div key={optname + 'input'} className="form-check ms-2 mb-2">
                             <input
-                                className="form-check-input radio-button-input"
+                                className={`form-check-input radio-button-input ${
+                                    answer && answer[index].value === 'true' ? 'opacity-100' : ''
+                                }`}
                                 type="radio"
                                 name={'radiooptions' + input.id}
                                 id={optname + 'input'}
                                 onChange={() => handleAnswerChange(index)}
+                                checked={answer && answer[index].value === 'true'}
+                                disabled={answer !== undefined}
                             ></input>
-                            <label className="form-check-label radio-button-label font-barlow" htmlFor={optname + 'input'}>
+                            <label
+                                className={`form-check-label radio-button-label font-barlow ${
+                                    answer && answer[index].value === 'true' ? 'opacity-100' : ''
+                                }`}
+                                htmlFor={optname + 'input'}
+                            >
                                 {option.value}
                             </label>
                         </div>
