@@ -2,7 +2,7 @@ import { React, useContext, useState, useRef } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/backgroundLogin.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
@@ -30,6 +30,10 @@ const styles = `
 
     .login-forgot-pw{
         color: #91CAD6;
+    }
+
+    .login-forgot-pw:hover{
+        cursor: pointer;
     }
 `;
 
@@ -87,6 +91,9 @@ function LoginPage(props) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <Link to={'/acceptterms'} className="login-forgot-pw pb-2 fs-6">
+                        Criar nova conta
+                    </Link>
                     <p
                         className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
                         onClick={() => modalRef.current.showModal({ title: 'Acesse o e-mail cadastrado para recuperar sua senha.' })}
