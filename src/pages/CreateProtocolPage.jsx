@@ -1,9 +1,11 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
+import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
 import CreateTextBoxInput from '../components/CreateTextBoxInput';
+import { AuthContext } from '../contexts/AuthContext';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -40,15 +42,43 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+    const { user } = useContext(AuthContext);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const protocol = { title, description, inputs };
+        const placedInputs = [...inputs];
+        placedInputs.forEach((input, index) => {
+            input['placement'] = index + 1;
+        });
+        const protocol = { id: '', title, description, inputs: placedInputs };
+        axios
+            .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
         console.log(JSON.stringify(protocol));
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([...inputs, { question: '', description: '' }]);
+        setInputs([
+            ...inputs,
+            {
+                description: '',
+                question: '',
+                type: 0,
+                validation: [],
+                sugestions: [],
+                subForm: null,
+                id: null,
+            },
+        ]);
     };
 
     const handleTextBoxRemove = (indexToRemove) => {
