@@ -17,6 +17,7 @@ import ImageRadioButtonsInput from './components/ImageRadioButtonsInput';
 import TextImageInput from './components/TextImageInput';
 import CreateProtocolPage from './pages/CreateProtocolPage';
 import SignUpPage from './pages/SignUpPage';
+import AnswerPage from './pages/AnswerPage';
 
 const styles = `
 .App {
@@ -78,6 +79,7 @@ function App(props) {
                     <Route path="/logout" element={<LogoutPage />} />
                     <Route path="/logout" element={<LogoutPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/answer/:id" element={<AnswerPage />} />
                     <Route
                         path="/imageradio"
                         element={
