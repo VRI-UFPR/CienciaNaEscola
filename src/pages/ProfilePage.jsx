@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
+import { useNavigate } from 'react-router-dom';
 
 const profilePageStyles = `
     .font-barlow {
@@ -32,6 +33,7 @@ function ProfilePage(props) {
     const [email, setEmail] = useState('Seu email');
     const [password, setPassword] = useState('Sua senha');
     const modalRef = useRef(null);
+    const navigate = useNavigate();
 
     const { showSidebar, allowEdit } = props;
     return (
@@ -94,7 +96,7 @@ function ProfilePage(props) {
                                 <TextButton className={`px-5 ${allowEdit ? '' : 'd-none'}`} hsl={[97, 43, 70]} text="Salvar" />
                             </div>
                             <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                <RoundedButton />
+                                <RoundedButton role="link" onClick={() => navigate('/help')} />
                             </div>
                         </div>
                     </div>

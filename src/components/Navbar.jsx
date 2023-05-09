@@ -23,7 +23,7 @@ const styles = `
     }
 
     .offcanvas-ce{
-        max-width: 400px;
+        max-width: 16.66%;
     }
 `;
 
