@@ -1,8 +1,9 @@
-import React from 'react';
+import { React, useRef } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import iconToggler from '../assets/images/navToggler.svg';
 import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
+import Alert from './Alert';
 
 const styles = `
     .ce-navbar {
@@ -28,6 +29,8 @@ const styles = `
 
 function NavBar(props) {
     const { showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const modalRef = useRef(null);
+
     return (
         <div>
             <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
@@ -54,8 +57,9 @@ function NavBar(props) {
             </nav>
 
             <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
-                <Sidebar />
+                <Sidebar modalRef={modalRef} />
             </div>
+            <Alert id="NavbarModal" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );
