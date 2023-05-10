@@ -4,6 +4,13 @@ import RoundedButton from './RoundedButton';
 import iconFile from '../assets/images/iconFile.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
 
+import { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import HomeButton from '../components/HomeButton';
+import TextImageInput from './TextImageInput';
+import { AuthContext } from '../contexts/AuthContext';
+
 const styles = `
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
@@ -23,6 +30,29 @@ const styles = `
 `;
 
 function SubForm(props) {
+    const [isLoading, setIsLoading] = useState(true);
+    const [userProtocols, setUserForms] = useState([]);
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user.id !== null && user.token !== null) {
+            // .get(`http://localhost:3333/user/list/${user.id}`)
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .then((response) => {
+                    setUserForms(response.data);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
+    }, [user]);
+
+    if (isLoading) {
+        return <TextImageInput />;
+    }
+
     return (
         <div className="pb-4 pb-lg-5">
             <div className="row justify-content-between m-0">
@@ -37,9 +67,15 @@ function SubForm(props) {
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4 font-barlow">
                 <select class="form-select form-select-lg mb-5 bg-light-grey font-barlow">
                     <option selected>Selecione um formulário</option>
+                    {userProtocols.map((userProtocol) => (
+                        <li key={userProtocol.id}>
+                            <Link className="list-home-btn" to={`/protocol/${userProtocol.id}`}>
+                                <HomeButton title={userProtocol.title} />
+                                <option value="1">um</option>
+                            </Link>
+                        </li>
+                    ))}
                     <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
                 </select>
             </div>
             <style>{styles}</style>
