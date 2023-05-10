@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from 'react';
-import iconLocation from '../assets/images/iconLocation.svg';
+import iconLocation from '../../assets/images/iconLocation.svg';
 
 const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
@@ -13,25 +14,24 @@ const styles = `
         background-color: #91CAD6;
     }
 
-    .location-label{
-        font-size: 1rem;
-        font-weight: 600;
+    .color-dark-gray {
         color: #535353;
     }
 
-    .location-input, .location-input::placeholder{
-        font-size: 1rem;
-        font-weight: 600;
-        color: #787878 !important;
+    .color-sonic-silver {
+        color: #787878;
     }
 
-    .location-input{
-        border-radius: 0;
+    .fs-7 {
+        font-size: 1.1rem !important;
+    }
+
+    .location-input {
         border: 0px;
         border-bottom: 1px solid #C1C1C1;
     }
 
-    .location-icon{
+    .location-icon {
         max-width: 50px;
     }
 `;
@@ -56,16 +56,16 @@ export function Location(props) {
                         <img src={iconLocation} alt="Ícone de localização" />
                     </div>
                 </div>
-                <div className="col p-3 pe-4">
-                    <div className="row m-0">
-                        <label htmlFor="locationinput" className="form-label location-label font-century-gothic m-0 p-0">
+                <div className="col p-3">
+                    <div className="row m-0 pb-1">
+                        <label htmlFor="locationinput" className="form-label color-dark-gray font-century-gothic fw-bold fs-7 m-0 p-0">
                             Localização
                         </label>
                     </div>
                     <div className="row m-0">
                         <input
                             type="text"
-                            className="form-control location-input pt-1 p-0"
+                            className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                             defaultValue={location || ''}
                             id="locationinput"
                             placeholder="Forneça sua localização"

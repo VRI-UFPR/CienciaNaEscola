@@ -4,10 +4,10 @@ import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-import InfoGerais from '../components/InfoGerais';
-import DateInput from '../components/DateInput';
-import TimeInput from '../components/TimeInput';
-import LocationInput from '../components/LocationInput';
+import InfoGerais from '../components/protocol/InfoGerais';
+import DateInput from '../components/protocol/DateInput';
+import TimeInput from '../components/protocol/TimeInput';
+import LocationInput from '../components/protocol/LocationInput';
 
 import SimpleTextInput from '../components/SimpleTextInput';
 import RadioButtonInput from '../components/RadioButtonInput';
