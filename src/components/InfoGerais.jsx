@@ -1,47 +1,37 @@
 import React from 'react';
 
 const styles = `
-    .bloco-info-gerais{
-        border-top: 12px solid #F59489;
-        width: 100%;
-    }
-
-    #form-label{
-        font-weight: 700;
-        font-size: 20px;
+    .color-dark-gray {
         color: #535353;
-        line-height: 38px;
     }
 
-    #infogerais{
+    .bloco-info-gerais {
+        border-top: 12px solid #F59489;
+    }
+
+    #infogerais {
         background: transparent;
         border: none;
         border-bottom: 1px solid #787878;
         -webkit-box-shadow: none;
-        box-shadow: none;
-        border-radius: 0;
     }
 `;
 
 function InfoGerais(props) {
     return (
-        <div className="bloco-info-gerais rounded shadow bg-white">
+        <div className="bloco-info-gerais rounded-4 shadow bg-white w-100">
             <form className="d-flex flex-column flex-grow-1">
-                <div className="row m-0 pb-4">
-                    <div className="rounded p-0">
-                        <div className="mb-1">
-                            <label htmlFor="infogerais" className="control-label" id="form-label">
-                                Informações gerais:
-                            </label>
-                            <input
-                                type="text"
-                                name="infogerais"
-                                className="form-control p-0"
-                                id="infogerais"
-                                placeholder="Adicionar descrição"
-                            />
-                        </div>
-                    </div>
+                <div className="row rounded m-0 p-0 pb-3">
+                    <label htmlFor="infogerais" className="control-label color-dark-gray fw-bold fs-5 lh-lg p-0">
+                        Informações gerais:
+                    </label>
+                    <input
+                        type="text"
+                        name="infogerais"
+                        className="form-control rounded-0 shadow-none p-0"
+                        id="infogerais"
+                        placeholder="Adicionar descrição"
+                    />
                 </div>
             </form>
             <style>{styles}</style>
