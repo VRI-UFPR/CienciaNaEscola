@@ -7,7 +7,7 @@ const styles = `
         height: 60px;
         padding: 0px 10px;
         border-radius: 9px;
-        font-size: 70%;
+        font-size: 90%;
         box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
     }
 
@@ -21,7 +21,7 @@ function HomeButton(props) {
         <div className="homeBtn font-barlow d-flex align-items-center">
             <div className="d-flex justify-content-between flex-fill px-0 py-0">
                 <div>{props.title}</div>
-                <div>17/09/2022</div>
+                <div>{props.date}</div>
             </div>
             <style>{styles}</style>
         </div>

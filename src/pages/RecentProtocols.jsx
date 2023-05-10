@@ -43,10 +43,8 @@ function RecentProtocolsPage(props) {
                     <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <div>
-                                <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
-                            </div>
-                            <div>
+                            <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
+                            <div className="">
                                 <ProtocolCarousel></ProtocolCarousel>
                             </div>
                         </div>
