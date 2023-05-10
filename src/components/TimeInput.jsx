@@ -5,6 +5,7 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
@@ -13,17 +14,16 @@ const styles = `
         background-color: #91CAD6;
     }
 
-    .time-label{
-        font-size: 1.1rem;
-        font-weight: 700;
+    .color-dark-gray {
         color: #535353;
     }
 
-    .time-input{
-        font-size: 1.1rem;
-        font-weight: 500;
+    .color-sonic-silver {
         color: #787878;
-        border: 0;
+    }
+
+    .fs-7 {
+        font-size: 1.1rem !important;
     }
 
     .time-icon{
@@ -47,16 +47,16 @@ function TimeInput(props) {
                         <img src={iconTime} alt="Ícone de relógio" />
                     </div>
                 </div>
-                <div className="col py-3">
-                    <div className="row m-0">
-                        <label labelfor="timeinput" className="form-label time-label font-century-gothic m-0 ps-2 p-0">
+                <div className="col p-3">
+                    <div className="row m-0 pb-1">
+                        <label labelfor="timeinput" className="form-label color-dark-gray font-century-gothic fw-bold fs-7 m-0 p-0">
                             Horário da coleta
                         </label>
                     </div>
                     <div className="row m-0">
                         <input
                             type="time"
-                            className="form-control time-input w-auto ps-2 pt-1 p-0"
+                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
                             defaultValue={currentTime()}
                         ></input>
