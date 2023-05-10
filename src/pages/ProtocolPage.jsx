@@ -11,6 +11,7 @@ import Location from '../components/Location';
 
 import SimpleTextInput from '../components/SimpleTextInput';
 import RadioButtonInput from '../components/RadioButtonInput';
+import FileUpload from '../components/FileUpload';
 
 const styles = `
     .bg-yellow-orange {
@@ -54,6 +55,7 @@ function ProtocolPage(props) {
     return (
         <div className="d-flex flex-column min-vh-100">
             <NavBar />
+            <FileUpload />
             <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
