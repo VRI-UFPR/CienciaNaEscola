@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useEffect, useState } from 'react';
 
 const styles = `
     .font-barlow {
@@ -18,11 +18,16 @@ const styles = `
 
 function RadioButtonInput(props) {
     const { onAnswerChange, input, answer } = props;
+    const [options, setOptions] = useState(new Array(input.sugestions.length).fill('false'));
 
-    const handleAnswerChange = (index) => {
+    useEffect(() => {
+        onAnswerChange(input.id, options);
+    }, [options, input.id, onAnswerChange]);
+
+    const handleOptionsUpdate = (index) => {
         const array = new Array(input.sugestions.length).fill('false');
         array[index] = 'true';
-        onAnswerChange(input.id, array);
+        setOptions(array);
     };
 
     return (
@@ -42,8 +47,8 @@ function RadioButtonInput(props) {
                                 type="radio"
                                 name={'radiooptions' + input.id}
                                 id={optname + 'input'}
-                                onChange={() => handleAnswerChange(index)}
-                                checked={answer && answer[index].value === 'true'}
+                                onChange={() => handleOptionsUpdate(index)}
+                                checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
                                 disabled={answer !== undefined}
                             ></input>
                             <label
