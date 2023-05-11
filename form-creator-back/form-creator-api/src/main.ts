@@ -67,7 +67,7 @@ app.put("/user/changePassword", tokenValidation(), UserCtrl.changePassword);
 app.get("/user/list/:id", UserCtrl.listForms);
 app.put("/user/update", tokenValidation(), UserCtrl.update);
 app.delete("/user/deleteData/:id", tokenValidation(), UserCtrl.deleteData);
-app.post('/file/upload', upload.single('file'), (req, res) => {
+app.post("/file/upload", upload.single('file'), (req, res) => {
      const file = req.file;
         if (!file) {
             res.send('<h2>Selecione um arquivo</h2>');

@@ -5,7 +5,7 @@ import multer = require('multer');
 // destination: lida com o destino
 // filenane: permite definir o nome do arquivo gravado
 const storage = multer.diskStorage({
-    destination: "../uploads/",
+    destination: "./uploads",
     // destino do arquivo no servidor
     // req: informações sobre a requisição feita pelo usuário
     // file: arquivo enviado

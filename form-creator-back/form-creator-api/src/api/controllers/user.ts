@@ -302,7 +302,6 @@ export class UserCtrl {
         });
 
     }
-
     public static update(req: Request, res: Response, next: NextFunction) {
 
         let newUser: User;
