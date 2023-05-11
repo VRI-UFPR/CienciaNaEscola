@@ -48,11 +48,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                if (response.data.message === 'Answered') {
-                    console.log('Funcionou');
-                } else {
-                    console.log('Não funcionou');
-                }
+                console.log(response);
             })
             .catch((error) => {
                 console.error(error.message);

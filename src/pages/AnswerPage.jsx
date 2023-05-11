@@ -44,7 +44,6 @@ function AnswerPage(props) {
                 .then((response) => {
                     setProtocolAnswer(response.data);
                     setIsLoading(false);
-                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.error(error.message);
