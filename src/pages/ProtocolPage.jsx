@@ -1,13 +1,13 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-import InfoGerais from '../components/InfoGerais';
-import DateInput from '../components/DateInput';
-import TimeInput from '../components/TimeInput';
-import Location from '../components/Location';
+import InfoGerais from '../components/protocol/InfoGerais';
+import DateInput from '../components/protocol/DateInput';
+import TimeInput from '../components/protocol/TimeInput';
+import LocationInput from '../components/protocol/LocationInput';
 
 import SimpleTextInput from '../components/SimpleTextInput';
 import RadioButtonInput from '../components/RadioButtonInput';
@@ -32,8 +32,50 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [protocol, setProtocol] = useState([]);
+    const [protocol, setProtocol] = useState();
+    const [answers, setAnswers] = useState({});
     const { id } = useParams();
+
+    const initializeAnswers = useCallback(() => {
+        const initialAnswers = {};
+
+        if (!isLoading) {
+            protocol.inputs.forEach((input) => {
+                switch (input.type) {
+                    case 0:
+                        initialAnswers[input.id] = '';
+                        break;
+                    case 2:
+                        initialAnswers[input.id] = new Array(input.sugestions.length).fill('false');
+                        break;
+                    default:
+                        break;
+                }
+            });
+            setAnswers(initialAnswers);
+        }
+    }, [isLoading, protocol]);
+
+    const handleAnswerChange = (index, answer) => {
+        const updatedAnswers = { ...answers };
+        updatedAnswers[index] = answer;
+        setAnswers(updatedAnswers);
+    };
+
+    const handleProtocolSubmit = () => {
+        axios
+            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
+            .then((response) => {
+                if (response.data.message === 'Answered') {
+                    console.log('Funcionou');
+                } else {
+                    console.log('Não funcionou');
+                }
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    };
 
     useEffect(() => {
         axios
@@ -46,6 +88,10 @@ function ProtocolPage(props) {
                 console.error(error.message);
             });
     }, [id]);
+
+    useEffect(() => {
+        initializeAnswers();
+    }, [isLoading, initializeAnswers]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -70,20 +116,20 @@ function ProtocolPage(props) {
                 <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<LocationInput />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SimpleTextInput input={input} />}
+                                    {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<RadioButtonInput input={input} />}
+                                    {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
