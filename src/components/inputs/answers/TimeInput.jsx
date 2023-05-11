@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import iconTime from '../../assets/images/iconTime.svg';
+import iconTime from '../../../assets/images/iconTime.svg';
 
 const styles = `
     .font-barlow {

@@ -5,13 +5,13 @@ import axios from 'axios';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-import SimpleTextInput from '../components/SimpleTextInput';
-import RadioButtonInput from '../components/RadioButtonInput';
+import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
+import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import { AuthContext } from '../contexts/AuthContext';
-import InfoGerais from '../components/protocol/InfoGerais';
-import DateInput from '../components/protocol/DateInput';
-import TimeInput from '../components/protocol/TimeInput';
-import Location from '../components/protocol/LocationInput';
+import InfoGerais from '../components/inputs/answers/InfoGerais';
+import DateInput from '../components/inputs/answers/DateInput';
+import TimeInput from '../components/inputs/answers/TimeInput';
+import Location from '../components/inputs/answers/LocationInput';
 
 const styles = `
     .bg-yellow-orange {
