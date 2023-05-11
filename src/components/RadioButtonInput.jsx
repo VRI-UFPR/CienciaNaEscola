@@ -1,4 +1,4 @@
-import React from 'react';
+import { React } from 'react';
 
 const styles = `
     .font-barlow {
@@ -17,13 +17,21 @@ const styles = `
 `;
 
 function RadioButtonInput(props) {
+    const { onAnswerChange, input } = props;
+
+    const handleAnswerChange = (index) => {
+        const array = new Array(input.sugestions.length).fill('false');
+        array[index] = 'true';
+        onAnswerChange(input.id, array);
+    };
+
     return (
         <div className="shadow rounded bg-white p-3">
             <div className="row justify-content-between m-0">
-                <p className="form-label radio-button-label font-barlow lh-sm px-0">{props.input.question}</p>
+                <p className="form-label radio-button-label font-barlow lh-sm px-0">{input.question}</p>
             </div>
             <div className="pt-2">
-                {props.input.sugestions.map((option) => {
+                {input.sugestions.map((option, index) => {
                     const optname = option.value.toLowerCase().replace(/\s/g, '');
 
                     return (
@@ -31,8 +39,9 @@ function RadioButtonInput(props) {
                             <input
                                 className="form-check-input radio-button-input"
                                 type="radio"
-                                name="radiooptions"
+                                name={'radiooptions' + input.id}
                                 id={optname + 'input'}
+                                onChange={() => handleAnswerChange(index)}
                             ></input>
                             <label className="form-check-label radio-button-label font-barlow" htmlFor={optname + 'input'}>
                                 {option.value}
