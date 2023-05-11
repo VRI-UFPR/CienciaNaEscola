@@ -12,7 +12,7 @@ function FileUpload() {
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post('/file/upload', formData, {
+    axios.post('https://genforms.c3sl.ufpr.br/api/file/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
