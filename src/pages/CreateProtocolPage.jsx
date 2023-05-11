@@ -53,7 +53,8 @@ function CreateProtocolPage(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const defaultInputs = [{
+        const defaultInputs = [
+            {
                 description: 'infos',
                 question: 'infos',
                 type: 0,
@@ -61,7 +62,8 @@ function CreateProtocolPage(props) {
                 sugestions: [],
                 subForm: null,
                 id: null,
-            },{
+            },
+            {
                 description: 'date',
                 question: 'date',
                 type: 0,
@@ -69,7 +71,8 @@ function CreateProtocolPage(props) {
                 sugestions: [],
                 subForm: null,
                 id: null,
-            },{
+            },
+            {
                 description: 'time',
                 question: 'time',
                 type: 0,
@@ -77,7 +80,8 @@ function CreateProtocolPage(props) {
                 sugestions: [],
                 subForm: null,
                 id: null,
-            },{
+            },
+            {
                 description: 'location',
                 question: 'location',
                 type: 0,
@@ -85,13 +89,14 @@ function CreateProtocolPage(props) {
                 sugestions: [],
                 subForm: null,
                 id: null,
-            }]
+            },
+        ];
         const placedInputs = defaultInputs.concat(...inputs);
 
         placedInputs.forEach((input, index) => {
             input['placement'] = index + 1;
         });
-        
+
         const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
         if (edit) {
             axios
