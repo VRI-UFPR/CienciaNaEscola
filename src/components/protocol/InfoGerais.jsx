@@ -18,7 +18,7 @@ const styles = `
 `;
 
 function InfoGerais(props) {
-    const [infos, setInfos] = useState('');
+    const [infos, setInfos] = useState(['']);
     const { onAnswerChange, input, answer } = props;
 
     useEffect(() => {
@@ -38,7 +38,7 @@ function InfoGerais(props) {
                         className="form-control rounded-0 shadow-none p-0"
                         id="infogerais"
                         placeholder="Adicionar descrição"
-                        onChange={(e) => setInfos(e.target.value)}
+                        onChange={(e) => setInfos([e.target.value])}
                         value={answer ? answer[0].value : infos}
                         disabled={answer !== undefined}
                     />

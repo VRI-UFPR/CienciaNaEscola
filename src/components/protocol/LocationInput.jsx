@@ -37,15 +37,15 @@ const styles = `
 `;
 
 export function Location(props) {
-    const [location, setLocation] = useState('');
+    const [location, setLocation] = useState(['']);
     const { onAnswerChange, input, answer } = props;
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
-                setLocation(latitude + ', ' + longitude);
-                onAnswerChange(input.id, latitude + ', ' + longitude);
+                setLocation([latitude + ', ' + longitude]);
+                onAnswerChange(input.id, [latitude + ', ' + longitude]);
             });
         }
     }, [onAnswerChange, input.id]);
@@ -74,7 +74,7 @@ export function Location(props) {
                             className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                             id="locationinput"
                             placeholder="Forneça sua localização"
-                            onChange={(e) => setLocation(e.target.value)}
+                            onChange={(e) => setLocation([e.target.value])}
                             value={answer ? answer[0].value : location}
                             disabled={answer !== undefined}
                         ></input>
