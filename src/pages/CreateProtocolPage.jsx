@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
+import { defaultInputs } from '../utils/constants';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -53,46 +54,8 @@ function CreateProtocolPage(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const defaultInputs = [
-            {
-                description: 'infos',
-                question: 'infos',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-            {
-                description: 'date',
-                question: 'date',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-            {
-                description: 'time',
-                question: 'time',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-            {
-                description: 'location',
-                question: 'location',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ];
-        const placedInputs = defaultInputs.concat(...inputs);
 
+        const placedInputs = defaultInputs.concat(...inputs);
         placedInputs.forEach((input, index) => {
             input['placement'] = index + 1;
         });
@@ -125,7 +88,6 @@ function CreateProtocolPage(props) {
                     console.error(error.message);
                 });
         }
-        console.log(JSON.stringify(protocol));
     };
 
     const handleTextBoxAdd = () => {
