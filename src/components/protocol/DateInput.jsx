@@ -32,7 +32,7 @@ const styles = `
 `;
 
 function DateInput(props) {
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(['']);
     const { onAnswerChange, input, answer } = props;
 
     useEffect(() => {
@@ -40,8 +40,8 @@ function DateInput(props) {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = String(date.getFullYear());
-        setDate(year + '-' + month + '-' + day);
-        onAnswerChange(input.id, year + '-' + month + '-' + day);
+        setDate([year + '-' + month + '-' + day]);
+        onAnswerChange(input.id, [year + '-' + month + '-' + day]);
     }, [onAnswerChange, input.id]);
 
     useEffect(() => {
@@ -67,7 +67,7 @@ function DateInput(props) {
                             type="date"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) => setDate([e.target.value])}
                             value={answer ? answer[0].value : date}
                             disabled={answer !== undefined}
                         ></input>
