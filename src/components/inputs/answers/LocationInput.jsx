@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import iconLocation from '../../assets/images/iconLocation.svg';
+import iconLocation from '../../../assets/images/iconLocation.svg';
 
 const styles = `
     .font-barlow {
