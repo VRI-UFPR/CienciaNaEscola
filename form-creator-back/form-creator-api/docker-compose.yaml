@@ -10,6 +10,7 @@ services:
             DB_NAME: ${DB_NAME}
         volumes:
             - ~/.docker-volumes/form-creator-database/db:/var/lib/postgresql/data
+            - ./uploads:/src/uploads
         networks:
             backend:
 
