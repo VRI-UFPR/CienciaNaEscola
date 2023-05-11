@@ -36,30 +36,11 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
 
-    const initializeAnswers = useCallback(() => {
-        const initialAnswers = {};
-
-        if (!isLoading) {
-            protocol.inputs.forEach((input) => {
-                switch (input.type) {
-                    case 0:
-                        initialAnswers[input.id] = '';
-                        break;
-                    case 2:
-                        initialAnswers[input.id] = new Array(input.sugestions.length).fill('false');
-                        break;
-                    default:
-                        break;
-                }
-            });
-            setAnswers(initialAnswers);
-        }
-    }, [isLoading, protocol]);
-
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
-            prevAnswers[indexToUpdate] = updatedAnswer;
-            return prevAnswers;
+            const newAnswers = { ...prevAnswers };
+            newAnswers[indexToUpdate] = updatedAnswer;
+            return newAnswers;
         });
     }, []);
 
@@ -90,10 +71,6 @@ function ProtocolPage(props) {
             });
     }, [id]);
 
-    useEffect(() => {
-        initializeAnswers();
-    }, [isLoading, initializeAnswers]);
-
     if (isLoading) {
         return <SplashPage />;
     }
@@ -117,25 +94,25 @@ function ProtocolPage(props) {
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
-                            if (input.question === 'infos' && input.placement === 1) {
+                            if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<InfoGerais input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'date' && input.placement === 2) {
+                            } else if (input.question === 'date' && input.description === 'date' && input.placement === 2) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'time' && input.placement === 3) {
+                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 3) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'location' && input.placement === 4) {
+                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 4) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
@@ -156,9 +133,10 @@ function ProtocolPage(props) {
                             );
 
                         default:
-                            return <p>ruim</p>;
+                            return <></>;
                     }
                 })}
+                <button onClick={handleProtocolSubmit}>Submit</button>
             </div>
             <style>{styles}</style>
         </div>
