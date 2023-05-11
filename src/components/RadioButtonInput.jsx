@@ -5,14 +5,12 @@ const styles = `
         font-family: 'Barlow', sans-serif;
     }
 
-    .radio-button-label{
-        font-weight: 600;
-        font-size: 90%;
-        color: #535353;
+    .bg-grey {
+        background-color: #D9D9D9
     }
 
-    .radio-button-input{
-        background-color: #D9D9D9
+    .color-dark-gray {
+        color: #535353;
     }
 `;
 
@@ -31,19 +29,17 @@ function RadioButtonInput(props) {
     };
 
     return (
-        <div className="shadow rounded bg-white p-3">
-            <div className="row justify-content-between m-0">
-                <p className="form-label radio-button-label font-barlow lh-sm px-0">{input.question}</p>
+        <div className="rounded-4 shadow bg-white p-3">
+            <div className="row m-0 pb-3">
+                <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{input.question}</p>
             </div>
-            <div className="pt-2">
+            <div className="row m-0 px-2">
                 {input.sugestions.map((option, index) => {
                     const optname = option.value.toLowerCase().replace(/\s/g, '');
                     return (
-                        <div key={optname + 'input'} className="form-check ms-2 mb-2">
+                        <div key={optname + 'input'} className="form-check m-0 pb-2 pe-2">
                             <input
-                                className={`form-check-input radio-button-input ${
-                                    answer && answer[index].value === 'true' ? 'opacity-100' : ''
-                                }`}
+                                className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
                                 type="radio"
                                 name={'radiooptions' + input.id}
                                 id={optname + 'input'}
@@ -52,7 +48,7 @@ function RadioButtonInput(props) {
                                 disabled={answer !== undefined}
                             ></input>
                             <label
-                                className={`form-check-label radio-button-label font-barlow ${
+                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
                                     answer && answer[index].value === 'true' ? 'opacity-100' : ''
                                 }`}
                                 htmlFor={optname + 'input'}
