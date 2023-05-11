@@ -1,10 +1,11 @@
 import React from 'react';
-import iconDate from '../assets/images/iconDate.svg';
+import iconDate from '../../assets/images/iconDate.svg';
 
 const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
@@ -13,20 +14,19 @@ const styles = `
         background-color: #91CAD6;
     }
 
-    .date-label{
-        font-size: 1.1rem;
-        font-weight: 700;
+    .color-dark-gray {
         color: #535353;
     }
 
-    .date-input{
-        font-size: 1.1rem;
-        font-weight: 500;
+    .color-sonic-silver {
         color: #787878;
-        border: 0;
     }
 
-    .date-icon{
+    .fs-7 {
+        font-size: 1.1rem !important;
+    }
+
+    .date-icon {
         max-width: 50px;
     }
 `;
@@ -48,16 +48,16 @@ function DateInput(props) {
                         <img src={iconDate} alt="Ícone de calendário" />
                     </div>
                 </div>
-                <div className="col p-3 pe-4">
-                    <div className="row m-0">
-                        <label htmlFor="dateinput" className="form-label date-label font-century-gothic m-0 p-0">
+                <div className="col p-3">
+                    <div className="row m-0 pb-1">
+                        <label htmlFor="dateinput" className="form-label color-dark-gray font-century-gothic fw-bold fs-7 m-0 p-0">
                             Data da coleta
                         </label>
                     </div>
                     <div className="row m-0">
                         <input
                             type="date"
-                            className="form-control date-input w-auto pt-1 p-0"
+                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
                             defaultValue={currentDate()}
                         ></input>
