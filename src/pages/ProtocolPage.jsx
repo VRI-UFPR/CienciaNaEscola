@@ -56,11 +56,12 @@ function ProtocolPage(props) {
         }
     }, [isLoading, protocol]);
 
-    const handleAnswerChange = (index, answer) => {
-        const updatedAnswers = { ...answers };
-        updatedAnswers[index] = answer;
-        setAnswers(updatedAnswers);
-    };
+    const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
+        setAnswers((prevAnswers) => {
+            prevAnswers[indexToUpdate] = updatedAnswer;
+            return prevAnswers;
+        });
+    }, []);
 
     const handleProtocolSubmit = () => {
         axios
@@ -113,19 +114,40 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<LocationInput />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
+                            if (input.question === 'infos' && input.placement === 1) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<InfoGerais input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'date' && input.placement === 2) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'time' && input.placement === 3) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'location' && input.placement === 4) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            }
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
