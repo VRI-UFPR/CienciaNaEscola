@@ -8,6 +8,7 @@ import CreateTextBoxInput from '../components/CreateTextBoxInput';
 import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -48,6 +49,7 @@ function CreateProtocolPage(props) {
     const { user } = useContext(AuthContext);
     const { edit } = props;
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -211,7 +213,7 @@ function CreateProtocolPage(props) {
                                     <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
                                 </div>
                                 <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                    <RoundedButton />
+                                    <RoundedButton role="link" onClick={() => navigate('/help')} />
                                 </div>
                             </div>
                         </form>
