@@ -37,16 +37,22 @@ const styles = `
 `;
 
 export function Location(props) {
-    const [location, setLocation] = useState();
+    const [location, setLocation] = useState('');
+    const { onAnswerChange, input, answer } = props;
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
                 setLocation(latitude + ', ' + longitude);
+                onAnswerChange(input.id, latitude + ', ' + longitude);
             });
         }
-    }, []);
+    }, [onAnswerChange, input.id]);
+
+    useEffect(() => {
+        onAnswerChange(input.id, location);
+    }, [location, input.id, onAnswerChange]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -66,9 +72,11 @@ export function Location(props) {
                         <input
                             type="text"
                             className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
-                            defaultValue={location || ''}
                             id="locationinput"
                             placeholder="Forneça sua localização"
+                            onChange={(e) => setLocation(e.target.value)}
+                            value={answer ? answer[0].value : location}
+                            disabled={answer !== undefined}
                         ></input>
                     </div>
                 </div>
