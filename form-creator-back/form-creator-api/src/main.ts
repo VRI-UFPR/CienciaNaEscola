@@ -67,8 +67,13 @@ app.put("/user/changePassword", tokenValidation(), UserCtrl.changePassword);
 app.get("/user/list/:id", UserCtrl.listForms);
 app.put("/user/update", tokenValidation(), UserCtrl.update);
 app.delete("/user/deleteData/:id", tokenValidation(), UserCtrl.deleteData);
-app.post('/file/upload', upload.single('file'), 
-    (req, res) => res.send('<h2>Upload realizado com sucesso</h2>'));
+app.post('/file/upload', upload.single('file'), (req, res) => {
+     const file = req.file;
+        if (!file) {
+            res.send('<h2>Selecione um arquivo</h2>');
+        }
+     console.log(file);
+     res.json({message: 'Arquivo recebido com sucesso!'});});
 // Listening
 
 app.listen(port);
