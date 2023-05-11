@@ -10,6 +10,7 @@ import HelpPage from './../pages/HelpPage';
 import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
+import AnswerPage from '../pages/AnswerPage';
 
 function AppRoutes(props) {
     return (
