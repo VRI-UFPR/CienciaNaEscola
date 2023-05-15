@@ -30,13 +30,18 @@ function TextButton(props) {
         hsl: [hue, sat, lig],
         text,
         className,
+        type,
+        onClick,
+        role,
     } = props;
     return (
         <button
-            type="button"
+            type={type}
+            role={role}
             className={`btn d-flex btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig
-            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 p-2 ${className}`}
+            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 ${className}`}
+            onClick={onClick}
         >
             {text}
             <style>{TextButtonStyles(hue, sat, lig)}</style>
@@ -47,6 +52,9 @@ function TextButton(props) {
 TextButton.defaultProps = {
     hsl: [0, 0, 0],
     text: 'Button',
+    type: 'button',
+    role: undefined,
+    onClick: () => undefined,
 };
 
 export default TextButton;

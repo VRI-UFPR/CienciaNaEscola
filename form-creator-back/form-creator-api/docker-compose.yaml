@@ -1,0 +1,44 @@
+version: '3' # version matters, see https://docs.docker.com/compose/networking/
+services:
+    form-postgres:
+        container_name: form-postgres
+        image: postgres:11
+        environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_NAME: ${DB_NAME}
+        volumes:
+            - ~/.docker-volumes/form-creator-database/db:/var/lib/postgresql/data
+        networks:
+            backend:
+
+    form-creator-api-backend:
+        build: .
+        environment:
+            NODE_ENV: ${FORM_API_NODE_ENV}
+            DB_HOST: form-postgres
+            POSTGRES_HOST_AUTH_METHOD: trust
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_NAME: ${DB_NAME}
+            DB_PORT: 5432
+
+        volumes:
+            - ./bin/:/app/bin/
+            - ./client/:/app/client/
+            - ./common/:/app/common/
+            - ./config/:/app/config/
+            - ./script/:/app/script/
+            - ./server/:/app/server/
+            # - ./coverage/:/app/coverage/
+            - ./doc/:/app/doc/
+            - ./src/:/app/src/
+            - ./test/:/app/test/
+        ports:
+            - '3333:3333'
+        networks:
+            backend:
+        restart: unless-stopped
+networks:
+    backend:

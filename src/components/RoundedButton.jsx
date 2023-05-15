@@ -36,14 +36,19 @@ function RoundedButton(props) {
         size,
         icon,
         alt,
+        className,
+        onClick,
+        role,
     } = props;
     return (
-        <div className="ratio ratio-1x1 rounded-button">
+        <div className={`ratio ratio-1x1 rounded-button ${className}`}>
             <button
                 type="button"
+                role={role}
                 className={`btn btn-${
                     'hsl-' + hue + '-' + sat + '-' + lig
                 } d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1`}
+                onClick={onClick}
             >
                 <img src={icon} alt={alt} className="w-100"></img>
             </button>
@@ -57,6 +62,9 @@ RoundedButton.defaultProps = {
     size: 32,
     icon: helpIcon,
     alt: 'Ícone',
+    className: '',
+    role: undefined,
+    onClick: () => undefined,
 };
 
 export default RoundedButton;
