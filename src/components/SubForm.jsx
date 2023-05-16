@@ -10,6 +10,7 @@ import axios from 'axios';
 import HomeButton from '../components/HomeButton';
 import TextImageInput from './TextImageInput';
 import { AuthContext } from '../contexts/AuthContext';
+import SplashPage from '../pages/SplashPage';
 
 const styles = `
     .font-century-gothic {
@@ -42,6 +43,7 @@ function SubForm(props) {
                 .then((response) => {
                     setUserForms(response.data);
                     setIsLoading(false);
+                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -50,8 +52,9 @@ function SubForm(props) {
     }, [user]);
 
     if (isLoading) {
-        return <TextImageInput />;
+        return <SplashPage />;
     }
+
 
     return (
         <div className="pb-4 pb-lg-5">
@@ -68,14 +71,11 @@ function SubForm(props) {
                 <select class="form-select form-select-lg mb-5 bg-light-grey font-barlow">
                     <option selected>Selecione um formulário</option>
                     {userProtocols.map((userProtocol) => (
-                        <li key={userProtocol.id}>
-                            <Link className="list-home-btn" to={`/protocol/${userProtocol.id}`}>
-                                <HomeButton title={userProtocol.title} />
-                                <option value="1">um</option>
-                            </Link>
-                        </li>
-                    ))}
-                    <option value="1">One</option>
+                        <option key={userProtocol.id}>
+                            {userProtocol.title}
+                        </option>
+                    ))
+                    }
                 </select>
             </div>
             <style>{styles}</style>
