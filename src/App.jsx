@@ -10,9 +10,7 @@ const styles = ``;
 function App(props) {
     return (
         <AuthProvider>
-            <HashRouter>
-                <AppRoutes />
-            </HashRouter>
+            <AppRoutes />
             <style> {styles} </style>
         </AuthProvider>
     );
