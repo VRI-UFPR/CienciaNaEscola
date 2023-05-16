@@ -44,7 +44,9 @@ function ProfilePage(props) {
     const [name, setName] = useState('Seu nome');
     const [email, setEmail] = useState('Seu email');
     const { showSidebar, allowEdit } = props;
-  
+    const navigate = useNavigate();
+    const modalRef = useRef(null);
+
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
