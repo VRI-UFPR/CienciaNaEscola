@@ -51,6 +51,7 @@ function CreateTextBoxInput(props) {
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
                         aria-describedby="questionHelp"
+                        value={inputState.question}
                         onChange={(event) => handleTextBoxChange(event, 'question')}
                     />
                     <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
@@ -65,6 +66,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
+                        value={inputState.description}
                         onChange={(event) => handleTextBoxChange(event, 'description')}
                     />
                 </div>
