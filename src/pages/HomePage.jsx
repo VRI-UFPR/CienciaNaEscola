@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
@@ -37,6 +37,7 @@ function HomePage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [userProtocols, setUserForms] = useState([]);
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
@@ -83,7 +84,7 @@ function HomePage(props) {
                 </div>
             </div>
             <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
-                <RoundedButton />
+                <RoundedButton role="link" onClick={() => navigate('/help')} />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </div>
