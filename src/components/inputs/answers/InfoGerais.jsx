@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 
 const styles = `
     .color-dark-gray {
@@ -18,6 +18,13 @@ const styles = `
 `;
 
 function InfoGerais(props) {
+    const [infos, setInfos] = useState(['']);
+    const { onAnswerChange, input, answer } = props;
+
+    useEffect(() => {
+        onAnswerChange(input.id, infos);
+    }, [infos, input.id, onAnswerChange]);
+
     return (
         <div className="bloco-info-gerais rounded-4 shadow bg-white w-100">
             <form className="d-flex flex-column flex-grow-1">
@@ -31,6 +38,9 @@ function InfoGerais(props) {
                         className="form-control rounded-0 shadow-none p-0"
                         id="infogerais"
                         placeholder="Adicionar descrição"
+                        onChange={(e) => setInfos([e.target.value])}
+                        value={answer ? answer[0].value : infos}
+                        disabled={answer !== undefined}
                     />
                 </div>
             </form>

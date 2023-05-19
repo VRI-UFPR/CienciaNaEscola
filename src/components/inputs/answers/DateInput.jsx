@@ -1,5 +1,5 @@
-import React from 'react';
-import iconDate from '../../assets/images/iconDate.svg';
+import { React, useEffect, useState } from 'react';
+import iconDate from '../../../assets/images/iconDate.svg';
 
 const styles = `
     .font-barlow {
@@ -32,13 +32,21 @@ const styles = `
 `;
 
 function DateInput(props) {
-    const currentDate = () => {
+    const [date, setDate] = useState(['']);
+    const { onAnswerChange, input, answer } = props;
+
+    useEffect(() => {
         const date = new Date();
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = String(date.getFullYear());
-        return year + '-' + month + '-' + day;
-    };
+        setDate([year + '-' + month + '-' + day]);
+        onAnswerChange(input.id, [year + '-' + month + '-' + day]);
+    }, [onAnswerChange, input.id]);
+
+    useEffect(() => {
+        onAnswerChange(input.id, date);
+    }, [date, input.id, onAnswerChange]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -59,7 +67,9 @@ function DateInput(props) {
                             type="date"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            defaultValue={currentDate()}
+                            onChange={(e) => setDate([e.target.value])}
+                            value={answer ? answer[0].value : date}
+                            disabled={answer !== undefined}
                         ></input>
                     </div>
                 </div>

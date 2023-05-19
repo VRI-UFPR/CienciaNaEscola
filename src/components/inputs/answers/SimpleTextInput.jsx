@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useEffect, useState } from 'react';
 
 const styles = `
     .font-barlow {
@@ -20,7 +20,12 @@ const styles = `
 `;
 
 function SimpleTextInput(props) {
+    const [text, setText] = useState(['']);
     const { onAnswerChange, input, answer } = props;
+
+    useEffect(() => {
+        onAnswerChange(input.id, text);
+    }, [text, input.id, onAnswerChange]);
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
@@ -35,18 +40,13 @@ function SimpleTextInput(props) {
                 className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => onAnswerChange(input.id, [e.target.value])}
-                value={answer ? answer[0].value : undefined}
+                onChange={(e) => setText([e.target.value])}
+                value={answer ? answer[0].value : text}
                 disabled={answer !== undefined}
             ></input>
             <style>{styles}</style>
         </div>
     );
 }
-
-SimpleTextInput.defaultProps = {
-    onAnswerChange: () => undefined,
-    input: {},
-};
 
 export default SimpleTextInput;
