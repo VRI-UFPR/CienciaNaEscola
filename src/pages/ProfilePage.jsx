@@ -46,7 +46,6 @@ function ProfilePage(props) {
     const { showSidebar, allowEdit } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
-  
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
