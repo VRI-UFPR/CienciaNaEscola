@@ -17,6 +17,10 @@ const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
     }
+    
+    .bg-pastel-blue {
+        background-color: #91CAD6;
+    }
 
     .bg-coral-red {
         background-color: #F59489;
@@ -66,10 +70,20 @@ function AnswerPage(props) {
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
                         <div className="btn-group w-100" role="group" aria-label="Basic example">
-                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="prev">
+                            <button
+                                type="button"
+                                className="btn btn-primary bg-pastel-blue border-0"
+                                data-bs-target="#answersCarousel"
+                                data-bs-slide="prev"
+                            >
                                 Anterior
                             </button>
-                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="next">
+                            <button
+                                type="button"
+                                className="btn btn-primary bg-pastel-blue border-0"
+                                data-bs-target="#answersCarousel"
+                                data-bs-slide="next"
+                            >
                                 Próxima
                             </button>
                         </div>

@@ -154,7 +154,7 @@ function CreateProtocolPage(props) {
                         <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
                     </div>
                     <div className={`col-12 col-lg-2 p-0 mb-3 mb-lg-0 ps-lg-2 ${edit ? '' : 'd-none'}`}>
-                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" onClick={() => navigate(`/answers/${id}`)} />
+                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" onClick={() => navigate(`/answer/${id}`)} />
                     </div>
                 </div>
                 <div className="row justify-content-between m-0"></div>
