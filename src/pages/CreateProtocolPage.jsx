@@ -4,11 +4,12 @@ import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
-import CreateTextBoxInput from '../components/CreateTextBoxInput';
+import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { defaultInputs } from '../utils/constants';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -45,18 +46,20 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
     const { edit } = props;
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const placedInputs = [...inputs];
+
+        const placedInputs = defaultInputs.concat(...inputs);
         placedInputs.forEach((input, index) => {
             input['placement'] = index + 1;
         });
+
         const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
         if (edit) {
             axios
@@ -85,7 +88,6 @@ function CreateProtocolPage(props) {
                     console.error(error.message);
                 });
         }
-        console.log(JSON.stringify(protocol));
     };
 
     const handleTextBoxAdd = () => {

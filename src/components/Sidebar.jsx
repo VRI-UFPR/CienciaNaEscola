@@ -79,7 +79,6 @@ function Sidebar(props) {
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         onClick={() => {
-                            console.log('Deu');
                             modalRef.current.showModal({
                                 title: 'Tem certeza que deseja fazer logout?',
                                 dismissHsl: [355, 78, 66],

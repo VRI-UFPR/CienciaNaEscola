@@ -1,7 +1,7 @@
 import React from 'react';
-import RoundedButton from './RoundedButton';
-import iconFile from '../assets/images/iconFile.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
+import RoundedButton from '../../RoundedButton';
+import iconFile from '../../../assets/images/iconFile.svg';
+import iconTrash from '../../../assets/images/iconTrash.svg';
 
 const textBoxStyles = `
     .font-century-gothic {

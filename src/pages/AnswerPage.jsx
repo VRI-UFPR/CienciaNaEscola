@@ -5,9 +5,13 @@ import axios from 'axios';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-import SimpleTextInput from '../components/SimpleTextInput';
-import RadioButtonInput from '../components/RadioButtonInput';
+import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
+import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import { AuthContext } from '../contexts/AuthContext';
+import InfoGerais from '../components/inputs/answers/InfoGerais';
+import DateInput from '../components/inputs/answers/DateInput';
+import TimeInput from '../components/inputs/answers/TimeInput';
+import Location from '../components/inputs/answers/LocationInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -44,7 +48,6 @@ function AnswerPage(props) {
                 .then((response) => {
                     setProtocolAnswer(response.data);
                     setIsLoading(false);
-                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -88,15 +91,89 @@ function AnswerPage(props) {
                                         const inputAnswer = answer.inputAnswers[input.id];
                                         switch (input.type) {
                                             case 0:
-                                                return (
-                                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                        {<SimpleTextInput input={input} answer={inputAnswer} />}
-                                                    </div>
-                                                );
+                                                if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
+                                                    return (
+                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <InfoGerais
+                                                                    input={input}
+                                                                    onAnswerChange={() => undefined}
+                                                                    answer={inputAnswer}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
+                                                } else if (
+                                                    input.question === 'date' &&
+                                                    input.description === 'date' &&
+                                                    input.placement === 2
+                                                ) {
+                                                    return (
+                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <DateInput
+                                                                    input={input}
+                                                                    onAnswerChange={() => undefined}
+                                                                    answer={inputAnswer}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
+                                                } else if (
+                                                    input.question === 'time' &&
+                                                    input.description === 'time' &&
+                                                    input.placement === 3
+                                                ) {
+                                                    return (
+                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <TimeInput
+                                                                    input={input}
+                                                                    onAnswerChange={() => undefined}
+                                                                    answer={inputAnswer}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
+                                                } else if (
+                                                    input.question === 'location' &&
+                                                    input.description === 'location' &&
+                                                    input.placement === 4
+                                                ) {
+                                                    return (
+                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <Location
+                                                                    input={input}
+                                                                    onAnswerChange={() => undefined}
+                                                                    answer={inputAnswer}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <SimpleTextInput
+                                                                    input={input}
+                                                                    onAnswerChange={() => undefined}
+                                                                    answer={inputAnswer}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
+                                                }
                                             case 2:
                                                 return (
                                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                        {<RadioButtonInput input={input} answer={inputAnswer} />}
+                                                        {
+                                                            <RadioButtonInput
+                                                                input={input}
+                                                                answer={inputAnswer}
+                                                                onAnswerChange={() => undefined}
+                                                            />
+                                                        }
                                                     </div>
                                                 );
 

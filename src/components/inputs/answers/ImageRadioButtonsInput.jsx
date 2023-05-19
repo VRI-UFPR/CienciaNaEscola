@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FormInputButtons from './FormInputButtons';
+import FormInputButtons from '../../FormInputButtons';
 import visibilityIcon from '../assets/images/visibilityIcon.svg';
 
 const styles = `
