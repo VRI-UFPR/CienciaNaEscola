@@ -11,6 +11,7 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
+import TextButton from '../components/TextButton';
 
 const styles = `
     .bg-yellow-orange {
@@ -132,7 +133,14 @@ function ProtocolPage(props) {
                             return <></>;
                     }
                 })}
-                <button onClick={handleProtocolSubmit}>Submit</button>
+                <div className="d-flex justify-content-center">
+                    <TextButton
+                        text="Enviar"
+                        hsl={[97, 43, 70]}
+                        onClick={handleProtocolSubmit}
+                        className="my-4 shadow w-auto px-5"
+                    ></TextButton>
+                </div>
             </div>
             <style>{styles}</style>
         </div>
