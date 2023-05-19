@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback } from 'react';
+import { React, useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -13,6 +13,7 @@ import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import TextButton from '../components/TextButton';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
+import Alert from '../components/Alert';
 
 const styles = `
     .bg-yellow-orange {
@@ -37,6 +38,7 @@ function ProtocolPage(props) {
     const [protocol, setProtocol] = useState();
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
@@ -50,7 +52,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                console.log(response);
+                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
             })
             .catch((error) => {
                 console.error(error.message);
@@ -149,6 +151,7 @@ function ProtocolPage(props) {
                     ></TextButton>
                 </div>
             </div>
+            <Alert id="ProtocolPageAlert" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );
