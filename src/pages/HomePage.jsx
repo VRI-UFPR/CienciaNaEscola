@@ -1,17 +1,20 @@
 import { React, useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
-import HomeButton from '../components/HomeButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
+import TextButton from '../components/TextButton';
 
 const styles = `
     .protocolInfo {
         font-size: 75%;
         width: 90%;
+    }
+
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
     }
 
     .generalContainer {
@@ -30,6 +33,16 @@ const styles = `
         display: flex;
         justify-content: center;
         margin-bottom: 13px;
+    }
+
+    .bg-yellow-orange {
+        background-color: #FECF86;
+    }
+
+    .infos-h1 {
+        color: #535353;
+        font-weight: bold;
+        font-size: x-large;
     }
 `;
 
@@ -62,25 +75,25 @@ function HomePage(props) {
         <div className="generalContainer container-fluid d-flex flex-column font-barlow h-100 w-100 p-0">
             <NavBar />
             <div className="d-flex flex-column p-0">
-                <div className="protocolInfo container-fluid d-flex justify-content-between mt-4">
-                    <div>Protocolos recentes</div>
-                    <div>Ultima modificação</div>
+                <div className="protocolInfo container-fluid d-flex justify-content-between mt-4 px-4 pb-4 m-0">
+                    <h1 className="infos-h1 font-century-gothic m-0 fw-bold">Protocolos recentes</h1>
                 </div>
 
-                <div className="d-flex container-fluid p-0">
-                    <ul className="container-fluid list-unstyled d-flex flex-column flex-grow-1 p-0 m-0">
+                <div className="d-flex container-fluid px-4">
+                    <ul className="container-fluid bg-yellow-orange list-unstyled d-flex flex-column flex-grow-1 p-0 m-0 py-4 rounded-4 px-4">
                         {userProtocols.map((userProtocol) => (
-                            <li key={userProtocol.id}>
-                                <Link className="list-home-btn" to={`/protocol/${userProtocol.id}`}>
-                                    <HomeButton title={userProtocol.title} />
-                                </Link>
+                            <li key={userProtocol.id} className="m-0 p-0 py-2">
+                                <TextButton
+                                    text={userProtocol.title}
+                                    hsl={[0, 1, 100]}
+                                    className="font-barlow rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
+                                    overWriteStyles={true}
+                                    onClick={() => navigate(`/protocol/${userProtocol.id}`)}
+                                ></TextButton>
                             </li>
                         ))}
                     </ul>
                     <style>{styles}</style>
-                </div>
-                <div className="d-flex">
-                    <HomeArrows />
                 </div>
             </div>
             <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
