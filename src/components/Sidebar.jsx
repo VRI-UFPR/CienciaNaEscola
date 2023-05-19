@@ -1,7 +1,7 @@
 import React from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/PerfilImg.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const styles = `
     .font-barlow {
@@ -61,21 +61,21 @@ function Sidebar(props) {
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
-                    <a className="text-white text-decoration-none ps-5 py-2" href="/home">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/home">
                         Protocolos
-                    </a>
-                    <a className="text-white text-decoration-none ps-5 py-2" href="/about">
+                    </Link>
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about">
                         Sobre o App
-                    </a>
-                    <a className="text-white text-decoration-none ps-5 py-2" href="/terms">
+                    </Link>
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms">
                         Termos de Uso
-                    </a>
+                    </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <a className="text-white text-decoration-none ps-5 py-2" href="/profile">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile">
                         Perfil
-                    </a>
+                    </Link>
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         onClick={() => {
@@ -95,9 +95,13 @@ function Sidebar(props) {
                 <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4">
                     <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
                     <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
-                    <a href="/" className="text-white text-decoration-underline fw-medium pb-2 ps-4 ps-md-5">
+                    <Link
+                        href="/"
+                        className="text-white text-decoration-underline fw-medium pb-2 ps-4 ps-md-5"
+                        to="https://www.denuncias.com"
+                    >
                         www.denuncias.com
-                    </a>
+                    </Link>
                 </div>
             </div>
             <style>{styles}</style>
