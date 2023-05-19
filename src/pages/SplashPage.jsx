@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { React } from 'react';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
-import { Navigate } from 'react-router-dom';
 
 const styles = `
     .logo-picce-circular{
@@ -21,19 +20,6 @@ const styles = `
 `;
 
 function SplashPage(props) {
-    const [navigate, setNavigate] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setNavigate(true);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (navigate) {
-        return <Navigate to="/login" />;
-    }
-
     return (
         <div className="d-flex flex-column align-items-center vh-100">
             <ColoredBorder />

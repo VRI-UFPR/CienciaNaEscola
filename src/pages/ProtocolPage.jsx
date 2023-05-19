@@ -12,6 +12,7 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import TextButton from '../components/TextButton';
+import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -122,6 +123,12 @@ function ProtocolPage(props) {
                                     </div>
                                 );
                             }
+                        case 1:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">

@@ -11,6 +11,7 @@ import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
+import SplashPage from '../pages/SplashPage';
 
 function AppRoutes(props) {
     return (
@@ -40,6 +41,7 @@ function AppRoutes(props) {
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/answer/:id" element={<AnswerPage />} />
+            <Route path="/splash" element={<SplashPage />} />
             {/* <Route
                 path="/textimage"
                 element={
