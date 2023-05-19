@@ -4,13 +4,13 @@ import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-import InfoGerais from '../components/protocol/InfoGerais';
-import DateInput from '../components/protocol/DateInput';
-import TimeInput from '../components/protocol/TimeInput';
-import LocationInput from '../components/protocol/LocationInput';
+import InfoGerais from '../components/inputs/answers/InfoGerais';
+import DateInput from '../components/inputs/answers/DateInput';
+import TimeInput from '../components/inputs/answers/TimeInput';
+import LocationInput from '../components/inputs/answers/LocationInput';
 
-import SimpleTextInput from '../components/SimpleTextInput';
-import RadioButtonInput from '../components/RadioButtonInput';
+import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
+import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -36,41 +36,19 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
 
-    const initializeAnswers = useCallback(() => {
-        const initialAnswers = {};
-
-        if (!isLoading) {
-            protocol.inputs.forEach((input) => {
-                switch (input.type) {
-                    case 0:
-                        initialAnswers[input.id] = '';
-                        break;
-                    case 2:
-                        initialAnswers[input.id] = new Array(input.sugestions.length).fill('false');
-                        break;
-                    default:
-                        break;
-                }
-            });
-            setAnswers(initialAnswers);
-        }
-    }, [isLoading, protocol]);
-
-    const handleAnswerChange = (index, answer) => {
-        const updatedAnswers = { ...answers };
-        updatedAnswers[index] = answer;
-        setAnswers(updatedAnswers);
-    };
+    const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
+        setAnswers((prevAnswers) => {
+            const newAnswers = { ...prevAnswers };
+            newAnswers[indexToUpdate] = updatedAnswer;
+            return newAnswers;
+        });
+    }, []);
 
     const handleProtocolSubmit = () => {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                if (response.data.message === 'Answered') {
-                    console.log('Funcionou');
-                } else {
-                    console.log('Não funcionou');
-                }
+                console.log(response);
             })
             .catch((error) => {
                 console.error(error.message);
@@ -88,10 +66,6 @@ function ProtocolPage(props) {
                 console.error(error.message);
             });
     }, [id]);
-
-    useEffect(() => {
-        initializeAnswers();
-    }, [isLoading, initializeAnswers]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -113,19 +87,40 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-4">{<InfoGerais />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
-                <div className="row justify-content-center m-0 pt-3">{<LocationInput />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
+                            if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<InfoGerais input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'date' && input.description === 'date' && input.placement === 2) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 3) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 4) {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            }
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
@@ -134,9 +129,10 @@ function ProtocolPage(props) {
                             );
 
                         default:
-                            return <p>ruim</p>;
+                            return <></>;
                     }
                 })}
+                <button onClick={handleProtocolSubmit}>Submit</button>
             </div>
             <style>{styles}</style>
         </div>
