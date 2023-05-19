@@ -144,7 +144,20 @@ function CreateProtocolPage(props) {
             <NavBar />
             <div className="container-fluid d-flex flex-column flex-grow-1 font-barlow p-4 p-lg-5">
                 <div className="row m-0">
-                    <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0">Gerador de formulários</h1>
+                    <div className="col-4">
+                        <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0">Gerador de formulários</h1>
+                    </div>
+                    <div className="col-4">
+                    </div>
+                    <div className="col-2 ">
+                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
+                    </div>
+                    <div className="col-2">
+                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
+                    </div>
+                </div>
+                <div className="row justify-content-between m-0">
+
                 </div>
                 <div className="row flex-grow-1 m-0">
                     <div className="col-12 col-lg-auto p-0 pb-4">
