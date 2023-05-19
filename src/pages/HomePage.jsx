@@ -74,12 +74,12 @@ function HomePage(props) {
     return (
         <div className="generalContainer container-fluid d-flex flex-column font-barlow h-100 w-100 p-0">
             <NavBar />
-            <div className="d-flex flex-column p-0">
+            <div className="d-flex flex-column p-0 flex-grow-1">
                 <div className="protocolInfo container-fluid d-flex justify-content-between mt-4 px-4 pb-4 m-0">
                     <h1 className="infos-h1 font-century-gothic m-0 fw-bold">Protocolos recentes</h1>
                 </div>
 
-                <div className="d-flex container-fluid px-4">
+                <div className="d-flex container-fluid flex-grow-1 px-4">
                     <ul className="container-fluid bg-yellow-orange list-unstyled d-flex flex-column flex-grow-1 p-0 m-0 py-4 rounded-4 px-4">
                         {userProtocols.map((userProtocol) => (
                             <li key={userProtocol.id} className="m-0 p-0 py-2">
@@ -96,7 +96,7 @@ function HomePage(props) {
                     <style>{styles}</style>
                 </div>
             </div>
-            <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
+            <div className="d-flex button-container align-items-end justify-content-end">
                 <RoundedButton role="link" onClick={() => navigate('/help')} />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
