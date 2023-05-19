@@ -93,7 +93,7 @@ function Sidebar(props) {
                         Logout
                     </button>
                 </div>
-                <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4">
+                <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4 pe-5">
                     <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
                     <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
                     <Link

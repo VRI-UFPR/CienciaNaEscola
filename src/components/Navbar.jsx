@@ -56,7 +56,7 @@ function NavBar(props) {
                 </div>
             </nav>
 
-            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
+            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-auto" tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} />
             </div>
             <Alert id="NavbarModal" ref={modalRef} />
