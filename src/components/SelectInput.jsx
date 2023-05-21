@@ -1,3 +1,4 @@
+import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 
 const style = `
@@ -12,29 +13,34 @@ const style = `
         background-color: #91CAD6;
     }
 
+    .select-border-gray {
+        border-color: #A5A5A5
+    }
+
     .select-label{
         font-weight: 600;
         font-size: 1rem;
         color: #535353;
     }
-
-    .select-input{
-    
-    }
 `;
 
 function SelectInput(props) {
     console.log(props);
+    const options = props.input.options || [];
     return (
-        <div className="rounded shadow bg-white font-barlow p-3">
+        <div className="rounded shadow bg-white font-barlow pt-3 px-0">
             <div className="row m-0 d-flex justify-content-end">
-                <label labelfor="select" className="form-label select-label m-0">{props.input.question}</label>
-                <div className="col-4">
-                    <select className="form-select">
-                        <option selected>Selecione uma opção</option>
-                        <option value="1">Opção 1</option>
-                        <option value="2">Opção 2</option>
-                        <option value="3">Opção 3</option>
+                <label labelfor="select" className="form-label select-label m-0 px-3">
+                    {props.input.question}
+                </label>
+                <div className="col-5 px-0 pt-2">
+                    <select className="form-select select-border-gray rounded-3">
+                        <option defaultValue=""></option>
+                        {options.map((option, index) => (
+                            <option key={index} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>

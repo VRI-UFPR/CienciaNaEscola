@@ -72,7 +72,15 @@ function ProtocolPage(props) {
                 <div className="row justify-content-center m-0 pt-3">{<DateInput />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<TimeInput />}</div>
                 <div className="row justify-content-center m-0 pt-3">{<Location />}</div>
-                <div className='row justify-content-center m-0 pt-3'>{<SelectInput input={{question:"Pega no meu pau"}} />}</div>
+                <div className='row justify-content-center m-0 pt-3'>{<SelectInput 
+                input={{
+                    question:"Selecione uma opção?",
+                    options: [
+                        { value: "1", label: "Respota A" },
+                        { value: "2", label: "Opção 2" },
+                        { value: "3", label: "Nenhuma das Anteriores" },
+                    ]
+                }} />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
