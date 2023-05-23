@@ -33,17 +33,29 @@ const styles = `
 
     ::placeholder {
         color: #FFFFFF;
-    }  
+    }
+
+    @media (min-width: 992px) and (max-width: 1160px) {
+        .sidebar-col {
+            width: 25% !important;
+        }
+    }
 `;
 
 function HelpPage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const modalRef = useRef(null);
 
+    const questions = [
+        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Ola mundo' },
+        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Isso eh' },
+        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Um teste' },
+    ];
+
     return (
         <div className="d-flex flex-column vh-100">
             <div className="row flex-grow-1 m-0">
-                <div className={`col-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
+                <div className={`sidebar-col col-md-3 col-lg-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col p-0">
@@ -62,24 +74,16 @@ function HelpPage(props) {
                         <div className="fs-6">
                             <h6 className="pb-3 ps-1 m-0">Dúvidas frequentes: </h6>
                             <div className="tab d-flex flex-column ">
-                                <a className="light-gray-color pb-3" href="#link1">
-                                    -Lorem ipsum dolor sit amet, consec?
-                                </a>
-                                <div id="link1">
-                                    <p>Ola mundo</p>
-                                </div>
-                                <a className="light-gray-color pb-3" href="#link2">
-                                    -Lorem ipsum dolor sit amet, consec?
-                                </a>
-                                <div id="link2">
-                                    <p>Isso eh</p>
-                                </div>
-                                <a className="light-gray-color pb-3" href="#link3">
-                                    -Lorem ipsum dolor sit amet, consec?
-                                </a>
-                                <div id="link3">
-                                    <p>Um teste</p>
-                                </div>
+                                {questions.map((question) => (
+                                    <>
+                                        <a className="light-gray-color pb-3" href={'#' + question.answer}>
+                                            {question.question}
+                                        </a>
+                                        <div id={question.answer}>
+                                            <p>{question.answer}</p>
+                                        </div>
+                                    </>
+                                ))}
                             </div>
                         </div>
                     </div>
