@@ -11,6 +11,7 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
+import TextButton from '../components/TextButton';
 
 const styles = `
     .bg-yellow-orange {
@@ -27,6 +28,10 @@ const styles = `
 
     .font-barlow {
         font-family: 'Barlow', sans-serif;
+    }
+
+    .name-col input:focus{
+        outline: none;
     }
 `;
 
@@ -72,14 +77,14 @@ function ProtocolPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column min-vh-100">
+        <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
             <NavBar />
             <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
-                    <div className="col-9 col-sm-10 pe-0">
+                    <div className="name-col col-9 col-sm-10 pe-0">
                         <input
                             className="rounded shadow font-barlow gray-color border-0 p-2 w-100"
                             type="text"
@@ -132,7 +137,9 @@ function ProtocolPage(props) {
                             return <></>;
                     }
                 })}
-                <button onClick={handleProtocolSubmit}>Submit</button>
+                <div className="col-4 align-self-center pt-4">
+                    <TextButton type="submit" hsl={[97, 43, 70]} text="Enviar" onClick={handleProtocolSubmit} />
+                </div>
             </div>
             <style>{styles}</style>
         </div>
