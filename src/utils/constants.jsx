@@ -1,0 +1,38 @@
+export const defaultInputs = [
+    {
+        description: 'infos',
+        question: 'infos',
+        type: 0,
+        validation: [],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    },
+    {
+        description: 'date',
+        question: 'date',
+        type: 0,
+        validation: [],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    },
+    {
+        description: 'time',
+        question: 'time',
+        type: 0,
+        validation: [],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    },
+    {
+        description: 'location',
+        question: 'location',
+        type: 0,
+        validation: [],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    },
+];
