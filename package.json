@@ -23,7 +23,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,jsx}\"",
-        "docker-back": "docker-compose --file ./form-creator-back/form-creator-api/docker-compose.yaml up --build"
+        "docker-back": "cp ./form-creator-back/form-creator-api/config/config.env.example ./form-creator-back/form-creator-api/config/config.env && cp ./form-creator-back/form-creator-api/config/test.env.example ./form-creator-back/form-creator-api/config/test.env && docker-compose --file ./form-creator-back/form-creator-api/docker-compose.yaml up --build"
     },
     "eslintConfig": {
         "extends": [
