@@ -1,10 +1,11 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useState, useRef } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/backgroundLogin.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
+import Alert from '../components/Alert';
 
 const styles = `
 
@@ -30,6 +31,10 @@ const styles = `
     .login-forgot-pw{
         color: #91CAD6;
     }
+
+    .login-forgot-pw:hover{
+        cursor: pointer;
+    }
 `;
 
 function LoginPage(props) {
@@ -37,6 +42,7 @@ function LoginPage(props) {
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const modalRef = useRef(null);
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -50,10 +56,12 @@ function LoginPage(props) {
                 if (response.data.token) {
                     login(response.data.id, response.data.token);
                     navigate('/home');
+                } else {
+                    throw new Error('Something went wrong!');
                 }
             })
             .catch((error) => {
-                console.error(error.message);
+                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que email e senha estão corretos.' });
             });
     };
 
@@ -83,9 +91,15 @@ function LoginPage(props) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <a href="/" className="login-forgot-pw fs-6">
+                    <Link to={'/acceptterms'} className="login-forgot-pw pb-2 fs-6">
+                        Criar nova conta
+                    </Link>
+                    <p
+                        className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
+                        onClick={() => modalRef.current.showModal({ title: 'Acesse o e-mail cadastrado para recuperar sua senha.' })}
+                    >
                         Esqueci minha senha
-                    </a>
+                    </p>
                 </div>
                 <div className="row flex-column justify-content-start align-items-center pt-lg-5 h-50">
                     <div className="col-12 col-lg-6">
@@ -93,6 +107,8 @@ function LoginPage(props) {
                     </div>
                 </div>
             </form>
+
+            <Alert id="LoginModal" ref={modalRef} />
             <style> {styles}</style>
         </div>
     );
