@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
+
 import InfoGerais from '../components/inputs/answers/InfoGerais';
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
