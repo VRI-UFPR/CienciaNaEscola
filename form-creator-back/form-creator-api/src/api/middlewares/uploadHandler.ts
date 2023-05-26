@@ -7,7 +7,7 @@ import fs = require('fs');
 // filenane: permite definir o nome do arquivo gravado
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const path = `./form-creator-back/form-creator-api/uploads/gallery/`
+        const path = `./gallery/`
         if (!fs.existsSync(path))
             fs.mkdirSync(path, { recursive: true })
         return cb(null, path)
