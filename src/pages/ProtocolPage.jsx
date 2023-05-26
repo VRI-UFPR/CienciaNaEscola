@@ -5,7 +5,6 @@ import axios from 'axios';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-import InfoGerais from '../components/inputs/answers/InfoGerais';
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
 import LocationInput from '../components/inputs/answers/LocationInput';
@@ -91,25 +90,19 @@ function ProtocolPage(props) {
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
-                            if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<InfoGerais input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'date' && input.description === 'date' && input.placement === 2) {
+                            if (input.question === 'date' && input.description === 'date' && input.placement === 1) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 3) {
+                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 2) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 4) {
+                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 3) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
