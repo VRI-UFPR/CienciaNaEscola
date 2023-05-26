@@ -22,7 +22,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,jsx}\""
+        "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,jsx}\"",
+        "docker-back": "docker-compose --file ./form-creator-back/form-creator-api/docker-compose.yaml up --build"
     },
     "eslintConfig": {
         "extends": [
