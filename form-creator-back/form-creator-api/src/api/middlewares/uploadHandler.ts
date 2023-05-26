@@ -1,5 +1,6 @@
 import express = require('express');
 import multer = require('multer');
+import fs = require('fs');
 
 // cria uma instância do middleware configurada
 // destination: lida com o destino
