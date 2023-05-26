@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback } from 'react';
+import { React, useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,6 +12,8 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
+import Alert from '../components/Alert';
+import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -36,6 +38,7 @@ function ProtocolPage(props) {
     const [protocol, setProtocol] = useState();
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
@@ -49,7 +52,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                console.log(response);
+                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
             })
             .catch((error) => {
                 console.error(error.message);
@@ -122,6 +125,12 @@ function ProtocolPage(props) {
                                     </div>
                                 );
                             }
+                        case 1:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
@@ -135,6 +144,7 @@ function ProtocolPage(props) {
                 })}
                 <button onClick={handleProtocolSubmit}>Submit</button>
             </div>
+            <Alert id="ProtocolPageAlert" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );
