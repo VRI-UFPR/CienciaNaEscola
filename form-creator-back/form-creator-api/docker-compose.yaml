@@ -31,6 +31,7 @@ services:
             - ./config/:/app/config/
             - ./script/:/app/script/
             - ./server/:/app/server/
+            - ./form-creator-back/form-creator-api/uploads/gallery/:/home/eduardo/Downloads/CienciaNaEscola/form-creator-back/form-creator-api/uploads/gallery/
             # - ./coverage/:/app/coverage/
             - ./doc/:/app/doc/
             - ./src/:/app/src/
