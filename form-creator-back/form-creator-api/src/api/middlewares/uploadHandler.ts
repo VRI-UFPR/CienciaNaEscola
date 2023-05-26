@@ -14,7 +14,8 @@ const storage = multer.diskStorage({
     // da requisição
     filename: function (req, file, cb) {
         // error first callback
-        cb(null, file.fieldname + '-' + Date.now())
+        let data = new Date().toISOString().replace(/:/g, '-') + '-';
+        cb(null, file.originalname + '-' + data)
     },
 });
 
