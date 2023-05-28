@@ -1,29 +1,39 @@
 import { React, useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-
-import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
-import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import { AuthContext } from '../contexts/AuthContext';
-import InfoGerais from '../components/inputs/answers/InfoGerais';
-import DateInput from '../components/inputs/answers/DateInput';
-import TimeInput from '../components/inputs/answers/TimeInput';
-import Location from '../components/inputs/answers/LocationInput';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
     }
 
+    .color-yellow-orange {
+        color: #FECF86;
+    }
+
+    .bg-light-gray {
+        background-color: #D9D9D9;
+    }
+
     .bg-coral-red {
         background-color: #F59489;
     }
 
-    .gray-color {
+    .color-gray {
         color: #787878;
+    }
+
+    .font-century-gothic {
+        font-family: 'Century Gothic', sans-serif;
+    }
+
+    .color-dark-gray {
+        color: #535353;
     }
 
     .font-barlow {
@@ -34,8 +44,32 @@ const styles = `
 function AnswerPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [protocolAnswer, setProtocolAnswer] = useState();
+    const [selectedPerson, setSelectedPerson] = useState(undefined);
+    const [selectedQuestion, setSelectedQuestion] = useState(undefined);
     const { id } = useParams();
     const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const formatAnswer = (input, inputAnswers) => {
+        switch (input.type) {
+            case 0:
+                return inputAnswers[0].value;
+            case 1:
+            case 2:
+                return inputAnswers
+                    .filter((option) => option.value === 'true')
+                    .map((option) => input.sugestions[option.placement].value)
+                    .join(', ');
+
+            default:
+                break;
+        }
+    };
+
+    const setVisualization = (person, question) => {
+        setSelectedPerson(person);
+        setSelectedQuestion(question);
+    };
 
     useEffect(() => {
         if (user.token) {
@@ -47,6 +81,7 @@ function AnswerPage(props) {
                 })
                 .then((response) => {
                     setProtocolAnswer(response.data);
+                    console.log(response.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
@@ -60,130 +95,78 @@ function AnswerPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column min-vh-100">
+        <div className="font-barlow d-flex flex-column min-vh-100">
             <NavBar />
-            <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
-                <div className="row m-0 w-100">
-                    <div className="col-3 col-sm-2 p-0">
-                        <div className="btn-group w-100" role="group" aria-label="Basic example">
-                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="prev">
-                                Anterior
-                            </button>
-                            <button type="button" className="btn btn-primary" data-bs-target="#answersCarousel" data-bs-slide="next">
-                                Próxima
-                            </button>
-                        </div>
-                    </div>
-                    <div className="col-9 col-sm-10 pe-0">
-                        <input
-                            className="rounded shadow font-barlow gray-color border-0 p-2 w-100"
-                            type="text"
-                            placeholder="Insira seu nome"
-                        />
-                    </div>
+            <div className="d-flex flex-column flex-grow-1 bg-white p-4 p-lg-5">
+                <div className="row m-0 mb-4 p-0">
+                    <h1 className="color-dark-gray w-auto fw-bold fs-4 m-0 p-0">
+                        <Link className="color-dark-gray" to={`/protocol/${id}`}>
+                            {protocolAnswer.length > 0 ? protocolAnswer[0].form.title : 'Inválido'}
+                        </Link>{' '}
+                        -
+                    </h1>
+                    <h1 className="color-yellow-orange w-auto fw-bold fs-4 m-0 p-0 ps-1">Respostas</h1>
                 </div>
-                <div id="answersCarousel" className="carousel slide carousel-fade" data-bs-touch="false">
-                    <div className="carousel-inner">
-                        {protocolAnswer.map((answer, answerIndex) => {
-                            return (
-                                <div key={answer.id} className={`carousel-item ${answerIndex === 0 ? 'active' : ''}`}>
-                                    {answer.form.inputs.map((input, inputIndex) => {
-                                        const inputAnswer = answer.inputAnswers[input.id];
-                                        switch (input.type) {
-                                            case 0:
-                                                if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
-                                                    return (
-                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                            {
-                                                                <InfoGerais
-                                                                    input={input}
-                                                                    onAnswerChange={() => undefined}
-                                                                    answer={inputAnswer}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    );
-                                                } else if (
-                                                    input.question === 'date' &&
-                                                    input.description === 'date' &&
-                                                    input.placement === 2
-                                                ) {
-                                                    return (
-                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                            {
-                                                                <DateInput
-                                                                    input={input}
-                                                                    onAnswerChange={() => undefined}
-                                                                    answer={inputAnswer}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    );
-                                                } else if (
-                                                    input.question === 'time' &&
-                                                    input.description === 'time' &&
-                                                    input.placement === 3
-                                                ) {
-                                                    return (
-                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                            {
-                                                                <TimeInput
-                                                                    input={input}
-                                                                    onAnswerChange={() => undefined}
-                                                                    answer={inputAnswer}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    );
-                                                } else if (
-                                                    input.question === 'location' &&
-                                                    input.description === 'location' &&
-                                                    input.placement === 4
-                                                ) {
-                                                    return (
-                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                            {
-                                                                <Location
-                                                                    input={input}
-                                                                    onAnswerChange={() => undefined}
-                                                                    answer={inputAnswer}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    );
-                                                } else {
-                                                    return (
-                                                        <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                            {
-                                                                <SimpleTextInput
-                                                                    input={input}
-                                                                    onAnswerChange={() => undefined}
-                                                                    answer={inputAnswer}
-                                                                />
-                                                            }
-                                                        </div>
-                                                    );
-                                                }
-                                            case 2:
+
+                <div className="bg-light-gray rounded-4 mb-3 p-3">
+                    <h2 className="color-dark-gray fw-medium fs-5 m-0">
+                        {protocolAnswer.length} respostas{' '}
+                        <a href="#answerTab" onClick={() => setVisualization(undefined, undefined)} className="fs-6">
+                            (ver todas)
+                        </a>
+                    </h2>
+                </div>
+                <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                    <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
+                    {protocolAnswer.map((answer, answerIndex) => {
+                        return (
+                            <div key={'Person ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
+                                <p className="fw-medium fs-6 m-0">
+                                    <a href="#answerTab" onClick={() => setVisualization(answerIndex, undefined)}>
+                                        Pessoa {answerIndex}
+                                    </a>
+                                </p>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                <div id="answerTab" className=" mb-lg-4">
+                    {protocolAnswer.length > 0 &&
+                        protocolAnswer[0].form.inputs
+                            .filter((_, inputIndex) => selectedQuestion === undefined || selectedQuestion === inputIndex)
+                            .map((input, inputIndex) => {
+                                return (
+                                    <div key={'Input ' + input.id} className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                                        <a
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(undefined, inputIndex)}
+                                            className="fw-medium fs-5 m-0"
+                                        >
+                                            Pergunta {input.placement}
+                                        </a>
+                                        <h3 className="color-dark-gray fw-bold fs-6 m-0 mt-1 mb-3">{input.question}</h3>
+                                        {protocolAnswer
+                                            .filter((answer, answerIndex) => selectedPerson === undefined || selectedPerson === answerIndex)
+                                            .map((answer, answerIndex) => {
                                                 return (
-                                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                                        {
-                                                            <RadioButtonInput
-                                                                input={input}
-                                                                answer={inputAnswer}
-                                                                onAnswerChange={() => undefined}
-                                                            />
-                                                        }
+                                                    <div key={'Answer ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
+                                                        <p className="fw-medium fs-6 m-0">
+                                                            Pessoa {answerIndex} -{' '}
+                                                            <span className="color-dark-gray">
+                                                                {formatAnswer(input, answer.inputAnswers[input.id])}
+                                                            </span>
+                                                        </p>
                                                     </div>
                                                 );
-
-                                            default:
-                                                return undefined;
-                                        }
-                                    })}
-                                </div>
-                            );
-                        })}
+                                            })}
+                                    </div>
+                                );
+                            })}
+                </div>
+                <div className="row flex-grow-1 justify-content-end mx-0">
+                    <div className="col-2 d-flex align-items-end justify-content-end p-0">
+                        <RoundedButton role="link" onClick={() => navigate('/help')} />
                     </div>
                 </div>
             </div>
