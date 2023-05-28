@@ -150,10 +150,10 @@ function CreateProtocolPage(props) {
                     <div className="col-4">
                     </div>
                     <div className="col-2 ">
-                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
+                        <TextButton role="link" hsl={[6, 84, 75]} text="Estatísticas" />
                     </div>
                     <div className="col-2">
-                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
+                        <TextButton role="link" hsl={[37, 98, 76]} text="Respostas" />
                     </div>
                 </div>
                 <div className="row justify-content-between m-0">
