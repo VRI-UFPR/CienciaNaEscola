@@ -25,6 +25,12 @@ const styles = `
     .offcanvas-ce{
         max-width: 50%;
     }
+
+    @media (min-width: 700px) and (max-width: 900px) {
+        .sidebar-width {
+            width: 30% !important;
+        }
+    }
 `;
 
 function NavBar(props) {

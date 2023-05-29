@@ -19,15 +19,11 @@ const infosPageStyles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .infos-h1 {
+    .color-dark-gray {
         color: #535353;
-        font-weight: bold;
-        font-size: x-large;
     }
 
-    .infos-h2 {
-        color: #535353;
-        font-size: medium;
+    .text-justify {
         text-align: justify;
     }
 `;
@@ -46,8 +42,8 @@ function InfosPage(props) {
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
-                            <h2 className="infos-h2 pb-4 m-0 fw-medium">{content}</h2>
+                            <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{title}</h1>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{content}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-2"></div>
