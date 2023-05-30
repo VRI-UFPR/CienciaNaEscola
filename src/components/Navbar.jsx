@@ -25,6 +25,12 @@ const styles = `
     .offcanvas-ce{
         max-width: 16.66%;
     }
+
+    @media (min-width: 700px) and (max-width: 900px) {
+        .sidebar-width {
+            width: 30% !important;
+        }
+    }
 `;
 
 function NavBar(props) {
@@ -56,7 +62,7 @@ function NavBar(props) {
                 </div>
             </nav>
 
-            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
+            <div className="sidebar-width offcanvas offcanvas-start bg-coral-red w-50" tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} />
             </div>
             <Alert id="NavbarModal" ref={modalRef} />
