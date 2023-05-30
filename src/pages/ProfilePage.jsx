@@ -5,6 +5,7 @@ import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import ChangePassword from '../components/ChangePassword';
 
 const profilePageStyles = `
     .font-barlow {
@@ -46,7 +47,7 @@ function ProfilePage(props) {
     const { showSidebar, allowEdit } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
-  
+
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
@@ -96,9 +97,24 @@ function ProfilePage(props) {
                                 </div>
                             </div>
                         </div>
-                        <a className="underline-light text-center text-pastel-blue fs-5 pt-2" href="/profile">
-                            Deseja alterar sua senha?
-                        </a>
+                        <div className="d-flex justify-center justify-content-center">
+                            <button
+                                type="button"
+                                className="btn text-center text-pastel-blue fs-5"
+                                data-bs-toggle="modal"
+                                data-bs-target="#ChangePassword"
+                            >
+                                {' '}
+                                Deseja alterar sua senha?{' '}
+                            </button>
+                            <div className="modal fade" id="ChangePassword" tabindex="-1" aria-hidden="true">
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content bg-transparent border-0">
+                                        <ChangePassword />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="row flex-grow-1 justify-content-between align-items-end w-100 mx-0">
                             <div className="col-2"></div>
                             <div className="col-auto align-items-center p-0">
