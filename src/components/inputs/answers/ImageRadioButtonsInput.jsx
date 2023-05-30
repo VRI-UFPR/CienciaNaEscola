@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import FormInputButtons from '../../FormInputButtons';
-import visibilityIcon from '../assets/images/visibilityIcon.svg';
+import visibilityIcon from '../../../assets/images/eyeIcon.svg';
 
 const styles = `
     .font-barlow {
@@ -45,7 +44,14 @@ const styles = `
     }
 `;
 
-function ImageRadioButtonsInput({ options = [], images = [] }) {
+function ImageRadioButtonsInput(props) {
+    const options = ['Opção 1', 'Opção 2'];
+    const images = [
+        'https://picsum.photos/900/1300?random=1',
+        'https://picsum.photos/900/1300?random=2',
+        'https://picsum.photos/900/1300?random=3',
+        'https://picsum.photos/900/1300?random=4',
+    ];
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
@@ -67,15 +73,12 @@ function ImageRadioButtonsInput({ options = [], images = [] }) {
     }, []);
 
     return (
-        <div className="row justify-content-center shadow rounded m-0 p-3 pb-2">
+        <div className="row justify-content-center bg-white shadow rounded-4 m-0 p-3 pb-2">
             <div className="row justify-content-between m-0 mb-3">
                 <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm m-0">
                         Qual destas informações abaixo descrevem melhor a área ou ambiente de coleta? Destaque apenas um.
                     </p>
-                </div>
-                <div className="col-3 d-flex justify-content-end ps-3 p-0">
-                    <FormInputButtons />
                 </div>
             </div>
             <div className="row position-relative m-0 p-0" style={{ maxWidth: '1200px' }}>
@@ -86,7 +89,7 @@ function ImageRadioButtonsInput({ options = [], images = [] }) {
                                 {images.map((image, index) => {
                                     return (
                                         <div className="col-4 p-0" key={image + index}>
-                                            <div className={'squareParent rounded shadow mx-2'}>
+                                            <div className={'squareParent rounded-4 shadow mx-2'}>
                                                 <img src={image} className="square w-100" alt="Imagem submetida" />
                                             </div>
                                         </div>
@@ -100,7 +103,7 @@ function ImageRadioButtonsInput({ options = [], images = [] }) {
                         {slicedImages[0].map((image, index) => {
                             return (
                                 <div className="col-4 p-0" key={image + index}>
-                                    <div className={'squareParent rounded shadow mx-2'}>
+                                    <div className={'squareParent rounded-4 shadow mx-2'}>
                                         <img src={image} className="square w-100" alt="Imagem submetida" />
                                     </div>
                                 </div>

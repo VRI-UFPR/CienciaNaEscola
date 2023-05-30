@@ -13,6 +13,8 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import TextButton from '../components/TextButton';
+import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
+import TextImageInput from '../components/inputs/answers/TextImageInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -92,6 +94,12 @@ function ProtocolPage(props) {
                             placeholder="Insira seu nome"
                         />
                     </div>
+                </div>
+                <div className="row justify-content-center m-0 pt-3">
+                    <ImageRadioButtonsInput />
+                </div>
+                <div className="row justify-content-center m-0 pt-3">
+                    <TextImageInput />
                 </div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
