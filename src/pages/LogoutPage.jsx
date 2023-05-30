@@ -2,7 +2,6 @@ import React from 'react';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import { useNavigate } from 'react-router-dom';
-
 const styles = `
 
     .bg-grey {
