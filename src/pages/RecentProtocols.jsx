@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 import ProtocolCarousel from '../components/ProtocolCarousel';
 
-const recentProtocolStyles = `
+const style = `
     .bg-coral-red {
         background-color: #F59489;
     }
@@ -33,6 +33,9 @@ const recentProtocolStyles = `
 
 function RecentProtocolsPage(props) {
     const { title, content, showSidebar, showCreateProtocol, showNavToggler } = props;
+
+    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9', 'Button10']
+
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
@@ -44,8 +47,8 @@ function RecentProtocolsPage(props) {
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
                             <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
-                            <div className="">
-                                <ProtocolCarousel></ProtocolCarousel>
+                            <div className="d-flex justify-content-center align-itens-center flex-grow-1 mb-5">
+                                <ProtocolCarousel buttons={buttons} />
                             </div>
                         </div>
                         <div className="row justify-content-between mx-0">
@@ -61,7 +64,7 @@ function RecentProtocolsPage(props) {
                 </div>
             </div>
 
-            <style>{recentProtocolStyles}</style>
+            <style>{style}</style>
         </div>
     );
 }
