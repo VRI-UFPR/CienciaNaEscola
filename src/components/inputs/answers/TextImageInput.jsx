@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React } from 'react';
 
 const styles = `
     .font-barlow {
@@ -23,7 +23,7 @@ function TextImageInput(props) {
                 <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{input.question}</p>
             </div>
 
-            <div className="ratio ratio-1x1 rounded-4 bg-grey overflow-hidden">
+            <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
                 <img className="img-fluid object-fit-contain" src={input.description} alt="Imagem" />
             </div>
 
