@@ -44,7 +44,7 @@ function ImageRadioButtonsInput(props) {
                 {images.slice(0, ImageVisibility ? images.length : 3).map((image, index) => {
                     return (
                         <div key={index} className={`col-4 m-0 p-1 p-lg-2 ${index < 3 ? 'pt-0' : ''}`}>
-                            <div className="ratio ratio-1x1 bg-grey rounded-4">
+                            <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
                                 <img src={image} className="img-fluid object-fit-contain" alt="Responsive image" />
                             </div>
                         </div>
@@ -87,14 +87,14 @@ function ImageRadioButtonsInput(props) {
 
 ImageRadioButtonsInput.defaultProps = {
     images: [
-        'https://picsum.photos/900/1300?random=1',
-        'https://picsum.photos/900/1300?random=2',
-        'https://picsum.photos/900/1300?random=3',
-        'https://picsum.photos/900/1300?random=4',
-        'https://picsum.photos/900/1300?random=5',
-        'https://picsum.photos/900/1300?random=6',
-        'https://picsum.photos/900/1300?random=7',
-        'https://picsum.photos/900/1300?random=8',
+        'https://picsum.photos/1300/1300?random=1',
+        'https://picsum.photos/1300/1300?random=2',
+        'https://picsum.photos/1300/1300?random=3',
+        'https://picsum.photos/1300/1300?random=4',
+        'https://picsum.photos/1300/1300?random=5',
+        'https://picsum.photos/1300/1300?random=6',
+        'https://picsum.photos/1300/1300?random=7',
+        'https://picsum.photos/1300/1300?random=8',
     ],
 };
 
