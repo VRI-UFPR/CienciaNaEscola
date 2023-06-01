@@ -40,17 +40,17 @@ function ImageRadioButtonsInput(props) {
             <div className="row m-0 pb-3">
                 <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{input.question}</p>
             </div>
-            <div className="row m-0 mx-auto pb-3 justify-content-center position-relative" style={{ maxWidth: '1200px' }}>
+            <div className="row row-cols-3 justify-content-center position-relative m-0 mx-auto pb-3">
                 {images.slice(0, ImageVisibility ? images.length : 3).map((image, index) => {
                     return (
                         <div key={index} className={`col-4 m-0 p-1 p-lg-2 ${index < 3 ? 'pt-0' : ''}`}>
                             <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
-                                <img src={image} className="img-fluid object-fit-contain" alt="Responsive image" />
+                                <img src={image} className="img-fluid object-fit-contain" alt="Responsive" />
                             </div>
                         </div>
                     );
                 })}
-                <div className="row p-1 p-lg-2 m-0 mb-3 position-absolute bottom-0 end-0 justify-content-end">
+                <div className="row justify-content-end position-absolute bottom-0 end-0 m-0 mb-3 p-1 p-lg-2">
                     <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon={eyeIcon} onClick={toggleImageVisibility} />
                 </div>
             </div>
@@ -62,7 +62,7 @@ function ImageRadioButtonsInput(props) {
                             <input
                                 className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
                                 type="radio"
-                                name={'radiooptions' + input.id}
+                                name={'imageradiooptions' + input.id}
                                 id={optname + 'input'}
                                 onChange={() => handleOptionsUpdate(index)}
                                 checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
