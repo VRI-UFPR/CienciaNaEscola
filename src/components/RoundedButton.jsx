@@ -41,7 +41,7 @@ function RoundedButton(props) {
         role,
     } = props;
     return (
-        <div className={`ratio ratio-1x1 rounded-button ${className}`}>
+        <div className={`ratio ratio-1x1 rounded-button p-0 ${className}`}>
             <button
                 type="button"
                 role={role}
