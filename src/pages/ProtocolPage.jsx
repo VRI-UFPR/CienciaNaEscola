@@ -95,12 +95,6 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">
-                    <ImageRadioButtonsInput />
-                </div>
-                <div className="row justify-content-center m-0 pt-3">
-                    <TextImageInput />
-                </div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
@@ -139,6 +133,20 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 100:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 101:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
