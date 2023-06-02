@@ -165,9 +165,7 @@ function CreateProtocolPage(props) {
                         <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
                     </div>
                 </div>
-                <div className="row justify-content-between m-0">
-
-                </div>
+                
                 <div className="row flex-grow-1 m-0">
                     <div className="col-12 col-lg-auto p-0 pb-4">
                         <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-4 p-4">
