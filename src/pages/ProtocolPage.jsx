@@ -15,7 +15,7 @@ import TextButton from '../components/TextButton';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import Alert from '../components/Alert';
 import ImageInput from '../components/inputs/answers/ImageInput';
-//import ImageInput from '../components/inputs/answers/ImageInput';
+import ImageInput from '../components/inputs/answers/ImageInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -159,7 +159,7 @@ function ProtocolPage(props) {
                             } else {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
                             }
@@ -173,6 +173,12 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+                        case 102:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 

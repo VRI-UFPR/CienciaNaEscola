@@ -31,15 +31,15 @@ function ImageInput(props) {
                     </label>
                     <input
                         type="file"
-                        accept=".jpg,.gif,.png"
+                        accept="image/*"
                         name="imageinput"
+                        capture="environment"
                         id="imageinput"
                         placeholder="Adicione uma imagem"
                         className="form-control rounded-0 shadow-none font-barlow fw-medium p-0"
                         onChange={(e) => setImage([e.target.files[0]])}
                         disabled={answer !== undefined}
                     />
-                    <input id="submitbutton" type="submit" />
                 </div>
             </form>
             <style>{styles}</style>
