@@ -15,12 +15,12 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    // const [image, setImage] = useState(['']);
-    // const { onImageChange, input, answer } = props;
+    const [image, setImage] = useState(['']);
+    const { onAnswerChange, input, answer } = props;
 
-    // useEffect(() => {
-    //     onImageChange(input.id, image);
-    // }, [image, input.id, onImageChange]);
+    useEffect(() => {
+        onAnswerChange(input.id, image);
+    }, [image, input.id, onAnswerChange]);
 
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
@@ -36,9 +36,8 @@ function ImageInput(props) {
                         id="imageinput"
                         placeholder="Adicione uma imagem"
                         className="form-control rounded-0 shadow-none font-barlow fw-medium p-0"
-                        // onChange={(e) => setImage([e.target.value])}
-                        // value={answer ? answer[0].value : image}
-                        // disabled={answer !== undefined}
+                        onChange={(e) => setImage([e.target.files[0]])}
+                        disabled={answer !== undefined}
                     />
                     <input id="submitbutton" type="submit" />
                 </div>
