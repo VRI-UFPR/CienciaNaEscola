@@ -14,6 +14,8 @@ import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import TextButton from '../components/TextButton';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import Alert from '../components/Alert';
+import ImageInput from '../components/inputs/answers/ImageInput';
+//import ImageInput from '../components/inputs/answers/ImageInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -33,6 +35,24 @@ const styles = `
     }
 `;
 
+const uploadFile = async (file) => {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post(`https://tmpfiles.org/api/v1/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [protocol, setProtocol] = useState();
@@ -49,14 +69,32 @@ function ProtocolPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
-        axios
-            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
-            .then((response) => {
-                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
+        const uploadedFiles = {};
+        const uploadPromises = [];
+
+        for (let prop in answers) {
+            uploadedFiles[prop] = [];
+            if (answers[prop][0] instanceof File) {
+                uploadPromises.push(
+                    uploadFile(answers[prop][0]).then((response) => {
+                        uploadedFiles[prop][0] = response.data.data.url;
+                    })
+                );
+            } else {
+                uploadedFiles[prop][0] = answers[prop][0];
+            }
+        }
+
+        Promise.all(uploadPromises).then(() => {
+            axios
+                .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        });
     };
 
     useEffect(() => {
@@ -121,7 +159,7 @@ function ProtocolPage(props) {
                             } else {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
+                                        {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
                             }
