@@ -27,7 +27,7 @@ function ImageInput(props) {
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
                     <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id cursus neque. Adicione uma imagem.
+                        {input.question}
                     </label>
                     <input
                         type="file"
