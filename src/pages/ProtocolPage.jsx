@@ -15,7 +15,6 @@ import TextButton from '../components/TextButton';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import Alert from '../components/Alert';
 import ImageInput from '../components/inputs/answers/ImageInput';
-import ImageInput from '../components/inputs/answers/ImageInput';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 
@@ -104,8 +103,9 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
+        //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+            .get('https://run.mocky.io/v3/ca0f74f2-4166-4e4f-bc4c-fd5124ba18b9')
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
