@@ -40,6 +40,7 @@ form-creator-back/form-creator-api/doc
 form-creator-back/form-creator-api/coverage
 form-creator-back/form-creator-api/build
 form-creator-back/form-creator-api/dist
+form-creator-back/form-creator-api/uploads
 *.bak
 .env
 .editorconfig
