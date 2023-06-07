@@ -43,9 +43,11 @@ const styles = `
 const uploadFile = async (file) => {
     try {
         const formData = new FormData();
+        formData.append('api_key', process.env.REACT_APP_API_KEY);
+        formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
         formData.append('file', file);
 
-        const response = await axios.post(`https://tmpfiles.org/api/v1/upload`, formData, {
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/dbxjlnwlo/image/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -84,7 +86,7 @@ function ProtocolPage(props) {
         //     if (answers[prop][0] instanceof File) {
         //         uploadPromises.push(
         //             uploadFile(answers[prop][0]).then((response) => {
-        //                 uploadedFiles[prop][0] = response.data.data.url;
+        //                 uploadedFiles[prop][0] = response.data.url;
         //             })
         //         );
         //     } else {
