@@ -55,7 +55,6 @@ function SubForm(props) {
         return <SplashPage />;
     }
 
-
     return (
         <div className="pb-4 pb-lg-5">
             <div className="row justify-content-between m-0">
@@ -71,11 +70,8 @@ function SubForm(props) {
                 <select class="form-select form-select-lg mb-5 bg-light-grey font-barlow">
                     <option selected>Selecione um formulário</option>
                     {userProtocols.map((userProtocol) => (
-                        <option key={userProtocol.id}>
-                            {userProtocol.title}
-                        </option>
-                    ))
-                    }
+                        <option key={userProtocol.id}>{userProtocol.title}</option>
+                    ))}
                 </select>
             </div>
             <style>{styles}</style>
