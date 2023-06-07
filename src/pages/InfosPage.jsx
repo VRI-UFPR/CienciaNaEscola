@@ -49,7 +49,6 @@ function InfosPage(props) {
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduardo Mathias de Souza"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eloisa Nielsen"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Izalorran Bonaldi"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduardo Mathias de Souza"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"João Armênio"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Juliana Zambon"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Matheus Piovesan"}</h2>
