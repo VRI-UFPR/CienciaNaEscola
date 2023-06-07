@@ -53,6 +53,7 @@ function InfosPage(props) {
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"João Armênio"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Juliana Zambon"}</h2>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Matheus Piovesan"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Yuri Tobias"}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-2"></div>
