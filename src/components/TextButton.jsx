@@ -33,14 +33,17 @@ function TextButton(props) {
         type,
         onClick,
         role,
+        overWriteStyles,
     } = props;
     return (
         <button
             type={type}
             role={role}
-            className={`btn d-flex btn-${
-                'hsl-' + hue + '-' + sat + '-' + lig
-            } rounded-4 font-century-gothic align-items-center justify-content-center w-100 ${className}`}
+            className={`btn btn-${'hsl-' + hue + '-' + sat + '-' + lig} ${
+                overWriteStyles
+                    ? className
+                    : `${className} d-flex rounded-4 font-century-gothic align-items-center justify-content-center w-100`
+            }`}
             onClick={onClick}
         >
             {text}
@@ -54,6 +57,7 @@ TextButton.defaultProps = {
     text: 'Button',
     type: 'button',
     role: undefined,
+    overWriteStyles: false,
     onClick: () => undefined,
 };
 
