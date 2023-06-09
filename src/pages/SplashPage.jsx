@@ -1,4 +1,4 @@
-import React from 'react';
+import { React } from 'react';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';

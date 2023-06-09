@@ -28,9 +28,9 @@ const styles = `
 
 function Weather(props) {
     return (
-        <div className="d-flex flex-column shadow rounded bg-white pb-4 p-3">
+        <div className="d-flex flex-column shadow rounded pb-4 p-3">
             <div className="row justify-content-between mb-2 m-0">
-                <div className="col p-0">
+                <div className="col-9 p-0">
                     <p className="form-label font-barlow lh-sm">Como você descreveria o tempo hoje?</p>
                 </div>
             </div>

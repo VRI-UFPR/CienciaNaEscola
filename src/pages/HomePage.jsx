@@ -1,20 +1,23 @@
 import { React, useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import HomeArrows from '../components/HomeArrows';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
-import HomeButton from '../components/HomeButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
+import TextButton from '../components/TextButton';
 
 const styles = `
-    .protocol-info {
+    .protocolInfo {
         font-size: 75%;
         width: 90%;
     }
 
-    .general-container {
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .generalContainer {
         position: absolute;
     }
 
@@ -31,6 +34,16 @@ const styles = `
         justify-content: center;
         margin-bottom: 13px;
     }
+
+    .bg-yellow-orange {
+        background-color: #FECF86;
+    }
+
+    .infos-h1 {
+        color: #535353;
+        font-weight: bold;
+        font-size: x-large;
+    }
 `;
 
 function HomePage(props) {
@@ -43,7 +56,7 @@ function HomePage(props) {
         if (user.id !== null && user.token !== null) {
             // .get(`http://localhost:3333/user/list/${user.id}`)
             axios
-                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .get(`https://genforms.c3sl.ufpr.br/api/user/list/83`)
                 .then((response) => {
                     setUserForms(response.data);
                     setIsLoading(false);
@@ -59,32 +72,51 @@ function HomePage(props) {
     }
 
     return (
-        <div className="general-container container-fluid d-flex flex-column font-barlow h-100 w-100 p-0">
+        <div className="generalContainer container-fluid d-flex flex-column font-barlow h-100 w-100 p-0">
             <NavBar />
-            <div className="d-flex flex-column p-0">
-                <div className="protocol-info container-fluid d-flex justify-content-between mt-4">
-                    <div>Protocolos recentes</div>
-                    <div>Ultima modificação</div>
+            <div className="d-flex flex-column p-0 flex-grow-1">
+                <div className="protocolInfo container-fluid d-flex justify-content-between mt-4 px-4 pb-4 m-0">
+                    <h1 className="infos-h1 font-century-gothic m-0 fw-bold">Protocolos recentes</h1>
                 </div>
 
-                <div className="d-flex container-fluid p-0">
-                    <ul className="container-fluid list-unstyled d-flex flex-column flex-grow-1 p-0 m-0">
+                <div className="d-flex container-fluid flex-grow-1 px-4">
+                    <ul className="container-fluid bg-yellow-orange list-unstyled d-flex flex-column flex-grow-1 p-0 m-0 py-4 rounded-4 px-4">
                         {userProtocols.map((userProtocol) => (
-                            <li key={userProtocol.id}>
-                                <Link className="list-home-btn" to={`/protocol/${userProtocol.id}`}>
-                                    <HomeButton title={userProtocol.title} />
-                                </Link>
+                            <li key={userProtocol.id} className="m-0 p-0 py-2">
+                                <TextButton
+                                    text={userProtocol.title}
+                                    hsl={[0, 1, 100]}
+                                    className="font-barlow d-flex d-lg-none rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
+                                    overWriteStyles={true}
+                                    onClick={() => navigate(`/protocol/${userProtocol.id}`)}
+                                ></TextButton>
+                                <TextButton
+                                    text={userProtocol.title}
+                                    hsl={[0, 1, 100]}
+                                    className="font-barlow d-none d-lg-flex rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
+                                    overWriteStyles={true}
+                                    onClick={() => navigate(`/editprotocol/${userProtocol.id}`)}
+                                ></TextButton>
                             </li>
                         ))}
                     </ul>
                     <style>{styles}</style>
                 </div>
-                <div className="d-flex">
-                    <HomeArrows />
-                </div>
             </div>
-            <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
-                <RoundedButton role="link" onClick={() => navigate('/help')} />
+            <div className="row justify-content-between mx-0 p-4">
+                <div className="col-2"></div>
+                <div className="col-8 col-lg-4 align-items-center p-0">
+                    <TextButton
+                        role="link"
+                        className="d-none d-lg-flex"
+                        onClick={() => navigate('/createprotocol')}
+                        hsl={[97, 43, 70]}
+                        text="Criar novo protocolo"
+                    />
+                </div>
+                <div className="col-2 d-flex align-items-end justify-content-end p-0">
+                    <RoundedButton role="link" onClick={() => navigate('/help')} />
+                </div>
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </div>
