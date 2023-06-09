@@ -18,10 +18,9 @@ const styles = `
 
 function HomeButton(props) {
     return (
-        <div className="homeBtn font-barlow d-flex align-items-center">
+        <div className="homeBtn font-barlow d-flex align-items-center px-4 bg-white">
             <div className="d-flex justify-content-between flex-fill px-0 py-0">
                 <div>{props.title}</div>
-                <div>17/09/2022</div>
             </div>
             <style>{styles}</style>
         </div>

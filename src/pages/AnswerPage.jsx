@@ -11,6 +11,10 @@ const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
     }
+    
+    .bg-pastel-blue {
+        background-color: #91CAD6;
+    }
 
     .color-yellow-orange {
         color: #FECF86;

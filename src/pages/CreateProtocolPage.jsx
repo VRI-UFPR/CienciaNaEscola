@@ -10,7 +10,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
-import { Alert } from 'bootstrap';
+import Alert from '../components/Alert';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -146,8 +146,18 @@ function CreateProtocolPage(props) {
             <NavBar />
             <div className="container-fluid d-flex flex-column flex-grow-1 font-barlow p-4 p-lg-5">
                 <div className="row m-0">
-                    <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0">Gerador de formulários</h1>
+                    <div className="col-12 col-lg-4 p-0 mb-3 mb-lg-0">
+                        <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 m-0">Gerador de formulários</h1>
+                    </div>
+                    <div className="col-0 col-lg-4 p-0"></div>
+                    <div className={`col-12 col-lg-2 p-0 mb-3 mb-lg-0 pe-lg-2 ${edit ? '' : 'd-none'}`}>
+                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
+                    </div>
+                    <div className={`col-12 col-lg-2 p-0 mb-3 mb-lg-0 ps-lg-2 ${edit ? '' : 'd-none'}`}>
+                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" onClick={() => navigate(`/answer/${id}`)} />
+                    </div>
                 </div>
+                <div className="row justify-content-between m-0"></div>
                 <div className="row flex-grow-1 m-0">
                     <div className="col-12 col-lg-auto p-0 pb-4">
                         <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-4 p-4">
