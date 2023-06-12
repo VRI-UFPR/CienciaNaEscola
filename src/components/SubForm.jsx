@@ -70,8 +70,11 @@ function SubForm(props) {
                 <select class="form-select form-select-lg mb-5 bg-light-grey font-barlow">
                     <option selected>Selecione um formulário</option>
                     {userProtocols.map((userProtocol) => (
-                        <option key={userProtocol.id}>{userProtocol.title}</option>
-                    ))}
+                        <option key={userProtocol.id}>
+                            {userProtocol.title}
+                        </option>
+                    ))
+                    }
                 </select>
             </div>
             <style>{styles}</style>
