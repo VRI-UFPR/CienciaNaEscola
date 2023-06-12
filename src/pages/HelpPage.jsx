@@ -34,6 +34,12 @@ const styles = `
     ::placeholder {
         color: #FFFFFF;
     }
+
+    @media (min-width: 992px) and (max-width: 1160px) {
+        .sidebar-col {
+            width: 25% !important;
+        }
+    }
 `;
 
 function HelpPage(props) {
@@ -49,7 +55,7 @@ function HelpPage(props) {
     return (
         <div className="d-flex flex-column vh-100">
             <div className="row flex-grow-1 m-0">
-                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
+                <div className={`sidebar-col col-md-3 col-lg-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col p-0">

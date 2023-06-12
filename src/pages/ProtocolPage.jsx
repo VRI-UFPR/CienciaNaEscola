@@ -14,6 +14,7 @@ import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
+import ImageInput from '../components/inputs/answers/ImageInput';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 
@@ -39,6 +40,26 @@ const styles = `
     }
 `;
 
+const uploadFile = async (file) => {
+    try {
+        const formData = new FormData();
+        formData.append('api_key', process.env.REACT_APP_API_KEY);
+        formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
+        formData.append('file', file);
+
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/dbxjlnwlo/image/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [protocol, setProtocol] = useState();
@@ -55,19 +76,40 @@ function ProtocolPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
-        axios
-            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
-            .then((response) => {
-                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
+        const uploadedFiles = {};
+        const uploadPromises = [];
+
+        modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+
+        // for (let prop in answers) {
+        //     uploadedFiles[prop] = [];
+        //     if (answers[prop][0] instanceof File) {
+        //         uploadPromises.push(
+        //             uploadFile(answers[prop][0]).then((response) => {
+        //                 uploadedFiles[prop][0] = response.data.url;
+        //             })
+        //         );
+        //     } else {
+        //         uploadedFiles[prop][0] = answers[prop][0];
+        //     }
+        // }
+
+        // Promise.all(uploadPromises).then(() => {
+        //     axios
+        //         .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
+        //         .then((response) => {
+        //             modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+        //         })
+        //         .catch((error) => {
+        //             console.error(error.message);
+        //         });
+        // });
     };
 
     useEffect(() => {
+        //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+            .get('https://run.mocky.io/v3/f7315868-1f93-47f0-860c-f572d9a4b60a')
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
@@ -135,6 +177,26 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+                        case 102:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 100:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 101:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
