@@ -24,7 +24,7 @@ function RecoveryAlert(props) {
             </div>
             <div className="row d-flex justify-content-center p-4 py-2 mx-0">
                 <div className="col-auto d-flex px-1">
-                    <TextButton hsl={[97, 43, 70]} text="OK"  className="p-4 px-5" />
+                    <TextButton hsl={[97, 43, 70]} text="OK" className="p-4 px-5" />
                 </div>
             </div>
             <style>{alertProtocolAlertStyles}</style>

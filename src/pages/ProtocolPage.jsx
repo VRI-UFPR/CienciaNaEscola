@@ -11,9 +11,9 @@ import LocationInput from '../components/inputs/answers/LocationInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
-import TextButton from '../components/TextButton';
-import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import Alert from '../components/Alert';
+import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
+import TextButton from '../components/TextButton';
 import ImageInput from '../components/inputs/answers/ImageInput';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
@@ -183,6 +183,20 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 100:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 101:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
