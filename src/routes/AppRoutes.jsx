@@ -10,6 +10,7 @@ import HelpPage from './../pages/HelpPage';
 import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
+import PrototypeAnswersPage from '../pages/PrototypeAnswersPage';
 import AnswerPage from '../pages/AnswerPage';
 import SplashPage from '../pages/SplashPage';
 
@@ -37,6 +38,7 @@ function AppRoutes(props) {
             <Route path="/help" element={<HelpPage />} />
             <Route path="/createprotocol" element={<CreateProtocolPage />} />
             <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
+            <Route path="/prototypeanswer/:id" element={<PrototypeAnswersPage />} />
             <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />

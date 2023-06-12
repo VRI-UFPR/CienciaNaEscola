@@ -55,7 +55,6 @@ function SubForm(props) {
         return <SplashPage />;
     }
 
-
     return (
         <div className="pb-4 pb-lg-5">
             <div className="row justify-content-between m-0">
