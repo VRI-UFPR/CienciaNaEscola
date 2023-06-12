@@ -47,3 +47,6 @@ form-creator-back/form-creator-api/uploads
 *~
 .#*
 *#
+
+#local
+.vscode
