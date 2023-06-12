@@ -4,7 +4,6 @@ const styles = `
     .homeBtn {
         background-color: #D9D9D9;
         width: 85%;
-        height: 60px;
         padding: 0px 10px;
         border-radius: 9px;
         font-size: 90%;
@@ -18,7 +17,7 @@ const styles = `
 
 function HomeButton(props) {
     return (
-        <div className="homeBtn font-barlow d-flex align-items-center">
+        <div className="homeBtn font-barlow d-flex align-items-center h-100">
             <div className="d-flex justify-content-between flex-fill px-0 py-0">
                 <div>{props.title}</div>
                 <div>{props.date}</div>

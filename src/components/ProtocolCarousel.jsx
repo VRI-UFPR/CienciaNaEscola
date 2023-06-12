@@ -36,7 +36,7 @@ function ProtocolCarousel(props) {
 
     const carouselRef = useRef(null);
     const carouselParentRef = useRef(null);
-    const itemsPerSlide = 3;
+    const itemsPerSlide = 5;
     const totalSlides = Math.ceil(buttons.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -57,12 +57,12 @@ function ProtocolCarousel(props) {
             const slideButtons = buttons.slice(startIndex, endIndex);
 
             carouselItems.push(
-            <div key={i} className={`carousel-item${i === 0 ? ' active' : ''}`}>
-                <div className="d-flex flex-column align-items-center">
+            <div key={i} className={`h-100 carousel-item${i === 0 ? ' active' : ''}`}>
+                <div className="d-flex flex-column align-items-center h-100 pb-3">
                 {slideButtons.map((button, index) => (
                     <div 
                         key={index} 
-                        className="d-flex flex-column align-items-center mb-3 w-100">
+                        className="d-flex flex-column align-items-center pb-3 w-100" style={{height: '20%', maxHeight: '20%'}}>
                         <HomeButton 
                             key={index} 
                             title={button} 
@@ -103,7 +103,7 @@ function ProtocolCarousel(props) {
 
     return (
         <div id="dynamic-carousel" className="carousel slide custom-carousel" data-bs-interval="false" ref={carouselRef}>
-        <div className="carousel-inner">
+        <div className="carousel-inner h-100">
             {renderCarouselItems()}
         </div>
         <div className="carousel-indicators">

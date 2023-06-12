@@ -34,7 +34,7 @@ const style = `
 function RecentProtocolsPage(props) {
     const { title, content, showSidebar, showCreateProtocol, showNavToggler } = props;
 
-    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9', 'Button10']
+    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9']
 
     return (
         <div className="d-flex flex-column font-barlow vh-100">
