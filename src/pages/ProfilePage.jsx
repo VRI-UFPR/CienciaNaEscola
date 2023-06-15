@@ -64,9 +64,6 @@ function ProfilePage(props) {
                         <div className="row bg-pastel-blue align-items-center rounded p-4 p-lg-5 m-0">
                             <div className="col-12 col-lg-2 d-flex flex-column align-items-center p-0 pb-4 pb-lg-0">
                                 <div className="profile-figure ratio ratio-1x1 rounded-circle bg-white shadow-sm w-75"></div>
-                                <a className="link-body-emphasis underline-light text-center fs-5 fw-light lh-1 p-3 pb-0" href="/profile">
-                                    Editar foto de perfil
-                                </a>
                             </div>
                             <div className="col d-flex flex-column justify-content-center">
                                 <div className="row align-items-center pb-2 pb-lg-4 m-0">
