@@ -54,7 +54,7 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.token) {
-                    login(response.data.id, response.data.token);
+                    login(response.data.id, email, response.data.token);
                     navigate('/home');
                 } else {
                     throw new Error('Something went wrong!');

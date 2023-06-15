@@ -1,4 +1,4 @@
-import { React, useState, useRef } from 'react';
+import { React, useState, useRef, useContext, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RoundedButton from '../components/RoundedButton';
@@ -6,6 +6,8 @@ import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 import ChangePassword from '../components/ChangePassword';
+import SplashPage from './SplashPage';
+import { AuthContext } from '../contexts/AuthContext';
 
 const profilePageStyles = `
     .font-barlow {
@@ -42,11 +44,20 @@ const profilePageStyles = `
 `;
 
 function ProfilePage(props) {
-    const [name, setName] = useState('Seu nome');
-    const [email, setEmail] = useState('Seu email');
+    // const [name, setName] = useState('Seu nome');
+    const { user } = useContext(AuthContext);
+    const [email, setEmail] = useState(null);
     const { showSidebar, allowEdit } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
+
+    useEffect(() => {
+        setEmail(user.email);
+    }, [user]);
+
+    if (email === null) {
+        return <SplashPage />;
+    }
 
     return (
         <>
@@ -69,7 +80,7 @@ function ProfilePage(props) {
                                 </a>
                             </div>
                             <div className="col d-flex flex-column justify-content-center">
-                                <div className="row align-items-center pb-2 pb-lg-4 m-0">
+                                {/* <div className="row align-items-center pb-2 pb-lg-4 m-0">
                                     <label htmlFor="name-input" className="col-12 col-lg-1 form-label profile-label fs-5 pe-lg-5 mb-0">
                                         Nome:
                                     </label>
@@ -81,7 +92,7 @@ function ProfilePage(props) {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                     ></input>
-                                </div>
+                                </div> */}
                                 <div className="row align-items-center m-0">
                                     <label htmlFor="email-input" className="col-12 col-lg-1 form-label profile-label fs-5 pe-lg-5 mb-0">
                                         Email:
@@ -107,7 +118,7 @@ function ProfilePage(props) {
                                 {' '}
                                 Deseja alterar sua senha?{' '}
                             </button>
-                            <div className="modal fade" id="ChangePassword" tabindex="-1" aria-hidden="true">
+                            <div className="modal fade" id="ChangePassword" tabIndex="-1" aria-hidden="true">
                                 <div className="modal-dialog modal-dialog-centered">
                                     <div className="modal-content bg-transparent border-0">
                                         <ChangePassword />
