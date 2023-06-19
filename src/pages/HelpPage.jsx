@@ -27,8 +27,8 @@ const styles = `
         display: none;
     }
 
-    .tab div:target {
-        display: block; 
+    .tab button {
+        text-decoration: underline;
     }
 
     ::placeholder {
@@ -41,6 +41,21 @@ const styles = `
         }
     }
 `;
+
+function toggle(id) {
+    console.log(id);
+    var element = document.getElementById(id);
+    console.log(element);
+    if (element) {
+        var display = element.style.display;
+    
+        if (display == "none") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+      }
+}
 
 function HelpPage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
@@ -76,9 +91,9 @@ function HelpPage(props) {
                             <div className="tab d-flex flex-column ">
                                 {questions.map((question) => (
                                     <>
-                                        <a className="light-gray-color pb-3" href={'#' + question.answer}>
+                                        <button className="btn border-0 light-gray-color text-start pb-3" onClick={() => toggle(question.answer)}>
                                             {question.question}
-                                        </a>
+                                        </button>
                                         <div id={question.answer}>
                                             <p>{question.answer}</p>
                                         </div>
