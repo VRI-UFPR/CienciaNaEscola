@@ -54,9 +54,9 @@ function HelpPage(props) {
     const modalRef = useRef(null);
 
     const questions = [
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Ola mundo' },
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Isso eh' },
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Um teste' },
+        { id: 1, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
+        { id: 2, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
+        { id: 3, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
     ];
 
     return (
@@ -83,10 +83,10 @@ function HelpPage(props) {
                             <div className="tab d-flex flex-column ">
                                 {questions.map((question) => (
                                     <>
-                                        <button className="btn border-0 light-gray-color text-start pb-3" onClick={() => toggle(question.answer)}>
+                                        <button className="btn border-0 light-gray-color text-start pb-3" onClick={() => toggle(question.id)}>
                                             {question.question}
                                         </button>
-                                        <div id={question.answer}>
+                                        <div id={question.id}>
                                             <p>{question.answer}</p>
                                         </div>
                                     </>
