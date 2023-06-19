@@ -109,7 +109,7 @@ function ProtocolPage(props) {
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get('https://run.mocky.io/v3/f7315868-1f93-47f0-860c-f572d9a4b60a')
+            .get(`https://run.mocky.io/v3/${(id==='1')?'f7315868-1f93-47f0-860c-f572d9a4b60a':'6709f72d-8727-46c6-823a-062dee952a50'}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
@@ -185,35 +185,18 @@ function ProtocolPage(props) {
                                     {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
-
                         case 100:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
-
                         case 101:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
-
-                        case 100:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 101:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
                         default:
                             return <></>;
                     }
