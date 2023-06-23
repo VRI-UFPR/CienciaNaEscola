@@ -33,7 +33,7 @@ function SelectInput(props) {
                     {props.input.question}
                 </label>
                 <div className="col-5 px-0 pt-2">
-                    <select className="form-select select-border-gray rounded-3">
+                    <select className="form-select border-0 rounded-3">
                         <option defaultValue=""></option>
                         {options.map((option, index) => (
                             <option key={index} value={option.value}>
