@@ -38,6 +38,7 @@ const port = process.env.PORT;
 
 // Include middlewares
 import { DbHandlerMw } from "./api/middlewares/dbHandler";
+import { upload } from "./api/middlewares/uploadHandler";
 
 // Include controllers
 import { FormCtrl } from "./api/controllers/form";
@@ -66,7 +67,13 @@ app.put("/user/changePassword", tokenValidation(), UserCtrl.changePassword);
 app.get("/user/list/:id", UserCtrl.listForms);
 app.put("/user/update", tokenValidation(), UserCtrl.update);
 app.delete("/user/deleteData/:id", tokenValidation(), UserCtrl.deleteData);
-
+app.post("/file/upload", upload.single('file'), (req, res) => {
+     const file = req.file;
+        if (!file) {
+            res.send('<h2>Selecione um arquivo</h2>');
+        }
+     console.log(file);
+     res.json({message: 'Arquivo recebido com sucesso!'});});
 // Listening
 
 app.listen(port);

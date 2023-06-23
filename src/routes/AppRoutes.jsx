@@ -10,6 +10,7 @@ import HelpPage from './../pages/HelpPage';
 import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
+import AnswerPage from '../pages/AnswerPage';
 
 function AppRoutes(props) {
     return (
@@ -17,11 +18,15 @@ function AppRoutes(props) {
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/terms" element={<InfosPage title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />} />
+            <Route
+                path="/terms"
+                element={<InfosPage key="terms" title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />}
+            />
             <Route
                 path="/acceptterms"
                 element={
                     <InfosPage
+                        key="acceptterms"
                         title="Termos de uso"
                         showSidebar={false}
                         showAccept={true}
@@ -34,9 +39,11 @@ function AppRoutes(props) {
             <Route path="/protocol/:id" element={<ProtocolPage />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/createprotocol" element={<CreateProtocolPage />} />
+            <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
             <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/answer/:id" element={<AnswerPage />} />
             {/* <Route
                 path="/textimage"
                 element={

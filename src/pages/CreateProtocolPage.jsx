@@ -1,10 +1,16 @@
-import { React, useState } from 'react';
+import { React, useState, useContext, useEffect, useRef } from 'react';
+import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
-import CreateTextBoxInput from '../components/CreateTextBoxInput';
+import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import SplashPage from './SplashPage';
+import { useParams } from 'react-router-dom';
+import { defaultInputs } from '../utils/constants';
+import { Alert } from 'bootstrap';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -42,15 +48,63 @@ function CreateProtocolPage(props) {
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const { user } = useContext(AuthContext);
+    const { edit } = props;
+    const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const protocol = { title, description, inputs };
-        console.log(JSON.stringify(protocol));
+
+        const placedInputs = defaultInputs.concat(...inputs);
+        placedInputs.forEach((input, index) => {
+            input['placement'] = index + 1;
+        });
+
+        const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
+        if (edit) {
+            axios
+                .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            axios
+                .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([...inputs, { question: '', description: '' }]);
+        setInputs([
+            ...inputs,
+            {
+                description: '',
+                question: '',
+                type: 0,
+                validation: [],
+                sugestions: [],
+                subForm: null,
+                id: null,
+            },
+        ]);
     };
 
     const handleTextBoxRemove = (indexToRemove) => {
@@ -63,6 +117,29 @@ function CreateProtocolPage(props) {
         updateInputs[index] = input;
         setInputs(updateInputs);
     };
+
+    useEffect(() => {
+        if (edit) {
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+                .then((response) => {
+                    delete response.data.inputs.id;
+                    setInputs(response.data.inputs.slice(4));
+                    setTitle(response.data.title);
+                    setDescription(response.data.description);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            setIsLoading(false);
+        }
+    }, [id, edit]);
+
+    if (isLoading) {
+        return <SplashPage />;
+    }
 
     return (
         <div className="d-flex flex-column min-vh-100">
@@ -147,9 +224,14 @@ function CreateProtocolPage(props) {
                     </div>
                 </div>
             </div>
+            <Alert id="CreateProtocolAlert" ref={modalRef} />
             <style>{CreateProtocolStyles}</style>
         </div>
     );
 }
+
+CreateProtocolPage.defaultProps = {
+    edit: false,
+};
 
 export default CreateProtocolPage;
