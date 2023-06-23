@@ -28,7 +28,7 @@ function SelectInput(props) {
     const options = props.input.options || [];
     return (
         <div className="rounded shadow bg-white font-barlow pt-3 px-0">
-            <div className="row m-0 d-flex justify-content-end">
+            <div className="row d-flex justify-content-end m-0">
                 <label labelfor="select" className="form-label select-label m-0 px-3">
                     {props.input.question}
                 </label>
