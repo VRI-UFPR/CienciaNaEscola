@@ -27,35 +27,42 @@ const styles = `
         display: none;
     }
 
-    .tab div:target {
-        display: block; 
+    .tab button {
+        text-decoration: underline;
     }
 
     ::placeholder {
         color: #FFFFFF;
     }
-
-    @media (min-width: 992px) and (max-width: 1160px) {
-        .sidebar-col {
-            width: 25% !important;
-        }
-    }
 `;
+
+function toggle(id) {
+    var element = document.getElementById(id);
+    if (element) {
+        var display = element.style.display;
+    
+        if (display == "none") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+      }
+}
 
 function HelpPage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const modalRef = useRef(null);
 
     const questions = [
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Ola mundo' },
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Isso eh' },
-        { question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Um teste' },
+        { id: 1, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
+        { id: 2, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
+        { id: 3, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
     ];
 
     return (
         <div className="d-flex flex-column vh-100">
             <div className="row flex-grow-1 m-0">
-                <div className={`sidebar-col col-md-3 col-lg-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
+                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col p-0">
@@ -76,10 +83,10 @@ function HelpPage(props) {
                             <div className="tab d-flex flex-column ">
                                 {questions.map((question) => (
                                     <>
-                                        <a className="light-gray-color pb-3" href={'#' + question.answer}>
+                                        <button className="btn border-0 light-gray-color text-start pb-3" onClick={() => toggle(question.id)}>
                                             {question.question}
-                                        </a>
-                                        <div id={question.answer}>
+                                        </button>
+                                        <div id={question.id}>
                                             <p>{question.answer}</p>
                                         </div>
                                     </>
