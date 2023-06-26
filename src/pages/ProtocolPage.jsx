@@ -81,35 +81,35 @@ function ProtocolPage(props) {
 
         modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
 
-        // for (let prop in answers) {
-        //     uploadedFiles[prop] = [];
-        //     if (answers[prop][0] instanceof File) {
-        //         uploadPromises.push(
-        //             uploadFile(answers[prop][0]).then((response) => {
-        //                 uploadedFiles[prop][0] = response.data.url;
-        //             })
-        //         );
-        //     } else {
-        //         uploadedFiles[prop][0] = answers[prop][0];
-        //     }
-        // }
+        for (let prop in answers) {
+            uploadedFiles[prop] = [];
+            if (answers[prop][0] instanceof File) {
+                uploadPromises.push(
+                    uploadFile(answers[prop][0]).then((response) => {
+                        uploadedFiles[prop][0] = response.data.url;
+                    })
+                );
+            } else {
+                uploadedFiles[prop][0] = answers[prop][0];
+            }
+        }
 
-        // Promise.all(uploadPromises).then(() => {
-        //     axios
-        //         .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
-        //         .then((response) => {
-        //             modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
-        //         })
-        //         .catch((error) => {
-        //             console.error(error.message);
-        //         });
-        // });
+        Promise.all(uploadPromises).then(() => {
+            axios
+                .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        });
     };
 
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://run.mocky.io/v3/${(id==='1')?'f7315868-1f93-47f0-860c-f572d9a4b60a':'6709f72d-8727-46c6-823a-062dee952a50'}`)
+            .get(`https://run.mocky.io/v3/${id === '90' ? 'f7315868-1f93-47f0-860c-f572d9a4b60a' : '54c8b135-80b3-4e68-b538-4f84032432fb'}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
