@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useRef } from 'react';
+import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -17,6 +17,8 @@ import TextButton from '../components/TextButton';
 import ImageInput from '../components/inputs/answers/ImageInput';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const styles = `
     .bg-yellow-orange {
@@ -66,6 +68,8 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
@@ -99,6 +103,7 @@ function ProtocolPage(props) {
                 .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
                 .then((response) => {
                     modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+                    navigate('/home');
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -109,7 +114,7 @@ function ProtocolPage(props) {
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://run.mocky.io/v3/${id === '90' ? 'f7315868-1f93-47f0-860c-f572d9a4b60a' : '54c8b135-80b3-4e68-b538-4f84032432fb'}`)
+            .get(`https://run.mocky.io/v3/${id === '90' ? '9f88aaf3-440c-4fc6-a0a2-af24668f6c8e' : 'bfb41b55-54e3-4096-a925-8002b55dbdea'}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
@@ -119,8 +124,26 @@ function ProtocolPage(props) {
             });
     }, [id]);
 
-    if (isLoading) {
-        return <SplashPage />;
+    useEffect(() => {
+        if (!isLoading) {
+            if (protocol.owner !== undefined && protocol.owner !== user.id) {
+                modalRef.current.showModal({
+                    title: 'Você não tem permissão para acessar este formulário.',
+                    onHide: () => {
+                        navigate('/home');
+                    },
+                });
+            }
+        }
+    }, [isLoading, navigate, protocol, user]);
+
+    if (isLoading || user === undefined || (protocol.owner !== undefined && protocol.owner !== user.id)) {
+        return (
+            <>
+                <SplashPage />
+                <Alert id="ProtocolPageAlert" ref={modalRef} />
+            </>
+        );
     }
 
     return (
