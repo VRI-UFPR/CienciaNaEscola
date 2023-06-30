@@ -1,4 +1,4 @@
-import { React, useState, useContext, useEffect } from 'react';
+import { React, useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -10,6 +10,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
+import { Alert } from 'bootstrap';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -60,6 +61,7 @@ function CreateProtocolPage(props) {
     const { user } = useContext(AuthContext);
     const { edit } = props;
     const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -78,7 +80,7 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    console.log(response);
+                    modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -91,7 +93,7 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    console.log(response);
+                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -131,7 +133,7 @@ function CreateProtocolPage(props) {
                 .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
                 .then((response) => {
                     delete response.data.inputs.id;
-                    setInputs(response.data.inputs);
+                    setInputs(response.data.inputs.slice(4));
                     setTitle(response.data.title);
                     setDescription(response.data.description);
                     setIsLoading(false);
@@ -242,6 +244,7 @@ function CreateProtocolPage(props) {
                     </div>
                 </div>
             </div>
+            <Alert id="CreateProtocolAlert" ref={modalRef} />
             <style>{CreateProtocolStyles}</style>
         </div>
     );

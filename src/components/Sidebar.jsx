@@ -97,7 +97,7 @@ function Sidebar(props) {
                     <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
                     <Link
                         href="/"
-                        className="text-white text-decoration-underline fw-medium pb-2 ps-4 ps-md-5"
+                        className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
                         to="https://www.denuncias.com"
                     >
                         www.denuncias.com

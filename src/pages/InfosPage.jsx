@@ -19,35 +19,40 @@ const infosPageStyles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .infos-h1 {
+    .color-dark-gray {
         color: #535353;
-        font-weight: bold;
-        font-size: x-large;
     }
 
-    .infos-h2 {
-        color: #535353;
-        font-size: medium;
+    .text-justify {
         text-align: justify;
     }
 `;
 
 function InfosPage(props) {
-    const { title, content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const {showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className={`col-2 bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
+                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
                     <Sidebar modalRef={modalRef} />
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
-                            <h2 className="infos-h2 pb-4 m-0 fw-medium">{content}</h2>
+                            <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{"Equipe"}</h1>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Clara Drimel"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Daniel Lins"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduarda de Aguiar Freitas"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduardo Mathias de Souza"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eloisa Nielsen"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Izalorran Bonaldi"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"João Armênio"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Juliana Zambon"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Matheus Piovesan"}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Yuri Tobias"}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-2"></div>
@@ -87,9 +92,6 @@ function InfosPage(props) {
 }
 
 InfosPage.defaultProps = {
-    title: '',
-    content:
-        'Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis.',
     showSidebar: true,
     showAccept: true,
     showNavTogglerMobile: true,
