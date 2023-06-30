@@ -1,16 +1,21 @@
-import { React, useState, useEffect, useCallback } from 'react';
+import { React, useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-import InfoGerais from '../components/inputs/answers/InfoGerais';
+
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
 import LocationInput from '../components/inputs/answers/LocationInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
+import Alert from '../components/Alert';
+import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
+import TextButton from '../components/TextButton';
+import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
+import TextImageInput from '../components/inputs/answers/TextImageInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -28,6 +33,10 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
+
+    .name-col input:focus{
+        outline: none;
+    }
 `;
 
 function ProtocolPage(props) {
@@ -35,6 +44,7 @@ function ProtocolPage(props) {
     const [protocol, setProtocol] = useState();
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
@@ -48,7 +58,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                console.log(response);
+                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
             })
             .catch((error) => {
                 console.error(error.message);
@@ -72,14 +82,14 @@ function ProtocolPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column min-vh-100">
+        <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
             <NavBar />
             <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
-                    <div className="col-9 col-sm-10 pe-0">
+                    <div className="name-col col-9 col-sm-10 pe-0">
                         <input
                             className="rounded shadow font-barlow gray-color border-0 p-2 w-100"
                             type="text"
@@ -90,25 +100,19 @@ function ProtocolPage(props) {
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
-                            if (input.question === 'infos' && input.description === 'infos' && input.placement === 1) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<InfoGerais input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'date' && input.description === 'date' && input.placement === 2) {
+                            if (input.question === 'date' && input.description === 'date' && input.placement === 1) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 3) {
+                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 2) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
-                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 4) {
+                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 3) {
                                 return (
                                     <div key={input.id} className="row justify-content-center m-0 pt-3">
                                         {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
@@ -121,6 +125,12 @@ function ProtocolPage(props) {
                                     </div>
                                 );
                             }
+                        case 1:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
@@ -128,12 +138,29 @@ function ProtocolPage(props) {
                                 </div>
                             );
 
+                        case 100:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 101:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
                         default:
                             return <></>;
                     }
                 })}
-                <button onClick={handleProtocolSubmit}>Submit</button>
+                <div className="col-4 align-self-center pt-4">
+                    <TextButton type="submit" hsl={[97, 43, 70]} text="Enviar" onClick={handleProtocolSubmit} />
+                </div>
             </div>
+            <Alert id="ProtocolPageAlert" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );
