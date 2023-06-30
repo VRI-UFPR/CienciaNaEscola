@@ -25,16 +25,17 @@ services:
             DB_PORT: 5432
 
         volumes:
-            - ./bin/:/app/bin/
-            - ./client/:/app/client/
-            - ./common/:/app/common/
+            # - ./bin/:/app/bin/
+            # - ./client/:/app/client/
+            # - ./common/:/app/common/
             - ./config/:/app/config/
-            - ./script/:/app/script/
-            - ./server/:/app/server/
+            # - ./script/:/app/script/
+            # - ./server/:/app/server/
             # - ./coverage/:/app/coverage/
-            - ./doc/:/app/doc/
+            # - ./doc/:/app/doc/
             - ./src/:/app/src/
             - ./test/:/app/test/
+            - ./uploads:/app/uploads
         ports:
             - '3333:3333'
         networks:
