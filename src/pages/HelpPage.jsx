@@ -40,13 +40,13 @@ function toggle(id) {
     var element = document.getElementById(id);
     if (element) {
         var display = element.style.display;
-    
-        if (display == "none") {
-            element.style.display = "block";
+
+        if (display == 'none') {
+            element.style.display = 'block';
         } else {
-            element.style.display = "none";
+            element.style.display = 'none';
         }
-      }
+    }
 }
 
 function HelpPage(props) {
@@ -54,9 +54,21 @@ function HelpPage(props) {
     const modalRef = useRef(null);
 
     const questions = [
-        { id: 1, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
-        { id: 2, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
-        { id: 3, question: '-Lorem ipsum dolor sit amet, consec?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.' },
+        {
+            id: 1,
+            question: '-Lorem ipsum dolor sit amet, consec?',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.',
+        },
+        {
+            id: 2,
+            question: '-Lorem ipsum dolor sit amet, consec?',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.',
+        },
+        {
+            id: 3,
+            question: '-Lorem ipsum dolor sit amet, consec?',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin dolor at ipsum egestas, in cursus turpis ultricies.',
+        },
     ];
 
     return (
@@ -83,7 +95,10 @@ function HelpPage(props) {
                             <div className="tab d-flex flex-column ">
                                 {questions.map((question) => (
                                     <>
-                                        <button className="btn border-0 light-gray-color text-start pb-3" onClick={() => toggle(question.id)}>
+                                        <button
+                                            className="btn border-0 light-gray-color text-start pb-3"
+                                            onClick={() => toggle(question.id)}
+                                        >
                                             {question.question}
                                         </button>
                                         <div id={question.id}>
