@@ -102,8 +102,12 @@ function ProtocolPage(props) {
             axios
                 .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
                 .then((response) => {
-                    modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
-                    navigate('/home');
+                    modalRef.current.showModal({
+                        title: 'Resposta submetida com sucesso.',
+                        onHide: () => {
+                            navigate('/home');
+                        },
+                    });
                 })
                 .catch((error) => {
                     console.error(error.message);
