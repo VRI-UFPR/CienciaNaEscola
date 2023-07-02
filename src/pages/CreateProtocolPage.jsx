@@ -41,6 +41,15 @@ const CreateProtocolStyles = `
         min-width: 15px;
         width: 20px;
     }
+
+    @media (max-width: 767px) {
+        .botao-form {
+            margin-bottom: 10px;
+        }
+
+        .titulo-form {
+            text-align: center;
+        }
 `;
 
 function CreateProtocolPage(props) {

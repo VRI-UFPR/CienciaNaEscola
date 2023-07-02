@@ -91,9 +91,9 @@ function LoginPage(props) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Link to={'/acceptterms'} className="login-forgot-pw pb-2 fs-6">
+                    {/* <Link to={'/acceptterms'} className="login-forgot-pw pb-2 fs-6">
                         Criar nova conta
-                    </Link>
+                    </Link> */}
                     <p
                         className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
                         onClick={() => modalRef.current.showModal({ title: 'Acesse o e-mail cadastrado para recuperar sua senha.' })}

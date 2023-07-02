@@ -20,11 +20,15 @@ function AppRoutes(props) {
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/terms" element={<InfosPage title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />} />
+            <Route
+                path="/terms"
+                element={<InfosPage key="terms" title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />}
+            />
             <Route
                 path="/acceptterms"
                 element={
                     <InfosPage
+                        key="acceptterms"
                         title="Termos de uso"
                         showSidebar={false}
                         showAccept={true}
