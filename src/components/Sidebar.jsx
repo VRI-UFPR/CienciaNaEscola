@@ -113,17 +113,6 @@ function Sidebar(props) {
                     </Link>
                 </div>
             </div>
-            <button
-                type="button"
-                className="p-0 b-0"
-                data-bs-dismiss="offcanvas"
-                style={{
-                    width: '0px',
-                    height: '0px',
-                }}
-            >
-                <img src={Arrow} alt="" className="left-arrow" />
-            </button>
             <style>{styles}</style>
         </div>
     );
