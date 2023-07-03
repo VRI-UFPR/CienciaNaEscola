@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ChangePassword from '../components/ChangePassword';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
+import BlankProfilePic from '../assets/images/blankProfile.jpg';
 
 const profilePageStyles = `
     .font-barlow {
@@ -73,11 +74,17 @@ function ProfilePage(props) {
                             <h2 className="fw-medium fs-5 m-0">Edite e adicione informações sobre você</h2>
                         </div>
                         <div className="row bg-pastel-blue align-items-center rounded p-4 p-lg-5 m-0">
-                            <div className="col-12 col-lg-2 d-flex flex-column align-items-center p-0 pb-4 pb-lg-0">
-                                <div className="profile-figure ratio ratio-1x1 rounded-circle bg-white shadow-sm w-75"></div>
-                                <a className="link-body-emphasis underline-light text-center fs-5 fw-light lh-1 p-3 pb-0" href="/profile">
+                            <div className="col-12 col-lg-3 col-xl-2 d-flex flex-column align-items-center p-0 pb-4 pb-lg-0">
+                                <div className="profile-figure ratio ratio-1x1 rounded-circle position-relative shadow-sm w-75">
+                                    <img src={BlankProfilePic} className="h-100 w-100 rounded-circle" alt="Foto de perfil" />
+                                </div>
+                                <button
+                                    type="button"
+                                    className="btn btn-link link-dark fs-5"
+                                    onClick={() => modalRef.current.showModal({ title: 'Esta função estará disponível em breve.' })}
+                                >
                                     Editar foto de perfil
-                                </a>
+                                </button>
                             </div>
                             <div className="col d-flex flex-column justify-content-center">
                                 {/* <div className="row align-items-center pb-2 pb-lg-4 m-0">
@@ -94,7 +101,10 @@ function ProfilePage(props) {
                                     ></input>
                                 </div> */}
                                 <div className="row align-items-center m-0">
-                                    <label htmlFor="email-input" className="col-12 col-lg-1 form-label profile-label fs-5 pe-lg-5 mb-0">
+                                    <label
+                                        htmlFor="email-input"
+                                        className="col-12 col-lg-1 form-label profile-label fs-5 pb-2 pb-lg-0 pe-lg-5 mb-0"
+                                    >
                                         Email:
                                     </label>
                                     <input
@@ -115,8 +125,7 @@ function ProfilePage(props) {
                                 data-bs-toggle="modal"
                                 data-bs-target="#ChangePassword"
                             >
-                                {' '}
-                                Deseja alterar sua senha?{' '}
+                                Deseja alterar sua senha?
                             </button>
                             <div className="modal fade" id="ChangePassword" tabIndex="-1" aria-hidden="true">
                                 <div className="modal-dialog modal-dialog-centered">
