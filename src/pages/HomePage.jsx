@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import HomeArrows from '../components/HomeArrows';
@@ -7,6 +7,8 @@ import RoundedButton from '../components/RoundedButton';
 import HomeButton from '../components/HomeButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
+import Sidebar from '../components/Sidebar';
+import Alert from '../components/Alert';
 
 const styles = `
     .protocol-info {
@@ -38,6 +40,7 @@ function HomePage(props) {
     const [userProtocols, setUserForms] = useState([]);
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const modalRef = useRef(null);
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
@@ -85,6 +88,10 @@ function HomePage(props) {
             </div>
             <div className="d-flex button-container flex-grow-1 align-items-end justify-content-end">
                 <RoundedButton role="link" onClick={() => navigate('/help')} />
+            </div>
+            <Alert id="HomePageAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} />
             </div>
             <style dangerouslySetInnerHTML={{ __html: styles }} />
         </div>

@@ -10,7 +10,8 @@ import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
-import { Alert } from 'bootstrap';
+import Sidebar from '../components/Sidebar';
+import Alert from '../components/Alert';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -156,10 +157,11 @@ function CreateProtocolPage(props) {
             <div className="container-fluid d-flex flex-column flex-grow-1 font-barlow p-4 p-lg-5">
                 <div className="row m-0">
                     <div className="col-lg-5 col-md-5">
-                        <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0 titulo-form">Gerador de formulários</h1>
+                        <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0 titulo-form">
+                            Gerador de formulários
+                        </h1>
                     </div>
-                    <div className="col-lg-3 col-md-1">
-                    </div>
+                    <div className="col-lg-3 col-md-1"></div>
                     <div className="col-lg-2 col-md-3 botao-form">
                         <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
                     </div>
@@ -167,7 +169,7 @@ function CreateProtocolPage(props) {
                         <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
                     </div>
                 </div>
-                
+
                 <div className="row flex-grow-1 m-0">
                     <div className="col-12 col-lg-auto p-0 pb-4">
                         <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-4 p-4">
@@ -245,6 +247,9 @@ function CreateProtocolPage(props) {
                 </div>
             </div>
             <Alert id="CreateProtocolAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} />
+            </div>
             <style>{CreateProtocolStyles}</style>
         </div>
     );
