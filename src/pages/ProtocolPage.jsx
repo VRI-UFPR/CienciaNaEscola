@@ -94,7 +94,7 @@ function ProtocolPage(props) {
                     })
                 );
             } else {
-                uploadedFiles[prop][0] = answers[prop][0];
+                uploadedFiles[prop] = answers[prop];
             }
         }
 
