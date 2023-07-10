@@ -118,7 +118,7 @@ function ProtocolPage(props) {
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://run.mocky.io/v3/${id === '90' ? '9f88aaf3-440c-4fc6-a0a2-af24668f6c8e' : 'bfb41b55-54e3-4096-a925-8002b55dbdea'}`)
+            .get(`https://run.mocky.io/v3/${id === '90' ? '9f88aaf3-440c-4fc6-a0a2-af24668f6c8e' : '54e9cb63-0bf1-4750-a5be-2fdd3790d93c'}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
@@ -132,7 +132,7 @@ function ProtocolPage(props) {
         if (!isLoading) {
             if (protocol.owner !== undefined && protocol.owner !== user.id) {
                 modalRef.current.showModal({
-                    title: 'Você não tem permissão para acessar este formulário.',
+                    title: 'Você não tem permissão para acessar este protocolo.',
                     onHide: () => {
                         navigate('/home');
                     },
