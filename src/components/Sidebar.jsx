@@ -64,8 +64,8 @@ function Sidebar(props) {
                         <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
                     </button>
                 </div>
-                <div className="container d-flex flex-column align-items-center pt-3 pb-4">
-                    <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                <div className="container d-flex flex-column align-items-center p-5 pt-3 pb-4">
+                    <img className="profile-image rounded-circle mx-4" src={PerfilImg} alt="Perfil" />
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
@@ -100,7 +100,7 @@ function Sidebar(props) {
                         Logout
                     </button>
                 </div>
-                <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4 pe-5">
+                {/* <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4 pe-5">
                     <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
                     <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
                     <Link
@@ -111,7 +111,7 @@ function Sidebar(props) {
                     >
                         www.denuncias.com
                     </Link>
-                </div>
+                </div> */}
             </div>
             <style>{styles}</style>
         </div>
