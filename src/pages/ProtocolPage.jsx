@@ -118,7 +118,7 @@ function ProtocolPage(props) {
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
         axios
-            .get(`https://run.mocky.io/v3/${id === '90' ? '9f88aaf3-440c-4fc6-a0a2-af24668f6c8e' : '54e9cb63-0bf1-4750-a5be-2fdd3790d93c'}`)
+            .get(`https://run.mocky.io/v3/${id === '96' ? '87b5ea73-fa48-4e89-829d-6e0fa1ed32de' : '4441b136-5756-477d-9ec9-dd4f4f2d554f'}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
