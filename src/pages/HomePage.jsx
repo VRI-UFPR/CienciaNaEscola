@@ -91,17 +91,17 @@ function HomePage(props) {
                                 <TextButton
                                     text={userProtocol.title}
                                     hsl={[0, 1, 100]}
-                                    className="font-barlow d-flex d-lg-none rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
+                                    className="font-barlow d-flex rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
                                     overWriteStyles={true}
                                     onClick={() => navigate(`/protocol/${userProtocol.id}`)}
                                 ></TextButton>
-                                <TextButton
+                                {/* <TextButton
                                     text={userProtocol.title}
                                     hsl={[0, 1, 100]}
                                     className="font-barlow d-none d-lg-flex rounded-3 shadow text-dark text-start fs-5 fw-medium px-4 py-3 w-100"
                                     overWriteStyles={true}
                                     onClick={() => navigate(`/editprotocol/${userProtocol.id}`)}
-                                ></TextButton>
+                                ></TextButton> */}
                             </li>
                         ))}
                     </ul>
@@ -110,7 +110,7 @@ function HomePage(props) {
             </div>
             <div className="row justify-content-between mx-0 p-4">
                 <div className="col-2"></div>
-                <div className="col-8 col-lg-4 align-items-center p-0">
+                {/* <div className="col-8 col-lg-4 align-items-center p-0">
                     <TextButton
                         role="link"
                         className="d-none d-lg-flex"
@@ -118,7 +118,7 @@ function HomePage(props) {
                         hsl={[97, 43, 70]}
                         text="Criar novo protocolo"
                     />
-                </div>
+                </div> */}
                 <div className="col-2 d-flex align-items-end justify-content-end p-0">
                     <RoundedButton role="link" onClick={() => navigate('/help')} />
                 </div>
