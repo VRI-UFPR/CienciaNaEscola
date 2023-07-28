@@ -25,9 +25,13 @@ const styles = `
         border-color: #4E9BB9 !important;
     }
 
+    .form-check-input {
+        background-color: #D9D9D9;
+    }
+
     `;
 
-function InputOptions(props) {
+function CreateSingleSelectionInput(props) {
     const { index, inputState, onTextBoxChange, onTextBoxRemove } = props;
 
     const handleTextBoxChange = (event, field) => {
@@ -49,15 +53,21 @@ function InputOptions(props) {
     // const onSubmit = (data) => console.log(data);
 
     return (
-        <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between m-0">
+        <div className="px-0 pb-4 pb-lg-5">
+            <div className="row justify-content-between pb-2 m-0">
                 <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 pb-4 m-0">Seleção Única</h1>
+                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Seleção Única</h1>
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
                     <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onTextBoxRemove} />
                 </div>
+            </div>
+            <div className="row form-check form-switch pb-3 m-0 ms-2">
+                <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                <label className="form-check-label font-barlow fw-medium fs-5 p-0" for="flexSwitchCheckDefault">
+                    Obrigatório
+                </label>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
@@ -105,13 +115,15 @@ function InputOptions(props) {
                     O campo precisa ter pelo menos duas opções!
                 </div>
             </div>
-            <div class="form-check form-switch d-flex justify-content-end p-1">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                <label class="form-check-label font-barlow fw-medium ps-1" for="flexSwitchCheckDefault">
-                    Obrigatório
-                </label>
-            </div>
-            {/* <div className="quest p-5">
+            <style>{styles}</style>
+        </div>
+    );
+}
+
+export default CreateSingleSelectionInput;
+
+{
+    /* <div className="quest p-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form">
                         <label>Pergunta</label>
@@ -123,10 +135,5 @@ function InputOptions(props) {
                         <input type="submit" />
                     </div>
                 </form>
-            </div> */}
-            <style>{styles}</style>
-        </div>
-    );
+            </div> */
 }
-
-export default InputOptions;
