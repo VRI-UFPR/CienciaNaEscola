@@ -4,6 +4,7 @@ import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
 import CreateTextBoxInput from '../components/CreateTextBoxInput';
+import CreateSingleSelectionInput from '../components/CreateSingleSelectionInput';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -132,6 +133,9 @@ function CreateProtocolPage(props) {
                                     onTextBoxRemove={() => handleTextBoxRemove(index)}
                                 />
                             ))}
+                            <div className="row justify-content-center m-0">
+                                <CreateSingleSelectionInput />
+                            </div>
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>
                                 <div className="col-8 col-lg-4">
