@@ -1,12 +1,13 @@
-import React from 'react';
+import { React, useRef } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import iconToggler from '../assets/images/navToggler.svg';
 import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
+import Alert from './Alert';
 
 const styles = `
     .ce-navbar {
-        background-color: rgba(78, 155, 185, 0.81);
+        background-color: #78acc4;
     }
 
     .bg-coral-red {
@@ -22,12 +23,14 @@ const styles = `
     }
 
     .offcanvas-ce{
-        max-width: 400px;
+        max-width: 50%;
     }
 `;
 
 function NavBar(props) {
-    const { showNavToggler } = props;
+    const { showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const modalRef = useRef(null);
+
     return (
         <div>
             <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
@@ -35,7 +38,9 @@ function NavBar(props) {
                 <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
                     <div className="col-2 d-flex justify-content-start p-0">
                         <button
-                            className={`navbar-toggler icon-toggler btn h-auto shadow-none p-1 ${showNavToggler ? '' : 'd-none'}`}
+                            className={`navbar-toggler icon-toggler btn border-0 h-auto shadow-none p-1 ${
+                                showNavTogglerMobile ? 'd-flex' : 'd-none'
+                            } ${showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'}`}
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#sidebar"
@@ -51,16 +56,18 @@ function NavBar(props) {
                 </div>
             </nav>
 
-            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-50" tabIndex="-1" id="sidebar">
-                <Sidebar />
+            <div className="offcanvas offcanvas-start offcanvas-ce bg-coral-red w-auto" tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} />
             </div>
+            <Alert id="NavbarModal" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );
 }
 
 NavBar.defaultProps = {
-    showNavToggler: true,
+    showNavTogglerDesktop: true,
+    showNavTogglerMobile: true,
 };
 
 export default NavBar;

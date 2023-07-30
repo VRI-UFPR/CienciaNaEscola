@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../components/Navbar';
-// import HelpButton from '../components/HelpButton';
-
+import RoundedButton from '../components/RoundedButton';
+import { useNavigate } from 'react-router-dom';
 const styles = `
 
     .bg-grey {
@@ -52,6 +52,7 @@ const styles = `
 `;
 
 function LogoutPage(props) {
+    const navigate = useNavigate();
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <NavBar />
@@ -65,7 +66,7 @@ function LogoutPage(props) {
                 </div>
             </div>
             <div className="d-flex justify-content-end pe-4 pb-4">
-                {/* <HelpButton /> */}
+                <RoundedButton role="link" onClick={() => navigate('/help')} />
             </div>
             <style>{styles}</style>
         </div>
@@ -73,3 +74,4 @@ function LogoutPage(props) {
 }
 
 export default LogoutPage;
+

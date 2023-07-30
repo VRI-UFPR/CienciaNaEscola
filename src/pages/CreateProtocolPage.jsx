@@ -1,10 +1,17 @@
-import { React, useState } from 'react';
+import { React, useState, useContext, useEffect, useRef } from 'react';
+import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
-import CreateTextBoxInput from '../components/CreateTextBoxInput';
 import CreateSingleSelectionInput from '../components/CreateSingleSelectionInput';
+import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import SplashPage from './SplashPage';
+import { useParams } from 'react-router-dom';
+import { defaultInputs } from '../utils/constants';
+import { Alert } from 'bootstrap';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -35,26 +42,97 @@ const CreateProtocolStyles = `
         min-width: 15px;
         width: 20px;
     }
+
+    @media (max-width: 767px) {
+        .botao-form {
+            margin-bottom: 10px;
+        }
+
+        .titulo-form {
+            text-align: center;
+        }
 `;
 
 function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+  
     let item;
+  
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const { user } = useContext(AuthContext);
+    const { edit } = props;
+    const { id } = useParams();
+    const modalRef = useRef(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const protocol = { title, description, inputs };
-        console.log(JSON.stringify(protocol));
+
+        const placedInputs = defaultInputs.concat(...inputs);
+        placedInputs.forEach((input, index) => {
+            input['placement'] = index + 1;
+        });
+
+        const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
+        if (edit) {
+            axios
+                .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            axios
+                .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([...inputs, { id: 1, question: '', description: '' }]);
+        setInputs([
+            ...inputs,
+            {
+                description: '',
+                question: '',
+                type: 0,
+                validation: [],
+                sugestions: [],
+                subForm: null,
+                id: 1,
+            },
+        ]);
     };
 
     const handleSingleInputAdd = () => {
-        setInputs([...inputs, { id: 3, question: '', description: '' }]);
+        setInputs([
+            ...inputs,
+            {
+                description: '',
+                question: '',
+                type: 0,
+                validation: [],
+                sugestions: [],
+                subForm: null,
+                id: 3,
+            },
+        ]);
     };
 
     const handleTextBoxRemove = (indexToRemove) => {
@@ -68,13 +146,47 @@ function CreateProtocolPage(props) {
         setInputs(updateInputs);
     };
 
+    useEffect(() => {
+        if (edit) {
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+                .then((response) => {
+                    delete response.data.inputs.id;
+                    setInputs(response.data.inputs.slice(4));
+                    setTitle(response.data.title);
+                    setDescription(response.data.description);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            setIsLoading(false);
+        }
+    }, [id, edit]);
+
+    if (isLoading) {
+        return <SplashPage />;
+    }
+
     return (
         <div className="d-flex flex-column min-vh-100">
             <NavBar />
             <div className="container-fluid d-flex flex-column flex-grow-1 font-barlow p-4 p-lg-5">
                 <div className="row m-0">
-                    <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0">Gerador de formulários</h1>
+                    <div className="col-lg-5 col-md-5">
+                        <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0 titulo-form">Gerador de formulários</h1>
+                    </div>
+                    <div className="col-lg-3 col-md-1">
+                    </div>
+                    <div className="col-lg-2 col-md-3 botao-form">
+                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
+                    </div>
+                    <div className="col-lg-2 col-md-3 botao-form">
+                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
+                    </div>
                 </div>
+                
                 <div className="row flex-grow-1 m-0">
                     <div className="col-12 col-lg-auto p-0 pb-4">
                         <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-4 p-4">
@@ -168,16 +280,21 @@ function CreateProtocolPage(props) {
                                     <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
                                 </div>
                                 <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                    <RoundedButton />
+                                    <RoundedButton role="link" onClick={() => navigate('/help')} />
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <Alert id="CreateProtocolAlert" ref={modalRef} />
             <style>{CreateProtocolStyles}</style>
         </div>
     );
 }
+
+CreateProtocolPage.defaultProps = {
+    edit: false,
+};
 
 export default CreateProtocolPage;
