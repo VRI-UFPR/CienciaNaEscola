@@ -41,6 +41,7 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+    let item;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -49,7 +50,11 @@ function CreateProtocolPage(props) {
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([...inputs, { question: '', description: '' }]);
+        setInputs([...inputs, { id: 1, question: '', description: '' }]);
+    };
+
+    const handleSingleInputAdd = () => {
+        setInputs([...inputs, { id: 3, question: '', description: '' }]);
     };
 
     const handleTextBoxRemove = (indexToRemove) => {
@@ -86,7 +91,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleSingleInputAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
@@ -124,18 +133,35 @@ function CreateProtocolPage(props) {
                                     onChange={(event) => setDescription(event.target.value)}
                                 ></textarea>
                             </div>
-                            {inputs.map((input, index) => (
-                                <CreateTextBoxInput
-                                    key={index}
-                                    index={index}
-                                    inputState={input}
-                                    onTextBoxChange={handleTextBoxChange}
-                                    onTextBoxRemove={() => handleTextBoxRemove(index)}
-                                />
-                            ))}
-                            <div className="row justify-content-center m-0">
-                                <CreateSingleSelectionInput />
-                            </div>
+                            {inputs.map((input, index) => {
+                                switch (input.id) {
+                                    case 1:
+                                        item = (
+                                            <CreateTextBoxInput
+                                                key={index}
+                                                index={index}
+                                                inputState={input}
+                                                onTextBoxChange={handleTextBoxChange}
+                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                            />
+                                        );
+                                        break;
+                                    case 3:
+                                        item = (
+                                            <CreateSingleSelectionInput
+                                                key={index}
+                                                index={index}
+                                                inputState={input}
+                                                onTextBoxChange={handleTextBoxChange}
+                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                            />
+                                        );
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                return item;
+                            })}
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>
                                 <div className="col-8 col-lg-4">
