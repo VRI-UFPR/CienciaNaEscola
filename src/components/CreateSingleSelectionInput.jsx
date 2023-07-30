@@ -1,6 +1,8 @@
 import React from 'react';
+import { useState } from 'react';
 import iconFile from '../assets/images/iconFile.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
+import iconPlus from '../assets/images/iconPlus.svg';
 
 import RoundedButton from './RoundedButton';
 
@@ -34,23 +36,45 @@ const styles = `
 function CreateSingleSelectionInput(props) {
     const { index, inputState, onTextBoxChange, onTextBoxRemove } = props;
 
+    const [inputEmpty, setInputEmpty] = useState([true, true]);
+    const [inputs, setInputs] = useState([[]]);
+
+    const updateInputEmpty = (i, reason) => {
+        const old = [...inputEmpty];
+        reason === 0 ? (old[i] = true) : (old[i] = false);
+        setInputEmpty(old);
+    };
+
     const handleTextBoxChange = (event, field) => {
         const updatedTextBox = { ...inputState };
         updatedTextBox[field] = event.target.value;
         onTextBoxChange(index, updatedTextBox);
+        if (event.target.id === 'question') {
+            event.target.value === '' ? updateInputEmpty(0, 0) : updateInputEmpty(0, 1);
+        }
     };
 
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     watch,
-    //     formState: { errors },
-    // } = useForm();
+    const handleAdd = () => {
+        const inp = [...inputs, []];
+        const inpEmp = [...inputEmpty, true];
+        setInputs(inp);
+        setInputEmpty(inpEmp);
+    };
 
-    // const [questionInputText, setQuestionInputText] = useState('');
-    // const [descriptionInputText, setDescriptionInputText] = useState('');
+    const handleDeleteInput = (i) => {
+        const deleteInp = [...inputs];
+        deleteInp.splice(i, 1);
+        setInputs(deleteInp);
+    };
 
-    // const onSubmit = (data) => console.log(data);
+    const handleInputChange = (onChangeValue, i) => {
+        const inputData = [...inputs];
+        inputData[i] = onChangeValue.target.value;
+        setInputs(inputData);
+        if (onChangeValue.target.id === String(i)) {
+            onChangeValue.target.value === '' ? updateInputEmpty(i + 1, 0) : updateInputEmpty(i + 1, 1);
+        }
+    };
 
     return (
         <div className="px-0 pb-4 pb-lg-5">
@@ -65,7 +89,7 @@ function CreateSingleSelectionInput(props) {
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
                 <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                <label className="form-check-label font-barlow fw-medium fs-5 p-0" for="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
             </div>
@@ -81,9 +105,11 @@ function CreateSingleSelectionInput(props) {
                         aria-describedby="questionHelp"
                         onChange={(event) => handleTextBoxChange(event, 'question')}
                     />
-                    <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
-                        *Este campo é obrigatório.
-                    </div>
+                    {inputEmpty[0] && (
+                        <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
+                            *Este campo é obrigatório.
+                        </div>
+                    )}
                 </div>
                 <div className="pb-1">
                     <label htmlFor="description" className="form-label fs-5 fw-medium">
@@ -96,23 +122,38 @@ function CreateSingleSelectionInput(props) {
                         onChange={(event) => handleTextBoxChange(event, 'description')}
                     />
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="option0" className="form-label fs-5 fw-medium">
-                        Opção 0
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="option0"
-                        aria-describedby="questionHelp"
-                        onChange={(event) => handleTextBoxChange(event, 'question')}
-                    />
+                {inputs.map((data, i) => {
+                    return (
+                        <div key={data + i} className="mb-3">
+                            <label htmlFor={i} className="form-label fw-medium fs-5">
+                                Opção {i}
+                            </label>
+                            <div className="d-flex">
+                                <input
+                                    type="text"
+                                    value={data}
+                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                    id={i}
+                                    aria-describedby="questionHelp"
+                                    onChange={(event) => handleInputChange(event, i)}
+                                />
+                                <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={() => handleDeleteInput(i)} />
+                            </div>
+                            {inputEmpty[i + 1] && (
+                                <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
+                                    *Por favor, preencha esta opção
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+                {inputs.length < 2 && (
                     <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
-                        *Por favor, preencha esta opção
+                        O campo precisa ter pelo menos duas opções!
                     </div>
-                </div>
-                <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
-                    O campo precisa ter pelo menos duas opções!
+                )}
+                <div className="d-flex justify-content-end p-0">
+                    <RoundedButton hsl={[190, 46, 70]} size={22} icon={iconPlus} onClick={handleAdd} />
                 </div>
             </div>
             <style>{styles}</style>
@@ -121,19 +162,3 @@ function CreateSingleSelectionInput(props) {
 }
 
 export default CreateSingleSelectionInput;
-
-{
-    /* <div className="quest p-5">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form">
-                        <label>Pergunta</label>
-                        <input {...register('question', { required: true })} />
-                        {errors.question && <span className="error">*Este campo é obrigatório</span>}
-
-                        <label>Descrição</label>
-                        <input {...register('description')} />
-                        <input type="submit" />
-                    </div>
-                </form>
-            </div> */
-}
