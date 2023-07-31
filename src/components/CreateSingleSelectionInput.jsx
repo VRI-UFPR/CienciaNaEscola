@@ -124,7 +124,7 @@ function CreateSingleSelectionInput(props) {
                 </div>
                 {inputs.map((data, i) => {
                     return (
-                        <div key={data + i} className="mb-3">
+                        <div key={i + 1} className="mb-3">
                             <label htmlFor={i} className="form-label fw-medium fs-5">
                                 Opção {i}
                             </label>
