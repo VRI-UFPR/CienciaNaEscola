@@ -93,7 +93,7 @@ function HomePage(props) {
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} />
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <style>{styles}</style>
         </div>
     );
 }
