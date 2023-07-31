@@ -1,5 +1,7 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect, useState } from 'react';
 import iconLocation from '../../../assets/images/iconLocation.svg';
+import iconSearch from '../../../assets/images/iconSearch.svg';
+import RoundedButton from '../../RoundedButton';
 
 const styles = `
     .font-barlow {
@@ -34,13 +36,17 @@ const styles = `
     .location-icon {
         max-width: 50px;
     }
+
+    .search-col {
+        min-width: 32px;
+    }
 `;
 
 export function Location(props) {
     const [location, setLocation] = useState(['']);
     const { onAnswerChange, input, answer } = props;
 
-    useEffect(() => {
+    const defaultLocation = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
@@ -48,7 +54,11 @@ export function Location(props) {
                 onAnswerChange(input.id, [latitude + ', ' + longitude]);
             });
         }
-    }, [onAnswerChange, input.id]);
+    }, [input.id, onAnswerChange]);
+
+    useEffect(() => {
+        defaultLocation();
+    }, [defaultLocation]);
 
     useEffect(() => {
         onAnswerChange(input.id, location);
@@ -68,16 +78,27 @@ export function Location(props) {
                             Localização
                         </label>
                     </div>
-                    <div className="row m-0">
-                        <input
-                            type="text"
-                            className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
-                            id="locationinput"
-                            placeholder="Forneça sua localização"
-                            onChange={(e) => setLocation([e.target.value])}
-                            value={answer ? answer[0].value : location}
-                            disabled={answer !== undefined}
-                        ></input>
+                    <div className="row m-0 align-items-center">
+                        <div className="col m-0 p-0 pe-2">
+                            <input
+                                type="text"
+                                className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
+                                id="locationinput"
+                                placeholder="Forneça sua localização"
+                                onChange={(e) => setLocation([e.target.value])}
+                                value={answer ? answer[0].value : location}
+                                disabled={answer !== undefined}
+                            ></input>
+                        </div>
+                        <div className="col-auto search-col d-flex justify-content-end m-0 p-0">
+                            <RoundedButton
+                                hsl={[190, 46, 70]}
+                                onClick={() => {
+                                    defaultLocation();
+                                }}
+                                icon={iconSearch}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
