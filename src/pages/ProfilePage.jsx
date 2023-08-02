@@ -52,7 +52,6 @@ function ProfilePage(props) {
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
-
     useEffect(() => {
         setEmail(user.email);
     }, [user]);
