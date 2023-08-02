@@ -35,8 +35,14 @@ function InfosPage(props) {
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
-                    <Sidebar modalRef={modalRef} />
+                <div className={`col-auto bg-coral-red p-0 ${showSidebar ? '' : 'd-lg-none'}`}>
+                    <div
+                        className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
+                        tabIndex="-1"
+                        id="sidebar"
+                    >
+                        <Sidebar modalRef={modalRef} />
+                    </div>
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
