@@ -1,6 +1,6 @@
 import React from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
-import PerfilImg from '../assets/images/PerfilImg.png';
+import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 
@@ -69,7 +69,9 @@ function Sidebar(props) {
                     </button>
                 </div>
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4">
-                    <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                    <Link className="rounded-circle" to="/profile">
+                        <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                    </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
