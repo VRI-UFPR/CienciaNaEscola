@@ -49,8 +49,14 @@ function HelpPage(props) {
     return (
         <div className="d-flex flex-column vh-100">
             <div className="row flex-grow-1 m-0">
-                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
-                    <Sidebar modalRef={modalRef} />
+                <div className={`col-auto bg-coral-red ${showSidebar ? '' : 'd-lg-none'} p-0`}>
+                    <div
+                        className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
+                        tabIndex="-1"
+                        id="sidebar"
+                    >
+                        <Sidebar modalRef={modalRef} />
+                    </div>
                 </div>
                 <div className="col p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
