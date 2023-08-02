@@ -52,6 +52,7 @@ function ProfilePage(props) {
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
+
     useEffect(() => {
         setEmail(user.email);
     }, [user]);
@@ -63,8 +64,10 @@ function ProfilePage(props) {
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
-                <div className={`col-auto d-none ${showSidebar ? 'd-lg-flex' : ''} bg-coral-red p-0`}>
-                    <Sidebar modalRef={modalRef} />
+                <div className={`col-auto bg-coral-red ${showSidebar ? '' : 'd-lg-none'} p-0`}>
+                    <div className={`offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                        <Sidebar modalRef={modalRef} />
+                    </div>
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={!showSidebar} />
