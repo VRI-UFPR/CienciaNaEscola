@@ -57,7 +57,7 @@ function TimeInput(props) {
                 </div>
                 <div className="col p-3">
                     <div className="row m-0 pb-1">
-                        <label labelfor="timeinput" className="form-label color-dark-gray font-century-gothic fw-bold fs-7 m-0 p-0">
+                        <label htmlFor="timeinput" className="form-label color-dark-gray font-century-gothic fw-bold fs-7 m-0 p-0">
                             Horário da coleta
                         </label>
                     </div>
