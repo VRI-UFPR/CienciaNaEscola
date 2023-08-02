@@ -155,7 +155,7 @@ function AnswerPage(props) {
                                                 return (
                                                     <div key={'Answer ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
                                                         <p className="fw-medium fs-6 m-0">
-                                                            Pessoa {answerIndex} -{' '}
+                                                            Pessoa {selectedPerson || answerIndex} -{' '}
                                                             <span className="color-dark-gray">
                                                                 {formatAnswer(input, answer.inputAnswers[input.id])}
                                                             </span>
