@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import iconFile from '../../../assets/images/iconFile.svg';
+import { React, useEffect, useState } from 'react';
 
 const styles = `
     .color-dark-gray {
@@ -32,6 +33,8 @@ const styles = `
 
     .button-label {
         margin-left: 10px;
+    #submitbutton {
+        
     }
 `;
 
@@ -39,6 +42,8 @@ function ImageInput(props) {
     const [image, setImage] = useState(null);
     const { onAnswerChange, input, answer } = props;
     const fileInputRef = useRef(null);
+    const [image, setImage] = useState(['']);
+    const { onAnswerChange, input, answer } = props;
 
     useEffect(() => {
         onAnswerChange(input.id, image);
@@ -67,6 +72,9 @@ function ImageInput(props) {
                             {image ? image.name : 'Selecionar Imagem'}
                         </div>
                     </div>
+                    <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
+                        {input.question}
+                    </label>
                     <input
                         type="file"
                         accept="image/*"
@@ -77,6 +85,10 @@ function ImageInput(props) {
                         onChange={handleFileInputChange}
                         disabled={answer !== undefined}
                         ref={fileInputRef}
+                        placeholder="Adicione uma imagem"
+                        className="form-control rounded-0 shadow-none font-barlow fw-medium p-0"
+                        onChange={(e) => setImage([e.target.files[0]])}
+                        disabled={answer !== undefined}
                     />
                 </div>
             </form>
@@ -85,4 +97,5 @@ function ImageInput(props) {
     );
 }
 
+export default ImageInput;
 export default ImageInput;
