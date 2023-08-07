@@ -112,9 +112,7 @@ function CreateProtocolPage(props) {
     };
 
     const handleInputChange = (indexToUpdate, updatedInput) => {
-        const updatedInputs = [...inputs];
-        updatedInputs[indexToUpdate] = updatedInput;
-        setInputs(updatedInputs);
+        setInputs(inputs.map((input, index) => (index === indexToUpdate ? updatedInput : input)));
     };
 
     useEffect(() => {
@@ -216,9 +214,8 @@ function CreateProtocolPage(props) {
                             {inputs.map((input, index) => (
                                 <CreateTextBoxInput
                                     key={index}
-                                    index={index}
                                     input={input}
-                                    onInputChange={handleInputChange}
+                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
                                     onInputRemove={() => handleInputRemove(index)}
                                 />
                             ))}
