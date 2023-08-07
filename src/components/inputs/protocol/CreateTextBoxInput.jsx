@@ -22,12 +22,10 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { index, input, onInputChange, onInputRemove } = props;
+    const { input, onInputChange, onInputRemove } = props;
 
-    const handleTextBoxChange = (event, field) => {
-        const updatedTextBox = { ...input };
-        updatedTextBox[field] = event.target.value;
-        onInputChange(index, updatedTextBox);
+    const handleFieldChange = (fieldToUpdate, updatedField) => {
+        onInputChange({ ...input, [fieldToUpdate]: updatedField });
     };
 
     return (
@@ -51,8 +49,7 @@ function CreateTextBoxInput(props) {
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
                         aria-describedby="questionHelp"
-                        value={input.question}
-                        onChange={(event) => handleTextBoxChange(event, 'question')}
+                        onChange={(event) => handleFieldChange('question', event.target.value)}
                     />
                     {!input.question && (
                         <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
@@ -68,8 +65,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
-                        value={input.description}
-                        onChange={(event) => handleTextBoxChange(event, 'description')}
+                        onChange={(event) => handleFieldChange('description', event.target.value)}
                     />
                 </div>
             </div>
