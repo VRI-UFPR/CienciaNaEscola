@@ -27,3 +27,13 @@ export const defaultInputs = [
         id: null,
     },
 ];
+
+export const defaultTextBox = {
+    description: '',
+    question: '',
+    type: 0,
+    validation: [],
+    sugestions: [],
+    subForm: null,
+    id: null,
+};

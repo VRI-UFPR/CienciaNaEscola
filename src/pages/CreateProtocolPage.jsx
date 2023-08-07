@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
+import { defaultTextBox } from '../utils/constants';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -103,18 +104,7 @@ function CreateProtocolPage(props) {
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([
-            ...inputs,
-            {
-                description: '',
-                question: '',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ]);
+        setInputs([...inputs, defaultTextBox]);
     };
 
     const handleInputRemove = (indexToRemove) => {
