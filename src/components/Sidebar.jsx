@@ -1,7 +1,8 @@
 import React from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
-import PerfilImg from '../assets/images/PerfilImg.png';
+import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
+import { Offcanvas } from 'bootstrap';
 
 const styles = `
     .font-barlow {
@@ -48,32 +49,45 @@ function Sidebar(props) {
     const { modalRef } = props;
     const navigate = useNavigate();
 
+    const closeSidebar = () => {
+        const offcanvas = document.getElementById('sidebar');
+        const bsOffcanvas = Offcanvas.getOrCreateInstance(offcanvas);
+        bsOffcanvas.hide();
+    };
+
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
                 <div className="container d-flex d-lg-none justify-content-end p-0">
-                    <button type="button" className="btn btn-transparent rounded-circle border-0" data-bs-dismiss="offcanvas">
+                    <button
+                        type="button"
+                        className="btn btn-transparent rounded-circle border-0"
+                        data-bs-dismiss="offcanvas"
+                        data-bs-target="#sidebar"
+                    >
                         <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
                     </button>
                 </div>
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4">
-                    <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                    <Link className="rounded-circle" to="/profile">
+                        <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                    </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/home">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/home" onClick={() => closeSidebar()}>
                         Protocolos
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about" onClick={() => closeSidebar()}>
                         Sobre o App
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms" onClick={() => closeSidebar()}>
                         Termos de Uso
                     </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile">
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
                         Perfil
                     </Link>
                     <button
@@ -99,6 +113,7 @@ function Sidebar(props) {
                         href="/"
                         className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
                         to="https://www.denuncias.com"
+                        onClick={() => closeSidebar()}
                     >
                         www.denuncias.com
                     </Link>

@@ -11,6 +11,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
+import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 
 const CreateProtocolStyles = `
@@ -289,6 +290,9 @@ function CreateProtocolPage(props) {
                 </div>
             </div>
             <Alert id="CreateProtocolAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} />
+            </div>
             <style>{CreateProtocolStyles}</style>
         </div>
     );

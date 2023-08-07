@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -6,6 +6,8 @@ import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import RoundedButton from '../components/RoundedButton';
+import Sidebar from '../components/Sidebar';
+import Alert from '../components/Alert';
 
 const styles = `
     .bg-yellow-orange {
@@ -49,6 +51,7 @@ function AnswerPage(props) {
     const { id } = useParams();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const modalRef = useRef(null);
 
     const formatAnswer = (input, inputAnswers) => {
         switch (input.type) {
@@ -152,7 +155,7 @@ function AnswerPage(props) {
                                                 return (
                                                     <div key={'Answer ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
                                                         <p className="fw-medium fs-6 m-0">
-                                                            Pessoa {answerIndex} -{' '}
+                                                            Pessoa {selectedPerson || answerIndex} -{' '}
                                                             <span className="color-dark-gray">
                                                                 {formatAnswer(input, answer.inputAnswers[input.id])}
                                                             </span>
@@ -169,6 +172,10 @@ function AnswerPage(props) {
                         <RoundedButton role="link" onClick={() => navigate('/help')} />
                     </div>
                 </div>
+            </div>
+            <Alert id="AnswerPageAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} />
             </div>
             <style>{styles}</style>
         </div>

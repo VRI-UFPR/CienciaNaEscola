@@ -29,30 +29,36 @@ const infosPageStyles = `
 `;
 
 function InfosPage(props) {
-    const {showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className={`col-auto bg-coral-red d-none p-0 ${showSidebar ? 'd-lg-flex' : ''}`}>
-                    <Sidebar modalRef={modalRef} />
+                <div className={`col-auto bg-coral-red p-0 ${showSidebar ? '' : 'd-lg-none'}`}>
+                    <div
+                        className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
+                        tabIndex="-1"
+                        id="sidebar"
+                    >
+                        <Sidebar modalRef={modalRef} />
+                    </div>
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{"Equipe"}</h1>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Clara Drimel"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Daniel Lins"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduarda de Aguiar Freitas"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eduardo Mathias de Souza"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Eloisa Nielsen"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Izalorran Bonaldi"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"João Armênio"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Juliana Zambon"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Matheus Piovesan"}</h2>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{"Yuri Tobias"}</h2>
+                            <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{'Equipe'}</h1>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Clara Drimel'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Daniel Lins'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Eduarda de Aguiar Freitas'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Eduardo Mathias de Souza'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Eloisa Nielsen'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Izalorran Bonaldi'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'João Armênio'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Juliana Zambon'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Matheus Piovesan'}</h2>
+                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{'Yuri Tobias'}</h2>
                         </div>
                         <div className="row justify-content-between mx-0">
                             <div className="col-2"></div>
