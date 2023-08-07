@@ -126,11 +126,11 @@ function CreateProtocolPage(props) {
             {
                 description: '',
                 question: '',
-                type: 0,
+                type: 2,
                 validation: [],
                 sugestions: [],
                 subForm: null,
-                id: 3,
+                id: null,
             },
         ]);
     };
@@ -247,8 +247,8 @@ function CreateProtocolPage(props) {
                                 ></textarea>
                             </div>
                             {inputs.map((input, index) => {
-                                switch (input.id) {
-                                    case 1:
+                                switch (input.type) {
+                                    case 0:
                                         item = (
                                             <CreateTextBoxInput
                                                 key={index}
@@ -259,7 +259,7 @@ function CreateProtocolPage(props) {
                                             />
                                         );
                                         break;
-                                    case 3:
+                                    case 2:
                                         item = (
                                             <CreateSingleSelectionInput
                                                 key={index}

@@ -111,7 +111,7 @@ function CreateSingleSelectionInput(props) {
                         </div>
                     )}
                 </div>
-                <div className="pb-1">
+                <div className="mb-3">
                     <label htmlFor="description" className="form-label fs-5 fw-medium">
                         Descrição
                     </label>
