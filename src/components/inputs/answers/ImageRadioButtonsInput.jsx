@@ -58,12 +58,12 @@ function ImageRadioButtonsInput(props) {
                 {input.sugestions.map((option, index) => {
                     const optname = option.value.toLowerCase().replace(/\s/g, '');
                     return (
-                        <div key={optname + 'input'} className="form-check col-12 col-lg-6 m-0 pb-2 pe-2">
+                        <div key={optname + 'input' + input.id} className="form-check col-12 col-lg-6 m-0 pb-2 pe-2">
                             <input
                                 className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
                                 type="radio"
                                 name={'imageradiooptions' + input.id}
-                                id={optname + 'input'}
+                                id={optname + 'input' + input.id}
                                 onChange={() => handleOptionsUpdate(index)}
                                 checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
                                 disabled={answer !== undefined}
@@ -72,7 +72,7 @@ function ImageRadioButtonsInput(props) {
                                 className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
                                     answer && answer[index].value === 'true' ? 'opacity-100' : ''
                                 }`}
-                                htmlFor={optname + 'input'}
+                                htmlFor={optname + 'input' + input.id}
                             >
                                 {option.value}
                             </label>
