@@ -59,18 +59,21 @@ function CreateSingleSelectionInput(props) {
         const inpEmp = [...inputEmpty, true];
         setInputs(inp);
         setInputEmpty(inpEmp);
+        onTextBoxChange(index, {...inputState, options: inp});
     };
 
     const handleDeleteInput = (i) => {
         const deleteInp = [...inputs];
         deleteInp.splice(i, 1);
         setInputs(deleteInp);
+        onTextBoxChange(index, {...inputState, options: deleteInp});
     };
 
     const handleInputChange = (onChangeValue, i) => {
         const inputData = [...inputs];
         inputData[i] = onChangeValue.target.value;
         setInputs(inputData);
+        onTextBoxChange(index, {...inputState, options: inputData});
         if (onChangeValue.target.id === String(i)) {
             onChangeValue.target.value === '' ? updateInputEmpty(i + 1, 0) : updateInputEmpty(i + 1, 1);
         }
