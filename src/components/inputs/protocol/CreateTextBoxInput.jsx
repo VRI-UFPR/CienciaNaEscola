@@ -22,12 +22,12 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { index, inputState, onTextBoxChange, onTextBoxRemove } = props;
+    const { index, input, onInputChange, onInputRemove } = props;
 
     const handleTextBoxChange = (event, field) => {
-        const updatedTextBox = { ...inputState };
+        const updatedTextBox = { ...input };
         updatedTextBox[field] = event.target.value;
-        onTextBoxChange(index, updatedTextBox);
+        onInputChange(index, updatedTextBox);
     };
 
     return (
@@ -38,7 +38,7 @@ function CreateTextBoxInput(props) {
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onTextBoxRemove} />
+                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
@@ -51,12 +51,14 @@ function CreateTextBoxInput(props) {
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
                         aria-describedby="questionHelp"
-                        value={inputState.question}
+                        value={input.question}
                         onChange={(event) => handleTextBoxChange(event, 'question')}
                     />
-                    <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
-                        *Este campo é obrigatório.
-                    </div>
+                    {!input.question && (
+                        <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
+                            *Este campo é obrigatório.
+                        </div>
+                    )}
                 </div>
                 <div>
                     <label htmlFor="description" className="form-label fs-5 fw-medium">
@@ -66,7 +68,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
-                        value={inputState.description}
+                        value={input.description}
                         onChange={(event) => handleTextBoxChange(event, 'description')}
                     />
                 </div>

@@ -117,15 +117,14 @@ function CreateProtocolPage(props) {
         ]);
     };
 
-    const handleTextBoxRemove = (indexToRemove) => {
-        const updatedInputs = inputs.filter((_, index) => index !== indexToRemove);
-        setInputs(updatedInputs);
+    const handleInputRemove = (indexToRemove) => {
+        setInputs(inputs.filter((_, index) => index !== indexToRemove));
     };
 
-    const handleTextBoxChange = (index, input) => {
-        const updateInputs = [...inputs];
-        updateInputs[index] = input;
-        setInputs(updateInputs);
+    const handleInputChange = (indexToUpdate, updatedInput) => {
+        const updatedInputs = [...inputs];
+        updatedInputs[indexToUpdate] = updatedInput;
+        setInputs(updatedInputs);
     };
 
     useEffect(() => {
@@ -228,9 +227,9 @@ function CreateProtocolPage(props) {
                                 <CreateTextBoxInput
                                     key={index}
                                     index={index}
-                                    inputState={input}
-                                    onTextBoxChange={handleTextBoxChange}
-                                    onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                    input={input}
+                                    onInputChange={handleInputChange}
+                                    onInputRemove={() => handleInputRemove(index)}
                                 />
                             ))}
                             <div className="row justify-content-between m-0">
