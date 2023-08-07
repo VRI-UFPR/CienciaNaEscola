@@ -11,7 +11,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
-import { Alert } from 'bootstrap';
+import Alert from '../components/Alert';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -288,7 +288,7 @@ function CreateProtocolPage(props) {
                     </div>
                 </div>
             </div>
-            {/* <Alert id="CreateProtocolAlert" ref={modalRef} /> */}
+            <Alert id="CreateProtocolAlert" ref={modalRef} />
             <style>{CreateProtocolStyles}</style>
         </div>
     );
