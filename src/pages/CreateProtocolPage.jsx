@@ -116,7 +116,7 @@ function CreateProtocolPage(props) {
                 validation: [],
                 sugestions: [],
                 subForm: null,
-                id: 1,
+                id: null,
             },
         ]);
     };
