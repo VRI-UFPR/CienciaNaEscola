@@ -56,7 +56,7 @@ function ImageInput(props) {
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
-                    <label htmlFor="simpletext" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
+                    <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
                         {input.question}
                     </label>
                     <div className="d-flex align-items-center p-0">
