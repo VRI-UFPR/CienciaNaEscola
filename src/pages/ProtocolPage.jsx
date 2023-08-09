@@ -18,6 +18,8 @@ import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButto
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 
+import SelectInput from '../components/inputs/answers/SelectInput';
+
 const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
@@ -157,6 +159,9 @@ function ProtocolPage(props) {
                             return <></>;
                     }
                 })}
+                <div>
+                    <SelectInput input={protocol.inputs[0]} />
+                </div>
                 <div className="col-4 align-self-center pt-4">
                     <TextButton type="submit" hsl={[97, 43, 70]} text="Enviar" onClick={handleProtocolSubmit} />
                 </div>
@@ -165,6 +170,7 @@ function ProtocolPage(props) {
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} />
             </div>
+
             <style>{styles}</style>
         </div>
     );
