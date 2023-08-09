@@ -59,7 +59,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+                modalRef.current.showModal({ title: 'Muito obrigado por sua participação no projeto!' });
             })
             .catch((error) => {
                 console.error(error.message);
