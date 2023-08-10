@@ -17,7 +17,7 @@ import TextButton from '../components/TextButton';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
-import InfoGerais from '../components/inputs/answers/InfoGerais';
+import ProtocolInfo from '../components/ProtocolInfo';
 
 const styles = `
     .bg-yellow-orange {
@@ -99,7 +99,7 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">{<InfoGerais info={protocol.description} />}</div>
+                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
