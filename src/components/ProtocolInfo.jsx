@@ -1,6 +1,6 @@
 import { React } from 'react';
 
-const styles = `
+const protocolInfoStyles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
@@ -18,7 +18,7 @@ const styles = `
     }
 `;
 
-function InfoGerais(props) {
+function ProtocolInfo(props) {
     const { info } = props;
 
     return (
@@ -29,9 +29,9 @@ function InfoGerais(props) {
                 <p className="color-gray font-barlow text-break fw-medium fs-6 m-0 p-0">{info}</p>
             </div>
 
-            <style>{styles}</style>
+            <style>{protocolInfoStyles}</style>
         </div>
     );
 }
 
-export default InfoGerais;
+export default ProtocolInfo;
