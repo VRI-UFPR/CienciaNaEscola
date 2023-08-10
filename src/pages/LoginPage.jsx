@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
+import logoFA from '../assets/images/logoFA.png';
+import logoUFPR from '../assets/images/logoUFPR.png';
 
 const styles = `
 
@@ -34,6 +36,12 @@ const styles = `
 
     .login-forgot-pw:hover{
         cursor: pointer;
+    }
+
+    .logo-FA{
+        width: 100px;
+        height: 100px;
+
     }
 `;
 
@@ -105,6 +113,9 @@ function LoginPage(props) {
                     <div className="col-12 col-lg-6">
                         <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                     </div>
+                </div>
+                <div className="d-flex logo-FA flex-grow-1 align-items-end justify-content-end">
+                    <img src={logoFA} />
                 </div>
             </form>
 
