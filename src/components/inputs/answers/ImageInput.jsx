@@ -17,6 +17,7 @@ const styles = `
         background-color: #91CAD6;
         border-radius: 50%;
         width: 41px;
+        min-width: 41px;
         height: 41px;
         padding: 8px;
         cursor: pointer;
@@ -32,6 +33,10 @@ const styles = `
 
     .button-label {
         margin-left: 10px;
+    }
+
+    .image-preview{
+        max-height: 200px;
     }
 `;
 
@@ -61,10 +66,20 @@ function ImageInput(props) {
                     </label>
                     <div className="d-flex align-items-center p-0">
                         <button type="button" className="image-input-button" onClick={handleButtonClick}>
-                            <img src={iconFile} alt='Selecionar Arquivo'/>
+                            <img src={iconFile} alt="Selecionar Arquivo" />
                         </button>
-                        <div className="button-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-0">
-                            {image ? image.name : 'Selecionar Imagem'}
+                        <div className="button-label d-flex color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 pb-0">
+                            {image ? (
+                                <div className="d-flex justify-content-center w-100 bg-grey rounded-4 overflow-hidden">
+                                    <img
+                                        className="image-preview img-fluid object-fit-contain"
+                                        src={URL.createObjectURL(image)}
+                                        alt="Imagem selecionada"
+                                    />
+                                </div>
+                            ) : (
+                                <span>Selecionar Imagem</span>
+                            )}
                         </div>
                     </div>
                     <input
