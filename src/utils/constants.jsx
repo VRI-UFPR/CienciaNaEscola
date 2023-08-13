@@ -30,24 +30,15 @@ export const defaultInputs = [
 
 export const teamMembers = (
     <>
-        Clara Drimel
-        <br />
-        Daniel Lins
-        <br />
-        Eduarda de Aguiar Freitas
-        <br />
-        Eduardo Mathias de Souza
-        <br />
-        Eloisa Nielsen
-        <br />
-        Izalorran Bonaldi
-        <br />
-        João Armênio
-        <br />
-        Juliana Zambon
-        <br />
-        Matheus Piovesan
-        <br />
-        Yuri Tobias
+        <p className="mb-4">Clara Drimel</p>
+        <p className="mb-4">Daniel Lins</p>
+        <p className="mb-4">Eduarda de Aguiar Freitas</p>
+        <p className="mb-4">Eduardo Mathias de Souza</p>
+        <p className="mb-4">Eloisa Nielsen</p>
+        <p className="mb-4">Izalorran Bonaldi</p>
+        <p className="mb-4">João Armênio</p>
+        <p className="mb-4">Juliana Zambon</p>
+        <p className="mb-4">Matheus Piovesan</p>
+        <p className="mb-4">Yuri Tobias</p>
     </>
 );
