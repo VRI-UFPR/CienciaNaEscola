@@ -27,3 +27,27 @@ export const defaultInputs = [
         id: null,
     },
 ];
+
+export const teamMembers = (
+    <>
+        Clara Drimel
+        <br />
+        Daniel Lins
+        <br />
+        Eduarda de Aguiar Freitas
+        <br />
+        Eduardo Mathias de Souza
+        <br />
+        Eloisa Nielsen
+        <br />
+        Izalorran Bonaldi
+        <br />
+        João Armênio
+        <br />
+        Juliana Zambon
+        <br />
+        Matheus Piovesan
+        <br />
+        Yuri Tobias
+    </>
+);
