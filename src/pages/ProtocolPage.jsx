@@ -18,8 +18,6 @@ import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButto
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 
-import SelectInput from '../components/inputs/answers/SelectInput';
-
 const styles = `
     .bg-yellow-orange {
         background-color: #FECF86;
@@ -159,20 +157,6 @@ function ProtocolPage(props) {
                             return <></>;
                     }
                 })}
-
-                <div>
-                    <SelectInput
-                    input={{
-                        question:"Qual sua cor favorita?",
-                        options: [
-                            {value: "1", label: "Azul"},
-                            {value: "2", label: "Vermelho"},
-                            {value: "3", label: "Verde"},
-                            {value: "4", label: "Nenhuma das anteriores"}
-                        ]
-                    }} />
-                </div>
-
                 <div className="col-4 align-self-center pt-4">
                     <TextButton type="submit" hsl={[97, 43, 70]} text="Enviar" onClick={handleProtocolSubmit} />
                 </div>
