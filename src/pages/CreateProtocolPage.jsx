@@ -4,6 +4,7 @@ import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
+import CreateSingleSelectionInput from '../components/CreateSingleSelectionInput';
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
@@ -57,6 +58,9 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+
+    let item;
+
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
@@ -109,6 +113,21 @@ function CreateProtocolPage(props) {
                 description: '',
                 question: '',
                 type: 0,
+                validation: [],
+                sugestions: [],
+                subForm: null,
+                id: null,
+            },
+        ]);
+    };
+
+    const handleSingleInputAdd = () => {
+        setInputs([
+            ...inputs,
+            {
+                description: '',
+                question: '',
+                type: 2,
                 validation: [],
                 sugestions: [],
                 subForm: null,
@@ -186,7 +205,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleSingleInputAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
@@ -224,15 +247,35 @@ function CreateProtocolPage(props) {
                                     onChange={(event) => setDescription(event.target.value)}
                                 ></textarea>
                             </div>
-                            {inputs.map((input, index) => (
-                                <CreateTextBoxInput
-                                    key={index}
-                                    index={index}
-                                    inputState={input}
-                                    onTextBoxChange={handleTextBoxChange}
-                                    onTextBoxRemove={() => handleTextBoxRemove(index)}
-                                />
-                            ))}
+                            {inputs.map((input, index) => {
+                                switch (input.type) {
+                                    case 0:
+                                        item = (
+                                            <CreateTextBoxInput
+                                                key={index}
+                                                index={index}
+                                                inputState={input}
+                                                onTextBoxChange={handleTextBoxChange}
+                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                            />
+                                        );
+                                        break;
+                                    case 2:
+                                        item = (
+                                            <CreateSingleSelectionInput
+                                                key={index}
+                                                index={index}
+                                                inputState={input}
+                                                onTextBoxChange={handleTextBoxChange}
+                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                            />
+                                        );
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                return item;
+                            })}
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>
                                 <div className="col-8 col-lg-4">
