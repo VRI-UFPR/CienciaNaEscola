@@ -33,7 +33,12 @@ export const defaultNewInput = (type) => {
         description: '',
         question: '',
         type: type,
-        validation: [],
+        validation: [
+            {
+                type: 'required',
+                value: false,
+            },
+        ],
         sugestions: [],
         subForm: null,
         id: null,
