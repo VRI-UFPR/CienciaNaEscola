@@ -34,7 +34,7 @@ const styles = `
     `;
 
 function CreateSingleSelectionInput(props) {
-    const { inputState, onTextBoxChange, onTextBoxRemove } = props;
+    const { input, onInputChange, onInputRemove } = props;
 
     const [inputEmpty, setInputEmpty] = useState([true, true]);
     const [inputs, setInputs] = useState([[]]);
@@ -46,9 +46,9 @@ function CreateSingleSelectionInput(props) {
     };
 
     const handleTextBoxChange = (event, field) => {
-        const updatedTextBox = { ...inputState };
+        const updatedTextBox = { ...input };
         updatedTextBox[field] = event.target.value;
-        onTextBoxChange(updatedTextBox);
+        onInputChange(updatedTextBox);
         if (event.target.id === 'question') {
             event.target.value === '' ? updateInputEmpty(0, 0) : updateInputEmpty(0, 1);
         }
@@ -59,21 +59,21 @@ function CreateSingleSelectionInput(props) {
         const inpEmp = [...inputEmpty, true];
         setInputs(inp);
         setInputEmpty(inpEmp);
-        onTextBoxChange({ ...inputState, options: inp });
+        onInputChange({ ...input, options: inp });
     };
 
     const handleDeleteInput = (i) => {
         const deleteInp = [...inputs];
         deleteInp.splice(i, 1);
         setInputs(deleteInp);
-        onTextBoxChange({ ...inputState, options: deleteInp });
+        onInputChange({ ...input, options: deleteInp });
     };
 
     const handleInputChange = (onChangeValue, i) => {
         const inputData = [...inputs];
         inputData[i] = onChangeValue.target.value;
         setInputs(inputData);
-        onTextBoxChange({ ...inputState, options: inputData });
+        onInputChange({ ...input, options: inputData });
         if (onChangeValue.target.id === String(i)) {
             onChangeValue.target.value === '' ? updateInputEmpty(i + 1, 0) : updateInputEmpty(i + 1, 1);
         }
@@ -87,7 +87,7 @@ function CreateSingleSelectionInput(props) {
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onTextBoxRemove} />
+                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
@@ -97,9 +97,9 @@ function CreateSingleSelectionInput(props) {
                     role="switch"
                     id="flexSwitchCheckDefault"
                     onChange={(event) =>
-                        onTextBoxChange({
-                            ...inputState,
-                            validation: inputState.validation.map((item) =>
+                        onInputChange({
+                            ...input,
+                            validation: input.validation.map((item) =>
                                 item.type === 'required' ? { ...item, value: event.target.checked } : { item }
                             ),
                         })
