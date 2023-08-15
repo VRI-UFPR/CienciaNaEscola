@@ -28,14 +28,16 @@ export const defaultInputs = [
     },
 ];
 
-export const defaultTextBox = {
-    description: '',
-    question: '',
-    type: 0,
-    validation: [],
-    sugestions: [],
-    subForm: null,
-    id: null,
+export const defaultNewInput = (type) => {
+    return {
+        description: '',
+        question: '',
+        type: type,
+        validation: [],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    };
 };
 
 export const teamMembers = (

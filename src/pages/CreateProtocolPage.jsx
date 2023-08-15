@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
-import { defaultTextBox } from '../utils/constants';
+import { defaultNewInput } from '../utils/constants';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -106,7 +106,7 @@ function CreateProtocolPage(props) {
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([...inputs, defaultTextBox]);
+        setInputs([...inputs, defaultNewInput(0)]);
     };
 
     const handleInputRemove = (indexToRemove) => {
@@ -114,18 +114,7 @@ function CreateProtocolPage(props) {
     };
 
     const handleSingleInputAdd = () => {
-        setInputs([
-            ...inputs,
-            {
-                description: '',
-                question: '',
-                type: 2,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ]);
+        setInputs([...inputs, defaultNewInput(2)]);
     };
 
     const handleInputChange = (indexToUpdate, updatedInput) => {
@@ -253,7 +242,7 @@ function CreateProtocolPage(props) {
                                             />
                                         );
                                     default:
-                                        break;
+                                        return null;
                                 }
                             })}
                             <div className="row justify-content-between m-0">
