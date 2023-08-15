@@ -60,8 +60,6 @@ function CreateProtocolPage(props) {
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
 
-    let item;
-
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
@@ -237,7 +235,7 @@ function CreateProtocolPage(props) {
                             {inputs.map((input, index) => {
                                 switch (input.type) {
                                     case 0:
-                                        item = (
+                                        return (
                                             <CreateTextBoxInput
                                                 key={index}
                                                 input={input}
@@ -245,22 +243,18 @@ function CreateProtocolPage(props) {
                                                 onInputRemove={() => handleInputRemove(index)}
                                             />
                                         );
-                                        break;
                                     case 2:
-                                        item = (
+                                        return (
                                             <CreateSingleSelectionInput
                                                 key={index}
-                                                index={index}
                                                 inputState={input}
-                                                onTextBoxChange={handleTextBoxChange}
-                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                                onTextBoxChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onTextBoxRemove={() => handleInputRemove(index)}
                                             />
                                         );
-                                        break;
                                     default:
                                         break;
                                 }
-                                return item;
                             })}
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>
