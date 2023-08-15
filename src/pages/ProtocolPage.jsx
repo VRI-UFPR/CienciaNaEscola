@@ -17,6 +17,7 @@ import TextButton from '../components/TextButton';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
+import ProtocolInfo from '../components/ProtocolInfo';
 
 const styles = `
     .bg-yellow-orange {
@@ -59,7 +60,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
+                modalRef.current.showModal({ title: 'Muito obrigado por sua participação no projeto!' });
             })
             .catch((error) => {
                 console.error(error.message);
@@ -98,6 +99,7 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
+                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
