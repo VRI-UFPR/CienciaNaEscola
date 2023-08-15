@@ -91,7 +91,20 @@ function CreateSingleSelectionInput(props) {
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
-                <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                <input
+                    className="form-check-input border-0 fs-5 p-0"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    onChange={(event) =>
+                        onTextBoxChange({
+                            ...inputState,
+                            validation: inputState.validation.map((item) =>
+                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
+                            ),
+                        })
+                    }
+                />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
