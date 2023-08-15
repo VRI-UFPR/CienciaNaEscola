@@ -26,14 +26,34 @@ function CreateTextBoxInput(props) {
 
     return (
         <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between m-0">
+            <div className="row justify-content-between pb-2 m-0">
                 <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 pb-4 m-0">Caixa de texto</h1>
+                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Caixa de texto</h1>
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
                     <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
                 </div>
+            </div>
+            <div className="row form-check form-switch pb-3 m-0 ms-2">
+                <input
+                    className="form-check-input border-0 fs-5 p-0"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    defaultChecked={false}
+                    onChange={(event) =>
+                        onInputChange({
+                            ...input,
+                            validation: input.validation.map((item) =>
+                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
+                            ),
+                        })
+                    }
+                />
+                <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
+                    Obrigatório
+                </label>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
