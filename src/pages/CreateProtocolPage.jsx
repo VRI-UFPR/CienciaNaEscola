@@ -109,12 +109,12 @@ function CreateProtocolPage(props) {
         setInputs([...inputs, defaultNewInput(0)]);
     };
 
-    const handleInputRemove = (indexToRemove) => {
-        setInputs(inputs.filter((_, index) => index !== indexToRemove));
-    };
-
     const handleSingleInputAdd = () => {
         setInputs([...inputs, defaultNewInput(2)]);
+    };
+
+    const handleInputRemove = (indexToRemove) => {
+        setInputs(inputs.filter((_, index) => index !== indexToRemove));
     };
 
     const handleInputChange = (indexToUpdate, updatedInput) => {
@@ -236,9 +236,9 @@ function CreateProtocolPage(props) {
                                         return (
                                             <CreateSingleSelectionInput
                                                 key={index}
-                                                inputState={input}
-                                                onTextBoxChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                onTextBoxRemove={() => handleInputRemove(index)}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
                                             />
                                         );
                                     default:
