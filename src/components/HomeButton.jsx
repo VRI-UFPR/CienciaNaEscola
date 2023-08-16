@@ -2,7 +2,7 @@ import React from 'react';
 
 const styles = `
     .homeBtn {
-        background-color: #D9D9D9;
+        background-color: #F8F8F8;
         width: 85%;
         padding: 0px 10px;
         border-radius: 9px;

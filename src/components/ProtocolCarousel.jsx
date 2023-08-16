@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 
 const style = `
     .custom-carousel {
-        background-color: #FECF86;
+        background-color: rgba(254, 207, 134, 0.7);
+        
         border-radius: 15px;
         width: 100%;
         padding-top: 2rem;
@@ -57,7 +58,7 @@ function ProtocolCarousel(props) {
             const slideButtons = buttons.slice(startIndex, endIndex);
 
             carouselItems.push(
-            <div key={i} className={`h-100 carousel-item${i === 0 ? ' active' : ''}`}>
+            <div key={i} className={`carousel-item${i === 0 ? ' active' : ''} h-100`}>
                 <div className="d-flex flex-column align-items-center h-100 pb-3">
                 {slideButtons.map((button, index) => (
                     <div 

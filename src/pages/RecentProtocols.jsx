@@ -34,7 +34,7 @@ const style = `
 function RecentProtocolsPage(props) {
     const { title, content, showSidebar, showCreateProtocol, showNavToggler } = props;
 
-    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9']
+    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9'];
 
     return (
         <div className="d-flex flex-column font-barlow vh-100">
@@ -47,6 +47,9 @@ function RecentProtocolsPage(props) {
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
                             <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
+                            <div>
+                            
+                            </div>
                             <div className="d-flex justify-content-center align-itens-center flex-grow-1 mb-5">
                                 <ProtocolCarousel buttons={buttons} />
                             </div>
