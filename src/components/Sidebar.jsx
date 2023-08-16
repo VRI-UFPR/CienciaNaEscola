@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/blankProfile.jpg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 
 const styles = `
@@ -45,9 +45,14 @@ const styles = `
     }
 `;
 
+
 function Sidebar(props) {
     const { modalRef } = props;
     const navigate = useNavigate();
+    const location = useLocation();
+    const isHomePage = location.pathname === '/home'; // Verifica se a página atual é a home
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
     const closeSidebar = () => {
         const offcanvas = document.getElementById('sidebar');
@@ -55,19 +60,33 @@ function Sidebar(props) {
         bsOffcanvas.hide();
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 992);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
-                <div className="container d-flex justify-content-end p-0">
-                    <button
-                        type="button"
-                        className="btn btn-transparent rounded-circle border-0"
-                        data-bs-dismiss="offcanvas"
-                        data-bs-target="#sidebar"
-                    >
-                        <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
-                    </button>
-                </div>
+                {(isHomePage || isMobile) && (
+                    <div className="container d-flex justify-content-end p-0">
+                        <button
+                            type="button"
+                            className="btn btn-transparent rounded-circle border-0"
+                            data-bs-dismiss="offcanvas"
+                            data-bs-target="#sidebar"
+                        >
+                            <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
+                        </button>
+                    </div>
+                )}
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4">
                     <Link className="rounded-circle" to="/profile">
                         <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
