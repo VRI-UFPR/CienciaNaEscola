@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import HomeButton from './HomeButton';
 import { Carousel } from 'bootstrap';
 import { useEffect, useRef, useState } from 'react';
@@ -33,12 +34,12 @@ const style = `
 `;
 
 function ProtocolCarousel(props) {
-    const { buttons } = props;
+    const { users } = props;
 
     const carouselRef = useRef(null);
     const carouselParentRef = useRef(null);
     const itemsPerSlide = 5;
-    const totalSlides = Math.ceil(buttons.length / itemsPerSlide);
+    const totalSlides = Math.ceil(users.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -55,18 +56,17 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideButtons = buttons.slice(startIndex, endIndex);
+            const slideButtons = users.slice(startIndex, endIndex);
 
             carouselItems.push(
             <div key={i} className={`carousel-item${i === 0 ? ' active' : ''} h-100`}>
                 <div className="d-flex flex-column align-items-center h-100 pb-3">
                 {slideButtons.map((button, index) => (
-                    <div 
-                        key={index} 
+                    <div
+                        key={index}
                         className="d-flex flex-column align-items-center pb-3 w-100" style={{height: '20%', maxHeight: '20%'}}>
-                        <HomeButton 
-                            key={index} 
-                            title={button} 
+                        <HomeButton
+                            title={users.userProtocol.title}
                             date="01/01/2021"
                         />
                     </div>
@@ -93,7 +93,7 @@ function ProtocolCarousel(props) {
                     onClick={() => setCurrentPage(i)}
                     style={{ 
                         width: '1rem',
-                        height: '1rem' 
+                        height: '1rem'
                     }}
                 ></button>
             )
@@ -110,17 +110,17 @@ function ProtocolCarousel(props) {
         <div className="carousel-indicators">
             {renderPageIndicators()}
         </div>
-            <button className="carousel-control-prev">
+            <button className="carousel-control-prev d-none">
                 {}
             </button>
-            <button className="carousel-control-next">
+            <button className="carousel-control-next d-none">
                 {}
             </button>
-        <button className="carousel-control-prev" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="prev">
+        <button className="carousel-control-prev d-none" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="prev">
             <span className="carousel-control-prev-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Previous</span>
         </button>
-        <button className="carousel-control-next" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="next">
+        <button className="carousel-control-next d-none" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="next">
             <span className="carousel-control-next-icon" aria-hidden="true"></span>
             <span className="visually-hidden">Next</span>
         </button>

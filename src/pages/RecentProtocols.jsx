@@ -1,4 +1,8 @@
-import React from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../contexts/AuthContext';
+
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
@@ -34,7 +38,26 @@ const style = `
 function RecentProtocolsPage(props) {
     const { title, content, showSidebar, showCreateProtocol, showNavToggler } = props;
 
-    const buttons = ['Button 1', 'Button2', 'Button3', 'Button4', 'Button5', 'Button6', 'Button7', 'Button8', 'Button9'];
+    const [isLoading, setIsLoading] = useState(true);
+    const [userProtocols, setUserForms] = useState([]);
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+        if (user.id !== null && user.token !== null) {
+            // .get(`http://localhost:3333/user/list/${user.id}`)
+            axios
+                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .then((response) => {
+                    setUserForms(response.data);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
+    }, [user]);
 
     return (
         <div className="d-flex flex-column font-barlow vh-100">
@@ -46,12 +69,14 @@ function RecentProtocolsPage(props) {
                     <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold">{title}</h1>
-                            <div>
-                            
+                            <div className="d-flex column justify-content-between">
+                                <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold fs-2">{title}</h1>
+                                <div className="">
+                                    <span>AAAAAAAAAAAAAAAAAAAA</span>
+                                </div>
                             </div>
                             <div className="d-flex justify-content-center align-itens-center flex-grow-1 mb-5">
-                                <ProtocolCarousel buttons={buttons} />
+                                <ProtocolCarousel users={userProtocols} />
                             </div>
                         </div>
                         <div className="row justify-content-between mx-0">
