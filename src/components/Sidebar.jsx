@@ -112,7 +112,6 @@ function Sidebar(props) {
                     <Link
                         href="/"
                         className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
-                        to="https://www.denuncias.com"
                         onClick={() => closeSidebar()}
                     >
                         www.denuncias.com
