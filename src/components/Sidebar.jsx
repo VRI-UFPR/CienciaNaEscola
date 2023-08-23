@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/blankProfile.jpg';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 
 const styles = `
@@ -45,12 +45,9 @@ const styles = `
     }
 `;
 
-
 function Sidebar(props) {
-    const { modalRef } = props;
+    const { modalRef, showExitButton } = props;
     const navigate = useNavigate();
-    const location = useLocation();
-    const isHomePage = location.pathname === '/home'; // Verifica se a página atual é a home
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
@@ -66,6 +63,7 @@ function Sidebar(props) {
         };
 
         window.addEventListener('resize', handleResize);
+        handleResize();
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -75,8 +73,8 @@ function Sidebar(props) {
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
-                {(isHomePage || isMobile) && (
-                    <div className="container d-flex justify-content-end p-0">
+                {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
+                    <div className="container d-flex justify-content-end p-0 erro">
                         <button
                             type="button"
                             className="btn btn-transparent rounded-circle border-0"
