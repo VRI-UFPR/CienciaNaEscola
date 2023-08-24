@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import iconFile from '../assets/images/iconFile.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
-import iconPlus from '../assets/images/iconPlus.svg';
+import iconFile from '../../../assets/images/iconFile.svg';
+import iconTrash from '../../../assets/images/iconTrash.svg';
+import iconPlus from '../../../assets/images/iconPlus.svg';
 
-import RoundedButton from './RoundedButton';
+import RoundedButton from '../../RoundedButton';
 
 const styles = `
     .font-century-gothic {
