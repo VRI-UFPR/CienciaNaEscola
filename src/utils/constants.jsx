@@ -40,7 +40,7 @@ export const defaultNewInput = (type) => {
             },
         ],
         sugestions: [],
-        subForm: null,
+        inputId: null,
         id: null,
     };
 };
