@@ -41,7 +41,7 @@ function CreateTextBoxInput(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    defaultChecked={false}
+                    defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
                     onChange={(event) =>
                         onInputChange({
                             ...input,
