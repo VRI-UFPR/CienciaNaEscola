@@ -1,16 +1,11 @@
-import { getByTitle } from '@testing-library/react';
 import React from 'react';
 import RoundedButton from './RoundedButton';
 import iconFile from '../assets/images/iconFile.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
 
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import HomeButton from '../components/HomeButton';
-import TextImageInput from './TextImageInput';
 import { AuthContext } from '../contexts/AuthContext';
-import SplashPage from '../pages/SplashPage';
 
 const styles = `
     .font-century-gothic {
@@ -31,9 +26,10 @@ const styles = `
 `;
 
 function SubForm(props) {
+    const { input, onInputChange, onInputRemove } = props;
     const [isLoading, setIsLoading] = useState(true);
-    const [userProtocols, setUserForms] = useState([]);
     const { user } = useContext(AuthContext);
+    const [userProtocols, setUserForms] = useState([]);
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
@@ -43,7 +39,6 @@ function SubForm(props) {
                 .then((response) => {
                     setUserForms(response.data);
                     setIsLoading(false);
-                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.error(error.message);
@@ -52,25 +47,56 @@ function SubForm(props) {
     }, [user]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <></>;
     }
 
     return (
         <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between m-0">
+            <div className="row justify-content-between pb-2 m-0">
                 <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 pb-4 m-0">Subformulário</h1>
+                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Subformulário</h1>
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} />
+                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
                 </div>
             </div>
+            <div className="row form-check form-switch pb-3 m-0 ms-2">
+                <input
+                    className="form-check-input border-0 fs-5 p-0"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
+                    onChange={(event) =>
+                        onInputChange({
+                            ...input,
+                            validation: input.validation.map((item) =>
+                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
+                            ),
+                        })
+                    }
+                />
+                <label className="form-check-label d-flex font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
+                    Obrigatório
+                </label>
+            </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4 font-barlow">
-                <select class="form-select form-select-lg mb-5 bg-light-grey font-barlow">
-                    <option selected>Selecione um formulário</option>
+                <select
+                    className="form-select form-select-lg mb-5 bg-light-grey font-barlow"
+                    defaultValue={-1}
+                    onChange={(event) =>
+                        onInputChange({
+                            ...input,
+                            subformId: event.target.value,
+                        })
+                    }
+                >
+                    <option value={-1}>Selecione um formulário</option>
                     {userProtocols.map((userProtocol) => (
-                        <option key={userProtocol.id}>{userProtocol.title}</option>
+                        <option key={userProtocol.id} value={userProtocol.id}>
+                            {userProtocol.title}
+                        </option>
                     ))}
                 </select>
             </div>

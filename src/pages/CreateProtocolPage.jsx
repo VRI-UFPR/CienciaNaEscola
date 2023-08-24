@@ -14,6 +14,7 @@ import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
+import SubForm from '../components/SubForm';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -113,6 +114,10 @@ function CreateProtocolPage(props) {
         setInputs([...inputs, defaultNewInput(2)]);
     };
 
+    const handleSubFormAdd = () => {
+        setInputs([...inputs, defaultNewInput(4)]);
+    };
+
     const handleInputRemove = (indexToRemove) => {
         setInputs(inputs.filter((_, index) => index !== indexToRemove));
     };
@@ -191,7 +196,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleSubFormAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Subformulário</span>
                             </button>
@@ -235,6 +244,15 @@ function CreateProtocolPage(props) {
                                     case 2:
                                         return (
                                             <CreateSingleSelectionInput
+                                                key={index}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
+                                    case 4:
+                                        return (
+                                            <SubForm
                                                 key={index}
                                                 input={input}
                                                 onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
