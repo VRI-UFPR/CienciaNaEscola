@@ -1,11 +1,11 @@
 import React from 'react';
-import RoundedButton from './RoundedButton';
-import iconFile from '../assets/images/iconFile.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
+import RoundedButton from '../../RoundedButton';
+import iconFile from '../../../assets/images/iconFile.svg';
+import iconTrash from '../../../assets/images/iconTrash.svg';
 
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 const styles = `
     .font-century-gothic {

@@ -14,7 +14,7 @@ import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
-import SubForm from '../components/SubForm';
+import SubForm from '../components/inputs/protocol/CreateSubformInput';
 
 const CreateProtocolStyles = `
     .font-barlow {
