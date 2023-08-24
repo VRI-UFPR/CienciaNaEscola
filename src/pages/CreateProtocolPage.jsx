@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
+import { defaultNewInput } from '../utils/constants';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -58,8 +59,6 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
-
-    let item;
 
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
@@ -107,44 +106,19 @@ function CreateProtocolPage(props) {
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([
-            ...inputs,
-            {
-                description: '',
-                question: '',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ]);
+        setInputs([...inputs, defaultNewInput(0)]);
     };
 
     const handleSingleInputAdd = () => {
-        setInputs([
-            ...inputs,
-            {
-                description: '',
-                question: '',
-                type: 2,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ]);
+        setInputs([...inputs, defaultNewInput(2)]);
     };
 
-    const handleTextBoxRemove = (indexToRemove) => {
-        const updatedInputs = inputs.filter((_, index) => index !== indexToRemove);
-        setInputs(updatedInputs);
+    const handleInputRemove = (indexToRemove) => {
+        setInputs(inputs.filter((_, index) => index !== indexToRemove));
     };
 
-    const handleTextBoxChange = (index, input) => {
-        const updateInputs = [...inputs];
-        updateInputs[index] = input;
-        setInputs(updateInputs);
+    const handleInputChange = (indexToUpdate, updatedInput) => {
+        setInputs(inputs.map((input, index) => (index === indexToUpdate ? updatedInput : input)));
     };
 
     useEffect(() => {
@@ -250,31 +224,26 @@ function CreateProtocolPage(props) {
                             {inputs.map((input, index) => {
                                 switch (input.type) {
                                     case 0:
-                                        item = (
+                                        return (
                                             <CreateTextBoxInput
                                                 key={index}
-                                                index={index}
-                                                inputState={input}
-                                                onTextBoxChange={handleTextBoxChange}
-                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
                                             />
                                         );
-                                        break;
                                     case 2:
-                                        item = (
+                                        return (
                                             <CreateSingleSelectionInput
                                                 key={index}
-                                                index={index}
-                                                inputState={input}
-                                                onTextBoxChange={handleTextBoxChange}
-                                                onTextBoxRemove={() => handleTextBoxRemove(index)}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
                                             />
                                         );
-                                        break;
                                     default:
-                                        break;
+                                        return null;
                                 }
-                                return item;
                             })}
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>

@@ -28,6 +28,23 @@ export const defaultInputs = [
     },
 ];
 
+export const defaultNewInput = (type) => {
+    return {
+        description: '',
+        question: '',
+        type: type,
+        validation: [
+            {
+                type: 'required',
+                value: false,
+            },
+        ],
+        sugestions: [],
+        subForm: null,
+        id: null,
+    };
+};
+
 export const teamMembers = (
     <>
         <p className="mb-4">Clara Drimel</p>
