@@ -75,7 +75,9 @@ function LoginPage(props) {
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end h-50">
                     <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '270px' }} />
-                    <span className="login-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
+                    <span className="login-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">
+                        Bem-vindo(a) ao Ciência Cidadã na Escola!
+                    </span>
                 </div>
 
                 <form className="row justify-content-center pt-5 h-50 w-75" onSubmit={loginHandler}>
@@ -112,17 +114,22 @@ function LoginPage(props) {
                 </form>
             </div>
             <div className="row align-items-end justify-content-between pb-4 ps-2 h-25 w-100 ">
-                <div className='col-4 justify-content-start d-flex align-items-center'>
-                    <img className="d-h-auto w-100" src={logoUFPR} style={{ maxWidth: '150px' }} />
+                <div className="col-4 justify-content-start d-flex align-items-center">
+                    <img
+                        className="d-h-auto w-100"
+                        src={logoUFPR}
+                        style={{ maxWidth: '150px' }}
+                        alt="Logomarca da Universidade Federal do Paraná"
+                    />
                 </div>
-                <div className='col-6 justify-content-end d-flex align-items-center'>
-                    <img className="h-auto w-100" src={logoFA} style={{ maxWidth: '200px' }} />
+                <div className="col-6 justify-content-end d-flex align-items-center">
+                    <img className="h-auto w-100" src={logoFA} style={{ maxWidth: '200px' }} alt="Logomarca da Fundação Araucária" />
                 </div>
             </div>
 
             <Alert id="LoginModal" ref={modalRef} />
             <style> {styles}</style>
-        </div >
+        </div>
     );
 }
 
