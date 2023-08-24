@@ -4,7 +4,7 @@ import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
-import CreateSingleSelectionInput from '../components/CreateSingleSelectionInput';
+import CreateSingleSelectionInput from '../components/inputs/protocol/CreateSingleSelectionInput';
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
