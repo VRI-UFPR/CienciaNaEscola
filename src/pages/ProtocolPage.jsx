@@ -165,7 +165,7 @@ function ProtocolPage(props) {
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} />
+                <Sidebar modalRef={modalRef} showExitButton={true}/>
             </div>
 
             <style>{styles}</style>
