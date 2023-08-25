@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import iconFile from '../../../assets/images/iconFile.svg';
+import RoundedButton from '../../RoundedButton';
 
 const styles = `
     .color-dark-gray {
@@ -10,32 +11,7 @@ const styles = `
         font-family: 'Barlow', sans-serif;
     }
 
-    .image-input-button {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        background-color: #91CAD6;
-        border-radius: 50%;
-        width: 41px;
-        min-width: 41px;
-        height: 41px;
-        padding: 8px;
-        cursor: pointer;
-        border: none;
-        outline: none;
-    }
-
-    .image-input-button img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-
-    .button-label {
-        margin-left: 10px;
-    }
-
-    .image-preview{
+    .image-preview {
         max-height: 200px;
     }
 `;
@@ -65,12 +41,16 @@ function ImageInput(props) {
                         {input.question}
                     </label>
                     <div className="d-flex align-items-center p-0">
-                        <button type="button" className="image-input-button" onClick={handleButtonClick}>
-                            <img src={iconFile} alt="Selecionar Arquivo" />
-                        </button>
-                        <div className="button-label d-flex color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 pb-0">
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon={iconFile}
+                            size={41}
+                            alt={'Selecionar Arquivo'}
+                            onClick={handleButtonClick}
+                        />
+                        <div className="d-flex color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
                             {image ? (
-                                <div className="d-flex justify-content-center w-100 bg-grey rounded-4 overflow-hidden">
+                                <div className="d-flex justify-content-center rounded-4 overflow-hidden bg-grey w-100">
                                     <img
                                         className="image-preview img-fluid object-fit-contain"
                                         src={URL.createObjectURL(image)}
