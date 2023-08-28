@@ -46,7 +46,6 @@ function ProtocolCarousel(props) {
         const carousel = carouselRef.current;
         const carouselParent = carouselParentRef.current;
         
-
         new Carousel(carousel);
     }, []);
 
@@ -58,20 +57,16 @@ function ProtocolCarousel(props) {
             const endIndex = (i + 1) * itemsPerSlide;
             const slideButtons = users.slice(startIndex, endIndex);
 
-            console.log(users)
-            console.log("======================")
-            console.log(slideButtons)
-
             carouselItems.push(
             <div key={i} className={`carousel-item${i === 0 ? ' active' : ''} h-100`}>
                 <div className="d-flex flex-column align-items-center h-100 pb-3">
-                {slideButtons.map((button, index) => (
+                {slideButtons.map((protocol, index) => (
                     <Link
-                        to={`/protocol/${button.id}`}
+                        to={`/protocol/${protocol.id}`}
                         key={index}
-                        className="d-flex flex-column align-items-center pb-3 w-100" style={{height: '20%', maxHeight: '20%'}}>
+                        className="d-flex flex-column align-items-center pb-3 w-100 text-decoration-none" style={{height: '20%', maxHeight: '20%', color: '#262626'}}>
                         <HomeButton
-                            title={button.title}
+                            title={protocol.title}
                             date="01/01/2021"
                         />
                     </Link>

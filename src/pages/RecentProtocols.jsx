@@ -33,6 +33,11 @@ const style = `
         font-size: medium;
         text-align: justify;
     }
+
+    .search-bar {
+        background-color: #D9D9D9;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
 `;
 
 function RecentProtocolsPage(props) {
@@ -43,6 +48,8 @@ function RecentProtocolsPage(props) {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const modalRef = useRef(null);
+
+    const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
@@ -59,6 +66,15 @@ function RecentProtocolsPage(props) {
         }
     }, [user]);
 
+    const handleFilter = (event) => {
+        const searchWord = event.target.value;
+        const newFilter = userProtocols.filter((value) => {
+            return value.title.toLowerCase().includes(searchWord.toLowerCase());
+        });
+        console.log(newFilter);
+        setFilteredData(newFilter);
+    };
+
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
@@ -69,14 +85,22 @@ function RecentProtocolsPage(props) {
                     <NavBar showNavToggler={showNavToggler} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
-                            <div className="d-flex column justify-content-between">
-                                <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold fs-2">{title}</h1>
-                                <div className="">
-                                    <span>AAAAAAAAAAAAAAAAAAAA</span>
+                            <div className="d-flex column">
+                                <h1 className="infos-h1 font-century-gothic pb-3 m-0 fw-bold fs-2 col-6">Protocolos Recentes</h1>
+                                <div className="search-wrapper col-6">
+                                    <input className="search-bar rounded-4 border-0 w-100 p-1 px-3"
+                                        type="text"
+                                        name="search-bar"
+                                        id="search-bar"
+                                        placeholder="Pesquisar"
+                                        onChange={handleFilter}
+                                    />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-center align-itens-center flex-grow-1 mb-5">
-                                <ProtocolCarousel users={userProtocols} />
+                                <ProtocolCarousel users={
+                                    filteredData.length > 0 ? filteredData : userProtocols
+                                } />
                             </div>
                         </div>
                         <div className="row justify-content-between mx-0">
