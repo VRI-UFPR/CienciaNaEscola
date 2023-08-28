@@ -44,7 +44,7 @@ function RecentProtocolsPage(props) {
     const { title, content, showSidebar, showCreateProtocol, showNavToggler } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [userProtocols, setUserForms] = useState([]);
+    const [userProtocols, setUserForms] = useState([]); 
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -58,6 +58,7 @@ function RecentProtocolsPage(props) {
                 .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
                 .then((response) => {
                     setUserForms(response.data);
+                    setFilteredData(response.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
@@ -68,12 +69,18 @@ function RecentProtocolsPage(props) {
 
     const handleFilter = (event) => {
         const searchWord = event.target.value;
-        const newFilter = userProtocols.filter((value) => {
+        const newFilter = filteredData.filter((value) => {
             return value.title.toLowerCase().includes(searchWord.toLowerCase());
         });
         console.log(newFilter);
-        setFilteredData(newFilter);
+        if(event.target.value === ''){
+            setFilteredData(userProtocols);
+        } else {
+            setFilteredData(newFilter);
+        }
     };
+
+
 
     return (
         <div className="d-flex flex-column font-barlow vh-100">
@@ -98,9 +105,7 @@ function RecentProtocolsPage(props) {
                                 </div>
                             </div>
                             <div className="d-flex justify-content-center align-itens-center flex-grow-1 mb-5">
-                                <ProtocolCarousel users={
-                                    filteredData.length > 0 ? filteredData : userProtocols
-                                } />
+                                <ProtocolCarousel users={ filteredData } />
                             </div>
                         </div>
                         <div className="row justify-content-between mx-0">
