@@ -19,6 +19,10 @@ const textBoxStyles = `
     .border-steel-blue{
         border-color: #4E9BB9 !important;
     }
+
+    .form-check-input {
+        background-color: #D9D9D9;
+    }
 `;
 
 function CreateTextBoxInput(props) {
