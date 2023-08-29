@@ -8,20 +8,20 @@ import axios from 'axios';
 import { AuthContext } from '../../../contexts/AuthContext';
 
 const styles = `
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
     }
+
     .bg-light-grey{
         background-color: #D9D9D9;
     }
+
     .text-steel-blue {
         color: #4E9BB9;
     }
-    .border-steel-blue{
-        border-color: #4E9BB9 !important;
-    }
-    .font-barlow {
-        font-family: 'Barlow', sans-serif;
+
+    .form-check-input {
+        background-color: #D9D9D9;
     }
 `;
 
@@ -81,9 +81,9 @@ function SubForm(props) {
                     Obrigatório
                 </label>
             </div>
-            <div className="bg-light-grey rounded-4 lh-1 w-100 p-4 font-barlow">
+            <div className="font-barlow bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <select
-                    className="form-select form-select-lg mb-5 bg-light-grey font-barlow"
+                    className="form-select form-select-lg font-barlow bg-light-grey mb-5"
                     defaultValue={-1}
                     onChange={(event) =>
                         onInputChange({
