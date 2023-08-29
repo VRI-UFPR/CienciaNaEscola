@@ -34,7 +34,7 @@ const styles = `
     `;
 
 function CreateSingleSelectionInput(props) {
-    const { index, inputState, onTextBoxChange, onTextBoxRemove } = props;
+    const { input, onInputChange, onInputRemove } = props;
 
     const [inputEmpty, setInputEmpty] = useState([true, true]);
     const [inputs, setInputs] = useState([[]]);
@@ -46,9 +46,9 @@ function CreateSingleSelectionInput(props) {
     };
 
     const handleTextBoxChange = (event, field) => {
-        const updatedTextBox = { ...inputState };
+        const updatedTextBox = { ...input };
         updatedTextBox[field] = event.target.value;
-        onTextBoxChange(index, updatedTextBox);
+        onInputChange(updatedTextBox);
         if (event.target.id === 'question') {
             event.target.value === '' ? updateInputEmpty(0, 0) : updateInputEmpty(0, 1);
         }
@@ -59,21 +59,21 @@ function CreateSingleSelectionInput(props) {
         const inpEmp = [...inputEmpty, true];
         setInputs(inp);
         setInputEmpty(inpEmp);
-        onTextBoxChange(index, {...inputState, options: inp});
+        onInputChange({ ...input, options: inp });
     };
 
     const handleDeleteInput = (i) => {
         const deleteInp = [...inputs];
         deleteInp.splice(i, 1);
         setInputs(deleteInp);
-        onTextBoxChange(index, {...inputState, options: deleteInp});
+        onInputChange({ ...input, options: deleteInp });
     };
 
     const handleInputChange = (onChangeValue, i) => {
         const inputData = [...inputs];
         inputData[i] = onChangeValue.target.value;
         setInputs(inputData);
-        onTextBoxChange(index, {...inputState, options: inputData});
+        onInputChange({ ...input, options: inputData });
         if (onChangeValue.target.id === String(i)) {
             onChangeValue.target.value === '' ? updateInputEmpty(i + 1, 0) : updateInputEmpty(i + 1, 1);
         }
@@ -87,11 +87,25 @@ function CreateSingleSelectionInput(props) {
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onTextBoxRemove} />
+                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
-                <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                <input
+                    className="form-check-input border-0 fs-5 p-0"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
+                    onChange={(event) =>
+                        onInputChange({
+                            ...input,
+                            validation: input.validation.map((item) =>
+                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
+                            ),
+                        })
+                    }
+                />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
