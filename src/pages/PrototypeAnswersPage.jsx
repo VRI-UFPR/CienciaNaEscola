@@ -53,7 +53,7 @@ function jsonToCsv(items) {
         // Percorre todas as perguntas para verificar se existem respostas
         for (let j = 0; j < items[i].form.inputs.length; j++) {
             // Se existir resposta, trata de acordo com o tipo da pergunta
-            if (answersNumber.find((findId) => findId == items[i].form.inputs[j].id) != undefined) {
+            if (answersNumber.find((findId) => findId === items[i].form.inputs[j].id) !== undefined) {
                 // Os tipos estão definidos na descrição dessa função
                 switch (items[i].form.inputs[j].type) {
                     case 0:
@@ -62,7 +62,7 @@ function jsonToCsv(items) {
 
                     case 1:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) == 'true') {
+                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
                                 mAnswer.push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }
@@ -74,7 +74,7 @@ function jsonToCsv(items) {
 
                     case 2:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) == 'true') {
+                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }
@@ -82,7 +82,7 @@ function jsonToCsv(items) {
 
                     case 3:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) == 'true') {
+                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }

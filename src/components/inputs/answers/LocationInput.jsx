@@ -36,6 +36,10 @@ const styles = `
     .location-icon {
         max-width: 50px;
     }
+
+    .search-col {
+        min-width: 32px;
+    }
 `;
 
 export function Location(props) {
@@ -75,7 +79,7 @@ export function Location(props) {
                         </label>
                     </div>
                     <div className="row m-0 align-items-center">
-                        <div className="col m-0 p-0">
+                        <div className="col m-0 p-0 pe-2">
                             <input
                                 type="text"
                                 className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
@@ -86,7 +90,7 @@ export function Location(props) {
                                 disabled={answer !== undefined}
                             ></input>
                         </div>
-                        <div className="col-2 m-0 p-0 d-flex justify-content-end">
+                        <div className="col-auto search-col d-flex justify-content-end m-0 p-0">
                             <RoundedButton
                                 hsl={[190, 46, 70]}
                                 onClick={() => {
