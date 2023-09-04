@@ -2,7 +2,8 @@ import { React, useContext, useState, useRef } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/backgroundLogin.png';
-import { Link, useNavigate } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
@@ -54,7 +55,7 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.token) {
-                    login(response.data.id, response.data.token);
+                    login(response.data.id, email, response.data.token);
                     navigate('/home');
                 } else {
                     throw new Error('Something went wrong!');

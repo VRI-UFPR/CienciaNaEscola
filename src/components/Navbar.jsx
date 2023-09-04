@@ -1,9 +1,7 @@
-import { React, useRef } from 'react';
+import { React } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import iconToggler from '../assets/images/navToggler.svg';
-import Sidebar from './Sidebar';
 import ColoredBorder from './ColoredBorder';
-import Alert from './Alert';
 
 const styles = `
     .ce-navbar {
@@ -21,15 +19,10 @@ const styles = `
     .icon-toggler{
         max-width: 50px;
     }
-
-    .offcanvas-ce{
-        max-width: 50%;
-    }
 `;
 
 function NavBar(props) {
     const { showNavTogglerMobile, showNavTogglerDesktop } = props;
-    const modalRef = useRef(null);
 
     return (
         <div>
@@ -55,11 +48,6 @@ function NavBar(props) {
                     <div className="col-2"></div>
                 </div>
             </nav>
-
-            <div className="offcanvas offcanvas-start bg-coral-red w-auto" tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} />
-            </div>
-            <Alert id="NavbarModal" ref={modalRef} />
             <style>{styles}</style>
         </div>
     );

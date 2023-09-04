@@ -1,11 +1,13 @@
-import { React, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
+import Sidebar from '../components/Sidebar';
+import Alert from '../components/Alert';
 
 const styles = `
     .protocolInfo {
@@ -51,6 +53,7 @@ function HomePage(props) {
     const [userProtocols, setUserForms] = useState([]);
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const modalRef = useRef(null);
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
@@ -123,7 +126,11 @@ function HomePage(props) {
                     <RoundedButton role="link" onClick={() => navigate('/help')} />
                 </div>
             </div>
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <Alert id="HomePageAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} showExitButton={true} />
+            </div>
+            <style>{styles}</style>
         </div>
     );
 }

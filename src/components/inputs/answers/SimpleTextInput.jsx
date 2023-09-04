@@ -30,7 +30,7 @@ function SimpleTextInput(props) {
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0 pb-3">
-                <label labelfor="simpletextinput" className="form-label color-dark-gray font-barlow fw-medium fs-6 m-0 p-0">
+                <label htmlFor="simpletextinput" className="form-label color-dark-gray font-barlow fw-medium fs-6 m-0 p-0">
                     {input.question}
                 </label>
             </div>

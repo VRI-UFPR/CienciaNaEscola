@@ -13,6 +13,7 @@ import CreateProtocolPage from './../pages/CreateProtocolPage';
 import PrototypeAnswersPage from '../pages/PrototypeAnswersPage';
 import AnswerPage from '../pages/AnswerPage';
 import SplashPage from '../pages/SplashPage';
+import { teamMembers } from '../utils/constants';
 
 function AppRoutes(props) {
     return (
@@ -43,7 +44,10 @@ function AppRoutes(props) {
             <Route path="/createprotocol" element={<CreateProtocolPage />} />
             <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
             <Route path="/prototypeanswer/:id" element={<PrototypeAnswersPage />} />
-            <Route path="/about" element={<InfosPage title="Sobre o aplicativo" showAccept={false} showNavTogglerDesktop={false} />} />
+            <Route
+                path="/about"
+                element={<InfosPage title="Equipe" content={teamMembers} showAccept={false} showNavTogglerDesktop={false} />}
+            />
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/answer/:id" element={<AnswerPage />} />

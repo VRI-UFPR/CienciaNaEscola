@@ -19,6 +19,8 @@ import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButto
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import ProtocolInfo from '../components/ProtocolInfo';
 
 const styles = `
     .bg-yellow-orange {
@@ -83,8 +85,6 @@ function ProtocolPage(props) {
         const uploadedFiles = {};
         const uploadPromises = [];
 
-        modalRef.current.showModal({ title: 'Resposta submetida com sucesso.' });
-
         for (let prop in answers) {
             uploadedFiles[prop] = [];
             if (answers[prop][0] instanceof File) {
@@ -103,13 +103,16 @@ function ProtocolPage(props) {
                 .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
                 .then((response) => {
                     modalRef.current.showModal({
-                        title: 'Resposta submetida com sucesso.',
+                        title: 'Muito obrigado por sua participação no projeto!',
                         onHide: () => {
                             navigate('/home');
                         },
                     });
                 })
                 .catch((error) => {
+                    modalRef.current.showModal({
+                        title: 'Não foi possível enviar a resposta. Tente novamente mais tarde.',
+                    });
                     console.error(error.message);
                 });
         });
@@ -166,6 +169,7 @@ function ProtocolPage(props) {
                         />
                     </div>
                 </div>
+                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
                 {protocol.inputs.map((input) => {
                     switch (input.type) {
                         case 0:
@@ -233,6 +237,10 @@ function ProtocolPage(props) {
                 </div>
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
+            <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
+                <Sidebar modalRef={modalRef} showExitButton={true} />
+            </div>
+
             <style>{styles}</style>
         </div>
     );

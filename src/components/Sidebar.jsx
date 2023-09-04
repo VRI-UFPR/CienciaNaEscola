@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
-import PerfilImg from '../assets/images/PerfilImg.png';
-import Arrow from '../assets/images/SidebarArrow.svg';
+import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 
@@ -47,8 +46,10 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { modalRef } = props;
+    const { modalRef, showExitButton } = props;
     const navigate = useNavigate();
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
     const closeSidebar = () => {
         const offcanvas = document.getElementById('sidebar');
@@ -56,16 +57,38 @@ function Sidebar(props) {
         bsOffcanvas.hide();
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 992);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <div className="d-flex flex-column flex-grow-1">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
-                <div className="container d-flex d-lg-none justify-content-end p-0">
-                    <button type="button" className="btn btn-transparent rounded-circle border-0" data-bs-dismiss="offcanvas">
-                        <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
-                    </button>
-                </div>
-                <div className="container d-flex flex-column align-items-center p-5 pt-3 pb-4">
-                    <img className="profile-image rounded-circle mx-4" src={PerfilImg} alt="Perfil" />
+                {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
+                    <div className="container d-flex justify-content-end p-0 erro">
+                        <button
+                            type="button"
+                            className="btn btn-transparent rounded-circle border-0"
+                            data-bs-dismiss="offcanvas"
+                            data-bs-target="#sidebar"
+                        >
+                            <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
+                        </button>
+                    </div>
+                )}
+                <div className="container d-flex flex-column align-items-center pt-3 pb-4">
+                    <Link className="rounded-circle" to="/profile">
+                        <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                    </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
@@ -100,18 +123,17 @@ function Sidebar(props) {
                         Logout
                     </button>
                 </div>
-                {/* <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4 pe-5">
+                <div className="invisible container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4">
                     <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
                     <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
                     <Link
                         href="/"
                         className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
-                        to="https://www.denuncias.com"
                         onClick={() => closeSidebar()}
                     >
                         www.denuncias.com
                     </Link>
-                </div> */}
+                </div>
             </div>
             <style>{styles}</style>
         </div>

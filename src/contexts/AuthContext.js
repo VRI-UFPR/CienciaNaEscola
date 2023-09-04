@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({
         id: null,
+        email: null,
         token: null,
     });
 
@@ -15,14 +16,15 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = (id, token) => {
-        setUser({ id, token });
-        localStorage.setItem('user', JSON.stringify({ id, token }));
+    const login = (id, email, token) => {
+        setUser({ id, email, token });
+        localStorage.setItem('user', JSON.stringify({ id, email, token }));
     };
 
     const logout = () => {
         setUser({
             id: null,
+            email: null,
             token: null,
         });
         localStorage.removeItem('user');
