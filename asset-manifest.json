@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/CienciaNaEscola/static/css/main.599d62e2.css",
-    "main.js": "/CienciaNaEscola/static/js/main.b24d81ea.js",
+    "main.css": "/CienciaNaEscola/static/css/main.104445ec.css",
+    "main.js": "/CienciaNaEscola/static/js/main.02433a1a.js",
     "static/js/787.28cb0dcd.chunk.js": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js",
     "static/media/backgroundLogin.png": "/CienciaNaEscola/static/media/backgroundLogin.530fd9e8c132a663b298.png",
     "static/media/logoPicceCircular.svg": "/CienciaNaEscola/static/media/logoPicceCircular.9a175afea811834ff70fc7daef799508.svg",
+    "static/media/blankProfile.jpg": "/CienciaNaEscola/static/media/blankProfile.2e001b856e90a7542ef2.jpg",
     "static/media/iconSearch.svg": "/CienciaNaEscola/static/media/iconSearch.d37827e354efec79aa096ded6ddcd489.svg",
     "static/media/logoPicceTextual.svg": "/CienciaNaEscola/static/media/logoPicceTextual.c6d03647784b52d30d34bf504bda514c.svg",
     "static/media/iconLocation.svg": "/CienciaNaEscola/static/media/iconLocation.ff608443971fe62b7ef72cb1dbe8cfa4.svg",
@@ -12,21 +13,20 @@
     "static/media/helpIcon.svg": "/CienciaNaEscola/static/media/helpIcon.43b5082de8a06b62500df4eaa598fcf7.svg",
     "static/media/iconTrash.svg": "/CienciaNaEscola/static/media/iconTrash.87bdc7d5981ae43bd4090ff51bd9fdba.svg",
     "static/media/titleCE.svg": "/CienciaNaEscola/static/media/titleCE.d40526b829f85f1edc51cc0342c2341c.svg",
-    "static/media/SidebarArrow.svg": "/CienciaNaEscola/static/media/SidebarArrow.3afbfe261fe8cb2b903bd43531eec0c8.svg",
     "static/media/loginTitle.svg": "/CienciaNaEscola/static/media/loginTitle.c88852f770423ccbdf5767f701001fd3.svg",
     "static/media/navToggler.svg": "/CienciaNaEscola/static/media/navToggler.61f84818c949c75f382cca49370e1a47.svg",
     "static/media/iconDate.svg": "/CienciaNaEscola/static/media/iconDate.885a0a6a088622559e3cbf6f5d1af128.svg",
     "index.html": "/CienciaNaEscola/index.html",
     "static/media/eyeIcon.svg": "/CienciaNaEscola/static/media/eyeIcon.21a1aab87701654fed9a246fd629f8de.svg",
     "static/media/ExitSidebarIcon.svg": "/CienciaNaEscola/static/media/ExitSidebarIcon.de8adb0cab043f373f080776a16498e2.svg",
-    "static/media/iconPlus.svg": "/CienciaNaEscola/static/media/iconPlus.083dd714befecd3095ad4e89593ed951.svg",
+    "static/media/iconPlus.svg": "/CienciaNaEscola/static/media/iconPlus.9748854ae44a26bdedd2c8a85c202cb1.svg",
     "static/media/iconTime.svg": "/CienciaNaEscola/static/media/iconTime.2bc90f507ffcccb4894b2680d4b271e5.svg",
-    "main.599d62e2.css.map": "/CienciaNaEscola/static/css/main.599d62e2.css.map",
-    "main.b24d81ea.js.map": "/CienciaNaEscola/static/js/main.b24d81ea.js.map",
+    "main.104445ec.css.map": "/CienciaNaEscola/static/css/main.104445ec.css.map",
+    "main.02433a1a.js.map": "/CienciaNaEscola/static/js/main.02433a1a.js.map",
     "787.28cb0dcd.chunk.js.map": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.599d62e2.css",
-    "static/js/main.b24d81ea.js"
+    "static/css/main.104445ec.css",
+    "static/js/main.02433a1a.js"
   ]
 }
