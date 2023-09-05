@@ -12,10 +12,16 @@
     ],
     "icons": [
         {
-            "src": "faviconmono.png",
-            "sizes": "64x64 32x32 24x24 16x16 192x192 512x512",
+            "src": "favicon.png",
+            "sizes": "454x454",
             "type": "image/png",
-            "purpose": "any monochrome"
+            "purpose": "any"
+        },
+        {
+            "src": "faviconmono.png",
+            "sizes": "454x454",
+            "type": "image/png",
+            "purpose": "monochrome"
         }
     ],
     "start_url": ".",
