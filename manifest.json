@@ -13,9 +13,8 @@
     "icons": [
         {
             "src": "favicon.png",
-            "sizes": "454x454",
-            "type": "image/png",
-            "purpose": "any"
+            "sizes": "192x192",
+            "type": "image/png"
         },
         {
             "src": "faviconmono.png",
