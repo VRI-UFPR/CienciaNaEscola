@@ -19,7 +19,7 @@
         },
         {
             "src": "faviconmono.png",
-            "sizes": "454x454",
+            "sizes": "192x192",
             "type": "image/png",
             "purpose": "monochrome"
         }
