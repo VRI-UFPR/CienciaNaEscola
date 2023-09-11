@@ -24,7 +24,7 @@ function TextImageInput(props) {
             </div>
 
             {input.description !== '' && (
-                <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
+                <div className="bg-grey rounded-4 overflow-hidden">
                     <img className="img-fluid object-fit-contain" src={input.description} alt="Imagem" />
                 </div>
             )}
