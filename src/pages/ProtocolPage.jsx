@@ -124,6 +124,8 @@ function ProtocolPage(props) {
             switch (id) {
                 case '96':
                     return '091a3cde-f7e5-464e-aaef-1ba653a1312f';
+                case '103':
+                    return 'c9fcab4f-4e83-4c08-9eb5-a7a070b8b71c';
                 case '106':
                     return 'fb534ef1-1507-4ffe-b851-f4d43b3c487b';
                 default:
