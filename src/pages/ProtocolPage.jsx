@@ -120,8 +120,19 @@ function ProtocolPage(props) {
 
     useEffect(() => {
         //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+        const url = () => {
+            switch (id) {
+                case '96':
+                    return '091a3cde-f7e5-464e-aaef-1ba653a1312f';
+                case '106':
+                    return 'fb534ef1-1507-4ffe-b851-f4d43b3c487b';
+                default:
+                    return '4441b136-5756-477d-9ec9-dd4f4f2d554f';
+            }
+        };
+
         axios
-            .get(`https://run.mocky.io/v3/${id === '96' ? '091a3cde-f7e5-464e-aaef-1ba653a1312f' : '4441b136-5756-477d-9ec9-dd4f4f2d554f'}`)
+            .get(`https://run.mocky.io/v3/${url()}`)
             .then((response) => {
                 setProtocol(response.data);
                 setIsLoading(false);
