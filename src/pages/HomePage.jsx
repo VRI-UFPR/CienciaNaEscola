@@ -56,15 +56,22 @@ function HomePage(props) {
     const modalRef = useRef(null);
 
     useEffect(() => {
+        const url = () => {
+            switch (user.id) {
+                case 89:
+                    return '9ab01800-6703-440b-b7f0-fba0da6b928c';
+                case 92:
+                    return '35ca541c-d007-4f63-a180-0dfdab4bb807';
+                default:
+                    return 'bfd805e5-08ba-4c6f-a7e7-281071b2d833';
+            }
+        };
+
         if (user.id !== null && user.token !== null) {
             // .get(`http://localhost:3333/user/list/${user.id}`)
             // .get(`https://genforms.c3sl.ufpr.br/api/user/list/83`)
             axios
-                .get(
-                    `https://run.mocky.io/v3/${
-                        user.id === 89 ? '9ab01800-6703-440b-b7f0-fba0da6b928c' : 'bfd805e5-08ba-4c6f-a7e7-281071b2d833'
-                    }`
-                )
+                .get(`https://run.mocky.io/v3/${url()}`)
                 .then((response) => {
                     setUserForms(response.data);
                     setIsLoading(false);
