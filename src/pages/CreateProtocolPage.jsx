@@ -4,6 +4,7 @@ import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
+import CreateSingleSelectionInput from '../components/inputs/protocol/CreateSingleSelectionInput';
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
@@ -12,6 +13,8 @@ import { useParams } from 'react-router-dom';
 import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
+import { defaultNewInput } from '../utils/constants';
+import SubForm from '../components/inputs/protocol/CreateSubformInput';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -57,6 +60,7 @@ function CreateProtocolPage(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [inputs, setInputs] = useState([]);
+
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
@@ -103,29 +107,23 @@ function CreateProtocolPage(props) {
     };
 
     const handleTextBoxAdd = () => {
-        setInputs([
-            ...inputs,
-            {
-                description: '',
-                question: '',
-                type: 0,
-                validation: [],
-                sugestions: [],
-                subForm: null,
-                id: null,
-            },
-        ]);
+        setInputs([...inputs, defaultNewInput(0)]);
     };
 
-    const handleTextBoxRemove = (indexToRemove) => {
-        const updatedInputs = inputs.filter((_, index) => index !== indexToRemove);
-        setInputs(updatedInputs);
+    const handleSingleInputAdd = () => {
+        setInputs([...inputs, defaultNewInput(2)]);
     };
 
-    const handleTextBoxChange = (index, input) => {
-        const updateInputs = [...inputs];
-        updateInputs[index] = input;
-        setInputs(updateInputs);
+    const handleSubFormAdd = () => {
+        setInputs([...inputs, defaultNewInput(4)]);
+    };
+
+    const handleInputRemove = (indexToRemove) => {
+        setInputs(inputs.filter((_, index) => index !== indexToRemove));
+    };
+
+    const handleInputChange = (indexToUpdate, updatedInput) => {
+        setInputs(inputs.map((input, index) => (index === indexToUpdate ? updatedInput : input)));
     };
 
     useEffect(() => {
@@ -186,7 +184,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleSingleInputAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
@@ -194,7 +196,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleSubFormAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Subformulário</span>
                             </button>
@@ -224,15 +230,39 @@ function CreateProtocolPage(props) {
                                     onChange={(event) => setDescription(event.target.value)}
                                 ></textarea>
                             </div>
-                            {inputs.map((input, index) => (
-                                <CreateTextBoxInput
-                                    key={index}
-                                    index={index}
-                                    inputState={input}
-                                    onTextBoxChange={handleTextBoxChange}
-                                    onTextBoxRemove={() => handleTextBoxRemove(index)}
-                                />
-                            ))}
+                            {inputs.map((input, index) => {
+                                switch (input.type) {
+                                    case 0:
+                                        return (
+                                            <CreateTextBoxInput
+                                                key={index}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
+                                    case 2:
+                                        return (
+                                            <CreateSingleSelectionInput
+                                                key={index}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
+                                    case 4:
+                                        return (
+                                            <SubForm
+                                                key={index}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
+                                    default:
+                                        return null;
+                                }
+                            })}
                             <div className="row justify-content-between m-0">
                                 <div className="col-2"></div>
                                 <div className="col-8 col-lg-4">
@@ -248,7 +278,7 @@ function CreateProtocolPage(props) {
             </div>
             <Alert id="CreateProtocolAlert" ref={modalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} />
+                <Sidebar modalRef={modalRef} showExitButton={true}/>
             </div>
             <style>{CreateProtocolStyles}</style>
         </div>
