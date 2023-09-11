@@ -23,10 +23,11 @@ function TextImageInput(props) {
                 <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{input.question}</p>
             </div>
 
-            <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
-                <img className="img-fluid object-fit-contain" src={input.description} alt="Imagem" />
-            </div>
-
+            {input.description !== '' && (
+                <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
+                    <img className="img-fluid object-fit-contain" src={input.description} alt="Imagem" />
+                </div>
+            )}
             <style>{styles}</style>
         </div>
     );
