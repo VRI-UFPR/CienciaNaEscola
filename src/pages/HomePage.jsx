@@ -58,6 +58,8 @@ function HomePage(props) {
     useEffect(() => {
         const url = () => {
             switch (user.id) {
+                case 73:
+                    return 'bf2163d2-f1b8-4251-803d-f8aaeea6996a';
                 case 89:
                     return '9ab01800-6703-440b-b7f0-fba0da6b928c';
                 case 92:
