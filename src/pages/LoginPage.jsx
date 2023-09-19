@@ -64,7 +64,7 @@ function LoginPage(props) {
                 }
             })
             .catch((error) => {
-                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que email e senha estão corretos.' });
+                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
             });
     };
 
@@ -86,7 +86,7 @@ function LoginPage(props) {
                         <input
                             className="login-input align-items-center rounded-pill text-center fs-5 px-3 py-2 mb-4 w-100"
                             placeholder="Login"
-                            type="email"
+                            type="login"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -102,7 +102,7 @@ function LoginPage(props) {
                     </Link> */}
                         <p
                             className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => modalRef.current.showModal({ title: 'Acesse o e-mail cadastrado para recuperar sua senha.' })}
+                            onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>
