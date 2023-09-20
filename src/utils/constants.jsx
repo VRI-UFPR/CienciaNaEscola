@@ -61,7 +61,7 @@ export const aboutPICCE = (
 
 export const teamMembers = (
     <>
-        <p className="mb-4">Ana</p>
+        <p className="mb-4">Ana de Vasconcelos Oporto</p>
         <p className="mb-4">Clara Drimel</p>
         <p className="mb-4">Daniel Lins</p>
         <p className="mb-4">Eduarda de Aguiar Freitas</p>
@@ -70,7 +70,7 @@ export const teamMembers = (
         <p className="mb-4">Guilherme Stonoga Tedardi</p>
         <p className="mb-4">Izalorran Bonaldi</p>
         <p className="mb-4">João Armênio</p>
-        <p className="mb-4">José</p>
+        <p className="mb-4">José Guilherme de Oliveira Pedroso</p>
         <p className="mb-4">Juliana Zambon</p>
         <p className="mb-4">Matheus Piovesan</p>
         <p className="mb-4">Tiago Mendes Bottamedi</p>
