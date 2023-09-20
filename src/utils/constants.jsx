@@ -61,19 +61,19 @@ export const aboutPICCE = (
 
 export const teamMembers = (
     <>
-        <p className="mb-4">Ana de Vasconcelos Oporto</p>
-        <p className="mb-4">Clara Drimel</p>
-        <p className="mb-4">Daniel Lins</p>
-        <p className="mb-4">Eduarda de Aguiar Freitas</p>
-        <p className="mb-4">Eduardo Mathias de Souza</p>
-        <p className="mb-4">Eloisa Nielsen</p>
-        <p className="mb-4">Guilherme Stonoga Tedardi</p>
-        <p className="mb-4">Izalorran Bonaldi</p>
-        <p className="mb-4">João Armênio</p>
-        <p className="mb-4">José Guilherme de Oliveira Pedroso</p>
-        <p className="mb-4">Juliana Zambon</p>
-        <p className="mb-4">Matheus Piovesan</p>
-        <p className="mb-4">Tiago Mendes Bottamedi</p>
-        <p className="mb-4">Yuri Tobias</p>
+        <p className="mb-8">Ana de Vasconcelos Oporto</p>
+        <p className="mb-8">Clara Drimel</p>
+        <p className="mb-8">Daniel Lins</p>
+        <p className="mb-8">Eduarda de Aguiar Freitas</p>
+        <p className="mb-8">Eduardo Mathias de Souza</p>
+        <p className="mb-8">Eloisa Nielsen</p>
+        <p className="mb-8">Guilherme Stonoga Tedardi</p>
+        <p className="mb-8">Izalorran Bonaldi</p>
+        <p className="mb-8">João Armênio</p>
+        <p className="mb-8">José Guilherme de Oliveira Pedroso</p>
+        <p className="mb-8">Juliana Zambon</p>
+        <p className="mb-8">Matheus Piovesan</p>
+        <p className="mb-8">Tiago Mendes Bottamedi</p>
+        <p className="mb-8">Yuri Tobias</p>
     </>
 );
