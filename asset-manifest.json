@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/CienciaNaEscola/static/css/main.104445ec.css",
-    "main.js": "/CienciaNaEscola/static/js/main.7a78363b.js",
+    "main.css": "/CienciaNaEscola/static/css/main.599d62e2.css",
+    "main.js": "/CienciaNaEscola/static/js/main.fdfcfbb2.js",
     "static/js/787.28cb0dcd.chunk.js": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js",
     "static/media/backgroundLogin.png": "/CienciaNaEscola/static/media/backgroundLogin.530fd9e8c132a663b298.png",
     "static/media/logoPicceCircular.svg": "/CienciaNaEscola/static/media/logoPicceCircular.9a175afea811834ff70fc7daef799508.svg",
@@ -21,12 +21,12 @@
     "static/media/ExitSidebarIcon.svg": "/CienciaNaEscola/static/media/ExitSidebarIcon.de8adb0cab043f373f080776a16498e2.svg",
     "static/media/iconPlus.svg": "/CienciaNaEscola/static/media/iconPlus.9748854ae44a26bdedd2c8a85c202cb1.svg",
     "static/media/iconTime.svg": "/CienciaNaEscola/static/media/iconTime.2bc90f507ffcccb4894b2680d4b271e5.svg",
-    "main.104445ec.css.map": "/CienciaNaEscola/static/css/main.104445ec.css.map",
-    "main.7a78363b.js.map": "/CienciaNaEscola/static/js/main.7a78363b.js.map",
+    "main.599d62e2.css.map": "/CienciaNaEscola/static/css/main.599d62e2.css.map",
+    "main.fdfcfbb2.js.map": "/CienciaNaEscola/static/js/main.fdfcfbb2.js.map",
     "787.28cb0dcd.chunk.js.map": "/CienciaNaEscola/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.104445ec.css",
-    "static/js/main.7a78363b.js"
+    "static/css/main.599d62e2.css",
+    "static/js/main.fdfcfbb2.js"
   ]
 }
