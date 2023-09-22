@@ -70,6 +70,8 @@ function HomePage(props) {
                     return '73e8f90e-48a2-4dda-be96-133f83b8f577';
                 case 98:
                     return '36dd9235-396a-4513-8965-67fa9bfecf2d';
+                case 106:
+                    return '935b897b-6ab5-455a-9d7a-7bc84b32a3fa';
                 default:
                     return 'bfd805e5-08ba-4c6f-a7e7-281071b2d833';
             }
