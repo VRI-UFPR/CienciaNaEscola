@@ -86,7 +86,7 @@ function LoginPage(props) {
                         <input
                             className="login-input align-items-center rounded-pill text-center fs-5 px-3 py-2 mb-4 w-100"
                             placeholder="Login"
-                            type="login"
+                            type="text"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
