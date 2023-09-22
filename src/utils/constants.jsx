@@ -59,21 +59,28 @@ export const aboutPICCE = (
     </>
 );
 
+const styles = `
+    .mb-2-5 {
+        margin-bottom: 12px !important;
+    }
+`;
+
 export const teamMembers = (
     <>
-        <p className="mb-8">Ana de Vasconcelos Oporto</p>
-        <p className="mb-8">Clara Drimel</p>
-        <p className="mb-8">Daniel Lins</p>
-        <p className="mb-8">Eduarda de Aguiar Freitas</p>
-        <p className="mb-8">Eduardo Mathias de Souza</p>
-        <p className="mb-8">Eloisa Nielsen</p>
-        <p className="mb-8">Guilherme Stonoga Tedardi</p>
-        <p className="mb-8">Izalorran Bonaldi</p>
-        <p className="mb-8">João Armênio</p>
-        <p className="mb-8">José Guilherme de Oliveira Pedroso</p>
-        <p className="mb-8">Juliana Zambon</p>
-        <p className="mb-8">Matheus Piovesan</p>
-        <p className="mb-8">Tiago Mendes Bottamedi</p>
-        <p className="mb-8">Yuri Tobias</p>
+        <p className="mb-2-5">Ana de Vasconcelos Oporto</p>
+        <p className="mb-2-5">Clara Drimel</p>
+        <p className="mb-2-5">Daniel Lins</p>
+        <p className="mb-2-5">Eduarda de Aguiar Freitas</p>
+        <p className="mb-2-5">Eduardo Mathias de Souza</p>
+        <p className="mb-2-5">Eloisa Nielsen</p>
+        <p className="mb-2-5">Guilherme Stonoga Tedardi</p>
+        <p className="mb-2-5">Izalorran Bonaldi</p>
+        <p className="mb-2-5">João Armênio</p>
+        <p className="mb-2-5">José Guilherme de Oliveira Pedroso</p>
+        <p className="mb-2-5">Juliana Zambon</p>
+        <p className="mb-2-5">Matheus Moraes Piovesan</p>
+        <p className="mb-2-5">Tiago Mendes Bottamedi</p>
+        <p className="mb-2-5">Yuri Junqueira Tobias</p>
+        <style>{styles}</style>
     </>
 );
