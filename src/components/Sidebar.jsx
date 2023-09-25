@@ -3,6 +3,8 @@ import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
+import { AuthContext } from '../contexts/AuthContext';
+import { useContext } from 'react';
 
 const styles = `
     .font-barlow {
@@ -47,6 +49,7 @@ const styles = `
 
 function Sidebar(props) {
     const { modalRef, showExitButton } = props;
+    const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
@@ -116,7 +119,10 @@ function Sidebar(props) {
                                 dismissText: 'Não',
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
-                                actionOnClick: () => navigate('/login'),
+                                actionOnClick: () => {
+                                    logout();
+                                    navigate('/login');
+                                },
                             });
                         }}
                     >
