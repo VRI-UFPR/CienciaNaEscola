@@ -1,4 +1,4 @@
-import { React, useContext, useState, useRef } from 'react';
+import { React, useContext, useState, useRef, useEffect } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/backgroundLogin.png';
@@ -46,6 +46,12 @@ function LoginPage(props) {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const modalRef = useRef(null);
+
+    useEffect(() => {
+        if (localStorage.getItem('user') != null) {
+            navigate('/home');
+        }
+    }, [navigate]);
 
     const loginHandler = (event) => {
         event.preventDefault();
