@@ -146,6 +146,8 @@ function ProtocolPage(props) {
                     return 'de19eda9-f683-4bc5-b3f5-d1212565c572';
                 case '118':
                     return '16b4188e-3b79-4f15-aaa4-655d55ab8f7a';
+                case '119':
+                    return '960558c3-fad6-47d9-840f-1fbb29d8d531';
                 default:
                     return '4441b136-5756-477d-9ec9-dd4f4f2d554f';
             }
