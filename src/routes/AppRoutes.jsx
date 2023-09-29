@@ -43,7 +43,7 @@ function AppRoutes(props) {
             <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
 
             <Route path="/about" element={<InfosPage title="Sobre o PICCE" content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />} />
-            <Route path="/equipe" element={<InfosPage title="Equipe" content={teamMembers} showAccept={false} showNavTogglerDesktop={false} />} />
+            <Route path="/team" element={<InfosPage title="Equipe" content={teamMembers} showAccept={false} showNavTogglerDesktop={false} />} />
     
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
