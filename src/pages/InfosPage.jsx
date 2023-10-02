@@ -1,10 +1,11 @@
-import { React, useRef } from 'react';
+import React, { useRef } from 'react';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { teamMembers } from '../utils/constants';
 
 const infosPageStyles = `
     .bg-coral-red {
@@ -32,6 +33,8 @@ function InfosPage(props) {
     const { title, content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
+    const location = useLocation();
+    
     return (
         <div className="d-flex flex-column font-barlow vh-100">
             <div className="row m-0 flex-grow-1">
@@ -51,6 +54,12 @@ function InfosPage(props) {
                             <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{title}</h1>
                             <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{content}</h2>
                         </div>
+                        {location.pathname === '/about' && (
+                            <div className="d-flex flex-column">
+                                <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">Equipe</h1>
+                                <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{teamMembers}</h2>
+                            </div>
+                        )}
                         <div className="row justify-content-between mx-0">
                             <div className="col-2"></div>
                             <div className="col-8 col-lg-4 align-items-center p-0">
