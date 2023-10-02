@@ -4,7 +4,7 @@ import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
 import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
-import CreateSingleSelectionInput from '../components/inputs/protocol/CreateSingleSelectionInput';
+import CreateMultipleInputItens from '../components/inputs/protocol/CreateMultipleInputItens';
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
@@ -110,8 +110,16 @@ function CreateProtocolPage(props) {
         setInputs([...inputs, defaultNewInput(0)]);
     };
 
+    const handleDropdownListAdd = () => {
+        setInputs([...inputs, defaultNewInput(1)]);
+    };
+
     const handleSingleInputAdd = () => {
         setInputs([...inputs, defaultNewInput(2)]);
+    };
+
+    const handleMultipleChoiceAdd = () => {
+        setInputs([...inputs, defaultNewInput(3)]);
     };
 
     const handleSubFormAdd = () => {
@@ -180,7 +188,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleDropdownListAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
                             </button>
@@ -192,7 +204,11 @@ function CreateProtocolPage(props) {
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
                             </button>
-                            <button type="button" className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0">
+                            <button
+                                type="button"
+                                className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                onClick={handleMultipleChoiceAdd}
+                            >
                                 <IconPlus className="icon-plus" />
                                 <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                             </button>
@@ -241,10 +257,31 @@ function CreateProtocolPage(props) {
                                                 onInputRemove={() => handleInputRemove(index)}
                                             />
                                         );
+                                    case 1:
+                                        return (
+                                            <CreateMultipleInputItens
+                                                key={index}
+                                                title={'Lista Suspensa'}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
                                     case 2:
                                         return (
-                                            <CreateSingleSelectionInput
+                                            <CreateMultipleInputItens
                                                 key={index}
+                                                title={'Seleção Única'}
+                                                input={input}
+                                                onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
+                                                onInputRemove={() => handleInputRemove(index)}
+                                            />
+                                        );
+                                    case 3:
+                                        return (
+                                            <CreateMultipleInputItens
+                                                key={index}
+                                                title={'Múltipla Escolha'}
                                                 input={input}
                                                 onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
                                                 onInputRemove={() => handleInputRemove(index)}
@@ -278,7 +315,7 @@ function CreateProtocolPage(props) {
             </div>
             <Alert id="CreateProtocolAlert" ref={modalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} showExitButton={true}/>
+                <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
             <style>{CreateProtocolStyles}</style>
         </div>

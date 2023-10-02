@@ -11,7 +11,7 @@ import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
-import { teamMembers } from '../utils/constants';
+import { aboutPICCE } from '../utils/constants';
 
 function AppRoutes(props) {
     return (
@@ -41,10 +41,9 @@ function AppRoutes(props) {
             <Route path="/help" element={<HelpPage />} />
             <Route path="/createprotocol" element={<CreateProtocolPage />} />
             <Route path="/editprotocol/:id" element={<CreateProtocolPage edit={true} />} />
-            <Route
-                path="/about"
-                element={<InfosPage title="Equipe" content={teamMembers} showAccept={false} showNavTogglerDesktop={false} />}
-            />
+
+            <Route path="/about" element={<InfosPage title="Sobre o PICCE" content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />} />
+    
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/answer/:id" element={<AnswerPage />} />
