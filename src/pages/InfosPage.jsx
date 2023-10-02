@@ -33,6 +33,7 @@ function InfosPage(props) {
     const { title, content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
+    const location = useLocation();
     
     return (
         <div className="d-flex flex-column font-barlow vh-100">
