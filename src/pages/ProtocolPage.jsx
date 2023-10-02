@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import SplashPage from './SplashPage';
@@ -47,6 +47,7 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
         setAnswers((prevAnswers) => {
@@ -60,9 +61,15 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                modalRef.current.showModal({ title: 'Muito obrigado por sua participação no projeto!' });
+                modalRef.current.showModal({
+                    title: 'Muito obrigado por sua participação no projeto!',
+                    onHide: () => {
+                        navigate('/home');
+                    },
+                });
             })
             .catch((error) => {
+                modalRef.current.showModal({ title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.' });
                 console.error(error.message);
             });
     };
@@ -165,7 +172,7 @@ function ProtocolPage(props) {
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} showExitButton={true}/>
+                <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
 
             <style>{styles}</style>
