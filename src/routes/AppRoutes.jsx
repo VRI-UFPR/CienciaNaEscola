@@ -11,7 +11,7 @@ import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
-import {teamMembers} from '../utils/constants';
+import { aboutPICCE } from '../utils/constants';
 
 function AppRoutes(props) {
     return (
