@@ -30,19 +30,10 @@ const infosPageStyles = `
 `;
 
 function InfosPage(props) {
-    const { showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { title, content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
     const modalRef = useRef(null);
     const location = useLocation();
-
-    let content, title;
-    if (location.pathname === '/about') {
-        title = 'Sobre o PICCE';
-        content = aboutPICCE;
-    } else if (location.pathname === '/equipe') {
-        title = 'Equipe';
-        content = teamMembers;
-    }
     
     return (
         <div className="d-flex flex-column font-barlow vh-100">
