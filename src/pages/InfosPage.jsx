@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { aboutPICCE } from '../utils/constants';
+import { teamMembers } from '../utils/constants';
 
 const infosPageStyles = `
     .bg-coral-red {
