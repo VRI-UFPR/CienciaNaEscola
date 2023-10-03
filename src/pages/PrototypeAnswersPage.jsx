@@ -27,6 +27,7 @@ const PrototypeAnswersStyles = `
   • 3: Lista suspensa;
 */
 function jsonToCsv(items) {
+    console.log(items);
     let header = [],
         answers = [],
         mAnswer = [],
@@ -50,10 +51,14 @@ function jsonToCsv(items) {
         answers[i] = [];
         answersNumber = [];
         answersNumber = Object.keys(items[i].inputAnswers);
+        // console.log(answersNumber);
         // Percorre todas as perguntas para verificar se existem respostas
         for (let j = 0; j < items[i].form.inputs.length; j++) {
             // Se existir resposta, trata de acordo com o tipo da pergunta
-            if (answersNumber.find((findId) => findId === items[i].form.inputs[j].id) !== undefined) {
+            // answersNumber.find((findId) => console.log(findId));
+            // console.log(':');
+            // console.log(answersNumber.find((findId) => findId === items[i].form.inputs[j].id));
+            if (answersNumber.find((findId) => findId == items[i].form.inputs[j].id) !== undefined) {
                 // Os tipos estão definidos na descrição dessa função
                 switch (items[i].form.inputs[j].type) {
                     case 0:
@@ -62,7 +67,7 @@ function jsonToCsv(items) {
 
                     case 1:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
+                            if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 mAnswer.push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }
@@ -74,7 +79,7 @@ function jsonToCsv(items) {
 
                     case 2:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
+                            if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }
@@ -82,7 +87,7 @@ function jsonToCsv(items) {
 
                     case 3:
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
-                            if (Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value) === 'true') {
+                            if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
                             }
                         }
@@ -108,6 +113,8 @@ function jsonToCsv(items) {
     // Armazena tudo em uma única String
     const csv = [headerString, ...answers].join('\r\n');
 
+    console.log(csv);
+
     // Fim
     return csv;
 }
@@ -125,21 +132,21 @@ function createFile(user, id) {
             obj = response.data;
             csv = jsonToCsv(obj);
 
-            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            if (navigator.msSaveBlob) {
-                navigator.msSaveBlob(blob, 'data.csv');
-            } else {
-                var link = document.createElement('a');
-                if (link.download !== undefined) {
-                    var url = URL.createObjectURL(blob);
-                    link.setAttribute('href', url);
-                    link.setAttribute('download', 'data.csv');
-                    link.style.visibility = 'hidden';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            }
+            // var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            // if (navigator.msSaveBlob) {
+            //     navigator.msSaveBlob(blob, 'data.csv');
+            // } else {
+            //     var link = document.createElement('a');
+            //     if (link.download !== undefined) {
+            //         var url = URL.createObjectURL(blob);
+            //         link.setAttribute('href', url);
+            //         link.setAttribute('download', 'data.csv');
+            //         link.style.visibility = 'hidden';
+            //         document.body.appendChild(link);
+            //         link.click();
+            //         document.body.removeChild(link);
+            //     }
+            // }
         });
 }
 
