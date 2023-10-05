@@ -27,12 +27,11 @@ const PrototypeAnswersStyles = `
   • 3: Lista suspensa;
 */
 function jsonToCsv(items) {
-    console.log(items);
     let header = [],
         answers = [],
         mAnswer = [],
         answersNumber = [];
-    let headerString, mAnswerString;
+    let headerString, mAnswerString, control;
 
     // Armazena todas as perguntas no vetor 'header'
     for (let i = 0; i < items[0].form.inputs.length; i++) {
@@ -51,26 +50,30 @@ function jsonToCsv(items) {
         answers[i] = [];
         answersNumber = [];
         answersNumber = Object.keys(items[i].inputAnswers);
-        // console.log(answersNumber);
         // Percorre todas as perguntas para verificar se existem respostas
         for (let j = 0; j < items[i].form.inputs.length; j++) {
             // Se existir resposta, trata de acordo com o tipo da pergunta
             // answersNumber.find((findId) => console.log(findId));
-            // console.log(':');
-            // console.log(answersNumber.find((findId) => findId === items[i].form.inputs[j].id));
-            if (answersNumber.find((findId) => findId == items[i].form.inputs[j].id) !== undefined) {
+            if (answersNumber.find((findId) => Number(findId) === items[i].form.inputs[j].id) !== undefined) {
                 // Os tipos estão definidos na descrição dessa função
                 switch (items[i].form.inputs[j].type) {
                     case 0:
-                        answers[i].push(String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][0].value)));
+                        if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][0].value)) != null) {
+                            answers[i].push(String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][0].value)));
+                        } else {
+                            answers[i].push('Answer not found');
+                        }
                         break;
 
                     case 1:
+                        control = 0;
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
                             if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 mAnswer.push(String(items[i].form.inputs[j].sugestions[k].value));
+                                control = 1;
                             }
                         }
+                        if (control === 0) mAnswer.push('Answer not found');
                         mAnswerString = mAnswer.join(',');
                         answers[i].push(String(mAnswerString));
                         mAnswer = [];
@@ -78,19 +81,25 @@ function jsonToCsv(items) {
                         break;
 
                     case 2:
+                        control = 0;
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
                             if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
+                                control = 1;
                             }
                         }
+                        if (control === 0) answers[i].push('Answer not found');
                         break;
 
                     case 3:
+                        control = 0;
                         for (let k = 0; k < Object(items[i].inputAnswers[items[i].form.inputs[j].id]).length; k++) {
                             if (String(Object(items[i].inputAnswers[items[i].form.inputs[j].id][k].value)) === 'true') {
                                 answers[i].push(String(items[i].form.inputs[j].sugestions[k].value));
+                                control = 1;
                             }
                         }
+                        if (control === 0) answers[i].push('Answer not found');
                         break;
 
                     default:
@@ -113,8 +122,6 @@ function jsonToCsv(items) {
     // Armazena tudo em uma única String
     const csv = [headerString, ...answers].join('\r\n');
 
-    console.log(csv);
-
     // Fim
     return csv;
 }
@@ -132,21 +139,21 @@ function createFile(user, id) {
             obj = response.data;
             csv = jsonToCsv(obj);
 
-            // var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            // if (navigator.msSaveBlob) {
-            //     navigator.msSaveBlob(blob, 'data.csv');
-            // } else {
-            //     var link = document.createElement('a');
-            //     if (link.download !== undefined) {
-            //         var url = URL.createObjectURL(blob);
-            //         link.setAttribute('href', url);
-            //         link.setAttribute('download', 'data.csv');
-            //         link.style.visibility = 'hidden';
-            //         document.body.appendChild(link);
-            //         link.click();
-            //         document.body.removeChild(link);
-            //     }
-            // }
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, 'data.csv');
+            } else {
+                var link = document.createElement('a');
+                if (link.download !== undefined) {
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'data.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
         });
 }
 
