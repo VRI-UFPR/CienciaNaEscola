@@ -1,35 +1,24 @@
-import React from 'react'
+import { React } from 'react';
 import { Link } from 'react-router-dom';
-import HomeButton from './HomeButton';
 import { Carousel } from 'bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+import HomeButton from './HomeButton';
 
 const style = `
     .custom-carousel {
-        background-color: rgba(254, 207, 134, 0.7);
-        
-        border-radius: 15px;
-        width: 100%;
+        background-color: #FECF86B2;
+        border-radius: 20px;
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
-
-    .carousel-indicators {
-        display: flex;
-        justify-content: center;
-        margin-top: 1rem;
-    }
         
     .carousel-indicator {
-        border-radius: 50%;
-        background-color: #9F9F9F;
-        margin: 0 5px;
-        cursor: pointer;
-        border: none;
+        background-color: #9F9F9F !important;
     }
       
     .carousel-indicator.active {
-        background-color: #5C5C5C;
+        background-color: #5C5C5C !important;
     }
 `;
 
@@ -37,15 +26,12 @@ function ProtocolCarousel(props) {
     const { users } = props;
 
     const carouselRef = useRef(null);
-    const carouselParentRef = useRef(null);
     const itemsPerSlide = 5;
     const totalSlides = Math.ceil(users.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
         const carousel = carouselRef.current;
-        const carouselParent = carouselParentRef.current;
-        
         new Carousel(carousel);
     }, []);
 
@@ -58,21 +44,20 @@ function ProtocolCarousel(props) {
             const slideButtons = users.slice(startIndex, endIndex);
 
             carouselItems.push(
-            <div key={i} className={`carousel-item${i === 0 ? ' active' : ''} h-100`}>
-                <div className="d-flex flex-column align-items-center h-100 pb-3">
-                {slideButtons.map((protocol, index) => (
-                    <Link
-                        to={`/protocol/${protocol.id}`}
-                        key={index}
-                        className="d-flex flex-column align-items-center pb-3 w-100 text-decoration-none" style={{height: '20%', maxHeight: '20%', color: '#262626'}}>
-                        <HomeButton
-                            title={protocol.title}
-                            date="01/01/2021"
-                        />
-                    </Link>
-                ))}
+                <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
+                    <div className="d-flex flex-column align-items-center h-100 pb-3">
+                        {slideButtons.map((protocol, index) => (
+                            <Link
+                                to={`/protocol/${protocol.id}`}
+                                key={index}
+                                className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
+                                style={{ height: '20%', maxHeight: '20%', color: '#262626' }}
+                            >
+                                <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} />
+                            </Link>
+                        ))}
+                    </div>
                 </div>
-            </div>
             );
         }
 
@@ -85,48 +70,30 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             indicators.push(
                 <button
-                    key={i} 
-                    type="button" 
-                    className={`carousel-indicator ${i === currentPage ? ' active' : ''}`}
+                    key={i}
+                    type="button"
+                    className={`carousel-indicator ${i === currentPage ? ' active' : ''} rounded-circle border-0 mx-1`}
                     data-bs-target="#dynamic-carousel"
                     data-bs-slide-to={i}
                     onClick={() => setCurrentPage(i)}
-                    style={{ 
+                    style={{
                         width: '1rem',
-                        height: '1rem'
+                        height: '1rem',
                     }}
                 ></button>
-            )
+            );
         }
 
         return indicators;
-    }
+    };
 
     return (
-        <div id="dynamic-carousel" className="carousel slide custom-carousel" data-bs-interval="false" ref={carouselRef}>
-        <div className="carousel-inner h-100">
-            {renderCarouselItems()}
-        </div>
-        <div className="carousel-indicators">
-            {renderPageIndicators()}
-        </div>
-            <button className="carousel-control-prev d-none">
-                {}
-            </button>
-            <button className="carousel-control-next d-none">
-                {}
-            </button>
-        <button className="carousel-control-prev d-none" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="prev">
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-        </button>
-        <button className="carousel-control-next d-none" type="button" data-bs-target="#dynamic-carousel" data-bs-slide="next">
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-        </button>
-        <style>{style}</style>
+        <div id="dynamic-carousel" className="custom-carousel carousel slide w-100" ref={carouselRef}>
+            <div className="carousel-inner h-100">{renderCarouselItems()}</div>
+            <div className="carousel-indicators">{renderPageIndicators()}</div>
+            <style>{style}</style>
         </div>
     );
-};
+}
 
 export default ProtocolCarousel;

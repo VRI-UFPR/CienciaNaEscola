@@ -29,7 +29,7 @@ const styles = `
 function NavBar(props) {
     const { showNavToggler } = props;
     return (
-        <div>
+        <>
             <nav className="navbar ce-navbar navbar-light d-flex flex-column p-0">
                 <ColoredBorder />
                 <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
@@ -55,7 +55,7 @@ function NavBar(props) {
                 <Sidebar />
             </div>
             <style>{styles}</style>
-        </div>
+        </>
     );
 }
 
