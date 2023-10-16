@@ -1,7 +1,7 @@
 import { React, useContext, useState, useRef, useEffect } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
-import Background from '../assets/images/backgroundLogin.png';
+import Background from '../assets/images/loginPageBackground.png';
 // import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
@@ -9,6 +9,7 @@ import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
+
 
 const styles = `
 
@@ -29,6 +30,9 @@ const styles = `
 
     ::placeholder {
         color: #FFFFFF;
+        font-weight: 400;
+        font-size: 90%;
+        opacity: 1;
     }
 
     .login-forgot-pw{
@@ -90,14 +94,14 @@ function LoginPage(props) {
                 <form className="row justify-content-center pt-5 h-50 w-75" onSubmit={loginHandler}>
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
-                            className="login-input align-items-center rounded-pill text-center fs-5 px-3 py-2 mb-4 w-100"
+                            className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
                             placeholder="Login"
                             type="text"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
-                            className="login-input rounded-pill text-center fs-5 px-3 py-2 mb-3 w-100"
+                            className="login-input rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
                             placeholder="Senha"
                             type="password"
                             value={password}
