@@ -13,6 +13,10 @@ const styles = `
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html, body, #root, #root>div {
+    height: 100%;
+  }
+
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
