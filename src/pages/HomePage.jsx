@@ -1,8 +1,9 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import axios from 'axios';
 
 import NavBar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
 
@@ -21,9 +22,11 @@ const style = `
 `;
 
 function HomePage(props) {
+    const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
+
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
-
+    const modalRef = useRef(null);
     const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
@@ -47,7 +50,16 @@ function HomePage(props) {
 
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
-            <NavBar />
+            <div className={`col-auto bg-coral-red p-0 ${showSidebar ? 'd-flex' : 'd-lg-none'}`}>
+                <div
+                    className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
+                    tabIndex="-1"
+                    id="sidebar"
+                >
+                    <Sidebar modalRef={modalRef} />
+                </div>
+            </div>
+            <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
             <div className="row d-flex flex-column flex-grow-1 align-items-center font-barlow bg-white p-0 m-0">
                 <div className="col col-lg-9 d-flex flex-column flex-grow-1 p-4 p-lg-5">
                     <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Protocolos</h1>
@@ -61,5 +73,11 @@ function HomePage(props) {
         </div>
     );
 }
+
+HomePage.defaultProps = {
+    showSidebar: true,
+    showNavTogglerMobile: true,
+    showNavTogglerDesktop: true,
+};
 
 export default HomePage;
