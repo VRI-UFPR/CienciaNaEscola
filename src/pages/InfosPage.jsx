@@ -52,7 +52,7 @@ function InfosPage(props) {
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
                             <h1 className="font-century-gothic color-dark-gray fw-bold fs-4 pb-3 m-0">{title}</h1>
-                            <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{content}</h2>
+                            <h2 className="color-dark-gray fw-medium fs-6 pb-4 m-0">{content}</h2>
                         </div>
                         {location.pathname === '/about' && (
                             <div className="d-flex flex-column">
