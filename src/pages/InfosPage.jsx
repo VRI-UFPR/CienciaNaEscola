@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import NavBar from '../components/Navbar';
-import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
@@ -39,8 +38,7 @@ function InfosPage(props) {
         if ((localStorage.getItem('user') != null) && (location.pathname === '/')) {
             navigate('/home');
         }
-    }, [navigate]);
-
+    }, [navigate, location.pathname]);
 
     return (
         <div className="d-flex flex-column font-barlow vh-100">
