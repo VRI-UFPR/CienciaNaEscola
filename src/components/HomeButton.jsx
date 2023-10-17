@@ -12,24 +12,23 @@ const styles = `
         width: 85%;
         box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
     }
-
-    .custom-icon {
-        max-width: 100px !important;
-        max-height: 60px !important;
-    }
 `;
 
 function HomeButton(props) {
     const { title, check } = props;
 
     return (
-        <div className="custom-btn d-flex align-items-center font-barlow h-100 px-4">
-            <div className="d-flex align-items-center w-75 h-100 p-0">
-                <h4 className=" text-truncate fw-medium m-0">{title}</h4>
+        <div className="custom-btn d-flex align-items-center justify-content-between font-barlow h-100 px-4">
+            <div className="d-flex align-items-center h-100 w-100 p-0">
+                <h4 className="text-truncate fw-medium w-100 m-0">{title}</h4>
+
+                {check && (
+                    <div className="d-flex justify-content-end align-items-center p-0 m-0">
+                        <img src={CheckIcon} alt="Ícone de já respondido" className="w-50 h-50" />
+                    </div>
+                )}
             </div>
-            <div className="d-flex justify-content-end align-items-center w-25 h-100 p-0">
-                {check && <img src={CheckIcon} alt="Ícone de já respondido" className="custom-icon w-50 h-50" />}
-            </div>
+
             <style>{styles}</style>
         </div>
     );
