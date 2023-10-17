@@ -84,9 +84,6 @@ function InfosPage(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-2 d-flex align-items-end justify-content-end p-0">
-                                <RoundedButton role="link" onClick={() => navigate('/help')} />
-                            </div>
                         </div>
                     </div>
                 </div>
