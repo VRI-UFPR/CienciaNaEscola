@@ -67,7 +67,6 @@ function InfosPage(props) {
                                 <h2 className="color-dark-gray text-justify fw-medium fs-6 pb-4 m-0">{teamMembers}</h2>
                             </div>
                         )}
-                        {location.pathname === '/' && (
                             <div className="row justify-content-center pb-4 m-0">
                                 <div className="col-8 col-lg-4 p-0">
                                     <div className="row m-0">
@@ -83,7 +82,7 @@ function InfosPage(props) {
                                         <div className="col-6 p-0">
                                             <TextButton
                                                 role="link"
-                                                onClick={() => navigate('/signup')}
+                                                onClick={() => navigate('/login')}
                                                 className={showAccept ? '' : 'd-none'}
                                                 hsl={[97, 43, 70]}
                                                 text="Aceitar"
@@ -92,7 +91,6 @@ function InfosPage(props) {
                                     </div>
                                 </div>
                             </div>
-                        )}
                     </div>
                 </div>
             </div>
