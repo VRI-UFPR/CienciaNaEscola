@@ -11,7 +11,7 @@ import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
-import { aboutPICCE } from '../utils/constants';
+import { aboutPICCE, terms} from '../utils/constants';
 
 function AppRoutes(props) {
     return (
@@ -21,13 +21,12 @@ function AppRoutes(props) {
             <Route path="/home" element={<HomePage />} />
             <Route
                 path="/terms"
-                element={<InfosPage key="terms" title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />}
+                element={<InfosPage title="Termos de uso"  content={terms} showAccept={false} showNavTogglerDesktop={false} />}
             />
             <Route
                 path="/acceptterms"
                 element={
                     <InfosPage
-                        key="acceptterms"
                         title="Termos de uso"
                         showSidebar={false}
                         showAccept={true}
