@@ -46,12 +46,12 @@ function HomePage(props) {
     }
 
     return (
-        <div className="container-fluid p-0">
-            <div className="row d-flex flex-column align-items-center font-barlow bg-white vh-100 p-0 m-0">
-                <NavBar />
-                <div className="col col-lg-10 d-flex flex-column flex-grow-1 p-4 p-lg-5">
+        <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
+            <NavBar />
+            <div className="row d-flex flex-column flex-grow-1 align-items-center font-barlow bg-white p-0 m-0">
+                <div className="col col-lg-9 d-flex flex-column flex-grow-1 p-4 p-lg-5">
                     <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Protocolos</h1>
-                    <div className="d-flex justify-content-center flex-grow-1 pb-5 m-0">
+                    <div className="d-flex justify-content-center flex-grow-1 pb-5 pb-lg-0 m-0">
                         <ProtocolCarousel users={filteredData} />
                     </div>
                 </div>
