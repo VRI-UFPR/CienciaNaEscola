@@ -12,6 +12,11 @@ const styles = `
         width: 85%;
         box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
     }
+
+    .custom-icon {
+        max-width: 100px !important;
+        max-height: 60px !important;
+    }
 `;
 
 function HomeButton(props) {
@@ -23,7 +28,7 @@ function HomeButton(props) {
                 <h4 className=" text-truncate fw-medium m-0">{title}</h4>
             </div>
             <div className="d-flex justify-content-end align-items-center w-25 h-100 p-0">
-                {check && <img src={CheckIcon} alt="Ícone de já respondido" className="w-50 h-50" />}
+                {check && <img src={CheckIcon} alt="Ícone de já respondido" className="custom-icon w-50 h-50" />}
             </div>
             <style>{styles}</style>
         </div>
