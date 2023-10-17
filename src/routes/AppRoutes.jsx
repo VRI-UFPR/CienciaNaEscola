@@ -25,18 +25,6 @@ function AppRoutes(props) {
                 element={<InfosPage title="Termos de uso" content={terms} showAccept={false} 
                 showNavTogglerDesktop={false} />}
             />
-            <Route
-                path="/acceptterms"
-                element={
-                    <InfosPage
-                        title="Termos de uso"
-                        showSidebar={false}
-                        showAccept={true}
-                        showNavTogglerMobile={false}
-                        showNavTogglerDesktop={false}
-                    />
-                }
-            />
             <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
             <Route path="/protocol/:id" element={<ProtocolPage />} />
             <Route path="/help" element={<HelpPage />} />
