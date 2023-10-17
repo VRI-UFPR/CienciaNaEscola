@@ -68,7 +68,7 @@ function InfosPage(props) {
                             </div>
                         )}
                         {location.pathname === '/' && (
-                            <div className="row justify-content-center m-0">
+                            <div className="row justify-content-center pb-4 m-0">
                                 <div className="col-8 col-lg-4 p-0">
                                     <div className="row m-0">
                                         <div className="col-6 p-0 pe-2">
