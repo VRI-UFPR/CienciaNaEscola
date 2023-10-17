@@ -34,7 +34,7 @@ function InfosPage(props) {
     const navigate = useNavigate();
     const modalRef = useRef(null);
     const location = useLocation();
-    
+
     useEffect(() => {
         if ((localStorage.getItem('user') != null) && (location.pathname === '/')) {
             navigate('/home');
@@ -68,31 +68,30 @@ function InfosPage(props) {
                             </div>
                         )}
                         {location.pathname === '/' && (
-                        <div className="row justify-content-between mx-0">
-                            <div className="col-2"></div>
-                            <div className="col-8 col-lg-4 align-items-center p-0">
-                                <div className="row m-0">
-                                    <div className="col-6 p-0 pe-1">
-                                        <TextButton
-                                            role="link"
-                                            onClick={() => navigate('/login')}
-                                            className={showAccept ? '' : 'd-none'}
-                                            hsl={[97, 43, 70]}
-                                            text="Aceitar"
-                                        />
-                                    </div>
-                                    <div className="col-6 p-0 ps-1">
-                                        <TextButton
-                                            role="link"
-                                            onClick={() => navigate('/login')}
-                                            className={showAccept ? '' : 'd-none'}
-                                            hsl={[355, 78, 66]}
-                                            text="Voltar"
-                                        />
+                            <div className="row justify-content-center m-0">
+                                <div className="col-8 col-lg-4 p-0">
+                                    <div className="row m-0">
+                                        <div className="col-6 p-0 pe-2">
+                                            <TextButton
+                                                role="link"
+                                                onClick={() => navigate('/login')}
+                                                className={showAccept ? '' : 'd-none'}
+                                                hsl={[37, 98, 76]}
+                                                text="Voltar"
+                                            />
+                                        </div>
+                                        <div className="col-6 p-0">
+                                            <TextButton
+                                                role="link"
+                                                onClick={() => navigate('/signup')}
+                                                className={showAccept ? '' : 'd-none'}
+                                                hsl={[97, 43, 70]}
+                                                text="Aceitar"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         )}
                     </div>
                 </div>
