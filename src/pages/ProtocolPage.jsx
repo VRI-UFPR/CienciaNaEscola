@@ -131,7 +131,7 @@ function ProtocolPage(props) {
                 case '105':
                     return '284bc033-0f04-4a2a-a751-19d706c6968e';
                 case '106':
-                    return 'a9ef4806-112f-4963-ab5e-cf7f3bc4735d';
+                    return '19c5d932-72cc-4200-833b-fcadd8719181';
                 case '108':
                     return '61e39415-fdf9-4024-b919-3b986f68fc6d';
                 case '109':
@@ -145,7 +145,7 @@ function ProtocolPage(props) {
                 case '113':
                     return '047ff336-f99d-47bb-a205-188f2cea9685';
                 case '114':
-                    return '243f10ee-9b78-4e35-82d8-ddad0d48b29c';
+                    return '579c37a1-0de8-46f6-8e2f-a0bbc55a8136';
                 case '115':
                     return 'e7ae00f5-d57c-445c-ab36-8d1aa026de5c';
                 case '117':
