@@ -2,7 +2,7 @@ import { React, useContext, useState, useRef, useEffect } from 'react';
 import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
-// import { Link } from 'react-router-dom';
+import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
@@ -10,12 +10,7 @@ import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 
-
 const styles = `
-
-    .login-title{
-        color: #3C3A3A;
-    }
 
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
@@ -41,6 +36,21 @@ const styles = `
 
     .login-forgot-pw:hover{
         cursor: pointer;
+    }
+
+    .button-position{
+        z-index: 1;
+    }
+
+    .background-style{
+        background-size: cover;
+        background-image: url(${Background});
+    }
+
+    @media (min-width: 768px) {
+        .background-style{
+            background-image: url(${BackgroundWeb});
+        }
     }
 `;
 
@@ -80,8 +90,8 @@ function LoginPage(props) {
 
     return (
         <div
-            className="d-flex flex-column align-items-center font-century-gothic vh-100 w-100"
-            style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
+            className="d-flex flex-column align-items-center font-century-gothic vh-100 w-100 background-style"
+            //style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
         >
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end h-50">
@@ -91,7 +101,7 @@ function LoginPage(props) {
                     </span>
                 </div>
 
-                <form className="row justify-content-center pt-5 h-50 w-75" onSubmit={loginHandler}>
+                <form className="row g-0 justify-content-center pt-5 h-50 w-75" onSubmit={loginHandler}>
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
                             className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
@@ -107,9 +117,6 @@ function LoginPage(props) {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        {/* <Link to={'/acceptterms'} className="login-forgot-pw pb-2 fs-6">
-                        Criar nova conta
-                    </Link> */}
                         <p
                             className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
                             onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
@@ -117,14 +124,14 @@ function LoginPage(props) {
                             Esqueci minha senha
                         </p>
                     </div>
-                    <div className="row flex-column justify-content-end align-items-center pt-lg-5">
+                    <div className="row g-0 flex-column justify-content-end align-items-center pt-lg-5 button-position">
                         <div className="col-12 col-lg-6">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
                     </div>
                 </form>
             </div>
-            <div className="row align-items-end justify-content-between pb-4 ps-2 h-25 w-100 ">
+            <div className="row g-0 align-items-end justify-content-between pb-4 ps-2 h-25 w-100 ">
                 <div className="col-4 justify-content-start d-flex align-items-center">
                     <img
                         className="d-h-auto w-100"
