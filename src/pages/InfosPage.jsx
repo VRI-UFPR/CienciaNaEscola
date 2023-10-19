@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import NavBar from '../components/Navbar';
-import RoundedButton from '../components/RoundedButton';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
