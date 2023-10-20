@@ -21,10 +21,6 @@ const profilePageStyles = `
     .bg-pastel-blue {
         background-color: #91CAD6;
     }
-
-    .text-pastel-blue {
-        color: #91CAD6;
-    }
     
     .color-dark-gray {
         color: #535353;
@@ -82,13 +78,10 @@ function ProfilePage(props) {
                             <div className="col-12 col-lg-9 d-flex flex-column justify-content-center">
                                 <div className="row align-items-center m-0 mb-2">
                                     <div className="row mb-1">
-                                        <label
-                                            htmlFor="name-input"
-                                            className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0"
-                                        >
+                                        <label htmlFor="name-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
                                             Nome:
                                         </label>
-                                    </div>  
+                                    </div>
                                     <input
                                         type="name"
                                         disabled={!allowEdit}
@@ -98,18 +91,15 @@ function ProfilePage(props) {
                                 </div>
                                 <div className="row align-items-center m-0 mb-2">
                                     <div className="row mb-1">
-                                        <label
-                                            htmlFor="username-input"
-                                            className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0"
-                                        >
+                                        <label htmlFor="username-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
                                             Nome de usuário:
                                         </label>
-                                    </div>  
+                                    </div>
                                     <input
                                         type="username"
                                         disabled={!allowEdit}
                                         className="col form-control rounded-4 shadow-sm fs-5"
-                                        id="username-input"                                    
+                                        id="username-input"
                                     ></input>
                                 </div>
                                 <div className="row align-items-center m-0 mb-2">
@@ -120,32 +110,29 @@ function ProfilePage(props) {
                                         >
                                             Instituição:
                                         </label>
-                                    </div>  
+                                    </div>
                                     <input
                                         type="institution"
                                         disabled={!allowEdit}
                                         className="col form-control rounded-4 shadow-sm fs-5"
-                                        id="institution-input"                                    
+                                        id="institution-input"
                                     ></input>
                                 </div>
                                 <div className="row align-items-center m-0">
                                     <div className="row mb-1">
-                                        <label
-                                            htmlFor="role-input"
-                                            className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0"
-                                        >
+                                        <label htmlFor="role-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
                                             Papel:
                                         </label>
-                                    </div>                                    
+                                    </div>
                                     <input
                                         type="role"
                                         disabled={!allowEdit}
                                         className="col form-control rounded-4 shadow-sm fs-5"
-                                        id="role-input"                                        
+                                        id="role-input"
                                     ></input>
                                 </div>
                             </div>
-                        </div>                                    
+                        </div>
                         <div className="row flex-grow-1 justify-center justify-content-center mx-0">
                             <div className="col-6 col-lg-4 pt-4">
                                 <TextButton className={`px-5 ${allowEdit}`} hsl={[97, 43, 70]} text="Salvar" />
