@@ -138,14 +138,12 @@ function ProtocolPage(props) {
                     return '1b2aed60-f977-4304-816b-c5efbdc4e108';
                 case '110':
                     return '74316371-84a4-4150-b39e-f15430731029';
-                case '122':
-                    return 'fd05c415-35df-4cbc-9a27-30c2b7f6a838';
                 case '112':
                     return '566823f4-9245-41c7-b597-9251c516f96b';
                 case '113':
                     return '047ff336-f99d-47bb-a205-188f2cea9685';
                 case '114':
-                    return '579c37a1-0de8-46f6-8e2f-a0bbc55a8136';
+                    return 'e5667a47-1e7b-4666-b5e2-8e0aa7c7c624';
                 case '115':
                     return 'e7ae00f5-d57c-445c-ab36-8d1aa026de5c';
                 case '117':
@@ -154,6 +152,8 @@ function ProtocolPage(props) {
                     return '16b4188e-3b79-4f15-aaa4-655d55ab8f7a';
                 case '119':
                     return '960558c3-fad6-47d9-840f-1fbb29d8d531';
+                case '122':
+                    return 'fd05c415-35df-4cbc-9a27-30c2b7f6a838';
                 default:
                     return '4441b136-5756-477d-9ec9-dd4f4f2d554f';
             }
