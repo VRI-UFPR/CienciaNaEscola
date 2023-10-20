@@ -89,10 +89,7 @@ function LoginPage(props) {
     };
 
     return (
-        <div
-            className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100"
-            //style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
-        >
+        <div className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100">
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end h-50">
                     <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '270px' }} />
