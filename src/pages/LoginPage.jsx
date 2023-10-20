@@ -90,7 +90,7 @@ function LoginPage(props) {
 
     return (
         <div
-            className="d-flex flex-column align-items-center font-century-gothic vh-100 w-100 background-style"
+            className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100"
             //style={{ backgroundSize: 'cover', backgroundImage: `url(${Background})` }}
         >
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
@@ -101,7 +101,7 @@ function LoginPage(props) {
                     </span>
                 </div>
 
-                <form className="row g-0 justify-content-center pt-5 h-50 w-75" onSubmit={loginHandler}>
+                <form className="row justify-content-center g-0 h-50 w-75 pt-5" onSubmit={loginHandler}>
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
                             className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
@@ -124,14 +124,14 @@ function LoginPage(props) {
                             Esqueci minha senha
                         </p>
                     </div>
-                    <div className="row g-0 flex-column justify-content-end align-items-center pt-lg-5 button-position">
+                    <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-lg-5">
                         <div className="col-12 col-lg-6">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
                     </div>
                 </form>
             </div>
-            <div className="row g-0 align-items-end justify-content-between pb-4 ps-2 h-25 w-100 ">
+            <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
                 <div className="col-4 justify-content-start d-flex align-items-center">
                     <img
                         className="d-h-auto w-100"
