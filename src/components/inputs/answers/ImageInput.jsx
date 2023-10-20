@@ -17,22 +17,30 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const [image, setImage] = useState(null);
     const { onAnswerChange, input, answer } = props;
+
+    const [images, setImages] = useState([]);
+    const [countImages, setCountImages] = useState(0);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        onAnswerChange(input.id, image);
-    }, [image, input.id, onAnswerChange]);
+        onAnswerChange(input.id, images);
+    }, [images, input.id, onAnswerChange]);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileInputChange = (e) => {
-        setImage(e.target.files[0]);
+    const handleFileInputChange = (e, i) => {
+        // setImages(e.target.files[0]);
+        setImages((prevImages) => {
+            const newImages = [...prevImages];
+            newImages[i] = e.target.files[0];
+            return newImages;
+        });
     };
 
+    console.log(images);
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <form className="d-flex flex-column flex-grow-1">
@@ -49,16 +57,20 @@ function ImageInput(props) {
                             onClick={handleButtonClick}
                         />
                         <div className="d-flex color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
-                            {image ? (
-                                <div className="d-flex justify-content-center rounded-4 overflow-hidden bg-grey w-100">
-                                    <img
-                                        className="image-preview img-fluid object-fit-contain"
-                                        src={URL.createObjectURL(image)}
-                                        alt="Imagem selecionada"
-                                    />
-                                </div>
+                            {images.length > 0 ? (
+                                images.map((image, i) => {
+                                    return (
+                                        <div key={i} className="d-flex justify-content-center rounded-4 overflow-hidden bg-grey w-100">
+                                            <img
+                                                className="image-preview img-fluid object-fit-contain"
+                                                src={URL.createObjectURL(images[0])}
+                                                alt="Imagem selecionada"
+                                            />
+                                        </div>
+                                    );
+                                })
                             ) : (
-                                <span>Selecionar Imagem</span>
+                                <span>Anexe uma fotografia</span>
                             )}
                         </div>
                     </div>
