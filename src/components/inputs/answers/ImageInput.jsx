@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import iconFile from '../../../assets/images/iconFile.svg';
+
 import RoundedButton from '../../RoundedButton';
+
+import iconFile from '../../../assets/images/iconFile.svg';
+import eyeIcon from '../../../assets/images/eyeIcon.svg';
 
 const styles = `
     .color-dark-gray {
@@ -10,18 +13,19 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
-
-    .image-preview {
-        max-height: 200px;
-    }
 `;
 
 function ImageInput(props) {
     const { onAnswerChange, input, answer } = props;
 
     const [images, setImages] = useState([]);
-    const [countImages, setCountImages] = useState(0);
+    const [index, setIndex] = useState(0);
+    const [ImageVisibility, setImageVisibility] = useState(false);
     const fileInputRef = useRef(null);
+
+    const toggleImageVisibility = () => {
+        setImageVisibility(!ImageVisibility);
+    };
 
     useEffect(() => {
         onAnswerChange(input.id, images);
@@ -31,16 +35,17 @@ function ImageInput(props) {
         fileInputRef.current.click();
     };
 
-    const handleFileInputChange = (e, i) => {
+    const handleFileInputChange = (e) => {
         // setImages(e.target.files[0]);
         setImages((prevImages) => {
             const newImages = [...prevImages];
-            newImages[i] = e.target.files[0];
+            newImages[index] = e.target.files[0];
+            setIndex(index + 1);
+            console.log(newImages);
             return newImages;
         });
     };
 
-    console.log(images);
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <form className="d-flex flex-column flex-grow-1">
@@ -56,21 +61,25 @@ function ImageInput(props) {
                             alt={'Selecionar Arquivo'}
                             onClick={handleButtonClick}
                         />
-                        <div className="d-flex color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
+                        <div className="row row-cols-2 flex-row position-relative color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
                             {images.length > 0 ? (
-                                images.map((image, i) => {
+                                images.slice(0, ImageVisibility ? images.length : 2).map((image, i) => {
                                     return (
-                                        <div key={i} className="d-flex justify-content-center rounded-4 overflow-hidden bg-grey w-100">
-                                            <img
-                                                className="image-preview img-fluid object-fit-contain"
-                                                src={URL.createObjectURL(images[0])}
-                                                alt="Imagem selecionada"
-                                            />
+                                        <div key={i} className={`col-6 g-0 pe-2 ${i < 2 ? 'pt-0' : 'pt-2'}`}>
+                                            <div className="bg-grey rounded-4 overflow-hidden">
+                                                <img
+                                                    className="img-fluid object-fit-contain"
+                                                    src={URL.createObjectURL(images[i])}
+                                                    alt="Imagem selecionada"
+                                                />
+                                            </div>
                                         </div>
                                     );
                                 })
                             ) : (
-                                <span>Anexe uma fotografia</span>
+                                <div className="col-12">
+                                    <span>Anexe uma fotografia</span>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -85,6 +94,9 @@ function ImageInput(props) {
                         disabled={answer !== undefined}
                         ref={fileInputRef}
                     />
+                </div>
+                <div className={`${images.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 p-1 p-lg-2`}>
+                    <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon={eyeIcon} onClick={toggleImageVisibility} />
                 </div>
             </form>
             <style>{styles}</style>
