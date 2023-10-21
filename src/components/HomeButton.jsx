@@ -20,7 +20,7 @@ function HomeButton(props) {
     return (
         <div className="custom-btn d-flex align-items-center justify-content-between font-barlow h-100 px-4">
             <div className="d-flex align-items-center h-100 w-100 p-0">
-                <h4 className="text-truncate fw-medium w-100 m-0">{title}</h4>
+                <h4 className="text-truncate fw-medium w-100 py-2 m-0">{title}</h4>
 
                 {check && (
                     <div className="d-flex justify-content-end align-items-center p-0 m-0">
