@@ -4,6 +4,7 @@ import RoundedButton from '../../RoundedButton';
 
 import iconFile from '../../../assets/images/iconFile.svg';
 import eyeIcon from '../../../assets/images/eyeIcon.svg';
+import iconTrash from '../../../assets/images/iconTrash.svg';
 
 const styles = `
     .color-dark-gray {
@@ -28,7 +29,7 @@ function ImageInput(props) {
     };
 
     useEffect(() => {
-        onAnswerChange(input.id, images);
+        onAnswerChange(input.id, images[0]);
     }, [images, input.id, onAnswerChange]);
 
     const handleButtonClick = () => {
@@ -36,7 +37,6 @@ function ImageInput(props) {
     };
 
     const handleFileInputChange = (e) => {
-        // setImages(e.target.files[0]);
         setImages((prevImages) => {
             const newImages = [...prevImages];
             newImages[index] = e.target.files[0];
@@ -44,6 +44,10 @@ function ImageInput(props) {
             console.log(newImages);
             return newImages;
         });
+    };
+
+    const handleFileInputRemove = (indexToRemove) => {
+        setImages(images.filter((_, index) => index !== indexToRemove));
     };
 
     return (
@@ -65,12 +69,23 @@ function ImageInput(props) {
                             {images.length > 0 ? (
                                 images.slice(0, ImageVisibility ? images.length : 2).map((image, i) => {
                                     return (
-                                        <div key={i} className={`col-6 g-0 pe-2 ${i < 2 ? 'pt-0' : 'pt-2'}`}>
-                                            <div className="bg-grey rounded-4 overflow-hidden">
+                                        <div
+                                            key={i}
+                                            className={`col-6 d-flex justify-content-center align-items-center g-0 pe-3 ${
+                                                i < 2 ? 'pt-0' : 'pt-3'
+                                            }`}
+                                        >
+                                            <div className="d-flex justify-content-center align-items-center position-relative border border-black border-opacity-50 rounded-4">
                                                 <img
-                                                    className="img-fluid object-fit-contain"
+                                                    className="img-fluid rounded-4 object-fit-contain"
                                                     src={URL.createObjectURL(images[i])}
                                                     alt="Imagem selecionada"
+                                                />
+                                                <RoundedButton
+                                                    className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                    hsl={[190, 46, 70]}
+                                                    icon={iconTrash}
+                                                    onClick={() => handleFileInputRemove(i)}
                                                 />
                                             </div>
                                         </div>
