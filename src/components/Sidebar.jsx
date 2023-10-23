@@ -87,7 +87,7 @@ function Sidebar(props) {
                         </button>
                     </div>
                 )}
-                <div className="container d-flex flex-column align-items-center pt-3 pb-4">
+                <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
                     <Link className="rounded-circle" to="/profile">
                         <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
                     </Link>
@@ -127,17 +127,6 @@ function Sidebar(props) {
                     >
                         Logout
                     </button>
-                </div>
-                <div className="container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4">
-                    <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
-                    <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
-                    <Link
-                        href="/"
-                        className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
-                        onClick={() => closeSidebar()}
-                    >
-                        www.denuncias.com
-                    </Link>
                 </div>
             </div>
             <style>{styles}</style>
