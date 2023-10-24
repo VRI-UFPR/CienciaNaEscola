@@ -8,6 +8,9 @@ import NavBar from '../components/Navbar';
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
 import LocationInput from '../components/inputs/answers/LocationInput';
+import ImageInput from '../components/inputs/answers/ImageInput';
+import Weather from '../components/inputs/answers/Weather';
+import SelectInput from '../components/inputs/answers/SelectInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
@@ -131,16 +134,25 @@ function ProtocolPage(props) {
                                     </div>
                                 );
                             }
+
                         case 1:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
+
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 3:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<SelectInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
@@ -162,6 +174,13 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 103:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<Weather input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
