@@ -138,7 +138,7 @@ function ProtocolPage(props) {
                 case '110':
                     return '74316371-84a4-4150-b39e-f15430731029';
                 case '112':
-                    return '566823f4-9245-41c7-b597-9251c516f96b';
+                    return '578d11a6-8092-41d3-b6e1-702758dc3f02';
                 case '113':
                     return '047ff336-f99d-47bb-a205-188f2cea9685';
                 case '114':
