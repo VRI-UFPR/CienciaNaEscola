@@ -21,6 +21,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
+import LinkBox from '../components/inputs/answers/LinkBox';
 
 const styles = `
     .bg-yellow-orange {
@@ -249,12 +250,6 @@ function ProtocolPage(props) {
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
-                        case 102:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
                         case 100:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
@@ -265,6 +260,18 @@ function ProtocolPage(props) {
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+                        case 102:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+                        case 103:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<LinkBox input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
                         default:
