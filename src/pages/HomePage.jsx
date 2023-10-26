@@ -6,6 +6,7 @@ import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
+import Alert from '../components/Alert';
 
 const style = `
     .font-barlow {
@@ -68,7 +69,7 @@ function HomePage(props) {
                     </div>
                 </div>
             </div>
-
+            <Alert id="InfosPageAlert" ref={modalRef} />
             <style>{style}</style>
         </div>
     );
