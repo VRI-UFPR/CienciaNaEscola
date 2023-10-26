@@ -8,6 +8,9 @@ import NavBar from '../components/Navbar';
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
 import LocationInput from '../components/inputs/answers/LocationInput';
+import ImageInput from '../components/inputs/answers/ImageInput';
+import Weather from '../components/inputs/answers/Weather';
+import SelectInput from '../components/inputs/answers/SelectInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
@@ -47,6 +50,7 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
+    const modalRef1 = useRef(null);
     const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
@@ -61,7 +65,7 @@ function ProtocolPage(props) {
         axios
             .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
             .then((response) => {
-                modalRef.current.showModal({
+                modalRef1.current.showModal({
                     title: 'Muito obrigado por sua participação no projeto!',
                     onHide: () => {
                         navigate('/home');
@@ -69,7 +73,9 @@ function ProtocolPage(props) {
                 });
             })
             .catch((error) => {
-                modalRef.current.showModal({ title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.' });
+                modalRef1.current.showModal({
+                    title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                });
                 console.error(error.message);
             });
     };
@@ -97,13 +103,6 @@ function ProtocolPage(props) {
                 <div className="row m-0 w-100">
                     <div className="col-3 col-sm-2 p-0">
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
-                    </div>
-                    <div className="name-col col-9 col-sm-10 pe-0">
-                        <input
-                            className="rounded shadow font-barlow gray-color border-0 p-2 w-100"
-                            type="text"
-                            placeholder="Insira seu nome"
-                        />
                     </div>
                 </div>
                 <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
@@ -135,16 +134,25 @@ function ProtocolPage(props) {
                                     </div>
                                 );
                             }
+
                         case 1:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
+
                         case 2:
                             return (
                                 <div key={input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 3:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<SelectInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
@@ -162,19 +170,49 @@ function ProtocolPage(props) {
                                 </div>
                             );
 
+                        case 102:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
+                        case 103:
+                            return (
+                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    {<Weather input={input} onAnswerChange={handleAnswerChange} />}
+                                </div>
+                            );
+
                         default:
                             return <></>;
                     }
                 })}
                 <div className="col-4 align-self-center pt-4">
-                    <TextButton type="submit" hsl={[97, 43, 70]} text="Enviar" onClick={handleProtocolSubmit} />
+                    <TextButton
+                        type="submit"
+                        hsl={[97, 43, 70]}
+                        text="Enviar"
+                        onClick={() => {
+                            modalRef.current.showModal({
+                                title: 'Tem certeza que deseja enviar o protocolo?',
+                                dismissHsl: [355, 78, 66],
+                                dismissText: 'Não',
+                                actionHsl: [97, 43, 70],
+                                actionText: 'Sim',
+                                actionOnClick: () => {
+                                    handleProtocolSubmit();
+                                },
+                            });
+                        }}
+                    />
                 </div>
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
+            <Alert id="ProtocolPageConfirmation" ref={modalRef1} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
-
             <style>{styles}</style>
         </div>
     );
