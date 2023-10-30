@@ -13,30 +13,29 @@ import CreateProtocolPage from './../pages/CreateProtocolPage';
 import PrototypeAnswersPage from '../pages/PrototypeAnswersPage';
 import AnswerPage from '../pages/AnswerPage';
 import SplashPage from '../pages/SplashPage';
-import { teamMembers } from '../utils/constants';
+import { aboutPICCE, terms } from '../utils/constants';
 
 function AppRoutes(props) {
     return (
         <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route
+                path="/"
+                element={
+                    <InfosPage
+                        title="Termos de uso"
+                        content={terms}
+                        showAccept={true}
+                        showNavTogglerDesktop={false}
+                        showNavTogglerMobile={false}
+                        showSidebar={false}
+                    />
+                }
+            />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route
                 path="/terms"
-                element={<InfosPage key="terms" title="Termos de uso" showAccept={false} showNavTogglerDesktop={false} />}
-            />
-            <Route
-                path="/acceptterms"
-                element={
-                    <InfosPage
-                        key="acceptterms"
-                        title="Termos de uso"
-                        showSidebar={false}
-                        showAccept={true}
-                        showNavTogglerMobile={false}
-                        showNavTogglerDesktop={false}
-                    />
-                }
+                element={<InfosPage title="Termos de uso" content={terms} showAccept={false} showNavTogglerDesktop={false} />}
             />
             <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
             <Route path="/protocol/:id" element={<ProtocolPage />} />
@@ -46,36 +45,13 @@ function AppRoutes(props) {
             <Route path="/prototypeanswer/:id" element={<PrototypeAnswersPage />} />
             <Route
                 path="/about"
-                element={<InfosPage title="Equipe" content={teamMembers} showAccept={false} showNavTogglerDesktop={false} />}
+                element={<InfosPage title="Sobre o PICCE" content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />}
             />
+
             <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/answer/:id" element={<AnswerPage />} />
             <Route path="/splash" element={<SplashPage />} />
-            {/* <Route
-                path="/textimage"
-                element={
-                    <TextImageInput
-                        options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
-                        image={'https://picsum.photos/380/380'}
-                    />
-                }
-            />
-            <Route
-                path="/imageradio"
-                element={
-                    <ImageRadioButtonsInput
-                        options={['Área de plantação', 'Jardim', 'Praça', 'Escola']}
-                        images={[
-                            'https://picsum.photos/108/148',
-                            'https://picsum.photos/108/148',
-                            'https://picsum.photos/108/148',
-                            'https://picsum.photos/108/148',
-                            'https://picsum.photos/108/148',
-                        ]}
-                    />
-                }
-            /> */}
         </Routes>
     );
 }
