@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = `
     .font-barlow {
@@ -47,6 +48,7 @@ const styles = `
 
 function Sidebar(props) {
     const { modalRef, showExitButton } = props;
+    const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
@@ -85,7 +87,7 @@ function Sidebar(props) {
                         </button>
                     </div>
                 )}
-                <div className="container d-flex flex-column align-items-center pt-3 pb-4">
+                <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
                     <Link className="rounded-circle" to="/profile">
                         <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
                     </Link>
@@ -116,23 +118,15 @@ function Sidebar(props) {
                                 dismissText: 'Não',
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
-                                actionOnClick: () => navigate('/login'),
+                                actionOnClick: () => {
+                                    logout();
+                                    navigate('/login');
+                                },
                             });
                         }}
                     >
                         Logout
                     </button>
-                </div>
-                <div className="invisible container d-flex flex-column flex-grow-1 justify-content-end font-barlow text-white p-0 pb-4">
-                    <h3 className="fw-bold fs-6 ps-4 ps-md-5">Denúncias</h3>
-                    <span className="fw-medium ps-4 ps-md-5">Acesse o site</span>
-                    <Link
-                        href="/"
-                        className="text-white text-decoration-underline fw-medium pb-2 px-4 px-md-5"
-                        onClick={() => closeSidebar()}
-                    >
-                        www.denuncias.com
-                    </Link>
                 </div>
             </div>
             <style>{styles}</style>

@@ -1,0 +1,15 @@
+name: Notifier
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+    notifyTelegram:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Pull Request Telegram
+              uses: F2had/pr-telegram-action@v1.0.0
+              with: 
+                bot_token: '${{ secrets.BotToken }}' # Your bot token from github secrets
+                chat_id: '${{ secrets.CHATID }}' # Your chat id from github secrets
