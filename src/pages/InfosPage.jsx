@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useContext } from 'react';
+import Background from '../assets/images/backgroundTerms.png';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
@@ -10,6 +11,10 @@ import { AuthContext } from '../contexts/AuthContext';
 const infosPageStyles = `
     .bg-coral-red {
         background-color: #F59489;
+    }
+
+    .bg-white {
+        background-color: #FFFFFF;
     }
 
     .font-barlow {
@@ -26,6 +31,12 @@ const infosPageStyles = `
 
     .text-justify {
         text-align: justify;
+    }
+
+    .background-style{
+        background-size: cover;
+        background-image: url(${Background});
+
     }
 `;
 
@@ -47,7 +58,7 @@ function InfosPage(props) {
     }, [navigate, user, acceptTerms, location.pathname]);
 
     return (
-        <div className="d-flex flex-column font-barlow vh-100">
+        <div className={`${location.pathname === '/dash' ? 'background-style' : ''} d-flex flex-column font-barlow vh-100`}>
             <div className="row m-0 flex-grow-1">
                 <div className={`col-auto bg-coral-red p-0 ${showSidebar ? 'd-flex' : 'd-lg-none'}`}>
                     <div
@@ -58,7 +69,7 @@ function InfosPage(props) {
                         <Sidebar modalRef={modalRef} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column bg-white p-0">
+                {location.pathname !== '/dash' && <div className="col d-flex flex-column bg-white p-0">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
                     <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
                         <div className="d-flex flex-column flex-grow-1">
@@ -96,7 +107,40 @@ function InfosPage(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
+                {location.pathname === '/dash' &&
+                <div className="container-fluid d-flex m-0 p-0">
+                    <div className="row d-flex justify-content-center align-items-center m-0 p-0">
+                        <div className="col-6 rounded-5 d-flex flex-column justify-content-center bg-white h-75 m-0 p-5">
+                            <h3 className="font-century-gothic color-dark-gray fw-bold pb-3 m-0">{title}</h3>
+                            <h5 className="color-dark-gray overflow-auto fw-medium fs-6 pb-4 pe-4 m-0">{content}</h5>
+                            <div className="row justify-content-center pb-4 pt-4 m-0">
+                                <div className="col-8 col-lg-4 p-0">
+                                    <div className="row m-0">
+                                        <div className="col-6 p-0 pe-2">
+                                            <TextButton
+                                                role="link"
+                                                onClick={() => navigate('/')}
+                                                className={showAccept ? '' : 'd-none'}
+                                                hsl={[37, 98, 76]}
+                                                text="Voltar"
+                                            />
+                                        </div>
+                                        <div className="col-6 p-0">
+                                            <TextButton
+                                                role="link"
+                                                onClick={() => navigate('/login')}
+                                                className={showAccept ? '' : 'd-none'}
+                                                hsl={[97, 43, 70]}
+                                                text="Aceitar"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
             </div>
             <Alert id="InfosPageAlert" ref={modalRef} />
             <style>{infosPageStyles}</style>
