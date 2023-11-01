@@ -16,8 +16,10 @@ import { aboutPICCE, terms} from '../utils/constants';
 function AppRoutes(props) {
     return (
         <Routes>
-            <Route path="/" element={<InfosPage title="Termos de uso" content={terms} showAccept={true}
+            <Route path="/" element={<InfosPage title="Termos de Uso" content={terms} showAccept={true}
             showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />} />
+            <Route path="/dash" element={<InfosPage title="Termos de Uso" content={terms} showAccept={true}
+            showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />}/>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route
