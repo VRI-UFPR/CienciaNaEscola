@@ -51,7 +51,7 @@ function ProtocolCarousel(props) {
                                 to={`/protocol/${protocol.id}`}
                                 key={index}
                                 className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
-                                style={{ height: '20%', maxHeight: '20%', color: '#262626' }}
+                                style={{ height: '4rem', maxHeight: '4rem', color: '#262626' }}
                             >
                                 <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} />
                             </Link>
