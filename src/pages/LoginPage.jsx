@@ -3,7 +3,7 @@ import LoginTitle from '../assets/images/loginTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
@@ -30,11 +30,11 @@ const styles = `
         opacity: 1;
     }
 
-    .login-forgot-pw{
+    .login-links{
         color: #91CAD6;
     }
 
-    .login-forgot-pw:hover{
+    .login-links:hover{
         cursor: pointer;
     }
 
@@ -58,6 +58,7 @@ function LoginPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
+    const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
@@ -115,13 +116,18 @@ function LoginPage(props) {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <p
-                            className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
+                            className="login-links text-decoration-underline fs-6 cursor-pointer"
                             onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>
+                        {location.pathname === '/dash/login' && (
+                            <Link classname="login-links text-decoration-underline fs-6 cursor-pointer" to="/SignUpPage" style={{ color: "#91CAD6" }}>
+                                Não é cadastrado?
+                            </Link>
+                        )}
                     </div>
-                    <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-lg-5">
+                    <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
                         <div className="col-12 col-lg-6">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
