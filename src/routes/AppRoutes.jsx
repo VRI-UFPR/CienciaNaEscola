@@ -19,6 +19,7 @@ function AppRoutes(props) {
             <Route path="/" element={<InfosPage title="Termos de uso" content={terms} showAccept={true}
             showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/dash/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route
                 path="/terms"
