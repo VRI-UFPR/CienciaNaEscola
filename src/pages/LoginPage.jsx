@@ -16,7 +16,7 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .login-input{
+    .login-input {
         background-color: #4E9BB9;
         color: #FFFFFF;
         font-size: 90%;
@@ -30,19 +30,19 @@ const styles = `
         opacity: 1;
     }
 
-    .login-links{
+    .login-links {
         color: #91CAD6;
     }
 
-    .login-links:hover{
+    .login-links:hover {
         cursor: pointer;
     }
 
-    .button-position{
+    .button-position {
         z-index: 1;
     }
 
-    .background-style{
+    .background-style {
         background-size: cover;
         background-image: url(${Background});
     }
@@ -122,7 +122,11 @@ function LoginPage(props) {
                             Esqueci minha senha
                         </p>
                         {location.pathname === '/dash/login' && (
-                            <Link classname="login-links text-decoration-underline fs-6 cursor-pointer" to="/SignUpPage" style={{ color: "#91CAD6" }}>
+                            <Link
+                                classname="login-links text-decoration-underline fs-6 cursor-pointer"
+                                to="/signup"
+                                style={{ color: '#91CAD6' }}
+                            >
                                 Não é cadastrado?
                             </Link>
                         )}
