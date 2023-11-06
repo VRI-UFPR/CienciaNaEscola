@@ -111,6 +111,7 @@ function Sidebar(props) {
                     </Link>
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
+                        type="button"
                         onClick={() => {
                             modalRef.current.showModal({
                                 title: 'Tem certeza que deseja fazer logout?',
