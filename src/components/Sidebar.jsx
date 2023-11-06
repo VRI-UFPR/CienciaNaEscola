@@ -73,60 +73,65 @@ function Sidebar(props) {
     }, []);
 
     return (
-        <div className="d-flex flex-column flex-grow-1">
-            <div className="sidebar-wrapper d-flex flex-column flex-grow-1 bg-coral-red">
-                {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
-                    <div className="container d-flex justify-content-end p-0 erro">
+        <div className="d-flex flex-column flex-grow-1 overflow-auto">
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="sidebar-wrapper d-flex flex-column flex-grow-1 overflow-auto bg-coral-red">
+                    {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
+                        <div className="container d-flex justify-content-end p-0 erro">
+                            <button
+                                type="button"
+                                className="btn btn-transparent rounded-circle border-0"
+                                data-bs-dismiss="offcanvas"
+                                data-bs-target="#sidebar"
+                            >
+                                <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
+                            </button>
+                        </div>
+                    )}
+                    <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
+                        <Link className="rounded-circle" to="/profile">
+                            <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                        </Link>
+                    </div>
+                    <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
+                        <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/home" onClick={() => closeSidebar()}>
+                            Protocolos
+                        </Link>
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/about" onClick={() => closeSidebar()}>
+                            Sobre o App
+                        </Link>
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/terms" onClick={() => closeSidebar()}>
+                            Termos de Uso
+                        </Link>
+                    </div>
+                    <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
+                        <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
+                            Perfil
+                        </Link>
                         <button
-                            type="button"
-                            className="btn btn-transparent rounded-circle border-0"
-                            data-bs-dismiss="offcanvas"
-                            data-bs-target="#sidebar"
+                            className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
+                            onClick={() => {
+                                modalRef.current.showModal({
+                                    title: 'Tem certeza que deseja fazer logout?',
+                                    dismissHsl: [355, 78, 66],
+                                    dismissText: 'Não',
+                                    actionHsl: [97, 43, 70],
+                                    actionText: 'Sim',
+                                    actionOnClick: () => {
+                                        logout();
+                                        navigate('/login');
+                                    },
+                                });
+                            }}
                         >
-                            <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
+                            Logout
                         </button>
                     </div>
-                )}
-                <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
-                    <Link className="rounded-circle" to="/profile">
-                        <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
-                    </Link>
                 </div>
-                <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
-                    <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/home" onClick={() => closeSidebar()}>
-                        Protocolos
-                    </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about" onClick={() => closeSidebar()}>
-                        Sobre o App
-                    </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms" onClick={() => closeSidebar()}>
-                        Termos de Uso
-                    </Link>
-                </div>
-                <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
-                    <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
-                        Perfil
-                    </Link>
-                    <button
-                        className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
-                        onClick={() => {
-                            modalRef.current.showModal({
-                                title: 'Tem certeza que deseja fazer logout?',
-                                dismissHsl: [355, 78, 66],
-                                dismissText: 'Não',
-                                actionHsl: [97, 43, 70],
-                                actionText: 'Sim',
-                                actionOnClick: () => {
-                                    logout();
-                                    navigate('/login');
-                                },
-                            });
-                        }}
-                    >
-                        Logout
-                    </button>
+                <div className="font-barlow fw-medium p-3 m-0">
+                    <p className="text-white text-decoration-none ps-2 m-0">Versão atual: 0.1.1</p>
                 </div>
             </div>
             <style>{styles}</style>

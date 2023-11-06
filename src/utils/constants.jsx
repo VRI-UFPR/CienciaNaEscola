@@ -72,7 +72,6 @@ export const terms = (
             mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et
             dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis.
         </p>
-        <p>Versão atual: 0.1.0</p>
     </>
 );
 
