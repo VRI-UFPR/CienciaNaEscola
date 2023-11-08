@@ -42,6 +42,7 @@ function AppRoutes(props) {
                 }
             />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/dash/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route
                 path="/about"
