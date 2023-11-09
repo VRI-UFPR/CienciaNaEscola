@@ -143,7 +143,7 @@ function SignUpPage(props) {
                             <h1 className="color-dark-gray font-century-gothic fs-3 fw-bold pb-2 m-0">Cadastro de usuário</h1>
                             <h2 className="color-dark-gray fs-5 fw-medium m-0">Insira suas informações abaixo</h2>
                         </div>
-                        <div className="text-center margin-item w-100">
+                        <div className="margin-item text-center w-100">
                             <label htmlFor="name-input" className="form-label fs-5">
                                 Nome completo:
                             </label>
