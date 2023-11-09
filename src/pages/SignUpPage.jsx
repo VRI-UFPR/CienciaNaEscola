@@ -188,7 +188,7 @@ function SignUpPage(props) {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
-                        <div className="text-center margin-title w-100">
+                        <div className="margin-title text-center w-100">
                             <label htmlFor="password-conf-input" className="form-label fs-5">
                                 Confirme a senha:
                             </label>
