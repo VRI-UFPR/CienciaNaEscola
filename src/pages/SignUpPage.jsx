@@ -136,7 +136,7 @@ function SignUpPage(props) {
     return (
         <div className="d-flex flex-column font-barlow min-vh-100">
             <NavBar showNavTogglerMobile={false} showNavTogglerDesktop={false} />
-            <div className="d-flex flex-column align-items-center flex-grow-1 p-4 p-lg-5">
+            <div className="d-flex flex-column align-items-center flex-grow-1 p-4">
                 <div className="row flex-column align-items-center flex-grow-1 w-100">
                     <div className="col-12 col-lg-8">
                         <div className="text-center w-100 margin-title">
