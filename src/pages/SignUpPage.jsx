@@ -31,9 +31,6 @@ const signUpPageStyles = `
         -webkit-text-fill-color: #535353 !important;
     }
 
-    .login-forgot-pw{
-        color: #91CAD6;
-    }
 
     .margin-item{
         margin-bottom: 1vh;
