@@ -158,7 +158,7 @@ function SignUpPage(props) {
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        <div className="text-center margin-item w-100">
+                        <div className="margin-item text-center w-100">
                             <label htmlFor="email-input" className="form-label fs-5">
                                 E-mail:
                             </label>
