@@ -164,7 +164,7 @@ function SignUpPage(props) {
                             </label>
                             <input
                                 id="email-input"
-                                className={`shadow ce-input bg-glacier-blue padding-item rounded-4 text-center fs-5 border-0 w-100 ${
+                                className={`ce-input padding-item shadow border-0 rounded-4 text-center fs-5 bg-glacier-blue w-100 ${
                                     validateEmail() ? 'text-white' : 'text-danger'
                                 }`}
                                 placeholder=""
