@@ -249,7 +249,7 @@ function SignUpPage(props) {
                             />
                         </div> */}
                     </div>
-                    <div className="row flex-column  align-items-center g-0">
+                    <div className="row flex-column align-items-center g-0">
                         <div className="col-auto">
                             <TextButton hsl={[97, 43, 70]} text="Cadastre-se" className="fs-4 px-2 py-2" onClick={signUpHandler} />
                         </div>
