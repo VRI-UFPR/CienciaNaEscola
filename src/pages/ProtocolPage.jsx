@@ -130,7 +130,7 @@ function ProtocolPage(props) {
                 case '104':
                     return '743e7fff-0461-4412-93d4-06200ece5a6f';
                 case '105':
-                    return '284bc033-0f04-4a2a-a751-19d706c6968e';
+                    return '85eb8430-206c-4d0a-b547-73cfcfaad499'; // P15 - Segurança no trânsito no entorno escolar
                 case '106':
                     return '782abe19-78c3-43d7-8472-c599b465f17f';
                 case '110':
