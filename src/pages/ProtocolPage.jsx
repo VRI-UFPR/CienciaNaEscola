@@ -90,10 +90,10 @@ function ProtocolPage(props) {
 
         for (let prop in answers) {
             uploadedFiles[prop] = [];
-            if (answers[prop][0] instanceof File) {
+            if (answers[prop] instanceof File) {
                 uploadPromises.push(
-                    uploadFile(answers[prop][0]).then((response) => {
-                        uploadedFiles[prop][0] = response.data.url;
+                    uploadFile(answers[prop]).then((response) => {
+                        uploadedFiles[prop] = [response.data.url];
                     })
                 );
             } else {
