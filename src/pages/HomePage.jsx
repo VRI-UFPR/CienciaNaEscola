@@ -68,7 +68,7 @@ function HomePage(props) {
                 case 105:
                     return '1e47edeb-0908-4d8a-806d-14bb0e9c766e';
                 case 106:
-                    return '935b897b-6ab5-455a-9d7a-7bc84b32a3fa';
+                    return 'd36fd758-db24-43fe-acd0-0c74df189eab';
                 case 107:
                     return 'e225de28-221b-4116-8aed-7942a5a74a6f';
                 case 108:
