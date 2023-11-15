@@ -11550,1592 +11550,1554 @@ export const protocol123 = {
 };
 
 export const protocol125 = {
-    id: 125,
-    title: 'PICCE - Eficiência energética nas escolas',
-    description:
-        'Este material foi produzido adequando-se aos objetivos propostos na Base Comum Curricular (BNCC) utilizando protocolos da ciência cidadã. A ciência cidadã é um movimento de integração entre a sociedade e os cientistas, através conjunto de ações realizadas por cidadãos não cientistas, que auxiliam as pesquisas em todo o mundo. Este protocolo foi pensado para se adptar à necessidade de a escola contribuir para atingir os Objetivos de Desenvolvimento Sustentável, proposto pela organização das Nações Unidas. Neste caso, o objetivo que está aderente à este trabalho é o ODS 12: Consumo e produção responsáveis: Garantir padrões de consumo e de produção sustentáveis, em que afirma: “até 2030, garantir que as pessoas, em todos os lugares, tenham informação relevante e conscientização para o desenvolvimento sustentável e estilos de vida em harmonia com a natureza.” Com isso, o objetivo desse projeto será analisar, quantitativamente, o consumo de energia elétrica da escola para, a partir disso, buscarmos alternativas para um consumo mais consciente e eficiente. O protocolo está dividido em duas partes: parte 1 - coleta de informações a respeito dos equipamentos eletrônicos do ambiente; e parte 2 - consumo de energia dos equipamentos eletrônicos. Vamos começar nossa jornada cheios de energia?',
-    inputs: [
+    "id": 125,
+    "title": "Eficiência energética nas escolas",
+    "description": "Este material foi produzido adequando-se aos objetivos propostos na Base Comum Curricular (BNCC) utilizando protocolos da ciência cidadã. A ciência cidadã é um movimento de integração entre a sociedade e cientista, através do conjunto de ações realizadas por cidadãos não cientistas, que auxiliam as pesquisas em todo o mundo. Este protocolo foi pensado para se adaptar à necessidade de a escola contribuir para atingir os Objetivos de Desenvolvimento Sustentável, proposto pela Organização das Nações Unidas. Neste caso, o objetivo que está aderente à este trabalho é o ODS 12: Consumo e produção responsáveis: Garantir padrões de consumo e de produção sustentáveis, em que afirma: “até 2030, garantir que as pessoas, em todos os lugares, tenham informação relevante e conscientização para o desenvolvimento sustentável e estilos de vida em harmonia com a natureza.” Com isso, o objetivo desse projeto será analisar, quantitativamente, o consumo de energia elétrica da escola para, a partir disso, buscarmos alternativas para um consumo mais consciente e eficiente. O protocolo está dividido em duas partes: parte 1 - coleta de informações a respeito dos equipamentos eletrônicos do ambiente; e parte 2 - consumo de energia dos equipamentos eletrônicos. Vamos começar nossa jornada cheios de energia?",
+    "inputs": [
         {
-            id: 20000,
-            placement: 0,
-            description: 'https://drive.google.com/file/d/1HcQKk6znUhSikM39gtpZbtqowIeDzNvP/view?usp=sharing',
-            question: 'EFICIÊNCIA ENERGÉTICA NAS ESCOLAS - GUIA DE CAMPO',
-            enabled: true,
-            type: 103,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20000,
+            "placement": 1,
+            "description": "",
+            "question": "INSTRUÇÕES PARA REALIZAÇÃO DA ATIVIDADE: Para realizar a coleta dos dados proposta neste protocolo, você precisa seguir uma série de passos, garantindo a qualidade do dado que será submetido no formulário online. Materiais necessários: Lápis ou caneta, prancheta e formulário para preenchimento ou, celular com acesso à internet, câmera fotográfica. Na hora de tirar as fotos é preciso tomar alguns cuidados e seguir algumas orientações.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20000,
-            placement: 1,
-            description: '',
-            question:
-                'INSTRUÇÕES PARA REALIZAÇÃO DA ATIVIDADE: Para realizar a coleta dos dados proposta neste protocolo, você precisa seguir uma série de passos, garantindo a qualidade do dado que será submetido no formulário online. Materiais necessários: Lápis ou caneta; Prancheta e formulário para preenchimento ou; Celular com acesso à internet; Câmera fotográfica. Na hora de tirar as fotos é preciso tomar alguns cuidados e seguir algumas orientações.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20020,
+            "placement": 2,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694468735/PICCE/sala._ecuppf.jpg",
+            "question": "1o Tire uma foto ampla e aberta dos ambientes analisados, como na figura:",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20020,
-            placement: 2,
-            description: 'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694468735/PICCE/sala._ecuppf.jpg',
-            question: '1° Tire uma foto ampla e aberta dos ambientes analisados, como na figura:',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20001,
+            "placement": 3,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694468735/PICCE/lampada_noxv3h.jpg",
+            "question": "2o Tire fotos dos objetos, tome cuidado para que nas fotos apareçam os objetos inteiros, como na figura 2.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20001,
-            placement: 3,
-            description: 'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694468735/PICCE/lampada_noxv3h.jpg',
-            question: '2° Tire fotos dos objetos, tome cuidado para que nas fotos apareçam os objetos inteiros, como na figura 2.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20002,
+            "placement": 4,
+            "description": "",
+            "question": "PARTE 1: CARACTERIZAÇÃO DO AMBIENTE",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20002,
-            placement: 4,
-            description: '',
-            question: 'PARTE 1: CARACTERIZAÇÃO DO AMBIENTE',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20003,
+            "placement": 5,
+            "description": "",
+            "question": "Vamos começar a preencher o formulário respondendo às perguntas de introdução, que são importantes tanto quanto o resto do questionário. Primeiro, selecione qual a sua formação e qual a sua experiência com eletricidade.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20003,
-            placement: 5,
-            description: '',
-            question:
-                'Vamos começar a preencher o formulário respondendo às perguntas de introdução, que são importantes tanto quanto o resto do questionário. Primeiro, selecione qual a sua formação e qual a sua experiência com eletricidade.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 2118,
-            placement: 6,
-            description: '',
-            question: '1.1 Queremos saber mais sobre você! Pode nos contar sua formação?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2118,
+            "placement": 6,
+            "description": "",
+            "question": "1.1 Queremos saber mais sobre você! Pode nos contar sua formação?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'Professor universitário',
-                    placement: 0,
+                    "value": "Professor universitário",
+                    "placement": 0
                 },
                 {
-                    value: 'Professor da educação básica',
-                    placement: 1,
+                    "value": "Professor da educação básica",
+                    "placement": 1
                 },
                 {
-                    value: 'Estudante do ensino fundamental',
-                    placement: 2,
+                    "value": "Estudante do ensino fundamental",
+                    "placement": 2
                 },
                 {
-                    value: 'Estudante do ensino médio',
-                    placement: 3,
+                    "value": "Estudante do ensino médio",
+                    "placement": 3
                 },
                 {
-                    value: 'Estudante universitário',
-                    placement: 4,
-                },
+                    "value": "Estudante universitário",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2119,
-            placement: 7,
-            description: '',
-            question: '1.2 Qual é a sua experiência em observar a conta de energia e coisas relacionadas a eletricidade?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2119,
+            "placement": 7,
+            "description": "",
+            "question": "1.2 Qual é a sua experiência em observar a conta de energia e coisas relacionadas a eletricidade?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'Faço isso desde criança',
-                    placement: 0,
+                    "value": "Faço isso desde criança",
+                    "placement": 0
                 },
                 {
-                    value: 'Frequentemente gosto de verificar o consumo de energia elétrica ou mexer em aparelhos eletroeletrônicos.',
-                    placement: 1,
+                    "value": "Frequentemente gosto de verificar o consumo de energia elétrica ou mexer em aparelhos eletroeletrônicos.",
+                    "placement": 1
                 },
                 {
-                    value: 'Raramente busco verificar o consumo de energia elétrica ou mexer em aparelhos eletroeletrônicos.',
-                    placement: 2,
+                    "value": "Raramente busco verificar o consumo de energia elétrica ou mexer em aparelhos eletroeletrônicos.",
+                    "placement": 2
                 },
                 {
-                    value: 'Nunca observei o consumo de energia elétrica ou mexi em aparelhos eletroeletrônicos.',
-                    placement: 3,
-                },
+                    "value": "Nunca observei o consumo de energia elétrica ou mexi em aparelhos eletroeletrônicos.",
+                    "placement": 3
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2120,
-            placement: 8,
-            description: '',
-            question: '1.3 Qual o endereço do local onde você está?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2120,
+            "placement": 8,
+            "description": "",
+            "question": "1.3 Qual o endereço do local onde você está?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2121,
-            placement: 9,
-            description: '',
-            question: '1.4 Quantos estudantes sua escola possui?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2121,
+            "placement": 9,
+            "description": "",
+            "question": "1.4 Quantos estudantes sua escola possui?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2122,
-            placement: 10,
-            description: '',
-            question: '1.5 Qual o nome da escola na qual será feita a coleta?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2122,
+            "placement": 10,
+            "description": "",
+            "question": "1.5 Qual o nome da escola na qual será feita a coleta?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2123,
-            placement: 11,
-            description: '',
-            question: '1.6 Quantos metros quadrados de área construída a sua escola possui?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2123,
+            "placement": 11,
+            "description": "",
+            "question": "1.6 Quantos metros quadrados de área construída a sua escola possui?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2124,
-            placement: 12,
-            description: '',
-            question: '1.7 Como você considera as dependências da escola em relação à estrutura de iluminação?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2124,
+            "placement": 12,
+            "description": "",
+            "question": "1.7 Como você considera as dependências da escola em relação à estrutura de iluminação?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'Ótima',
-                    placement: 0,
+                    "value": "Ótima",
+                    "placement": 0
                 },
                 {
-                    value: 'Boa',
-                    placement: 1,
+                    "value": "Boa",
+                    "placement": 1
                 },
                 {
-                    value: 'Regular',
-                    placement: 2,
+                    "value": "Regular",
+                    "placement": 2
                 },
                 {
-                    value: 'Ruim',
-                    placement: 3,
+                    "value": "Ruim",
+                    "placement": 3
                 },
                 {
-                    value: 'Péssima',
-                    placement: 4,
-                },
+                    "value": "Péssima",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2125,
-            placement: 13,
-            description: '',
-            question:
-                '1.8 E para finalizar a parte de introdução, adicione fotos da sua escola, principalmente mostrando a iluminação instalada nela, e também a data em que as fotos e os dados foram feitos.',
-            enabled: true,
-            type: 102,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2125,
+            "placement": 13,
+            "description": "",
+            "question": "1.8 E para finalizar a parte de introdução, adicione fotos da sua escola, principalmente mostrando a iluminação instalada nela, e também a data em que as fotos e os dados foram feitos.",
+            "enabled": true,
+            "type": 102,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20004,
-            placement: 14,
-            description: '',
-            question: 'PARTE 2: COLETA DE DADOS NO AMBIENTE',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20004,
+            "placement": 14,
+            "description": "",
+            "question": "PARTE 2: COLETA DE DADOS NO AMBIENTE",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20005,
-            placement: 15,
-            description: '',
-            question:
-                '2.1. Iluminação: Após você e seus colegas verificarem quais lâmpadas existem na sua sala de aula, é a hora de passar esses dados para o formulário da seguinte forma. Primeiro selecione 1 tipo de lâmpada encontrada.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20005,
+            "placement": 15,
+            "description": "",
+            "question": "2.1. Iluminação: Após você e seus colegas verificarem quais lâmpadas existem na sua sala de aula, é a hora de passar esses dados para o formulário da seguinte forma. Primeiro selecione 1 tipo de lâmpada encontrada.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2126,
-            placement: 16,
-            description: '',
-            question: '2.1 Agora de acordo com o guia de campo, veja a tabela de lâmpadas e avalie qual modelo sua sala de aula possui:',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2126,
+            "placement": 16,
+            "description": "",
+            "question": "2.1 Agora de acordo com o guia de campo, veja a tabela de lâmpadas e avalie qual modelo sua sala de aula possui:",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'Lâmpada LED de bulbo',
-                    placement: 0,
+                    "value": "Lâmpada LED de bulbo",
+                    "placement": 0
                 },
                 {
-                    value: 'Lâmpada LED tubular',
-                    placement: 1,
-                },
+                    "value": "Lâmpada LED tubular",
+                    "placement": 1
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2127,
-            placement: 17,
-            description: '',
-            question: 'Quantas?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2127,
+            "placement": 17,
+            "description": "",
+            "question": "Quantas?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2128,
-            placement: 18,
-            description: '',
-            question: 'Quanto tempo fica ligada por dia (em horas)?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2128,
+            "placement": 18,
+            "description": "",
+            "question": "Quanto tempo ficam ligadas por dia (em horas)?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2129,
-            placement: 19,
-            description: '',
-            question: 'Quantos dias por semana?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2129,
+            "placement": 19,
+            "description": "",
+            "question": "Quantos dias por semana?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2130,
-            placement: 20,
-            description: '',
-            question: '2.1.2. Quantas lâmpadas iguais à essa a sala possui? (Apenas\nnúmeros)',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2130,
+            "placement": 20,
+            "description": "",
+            "question": "2.1.2. Quantas lâmpadas iguais à essa a sala possui? (Apenas números)",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2131,
-            placement: 21,
-            description: '',
-            question: '2.1.3. Quanto tempo em média as lâmpadas ficam ligadas?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2131,
+            "placement": 21,
+            "description": "",
+            "question": "2.1.3. Quanto tempo em média as lâmpadas ficam ligadas?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2132,
-            placement: 22,
-            description: '',
-            question: '2.1.4. Quantos dias por semana ficam ligadas?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2132,
+            "placement": 22,
+            "description": "",
+            "question": "2.1.4. Quantos dias por semana ficam ligadas?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'Dias de aula: Segunda a Sexta.',
-                    placement: 0,
+                    "value": "Dias de aula: Segunda a Sexta.",
+                    "placement": 0
                 },
                 {
-                    value: 'Três vezes por semana.',
-                    placement: 1,
+                    "value": "Três vezes por semana.",
+                    "placement": 1
                 },
                 {
-                    value: 'Sempre, direto.',
-                    placement: 2,
-                },
+                    "value": "Sempre, direto.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20006,
-            placement: 23,
-            description: '',
-            question: '2.2. Cozinha: Em seguida vamos preencher a parte da cozinha. Selecione um objeto que foi encontrado na cozinha.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20006,
+            "placement": 23,
+            "description": "",
+            "question": "2.2. Cozinha: Em seguida vamos preencher a parte da cozinha. Selecione um objeto que foi encontrado na cozinha.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2133,
-            placement: 24,
-            description: '',
-            question:
-                '2.2.1. Na cozinha da escola, quais aparelhos eletrodomésticos es-\ntão presentes? (Veja de acordo com o guia de campo).',
-            enabled: true,
-            type: 1,
-            sugestions: [
+            "id": 2133,
+            "placement": 24,
+            "description": "",
+            "question": "2.2.1. Na cozinha da escola, quais aparelhos eletrodomésticos estão presentes? (Veja de acordo com o guia de campo).",
+            "enabled": true,
+            "type": 1,
+            "sugestions": [
                 {
-                    value: 'Geladeira',
-                    placement: 0,
+                    "value": "Geladeira",
+                    "placement": 0
                 },
                 {
-                    value: 'Forno-elétrico',
-                    placement: 1,
+                    "value": "Forno-elétrico",
+                    "placement": 1
                 },
                 {
-                    value: 'Micro-ondas',
-                    placement: 2,
+                    "value": "Micro-ondas",
+                    "placement": 2
                 },
                 {
-                    value: 'Torneira elétrica',
-                    placement: 3,
+                    "value": "Torneira elétrica",
+                    "placement": 3
                 },
                 {
-                    value: 'Ventilador',
-                    placement: 4,
+                    "value": "Ventilador",
+                    "placement": 4
                 },
                 {
-                    value: 'Ar-condicionado',
-                    placement: 5,
+                    "value": "Ar-condicionado",
+                    "placement": 5
                 },
                 {
-                    value: 'Liquidificador',
-                    placement: 6,
+                    "value": "Liquidificador",
+                    "placement": 6
                 },
                 {
-                    value: 'Freezer',
-                    placement: 7,
-                },
+                    "value": "Freezer",
+                    "placement": 7
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2134,
-            placement: 25,
-            description: '',
-            question: 'Digite a quantidade de aparelhos iguais a esse você encontrou, o\ntempo que ele fica ligado e a sua potência.',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2134,
+            "placement": 25,
+            "description": "",
+            "question": "Digite a quantidade de aparelhos iguais a esse você encontrou, o\ntempo que ele fica ligado e a sua potência.",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2135,
-            placement: 26,
-            description: '',
-            question: '2.2.2. A partir das respostas acima, diga o nome do aparelho e\nquantos iguais a ele existem. (Apenas números).',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2135,
+            "placement": 26,
+            "description": "",
+            "question": "2.2.2. A partir das respostas acima, diga o nome do aparelho e\nquantos iguais a ele existem. (Apenas números).",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2136,
-            placement: 27,
-            description: '',
-            question: '2.2.3. Quantas horas por dia o aparelho fica ligado?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2136,
+            "placement": 27,
+            "description": "",
+            "question": "2.2.3. Quantas horas por dia o aparelho fica ligado?",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2137,
-            placement: 28,
-            description: '',
-            question: 'Geladeira',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2137,
+            "placement": 28,
+            "description": "",
+            "question": "Geladeira",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2138,
-            placement: 29,
-            description: '',
-            question: 'Forno elétrico',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2138,
+            "placement": 29,
+            "description": "",
+            "question": "Forno elétrico",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2139,
-            placement: 30,
-            description: '',
-            question: 'Micro-ondas',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2139,
+            "placement": 30,
+            "description": "",
+            "question": "Micro-ondas",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2140,
-            placement: 31,
-            description: '',
-            question: 'Torneira elétrica',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2140,
+            "placement": 31,
+            "description": "",
+            "question": "Torneira elétrica",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2141,
-            placement: 32,
-            description: '',
-            question: 'Ventilador',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2141,
+            "placement": 32,
+            "description": "",
+            "question": "Ventilador",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2142,
-            placement: 33,
-            description: '',
-            question: 'Ar-condicionado',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2142,
+            "placement": 33,
+            "description": "",
+            "question": "Ar-condicionado",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2143,
-            placement: 34,
-            description: '',
-            question: 'Liquidificador',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2143,
+            "placement": 34,
+            "description": "",
+            "question": "Liquidificador",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2144,
-            placement: 35,
-            description: '',
-            question: 'Freezer',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2144,
+            "placement": 35,
+            "description": "",
+            "question": "Freezer",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2145,
-            placement: 36,
-            description: '',
-            question: '2.2.4. Dos aparelhos que existem e você assinalou acima, qual a\nsua potência?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2145,
+            "placement": 36,
+            "description": "",
+            "question": "2.2.4. Dos aparelhos que existem e você assinalou acima, qual a sua potência?",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2146,
-            placement: 37,
-            description: '',
-            question: 'Geladeira',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2146,
+            "placement": 37,
+            "description": "",
+            "question": "Geladeira",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2147,
-            placement: 38,
-            description: '',
-            question: 'Forno elétrico',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2147,
+            "placement": 38,
+            "description": "",
+            "question": "Forno elétrico",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2148,
-            placement: 39,
-            description: '',
-            question: 'Micro-ondas',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2148,
+            "placement": 39,
+            "description": "",
+            "question": "Micro-ondas",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2149,
-            placement: 40,
-            description: '',
-            question: 'Torneira elétrica',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2149,
+            "placement": 40,
+            "description": "",
+            "question": "Torneira elétrica",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2150,
-            placement: 41,
-            description: '',
-            question: 'Ventilador',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2150,
+            "placement": 41,
+            "description": "",
+            "question": "Ventilador",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2151,
-            placement: 42,
-            description: '',
-            question: 'Ar-condicionado',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2151,
+            "placement": 42,
+            "description": "",
+            "question": "Ar-condicionado",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2152,
-            placement: 43,
-            description: '',
-            question: 'Liquidificador',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2152,
+            "placement": 43,
+            "description": "",
+            "question": "Liquidificador",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2153,
-            placement: 44,
-            description: '',
-            question: 'Freezer',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2153,
+            "placement": 44,
+            "description": "",
+            "question": "Freezer",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20007,
-            placement: 45,
-            description: '',
-            question:
-                '2.3. Secretaria e Laboratórios: Agora faça o mesmo que foi feito anteriormente, mas agora com esses outros objetos. Bom trabalho! Agora iremos para a diretoria/ secretaria, sala na qual as pessoas gerenciam a sua escola.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20007,
+            "placement": 45,
+            "description": "",
+            "question": "2.3. Secretaria e Laboratórios: Agora faça o mesmo que foi feito anteriormente, mas agora com esses outros objetos. Bom trabalho! Agora iremos para a diretoria/ secretaria, sala na qual as pessoas gerenciam a sua escola.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2154,
-            placement: 46,
-            description: '',
-            question: '2.3.1. Quais desses aparelhos você viu que a escola possui?',
-            enabled: true,
-            type: 1,
-            sugestions: [
+            "id": 2154,
+            "placement": 46,
+            "description": "",
+            "question": "2.3.1. Quais desses aparelhos você viu que a escola possui?",
+            "enabled": true,
+            "type": 1,
+            "sugestions": [
                 {
-                    value: 'Computador de mesa',
-                    placement: 0,
+                    "value": "Computador de mesa",
+                    "placement": 0
                 },
                 {
-                    value: 'Notebook',
-                    placement: 1,
+                    "value": "Notebook",
+                    "placement": 1
                 },
                 {
-                    value: 'Impressora',
-                    placement: 2,
+                    "value": "Impressora",
+                    "placement": 2
                 },
                 {
-                    value: 'Aparelho de som (Som do intervalo)',
-                    placement: 3,
+                    "value": "Aparelho de som (Som do intervalo)",
+                    "placement": 3
                 },
                 {
-                    value: 'Bebedouro elétrico',
-                    placement: 4,
+                    "value": "Bebedouro elétrico",
+                    "placement": 4
                 },
                 {
-                    value: 'Ar-condicionado',
-                    placement: 5,
+                    "value": "Ar-condicionado",
+                    "placement": 5
                 },
                 {
-                    value: 'Televisão',
-                    placement: 6,
-                },
+                    "value": "Televisão",
+                    "placement": 6
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2155,
-            placement: 47,
-            description: '',
-            question:
-                'E suas respectivas informações. Agora que você assinalou esse\naparelho, quantos iguais ao assinalado existem na sua escola.\n(Responda somente com números).',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2155,
+            "placement": 47,
+            "description": "",
+            "question": "E suas respectivas informações. Agora que você assinalou esse aparelho, quantos iguais ao assinalado existem na sua escola. (Responda somente com números).",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2156,
-            placement: 48,
-            description: '',
-            question: '2.3.2. Quantas horas por dia o aparelho fica ligado?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2156,
+            "placement": 48,
+            "description": "",
+            "question": "2.3.2. Quantas horas por dia o aparelho fica ligado?",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2157,
-            placement: 49,
-            description: '',
-            question: 'Computador de mesa',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2157,
+            "placement": 49,
+            "description": "",
+            "question": "Computador de mesa",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2158,
-            placement: 50,
-            description: '',
-            question: 'Notebook',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2158,
+            "placement": 50,
+            "description": "",
+            "question": "Notebook",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2159,
-            placement: 51,
-            description: '',
-            question: 'Impressora',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2159,
+            "placement": 51,
+            "description": "",
+            "question": "Impressora",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2160,
-            placement: 52,
-            description: '',
-            question: 'Aparelho de som (Som do intervalo)',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2160,
+            "placement": 52,
+            "description": "",
+            "question": "Aparelho de som (Som do intervalo)",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2161,
-            placement: 53,
-            description: '',
-            question: 'Bebedouro elétrico',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2161,
+            "placement": 53,
+            "description": "",
+            "question": "Bebedouro elétrico",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2162,
-            placement: 54,
-            description: '',
-            question: 'Ar-condicionado',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2162,
+            "placement": 54,
+            "description": "",
+            "question": "Ar-condicionado",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2163,
-            placement: 55,
-            description: '',
-            question: 'Televisão',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2163,
+            "placement": 55,
+            "description": "",
+            "question": "Televisão",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia.',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia.",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia.',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia.",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia.',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia.",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2164,
-            placement: 56,
-            description: '',
-            question: '2.3.3. Dos aparelhos que existem e você assinalou acima, qual a\nsua potência?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2164,
+            "placement": 56,
+            "description": "",
+            "question": "2.3.3. Dos aparelhos que existem e você assinalou acima, qual a sua potência?",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2165,
-            placement: 57,
-            description: '',
-            question: 'Computador de mesa',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2165,
+            "placement": 57,
+            "description": "",
+            "question": "Computador de mesa",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2166,
-            placement: 58,
-            description: '',
-            question: 'Notebook',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2166,
+            "placement": 58,
+            "description": "",
+            "question": "Notebook",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2167,
-            placement: 59,
-            description: '',
-            question: 'Impressora',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2167,
+            "placement": 59,
+            "description": "",
+            "question": "Impressora",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2168,
-            placement: 60,
-            description: '',
-            question: 'Aparelho de som (Som do intervalo)',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2168,
+            "placement": 60,
+            "description": "",
+            "question": "Aparelho de som (Som do intervalo)",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2169,
-            placement: 61,
-            description: '',
-            question: 'Bebedouro elétrico',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2169,
+            "placement": 61,
+            "description": "",
+            "question": "Bebedouro elétrico",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2170,
-            placement: 62,
-            description: '',
-            question: 'Ar-condicionado',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2170,
+            "placement": 62,
+            "description": "",
+            "question": "Ar-condicionado",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2171,
-            placement: 63,
-            description: '',
-            question: 'Televisão',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2171,
+            "placement": 63,
+            "description": "",
+            "question": "Televisão",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20008,
-            placement: 64,
-            description: '',
-            question:
-                '2.4. Ambiente Livre: Agora você e seus colegas podem escolher qualquer parte da sua escola em que queiram fazer um levantamento do consumo de energia elétrica. Para isso, após serem coletados os dados dos aparelhos é preciso preencher o formulário da seguinte maneira.\n\nPrimeiro escreva os nomes dos locais, e em seguida adicione, se possível, uma ou mais fotos dos locais e dos seus aparelhos.\n\nAgora vamos para uma parte da escola na qual você estudante queira fazer um levantamento e analisar. Pode ser qualquer local da escola, exemplo: Sala de informática, sala de jogos, biblioteca etc.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20008,
+            "placement": 64,
+            "description": "",
+            "question": "2.4. Ambiente Livre: Agora você e seus colegas podem escolher qualquer parte da sua escola em que queiram fazer um levantamento do consumo de energia elétrica. Para isso, após serem coletados os dados dos aparelhos é preciso preencher o formulário da seguinte maneira.\n\nPrimeiro escreva os nomes dos locais, e em seguida adicione, se possível, uma ou mais fotos dos locais e dos seus aparelhos.\n\nAgora vamos para uma parte da escola na qual você estudante queira fazer um levantamento e analisar. Pode ser qualquer local da escola, exemplo: Sala de informática, sala de jogos, biblioteca etc.",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2172,
-            placement: 65,
-            description: '',
-            question: '2.4.1. Qual lugar você está avaliando?',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2172,
+            "placement": 65,
+            "description": "",
+            "question": "2.4.1. Qual lugar você está avaliando?",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2173,
-            placement: 66,
-            description: '',
-            question:
-                '2.4.2. Escreva o nome do aparelho que vocês encontraram, selecione a sua quantidade, o tempo que ele fica ligado, e por fim a sua potência. (Qual aparelho você vai ver as especificações, exemplo: notebook)',
-            enabled: true,
-            type: 0,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 2173,
+            "placement": 66,
+            "description": "",
+            "question": "2.4.2. Escreva o nome do aparelho que vocês encontraram, selecione a sua quantidade, o tempo que ele fica ligado, e por fim a sua potência. (Qual aparelho você vai ver as especificações, exemplo: notebook)",
+            "enabled": true,
+            "type": 0,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2174,
-            placement: 67,
-            description: '',
-            question: '2.4.3. Quantos(as) têm?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2174,
+            "placement": 67,
+            "description": "",
+            "question": "2.4.3. Quantos(as) têm?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 a 3',
-                    placement: 0,
+                    "value": "De 1 a 3",
+                    "placement": 0
                 },
                 {
-                    value: 'De 3 a 6',
-                    placement: 1,
+                    "value": "De 3 a 6",
+                    "placement": 1
                 },
                 {
-                    value: 'De 6 a 10',
-                    placement: 2,
+                    "value": "De 6 a 10",
+                    "placement": 2
                 },
                 {
-                    value: 'Mais que 10',
-                    placement: 3,
-                },
+                    "value": "Mais que 10",
+                    "placement": 3
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2175,
-            placement: 68,
-            description: '',
-            question: '2.4.4. Quantas horas por dia o aparelho fica ligado?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2175,
+            "placement": 68,
+            "description": "",
+            "question": "2.4.4. Quantas horas por dia o aparelho fica ligado?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: 'De 1 h a 4 h por dia',
-                    placement: 0,
+                    "value": "De 1 h a 4 h por dia",
+                    "placement": 0
                 },
                 {
-                    value: 'De 4 h a 12 h por dia',
-                    placement: 1,
+                    "value": "De 4 h a 12 h por dia",
+                    "placement": 1
                 },
                 {
-                    value: 'Mais de 12 h por dia',
-                    placement: 2,
-                },
+                    "value": "Mais de 12 h por dia",
+                    "placement": 2
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 2176,
-            placement: 69,
-            description: '',
-            question: '2.4.5. Do aparelho que você citou acima, qual a sua potência?',
-            enabled: true,
-            type: 2,
-            sugestions: [
+            "id": 2176,
+            "placement": 69,
+            "description": "",
+            "question": "2.4.5. Do aparelho que você citou acima, qual a sua potência?",
+            "enabled": true,
+            "type": 2,
+            "sugestions": [
                 {
-                    value: '0 a 100 watts',
-                    placement: 0,
+                    "value": "0 a 100 watts",
+                    "placement": 0
                 },
                 {
-                    value: '101 watts a 400 watts',
-                    placement: 1,
+                    "value": "101 watts a 400 watts",
+                    "placement": 1
                 },
                 {
-                    value: '400 watts a 900 watts',
-                    placement: 2,
+                    "value": "400 watts a 900 watts",
+                    "placement": 2
                 },
                 {
-                    value: '900 watts a 1500 watts',
-                    placement: 3,
+                    "value": "900 watts a 1500 watts",
+                    "placement": 3
                 },
                 {
-                    value: 'Mais de 1500 watts',
-                    placement: 4,
-                },
+                    "value": "Mais de 1500 watts",
+                    "placement": 4
+                }
             ],
-            subForm: null,
-            validation: [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20009,
-            placement: 70,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-14_on3gg9.jpg',
-            question: 'Guia ilustrado: Lâmpadas',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20009,
+            "placement": 70,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-14_on3gg9.jpg",
+            "question": "Guia ilustrado: Lâmpadas",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20010,
-            placement: 71,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-15_afqza5.jpg',
-            question: 'Guia ilustrado: Ar-condicionado',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20010,
+            "placement": 71,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-15_afqza5.jpg",
+            "question": "Guia ilustrado: Ar-condicionado",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20011,
-            placement: 72,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-16_k7m7ay.jpg',
-            question: 'Guia ilustrado: Geladeiras',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20011,
+            "placement": 72,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-16_k7m7ay.jpg",
+            "question": "Guia ilustrado: Geladeiras",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20012,
-            placement: 73,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-17_mpeym5.jpg',
-            question: 'Guia ilustrado: Computadores e fornos elétricos',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20012,
+            "placement": 73,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467449/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-17_mpeym5.jpg",
+            "question": "Guia ilustrado: Computadores e fornos elétricos",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20013,
-            placement: 74,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-18_mvhhnm.jpg',
-            question: 'Guia ilustrado: Microondas e televisões',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
+            "id": 20013,
+            "placement": 74,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-18_mvhhnm.jpg",
+            "question": "Guia ilustrado: Microondas e televisões",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
         },
         {
-            id: 20014,
-            placement: 75,
-            description:
-                'https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-19_ua3ky6.jpg',
-            question: 'Guia ilustrado: Ventiladores e Freezers',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 20000,
-            placement: 76,
-            description: '',
-            question: 'Versão: 20231114',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
+            "id": 20014,
+            "placement": 75,
+            "description": "https://res.cloudinary.com/dbxjlnwlo/image/upload/v1694467450/PICCE/PICCE_Guia-de-campo-13_Eficiencia_energetica-19_ua3ky6.jpg",
+            "question": "Guia ilustrado: Ventiladores e Freezers",
+            "enabled": true,
+            "type": 101,
+            "sugestions": [],
+            "subForm": null,
+            "validation": []
+        }
     ],
-    answerTimes: false,
+    "answerTimes": false
 };
 
 export const protocol127 = {
