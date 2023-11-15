@@ -6,6 +6,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({
         id: null,
         email: null,
+        username: null,
         token: null,
     });
 
@@ -22,9 +23,9 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = (id, email, token) => {
-        setUser({ id, email, token });
-        localStorage.setItem('user', JSON.stringify({ id, email, token }));
+    const login = (id, email, username, token) => {
+        setUser({ id, email, username, token });
+        localStorage.setItem('user', JSON.stringify({ id, email, username, token }));
         setAcceptTerms({ value: true });
         localStorage.setItem('acceptTerms', JSON.stringify({ value: true }));
     };
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
         setUser({
             id: null,
             email: null,
+            username: null,
             token: null,
         });
         localStorage.removeItem('user');

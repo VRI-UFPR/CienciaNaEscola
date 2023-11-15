@@ -55,8 +55,9 @@ const styles = `
 `;
 
 function LoginPage(props) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const email = 'picce_t@gmail.com';
+    const password = '12345@aA';
+    const [username, setUsername] = useState('');
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -77,7 +78,7 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.token) {
-                    login(response.data.id, email, response.data.token);
+                    login(response.data.id, email, username, response.data.token);
                     navigate('/home');
                 } else {
                     throw new Error('Something went wrong!');
@@ -102,30 +103,26 @@ function LoginPage(props) {
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
                             className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                            placeholder="Login"
+                            placeholder="Username"
                             type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
-                        <input
-                            className="login-input rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
-                            placeholder="Senha"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <p
+                        <div className="col-12 col-lg-6">
+                            <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                        </div>
+                        {/* <p
                             className="login-forgot-pw text-decoration-underline fs-6 cursor-pointer"
                             onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
-                        </p>
+                        </p> */}
                     </div>
-                    <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-lg-5">
+                    {/* <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-lg-5">
                         <div className="col-12 col-lg-6">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
-                    </div>
+                    </div> */}
                 </form>
             </div>
             <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
