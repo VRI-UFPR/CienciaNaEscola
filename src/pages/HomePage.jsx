@@ -1,12 +1,11 @@
-import { React, useState, useEffect, useContext, useRef } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import axios from 'axios';
+import { React, useState, useEffect, useRef } from 'react';
 
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
 import Alert from '../components/Alert';
+import { protocolList } from '../mockResponses/protocols';
 
 const style = `
     .font-barlow {
@@ -36,64 +35,67 @@ function HomePage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const { user } = useContext(AuthContext);
     const modalRef = useRef(null);
     const [filteredData, setFilteredData] = useState([]);
 
-    useEffect(() => {
-        const url = () => {
-            switch (user.id) {
-                case 73:
-                    return 'bf2163d2-f1b8-4251-803d-f8aaeea6996a';
-                case 89:
-                    return 'a508e9f8-30b7-401b-9fe2-475ad753fa48'; //P1 - 131
-                case 91:
-                    return '2ee976bc-5dd8-40a1-b6d9-903a64beca12';
-                case 92:
-                    return '35ca541c-d007-4f63-a180-0dfdab4bb807';
-                case 94:
-                    return '65da0a07-9010-42bb-8709-1f25f979a7fe';
-                case 96:
-                    return '73e8f90e-48a2-4dda-be96-133f83b8f577';
-                case 98:
-                    return '36dd9235-396a-4513-8965-67fa9bfecf2d'; // P15 - 105
-                case 99:
-                    return 'b836ce9e-736d-4ac5-89f0-7cdb7c593dc0'; // P16 - 127
-                case 101:
-                    return 'be2abdb5-063f-4d4b-82fb-8fd8c9aa8f4b';
-                case 102:
-                    return '32f7ab66-34d4-4643-bba0-6887b2c52f9e';
-                case 104:
-                    return 'c1d93725-a0d6-40bb-b4b0-c8761cd75f79';
-                case 105:
-                    return '1e47edeb-0908-4d8a-806d-14bb0e9c766e';
-                case 106:
-                    return 'd36fd758-db24-43fe-acd0-0c74df189eab';
-                case 107:
-                    return 'e225de28-221b-4116-8aed-7942a5a74a6f';
-                case 108:
-                    return '2775dcb6-09f8-4d72-a953-373e8ed3d383';
-                case 109:
-                    return 'b60abda5-a61c-4f31-b4de-05062bdab700';
-                default:
-                    return 'bfd805e5-08ba-4c6f-a7e7-281071b2d833';
-            }
-        };
+    // useEffect(() => {
+    //     const url = () => {
+    //         switch (user.id) {
+    //             case 73:
+    //                 return 'bf2163d2-f1b8-4251-803d-f8aaeea6996a';
+    //             case 89:
+    //                 return 'a508e9f8-30b7-401b-9fe2-475ad753fa48'; //P1 - 131
+    //             case 91:
+    //                 return '2ee976bc-5dd8-40a1-b6d9-903a64beca12';
+    //             case 92:
+    //                 return '35ca541c-d007-4f63-a180-0dfdab4bb807';
+    //             case 94:
+    //                 return '65da0a07-9010-42bb-8709-1f25f979a7fe';
+    //             case 96:
+    //                 return '73e8f90e-48a2-4dda-be96-133f83b8f577';
+    //             case 98:
+    //                 return '36dd9235-396a-4513-8965-67fa9bfecf2d'; // P15 - 105
+    //             case 99:
+    //                 return 'b836ce9e-736d-4ac5-89f0-7cdb7c593dc0'; // P16 - 127
+    //             case 101:
+    //                 return 'be2abdb5-063f-4d4b-82fb-8fd8c9aa8f4b';
+    //             case 102:
+    //                 return '32f7ab66-34d4-4643-bba0-6887b2c52f9e';
+    //             case 104:
+    //                 return 'c1d93725-a0d6-40bb-b4b0-c8761cd75f79';
+    //             case 105:
+    //                 return '1e47edeb-0908-4d8a-806d-14bb0e9c766e';
+    //             case 106:
+    //                 return 'd36fd758-db24-43fe-acd0-0c74df189eab';
+    //             case 107:
+    //                 return 'e225de28-221b-4116-8aed-7942a5a74a6f';
+    //             case 108:
+    //                 return '2775dcb6-09f8-4d72-a953-373e8ed3d383';
+    //             case 109:
+    //                 return 'b60abda5-a61c-4f31-b4de-05062bdab700';
+    //             default:
+    //                 return 'bfd805e5-08ba-4c6f-a7e7-281071b2d833';
+    //         }
+    //     };
 
-        if (user.id !== null && user.token !== null) {
-            // .get(`http://localhost:3333/user/list/${user.id}`)
-            // .get(`https://genforms.c3sl.ufpr.br/api/user/list/83`)
-            axios
-                .get(`https://run.mocky.io/v3/${url()}`)
-                .then((response) => {
-                    setFilteredData(response.data);
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        }
-    }, [user]);
+    //     if (user.id !== null && user.token !== null) {
+    //         // .get(`http://localhost:3333/user/list/${user.id}`)
+    //         // .get(`https://genforms.c3sl.ufpr.br/api/user/list/83`)
+    //         axios
+    //             .get(`https://run.mocky.io/v3/${url()}`)
+    //             .then((response) => {
+    //                 setFilteredData(response.data);
+    //                 setIsLoading(false);
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error.message);
+    //             });
+    //     }
+    // }, [user]);
+    useEffect(() => {
+        setFilteredData(protocolList);
+        setIsLoading(false);
+    }, []);
 
     if (isLoading) {
         return <SplashPage />;
