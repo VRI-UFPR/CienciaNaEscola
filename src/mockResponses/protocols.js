@@ -1137,6 +1137,17 @@ export const protocol104 = {
             validation: [],
         },
         {
+            id: 10008,
+            placement: 0,
+            description: '',
+            question: 'SEÇÃO 3: PERFIL DAS PROPAGANDAS',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 1444,
             placement: 82,
             description: '',
@@ -13190,10 +13201,6 @@ export const protocol127 = {
                 {
                     value: 'Rua 4',
                     placement: 3,
-                },
-                {
-                    value: 'Rua 5',
-                    placement: 4,
                 },
             ],
             subForm: null,
