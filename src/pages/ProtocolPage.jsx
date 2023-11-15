@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
+import { React, useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -19,10 +19,26 @@ import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
 import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
-import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import LinkBox from '../components/inputs/answers/LinkBox';
+import {
+    protocol104,
+    protocol105,
+    protocol106,
+    protocol113,
+    protocol114,
+    protocol115,
+    protocol118,
+    protocol119,
+    protocol122,
+    protocol123,
+    protocol125,
+    protocol127,
+    protocol128,
+    protocol129,
+    protocol131,
+} from '../mockResponses/protocols';
 
 const styles = `
     .bg-yellow-orange {
@@ -72,7 +88,6 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
-    const { user } = useContext(AuthContext);
     const modalRef1 = useRef(null);
     const navigate = useNavigate();
 
@@ -122,71 +137,59 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
-        //.get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
-        const url = () => {
+        const syncProtocol = async () => {
             switch (id) {
                 case '104':
-                    return '743e7fff-0461-4412-93d4-06200ece5a6f';
+                    return setProtocol(protocol104);
                 case '105':
-                    return '19b2ec93-076f-4662-9a2a-fd8520217f07'; // P15 - Segurança no trânsito no entorno escolar
+                    return setProtocol(protocol105);
                 case '106':
-                    return '46d005b6-d0ce-4e03-8493-ba66c1f99f71';
-                case '110':
-                    return '74316371-84a4-4150-b39e-f15430731029';
+                    return setProtocol(protocol106);
                 case '113':
-                    return 'ae1cdd8c-6a91-4c74-a2de-ff2ee73509ff';
+                    return setProtocol(protocol113);
                 case '114':
-                    return 'fdba06a5-6f90-45b2-8598-c0b47e72391e';
+                    return setProtocol(protocol114);
                 case '115':
-                    return 'e7ae00f5-d57c-445c-ab36-8d1aa026de5c';
+                    return setProtocol(protocol115);
                 case '118':
-                    return '16b4188e-3b79-4f15-aaa4-655d55ab8f7a';
+                    return setProtocol(protocol118);
                 case '119':
-                    return 'c03d1635-5ec1-4024-a37b-8d17384563b1';
+                    return setProtocol(protocol119);
                 case '122':
-                    return 'fd05c415-35df-4cbc-9a27-30c2b7f6a838';
+                    return setProtocol(protocol122);
                 case '123':
-                    return '70eea54d-8a95-46ef-9ed9-a21950aa3fe5';
+                    return setProtocol(protocol123);
                 case '125':
-                    return '2b4a2b9d-9897-4e58-b678-83cd7bd60d94';
+                    return setProtocol(protocol125);
                 case '127':
-                    return '26f48fbb-51b5-4ab5-8497-aebc09e829b7'; // P16 - Segurança no trânsito no entorno escolar
+                    return setProtocol(protocol127);
                 case '128':
-                    return '16eb037a-14af-4148-b1be-8e8948f2a654';
+                    return setProtocol(protocol128);
                 case '129':
-                    return 'cbab384a-de6e-45ab-8d2c-930562184744';
+                    return setProtocol(protocol129);
                 case '131':
-                    return '43a85605-a7a8-410f-9faa-43824636d273'; // P1 - Cobertura de solo
+                    return setProtocol(protocol131);
                 default:
-                    return '4441b136-5756-477d-9ec9-dd4f4f2d554f';
             }
         };
 
-        axios
-            .get(`https://run.mocky.io/v3/${url()}`)
-            .then((response) => {
-                setProtocol(response.data);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
+        syncProtocol().then(() => setIsLoading(false));
     }, [id]);
 
-    useEffect(() => {
-        if (!isLoading) {
-            if (protocol.owner !== undefined && protocol.owner !== user.id) {
-                modalRef.current.showModal({
-                    title: 'Você não tem permissão para acessar este protocolo.',
-                    onHide: () => {
-                        navigate('/home');
-                    },
-                });
-            }
-        }
-    }, [isLoading, navigate, protocol, user]);
+    // useEffect(() => {
+    //     if (!isLoading) {
+    //         if (protocol.owner !== undefined && protocol.owner !== user.id) {
+    //             modalRef.current.showModal({
+    //                 title: 'Você não tem permissão para acessar este protocolo.',
+    //                 onHide: () => {
+    //                     navigate('/home');
+    //                 },
+    //             });
+    //         }
+    //     }
+    // }, [isLoading, navigate, protocol, user]);
 
-    if (isLoading || user === undefined || (protocol.owner !== undefined && protocol.owner !== user.id)) {
+    if (isLoading) {
         return (
             <>
                 <SplashPage />
@@ -210,25 +213,25 @@ function ProtocolPage(props) {
                         case 0:
                             if (input.question === 'date' && input.description === 'date' && input.placement === 1) {
                                 return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    <div key={id + '-' + id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                         {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
                             } else if (input.question === 'time' && input.description === 'time' && input.placement === 2) {
                                 return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                         {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
                             } else if (input.question === 'location' && input.description === 'location' && input.placement === 3) {
                                 return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                         {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
                             } else {
                                 return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                    <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                         {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
                                     </div>
                                 );
@@ -236,52 +239,52 @@ function ProtocolPage(props) {
 
                         case 1:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
                         case 2:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
                         case 3:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<SelectInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
 
                         case 100:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
                         case 101:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
                         case 102:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
                         case 103:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<LinkBox input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
                         case 104:
                             return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
+                                <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                     {<Weather input={input} onAnswerChange={handleAnswerChange} />}
                                 </div>
                             );
