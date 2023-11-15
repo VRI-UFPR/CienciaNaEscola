@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useRef } from 'react';
+import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -22,6 +22,7 @@ import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import LinkBox from '../components/inputs/answers/LinkBox';
+import { AuthContext } from '../contexts/AuthContext';
 import {
     protocol104,
     protocol105,
@@ -86,6 +87,7 @@ function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [protocol, setProtocol] = useState();
     const [answers, setAnswers] = useState({});
+    const { user } = useContext(AuthContext);
     const { id } = useParams();
     const modalRef = useRef(null);
     const modalRef1 = useRef(null);
@@ -227,6 +229,18 @@ function ProtocolPage(props) {
                                 return (
                                     <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3">
                                         {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
+                                    </div>
+                                );
+                            } else if (input.question === 'username' && input.description === 'username') {
+                                return (
+                                    <div key={id + '-' + input.id} className="row justify-content-center m-0 pt-3 d-none">
+                                        {
+                                            <SimpleTextInput
+                                                input={input}
+                                                onAnswerChange={handleAnswerChange}
+                                                answer={[{ value: user.username }]}
+                                            />
+                                        }
                                     </div>
                                 );
                             } else {

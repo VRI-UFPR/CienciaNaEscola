@@ -20,8 +20,8 @@ const styles = `
 `;
 
 function SimpleTextInput(props) {
-    const [text, setText] = useState(['']);
     const { onAnswerChange, input, answer } = props;
+    const [text, setText] = useState(answer ? [answer[0].value] : ['']);
 
     useEffect(() => {
         onAnswerChange(input.id, text);
