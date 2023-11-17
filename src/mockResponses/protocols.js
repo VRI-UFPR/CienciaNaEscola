@@ -10344,7 +10344,7 @@ export const protocol123 = {
             id: 2425,
             placement: 0,
             description: 'https://forms.gle/vjuZ1cgs6agRndHM6',
-            question: 'Para acessar o formulário de campo completo, clique aqui.',
+            question: 'Para acessar o formulário completo, clique aqui.',
             enabled: true,
             type: 103,
             sugestions: [],
