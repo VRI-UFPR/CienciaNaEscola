@@ -7588,7 +7588,8 @@ export const protocol119 = {
             id: 1923,
             placement: 19,
             description: '(Você pode indicar várias respostas nesta pergunta)',
-            question: '1.1. Quais usos de solo você identifica em toda a área? (Pode ser assinalada mais de uma alternativa)\n',
+            question:
+                '1.1. Quais usos de solo você identifica em toda a área da escola ou colégio? (Pode ser assinalada mais de uma alternativa)',
             enabled: true,
             type: 1,
             sugestions: [
@@ -7752,8 +7753,21 @@ export const protocol119 = {
         {
             id: 9018,
             placement: 21,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693686/ic/kaazpnpndrieu3ierggc.jpg',
-            question: 'Nessa etapa, você irá fazer uma atividade que mostra como a água infiltra no solo. ',
+            description: '',
+            question:
+                'Nessa etapa, você irá fazer uma atividade que mostra como a água infiltra no solo. Antes de começar este experimento, determine a umidade do solo, que pode ser: • Molhado: ao apertar a amostra de solo com a mão, escorre água entre os dedos; • Úmido: ao colocar uma amostra de solo sobre uma folha de papel, esta fica úmida; • Seco: ao colocar uma amostra do solo sobre uma folha de papel, esta não fica úmida.',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 9018,
+            placement: 28,
+            description: '',
+            question:
+                'Para começar, vamos usar um pedaço de cano de PVC com 100 mm (10 cm) de diâmetro e aproximadamente de 30 cm de comprimento, para formar um cilindro aberto dos dois lados. Esse cano de PVC pode ser reutilizado de resto de material de construção. Com um pedaço de madeira apoiado sobre o cilindro, bata com um martelo, até cravar cerca de 5 cm dentro do solo, de modo que fique bem firme (figura 3).',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -7763,9 +7777,9 @@ export const protocol119 = {
         {
             id: 9018,
             placement: 21,
-            description: '',
+            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693686/ic/kaazpnpndrieu3ierggc.jpg',
             question:
-                'Antes de começar este experimento, determine a umidade do solo, que pode ser: • Molhado: ao apertar a amostra de solo com a mão, escorre água entre os dedos; • Úmido: ao colocar uma amostra de solo sobre uma folha de papel, esta fica úmida; • Seco: ao colocar uma amostra do solo sobre uma folha de papel, esta não fica úmida.',
+                'Figura 3. Materiais necessários para realização da prática e exemplificação da fixação do cano de PVC no solo utilizando um pedaço de madeira e martelo.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -7775,9 +7789,8 @@ export const protocol119 = {
         {
             id: 9019,
             placement: 22,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693691/ic/eff7ncjb2spd4ezues2n.jpg',
-            question:
-                'Figura 3. Materiais necessários para realização da prática e exemplificação da fixação do cano de PVC no solo utilizando um pedaço de madeira e martelo.',
+            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693686/ic/qketpylbi5wxlp71jxw2.jpg',
+            question: '',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -7799,7 +7812,7 @@ export const protocol119 = {
         {
             id: 9021,
             placement: 24,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693686/ic/qketpylbi5wxlp71jxw2.jpg',
+            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693691/ic/eff7ncjb2spd4ezues2n.jpg',
             question:
                 'Figura 4. Demonstração da colocação da água no cilindro e contagem do tempo de infiltração, com o auxílio do cronômetro do celular.',
             enabled: true,
@@ -7840,18 +7853,6 @@ export const protocol119 = {
                     placement: 2,
                 },
             ],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 9018,
-            placement: 28,
-            description: '',
-            question:
-                'Para começar, vamos usar um pedaço de cano de PVC com 100 mm (10 cm) de diâmetro e aproximadamente de 30 cm de comprimento, para formar um cilindro aberto dos dois lados. Esse cano de PVC pode ser reutilizado de resto de material de construção. Com um pedaço de madeira apoiado sobre o cilindro, bata com um martelo, até cravar cerca de 5 cm dentro do solo, de modo que fique bem firme (figura 3).',
-            enabled: true,
-            type: 101,
-            sugestions: [],
             subForm: null,
             validation: [],
         },
@@ -7997,7 +7998,7 @@ export const protocol119 = {
             placement: 39,
             description: '',
             question:
-                'Com o auxílio de pinça, lápis, palitos de sorvete e/ou lupa, observem a presença dos organismos que estão no solo sobre a lona ou no próprio buraco escavado no solo. Para te ajudar, veja o infográfico 1, que mostra os principais organismos encontrados no solo.',
+                'Com o auxílio de pinça, lápis, palitos de sorvete e/ou lupa, observem a presença dos organismos que estão no solo sobre a lona ou no próprio buraco escavado no solo.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -8158,23 +8159,11 @@ export const protocol119 = {
         {
             id: 9042,
             placement: 48,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693706/ic/irbztfqrvxzukrvyrz07.png',
+            description: 'https://nenc.gov.ua/old/GLOBE/Other/Munsell%20soil%20colour%20chart.pdf',
             question:
                 'Caso não esteja com o aplicativo em mãos, utilize a carta de Munsell impressa ou na tela do seu celular, disponível no link: https://nenc.gov.ua/old/GLOBE/Other/Munsell%20soil%20colour%20chart.pdf',
             enabled: true,
             type: 103,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 9043,
-            placement: 49,
-            description: '',
-            question:
-                'Cada página possui uma abertura embaixo de cada cor possível, que pode variar do vermelho até tons de cinza. Esse espaço é destinado para colocar a amostra de solo a fim de fazer uma comparação visual entre a carta e a amostra coletada.',
-            enabled: true,
-            type: 101,
             sugestions: [],
             subForm: null,
             validation: [],
@@ -8315,7 +8304,8 @@ export const protocol119 = {
             id: 1931,
             placement: 53,
             description: '',
-            question: 'Se você usou a carta de Munsell em PDF, responda: 4.4. Qual a cor (matiz/ valor/ croma) do solo coletado por você?',
+            question:
+                'Se você usou a carta de Munsell em PDF, responda: 4.4. Qual a cor (matiz/ valor/ croma) do solo coletado por você? Exemplo: 5YR 5/4.',
             enabled: true,
             type: 0,
             sugestions: [],
@@ -8392,19 +8382,8 @@ export const protocol119 = {
         {
             id: 9048,
             placement: 59,
-            description: '',
-            question: 'Tem um vídeo mostrando a determinação da dureza do solo no link a seguir: ',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 9048,
-            placement: 59,
             description: 'https://youtu.be/9cnD2vHFj84?t=87',
-            question: 'https://youtu.be/9cnD2vHFj84?t=87',
+            question: 'Tem um vídeo mostrando a determinação da dureza do solo no link a seguir: https://youtu.be/9cnD2vHFj84?t=87',
             enabled: true,
             type: 103,
             sugestions: [],
@@ -8491,7 +8470,7 @@ export const protocol119 = {
             placement: 63,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693698/ic/qlpk8oekhw6udfcetnjv.jpg',
             question:
-                'Figura 9. Procedimento para avaliar a resistência do solo com o uso de um lápis, utilizando um dedo (imagem à esquerda) e a mão (imagem à direita).',
+                'Figura 9. Procedimento para avaliar a resistência do solo com o uso de um lápis, utilizando um dedo e, se não conseguir, com a mão.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -8842,7 +8821,7 @@ export const protocol119 = {
         {
             id: 9070,
             placement: 86,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1694693708/ic/uafqhvrxvrc3jewb8a4a.jpg',
+            description: '',
             question:
                 'Anote todos os tipos de resíduos encontrados no solo, ou seja: Pilhas ou baterias; papel; plástico; papelão; madeira; isopor; vidro; metal; resíduos orgânicos (restos de alimentos); ou resíduos da construção civil (pedaços de tijolos, telhas, cimento, blocos de construção, asfalto, etc.).',
             enabled: true,
