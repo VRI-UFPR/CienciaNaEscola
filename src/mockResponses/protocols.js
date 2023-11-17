@@ -2162,7 +2162,7 @@ export const protocol106 = {
             id: 30000,
             placement: 0,
             description: '',
-            question: 'Diversidade e classificação dos insetos:',
+            question: 'DIVERSIDADE E CLASSIFICAÇÃO DOS INSETOS:',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2185,7 +2185,7 @@ export const protocol106 = {
             id: 30002,
             placement: 0,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1697671958/ic/yuripediu/ae5uxxwp8drjzei9f91k.jpg',
-            question: 'Figura 1. Exemplos de animais artrópodes terrestres que não são insetos.',
+            question: 'FIGURA 1. Exemplos de animais artrópodes terrestres que não são insetos.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2196,7 +2196,7 @@ export const protocol106 = {
             id: 30003,
             placement: 0,
             description: '',
-            question: 'Reconhecendo um inseto:',
+            question: 'RECONHECENDO UM INSETO:',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2220,7 +2220,7 @@ export const protocol106 = {
             placement: 0,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1697671954/ic/yuripediu/l1axxroiayfo2az66eda.jpg',
             question:
-                'Figura 2. Espécime de vespa representando um modelo esquemático das principais características morfológicas externas que definem um inseto.',
+                'FIGURA 2. Espécime de vespa representando um modelo esquemático das principais características morfológicas externas que definem um inseto.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2231,7 +2231,7 @@ export const protocol106 = {
             id: 30005,
             placement: 0,
             description: '',
-            question: 'Instruções para realização da atividade:',
+            question: 'INSTRUÇÕES PARA REALIZAÇÃO DA ATIVIDADE:',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2243,7 +2243,7 @@ export const protocol106 = {
             placement: 0,
             description: '',
             question:
-                'Onde posso realizar esta atividade? Em ambientes onde os insetos podem estar presentes, como em jardins, quintais, parques, no pátio ou proximidades do colégio, em residências ou outros lugares. Observe: Se a atividade for realizada na natureza, olhe atentamente o ambiente ao seu redor e busque localizar espécies de insetos presentes. Eles podem estar sobre ou sob as folhas, flores ou outras estruturas de uma planta, no chão ou em diferentes superfícies. Fique atento: A atividade não é perigosa, mas em observações na natureza são necessárias algumas precauções, não se aproximar demais e nunca tocar o inseto, pois ele poderá se sentir ameaçado e fugir, ou ainda causar algum tipo de alergia. Fotografe: Utilize a câmera do celular para capturar várias fotos do inseto encontrado. Se possível, fotografe de vários ângulos.',
+                'ONDE POSSO REALIZAR ESTA ATIVIDADE? Em ambientes onde os insetos podem estar presentes, como em jardins, quintais, parques, no pátio ou proximidades do colégio, em residências ou outros lugares. OBSERVE: Se a atividade for realizada na natureza, olhe atentamente o ambiente ao seu redor e busque localizar espécies de insetos presentes. Eles podem estar sobre ou sob as folhas, flores ou outras estruturas de uma planta, no chão ou em diferentes superfícies. FIQUE ATENTO: A atividade não é perigosa, mas em observações na natureza são necessárias algumas precauções, não se aproximar demais e nunca tocar o inseto, pois ele poderá se sentir ameaçado e fugir, ou ainda causar algum tipo de alergia. FOTOGRAFE: Utilize a câmera do celular para capturar várias fotos do inseto encontrado. Se possível, fotografe de vários ângulos.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2265,7 +2265,7 @@ export const protocol106 = {
             id: 30008,
             placement: 0,
             description: '',
-            question: 'Parte 1: Caracterização do ambiente da coleta de dados',
+            question: 'PARTE 1: CARACTERIZAÇÃO DO AMBIENTE DA COLETA DE DADOS',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2309,7 +2309,7 @@ export const protocol106 = {
             id: 1471,
             placement: 4,
             description: '',
-            question: '1.1 Como você descreveria o clima/tempo hoje?',
+            question: '1.1 COMO VOCÊ DESCREVERIA O CLIMA/TEMPO HOJE?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -2333,7 +2333,7 @@ export const protocol106 = {
             id: 1472,
             placement: 5,
             description: '',
-            question: '1.2 Quando foi a última chuva?',
+            question: '1.2 QUANDO FOI A ÚLTIMA CHUVA?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -2365,7 +2365,7 @@ export const protocol106 = {
             id: 1473,
             placement: 6,
             description: '',
-            question: '1.3 Em relação ao vento local, está:',
+            question: '1.3 EM RELAÇÃO AO VENTO LOCAL, ESTÁ:',
             enabled: true,
             type: 2,
             sugestions: [
@@ -2389,7 +2389,7 @@ export const protocol106 = {
             id: 1474,
             placement: 7,
             description: '',
-            question: '1.4 Como você descreveria o ambiente ao redor da área de observação?',
+            question: '1.4 COMO VOCÊ DESCREVERIA O AMBIENTE AO REDOR DA ÁREA DE OBSERVAÇÃO?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -2453,7 +2453,7 @@ export const protocol106 = {
             id: 30009,
             placement: 8,
             description: '',
-            question: 'Parte 2: Identificando as ordens de insetos',
+            question: 'PARTE 2: IDENTIFICANDO AS ORDENS DE INSETOS',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2477,7 +2477,7 @@ export const protocol106 = {
             placement: 10,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548513/PICCE/jrac55mflnrbgn88kpou.jpg',
             question:
-                'Opção 01: Olhos compostos, geralmente ocupando a maior parte da cabeça. Um par de asas membranosas desenvolvidas e visíveis; pernas de tamanho normal ou alongadas.',
+                'OPÇÃO 01: Olhos compostos, geralmente ocupando a maior parte da cabeça. Um par de asas membranosas desenvolvidas e visíveis; pernas de tamanho normal ou alongadas.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2575,7 +2575,7 @@ export const protocol106 = {
             placement: 15,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548621/PICCE/kk7cf1wpsfjxmv54f8n1.jpg',
             question:
-                'Opção 02: Dois pares de asas membranosas ou asas ausentes. Abdome pedunculado ou não, podendo conter um ferrão no último segmento.',
+                'OPÇÃO 02: Dois pares de asas membranosas ou asas ausentes. Abdome pedunculado ou não, podendo conter um ferrão no último segmento.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2673,7 +2673,7 @@ export const protocol106 = {
             placement: 20,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548640/PICCE/kx0arrz2uauivp3le1jx.jpg',
             question:
-                'Opção 03: Aparelho bucal em formato de espirotromba. Dois pares de asas cobertas com escamas de cores variáveis e padrões de manchas presentes ou não.',
+                'OPÇÃO 03: Aparelho bucal em formato de espirotromba. Dois pares de asas cobertas com escamas de cores variáveis e padrões de manchas presentes ou não.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2771,7 +2771,7 @@ export const protocol106 = {
             placement: 25,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548698/PICCE/fgpf3cfkd7errep3y2pu.jpg',
             question:
-                'Opção 04: Um par de asas anteriores rígidas e espessas formando élitros e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores.',
+                'OPÇÃO 04: Um par de asas anteriores rígidas e espessas formando élitros e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2869,7 +2869,7 @@ export const protocol106 = {
             placement: 30,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548715/PICCE/cpppj9gtcuk9rkdmzmip.jpg',
             question:
-                'Opção 05 (morfotipo um): peças bucais alongadas, formando um rostro. Um par de asas anteriores na forma de hemiélitro e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores. Escutelo geralmente visível e desenvolvido.',
+                'OPÇÃO 05 (morfotipo um): peças bucais alongadas, formando um rostro. Um par de asas anteriores na forma de hemiélitro e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores. Escutelo geralmente visível e desenvolvido.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -2967,7 +2967,7 @@ export const protocol106 = {
             placement: 35,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548727/PICCE/rknmhyfsiisib5mzud1j.jpg',
             question:
-                'Opção 05 (morfotipo dois): peças bucais alongadas, formando um rostro. Um par de asas anteriores com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; o terceiro par de pernas geralmente apresenta espinhos.',
+                'OPÇÃO 05 (morfotipo dois): peças bucais alongadas, formando um rostro. Um par de asas anteriores com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; o terceiro par de pernas geralmente apresenta espinhos.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3065,7 +3065,7 @@ export const protocol106 = {
             placement: 40,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548738/PICCE/vcb4mwmw8yqc8egtwkxp.jpg',
             question:
-                'Opção 05 (morfotipo três): peças bucais alongadas, formando um rostro, antenas curtas do tipo setácea. Dois pares de asas membranosas sendo o par de asas posteriores normalmente não visível por estar embaixo do par de asas anteriores.',
+                'OPÇÃO 05 (morfotipo três): peças bucais alongadas, formando um rostro, antenas curtas do tipo setácea. Dois pares de asas membranosas sendo o par de asas posteriores normalmente não visível por estar embaixo do par de asas anteriores.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3130,7 +3130,7 @@ export const protocol106 = {
             placement: 45,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548753/PICCE/vg0bnw7fsc6ubs3ejant.jpg',
             question:
-                'Opção 06: Um par de asas anteriores retas e com aspecto coriáceo (tégmina), e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; o terceiro par de pernas é mais longo, do tipo saltatório.',
+                'OPÇÃO 06: Um par de asas anteriores retas e com aspecto coriáceo (tégmina), e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; o terceiro par de pernas é mais longo, do tipo saltatório.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3228,7 +3228,7 @@ export const protocol106 = {
             placement: 50,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548764/PICCE/cauy71igxciuwkiwziiv.jpg',
             question:
-                'Opção 07: Antenas longas. Tórax em formato de um disco e cobrindo a cabeça; um par de asas anteriores arredondadas e com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; os três pares de pernas possuem espinhos. O último segmento do abdome pode apresentar cercos.',
+                'OPÇÃO 07: Antenas longas. Tórax em formato de um disco e cobrindo a cabeça; um par de asas anteriores arredondadas e com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar embaixo do par de asas anteriores; os três pares de pernas possuem espinhos. O último segmento do abdome pode apresentar cercos.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3293,7 +3293,7 @@ export const protocol106 = {
             placement: 55,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548778/PICCE/adz9xesiiv1xj4nj3fqw.jpg',
             question:
-                'Opção 08: Olhos compostos ocupando a maior parte da cabeça, antenas curtas do tipo setácea. Dois pares de asas membranosas mantidas horizontalmente quando em repouso e com venação ampla, com várias células; o par de asas posteriores pode não ser visível por estar embaixo do par de asas anteriores. Abdome alongado e cilíndrico.',
+                'OPÇÃO 08: Olhos compostos ocupando a maior parte da cabeça, antenas curtas do tipo setácea. Dois pares de asas membranosas mantidas horizontalmente quando em repouso e com venação ampla, com várias células; o par de asas posteriores pode não ser visível por estar embaixo do par de asas anteriores. Abdome alongado e cilíndrico.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3391,7 +3391,7 @@ export const protocol106 = {
             placement: 60,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548790/PICCE/ippoyhtwocxkai2w06eu.jpg',
             question:
-                'Opção 09: Um par de asas anteriores curtas e com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar em embaixo das asas anteriores. Um par de cercos em forma de pinça no final do abdome.',
+                'OPÇÃO 09: Um par de asas anteriores curtas e com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas, normalmente não visível por estar em embaixo das asas anteriores. Um par de cercos em forma de pinça no final do abdome.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3456,7 +3456,7 @@ export const protocol106 = {
             placement: 65,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548831/PICCE/l3sjftofoudspjuu2gki.jpg',
             question:
-                'Opção 10: Um par de asas anteriores com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas normalmente não visível por estar embaixo das asas anteriores; os três pares de pernas são alongados, sendo o primeiro par do tipo raptorial.',
+                'OPÇÃO 10: Um par de asas anteriores com aspecto coriáceo (tégmina) e um par de asas posteriores membranosas normalmente não visível por estar embaixo das asas anteriores; os três pares de pernas são alongados, sendo o primeiro par do tipo raptorial.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3521,7 +3521,7 @@ export const protocol106 = {
             placement: 70,
             description: 'http://res.cloudinary.com/dbxjlnwlo/image/upload/v1694548847/PICCE/gfdksojtoohycfgytpl6.jpg',
             question:
-                'Opção 11: Asas podem estar ausentes ou presentes; se presentes, o par de asas anteriores é curto e tem aspecto coriáceo (tégmina) e o par de asas posteriores é membranoso; os três pares de pernas são alongadas e finas; o tórax e o abdome são alongados e combinado com sua coloração, faz com que o inseto pareça um galho ou folha.',
+                'OPÇÃO 11: Asas podem estar ausentes ou presentes; se presentes, o par de asas anteriores é curto e tem aspecto coriáceo (tégmina) e o par de asas posteriores é membranoso; os três pares de pernas são alongadas e finas; o tórax e o abdome são alongados e combinado com sua coloração, faz com que o inseto pareça um galho ou folha.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -3551,7 +3551,7 @@ export const protocol106 = {
         {
             id: 30060,
             placement: 72,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1697676409/ic/Plasmatodea/gqyprv8ogcv41gzqug2f.jpg',
+            description: 'https://res.cloudinary.com/drgyf6g2z/image/upload/v1700186441/PICCE-8/i7darbmnv9rcvwoyq6b1.jpg',
             question: '',
             enabled: true,
             type: 101,
@@ -3562,7 +3562,7 @@ export const protocol106 = {
         {
             id: 30061,
             placement: 73,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1697676409/ic/Plasmatodea/rxi51g8f3pc7f1a7n9x9.jpg',
+            description: 'https://res.cloudinary.com/drgyf6g2z/image/upload/v1700186441/PICCE-8/gxak38qiwo4ltddvm4rp.jpg',
             question: '',
             enabled: true,
             type: 101,
@@ -3573,7 +3573,7 @@ export const protocol106 = {
         {
             id: 30062,
             placement: 74,
-            description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1697676410/ic/Plasmatodea/rvgxuwqhizlfftnomy1x.jpg',
+            description: 'https://res.cloudinary.com/drgyf6g2z/image/upload/v1700186440/PICCE-8/oiqkz4tuwlmnbzyyys31.jpg',
             question: '',
             enabled: true,
             type: 101,
