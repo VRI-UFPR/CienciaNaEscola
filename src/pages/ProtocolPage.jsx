@@ -307,25 +307,27 @@ function ProtocolPage(props) {
                             return <></>;
                     }
                 })}
-                <div className="col-4 align-self-center pt-4">
-                    <TextButton
-                        type="submit"
-                        hsl={[97, 43, 70]}
-                        text="Enviar"
-                        onClick={() => {
-                            modalRef.current.showModal({
-                                title: 'Tem certeza que deseja enviar o protocolo?',
-                                dismissHsl: [355, 78, 66],
-                                dismissText: 'Não',
-                                actionHsl: [97, 43, 70],
-                                actionText: 'Sim',
-                                actionOnClick: () => {
-                                    handleProtocolSubmit();
-                                },
-                            });
-                        }}
-                    />
-                </div>
+                {id !== '123' && (
+                    <div className="col-4 align-self-center pt-4">
+                        <TextButton
+                            type="submit"
+                            hsl={[97, 43, 70]}
+                            text="Enviar"
+                            onClick={() => {
+                                modalRef.current.showModal({
+                                    title: 'Tem certeza que deseja enviar o protocolo?',
+                                    dismissHsl: [355, 78, 66],
+                                    dismissText: 'Não',
+                                    actionHsl: [97, 43, 70],
+                                    actionText: 'Sim',
+                                    actionOnClick: () => {
+                                        handleProtocolSubmit();
+                                    },
+                                });
+                            }}
+                        />
+                    </div>
+                )}
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
             <Alert id="ProtocolPageConfirmation" ref={modalRef1} />
