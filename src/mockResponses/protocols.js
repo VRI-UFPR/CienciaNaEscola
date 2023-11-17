@@ -14042,7 +14042,8 @@ export const protocol127 = {
             id: 2213,
             placement: 35,
             description: '',
-            question: 'Observe na frente da porta de entrada do colégio e responda: Há faixa de pedestre?',
+            question:
+                'Observe na frente da porta de entrada do colégio (ou se for uma das outras ruas observe na rua como um todo) e responda: Há faixa de pedestre?',
             enabled: true,
             type: 2,
             sugestions: [
