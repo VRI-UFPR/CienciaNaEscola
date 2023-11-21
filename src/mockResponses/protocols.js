@@ -3661,31 +3661,8 @@ export const protocol106 = {
             validation: [],
         },
         {
-            id: 30064,
-            placement: 77,
-            description: '',
-            question: 'GLOSSÁRIO:',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 30065,
-            placement: 78,
-            description: '',
-            question:
-                'ABDOME: é a terceira região do corpo dos insetos, localizada logo após o tórax. Geralmente é formado por 11 segmentos, sendo os três últimos podem estar reduzidos e/ou modificados, possuindo ferrão, cercos, ou outras estruturas. ABDOME PEDUNCULADO: quando a união entre o abdome e o tórax apresenta uma constrição deixando a região mais estreita, formando um pedúnculo ou pecíolo. É característico de alguns himenópteros. ANTENA: par de apêndices articulados localizados na cabeça. São estruturas relacionadas ao sistema sensorial do inseto e identificam sinais químicos, odores, sabores, sons e auxiliam no equilíbrio. Podem apresentar formas variadas. ANTENA SETÁCEA: Antena curta que possui a base mais larga do que o ápice, tornando-a semelhante à ponta de uma seta. APÊNDICE: uma parte ou artículo que forma o corpo do inseto. Exemplos: peças bucais, antenas, pernas, asas etc. ASAS: dois ou quatro apêndices membranosos ligados ao tórax e que possibilitam o voo. Insetos com asas são chamados alados e os sem asa, ápteros. ASAS ANTERIORES: primeiro par de asas dos insetos, normalmente maiores que as posteriores. Alguns grupos apresentam asas anteriores modificadas. Exemplos: élitro e hemiélitro. ASAS MEMBRANOSAS: estruturas finas e leves, ligadas por veias e que possibilitam o voo dos insetos. Alguns grupos apresentam todas as asas membranosas, já outros apresentam apenas um par membranoso e outro modificado. ASAS POSTERIORES: segundo par de asas dos insetos, normalmente são menores que as anteriores. CABEÇA: região anterior do corpo de um inseto, sensorial e de coordenação dos sentidos. Nela estão as peças bucais, os olhos e as antenas do inseto. CERCO: estrutura única ou em par, normalmente pontiaguda, localizada no final do abdome, geralmente com função sensorial. ÉLITRO: primeiro par de asas endurecidas e engrossadas. São característicos dos besouros (Coleoptera) e têm como principal função proteger o par de asas posteriores membranosas. ESPÉCIME: um único ser vivo usado para representar a espécie à qual pertence. No nosso caso, o espécime é o inseto que foi fotografado. FERRÃO: estrutura pontiaguda que serve para defesa e que é formada pela modificação do último segmento abdominal. GRUPO TAXONÔMICO: grupo de seres definidos com base em um sistema de classificação composto por níveis que apresentam características comuns. O nível mais superior é o domínio e o inferior, a espécie. HEMIÉLITRO: asa anterior dividida em duas partes: rígida próxima incisão no tórax e membranosa e flexível na parte final. MORFOTIPO: Indivíduos com variações morfológicas pertencentes a um mesmo grupo. OLHO COMPOSTO: estruturas responsáveis pela visão, constituídas por muitos (normalmente milhares) estruturas menores chamadas omatídios. A combinação da informação recebida por cada omatídio produz a visão do inseto em forma de um mosaico. PERNAS: apêndices ligados ao tórax e utilizados para variadas funções como locomoção, predação, escavação, entre outras. PERNAS RAPTORIAIS: estrutura adaptada para a captura de presas. É encontrada em insetos predadores, como por exemplo o louva-deus. PERNAS SALTATÓRIAS: estruturas adaptadas para saltar. Possuem o fêmur e a tíbia dilatado devido à forte musculatura associada. REPOUSO: condição na qual o inseto não está voando, estando pousado sobre alguma estrutura. ROSTRO: aparelho bucal voltado para frente, adaptado para perfurar e sugar líquidos. TÉGMINA: asa anterior espessada com aspecto coriáceo. TÓRAX: é a região entre a cabeça e o abdome do corpo do inseto, onde estão fixadas as pernas. VENAÇÃO: é a organização das veias visualizadas na asa membranosa dos insetos. Normalmente há a presença de células que podem ser poucas ou muitas. Por vezes a venação pode estar coberta por escamas, como é o caso das asas da maioria das borboletas e mariposas.',
-            enabled: true,
-            type: 101,
-            sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
             id: 30066,
-            placement: 79,
+            placement: 77,
             description: '',
             question: 'REFERÊNCIAS BIBLIOGRÁFICAS CONSULTADAS:',
             enabled: true,
@@ -3696,7 +3673,7 @@ export const protocol106 = {
         },
         {
             id: 30067,
-            placement: 80,
+            placement: 78,
             description: '',
             question:
                 'GULLAN, P. J. CRANSTON, P. S. Insetos: fundamentos da entomologia, 5a Ed. Rio de Janeiro. Roca: 2017. ; INSECTA. Catálogo Taxonômico da Fauna do Brasil. Disponível em: <http://fauna.jbrj.gov.br/fauna/faunadobrasil/59>. Acesso em: 24 jan. 2023. ; RAFAEL, J. A. MELO, G. A. R. CARVALHO, C. J. B de. CASARI, S. A. CONSTANTINO, R. Insetos do Brasil: diversidade e taxonomia. Ribeirão Preto. Holos Editora: 2012. ; TRIPLEHORN, C. A. JOHNSON, N. F. Estudo dos insetos. 7a ed. São Paulo. Cengage Learning: 2016.',
@@ -3708,7 +3685,7 @@ export const protocol106 = {
         },
         {
             id: 30068,
-            placement: 81,
+            placement: 79,
             description: '',
             question:
                 'O protocolo “Observando e Identificando Insetos” tem como objetivo fornecer uma ferramenta de auxílio ao trabalho de professores em atividades práticas, bem como para a utilização direta por estudantes ou qualquer outra pessoa que tenha interesse pelo tema. Seguindo as informações disponibilizadas, o utilizador poderá rapidamente e de maneira científica, identificar qual a ordem taxonômica do inseto visualizado. Também permitirá fazer associações com o problema de pesquisa, sobre quais e onde as diferentes ordens de insetos podem ser encontradas e quais possuem maior interação com o ser humano.',
@@ -3720,7 +3697,7 @@ export const protocol106 = {
         },
         {
             id: 30064,
-            placement: 81,
+            placement: 80,
             description: '',
             question: 'Versão: 20231113',
             enabled: true,
@@ -5719,6 +5696,17 @@ export const protocol115 = {
     description2: '',
     owner: 108,
     inputs: [
+        {
+            id: 50000,
+            placement: 0,
+            description: 'https://drive.google.com/file/d/11QVzGWKjry8LeR-txSqfgG7VSPZGnZSS/view?usp=sharing',
+            question: 'MONITORAMENTO DA QUALIDADE DA ÁGUA - GUIA DE CAMPO',
+            enabled: true,
+            type: 103,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
         {
             id: 2431,
             placement: 33,
@@ -13109,11 +13097,84 @@ export const protocol127 = {
             validation: [],
         },
         {
+            id: 2226,
+            placement: 4,
+            description: '',
+            question:
+                'Fique de costas para o colégio e responda: A via para os carros que andam da esquerda para a direita tem quantas pistas?',
+            enabled: true,
+            type: 2,
+            sugestions: [
+                {
+                    value: 'Zero',
+                    placement: 0,
+                },
+                {
+                    value: '1',
+                    placement: 1,
+                },
+                {
+                    value: '2',
+                    placement: 2,
+                },
+                {
+                    value: '3',
+                    placement: 3,
+                },
+                {
+                    value: '4',
+                    placement: 4,
+                },
+                {
+                    value: '5',
+                    placement: 5,
+                },
+            ],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 2227,
+            placement: 4,
+            description: '',
+            question: 'A via para os carros que andam da direita para a esquerda tem quantas pistas?',
+            enabled: true,
+            type: 2,
+            sugestions: [
+                {
+                    value: 'Zero',
+                    placement: 0,
+                },
+                {
+                    value: '1',
+                    placement: 1,
+                },
+                {
+                    value: '2',
+                    placement: 2,
+                },
+                {
+                    value: '3',
+                    placement: 3,
+                },
+                {
+                    value: '4',
+                    placement: 4,
+                },
+                {
+                    value: '5',
+                    placement: 5,
+                },
+            ],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2182,
             placement: 4,
             description: '',
             question:
-                'Você vai caminhar na rua em frente ao colégio. Caminhe de uma esquina a outra e observe. Agora responda sobre a via em que você caminhou: Os carros podem andar em duas direções (direções contrárias)?',
+                'Você vai caminhar na rua. Caminhe de uma esquina a outra e observe. Agora responda sobre a via em que você caminhou: Os carros podem andar em duas direções (direções contrárias)?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13143,7 +13204,7 @@ export const protocol127 = {
             id: 2183,
             placement: 5,
             description: '',
-            question: 'A placa de limite de velocidade está presente?',
+            question: 'A placa de limite de velocidade está presente? Qual é a velocidade? (Se não houver placa escreva não há)',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13265,26 +13326,6 @@ export const protocol127 = {
             placement: 10,
             description: '',
             question: 'Há alguma placa A-33b, em algum dos lados na rua?',
-            enabled: true,
-            type: 2,
-            sugestions: [
-                {
-                    value: 'Sim',
-                    placement: 0,
-                },
-                {
-                    value: 'Não',
-                    placement: 1,
-                },
-            ],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 2189,
-            placement: 11,
-            description: '',
-            question: 'Há sinalização com piscante amarelo?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13916,7 +13957,8 @@ export const protocol127 = {
             id: 2218,
             placement: 40,
             description: '',
-            question: 'Há placa de proibido estacionar em frente à escola?',
+            question:
+                'Há placa de proibido estacionar em frente à escola (se não estiver avaliando a rua da entrada principal da escola marque não)?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13936,7 +13978,8 @@ export const protocol127 = {
             id: 2219,
             placement: 41,
             description: '',
-            question: 'Os carros podem estacionar em frente à escola? (tem placa de permitido estacionar?)',
+            question:
+                'Os carros podem estacionar em frente à escola? (tem placa de permitido estacionar?) (se não estiver avaliando a rua da entrada principal da escola marque não).',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13966,7 +14009,7 @@ export const protocol127 = {
             id: 2220,
             placement: 42,
             description: '',
-            question: 'Há gradil em frente à entrada?',
+            question: 'Há gradil em frente à entrada? (se não estiver avaliando a rua da entrada principal da escola marque não)',
             enabled: true,
             type: 2,
             sugestions: [
@@ -13986,7 +14029,7 @@ export const protocol127 = {
             id: 2221,
             placement: 43,
             description: '',
-            question: 'Cruze a rua da entrada do colégio e olhe: Tem placa de limite de velocidade?',
+            question: 'Cruze a rua e olhe: Tem placa de limite de velocidade?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -14066,83 +14109,10 @@ export const protocol127 = {
             id: 2225,
             placement: 47,
             description: '',
-            question: 'Qual é a velocidade?',
+            question: 'Qual é a velocidade? (Se não houver placa escreva não há)',
             enabled: true,
             type: 0,
             sugestions: [],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 2226,
-            placement: 48,
-            description: '',
-            question:
-                'Fique de costas para a entrada do colégio e responda: A via para os carros que andam da esquerda para a direita tem quantas pistas?',
-            enabled: true,
-            type: 2,
-            sugestions: [
-                {
-                    value: 'Zero',
-                    placement: 0,
-                },
-                {
-                    value: '1',
-                    placement: 1,
-                },
-                {
-                    value: '2',
-                    placement: 2,
-                },
-                {
-                    value: '3',
-                    placement: 3,
-                },
-                {
-                    value: '4',
-                    placement: 4,
-                },
-                {
-                    value: '5',
-                    placement: 5,
-                },
-            ],
-            subForm: null,
-            validation: [],
-        },
-        {
-            id: 2227,
-            placement: 49,
-            description: '',
-            question: 'A via para os carros que andam da direita para a esquerda tem quantas pistas?',
-            enabled: true,
-            type: 2,
-            sugestions: [
-                {
-                    value: 'Zero',
-                    placement: 0,
-                },
-                {
-                    value: '1',
-                    placement: 1,
-                },
-                {
-                    value: '2',
-                    placement: 2,
-                },
-                {
-                    value: '3',
-                    placement: 3,
-                },
-                {
-                    value: '4',
-                    placement: 4,
-                },
-                {
-                    value: '5',
-                    placement: 5,
-                },
-            ],
             subForm: null,
             validation: [],
         },
