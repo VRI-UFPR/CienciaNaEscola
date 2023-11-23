@@ -1,3 +1,34 @@
+export const protocol110 = {
+    id: 110,
+    title: 'Upload de imagem',
+    description: '',
+    inputs: [
+        {
+            id: 1555,
+            placement: 1,
+            description: '',
+            question: 'Nome da imagem',
+            enabled: true,
+            type: 0,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 1556,
+            placement: 2,
+            description: '',
+            question: 'Imagem',
+            enabled: true,
+            type: 102,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+    ],
+    answerTimes: false,
+};
+
 export const protocol104 = {
     id: 104,
     title: 'Exposição ao marketing e sua influência no padrão de consumo de drogas: implicações psicosociais',
@@ -5777,7 +5808,8 @@ export const protocol115 = {
             id: 16430,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700265998/ic/t11%20agua/glj2tuwusxcmwsv5z2hk.jpg',
-            question: 'Figura 1. Representação esquemática de uma bacia hidrográfica. A Rio Principal, B Afluentes, C Nascentes, D Mata Ciliar, E Lençol Freático, F Rochas, G Solo, H Largura do canal do rio, I Profundidade do rio.',
+            question:
+                'Figura 1. Representação esquemática de uma bacia hidrográfica. A Rio Principal, B Afluentes, C Nascentes, D Mata Ciliar, E Lençol Freático, F Rochas, G Solo, H Largura do canal do rio, I Profundidade do rio.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5854,7 +5886,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700270780/ic/t11%20agua/vxqmxnqgcfasscmfdtbs.jpg',
-            question: 'Figura 8. Representação esquemática dos tipos biológicos de macrófitas. A Macrófitas emergentes, anfíbias ou emersas, B Macrófitas flutuantes, C Macrófitas submersas livres, D Macrófitas submersas enraizada, E Macrófita enraizada com folhas flutuantes.',
+            question:
+                'Figura 8. Representação esquemática dos tipos biológicos de macrófitas. A Macrófitas emergentes, anfíbias ou emersas, B Macrófitas flutuantes, C Macrófitas submersas livres, D Macrófitas submersas enraizada, E Macrófita enraizada com folhas flutuantes.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5887,7 +5920,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700270780/ic/t11%20agua/kbxc198nm4p5c2kyizn8.jpg',
-            question: 'Figura 11. Representação esquemática dos microambientes ocupados pelos macroinvertebrados. A Reptantes, B Escavadores, C Saltadores, D Agarradores ou Escaladores, E Fossadores, F Nadadores, G Patinadores, H Mergulhadores.',
+            question:
+                'Figura 11. Representação esquemática dos microambientes ocupados pelos macroinvertebrados. A Reptantes, B Escavadores, C Saltadores, D Agarradores ou Escaladores, E Fossadores, F Nadadores, G Patinadores, H Mergulhadores.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5931,7 +5965,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266001/ic/t11%20agua/kabnu0brlx289pujk5ul.jpg',
-            question: 'Figura 14. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.831763 latitude sul e -48.539302 longitude oeste.',
+            question:
+                'Figura 14. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.831763 latitude sul e -48.539302 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5942,7 +5977,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266001/ic/t11%20agua/jvgzdiygh7ywau4p7yql.jpg',
-            question: 'Figura 15. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.798094 latitude sul e -48.541750 longitude oeste.',
+            question:
+                'Figura 15. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.798094 latitude sul e -48.541750 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5953,7 +5989,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266001/ic/t11%20agua/wyqhiltlwvub6sv9ucf1.jpg',
-            question: 'Figura 16. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.799790 latitude sul e -48.539773 longitude oeste.',
+            question:
+                'Figura 16. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.799790 latitude sul e -48.539773 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5964,7 +6001,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266002/ic/t11%20agua/jimpt5iwwz0n2nru4qp8.jpg',
-            question: 'Figura 17.Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.774976 latitude sul e -48.573829 longitude oeste.',
+            question:
+                'Figura 17.Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.774976 latitude sul e -48.573829 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5975,7 +6013,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266011/ic/t11%20agua/wh1wfoje5zoroj7dfbu2.jpg',
-            question: 'Figura 18. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.765672 latitude sul e -48.586611 longitude oeste.',
+            question:
+                'Figura 18. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.765672 latitude sul e -48.586611 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -5986,7 +6025,8 @@ export const protocol115 = {
             id: 16440,
             placement: 3,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266011/ic/t11%20agua/wh1wfoje5zoroj7dfbu2.jpg',
-            question: 'Figura 18. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.765672 latitude sul e -48.586611 longitude oeste.',
+            question:
+                'Figura 18. Trecho de ambiente lótico no litoral paranaense. Coordenadas Geográficas: -25.765672 latitude sul e -48.586611 longitude oeste.',
             enabled: true,
             type: 101,
             sugestions: [],
@@ -6666,7 +6706,8 @@ export const protocol115 = {
             id: 16660,
             placement: 26,
             description: 'https://res.cloudinary.com/dkhf17vah/image/upload/v1700266020/ic/t11%20agua/u6gsc6qudhvtk7gchcgj.jpg',
-            question: 'Figura 19. Representação da escala utilizada para comparação dos macroinvertebrados, De cima para baixo: semente de feijão, de milho de pipoca vermelho, de erva-doce e de milho de pipoca amarelo. Somatório de pontos de macrófitas:',
+            question:
+                'Figura 19. Representação da escala utilizada para comparação dos macroinvertebrados, De cima para baixo: semente de feijão, de milho de pipoca vermelho, de erva-doce e de milho de pipoca amarelo. Somatório de pontos de macrófitas:',
             enabled: true,
             type: 101,
             sugestions: [],

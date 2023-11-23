@@ -27,6 +27,7 @@ import {
     protocol104,
     protocol105,
     protocol106,
+    protocol110,
     protocol113,
     protocol114,
     protocol115,
@@ -122,7 +123,7 @@ function ProtocolPage(props) {
             axios
                 .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
                 .then((response) => {
-                    modalRef.current.showModal({
+                    modalRef1.current.showModal({
                         title: 'Muito obrigado por sua participação no projeto!',
                         onHide: () => {
                             navigate('/home');
@@ -171,6 +172,8 @@ function ProtocolPage(props) {
                     return setProtocol(protocol129);
                 case '131':
                     return setProtocol(protocol131);
+                case '110':
+                    return setProtocol(protocol110);
                 default:
             }
         };
