@@ -23,11 +23,11 @@ const style = `
 `;
 
 function ProtocolCarousel(props) {
-    const { users } = props;
+    const { protocols } = props;
 
     const carouselRef = useRef(null);
     const itemsPerSlide = 5;
-    const totalSlides = Math.ceil(users.length / itemsPerSlide);
+    const totalSlides = Math.ceil(protocols.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideButtons = users.slice(startIndex, endIndex);
+            const slideButtons = protocols.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
@@ -49,11 +49,12 @@ function ProtocolCarousel(props) {
                         {slideButtons.map((protocol, index) => (
                             <Link
                                 to={`/protocol/${protocol.id}`}
-                                key={index}
+                                key={'protocol-' + protocol.id}
                                 className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                                 style={{ height: '4rem', maxHeight: '4rem', color: '#262626' }}
                             >
-                                <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} />
+                                {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
+                                <HomeButton title={protocol.title} />
                             </Link>
                         ))}
                     </div>

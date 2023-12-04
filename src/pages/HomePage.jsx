@@ -28,7 +28,7 @@ function HomePage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [filteredData, setFilteredData] = useState([]);
+    const [userProtocols, setUserProtocols] = useState([]);
     const { user } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
@@ -36,11 +36,15 @@ function HomePage(props) {
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
-            // .get(`http://localhost:3333/user/list/${user.id}`)
             axios
-                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .get(`http://localhost:3000/api/protocol/getAllProtocols`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
                 .then((response) => {
-                    setFilteredData(response.data);
+                    console.log(response.data);
+                    setUserProtocols(response.data.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
@@ -79,7 +83,7 @@ function HomePage(props) {
                                     location.pathname === '/home' ? 'pb-5' : 'pb-2'
                                 } pb-lg-0 m-0`}
                             >
-                                <ProtocolCarousel users={filteredData} />
+                                <ProtocolCarousel protocols={userProtocols} />
                             </div>
                         </div>
                     </div>
