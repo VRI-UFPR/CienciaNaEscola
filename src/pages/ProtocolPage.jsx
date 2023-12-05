@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useRef } from 'react';
+import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -21,6 +21,7 @@ import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButto
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
+import { AuthContext } from '../contexts/AuthContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -46,6 +47,7 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const user = useContext(AuthContext);
     const [protocol, setProtocol] = useState();
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
@@ -82,9 +84,14 @@ function ProtocolPage(props) {
 
     useEffect(() => {
         axios
-            .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+            .get(`http://localhost:3000/api/protocol/getProtocol/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
             .then((response) => {
-                setProtocol(response.data);
+                console.log(response.data);
+                setProtocol(response.data.data);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -106,87 +113,43 @@ function ProtocolPage(props) {
                     </div>
                 </div>
                 <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
-                {protocol.inputs.map((input) => {
-                    switch (input.type) {
-                        case 0:
-                            if (input.question === 'date' && input.description === 'date' && input.placement === 1) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 2) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 3) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
+                {protocol.pages.map((page) => {
+                    return page.itemGroups.map((itemGroup) => {
+                        return itemGroup.items.map((item) => {
+                            switch (item.type) {
+                                case 'TEXTBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<SimpleTextInput item={item} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+
+                                // case 'CHECKBOX':
+                                //     return (
+                                //         <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                //             {<CheckBoxInput input={item} onAnswerChange={handleAnswerChange} />}
+                                //         </div>
+                                //     );
+
+                                // case 'RADIO':
+                                //     return (
+                                //         <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                //             {<RadioButtonInput input={item} onAnswerChange={handleAnswerChange} />}
+                                //         </div>
+                                //     );
+
+                                // case 'SELECT':
+                                //     return (
+                                //         <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                //             {<SelectInput input={item} onAnswerChange={handleAnswerChange} />}
+                                //         </div>
+                                //     );
+
+                                default:
+                                    return <p>Input type not found</p>;
                             }
-
-                        case 1:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 2:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 3:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SelectInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 100:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 101:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 102:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 103:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<Weather input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        default:
-                            return <></>;
-                    }
+                        });
+                    });
                 })}
                 <div className="col-4 align-self-center pt-4">
                     <TextButton
