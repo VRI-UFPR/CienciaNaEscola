@@ -138,12 +138,12 @@ function ProtocolPage(props) {
                                         </div>
                                     );
 
-                                // case 'SELECT':
-                                //     return (
-                                //         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                //             {<SelectInput input={item} onAnswerChange={handleAnswerChange} />}
-                                //         </div>
-                                //     );
+                                case 'SELECT':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<SelectInput item={item} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
 
                                 default:
                                     return <p>Input type not found</p>;
