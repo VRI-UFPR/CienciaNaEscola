@@ -21,17 +21,17 @@ const styles = `
 
 function SimpleTextInput(props) {
     const [text, setText] = useState(['']);
-    const { onAnswerChange, input, answer } = props;
+    const { onAnswerChange, item, answer } = props;
 
     useEffect(() => {
-        onAnswerChange(input.id, text);
-    }, [text, input.id, onAnswerChange]);
+        onAnswerChange(item.id, text);
+    }, [text, item.id, onAnswerChange]);
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0 pb-3">
                 <label htmlFor="simpletextinput" className="form-label color-dark-gray font-barlow fw-medium fs-6 m-0 p-0">
-                    {input.question}
+                    {item.text}
                 </label>
             </div>
 
