@@ -23,11 +23,11 @@ const style = `
 `;
 
 function ProtocolCarousel(props) {
-    const { protocols } = props;
+    const { applications } = props;
 
     const carouselRef = useRef(null);
     const itemsPerSlide = 5;
-    const totalSlides = Math.ceil(protocols.length / itemsPerSlide);
+    const totalSlides = Math.ceil(applications.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -41,20 +41,20 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideButtons = protocols.slice(startIndex, endIndex);
+            const slideButtons = applications.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
                     <div className="d-flex flex-column align-items-center h-100 pb-3">
-                        {slideButtons.map((protocol, index) => (
+                        {slideButtons.map((application, index) => (
                             <Link
-                                to={`/protocol/${protocol.id}`}
-                                key={'protocol-' + protocol.id}
+                                to={`/protocol/${application.id}`}
+                                key={'protocol-' + application.id}
                                 className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                                 style={{ height: '4rem', maxHeight: '4rem', color: '#262626' }}
                             >
                                 {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
-                                <HomeButton title={protocol.title} />
+                                <HomeButton title={application.protocol.title} />
                             </Link>
                         ))}
                     </div>
