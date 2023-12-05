@@ -28,8 +28,8 @@ function HomePage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [userProtocols, setUserProtocols] = useState([]);
-    const { user } = useContext(AuthContext);
+    const [userApplications, setUserApplications] = useState([]);
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -37,21 +37,25 @@ function HomePage(props) {
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             axios
-                .get(`http://localhost:3000/api/protocol/getAllProtocols`, {
+                .get(`http://localhost:3000/api/application/getAllApplicationsWithProtocol`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
                 .then((response) => {
                     console.log(response.data);
-                    setUserProtocols(response.data.data);
+                    setUserApplications(response.data.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
                     console.error(error.message);
+                    if (error.response.status === 401) {
+                        logout();
+                        navigate('/login');
+                    }
                 });
         }
-    }, [user]);
+    }, [user, logout, navigate]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -83,7 +87,7 @@ function HomePage(props) {
                                     location.pathname === '/home' ? 'pb-5' : 'pb-2'
                                 } pb-lg-0 m-0`}
                             >
-                                <ProtocolCarousel protocols={userProtocols} />
+                                <ProtocolCarousel applications={userApplications} />
                             </div>
                         </div>
                     </div>
