@@ -47,8 +47,8 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const user = useContext(AuthContext);
-    const [protocol, setProtocol] = useState();
+    const { user, logout } = useContext(AuthContext);
+    const [application, setApplication] = useState();
     const [answers, setAnswers] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
@@ -83,21 +83,27 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:3000/api/protocol/getProtocol/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                console.log(response.data);
-                setProtocol(response.data.data);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
-    }, [id]);
+        if (user.id !== null && user.token !== null) {
+            axios
+                .get(`http://localhost:3000/api/application/getApplicationWithProtocol/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    setApplication(response.data.data);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                    if (error.response.status === 401) {
+                        logout();
+                        navigate('/login');
+                    }
+                });
+        }
+    }, [id, user, logout, navigate]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -112,8 +118,8 @@ function ProtocolPage(props) {
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
-                {protocol.pages.map((page) => {
+                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={application.protocol.description} />}</div>
+                {application.protocol.pages.map((page) => {
                     return page.itemGroups.map((itemGroup) => {
                         return itemGroup.items.map((item) => {
                             switch (item.type) {
