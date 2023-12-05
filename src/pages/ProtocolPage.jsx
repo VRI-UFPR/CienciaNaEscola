@@ -124,12 +124,12 @@ function ProtocolPage(props) {
                                         </div>
                                     );
 
-                                // case 'CHECKBOX':
-                                //     return (
-                                //         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                //             {<CheckBoxInput input={item} onAnswerChange={handleAnswerChange} />}
-                                //         </div>
-                                //     );
+                                case 'CHECKBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<CheckBoxInput item={item} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
 
                                 // case 'RADIO':
                                 //     return (
