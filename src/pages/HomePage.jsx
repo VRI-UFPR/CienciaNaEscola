@@ -29,7 +29,7 @@ function HomePage(props) {
 
     const [isLoading, setIsLoading] = useState(true);
     const [userApplications, setUserApplications] = useState([]);
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -49,6 +49,10 @@ function HomePage(props) {
                 })
                 .catch((error) => {
                     console.error(error.message);
+                    if (error.response.status === 401) {
+                        logout();
+                        navigate('/login');
+                    }
                 });
         }
     }, [user]);
