@@ -55,7 +55,7 @@ function HomePage(props) {
                     }
                 });
         }
-    }, [user]);
+    }, [user, logout, navigate]);
 
     if (isLoading) {
         return <SplashPage />;
