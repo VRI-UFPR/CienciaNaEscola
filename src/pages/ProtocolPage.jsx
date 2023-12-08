@@ -5,11 +5,11 @@ import axios from 'axios';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-import DateInput from '../components/inputs/answers/DateInput';
-import TimeInput from '../components/inputs/answers/TimeInput';
-import LocationInput from '../components/inputs/answers/LocationInput';
-import ImageInput from '../components/inputs/answers/ImageInput';
-import Weather from '../components/inputs/answers/Weather';
+// import DateInput from '../components/inputs/answers/DateInput';
+// import TimeInput from '../components/inputs/answers/TimeInput';
+// import LocationInput from '../components/inputs/answers/LocationInput';
+// import ImageInput from '../components/inputs/answers/ImageInput';
+// import Weather from '../components/inputs/answers/Weather';
 import SelectInput from '../components/inputs/answers/SelectInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
@@ -17,8 +17,8 @@ import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
-import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
-import TextImageInput from '../components/inputs/answers/TextImageInput';
+// import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
+// import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
@@ -49,37 +49,93 @@ function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState();
-    const [answers, setAnswers] = useState({});
+    const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
     const modalRef1 = useRef(null);
     const navigate = useNavigate();
 
-    const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
-        setAnswers((prevAnswers) => {
-            const newAnswers = { ...prevAnswers };
-            newAnswers[indexToUpdate] = updatedAnswer;
-            return newAnswers;
+    const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
+        setItemAnswerGroups((prevItemAnswerGroups) => {
+            const newItemAnswerGroups = prevItemAnswerGroups;
+
+            if (newItemAnswerGroups[groupToUpdate] === undefined) {
+                newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
+            }
+
+            switch (itemType) {
+                case 'ITEM':
+                    newItemAnswerGroups[groupToUpdate]['itemAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'OPTION':
+                    newItemAnswerGroups[groupToUpdate]['optionAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'TABLE':
+                    newItemAnswerGroups[groupToUpdate]['tableAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                default:
+                    break;
+            }
+            return newItemAnswerGroups;
         });
     }, []);
 
     const handleProtocolSubmit = () => {
-        axios
-            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
-            .then((response) => {
-                modalRef1.current.showModal({
-                    title: 'Muito obrigado por sua participação no projeto!',
-                    onHide: () => {
-                        navigate('/home');
-                    },
+        const applicationAnswer = {
+            applicationId: application.id,
+            addressId: 1,
+            date: new Date(),
+            itemAnswerGroups: [],
+        };
+        for (const group in itemAnswerGroups) {
+            const itemAnswerGroup = {
+                itemAnswers: [],
+                optionAnswers: [],
+                tableAnswers: [],
+            };
+            for (const item in itemAnswerGroups[group].itemAnswers) {
+                itemAnswerGroup.itemAnswers.push({
+                    itemId: item,
+                    text: itemAnswerGroups[group].itemAnswers[item],
                 });
-            })
-            .catch((error) => {
-                modalRef1.current.showModal({
-                    title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                });
-                console.error(error.message);
-            });
+            }
+            for (const item in itemAnswerGroups[group].optionAnswers) {
+                for (const option in itemAnswerGroups[group].optionAnswers[item]) {
+                    itemAnswerGroup.optionAnswers.push({
+                        itemId: item,
+                        optionId: option,
+                        text: itemAnswerGroups[group].optionAnswers[item][option],
+                    });
+                }
+            }
+            for (const item in itemAnswerGroups[group].tableAnswers) {
+                for (const column in itemAnswerGroups[group].tableAnswers[item]) {
+                    itemAnswerGroup.tableAnswers.push({
+                        itemId: item,
+                        columnId: column,
+                        text: itemAnswerGroups[group].tableAnswers[item][column],
+                    });
+                }
+            }
+            applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
+        }
+        // axios
+        //     .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
+        //     .then((response) => {
+        //         modalRef1.current.showModal({
+        //             title: 'Muito obrigado por sua participação no projeto!',
+        //             onHide: () => {
+        //                 navigate('/home');
+        //             },
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         modalRef1.current.showModal({
+        //             title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+        //         });
+        //         console.error(error.message);
+        //     });
+        console.log(applicationAnswer);
     };
 
     useEffect(() => {
@@ -93,6 +149,7 @@ function ProtocolPage(props) {
                 .then((response) => {
                     console.log(response.data);
                     setApplication(response.data.data);
+
                     setIsLoading(false);
                 })
                 .catch((error) => {
@@ -126,28 +183,28 @@ function ProtocolPage(props) {
                                 case 'TEXTBOX':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<SimpleTextInput item={item} onAnswerChange={handleAnswerChange} />}
+                                            {<SimpleTextInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
                                         </div>
                                     );
 
                                 case 'CHECKBOX':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<CheckBoxInput item={item} onAnswerChange={handleAnswerChange} />}
+                                            {<CheckBoxInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
                                         </div>
                                     );
 
                                 case 'RADIO':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<RadioButtonInput item={item} onAnswerChange={handleAnswerChange} />}
+                                            {<RadioButtonInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
                                         </div>
                                     );
 
                                 case 'SELECT':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<SelectInput item={item} onAnswerChange={handleAnswerChange} />}
+                                            {<SelectInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
                                         </div>
                                     );
 
