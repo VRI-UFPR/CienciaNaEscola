@@ -15,17 +15,21 @@ const styles = `
 `;
 
 function CheckBoxInput(props) {
-    const { onAnswerChange, item, answer } = props;
-    const [options, setOptions] = useState(new Array(item.itemOptions.length).fill('false'));
+    const { onAnswerChange, item, group } = props;
+    const [options, setOptions] = useState({});
 
     useEffect(() => {
-        onAnswerChange(item.id, options);
-    }, [options, item.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'OPTION', options);
+    }, [options, item.id, onAnswerChange, group]);
 
-    const handleOptionsUpdate = (indexToUpdate, updatedOption) => {
+    const handleOptionsUpdate = (optionId, updatedOption) => {
         setOptions((prevOptions) => {
-            const newOptions = [...prevOptions];
-            newOptions[indexToUpdate] = `${updatedOption}`;
+            const newOptions = prevOptions;
+            if (updatedOption) {
+                newOptions[optionId] = '';
+            } else {
+                delete newOptions[optionId];
+            }
             return newOptions;
         });
     };
@@ -36,24 +40,26 @@ function CheckBoxInput(props) {
                 <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{item.text}</p>
             </div>
             <div className="row m-0 px-2">
-                {item.itemOptions.map((option, index) => {
+                {item.itemOptions.map((option) => {
                     const optname = option.text.toLowerCase().replace(/\s/g, '');
 
                     return (
                         <div key={optname + 'input' + item.id} className="form-check m-0 pb-2 pe-2">
                             <input
-                                className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
+                                // className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
+                                className={`form-check-input bg-grey`}
                                 type="checkbox"
                                 name={'checkboxoptions' + item.id}
                                 id={optname + 'input' + item.id}
-                                onChange={(e) => handleOptionsUpdate(index, e.target.checked)}
-                                checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
-                                disabled={answer !== undefined}
+                                onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
+                                //checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
+                                //disabled={answer !== undefined}
                             ></input>
                             <label
-                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
-                                    answer && answer[index].value === 'true' ? 'opacity-100' : ''
-                                }`}
+                                // className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
+                                //     answer && answer[index].value === 'true' ? 'opacity-100' : ''
+                                // }`}
+                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 `}
                                 htmlFor={optname + 'input' + item.id}
                             >
                                 {option.text}
