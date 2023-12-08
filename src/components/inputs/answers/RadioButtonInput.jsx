@@ -15,17 +15,19 @@ const styles = `
 `;
 
 function RadioButtonInput(props) {
-    const { onAnswerChange, item, answer } = props;
+    const { onAnswerChange, item, group } = props;
     const [options, setOptions] = useState(new Array(item.itemOptions.length).fill('false'));
 
     useEffect(() => {
-        onAnswerChange(item.id, options);
-    }, [options, item.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'OPTION', options);
+    }, [options, item.id, onAnswerChange, group]);
 
-    const handleOptionsUpdate = (index) => {
-        const array = new Array(item.itemOptions.length).fill('false');
-        array[index] = 'true';
-        setOptions(array);
+    const handleOptionsUpdate = (optionId) => {
+        setOptions(() => {
+            const newOptions = {};
+            newOptions[optionId] = '';
+            return newOptions;
+        });
     };
 
     return (
@@ -34,23 +36,25 @@ function RadioButtonInput(props) {
                 <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{item.text}</p>
             </div>
             <div className="row m-0 px-2">
-                {item.itemOptions.map((option, index) => {
+                {item.itemOptions.map((option) => {
                     const optname = option.text.toLowerCase().replace(/\s/g, '');
                     return (
                         <div key={optname + 'input' + item.id} className="form-check m-0 pb-2 pe-2">
                             <input
-                                className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
+                                // className={`form-check-input bg-grey ${answer && answer[option.id].value === 'true' ? 'opacity-100' : ''}`}
+                                className={`form-check-input bg-grey`}
                                 type="radio"
                                 name={'radiooptions' + item.id}
                                 id={optname + 'input' + item.id}
-                                onChange={() => handleOptionsUpdate(index)}
-                                checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
-                                disabled={answer !== undefined}
+                                onChange={() => handleOptionsUpdate(option.id)}
+                                //checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
+                                //disabled={answer !== undefined}
                             ></input>
                             <label
-                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
-                                    answer && answer[index].value === 'true' ? 'opacity-100' : ''
-                                }`}
+                                // className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
+                                //     answer && answer[index].value === 'true' ? 'opacity-100' : ''
+                                // }`}
+                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}
                                 htmlFor={optname + 'input' + item.id}
                             >
                                 {option.text}
