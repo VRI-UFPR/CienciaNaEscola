@@ -22,6 +22,7 @@ import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
+import { serialize } from 'object-to-formdata';
 
 const styles = `
     .bg-yellow-orange {
@@ -119,23 +120,30 @@ function ProtocolPage(props) {
             }
             applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
         }
-        // axios
-        //     .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
-        //     .then((response) => {
-        //         modalRef1.current.showModal({
-        //             title: 'Muito obrigado por sua participação no projeto!',
-        //             onHide: () => {
-        //                 navigate('/home');
-        //             },
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         modalRef1.current.showModal({
-        //             title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-        //         });
-        //         console.error(error.message);
-        //     });
-        console.log(applicationAnswer);
+
+        const formData = serialize(applicationAnswer, { indices: true });
+
+        axios
+            .post(`http://localhost:3000/api/applicationAnswer/createApplicationAnswer`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                modalRef1.current.showModal({
+                    title: 'Muito obrigado por sua participação no projeto!',
+                    onHide: () => {
+                        navigate('/home');
+                    },
+                });
+            })
+            .catch((error) => {
+                modalRef1.current.showModal({
+                    title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                });
+                console.error(error.message);
+            });
     };
 
     useEffect(() => {
