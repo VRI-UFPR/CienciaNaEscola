@@ -21,11 +21,11 @@ const styles = `
 
 function SimpleTextInput(props) {
     const [text, setText] = useState(['']);
-    const { onAnswerChange, item, answer } = props;
+    const { onAnswerChange, item, group } = props;
 
     useEffect(() => {
-        onAnswerChange(item.id, text);
-    }, [text, item.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'ITEM', text);
+    }, [text, item.id, onAnswerChange, group]);
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
@@ -40,9 +40,9 @@ function SimpleTextInput(props) {
                 className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => setText([e.target.value])}
-                value={answer ? answer[0].value : text}
-                disabled={answer !== undefined}
+                onChange={(e) => setText(e.target.value)}
+                //value={answer ? answer[0].value : text}
+                //disabled={answer !== undefined}
             ></input>
             <style>{styles}</style>
         </div>
