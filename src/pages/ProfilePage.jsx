@@ -78,19 +78,6 @@ function ProfilePage(props) {
                             <div className="col-12 col-lg-9 d-flex flex-column justify-content-center">
                                 <div className="row align-items-center m-0 mb-2">
                                     <div className="row mb-1">
-                                        <label htmlFor="name-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
-                                            Nome:
-                                        </label>
-                                    </div>
-                                    <input
-                                        type="name"
-                                        disabled={!allowEdit}
-                                        className="col form-control rounded-4 shadow-sm fs-5"
-                                        id="name-input"
-                                    ></input>
-                                </div>
-                                <div className="row align-items-center m-0 mb-2">
-                                    <div className="row mb-1">
                                         <label htmlFor="username-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
                                             Nome de usuário:
                                         </label>
