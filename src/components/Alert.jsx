@@ -23,8 +23,8 @@ const Alert = forwardRef((props, ref) => {
         if (modalData) {
             const alert = document.getElementById(modal.id);
             alert.removeEventListener('hidden.bs.modal', modal.onHide);
-            if (modalData.onHide) {
-                alert.addEventListener('hidden.bs.modal', modalData.onHide);
+            if (modal.actionOnClick) {
+                alert.removeEventListener('hidden.bs.modal', modal.actionOnClick);
             }
 
             setModal({
@@ -45,8 +45,10 @@ const Alert = forwardRef((props, ref) => {
 
     const hideModal = (action) => {
         const alert = document.getElementById(modal.id);
+        if (action) {
+            alert.addEventListener('hidden.bs.modal', action);
+        }
         Modal.getInstance(alert).hide();
-        if (action) action();
     };
 
     useImperativeHandle(ref, () => ({
