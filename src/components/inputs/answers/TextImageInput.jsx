@@ -1,4 +1,5 @@
 import { React } from 'react';
+import Markdown from 'markdown-to-jsx';
 
 const styles = `
     .font-barlow {
@@ -20,7 +21,7 @@ function TextImageInput(props) {
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0 pb-3">
-                <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{item.text}</p>
+                <Markdown className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{item.text}</Markdown>
             </div>
 
             {item.files.length > 0 && (
