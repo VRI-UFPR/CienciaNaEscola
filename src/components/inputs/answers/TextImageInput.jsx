@@ -25,7 +25,7 @@ function TextImageInput(props) {
 
             {item.files.length > 0 && (
                 <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
-                    <img className="img-fluid object-fit-contain" src={item.description} alt="Imagem" />
+                    <img className="img-fluid object-fit-contain" src={item.files[0].path} alt="Imagem" />
                 </div>
             )}
 
