@@ -13,6 +13,11 @@ const styles = `
     .color-dark-gray {
         color: #535353;
     }
+
+    .img-markdown {
+        max-width: 100%;
+        height: auto;
+    }
 `;
 
 function TextImageInput(props) {
@@ -21,7 +26,20 @@ function TextImageInput(props) {
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0 pb-3">
-                <Markdown className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{item.text}</Markdown>
+                <Markdown
+                    options={{
+                        overrides: {
+                            img: {
+                                props: {
+                                    className: 'img-markdown',
+                                },
+                            },
+                        },
+                    }}
+                    className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"
+                >
+                    {item.text}
+                </Markdown>
             </div>
 
             {item.files.length > 0 && (
