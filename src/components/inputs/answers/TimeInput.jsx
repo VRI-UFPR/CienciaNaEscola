@@ -33,19 +33,18 @@ const styles = `
 
 function TimeInput(props) {
     const [time, setTime] = useState('');
-    const { onAnswerChange, input, answer } = props;
+    const { onAnswerChange, item, group } = props;
 
     useEffect(() => {
         const date = new Date();
         const hour = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         setTime([hour + ':' + minutes]);
-        onAnswerChange(input.id, [hour + ':' + minutes]);
-    }, [onAnswerChange, input.id]);
+    }, []);
 
     useEffect(() => {
-        onAnswerChange(input.id, time);
-    }, [time, input.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'ITEM', time);
+    }, [time, item.id, onAnswerChange, group]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -67,8 +66,9 @@ function TimeInput(props) {
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
                             onChange={(e) => setTime([e.target.value])}
-                            value={answer ? answer[0].value : time}
-                            disabled={answer !== undefined}
+                            defaultValue={time}
+                            // value={answer ? answer[0].value : time}
+                            // disabled={answer !== undefined}
                         ></input>
                     </div>
                 </div>

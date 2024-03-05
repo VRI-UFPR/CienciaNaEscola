@@ -17,7 +17,7 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, input, answer } = props;
+    const { onAnswerChange, item, group } = props;
 
     const [images, setImages] = useState([]);
     const [index, setIndex] = useState(0);
@@ -29,8 +29,8 @@ function ImageInput(props) {
     };
 
     useEffect(() => {
-        onAnswerChange(input.id, images[0]);
-    }, [images, input.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'ITEM', images);
+    }, [images, item.id, onAnswerChange, group]);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
@@ -55,7 +55,7 @@ function ImageInput(props) {
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
                     <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
-                        {input.question}
+                        {item.text}
                     </label>
                     <div className="d-flex align-items-center p-0">
                         <RoundedButton
@@ -106,7 +106,7 @@ function ImageInput(props) {
                         id="imageinput"
                         style={{ display: 'none' }}
                         onChange={handleFileInputChange}
-                        disabled={answer !== undefined}
+                        // disabled={answer !== undefined}
                         ref={fileInputRef}
                     />
                 </div>
