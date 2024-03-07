@@ -5,19 +5,12 @@ export const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
     const [connected, setConnected] = useState(window.navigator.onLine);
-    const [pendingRequests, setPendingRequests] = useState([]);
+    const [pendingAnswer, setPendingAnswer] = useState(undefined);
     const [application, setApplication] = useState({});
+    const [id, setId] = useState(undefined);
 
     // Retrieve stored data from localStorage
     useEffect(() => {
-        const JSONtoFormData = (data) => {
-            const formData = new FormData();
-            for (const key in data) {
-                formData.append(key, data[key]);
-            }
-            return formData;
-        };
-
         const storedConnected = JSON.parse(localStorage.getItem('connected'));
         if (storedConnected) {
             setConnected(storedConnected);
@@ -26,9 +19,13 @@ export const StorageProvider = ({ children }) => {
         if (storedApplication) {
             setApplication(storedApplication);
         }
-        const storedPendingRequests = JSON.parse(localStorage.getItem('pendingRequests'));
-        if (storedPendingRequests) {
-            setPendingRequests(storedPendingRequests.map((request) => ({ ...request, data: JSONtoFormData(request.data) })));
+        const storedPendingAnswer = JSON.parse(localStorage.getItem('pendingAnswer'));
+        if (storedPendingAnswer) {
+            setPendingAnswer(storedPendingAnswer);
+        }
+        const storedId = JSON.parse(localStorage.getItem('id'));
+        if (storedId) {
+            setId(storedId);
         }
     }, []);
 
@@ -67,34 +64,65 @@ export const StorageProvider = ({ children }) => {
 
     // Store the pending requests in localStorage
     useEffect(() => {
-        const formDataToJSON = (formData) => {
-            const data = {};
-            for (const key of formData.keys()) {
-                data[key] = formData.get(key);
-            }
-            return data;
-        };
-
-        const pendingRequestsToStore = pendingRequests.map((request) => ({ ...request, data: formDataToJSON(request.data) }));
-
-        if (pendingRequests.length > 0) {
-            localStorage.setItem('pendingRequests', JSON.stringify(pendingRequestsToStore));
+        if (pendingAnswer) {
+            localStorage.setItem('pendingAnswer', JSON.stringify(pendingAnswer));
         }
-    }, [pendingRequests]);
+    }, [pendingAnswer]);
+
+    // Store the pending id in localStorage
+    useEffect(() => {
+        if (id) {
+            localStorage.setItem('id', JSON.stringify(id));
+        }
+    }, [id]);
 
     useEffect(() => {
-        if (connected && pendingRequests.length > 0) {
-            pendingRequests.forEach(async (request) => {
+        if (connected && pendingAnswer && id) {
+            const uploadFile = async (file) => {
                 try {
-                    await axios.post(request.url, request.data, request.config);
+                    const formData = new FormData();
+                    formData.append('api_key', process.env.REACT_APP_API_KEY);
+                    formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
+                    formData.append('file', file);
+
+                    const response = await axios.post(`https://api.cloudinary.com/v1_1/dbxjlnwlo/image/upload`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+
+                    return response;
                 } catch (error) {
-                    console.error(error);
+                    console.log(error);
+                    throw error;
                 }
+            };
+
+            const uploadedFiles = {};
+            const uploadPromises = [];
+
+            for (let prop in pendingAnswer) {
+                uploadedFiles[prop] = [];
+                if (pendingAnswer[prop] instanceof File) {
+                    uploadPromises.push(
+                        uploadFile(pendingAnswer[prop]).then((response) => {
+                            uploadedFiles[prop] = [response.data.url];
+                        })
+                    );
+                } else {
+                    uploadedFiles[prop] = pendingAnswer[prop];
+                }
+            }
+
+            Promise.all(uploadPromises).then(() => {
+                axios.post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles);
             });
-            setPendingRequests([]);
-            localStorage.removeItem('pendingRequests');
+            setPendingAnswer(undefined);
+            setId(undefined);
+            localStorage.removeItem('pendingAnswer');
+            localStorage.removeItem('id');
         }
-    }, [connected, pendingRequests]);
+    }, [connected, pendingAnswer, id]);
 
     useEffect(() => {
         if (connected && application.id) {
@@ -107,12 +135,16 @@ export const StorageProvider = ({ children }) => {
         setApplication(application);
     }, []);
 
-    const storePendingRequest = (request) => {
-        setPendingRequests((prev) => [...prev, request]);
+    const storePendingAnswer = (answer) => {
+        setPendingAnswer(answer);
+    };
+
+    const storePendingId = (id) => {
+        setId(id);
     };
 
     return (
-        <StorageContext.Provider value={{ connected, application, storeApplicationWithProtocol, storePendingRequest }}>
+        <StorageContext.Provider value={{ connected, application, storeApplicationWithProtocol, storePendingAnswer, storePendingId }}>
             {children}
         </StorageContext.Provider>
     );
