@@ -23,6 +23,7 @@ import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import LinkBox from '../components/inputs/answers/LinkBox';
 import { AuthContext } from '../contexts/AuthContext';
+import { StorageContext } from '../contexts/StorageContext';
 import {
     protocol104,
     protocol105,
@@ -90,8 +91,11 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { user } = useContext(AuthContext);
     const { id } = useParams();
+    const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
     const modalRef = useRef(null);
     const modalRef1 = useRef(null);
+    const modalRef2 = useRef(null);
+    const modalRef3 = useRef(null);
     const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
@@ -103,40 +107,59 @@ function ProtocolPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
-        const uploadedFiles = {};
-        const uploadPromises = [];
+        if (connected === true) {
+            const uploadedFiles = {};
+            const uploadPromises = [];
 
-        for (let prop in answers) {
-            uploadedFiles[prop] = [];
-            if (answers[prop] instanceof File) {
-                uploadPromises.push(
-                    uploadFile(answers[prop]).then((response) => {
-                        uploadedFiles[prop] = [response.data.url];
-                    })
-                );
-            } else {
-                uploadedFiles[prop] = answers[prop];
+            for (let prop in answers) {
+                uploadedFiles[prop] = [];
+                if (answers[prop] instanceof File) {
+                    uploadPromises.push(
+                        uploadFile(answers[prop]).then((response) => {
+                            uploadedFiles[prop] = [response.data.url];
+                        })
+                    );
+                } else {
+                    uploadedFiles[prop] = answers[prop];
+                }
             }
-        }
 
-        Promise.all(uploadPromises).then(() => {
-            axios
-                .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
-                .then((response) => {
-                    modalRef1.current.showModal({
-                        title: 'Muito obrigado por sua participação no projeto!',
-                        onHide: () => {
-                            navigate('/home');
-                        },
+            Promise.all(uploadPromises).then(() => {
+                axios
+                    .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, uploadedFiles)
+                    .then((response) => {
+                        modalRef1.current.showModal({
+                            title: 'Muito obrigado por sua participação no projeto!',
+                            onHide: () => {
+                                navigate('/home');
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        modalRef.current.showModal({
+                            title: 'Não foi possível enviar a resposta. Tente novamente mais tarde.',
+                        });
+                        console.error(error.message);
                     });
-                })
-                .catch((error) => {
-                    modalRef.current.showModal({
-                        title: 'Não foi possível enviar a resposta. Tente novamente mais tarde.',
-                    });
-                    console.error(error.message);
-                });
-        });
+            });
+        } else {
+            // storePendingRequest({
+            //     url: `http://localhost:3000/api/applicationAnswer/createApplicationAnswer`,
+            //     data: uploadedFiles,
+            //     config: {
+            //         headers: {
+            //             'Content-Type': 'multipart/form-data',
+            //             Authorization: `Bearer ${user.token}`,
+            //         },
+            //     },
+            // });
+            modalRef3.current.showModal({
+                title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
+        }
     };
 
     useEffect(() => {
@@ -180,6 +203,17 @@ function ProtocolPage(props) {
 
         syncProtocol().then(() => setIsLoading(false));
     }, [id]);
+
+    useEffect(() => {
+        if (connected === false) {
+            modalRef2.current.showModal({
+                title: 'Você está offline. O protocolo ' + id + ' continuará disponível para resposta enquanto esta página estiver aberta.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
+        }
+    }, [connected, storeApplicationWithProtocol, id]);
 
     // useEffect(() => {
     //     if (!isLoading) {
@@ -334,6 +368,8 @@ function ProtocolPage(props) {
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
             <Alert id="ProtocolPageConfirmation" ref={modalRef1} />
+            <Alert id="ProtocolPageOffline" ref={modalRef2} />
+            <Alert id="ProtocolPageSubmitOffline" ref={modalRef3} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
