@@ -91,7 +91,7 @@ function ProtocolPage(props) {
     const [answers, setAnswers] = useState({});
     const { user } = useContext(AuthContext);
     const { id } = useParams();
-    const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
+    const { connected, storeApplicationWithProtocol, storePendingAnswer, storePendingId } = useContext(StorageContext);
     const modalRef = useRef(null);
     const modalRef1 = useRef(null);
     const modalRef2 = useRef(null);
@@ -143,16 +143,8 @@ function ProtocolPage(props) {
                     });
             });
         } else {
-            // storePendingRequest({
-            //     url: `http://localhost:3000/api/applicationAnswer/createApplicationAnswer`,
-            //     data: uploadedFiles,
-            //     config: {
-            //         headers: {
-            //             'Content-Type': 'multipart/form-data',
-            //             Authorization: `Bearer ${user.token}`,
-            //         },
-            //     },
-            // });
+            storePendingAnswer(answers);
+            storePendingId(id);
             modalRef3.current.showModal({
                 title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
                 dismissHsl: [97, 43, 70],
