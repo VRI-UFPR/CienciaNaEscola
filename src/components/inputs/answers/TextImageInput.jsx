@@ -1,4 +1,5 @@
 import { React } from 'react';
+import Markdown from 'markdown-to-jsx';
 
 const styles = `
     .font-barlow {
@@ -12,20 +13,40 @@ const styles = `
     .color-dark-gray {
         color: #535353;
     }
+
+    .img-markdown {
+        max-width: 100%;
+        height: auto;
+    }
 `;
 
 function TextImageInput(props) {
-    const { input } = props;
+    const { item } = props;
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0 pb-3">
-                <p className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">{input.question}</p>
+                <Markdown
+                    options={{
+                        overrides: {
+                            img: {
+                                props: {
+                                    className: 'img-markdown',
+                                },
+                            },
+                        },
+                    }}
+                    className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"
+                >
+                    {item.text}
+                </Markdown>
             </div>
 
-            <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
-                <img className="img-fluid object-fit-contain" src={input.description} alt="Imagem" />
-            </div>
+            {item.files.length > 0 && (
+                <div className="ratio ratio-1x1 bg-grey rounded-4 overflow-hidden">
+                    <img className="img-fluid object-fit-contain" src={item.files[0].path} alt="Imagem" />
+                </div>
+            )}
 
             <style>{styles}</style>
         </div>
