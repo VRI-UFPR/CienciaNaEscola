@@ -9,6 +9,7 @@ import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
+import { serialize } from 'object-to-formdata';
 
 const styles = `
 
@@ -55,7 +56,7 @@ const styles = `
 `;
 
 function LoginPage(props) {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
     const location = useLocation();
@@ -70,18 +71,25 @@ function LoginPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
+        const formData = serialize({
+            username,
+            hash: password,
+        });
         // .post('http://localhost:3333/user/signIn', {
         axios
-            .post('https://genforms.c3sl.ufpr.br/api/user/signIn', {
-                email,
-                hash: password,
+            .post('http://localhost:3000/api/auth/signIn', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             })
             .then((response) => {
-                if (response.data.token) {
-                    login(response.data.id, email, response.data.token);
-                    navigate('/home');
+                if (response.data.data.token) {
+                    login(response.data.data.id, username, response.data.data.token);
+                    console.log(response.data);
+                    //navigate('/home');
                 } else {
-                    throw new Error('Something went wrong!');
+                    console.log(response.data);
+                    throw new Error('Authentication failed!');
                 }
             })
             .catch((error) => {
@@ -103,10 +111,10 @@ function LoginPage(props) {
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
                             className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                            placeholder="Login"
+                            placeholder="Username"
                             type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                         <input
                             className="login-input rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
