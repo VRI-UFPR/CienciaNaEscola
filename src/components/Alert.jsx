@@ -23,13 +23,14 @@ const Alert = forwardRef((props, ref) => {
         if (modalData) {
             const alert = document.getElementById(modal.id);
             alert.removeEventListener('hidden.bs.modal', modal.onHide);
-            if (modalData.onHide) {
-                alert.addEventListener('hidden.bs.modal', modalData.onHide);
+            if (modal.actionOnClick) {
+                alert.removeEventListener('hidden.bs.modal', modal.actionOnClick);
             }
 
             setModal({
                 id: modal.id,
                 title: modalData.title || modal.title,
+                dismissible: modalData.dismissible === undefined ? modal.dismissible : modalData.dismissible,
                 dismissHsl: modalData.dismissHsl || modal.dismissHsl,
                 dismissText: modalData.dismissText || modal.dismissText,
                 actionHsl: modalData.actionHsl,
@@ -44,8 +45,10 @@ const Alert = forwardRef((props, ref) => {
 
     const hideModal = (action) => {
         const alert = document.getElementById(modal.id);
+        if (action) {
+            alert.addEventListener('hidden.bs.modal', action);
+        }
         Modal.getInstance(alert).hide();
-        if (action) action();
     };
 
     useImperativeHandle(ref, () => ({
@@ -59,13 +62,13 @@ const Alert = forwardRef((props, ref) => {
                     <div className="d-flex flex-column shadow bg-white rounded-4 w-100 mx-0 p-4 py-5 p-md-5">
                         <h1 className="font-century-gothic color-dark-gray text-center mb-4 mb-md-5 fs-3 fw-bold">{modal.title}</h1>
 
-                        <div className="row justify-content-center m-0">
+                        <div className={`row ${modal.dismissible ? '' : 'd-none'} justify-content-center m-0`}>
                             <div className={`${modal.actionHsl ? 'col' : 'col-auto'} d-flex px-1`}>
                                 <TextButton
                                     className={`p-3 ${modal.actionHsl ? '' : 'px-5'} py-md-4 fs-3`}
                                     hsl={modal.dismissHsl}
                                     text={modal.dismissText}
-                                    onClick={() => hideModal()}
+                                    onClick={() => hideModal(modal.onHide)}
                                 />
                             </div>
                             <div className={`col ${modal.actionHsl ? 'd-flex' : 'd-none'} px-1`}>
@@ -88,6 +91,7 @@ const Alert = forwardRef((props, ref) => {
 Alert.defaultProps = {
     id: 'Modal',
     title: 'Você foi alertado',
+    dismissible: true,
     dismissHsl: [97, 43, 70],
     dismissText: 'Ok',
 };

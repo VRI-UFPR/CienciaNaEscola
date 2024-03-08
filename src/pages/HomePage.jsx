@@ -28,26 +28,34 @@ function HomePage(props) {
     const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
 
     const [isLoading, setIsLoading] = useState(true);
-    const [filteredData, setFilteredData] = useState([]);
-    const { user } = useContext(AuthContext);
+    const [userApplications, setUserApplications] = useState([]);
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
-            // .get(`http://localhost:3333/user/list/${user.id}`)
             axios
-                .get(`https://genforms.c3sl.ufpr.br/api/user/list/${user.id}`)
+                .get(`http://localhost:3000/api/application/getVisibleApplications`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
                 .then((response) => {
-                    setFilteredData(response.data);
+                    console.log(response.data);
+                    setUserApplications(response.data.data);
                     setIsLoading(false);
                 })
                 .catch((error) => {
                     console.error(error.message);
+                    if (error.response.status === 401) {
+                        logout();
+                        navigate('/login');
+                    }
                 });
         }
-    }, [user]);
+    }, [user, logout, navigate]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -79,7 +87,7 @@ function HomePage(props) {
                                     location.pathname === '/home' ? 'pb-5' : 'pb-2'
                                 } pb-lg-0 m-0`}
                             >
-                                <ProtocolCarousel users={filteredData} />
+                                <ProtocolCarousel applications={userApplications} />
                             </div>
                         </div>
                     </div>
