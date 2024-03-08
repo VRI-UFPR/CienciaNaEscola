@@ -23,11 +23,11 @@ const style = `
 `;
 
 function ProtocolCarousel(props) {
-    const { users } = props;
+    const { applications } = props;
 
     const carouselRef = useRef(null);
     const itemsPerSlide = 5;
-    const totalSlides = Math.ceil(users.length / itemsPerSlide);
+    const totalSlides = Math.ceil(applications.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -41,19 +41,20 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideButtons = users.slice(startIndex, endIndex);
+            const slideButtons = applications.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
                     <div className="d-flex flex-column align-items-center h-100 pb-3">
-                        {slideButtons.map((protocol, index) => (
+                        {slideButtons.map((application, index) => (
                             <Link
-                                to={`/protocol/${protocol.id}`}
-                                key={index}
+                                to={`/protocol/${application.id}`}
+                                key={'protocol-' + application.id}
                                 className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                                 style={{ height: '4rem', maxHeight: '4rem', color: '#262626' }}
                             >
-                                <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} />
+                                {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
+                                <HomeButton title={application.protocol.title} />
                             </Link>
                         ))}
                     </div>
