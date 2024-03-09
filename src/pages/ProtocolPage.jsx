@@ -220,7 +220,9 @@ function ProtocolPage(props) {
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={application.protocol.description} />}</div>
+                <div className="row justify-content-center m-0 pt-3">
+                    {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
+                </div>
                 {application.protocol.pages.map((page) => {
                     return page.itemGroups.map((itemGroup) => {
                         return itemGroup.items.map((item) => {
