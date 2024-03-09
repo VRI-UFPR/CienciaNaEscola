@@ -2,7 +2,7 @@ import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import TextButton from './TextButton';
 import { Modal } from 'bootstrap';
 
-const endProtocolAlertStyles = `
+const AlertStyles = `
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
@@ -83,7 +83,7 @@ const Alert = forwardRef((props, ref) => {
                     </div>
                 </div>
             </div>
-            <style>{endProtocolAlertStyles}</style>
+            <style>{AlertStyles}</style>
         </div>
     );
 });
