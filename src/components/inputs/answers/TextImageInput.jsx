@@ -22,7 +22,7 @@ const styles = `
 `;
 
 function TextImageInput(props) {
-    const { item } = props;
+    const { item, galleryRef } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
@@ -48,7 +48,7 @@ function TextImageInput(props) {
                 </Markdown>
             </div>
 
-            {item.files.length > 0 && (
+            {item.files.length > 0 && galleryRef && (
                 <div className="row justify-content-center m-0 pt-3">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
@@ -62,6 +62,7 @@ function TextImageInput(props) {
                                     className={`${
                                         item.files.length > 1 && 'ratio ratio-1x1'
                                     } border border-light-subtle rounded-4 overflow-hidden`}
+                                    onClick={() => galleryRef.current.showModal({ images: item.files, currentImage: index })}
                                 >
                                     <img src={image.path} className="img-fluid object-fit-contain" alt="Responsive" />
                                 </div>
