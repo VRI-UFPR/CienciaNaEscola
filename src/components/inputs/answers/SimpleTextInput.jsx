@@ -22,7 +22,7 @@ const styles = `
 
 function SimpleTextInput(props) {
     const [text, setText] = useState(['']);
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, group, galleryRef } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
@@ -41,7 +41,7 @@ function SimpleTextInput(props) {
                 </label>
             </div>
 
-            {item.files.length > 0 && (
+            {item.files.length > 0 && galleryRef && (
                 <div className="row justify-content-center m-0 pt-3">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
@@ -55,6 +55,7 @@ function SimpleTextInput(props) {
                                     className={`${
                                         item.files.length > 1 && 'ratio ratio-1x1'
                                     } border border-light-subtle rounded-4 overflow-hidden`}
+                                    onClick={() => galleryRef.current.showModal({ images: item.files, currentImage: index })}
                                 >
                                     <img src={image.path} className="img-fluid object-fit-contain" alt="Responsive" />
                                 </div>
