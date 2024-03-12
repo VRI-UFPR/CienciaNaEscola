@@ -12,6 +12,7 @@ import SelectInput from '../components/inputs/answers/SelectInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
+import Gallery from '../components/Gallery';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
@@ -50,6 +51,7 @@ function ProtocolPage(props) {
     const { id } = useParams();
     const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
     const modalRef = useRef(null);
+    const galleryRef = useRef(null);
     const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
@@ -230,21 +232,42 @@ function ProtocolPage(props) {
                                 case 'TEXTBOX':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<SimpleTextInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                            {
+                                                <SimpleTextInput
+                                                    item={item}
+                                                    galleryRef={galleryRef}
+                                                    group={itemGroup.id}
+                                                    onAnswerChange={handleAnswerChange}
+                                                />
+                                            }
                                         </div>
                                     );
 
                                 case 'CHECKBOX':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<CheckBoxInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                            {
+                                                <CheckBoxInput
+                                                    item={item}
+                                                    galleryRef={galleryRef}
+                                                    group={itemGroup.id}
+                                                    onAnswerChange={handleAnswerChange}
+                                                />
+                                            }
                                         </div>
                                     );
 
                                 case 'RADIO':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<RadioButtonInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                            {
+                                                <RadioButtonInput
+                                                    item={item}
+                                                    galleryRef={galleryRef}
+                                                    group={itemGroup.id}
+                                                    onAnswerChange={handleAnswerChange}
+                                                />
+                                            }
                                         </div>
                                     );
 
@@ -281,7 +304,14 @@ function ProtocolPage(props) {
                                 case 'TEXT':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<TextImageInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                            {
+                                                <TextImageInput
+                                                    item={item}
+                                                    galleryRef={galleryRef}
+                                                    group={itemGroup.id}
+                                                    onAnswerChange={handleAnswerChange}
+                                                />
+                                            }
                                         </div>
                                     );
                                 default:
@@ -311,6 +341,7 @@ function ProtocolPage(props) {
                 </div>
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
+            <Gallery id="ProtocolPageGallery" ref={galleryRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
