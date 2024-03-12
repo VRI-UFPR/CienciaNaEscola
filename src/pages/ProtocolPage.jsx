@@ -53,7 +53,6 @@ function ProtocolPage(props) {
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
-    const modalRef1 = useRef(null);
     const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
@@ -82,6 +81,11 @@ function ProtocolPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
+        modalRef.current.showModal({
+            title: 'Aguarde o processamento da resposta',
+            dismissible: false,
+        });
+
         const applicationAnswer = {
             applicationId: application.id,
             addressId: 1,
@@ -131,16 +135,22 @@ function ProtocolPage(props) {
                 },
             })
             .then((response) => {
-                modalRef1.current.showModal({
+                modalRef.current.showModal({
                     title: 'Muito obrigado por sua participação no projeto!',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
                     onHide: () => {
                         navigate('/home');
                     },
                 });
             })
             .catch((error) => {
-                modalRef1.current.showModal({
+                modalRef.current.showModal({
                     title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
                 });
                 console.error(error.message);
             });
@@ -243,7 +253,6 @@ function ProtocolPage(props) {
                 </div>
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
-            <Alert id="ProtocolPageConfirmation" ref={modalRef1} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>
