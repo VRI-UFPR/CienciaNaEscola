@@ -1,4 +1,5 @@
 import { React } from 'react';
+import Markdown from 'markdown-to-jsx';
 
 const protocolInfoStyles = `
     .font-barlow {
@@ -16,17 +17,35 @@ const protocolInfoStyles = `
     .bg-coral-red{
         background-color: #F59489;
     }
+
+    .img-markdown {
+        max-width: 100%;
+        height: auto;
+    }
 `;
 
 function ProtocolInfo(props) {
-    const { info } = props;
+    const { title, description } = props;
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden w-100 p-0">
             <div className="w-100 pb-3 bg-coral-red"></div>
             <div className="p-3 pt-2">
-                <h1 className="color-dark-gray font-barlow text-break fw-bold fs-5 m-0 p-0 pb-2">Informações gerais:</h1>
-                <p className="color-gray font-barlow text-break fw-medium fs-6 m-0 p-0">{info}</p>
+                <h1 className="color-dark-gray font-barlow text-break fw-bold fs-5 m-0 p-0 pb-2">{title}</h1>
+                <Markdown
+                    options={{
+                        overrides: {
+                            img: {
+                                props: {
+                                    className: 'img-markdown',
+                                },
+                            },
+                        },
+                    }}
+                    className="color-gray font-barlow text-break fw-medium fs-6 lh-sm m-0 p-0"
+                >
+                    {description}
+                </Markdown>
             </div>
 
             <style>{protocolInfoStyles}</style>
