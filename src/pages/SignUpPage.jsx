@@ -1,10 +1,9 @@
 import { React, useState, useRef } from 'react';
 import NavBar from '../components/Navbar';
-import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
 import Alert from '../components/Alert';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -32,9 +31,19 @@ const signUpPageStyles = `
         -webkit-text-fill-color: #535353 !important;
     }
 
-    .login-forgot-pw{
-        color: #91CAD6;
+
+    .margin-item{
+        margin-bottom: 1vh;
     }
+
+    .margin-title{
+        margin-bottom: 5vh;
+    }
+
+    .padding-item{
+        padding: 1vh;
+    }
+
 `;
 
 function SignUpPage(props) {
@@ -42,6 +51,9 @@ function SignUpPage(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConf, setPasswordConf] = useState('');
+    /*  const [username, setUsername] = useState('');
+    const [institution, setInstitution] = useState('');
+    const [role, setRole] = useState(''); */
     const modalRef = useRef(null);
     const navigate = useNavigate();
 
@@ -50,7 +62,7 @@ function SignUpPage(props) {
     const validatePasswordMatch = () => password === passwordConf;
 
     const validatePassword = () => {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const passwordRegex = /^(?=.*[!@#$%^&*()-_+=\\|[\]{};:'",<.>/?]).*(?=.*[A-Z]).*(?=.*[a-z]).{8,}$/;
 
         return password.match(passwordRegex);
     };
@@ -60,18 +72,46 @@ function SignUpPage(props) {
         return email.trim() === '' || emailRegex.test(email);
     };
 
+    const validateName = () => {
+        const nameRegex = /^[A-Za-z\s]+$/;
+        return name.trim() === '' || nameRegex.test(name);
+    };
+
+    /*     const validateUsername = () => {
+        const usernameRegex = /^[A-Za-z0-9_]+$/;
+        return username.trim() === '' || usernameRegex.test(username);
+    };
+
+    const validateInstitution = () => {
+        const institutionRegex = /^[A-Za-z\s]+$/;
+        return institution.trim() === '' || institutionRegex.test(institution);
+    };
+
+    const validateRole = () => {
+        const roleRegex = /(USER|APLICATOR|PUBLISHER|COORDINATOR|ADMIN)/;
+        return role.trim() === '' || roleRegex.test(role);
+    }; */
+
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {
             modalRef.current.showModal({ title: 'Falha no cadastro: preencha todos os campos' });
         } else if (!validateEmail()) {
             modalRef.current.showModal({ title: 'Falha no cadastro: email inválido' });
+        } else if (!validateName()) {
+            modalRef.current.showModal({ title: 'Falha no cadastro: nome inválido' });
         } else if (!validatePassword()) {
             modalRef.current.showModal({
                 title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula',
             });
         } else if (!validatePasswordMatch()) {
             modalRef.current.showModal({ title: 'Falha no cadastro: as senhas não coincidem' });
+            /*  } else if (!validateUsername()) {
+            modalRef.current.showModal({ title: 'Falha no cadastro: nome de usuário inválido' });
+        } else if (!validateInstitution()) {
+            modalRef.current.showModal({ title: 'Falha no cadastro: insituição inválida' });
+        } else if (!validateRole()) {
+            modalRef.current.showModal({ title: 'Falha no cadastro: função inválida' }); */
         } else {
             axios
                 .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
@@ -96,86 +136,123 @@ function SignUpPage(props) {
     return (
         <div className="d-flex flex-column font-barlow min-vh-100">
             <NavBar showNavTogglerMobile={false} showNavTogglerDesktop={false} />
-            <div className="d-flex flex-column flex-grow-1 p-4 p-lg-5">
-                <div className="row flex-column align-items-center flex-grow-1 w-100 m-0">
+            <div className="d-flex flex-column align-items-center flex-grow-1 p-4">
+                <div className="row flex-column align-items-center flex-grow-1 w-100">
                     <div className="col-12 col-lg-8">
-                        <div className="text-center w-100 mb-4 mb-lg-5">
+                        <div className="margin-title text-center w-100">
                             <h1 className="color-dark-gray font-century-gothic fs-3 fw-bold pb-2 m-0">Cadastro de usuário</h1>
                             <h2 className="color-dark-gray fs-5 fw-medium m-0">Insira suas informações abaixo</h2>
                         </div>
-                        <div className="text-center w-100 mb-3">
+                        <div className="margin-item text-center w-100">
                             <label htmlFor="name-input" className="form-label fs-5">
                                 Nome completo:
                             </label>
                             <input
                                 id="name-input"
-                                className="ce-input bg-glacier-blue text-white rounded-pill text-center fs-5 border-0 p-2 w-100"
-                                placeholder="Nome completo"
+                                className={`ce-input padding-item shadow border-0 rounded-4 text-center fs-5 bg-glacier-blue w-100 ${
+                                    validateName() ? 'text-white' : 'text-danger'
+                                }`}
+                                placeholder=""
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        <div className="text-center w-100 mb-3">
+                        <div className="margin-item text-center w-100">
                             <label htmlFor="email-input" className="form-label fs-5">
                                 E-mail:
                             </label>
                             <input
                                 id="email-input"
-                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                className={`ce-input padding-item shadow border-0 rounded-4 text-center fs-5 bg-glacier-blue w-100 ${
                                     validateEmail() ? 'text-white' : 'text-danger'
                                 }`}
-                                placeholder="Email"
+                                placeholder=""
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
-                        <div className="text-center w-100 mb-3">
+                        <div className="margin-item text-center w-100">
                             <label htmlFor="password-input" className="form-label fs-5">
                                 Senha:
                             </label>
                             <input
                                 id="password-input"
-                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                className={`ce-input padding-item shadow border-0 rounded-4 text-center fs-5 bg-glacier-blue w-100 ${
                                     validatePassword() ? 'text-white' : 'text-danger'
                                 }`}
-                                placeholder="Senha"
+                                placeholder=""
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
-                        <div className="text-center w-100 mb-3">
+                        <div className="margin-title text-center w-100">
                             <label htmlFor="password-conf-input" className="form-label fs-5">
                                 Confirme a senha:
                             </label>
                             <input
                                 id="password-conf-input"
-                                className={`ce-input bg-glacier-blue rounded-pill text-center fs-5 border-0 p-2 w-100 ${
+                                className={`ce-input padding-item shadow border-0 rounded-4 text-center fs-5 bg-glacier-blue w-100 ${
                                     validatePasswordMatch() && validatePassword() ? 'text-white' : 'text-danger'
                                 }`}
-                                placeholder="Confirme a senha"
+                                placeholder=""
                                 type="password"
                                 value={passwordConf}
                                 onChange={(e) => setPasswordConf(e.target.value)}
                             />
                         </div>
-                        <div className="text-center w-100">
-                            <Link to={'/login'} className="login-forgot-pw pb-2 fs-6">
-                                Voltar para o login
-                            </Link>
+                        {/* <div className="text-center margin-item w-100">
+                            <label htmlFor="username-input" className="form-label fs-5">
+                                Nome de usuário:
+                            </label>
+                            <input
+                                id="username-input"
+                                className={`shadow ce-input bg-glacier-blue padding-item rounded-4 text-center fs-5 border-0 p-2 w-100 ${
+                                    validateUsername() ? 'text-white' : 'text-danger'
+                                }`}
+                                placeholder="Nome de usuário"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
                         </div>
+                        <div className="text-center margin-item w-100">
+                            <label htmlFor="institution-input" className="form-label fs-5">
+                                Instituição:
+                            </label>
+                            <input
+                                id="v-input"
+                                className={`shadow ce-input bg-glacier-blue padding-item rounded-4 text-center fs-5 border-0 w-100 ${
+                                    validateInstitution() ? 'text-white' : 'text-danger'
+                                }`}
+                                placeholder="Instituição"
+                                type="text"
+                                value={institution}
+                                onChange={(e) => setInstitution(e.target.value)}
+                            />
+                        </div>
+                        <div className="text-center margin-titles w-100">
+                            <label htmlFor="role-input" className="form-label fs-5">
+                                Papel:
+                            </label>
+                            <input
+                                id="role-input"
+                                className={`shadow ce-input bg-glacier-blue padding-item rounded-4s text-center fs-5 border-0 w-100 ${
+                                    validateRole() ? 'text-white' : 'text-danger'
+                                }`}
+                                placeholder="Papel"
+                                type="text"
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                            />
+                        </div> */}
                     </div>
-                </div>
-
-                <div className="row justify-content-between w-100 mt-5 mx-0">
-                    <div className="col-1"></div>
-                    <div className="col-auto align-items-center p-0">
-                        <TextButton className="px-5" hsl={[97, 43, 70]} text="Cadastre-se" onClick={signUpHandler} />
-                    </div>
-                    <div className="col-1 d-flex align-items-end justify-content-end p-0">
-                        <RoundedButton role="link" onClick={() => navigate('/help')} />
+                    <div className="row flex-column align-items-center g-0">
+                        <div className="col-auto">
+                            <TextButton hsl={[97, 43, 70]} text="Cadastre-se" className="fs-4 px-2 py-2" onClick={signUpHandler} />
+                        </div>
                     </div>
                 </div>
             </div>
