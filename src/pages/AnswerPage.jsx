@@ -108,13 +108,13 @@ function AnswerPage(props) {
                         </Link>{' '}
                         -
                     </h1>
-                    <h1 className="color-yellow-orange w-auto fw-bold fs-4 m-0 p-0 ps-1">Respostas</h1>
+                    <h1 className="color-dark-gray w-auto fw-bold fs-4 m-0 p-0 ps-1">Respostas</h1>
                 </div>
 
                 <div className="bg-light-gray rounded-4 mb-3 p-3">
                     <h2 className="color-dark-gray fw-medium fs-5 m-0">
                         {protocolAnswer.length} respostas{' '}
-                        <a href="#answerTab" onClick={() => setVisualization(undefined, undefined)} className="fs-6">
+                        <a href="#answerTab" onClick={() => setVisualization(undefined, undefined)} className="color-dark-gray fw-bold fs-6">
                             (ver todas)
                         </a>
                     </h2>
@@ -125,7 +125,7 @@ function AnswerPage(props) {
                         return (
                             <div key={'Person ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
                                 <p className="fw-medium fs-6 m-0">
-                                    <a href="#answerTab" onClick={() => setVisualization(answerIndex, undefined)}>
+                                    <a className="color-dark-gray fw-bold" href="#answerTab" onClick={() => setVisualization(answerIndex, undefined)}>
                                         Pessoa {answerIndex}
                                     </a>
                                 </p>
@@ -144,7 +144,7 @@ function AnswerPage(props) {
                                         <a
                                             href="#answerTab"
                                             onClick={() => setVisualization(undefined, inputIndex)}
-                                            className="fw-medium fs-5 m-0"
+                                            className="color-dark-gray fw-bold fw-medium fs-5 m-0"
                                         >
                                             Pergunta {input.placement}
                                         </a>
