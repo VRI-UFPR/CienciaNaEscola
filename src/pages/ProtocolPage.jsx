@@ -1,15 +1,15 @@
-import { React, useState, useEffect, useCallback, useRef } from 'react';
+import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-import DateInput from '../components/inputs/answers/DateInput';
-import TimeInput from '../components/inputs/answers/TimeInput';
-import LocationInput from '../components/inputs/answers/LocationInput';
-import ImageInput from '../components/inputs/answers/ImageInput';
-import Weather from '../components/inputs/answers/Weather';
+// import DateInput from '../components/inputs/answers/DateInput';
+// import TimeInput from '../components/inputs/answers/TimeInput';
+// import LocationInput from '../components/inputs/answers/LocationInput';
+// import ImageInput from '../components/inputs/answers/ImageInput';
+// import Weather from '../components/inputs/answers/Weather';
 import SelectInput from '../components/inputs/answers/SelectInput';
 
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
@@ -17,10 +17,12 @@ import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
-import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
-import TextImageInput from '../components/inputs/answers/TextImageInput';
+// import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
+// import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
+import { AuthContext } from '../contexts/AuthContext';
+import { serialize } from 'object-to-formdata';
 
 const styles = `
     .bg-yellow-orange {
@@ -46,24 +48,88 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [protocol, setProtocol] = useState();
-    const [answers, setAnswers] = useState({});
+    const { user, logout } = useContext(AuthContext);
+    const [application, setApplication] = useState();
+    const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { id } = useParams();
     const modalRef = useRef(null);
     const modalRef1 = useRef(null);
     const navigate = useNavigate();
 
-    const handleAnswerChange = useCallback((indexToUpdate, updatedAnswer) => {
-        setAnswers((prevAnswers) => {
-            const newAnswers = { ...prevAnswers };
-            newAnswers[indexToUpdate] = updatedAnswer;
-            return newAnswers;
+    const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
+        setItemAnswerGroups((prevItemAnswerGroups) => {
+            const newItemAnswerGroups = prevItemAnswerGroups;
+
+            if (newItemAnswerGroups[groupToUpdate] === undefined) {
+                newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
+            }
+
+            switch (itemType) {
+                case 'ITEM':
+                    newItemAnswerGroups[groupToUpdate]['itemAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'OPTION':
+                    newItemAnswerGroups[groupToUpdate]['optionAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'TABLE':
+                    newItemAnswerGroups[groupToUpdate]['tableAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                default:
+                    break;
+            }
+            return newItemAnswerGroups;
         });
     }, []);
 
     const handleProtocolSubmit = () => {
+        const applicationAnswer = {
+            applicationId: application.id,
+            addressId: 1,
+            date: new Date(),
+            itemAnswerGroups: [],
+        };
+        for (const group in itemAnswerGroups) {
+            const itemAnswerGroup = {
+                itemAnswers: [],
+                optionAnswers: [],
+                tableAnswers: [],
+            };
+            for (const item in itemAnswerGroups[group].itemAnswers) {
+                itemAnswerGroup.itemAnswers.push({
+                    itemId: item,
+                    text: itemAnswerGroups[group].itemAnswers[item],
+                });
+            }
+            for (const item in itemAnswerGroups[group].optionAnswers) {
+                for (const option in itemAnswerGroups[group].optionAnswers[item]) {
+                    itemAnswerGroup.optionAnswers.push({
+                        itemId: item,
+                        optionId: option,
+                        text: itemAnswerGroups[group].optionAnswers[item][option],
+                    });
+                }
+            }
+            for (const item in itemAnswerGroups[group].tableAnswers) {
+                for (const column in itemAnswerGroups[group].tableAnswers[item]) {
+                    itemAnswerGroup.tableAnswers.push({
+                        itemId: item,
+                        columnId: column,
+                        text: itemAnswerGroups[group].tableAnswers[item][column],
+                    });
+                }
+            }
+            applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
+        }
+
+        const formData = serialize(applicationAnswer, { indices: true });
+
         axios
-            .post(`https://genforms.c3sl.ufpr.br/api/answer/${id}`, answers)
+            .post(`http://localhost:3000/api/applicationAnswer/createApplicationAnswer`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
             .then((response) => {
                 modalRef1.current.showModal({
                     title: 'Muito obrigado por sua participação no projeto!',
@@ -81,16 +147,28 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
-        axios
-            .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
-            .then((response) => {
-                setProtocol(response.data);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
-    }, [id]);
+        if (user.id !== null && user.token !== null) {
+            axios
+                .get(`http://localhost:3000/api/application/getApplicationWithProtocol/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    setApplication(response.data.data);
+
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                    if (error.response.status === 401) {
+                        logout();
+                        navigate('/login');
+                    }
+                });
+        }
+    }, [id, user, logout, navigate]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -105,88 +183,44 @@ function ProtocolPage(props) {
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={protocol.description} />}</div>
-                {protocol.inputs.map((input) => {
-                    switch (input.type) {
-                        case 0:
-                            if (input.question === 'date' && input.description === 'date' && input.placement === 1) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<DateInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'time' && input.description === 'time' && input.placement === 2) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<TimeInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else if (input.question === 'location' && input.description === 'location' && input.placement === 3) {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<LocationInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                        {<SimpleTextInput input={input} onAnswerChange={handleAnswerChange} />}
-                                    </div>
-                                );
+                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={application.protocol.description} />}</div>
+                {application.protocol.pages.map((page) => {
+                    return page.itemGroups.map((itemGroup) => {
+                        return itemGroup.items.map((item) => {
+                            switch (item.type) {
+                                case 'TEXTBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<SimpleTextInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+
+                                case 'CHECKBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<CheckBoxInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+
+                                case 'RADIO':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<RadioButtonInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+
+                                case 'SELECT':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<SelectInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+
+                                default:
+                                    return <p>Input type not found</p>;
                             }
-
-                        case 1:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<CheckBoxInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 2:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<RadioButtonInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 3:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<SelectInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 100:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageRadioButtonsInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 101:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<TextImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 102:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<ImageInput input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        case 103:
-                            return (
-                                <div key={input.id} className="row justify-content-center m-0 pt-3">
-                                    {<Weather input={input} onAnswerChange={handleAnswerChange} />}
-                                </div>
-                            );
-
-                        default:
-                            return <></>;
-                    }
+                        });
+                    });
                 })}
                 <div className="col-4 align-self-center pt-4">
                     <TextButton
