@@ -44,25 +44,24 @@ const styles = `
 
 export function Location(props) {
     const [location, setLocation] = useState(['']);
-    const { onAnswerChange, input, answer } = props;
+    const { onAnswerChange, item, group } = props;
 
     const defaultLocation = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
                 setLocation([latitude + ', ' + longitude]);
-                onAnswerChange(input.id, [latitude + ', ' + longitude]);
             });
         }
-    }, [input.id, onAnswerChange]);
+    }, []);
 
     useEffect(() => {
         defaultLocation();
     }, [defaultLocation]);
 
     useEffect(() => {
-        onAnswerChange(input.id, location);
-    }, [location, input.id, onAnswerChange]);
+        onAnswerChange(group, item.id, 'ITEM', location);
+    }, [location, item.id, onAnswerChange, group]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -86,8 +85,9 @@ export function Location(props) {
                                 id="locationinput"
                                 placeholder="Forneça sua localização"
                                 onChange={(e) => setLocation([e.target.value])}
-                                value={answer ? answer[0].value : location}
-                                disabled={answer !== undefined}
+                                defaultValue={location}
+                                // value={answer ? answer[0].value : location}
+                                // disabled={answer !== undefined}
                             ></input>
                         </div>
                         <div className="col-auto search-col d-flex justify-content-end m-0 p-0">

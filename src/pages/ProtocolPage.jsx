@@ -5,10 +5,10 @@ import axios from 'axios';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 
-// import DateInput from '../components/inputs/answers/DateInput';
-// import TimeInput from '../components/inputs/answers/TimeInput';
-// import LocationInput from '../components/inputs/answers/LocationInput';
-// import ImageInput from '../components/inputs/answers/ImageInput';
+import DateInput from '../components/inputs/answers/DateInput';
+import TimeInput from '../components/inputs/answers/TimeInput';
+import LocationInput from '../components/inputs/answers/LocationInput';
+import ImageInput from '../components/inputs/answers/ImageInput';
 // import Weather from '../components/inputs/answers/Weather';
 import SelectInput from '../components/inputs/answers/SelectInput';
 
@@ -18,7 +18,7 @@ import Alert from '../components/Alert';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
 // import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
-// import TextImageInput from '../components/inputs/answers/TextImageInput';
+import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
@@ -225,7 +225,36 @@ function ProtocolPage(props) {
                                             {<SelectInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
                                         </div>
                                     );
-
+                                case 'DATEBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<DateInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+                                case 'TIMEBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<TimeInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+                                case 'LOCATIONBOX':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<LocationInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+                                case 'UPLOAD':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<ImageInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
+                                case 'TEXT':
+                                    return (
+                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                            {<TextImageInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                        </div>
+                                    );
                                 default:
                                     return <p>Input type not found</p>;
                             }
