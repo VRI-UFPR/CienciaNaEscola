@@ -39,6 +39,7 @@ function HomePage(props) {
             axios
                 .get(`http://localhost:3000/api/application/getAllApplicationsWithProtocol`, {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
