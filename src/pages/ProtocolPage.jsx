@@ -1,23 +1,19 @@
 import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { StorageContext } from '../contexts/StorageContext';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
-
 import DateInput from '../components/inputs/answers/DateInput';
 import TimeInput from '../components/inputs/answers/TimeInput';
 import LocationInput from '../components/inputs/answers/LocationInput';
 import ImageInput from '../components/inputs/answers/ImageInput';
-// import Weather from '../components/inputs/answers/Weather';
 import SelectInput from '../components/inputs/answers/SelectInput';
-
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
-// import ImageRadioButtonsInput from '../components/inputs/answers/ImageRadioButtonsInput';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
@@ -52,6 +48,7 @@ function ProtocolPage(props) {
     const [application, setApplication] = useState();
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { id } = useParams();
+    const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
     const modalRef = useRef(null);
     const navigate = useNavigate();
 
@@ -127,33 +124,52 @@ function ProtocolPage(props) {
 
         const formData = serialize(applicationAnswer, { indices: true });
 
-        axios
-            .post(`http://localhost:3000/api/applicationAnswer/createApplicationAnswer`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                modalRef.current.showModal({
-                    title: 'Muito obrigado por sua participação no projeto!',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                    onHide: () => {
-                        navigate('/home');
+        if (connected === true) {
+            axios
+                .post(`http://localhost:3000/api/applicationAnswer/createApplicationAnswer`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
                     },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({
+                        title: 'Muito obrigado por sua participação no projeto!',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate('/home');
+                        },
+                    });
+                })
+                .catch((error) => {
+                    modalRef.current.showModal({
+                        title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
+                    console.error(error.message);
                 });
-            })
-            .catch((error) => {
-                modalRef.current.showModal({
-                    title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-                console.error(error.message);
+        } else {
+            storePendingRequest({
+                url: `http://localhost:3000/api/applicationAnswer/createApplicationAnswer`,
+                data: formData,
+                config: {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                },
             });
+            modalRef.current.showModal({
+                title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
+        }
     };
 
     useEffect(() => {
@@ -165,7 +181,6 @@ function ProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    console.log(response.data);
                     setApplication(response.data.data);
 
                     setIsLoading(false);
@@ -180,6 +195,18 @@ function ProtocolPage(props) {
         }
     }, [id, user, logout, navigate]);
 
+    useEffect(() => {
+        if (connected === false && application.id) {
+            modalRef.current.showModal({
+                title: 'Você está offline. O protocolo ' + id + ' será armazenado localmente e continuará acessível.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
+            storeApplicationWithProtocol(application);
+        }
+    }, [connected, application, storeApplicationWithProtocol, id]);
+
     if (isLoading) {
         return <SplashPage />;
     }
@@ -193,7 +220,9 @@ function ProtocolPage(props) {
                         <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
                     </div>
                 </div>
-                <div className="row justify-content-center m-0 pt-3">{<ProtocolInfo info={application.protocol.description} />}</div>
+                <div className="row justify-content-center m-0 pt-3">
+                    {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
+                </div>
                 {application.protocol.pages.map((page) => {
                     return page.itemGroups.map((itemGroup) => {
                         return itemGroup.items.map((item) => {
