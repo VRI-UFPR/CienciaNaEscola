@@ -102,7 +102,6 @@ function ImageInput(props) {
                         type="file"
                         accept="image/*"
                         name="imageinput"
-                        capture="environment"
                         id="imageinput"
                         style={{ display: 'none' }}
                         onChange={handleFileInputChange}
