@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import TextButton from '../../TextButton';
+import Markdown from 'markdown-to-jsx';
 
 const styles = `
     .font-barlow {
@@ -17,6 +18,11 @@ const styles = `
     .simple-text-input {
         border: 0px;
         border-bottom: 1px solid #C1C1C1;
+    }
+
+    .img-markdown {
+        max-width: 100%;
+        height: auto;
     }
 `;
 
@@ -36,9 +42,20 @@ function SimpleTextInput(props) {
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0">
-                <label htmlFor="simpletextinput" className="form-label color-dark-gray font-barlow fw-medium fs-6 m-0 p-0">
+                <Markdown
+                    options={{
+                        overrides: {
+                            img: {
+                                props: {
+                                    className: 'img-markdown',
+                                },
+                            },
+                        },
+                    }}
+                    className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"
+                >
                     {item.text}
-                </label>
+                </Markdown>
             </div>
 
             {item.files.length > 0 && galleryRef && (
