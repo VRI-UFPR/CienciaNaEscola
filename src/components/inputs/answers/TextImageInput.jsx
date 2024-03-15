@@ -25,13 +25,13 @@ function TextImageInput(props) {
     };
 
     return (
-        <div className="rounded-4 shadow bg-white p-3">
+        <div className="rounded-4 shadow bg-white p-3 pb-0">
             <div className="row m-0">
                 <MarkdownText text={item.text} />
             </div>
 
             {item.files.length > 0 && galleryRef && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
                             <div
@@ -55,7 +55,7 @@ function TextImageInput(props) {
             )}
 
             {item.files.length > 3 && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0">
                     <TextButton
                         className="fs-6 w-auto p-2 py-0"
                         hsl={[190, 46, 70]}

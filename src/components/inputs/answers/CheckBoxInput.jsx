@@ -48,7 +48,7 @@ function CheckBoxInput(props) {
             </div>
 
             {item.files.length > 0 && galleryRef && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0 mb-3">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
                             <div
@@ -72,7 +72,7 @@ function CheckBoxInput(props) {
             )}
 
             {item.files.length > 3 && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0 mb-3">
                     <TextButton
                         className="fs-6 w-auto p-2 py-0"
                         hsl={[190, 46, 70]}
@@ -82,7 +82,7 @@ function CheckBoxInput(props) {
                 </div>
             )}
 
-            <div className="row m-0 pt-3 px-2">
+            <div className="row m-0 px-2">
                 {item.itemOptions.map((option) => {
                     const optname = option.text.toLowerCase().replace(/\s/g, '');
 
