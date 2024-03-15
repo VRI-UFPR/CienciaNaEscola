@@ -27,10 +27,11 @@ function MarkdownText(props) {
                 options={{
                     wrapper: 'div',
                     forceWrapper: true,
+                    forceBlock: true,
                     overrides: {
                         img: {
                             props: {
-                                className: 'img-markdown',
+                                className: 'w-100 rounded-4',
                             },
                         },
                         h6: {

@@ -61,7 +61,7 @@ function ImageInput(props) {
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
                     <MarkdownText text={item.text} />
-                    <div className="d-flex align-items-center mt-3 p-0">
+                    <div className="d-flex align-items-center p-0">
                         <RoundedButton
                             hsl={[190, 46, 70]}
                             icon={iconFile}

@@ -46,7 +46,7 @@ function SimpleTextInput(props) {
             </div>
 
             {item.files.length > 0 && galleryRef && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0 mb-3">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
                             <div
@@ -70,7 +70,7 @@ function SimpleTextInput(props) {
             )}
 
             {item.files.length > 3 && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0 mb-3">
                     <TextButton
                         className="fs-6 w-auto p-2 py-0"
                         hsl={[190, 46, 70]}
@@ -82,7 +82,7 @@ function SimpleTextInput(props) {
 
             <input
                 type="text"
-                className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 pt-3 p-0"
+                className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
                 onChange={(e) => setText(e.target.value)}
