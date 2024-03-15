@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import TextButton from '../../TextButton';
-import Markdown from 'markdown-to-jsx';
+import MarkdownText from '../../MarkdownText';
 
 const styles = `
     .font-barlow {
@@ -13,11 +13,6 @@ const styles = `
 
     .color-dark-gray {
         color: #535353;
-    }
-
-    .img-markdown {
-        max-width: 100%;
-        height: auto;
     }
 `;
 
@@ -49,20 +44,7 @@ function CheckBoxInput(props) {
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row m-0">
-                <Markdown
-                    options={{
-                        overrides: {
-                            img: {
-                                props: {
-                                    className: 'img-markdown',
-                                },
-                            },
-                        },
-                    }}
-                    className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"
-                >
-                    {item.text}
-                </Markdown>
+                <MarkdownText text={item.text} />
             </div>
 
             {item.files.length > 0 && galleryRef && (

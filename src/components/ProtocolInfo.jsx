@@ -1,5 +1,5 @@
 import { React } from 'react';
-import Markdown from 'markdown-to-jsx';
+import MarkdownText from './MarkdownText';
 
 const protocolInfoStyles = `
     .font-barlow {
@@ -32,20 +32,7 @@ function ProtocolInfo(props) {
             <div className="w-100 pb-3 bg-coral-red"></div>
             <div className="p-3 pt-2">
                 <h1 className="color-dark-gray font-barlow text-break fw-bold fs-5 m-0 p-0 pb-2">{title}</h1>
-                <Markdown
-                    options={{
-                        overrides: {
-                            img: {
-                                props: {
-                                    className: 'img-markdown',
-                                },
-                            },
-                        },
-                    }}
-                    className="color-gray font-barlow text-break fw-medium fs-6 lh-sm m-0 p-0"
-                >
-                    {description}
-                </Markdown>
+                <MarkdownText text={description} />
             </div>
 
             <style>{protocolInfoStyles}</style>
