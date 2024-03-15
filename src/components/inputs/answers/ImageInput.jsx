@@ -5,6 +5,7 @@ import RoundedButton from '../../RoundedButton';
 import iconFile from '../../../assets/images/iconFile.svg';
 import eyeIcon from '../../../assets/images/eyeIcon.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
+import Markdown from 'markdown-to-jsx';
 
 const styles = `
     .color-dark-gray {
@@ -13,6 +14,11 @@ const styles = `
 
     .font-barlow {
         font-family: 'Barlow', sans-serif;
+    }
+
+    .img-markdown {
+        max-width: 100%;
+        height: auto;
     }
 `;
 
@@ -54,10 +60,21 @@ function ImageInput(props) {
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
-                    <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
+                    <Markdown
+                        options={{
+                            overrides: {
+                                img: {
+                                    props: {
+                                        className: 'img-markdown',
+                                    },
+                                },
+                            },
+                        }}
+                        className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"
+                    >
                         {item.text}
-                    </label>
-                    <div className="d-flex align-items-center p-0">
+                    </Markdown>
+                    <div className="d-flex align-items-center mt-3 p-0">
                         <RoundedButton
                             hsl={[190, 46, 70]}
                             icon={iconFile}
