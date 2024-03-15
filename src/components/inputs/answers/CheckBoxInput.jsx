@@ -30,7 +30,7 @@ function CheckBoxInput(props) {
 
     const handleOptionsUpdate = (optionId, updatedOption) => {
         setOptions((prevOptions) => {
-            const newOptions = prevOptions;
+            const newOptions = { ...prevOptions };
             if (updatedOption) {
                 newOptions[optionId] = '';
             } else {

@@ -17,7 +17,7 @@ const styles = `
 
 function RadioButtonInput(props) {
     const { onAnswerChange, item, group, galleryRef } = props;
-    const [options, setOptions] = useState(new Array(item.itemOptions.length).fill('false'));
+    const [options, setOptions] = useState({});
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
