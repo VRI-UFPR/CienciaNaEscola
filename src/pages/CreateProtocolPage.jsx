@@ -1,4 +1,4 @@
-import { React, useState, useContext, useEffect, useRef } from 'react';
+import { React, useState, useContext, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -59,7 +59,7 @@ function CreateProtocolPage(props) {
         title: '',
         description: '',
         enabled: true,
-        pages: [{ type: 'ITEMS', groups: [{ type: 'ITEMS', isRepeatable: false, items: [] }] }],
+        pages: [{ type: 'ITEMS', itemGroups: [{ type: 'MULTIPLE_ITEMS', isRepeatable: false, items: [] }] }],
     });
 
     const navigate = useNavigate();
@@ -83,21 +83,25 @@ function CreateProtocolPage(props) {
 
     const insertItem = (type, page, group) => {
         const newProtocol = { ...protocol };
-        newProtocol.pages[page].groups[group].items.push(defaultNewInput(type));
+        newProtocol.pages[page].itemGroups[group].items.push(defaultNewInput(type));
         setProtocol(newProtocol);
     };
 
-    const updateItem = (item, page, group, index) => {
-        const newProtocol = { ...protocol };
-        newProtocol.pages[page].groups[group].items[index] = item;
-        setProtocol(newProtocol);
-    };
+    const updateItem = useCallback((item, page, group, index) => {
+        setProtocol((prev) => {
+            const newProtocol = { ...prev };
+            newProtocol.pages[page].itemGroups[group].items[index] = item;
+            return newProtocol;
+        });
+    }, []);
 
-    const removeItem = (page, group, index) => {
-        const newProtocol = { ...protocol };
-        newProtocol.pages[page].groups[group].items.splice(index, 1);
-        setProtocol(newProtocol);
-    };
+    const removeItem = useCallback((page, group, index) => {
+        setProtocol((prev) => {
+            const newProtocol = { ...prev };
+            newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
+            return newProtocol;
+        });
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -108,7 +112,7 @@ function CreateProtocolPage(props) {
             pages: protocol.pages.map((page, index) => ({
                 ...page,
                 placement: index + 1,
-                groups: page.groups.map((group, index) => ({
+                itemGroups: page.itemGroups.map((group, index) => ({
                     ...group,
                     placement: index + 1,
                     items: group.items.map((item, index) => ({ ...item, placement: index + 1 })),
@@ -216,47 +220,47 @@ function CreateProtocolPage(props) {
                                     onChange={(event) => updateDescription(event.target.value)}
                                 ></textarea>
                             </div>
-                            {protocol.pages?.map((page, index) => {
-                                return page.groups?.map((group, index) => {
-                                    return group.items?.map((item, index) => {
+                            {protocol.pages?.map((page, pageIndex) => {
+                                return page.itemGroups?.map((group, groupIndex) => {
+                                    return group.items?.map((item, itemIndex) => {
                                         switch (item.type) {
                                             case 'TEXTBOX':
                                                 return (
                                                     <CreateTextBoxInput
-                                                        key={index}
+                                                        key={itemIndex}
                                                         input={item}
                                                         onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, index)}
+                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
                                                     />
                                                 );
                                             case 'SELECT':
                                                 return (
                                                     <CreateMultipleInputItens
-                                                        key={index}
+                                                        key={itemIndex}
                                                         title={'Lista Suspensa'}
                                                         input={item}
                                                         onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, index)}
+                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
                                                     />
                                                 );
                                             case 'RADIO':
                                                 return (
                                                     <CreateMultipleInputItens
-                                                        key={index}
+                                                        key={itemIndex}
                                                         title={'Seleção Única'}
                                                         input={item}
                                                         onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, index)}
+                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
                                                     />
                                                 );
                                             case 'CHECKBOX':
                                                 return (
                                                     <CreateMultipleInputItens
-                                                        key={index}
+                                                        key={itemIndex}
                                                         title={'Múltipla Escolha'}
                                                         input={item}
                                                         onInputChange={() => {}}
-                                                        onInputRemove={() => removeItem(0, 0, index)}
+                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
                                                     />
                                                 );
                                             default:
