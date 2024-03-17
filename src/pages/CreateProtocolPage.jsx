@@ -228,9 +228,11 @@ function CreateProtocolPage(props) {
                                                 return (
                                                     <CreateTextBoxInput
                                                         key={itemIndex}
-                                                        input={item}
-                                                        onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
+                                                        pageIndex={pageIndex}
+                                                        groupIndex={groupIndex}
+                                                        itemIndex={itemIndex}
+                                                        updateItem={updateItem}
+                                                        removeItem={removeItem}
                                                     />
                                                 );
                                             case 'SELECT':
