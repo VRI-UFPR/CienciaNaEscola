@@ -9,11 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import { useParams, useLocation } from 'react-router-dom';
-import { defaultInputs } from '../utils/constants';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
-import SubForm from '../components/inputs/protocol/CreateSubformInput';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -56,83 +54,81 @@ const CreateProtocolStyles = `
 `;
 
 function CreateProtocolPage(props) {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
+    const [protocol, setProtocol] = useState({ title: '', description: '', pages: [{ groups: [{ items: [] }] }] });
     const [inputs, setInputs] = useState([]);
 
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const { user } = useContext(AuthContext);
     const { edit } = props;
     const { id } = useParams();
     const modalRef = useRef(null);
     const location = useLocation();
 
+    useEffect(() => {
+        console.log(JSON.stringify(protocol));
+    }, [protocol]);
+
+    const updateTitle = (title) => {
+        setProtocol({ ...protocol, title: title });
+    };
+
+    const updateDescription = (description) => {
+        setProtocol({ ...protocol, description: description });
+    };
+
+    const insertItem = (type, page, group) => {
+        const newProtocol = { ...protocol };
+        newProtocol.pages[page].groups[group].items.push(defaultNewInput(type));
+        setProtocol(newProtocol);
+    };
+
+    const updateItem = (item, page, group, index) => {
+        const newProtocol = { ...protocol };
+        newProtocol.pages[page].groups[group].items[index] = item;
+        setProtocol(newProtocol);
+    };
+
+    const removeItem = (page, group, index) => {
+        const newProtocol = { ...protocol };
+        newProtocol.pages[page].groups[group].items.splice(index, 1);
+        setProtocol(newProtocol);
+    };
+
     const handleSubmit = (event) => {
-        event.preventDefault();
-
-        const placedInputs = defaultInputs.concat(...inputs);
-        placedInputs.forEach((input, index) => {
-            input['placement'] = index + 1;
-        });
-
-        const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
-        if (edit) {
-            axios
-                .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        } else {
-            axios
-                .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        }
-    };
-
-    const handleTextBoxAdd = () => {
-        setInputs([...inputs, defaultNewInput(0)]);
-    };
-
-    const handleDropdownListAdd = () => {
-        setInputs([...inputs, defaultNewInput(1)]);
-    };
-
-    const handleSingleInputAdd = () => {
-        setInputs([...inputs, defaultNewInput(2)]);
-    };
-
-    const handleMultipleChoiceAdd = () => {
-        setInputs([...inputs, defaultNewInput(3)]);
-    };
-
-    const handleSubFormAdd = () => {
-        setInputs([...inputs, defaultNewInput(4)]);
-    };
-
-    const handleInputRemove = (indexToRemove) => {
-        setInputs(inputs.filter((_, index) => index !== indexToRemove));
-    };
-
-    const handleInputChange = (indexToUpdate, updatedInput) => {
-        setInputs(inputs.map((input, index) => (index === indexToUpdate ? updatedInput : input)));
+        // event.preventDefault();
+        // const placedInputs = defaultInputs.concat(...inputs);
+        // placedInputs.forEach((input, index) => {
+        //     input['placement'] = index + 1;
+        // });
+        // const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
+        // if (edit) {
+        //     axios
+        //         .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
+        //             headers: {
+        //                 Authorization: `Bearer ${user.token}`,
+        //             },
+        //         })
+        //         .then((response) => {
+        //             modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
+        //         })
+        //         .catch((error) => {
+        //             console.error(error.message);
+        //         });
+        // } else {
+        //     axios
+        //         .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
+        //             headers: {
+        //                 Authorization: `Bearer ${user.token}`,
+        //             },
+        //         })
+        //         .then((response) => {
+        //             modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
+        //         })
+        //         .catch((error) => {
+        //             console.error(error.message);
+        //         });
+        // }
     };
 
     const handleButtons = () => {
@@ -145,25 +141,25 @@ function CreateProtocolPage(props) {
         }
     };
 
-    useEffect(() => {
-        if (edit) {
-            axios
-                .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
-                .then((response) => {
-                    delete response.data.inputs.id;
-                    setInputs(response.data.inputs.slice(4));
-                    setTitle(response.data.title);
-                    setDate(response.data.date);
-                    setDescription(response.data.description);
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                });
-        } else {
-            setIsLoading(false);
-        }
-    }, [id, edit]);
+    // useEffect(() => {
+    // if (edit) {
+    //     axios
+    //         .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
+    //         .then((response) => {
+    //             delete response.data.inputs.id;
+    //             setInputs(response.data.inputs.slice(4));
+    //             setTitle(response.data.title);
+    //             setDate(response.data.date);
+    //             setDescription(response.data.description);
+    //             setIsLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error(error.message);
+    //         });
+    // } else {
+    //     setIsLoading(false);
+    // }
+    // }, [id, edit]);
 
     if (isLoading) {
         return <SplashPage />;
@@ -196,7 +192,7 @@ function CreateProtocolPage(props) {
                                 <button
                                     type="button"
                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                    onClick={handleTextBoxAdd}
+                                    onClick={() => insertItem('TEXTBOX', 0, 0)}
                                 >
                                     <IconPlus className="icon-plus" />
                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
@@ -204,7 +200,7 @@ function CreateProtocolPage(props) {
                                 <button
                                     type="button"
                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                    onClick={handleDropdownListAdd}
+                                    onClick={() => insertItem('SELECT', 0, 0)}
                                 >
                                     <IconPlus className="icon-plus" />
                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
@@ -212,7 +208,7 @@ function CreateProtocolPage(props) {
                                 <button
                                     type="button"
                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                    onClick={handleSingleInputAdd}
+                                    onClick={() => insertItem('RADIO', 0, 0)}
                                 >
                                     <IconPlus className="icon-plus" />
                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
@@ -220,18 +216,10 @@ function CreateProtocolPage(props) {
                                 <button
                                     type="button"
                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                    onClick={handleMultipleChoiceAdd}
+                                    onClick={() => insertItem('CHECKBOX', 0, 0)}
                                 >
                                     <IconPlus className="icon-plus" />
                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                    onClick={handleSubFormAdd}
-                                >
-                                    <IconPlus className="icon-plus" />
-                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Subformulário</span>
                                 </button>
                             </div>
                         </div>
@@ -245,18 +233,7 @@ function CreateProtocolPage(props) {
                                         className="form-control rounded-4 bg-light-grey fs-5 mb-3"
                                         id="title"
                                         rows="3"
-                                        value={title}
-                                        onChange={(event) => setTitle(event.target.value)}
-                                    ></textarea>
-                                    <label htmlFor="description" className="form-label fs-5 fw-medium">
-                                        Data de publicação
-                                    </label>
-                                    <textarea
-                                        className="form-control rounded-4 bg-light-grey fs-5 mb-3"
-                                        id="date"
-                                        rows="2"
-                                        value={date}
-                                        onChange={(event) => setDate(event.target.value)}
+                                        onChange={(event) => updateTitle(event.target.value)}
                                     ></textarea>
                                     <label htmlFor="description" className="form-label fs-5 fw-medium">
                                         Descrição do formulário
@@ -265,63 +242,57 @@ function CreateProtocolPage(props) {
                                         className="form-control rounded-4 bg-light-grey fs-5 mb-3"
                                         id="description"
                                         rows="6"
-                                        value={description}
-                                        onChange={(event) => setDescription(event.target.value)}
+                                        onChange={(event) => updateDescription(event.target.value)}
                                     ></textarea>
                                 </div>
-                                {inputs.map((input, index) => {
-                                    switch (input.type) {
-                                        case 0:
-                                            return (
-                                                <CreateTextBoxInput
-                                                    key={index}
-                                                    input={input}
-                                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                    onInputRemove={() => handleInputRemove(index)}
-                                                />
-                                            );
-                                        case 1:
-                                            return (
-                                                <CreateMultipleInputItens
-                                                    key={index}
-                                                    title={'Lista Suspensa'}
-                                                    input={input}
-                                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                    onInputRemove={() => handleInputRemove(index)}
-                                                />
-                                            );
-                                        case 2:
-                                            return (
-                                                <CreateMultipleInputItens
-                                                    key={index}
-                                                    title={'Seleção Única'}
-                                                    input={input}
-                                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                    onInputRemove={() => handleInputRemove(index)}
-                                                />
-                                            );
-                                        case 3:
-                                            return (
-                                                <CreateMultipleInputItens
-                                                    key={index}
-                                                    title={'Múltipla Escolha'}
-                                                    input={input}
-                                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                    onInputRemove={() => handleInputRemove(index)}
-                                                />
-                                            );
-                                        case 4:
-                                            return (
-                                                <SubForm
-                                                    key={index}
-                                                    input={input}
-                                                    onInputChange={(updatedInput) => handleInputChange(index, updatedInput)}
-                                                    onInputRemove={() => handleInputRemove(index)}
-                                                />
-                                            );
-                                        default:
-                                            return null;
-                                    }
+                                {protocol.pages?.map((page, index) => {
+                                    return page.groups?.map((group, index) => {
+                                        return group.items?.map((item, index) => {
+                                            switch (item.type) {
+                                                case 'TEXTBOX':
+                                                    return (
+                                                        <CreateTextBoxInput
+                                                            key={index}
+                                                            input={item}
+                                                            onInputChange={(updatedInput) => {}}
+                                                            onInputRemove={() => removeItem(0, 0, index)}
+                                                        />
+                                                    );
+                                                case 'SELECT':
+                                                    return (
+                                                        <CreateMultipleInputItens
+                                                            key={index}
+                                                            title={'Lista Suspensa'}
+                                                            input={item}
+                                                            onInputChange={(updatedInput) => {}}
+                                                            onInputRemove={() => removeItem(0, 0, index)}
+                                                        />
+                                                    );
+                                                case 'RADIO':
+                                                    return (
+                                                        <CreateMultipleInputItens
+                                                            key={index}
+                                                            title={'Seleção Única'}
+                                                            input={item}
+                                                            onInputChange={(updatedInput) => {}}
+                                                            onInputRemove={() => removeItem(0, 0, index)}
+                                                        />
+                                                    );
+                                                case 'CHECKBOX':
+                                                    return (
+                                                        <CreateMultipleInputItens
+                                                            key={index}
+                                                            title={'Múltipla Escolha'}
+                                                            input={item}
+                                                            onInputChange={() => {}}
+                                                            onInputRemove={() => removeItem(0, 0, index)}
+                                                        />
+                                                    );
+                                                default:
+                                                    return null;
+                                            }
+                                        });
+                                    });
                                 })}
                                 <div className="row justify-content-center m-0">
                                     <div className="col-8 col-lg-4">
