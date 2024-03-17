@@ -7,11 +7,12 @@ import CreateMultipleInputItens from '../components/inputs/protocol/CreateMultip
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import SplashPage from './SplashPage';
-import { useParams } from 'react-router-dom';
+// import SplashPage from './SplashPage';
+// import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
+import { serialize } from 'object-to-formdata';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -54,13 +55,18 @@ const CreateProtocolStyles = `
 `;
 
 function CreateProtocolPage(props) {
-    const [protocol, setProtocol] = useState({ title: '', description: '', pages: [{ groups: [{ items: [] }] }] });
+    const [protocol, setProtocol] = useState({
+        title: '',
+        description: '',
+        enabled: true,
+        pages: [{ type: 'ITEMS', groups: [{ type: 'ITEMS', isRepeatable: false, items: [] }] }],
+    });
 
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
     const { user } = useContext(AuthContext);
     // const { edit } = props;
-    const { id } = useParams();
+    // const { id } = useParams();
     const modalRef = useRef(null);
 
     useEffect(() => {
@@ -94,64 +100,42 @@ function CreateProtocolPage(props) {
     };
 
     const handleSubmit = (event) => {
-        // event.preventDefault();
-        // const placedInputs = defaultInputs.concat(...inputs);
-        // placedInputs.forEach((input, index) => {
-        //     input['placement'] = index + 1;
-        // });
-        // const protocol = { id: id ? id : '', title, description, inputs: placedInputs };
-        // if (edit) {
-        //     axios
-        //         .put(`https://genforms.c3sl.ufpr.br/api/form/${id}`, protocol, {
-        //             headers: {
-        //                 Authorization: `Bearer ${user.token}`,
-        //             },
-        //         })
-        //         .then((response) => {
-        //             modalRef.current.showModal({ title: 'Formulário editado com sucesso.', onHide: () => navigate('/home') });
-        //         })
-        //         .catch((error) => {
-        //             console.error(error.message);
-        //         });
-        // } else {
-        //     axios
-        //         .post('https://genforms.c3sl.ufpr.br/api/form', protocol, {
-        //             headers: {
-        //                 Authorization: `Bearer ${user.token}`,
-        //             },
-        //         })
-        //         .then((response) => {
-        //             modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
-        //         })
-        //         .catch((error) => {
-        //             console.error(error.message);
-        //         });
-        // }
+        event.preventDefault();
+
+        const placedProtocol = {
+            ...protocol,
+            owners: [user.id],
+            pages: protocol.pages.map((page, index) => ({
+                ...page,
+                placement: index + 1,
+                groups: page.groups.map((group, index) => ({
+                    ...group,
+                    placement: index + 1,
+                    items: group.items.map((item, index) => ({ ...item, placement: index + 1 })),
+                })),
+            })),
+        };
+
+        const formData = serialize(placedProtocol, { indices: true });
+
+        axios
+            .post('http://localhost:3000/api/protocol/createProtocol', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
     };
 
-    // useEffect(() => {
-    // if (edit) {
-    //     axios
-    //         .get(`https://genforms.c3sl.ufpr.br/api/form/${id}`)
-    //         .then((response) => {
-    //             delete response.data.inputs.id;
-    //             setInputs(response.data.inputs.slice(4));
-    //             setTitle(response.data.title);
-    //             setDate(response.data.date);
-    //             setDescription(response.data.description);
-    //             setIsLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error(error.message);
-    //         });
-    // } else {
-    //     setIsLoading(false);
+    // if (isLoading) {
+    //     return <SplashPage />;
     // }
-    // }, [id, edit]);
-
-    if (isLoading) {
-        return <SplashPage />;
-    }
 
     return (
         <div className="d-flex flex-column min-vh-100">
