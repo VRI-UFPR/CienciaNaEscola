@@ -115,7 +115,11 @@ function CreateProtocolPage(props) {
                 itemGroups: page.itemGroups.map((group, index) => ({
                     ...group,
                     placement: index + 1,
-                    items: group.items.map((item, index) => ({ ...item, placement: index + 1 })),
+                    items: group.items.map((item, index) => ({
+                        ...item,
+                        placement: index + 1,
+                        itemOptions: item.itemOptions.map((option, index) => ({ ...option, placement: index + 1 })),
+                    })),
                 })),
             })),
         };
@@ -239,30 +243,36 @@ function CreateProtocolPage(props) {
                                                 return (
                                                     <CreateMultipleInputItens
                                                         key={itemIndex}
-                                                        title={'Lista Suspensa'}
-                                                        input={item}
-                                                        onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
+                                                        type={item.type}
+                                                        pageIndex={pageIndex}
+                                                        groupIndex={groupIndex}
+                                                        itemIndex={itemIndex}
+                                                        updateItem={updateItem}
+                                                        removeItem={removeItem}
                                                     />
                                                 );
                                             case 'RADIO':
                                                 return (
                                                     <CreateMultipleInputItens
                                                         key={itemIndex}
-                                                        title={'Seleção Única'}
-                                                        input={item}
-                                                        onInputChange={(updatedInput) => {}}
-                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
+                                                        type={item.type}
+                                                        pageIndex={pageIndex}
+                                                        groupIndex={groupIndex}
+                                                        itemIndex={itemIndex}
+                                                        updateItem={updateItem}
+                                                        removeItem={removeItem}
                                                     />
                                                 );
                                             case 'CHECKBOX':
                                                 return (
                                                     <CreateMultipleInputItens
                                                         key={itemIndex}
-                                                        title={'Múltipla Escolha'}
-                                                        input={item}
-                                                        onInputChange={() => {}}
-                                                        onInputRemove={() => removeItem(0, 0, itemIndex)}
+                                                        type={item.type}
+                                                        pageIndex={pageIndex}
+                                                        groupIndex={groupIndex}
+                                                        itemIndex={itemIndex}
+                                                        updateItem={updateItem}
+                                                        removeItem={removeItem}
                                                     />
                                                 );
                                             default:
