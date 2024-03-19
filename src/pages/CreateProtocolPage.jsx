@@ -69,10 +69,6 @@ function CreateProtocolPage(props) {
     // const { id } = useParams();
     const modalRef = useRef(null);
 
-    useEffect(() => {
-        console.log(JSON.stringify(protocol));
-    }, [protocol]);
-
     const updateTitle = (title) => {
         setProtocol({ ...protocol, title: title });
     };
