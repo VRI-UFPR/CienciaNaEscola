@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import TextButton from '../../TextButton';
+import Gallery from '../../Gallery';
 
 const styles = `
     .font-barlow {
@@ -22,12 +22,7 @@ const styles = `
 
 function SimpleTextInput(props) {
     const [text, setText] = useState(['']);
-    const { onAnswerChange, item, group, galleryRef } = props;
-    const [ImageVisibility, setImageVisibility] = useState(false);
-
-    const toggleImageVisibility = () => {
-        setImageVisibility(!ImageVisibility);
-    };
+    const { onAnswerChange, item, group, galleryModalRef } = props;
 
     useEffect(() => {
         onAnswerChange(group, item.id, 'ITEM', text);
@@ -41,40 +36,7 @@ function SimpleTextInput(props) {
                 </label>
             </div>
 
-            {item.files.length > 0 && galleryRef && (
-                <div className="row justify-content-center m-0 pt-3">
-                    {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
-                        return (
-                            <div
-                                key={'image-' + image.id}
-                                className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
-                                    index > 2 && 'mt-2'
-                                }`}
-                            >
-                                <div
-                                    className={`${
-                                        item.files.length > 1 && 'ratio ratio-1x1'
-                                    } border border-light-subtle rounded-4 overflow-hidden`}
-                                    onClick={() => galleryRef.current.showModal({ images: item.files, currentImage: index })}
-                                >
-                                    <img src={image.path} className="img-fluid object-fit-contain" alt="Responsive" />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
-
-            {item.files.length > 3 && (
-                <div className="row justify-content-center m-0 pt-3">
-                    <TextButton
-                        className="fs-6 w-auto p-2 py-0"
-                        hsl={[190, 46, 70]}
-                        text={`Ver ${ImageVisibility ? 'menos' : 'mais'}`}
-                        onClick={toggleImageVisibility}
-                    />
-                </div>
-            )}
+            <Gallery item={item} galleryModalRef={galleryModalRef} />
 
             <input
                 type="text"
