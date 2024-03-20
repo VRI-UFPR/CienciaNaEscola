@@ -17,11 +17,6 @@ const protocolInfoStyles = `
     .bg-coral-red{
         background-color: #F59489;
     }
-
-    .img-markdown {
-        max-width: 100%;
-        height: auto;
-    }
 `;
 
 function ProtocolInfo(props) {

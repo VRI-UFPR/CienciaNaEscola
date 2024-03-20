@@ -19,11 +19,6 @@ const styles = `
         border: 0px;
         border-bottom: 1px solid #C1C1C1;
     }
-
-    .img-markdown {
-        max-width: 100%;
-        height: auto;
-    }
 `;
 
 function SimpleTextInput(props) {

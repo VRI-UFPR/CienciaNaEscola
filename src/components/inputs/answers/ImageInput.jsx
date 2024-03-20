@@ -15,11 +15,6 @@ const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
-
-    .img-markdown {
-        max-width: 100%;
-        height: auto;
-    }
 `;
 
 function ImageInput(props) {

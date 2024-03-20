@@ -14,11 +14,6 @@ const styles = `
     .color-dark-gray {
         color: #535353;
     }
-
-    .img-markdown {
-        max-width: 100%;
-        height: auto;
-    }
 `;
 
 function RadioButtonInput(props) {
