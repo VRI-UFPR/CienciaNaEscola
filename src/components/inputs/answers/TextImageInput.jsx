@@ -70,11 +70,4 @@ function TextImageInput(props) {
     );
 }
 
-TextImageInput.defaultProps = {
-    input: {
-        question: 'Pergunta',
-        description: 'https://picsum.photos/1300/1300?random=1',
-    },
-};
-
 export default TextImageInput;
