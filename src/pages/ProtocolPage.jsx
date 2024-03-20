@@ -56,7 +56,7 @@ function ProtocolPage(props) {
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
         setItemAnswerGroups((prevItemAnswerGroups) => {
-            const newItemAnswerGroups = prevItemAnswerGroups;
+            const newItemAnswerGroups = { ...prevItemAnswerGroups };
 
             if (newItemAnswerGroups[groupToUpdate] === undefined) {
                 newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };

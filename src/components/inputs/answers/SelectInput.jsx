@@ -27,7 +27,7 @@ function SelectInput(props) {
 
     const handleOptionsUpdate = (optionText) => {
         if (optionText === 'defaultOption') {
-            return;
+            return setOptions({});
         }
 
         const optionFound = item.itemOptions.find((op) => op.text === optionText);
