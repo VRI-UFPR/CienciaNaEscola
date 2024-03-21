@@ -37,10 +37,10 @@ import {
     protocol122,
     protocol123,
     protocol125,
-    protocol127,
     protocol128,
     protocol129,
     protocol131,
+    protocol133,
 } from '../mockResponses/protocols';
 
 const styles = `
@@ -179,8 +179,6 @@ function ProtocolPage(props) {
                     return setProtocol(protocol123);
                 case '125':
                     return setProtocol(protocol125);
-                case '127':
-                    return setProtocol(protocol127);
                 case '128':
                     return setProtocol(protocol128);
                 case '129':
@@ -189,6 +187,8 @@ function ProtocolPage(props) {
                     return setProtocol(protocol131);
                 case '110':
                     return setProtocol(protocol110);
+                case '133':
+                    return setProtocol(protocol133);
                 default:
             }
         };
