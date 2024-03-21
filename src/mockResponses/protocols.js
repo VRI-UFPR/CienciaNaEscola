@@ -15662,6 +15662,17 @@ export const protocol133 = {
     owner: 99,
     inputs: [
         {
+            id: 100000,
+            placement: 0,
+            description: 'https://drive.google.com/file/d/1tzcT-bzzUQEhsl4ZlXa9nvMC0omZi_Zj/view?usp=sharing',
+            question: 'SEGURANÇA NO TRÂNSITO NO ENTORNO ESCOLAR - GUIA DE CAMPO',
+            enabled: true,
+            type: 103,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2476,
             placement: 1,
             description: 'username',
@@ -15860,6 +15871,17 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100001,
+            description:
+                'https://lh5.googleusercontent.com/QGBFKo5euIvJvmbgj5V_XTHM5eO306OpUCF1QW674hU4QjDdIqxjhDB8p-b10CR1Du4j77jWYk8xajrtLuaZ2R6hpBZtaRhKI7OcH0tfc0sJzU41qgJ0fPywlcKIqvevUw=w740',
+            question: 'Placa de limite de velocidade',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2485,
             placement: 10,
             description: '',
@@ -15951,6 +15973,17 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100002,
+            description:
+                'https://lh3.googleusercontent.com/O4DhKLZZUcW39-lHR517VxNHrYRRsnveeROO-YuYHtd-E1_-yCGstL6TvtB5226SV8k7xWUjBIBEs33DFbG5Wq2tLMj8BPbAiM1vBJ24LWMBwb7RM5MFXIO20e4Cn7o4dw=w688',
+            question: 'Placa A-33a: avisa o motorista sobre a presença de uma escola adiante, com possível passagem de alunos nas ruas.',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2490,
             placement: 15,
             description: '',
@@ -15967,6 +16000,18 @@ export const protocol133 = {
                     placement: 1,
                 },
             ],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 100003,
+            description:
+                'https://lh6.googleusercontent.com/LHxUfag-QgDQRHCsMjn55Wo0v59NGZdiaVboq1sDhBVkhFMjywhn0-hdD8hgYFmo1cKNhuCO37ywXLHYc_erTSfRgDxB4uLZOJl1eX03uFnCxwTFLttjttmkAOZ_G7ogYA=w711',
+            question:
+                'Placa A-33b: avisa o motorista sobre a presença de uma escola adiante e a possível passagem de alunos nas faixas de pedestre.',
+            enabled: true,
+            type: 101,
+            sugestions: [],
             subForm: null,
             validation: [],
         },
@@ -16292,6 +16337,17 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100004,
+            description:
+                'https://lh3.googleusercontent.com/UocutDMCxbzci5mkSA6pOxHUtd3TFWt_EiXWR7NvxrirZaSku8lC4ECEI68OVrv_lYvEJTZlYVkb2vCrWNiRMzQnKbCdJzPi0aIeZ3Yfw5OhaHtbnQkGdQypzLoQcyM30Q=w740',
+            question: 'Calçada tátil',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2507,
             placement: 32,
             description: '',
@@ -16348,6 +16404,17 @@ export const protocol133 = {
                     placement: 1,
                 },
             ],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 100005,
+            description:
+                'https://lh6.googleusercontent.com/8bDNEfwce80iCDPV9dy-dOtMb9UFuuYpM-BvEfuxTwberTLh-sKRs_nVOtMjkCY8CqyD5zfD9ZpA5Ccl70KAeYgBivTsTY-GuopBEQvqAUC9aamLIItBD-OI7AvuRRuxkw=w740',
+            question: 'Rampa para cadeirantes',
+            enabled: true,
+            type: 101,
+            sugestions: [],
             subForm: null,
             validation: [],
         },
@@ -16442,10 +16509,22 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100006,
+            description:
+                'https://lh3.googleusercontent.com/CdHjJKGrIliUQzu_GRhk5UIalnDMJFRhXAJU0R9I-04CD_2M_bHkDk11GBAOl7F26NmKlKY9l8OoQvYi53jVFumxxJzHtMr_zojjS6K0YBO5tH9VJ5sl8K0hz2oNYUFA8w=w740',
+            question: 'Faixa de pedestre',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2515,
             placement: 40,
             description: '',
-            question: 'Observe na frente da porta de entrada do colégio e responda: Há faixa de pedestre?',
+            question:
+                'Observe na frente da porta de entrada do colégio (ou se for uma das outras ruas observe na rua como um todo) e responda: Há faixa de pedestre?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -16502,6 +16581,17 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100007,
+            description:
+                'https://lh6.googleusercontent.com/ZMGja-ZX000A_-FnVqAq_Tz83kDNbrj40PSLRj6XZwv-67ZCLkt1zyxRoNcgIGd0X60Wjltxcjj81kpO2c2ZnkMjHUOfmjpAnbtehbabWRdpWO1CXUeKadTJjqd_x1WA4Q=w7401',
+            question: 'Semáforo para carros',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2518,
             placement: 43,
             description: '',
@@ -16518,6 +16608,17 @@ export const protocol133 = {
                     placement: 1,
                 },
             ],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 100008,
+            description:
+                'https://lh6.googleusercontent.com/aWXiAUQb1uXAWcT2Quf1ckBkUX6jWmh5dHXRvjYGmYipRviI1TLxhAhgj8UWJJ64GbtXvzmBkqZhU20zgdhYq70oWAraz9Zb4Jjg7KmsxMoNSTkxC5jB5dCtGVzRkUnuAg=w740',
+            question: 'Semáforo para pedestres',
+            enabled: true,
+            type: 101,
+            sugestions: [],
             subForm: null,
             validation: [],
         },
@@ -16545,7 +16646,8 @@ export const protocol133 = {
             id: 2520,
             placement: 45,
             description: '',
-            question: 'Há placa de proibido estacionar em frente à escola?',
+            question:
+                'Há placa de proibido estacionar em frente à escola (se não estiver avaliando a rua da entrada principal da escola marque não)?',
             enabled: true,
             type: 2,
             sugestions: [
@@ -16565,7 +16667,8 @@ export const protocol133 = {
             id: 2521,
             placement: 46,
             description: '',
-            question: 'Os carros podem estacionar em frente à escola? (tem placa de permitido estacionar?)',
+            question:
+                'Os carros podem estacionar em frente à escola? (tem placa de permitido estacionar?) (se não estiver avaliando a rua da entrada principal da escola marque não).',
             enabled: true,
             type: 2,
             sugestions: [
@@ -16582,10 +16685,21 @@ export const protocol133 = {
             validation: [],
         },
         {
+            id: 100009,
+            description:
+                'https://lh5.googleusercontent.com/dexcTGgDscLYHtEuEYJ0KS4mlIJcNqbWYYHwjsTLtw6J3OCQdqjtM3Ov59P7bT9vv-J7sRcOct3BLdgovpiyVPLZ8rBwhTZk4CoUFPk3iJkIt8rxABecr5eRKnu2PRtxwg=w740',
+            question: 'Gradil',
+            enabled: true,
+            type: 101,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
             id: 2522,
             placement: 47,
             description: '',
-            question: 'Há gradil em frente à entrada?',
+            question: 'Há gradil em frente à entrada? (se não estiver avaliando a rua da entrada principal da escola marque não)',
             enabled: true,
             type: 2,
             sugestions: [
@@ -16688,6 +16802,17 @@ export const protocol133 = {
             question: 'Qual é a velocidade? (Se não houver placa escreva não há)',
             enabled: true,
             type: 0,
+            sugestions: [],
+            subForm: null,
+            validation: [],
+        },
+        {
+            id: 100010,
+            placement: 52,
+            description: '',
+            question: 'Versão: 20240321',
+            enabled: true,
+            type: 101,
             sugestions: [],
             subForm: null,
             validation: [],
