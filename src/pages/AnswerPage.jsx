@@ -160,34 +160,50 @@ function AnswerPage(props) {
                                                     });
                                                 });
                                             })}
-                                            {Object.entries(item.optionAnswers).map(([applicationAnswerId, answerGroupId]) => {
-                                                return Object.entries(answerGroupId).map(([answerGroupId, groupAnswers]) => {
-                                                    return (
-                                                        (selectedAnswer === undefined || selectedAnswer === applicationAnswerId) && (
-                                                            <div
-                                                                key={'answer-' + applicationAnswerId}
-                                                                className="bg-white rounded-4 mb-3 p-2 px-3"
-                                                            >
-                                                                <p className="fw-medium fs-6 m-0 mb-1">
-                                                                    {answer.answers[applicationAnswerId].user.username +
-                                                                        ' - ' +
-                                                                        new Date(
-                                                                            answer.answers[applicationAnswerId].date
-                                                                        ).toLocaleDateString()}
-                                                                </p>
-                                                                <p className="fw-medium fs-6 color-dark-gray m-0">
-                                                                    {groupAnswers.map((groupAnswer, index) => {
+                                            {item.itemOptions.map((option, index) => {
+                                                return (
+                                                    <div key={'answer-' + option.id} className="bg-white rounded-4 mb-3 p-2 px-3">
+                                                        <p className="fw-medium fs-6 m-0 mb-1">
+                                                            {option.text +
+                                                                ' - ' +
+                                                                (selectedAnswer === undefined
+                                                                    ? Object.keys(option.optionAnswers).length
+                                                                    : option.optionAnswers[selectedAnswer] === undefined
+                                                                    ? '0'
+                                                                    : '1') +
+                                                                ' respostas'}
+                                                        </p>
+                                                        {Object.entries(option.optionAnswers).map(
+                                                            ([applicationAnswerId, answerGroupId]) => {
+                                                                return Object.entries(answerGroupId).map(
+                                                                    ([answerGroupId, groupAnswers]) => {
                                                                         return (
-                                                                            <span key={'answer-' + applicationAnswerId + '-group-' + index}>
-                                                                                {groupAnswer.option};{' '}
-                                                                            </span>
+                                                                            (selectedAnswer === undefined ||
+                                                                                selectedAnswer === applicationAnswerId) && (
+                                                                                <p
+                                                                                    className="fw-medium fs-6 color-dark-gray m-0"
+                                                                                    key={
+                                                                                        'answer-' +
+                                                                                        applicationAnswerId +
+                                                                                        '-' +
+                                                                                        answerGroupId
+                                                                                    }
+                                                                                >
+                                                                                    {answer.answers[applicationAnswerId].user.username +
+                                                                                        ' (' +
+                                                                                        new Date(
+                                                                                            answer.answers[applicationAnswerId].date
+                                                                                        ).toLocaleDateString() +
+                                                                                        '); '}
+                                                                                </p>
+                                                                            )
                                                                         );
-                                                                    })}
-                                                                </p>
-                                                            </div>
-                                                        )
-                                                    );
-                                                });
+                                                                    }
+                                                                );
+                                                            }
+                                                        )}
+                                                    </div>
+                                                );
                                             })}
                                         </div>
                                     )
