@@ -25,23 +25,19 @@ function SelectInput(props) {
         onAnswerChange(group, item.id, 'OPTION', options);
     }, [options, item.id, onAnswerChange, group]);
 
-    const handleOptionsUpdate = (optionText) => {
-        if (optionText === 'defaultOption') {
-            return setOptions({});
-        }
-
-        const optionFound = item.itemOptions.find((op) => op.text === optionText);
-        const optionId = optionFound.id;
-
+    const handleOptionsUpdate = (optionId) => {
         setOptions(() => {
             const newOptions = {};
-            newOptions[optionId] = '';
+            // eslint-disable-next-line
+            if (optionId != -1) {
+                newOptions[optionId] = '';
+            }
             return newOptions;
         });
     };
 
     return (
-        <div className="rounded shadow bg-white font-barlow pt-3 px-3">
+        <div className="rounded-4 shadow bg-white font-barlow p-3">
             <div className="row align-items-center justify-content-between pb-2 m-0">
                 <p className="text-break text-start color-dark-gray font-barlow fw-medium fs-6 lh-sm px-0 m-0">{item.text}</p>
             </div>
@@ -84,13 +80,13 @@ function SelectInput(props) {
             <div className="row px-0 py-2 m-0">
                 <select
                     className="form-select border border-dark-subtle px-2 py-0"
-                    defaultValue="defaultOption"
+                    defaultValue="-1"
                     onChange={(e) => handleOptionsUpdate(e.target.value)}
                 >
-                    <option value="defaultOption" label="Selecione uma opção:"></option>
+                    <option value="-1" label="Selecione uma opção:"></option>
                     {item.itemOptions.map((option) => {
                         const optname = option.text.toLowerCase().replace(/\s/g, '');
-                        return <option key={optname + 'input' + item.id} value={option.text} label={option.text}></option>;
+                        return <option key={optname + 'input' + item.id} value={option.id} label={option.text}></option>;
                     })}
                 </select>
             </div>
