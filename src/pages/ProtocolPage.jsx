@@ -56,7 +56,7 @@ function ProtocolPage(props) {
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
         setItemAnswerGroups((prevItemAnswerGroups) => {
-            const newItemAnswerGroups = prevItemAnswerGroups;
+            const newItemAnswerGroups = { ...prevItemAnswerGroups };
 
             if (newItemAnswerGroups[groupToUpdate] === undefined) {
                 newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
@@ -274,7 +274,14 @@ function ProtocolPage(props) {
                                 case 'SELECT':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {<SelectInput item={item} group={itemGroup.id} onAnswerChange={handleAnswerChange} />}
+                                            {
+                                                <SelectInput
+                                                    item={item}
+                                                    galleryRef={galleryRef}
+                                                    group={itemGroup.id}
+                                                    onAnswerChange={handleAnswerChange}
+                                                />
+                                            }
                                         </div>
                                     );
                                 case 'DATEBOX':
