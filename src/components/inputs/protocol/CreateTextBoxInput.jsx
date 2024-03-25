@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconFile from '../../../assets/images/iconFile.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
+import { defaultNewInput } from '../../../utils/constants';
 
 const textBoxStyles = `
     .font-century-gothic {
@@ -26,7 +27,12 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { input, onInputChange, onInputRemove } = props;
+    const [item, setItem] = useState(defaultNewInput('TEXTBOX'));
+    const { pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+
+    useEffect(() => {
+        updateItem(item, pageIndex, groupIndex, itemIndex);
+    }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
 
     return (
         <div className="pb-4 pb-lg-5">
@@ -36,25 +42,16 @@ function CreateTextBoxInput(props) {
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
+                    <RoundedButton
+                        className="ms-2"
+                        hsl={[190, 46, 70]}
+                        icon={iconTrash}
+                        onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
-                <input
-                    className="form-check-input border-0 fs-5 p-0"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    // defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
-                    onChange={(event) =>
-                        onInputChange({
-                            ...input,
-                            validation: input.validation.map((item) =>
-                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
-                            ),
-                        })
-                    }
-                />
+                <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
@@ -69,9 +66,9 @@ function CreateTextBoxInput(props) {
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
                         aria-describedby="questionHelp"
-                        onChange={(event) => onInputChange({ ...input, question: event.target.value })}
+                        onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                     />
-                    {!input.question && (
+                    {!item.text && (
                         <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                             *Este campo é obrigatório.
                         </div>
@@ -85,7 +82,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
-                        onChange={(event) => onInputChange({ ...input, description: event.target.value })}
+                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
                     />
                 </div>
             </div>
