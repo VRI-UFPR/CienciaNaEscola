@@ -1,47 +1,9 @@
-export const defaultInputs = [
-    {
-        description: 'date',
-        question: 'date',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-    {
-        description: 'time',
-        question: 'time',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-    {
-        description: 'location',
-        question: 'location',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-];
-
 export const defaultNewInput = (type) => {
     return {
+        text: '',
         description: '',
-        question: '',
         type: type,
-        validation: [
-            {
-                type: 'required',
-                value: false,
-            },
-        ],
-        sugestions: [],
-        inputId: null,
-        id: null,
+        enabled: true,
     };
 };
 
@@ -69,7 +31,7 @@ export const terms = (
         laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat
         nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem
         ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrum exercitationem ullam corporis.    
+        veniam, quis nostrum exercitationem ullam corporis.
     </>
 );
 
