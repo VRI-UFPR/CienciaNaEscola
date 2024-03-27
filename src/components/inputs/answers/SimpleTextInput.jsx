@@ -35,7 +35,7 @@ function SimpleTextInput(props) {
                 <MarkdownText text={item.text} />
             </div>
 
-            <Gallery item={item} galleryModalRef={galleryModalRef} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
 
             <input
                 type="text"
@@ -43,8 +43,6 @@ function SimpleTextInput(props) {
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
                 onChange={(e) => setText(e.target.value)}
-                //value={answer ? answer[0].value : text}
-                //disabled={answer !== undefined}
             ></input>
             <style>{styles}</style>
         </div>
