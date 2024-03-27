@@ -1,7 +1,7 @@
 {
     "name": "my-app",
     "version": "0.1.2",
-    "homepage": "https://vri-ufpr.github.io/CienciaNaEscola/",
+    "homepage": "https://vri-ufpr.github.io/PICCE-FRONT/",
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^5.16.5",
