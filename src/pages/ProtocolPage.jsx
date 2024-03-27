@@ -12,7 +12,7 @@ import SelectInput from '../components/inputs/answers/SelectInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
 import Alert from '../components/Alert';
-import Gallery from '../components/Gallery';
+import GalleryModal from '../components/GalleryModal';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
 import TextImageInput from '../components/inputs/answers/TextImageInput';
@@ -51,7 +51,7 @@ function ProtocolPage(props) {
     const { id } = useParams();
     const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
     const modalRef = useRef(null);
-    const galleryRef = useRef(null);
+    const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
@@ -235,7 +235,7 @@ function ProtocolPage(props) {
                                             {
                                                 <SimpleTextInput
                                                     item={item}
-                                                    galleryRef={galleryRef}
+                                                    galleryModalRef={galleryModalRef}
                                                     group={itemGroup.id}
                                                     onAnswerChange={handleAnswerChange}
                                                 />
@@ -249,7 +249,7 @@ function ProtocolPage(props) {
                                             {
                                                 <CheckBoxInput
                                                     item={item}
-                                                    galleryRef={galleryRef}
+                                                    galleryModalRef={galleryModalRef}
                                                     group={itemGroup.id}
                                                     onAnswerChange={handleAnswerChange}
                                                 />
@@ -263,7 +263,7 @@ function ProtocolPage(props) {
                                             {
                                                 <RadioButtonInput
                                                     item={item}
-                                                    galleryRef={galleryRef}
+                                                    galleryModalRef={galleryModalRef}
                                                     group={itemGroup.id}
                                                     onAnswerChange={handleAnswerChange}
                                                 />
@@ -277,7 +277,7 @@ function ProtocolPage(props) {
                                             {
                                                 <SelectInput
                                                     item={item}
-                                                    galleryRef={galleryRef}
+                                                    galleryRef={galleryModalRef}
                                                     group={itemGroup.id}
                                                     onAnswerChange={handleAnswerChange}
                                                 />
@@ -314,7 +314,7 @@ function ProtocolPage(props) {
                                             {
                                                 <TextImageInput
                                                     item={item}
-                                                    galleryRef={galleryRef}
+                                                    galleryModalRef={galleryModalRef}
                                                     group={itemGroup.id}
                                                     onAnswerChange={handleAnswerChange}
                                                 />
@@ -348,7 +348,7 @@ function ProtocolPage(props) {
                 </div>
             </div>
             <Alert id="ProtocolPageAlert" ref={modalRef} />
-            <Gallery id="ProtocolPageGallery" ref={galleryRef} />
+            <GalleryModal id="ProtocolPageGallery" ref={galleryModalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} showExitButton={true} />
             </div>

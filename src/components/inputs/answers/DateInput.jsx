@@ -68,8 +68,6 @@ function DateInput(props) {
                             id="dateinput"
                             onChange={(e) => setDate([e.target.value])}
                             defaultValue={date}
-                            // value={answer ? answer[0].value : date}
-                            // disabled={answer !== undefined}
                         ></input>
                     </div>
                 </div>

@@ -1,117 +1,59 @@
-import React, { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
-import { Modal, Carousel } from 'bootstrap';
-import RoundedButton from './RoundedButton';
-import iconExit from '../assets/images/ExitSidebarIcon.svg';
+import { React, useEffect, useState } from 'react';
+import TextButton from './TextButton';
 
-const GalleryStyles = `
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
-    }
-
-    .bg-grey {
-        background-color: #D9D9D9;
-    }
-
-    .color-dark-gray{
-        color: #535353;
+const galleryStyles = `
+    .img-gallery{
+        max-height: 200px;
     }
 `;
 
-const Gallery = forwardRef((props, ref) => {
-    const [modal, setModal] = useState(props);
+function Gallery(props) {
+    const { item, galleryModalRef, className } = props;
+    const [ImageVisibility, setImageVisibility] = useState(false);
 
-    const handleSlide = useCallback((event) => {
-        const targetId = event.to;
-        setModal((prevModal) => {
-            return {
-                ...prevModal,
-                currentImage: targetId,
-            };
-        });
-    }, []);
-
-    const showModal = (modalData) => {
-        if (modalData) {
-            const alert = document.getElementById(modal.id);
-
-            setModal({
-                id: modal.id,
-                currentImage: modalData.currentImage || modal.currentImage,
-                images: modalData.images || modal.images,
-            });
-
-            Modal.getOrCreateInstance(alert).show();
-
-            const carousel = document.getElementById(modal.id + '-carousel');
-            carousel.addEventListener('slide.bs.carousel', handleSlide);
-            Carousel.getOrCreateInstance(carousel).to(modalData.currentImage);
-        }
+    const toggleImageVisibility = () => {
+        setImageVisibility(!ImageVisibility);
     };
-
-    const hideModal = () => {
-        document.getElementById(modal.id + '-carousel').removeEventListener('slide.bs.carousel', handleSlide);
-        Modal.getInstance(document.getElementById(modal.id)).hide();
-    };
-
-    useImperativeHandle(ref, () => ({
-        showModal,
-    }));
 
     return (
-        <div className="modal fade" id={modal.id} tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content rounded-4">
-                    <div className="modal-header">
-                        <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
-                            Figura {modal.currentImage + 1}
-                        </h5>
-                        <RoundedButton hsl={[355, 78, 66]} icon={iconExit} onClick={hideModal} />
-                    </div>
-                    <div className="modal-body">
-                        <div id={modal.id + '-carousel'} className="carousel slide">
-                            <div className="carousel-inner">
-                                {modal.images.map((image, index) => {
-                                    return (
-                                        <div
-                                            className={`carousel-item ${modal.currentImage === index && 'active'}`}
-                                            key={`gallery-img-${image.id}`}
-                                        >
-                                            <img src={image.path} className="d-block rounded-4 w-100" alt={'Figura' + index + 1}></img>
-                                        </div>
-                                    );
-                                })}
+        <div className={item.files.length > 0 && galleryModalRef && className}>
+            {item.files.length > 0 && galleryModalRef && (
+                <div className="row justify-content-center m-0">
+                    {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
+                        return (
+                            <div
+                                key={'image-' + image.id}
+                                className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
+                                    index > 2 && 'mt-2'
+                                }`}
+                            >
+                                <div
+                                    className={`${
+                                        item.files.length > 1 && 'ratio ratio-1x1'
+                                    } img-gallery d-flex justify-content-center border border-light-subtle rounded-4 overflow-hidden`}
+                                    onClick={() => galleryModalRef.current.showModal({ images: item.files, currentImage: index })}
+                                >
+                                    <img src={image.path} className="img-fluid object-fit-contain w-100" alt="Responsive" />
+                                </div>
                             </div>
-                            <button
-                                className="carousel-control-prev"
-                                type="button"
-                                data-bs-target={'#' + modal.id + '-carousel'}
-                                data-bs-slide="prev"
-                            >
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button
-                                className="carousel-control-next"
-                                type="button"
-                                data-bs-target={'#' + modal.id + '-carousel'}
-                                data-bs-slide="next"
-                            >
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
-            </div>
-            <style>{GalleryStyles}</style>
+            )}
+
+            {item.files.length > 3 && (
+                <div className="row justify-content-center m-0 mt-3">
+                    <TextButton
+                        className="fs-6 w-auto p-2 py-0"
+                        hsl={[190, 46, 70]}
+                        text={`Ver ${ImageVisibility ? 'menos' : 'mais'}`}
+                        onClick={toggleImageVisibility}
+                    />
+                </div>
+            )}
+            <style>{galleryStyles}</style>
         </div>
     );
-});
-
-Gallery.defaultProps = {
-    id: 'Gallery',
-    currentImage: 0,
-    images: [],
-};
+}
 
 export default Gallery;

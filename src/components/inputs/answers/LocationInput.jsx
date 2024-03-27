@@ -86,8 +86,6 @@ export function Location(props) {
                                 placeholder="Forneça sua localização"
                                 onChange={(e) => setLocation([e.target.value])}
                                 defaultValue={location}
-                                // value={answer ? answer[0].value : location}
-                                // disabled={answer !== undefined}
                             ></input>
                         </div>
                         <div className="col-auto search-col d-flex justify-content-end m-0 p-0">

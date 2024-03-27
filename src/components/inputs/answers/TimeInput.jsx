@@ -67,8 +67,6 @@ function TimeInput(props) {
                             id="timeinput"
                             onChange={(e) => setTime([e.target.value])}
                             defaultValue={time}
-                            // value={answer ? answer[0].value : time}
-                            // disabled={answer !== undefined}
                         ></input>
                     </div>
                 </div>
