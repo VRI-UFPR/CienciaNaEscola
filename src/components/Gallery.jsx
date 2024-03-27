@@ -1,14 +1,14 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import TextButton from './TextButton';
 
 const galleryStyles = `
     .img-gallery{
-        max-height: 500px;
+        max-height: 200px;
     }
 `;
 
 function Gallery(props) {
-    const { item, galleryModalRef } = props;
+    const { item, galleryModalRef, className } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
 
     const toggleImageVisibility = () => {
@@ -16,9 +16,9 @@ function Gallery(props) {
     };
 
     return (
-        <>
+        <div className={item.files.length > 0 && galleryModalRef && className}>
             {item.files.length > 0 && galleryModalRef && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
                         return (
                             <div
@@ -42,7 +42,7 @@ function Gallery(props) {
             )}
 
             {item.files.length > 3 && (
-                <div className="row justify-content-center m-0 pt-3">
+                <div className="row justify-content-center m-0 mt-3">
                     <TextButton
                         className="fs-6 w-auto p-2 py-0"
                         hsl={[190, 46, 70]}
@@ -52,7 +52,7 @@ function Gallery(props) {
                 </div>
             )}
             <style>{galleryStyles}</style>
-        </>
+        </div>
     );
 }
 

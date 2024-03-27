@@ -25,7 +25,7 @@ function TextImageInput(props) {
                 <MarkdownText text={item.text} />
             </div>
 
-            <Gallery item={item} galleryModalRef={galleryModalRef} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
 
             <style>{styles}</style>
         </div>
