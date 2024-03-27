@@ -42,33 +42,28 @@ function CheckBoxInput(props) {
                 <MarkdownText text={item.text} />
             </div>
 
-            <Gallery item={item} galleryModalRef={galleryModalRef} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
 
             <div className="row m-0 px-2">
                 {item.itemOptions.map((option) => {
                     const optname = option.text.toLowerCase().replace(/\s/g, '');
 
                     return (
-                        <div key={optname + 'input' + item.id} className="form-check m-0 pb-2 pe-2">
+                        <div key={optname + 'input' + item.id} className="form-check m-0 mb-3 pe-0">
                             <input
-                                // className={`form-check-input bg-grey ${answer && answer[index].value === 'true' ? 'opacity-100' : ''}`}
                                 className={`form-check-input bg-grey`}
                                 type="checkbox"
                                 name={'checkboxoptions' + item.id}
                                 id={optname + 'input' + item.id}
                                 onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
-                                //checked={answer ? answer[index].value === 'true' : options[index] === 'true'}
-                                //disabled={answer !== undefined}
                             ></input>
                             <label
-                                // className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 ${
-                                //     answer && answer[index].value === 'true' ? 'opacity-100' : ''
-                                // }`}
-                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6 `}
+                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}
                                 htmlFor={optname + 'input' + item.id}
                             >
                                 {option.text}
                             </label>
+                            <Gallery className="mt-1" item={option} galleryModalRef={galleryModalRef} />
                         </div>
                     );
                 })}
