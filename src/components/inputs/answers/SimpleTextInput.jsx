@@ -76,7 +76,7 @@ function SimpleTextInput(props) {
             )}
 
             <input
-                type="text"
+                type={item.type === 'number' ? 'number' : 'text'}
                 className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
