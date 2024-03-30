@@ -230,6 +230,7 @@ function ProtocolPage(props) {
                         return itemGroup.items.map((item) => {
                             switch (item.type) {
                                 case 'TEXTBOX':
+                                case 'NUMBERBOX':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
                                             {
