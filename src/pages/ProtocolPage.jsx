@@ -100,7 +100,8 @@ function ProtocolPage(props) {
             for (const item in itemAnswerGroups[group].itemAnswers) {
                 itemAnswerGroup.itemAnswers.push({
                     itemId: item,
-                    text: itemAnswerGroups[group].itemAnswers[item],
+                    text: itemAnswerGroups[group].itemAnswers[item].text,
+                    files: itemAnswerGroups[group].itemAnswers[item].files,
                 });
             }
             for (const item in itemAnswerGroups[group].optionAnswers) {
