@@ -1,15 +1,15 @@
-import { createContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
 export const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
     const [connected, setConnected] = useState(window.navigator.onLine);
+    const [localApplications, setLocalApplications] = useState([]);
     const [pendingRequests, setPendingRequests] = useState([]);
-    const [application, setApplication] = useState({});
+    const isRequesting = useRef(false);
 
-    // Retrieve stored data from localStorage
-    useEffect(() => {
+    const getDBPendingRequests = () => {
         const JSONtoFormData = (data) => {
             const formData = new FormData();
             for (const key in data) {
@@ -18,18 +18,103 @@ export const StorageProvider = ({ children }) => {
             return formData;
         };
 
-        const storedConnected = JSON.parse(localStorage.getItem('connected'));
-        if (storedConnected) {
-            setConnected(storedConnected);
-        }
-        const storedApplication = JSON.parse(localStorage.getItem('application'));
-        if (storedApplication) {
-            setApplication(storedApplication);
-        }
-        const storedPendingRequests = JSON.parse(localStorage.getItem('pendingRequests'));
-        if (storedPendingRequests) {
-            setPendingRequests(storedPendingRequests.map((request) => ({ ...request, data: JSONtoFormData(request.data) })));
-        }
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open('picceDB');
+            dbRequest.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction(['pendingRequests'], 'readwrite');
+                const pendingRequestsStored = tx.objectStore('pendingRequests');
+                const result = [];
+                pendingRequestsStored.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        result.push(cursor.value);
+                        cursor.continue();
+                    } else {
+                        resolve(result.map((request) => ({ ...request, data: JSONtoFormData(request.data) })));
+                    }
+                };
+            };
+            dbRequest.onerror = (event) => {
+                console.error('Error opening indexedDB: ', event.target.error);
+                reject([]);
+            };
+        });
+    };
+
+    const getDBapplication = () => {
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open('picceDB');
+            dbRequest.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction(['applications'], 'readwrite');
+                const applicationStored = tx.objectStore('applications');
+                const result = [];
+                applicationStored.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        result.push(cursor.value);
+                        cursor.continue();
+                    } else {
+                        resolve(result);
+                    }
+                };
+            };
+            dbRequest.onerror = (event) => {
+                console.error('Error opening indexedDB: ', event.target.error);
+                reject([]);
+            };
+        });
+    };
+
+    const storeDBObject = (storeName, data) => {
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open('picceDB');
+            dbRequest.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction([storeName], 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.add(data);
+                resolve();
+            };
+            dbRequest.onerror = (event) => {
+                console.error('Error opening indexedDB: ', event.target.error);
+                reject();
+            };
+        });
+    };
+
+    const clearDBObject = (storeName) => {
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open('picceDB');
+            dbRequest.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction([storeName], 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.clear();
+                resolve();
+            };
+            dbRequest.onerror = (event) => {
+                console.error('Error opening indexedDB: ', event.target.error);
+                reject();
+            };
+        });
+    };
+
+    // Retrieve stored data from localStorage
+    useEffect(() => {
+        const dbRequest = indexedDB.open('picceDB');
+        dbRequest.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            db.createObjectStore('applications', { keyPath: 'id' });
+            db.createObjectStore('pendingRequests', { keyPath: 'id' });
+        };
+        getDBapplication().then((result) => {
+            setLocalApplications(result);
+        });
+        getDBPendingRequests().then((result) => {
+            setPendingRequests(result);
+        });
     }, []);
 
     // Add event listeners to update the connected state
@@ -51,22 +136,47 @@ export const StorageProvider = ({ children }) => {
         };
     }, []);
 
-    // Store the connected state in localStorage
     useEffect(() => {
-        if (connected !== undefined) {
-            localStorage.setItem('connected', JSON.stringify(connected));
+        if (connected && pendingRequests?.length > 0 && !isRequesting.current) {
+            isRequesting.current = true;
+            const promises = [];
+            for (const request of pendingRequests) {
+                try {
+                    // Axios request promise
+                    const promise = axios.post(request.url, request.data, request.config).then((response) => {
+                        Notification.requestPermission().then((result) => {
+                            new Notification('Envio pendente realizado! ', { body: request.title });
+                        });
+                    });
+                    promises.push(promise);
+                } catch (error) {
+                    Notification.requestPermission().then((result) => {
+                        new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
+                    });
+                }
+            }
+            Promise.all(promises).then(() => {
+                setPendingRequests([]);
+                clearDBObject('pendingRequests').then(() => {
+                    isRequesting.current = false;
+                });
+            });
         }
-    }, [connected]);
+    }, [connected, pendingRequests]);
 
-    // Store the application state in localStorage
     useEffect(() => {
-        if (application.id) {
-            localStorage.setItem('application', JSON.stringify(application));
+        if (connected && localApplications.length > 0) {
+            setLocalApplications([]);
+            clearDBObject('applications');
         }
-    }, [application]);
+    }, [connected, localApplications]);
 
-    // Store the pending requests in localStorage
-    useEffect(() => {
+    const storeApplicationWithProtocol = useCallback((application) => {
+        setLocalApplications((prev) => [...prev, application]);
+        storeDBObject('applications', application);
+    }, []);
+
+    const storePendingRequest = (request) => {
         const formDataToJSON = (formData) => {
             const data = {};
             for (const key of formData.keys()) {
@@ -75,44 +185,12 @@ export const StorageProvider = ({ children }) => {
             return data;
         };
 
-        const pendingRequestsToStore = pendingRequests.map((request) => ({ ...request, data: formDataToJSON(request.data) }));
-
-        if (pendingRequests.length > 0) {
-            localStorage.setItem('pendingRequests', JSON.stringify(pendingRequestsToStore));
-        }
-    }, [pendingRequests]);
-
-    useEffect(() => {
-        if (connected && pendingRequests.length > 0) {
-            pendingRequests.forEach(async (request) => {
-                try {
-                    await axios.post(request.url, request.data, request.config);
-                } catch (error) {
-                    console.error(error);
-                }
-            });
-            setPendingRequests([]);
-            localStorage.removeItem('pendingRequests');
-        }
-    }, [connected, pendingRequests]);
-
-    useEffect(() => {
-        if (connected && application.id) {
-            setApplication({});
-            localStorage.removeItem('application');
-        }
-    }, [connected, application]);
-
-    const storeApplicationWithProtocol = useCallback((application) => {
-        setApplication(application);
-    }, []);
-
-    const storePendingRequest = (request) => {
         setPendingRequests((prev) => [...prev, request]);
+        storeDBObject('pendingRequests', { ...request, data: formDataToJSON(request.data) });
     };
 
     return (
-        <StorageContext.Provider value={{ connected, application, storeApplicationWithProtocol, storePendingRequest }}>
+        <StorageContext.Provider value={{ connected, application: localApplications, storeApplicationWithProtocol, storePendingRequest }}>
             {children}
         </StorageContext.Provider>
     );
