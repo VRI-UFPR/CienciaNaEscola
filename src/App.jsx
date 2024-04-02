@@ -10,14 +10,14 @@ const styles = ``;
 
 function App(props) {
     return (
-        <AuthProvider>
-            <StorageProvider>
+        <StorageProvider>
+            <AuthProvider>
                 <BrowserRouter>
                     <AppRoutes />
                     <style> {styles} </style>
                 </BrowserRouter>
-            </StorageProvider>
-        </AuthProvider>
+            </AuthProvider>
+        </StorageProvider>
     );
 }
 

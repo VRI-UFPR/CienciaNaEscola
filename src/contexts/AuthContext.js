@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
+import { StorageContext } from './StorageContext';
 
 export const AuthContext = createContext();
 
@@ -8,6 +9,8 @@ export const AuthProvider = ({ children }) => {
         username: null,
         token: null,
     });
+
+    const { clearDBObject } = useContext(StorageContext);
 
     const [acceptTerms, setAcceptTerms] = useState({ value: false });
 
@@ -36,6 +39,9 @@ export const AuthProvider = ({ children }) => {
             token: null,
         });
         localStorage.removeItem('user');
+        setAcceptTerms({ value: false });
+        localStorage.removeItem('acceptTerms');
+        clearDBObject('applications');
     };
 
     return <AuthContext.Provider value={{ user, acceptTerms, login, logout }}>{children}</AuthContext.Provider>;

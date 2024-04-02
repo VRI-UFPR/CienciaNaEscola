@@ -9,6 +9,7 @@ import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
 import Alert from '../components/Alert';
 import TextButton from '../components/TextButton';
+import { StorageContext } from '../contexts/StorageContext';
 
 const style = `
     .font-barlow {
@@ -30,12 +31,18 @@ function HomePage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [userApplications, setUserApplications] = useState([]);
     const { user, logout } = useContext(AuthContext);
+    const { localApplications, connected } = useContext(StorageContext);
     const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
     useEffect(() => {
-        if (user.id !== null && user.token !== null) {
+        if (!connected) {
+            if (localApplications !== undefined) {
+                setUserApplications(localApplications);
+                setIsLoading(false);
+            }
+        } else if (user.id !== null && user.token !== null && connected) {
             axios
                 .get(`http://localhost:3000/api/application/getVisibleApplications`, {
                     headers: {
@@ -44,7 +51,6 @@ function HomePage(props) {
                     },
                 })
                 .then((response) => {
-                    console.log(response.data);
                     setUserApplications(response.data.data);
                     setIsLoading(false);
                 })
@@ -56,7 +62,7 @@ function HomePage(props) {
                     }
                 });
         }
-    }, [user, logout, navigate]);
+    }, [user, logout, navigate, connected, localApplications]);
 
     if (isLoading) {
         return <SplashPage />;

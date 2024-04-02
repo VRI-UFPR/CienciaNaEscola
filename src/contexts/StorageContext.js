@@ -5,8 +5,8 @@ export const StorageContext = createContext();
 
 export const StorageProvider = ({ children }) => {
     const [connected, setConnected] = useState(window.navigator.onLine);
-    const [localApplications, setLocalApplications] = useState([]);
-    const [pendingRequests, setPendingRequests] = useState([]);
+    const [localApplications, setLocalApplications] = useState(undefined);
+    const [pendingRequests, setPendingRequests] = useState(undefined);
     const isRequesting = useRef(false);
 
     const getDBPendingRequests = () => {
@@ -164,15 +164,14 @@ export const StorageProvider = ({ children }) => {
         }
     }, [connected, pendingRequests]);
 
-    useEffect(() => {
-        if (connected && localApplications.length > 0) {
-            setLocalApplications([]);
-            clearDBObject('applications');
-        }
-    }, [connected, localApplications]);
-
-    const storeApplicationWithProtocol = useCallback((application) => {
-        setLocalApplications((prev) => [...prev, application]);
+    const storeLocalApplication = useCallback((application) => {
+        setLocalApplications((prev) => {
+            if (prev.find((app) => app.id === application.id)) {
+                return prev;
+            } else {
+                return [...prev, application];
+            }
+        });
         storeDBObject('applications', application);
     }, []);
 
@@ -190,7 +189,7 @@ export const StorageProvider = ({ children }) => {
     };
 
     return (
-        <StorageContext.Provider value={{ connected, application: localApplications, storeApplicationWithProtocol, storePendingRequest }}>
+        <StorageContext.Provider value={{ connected, localApplications, storeLocalApplication, storePendingRequest, clearDBObject }}>
             {children}
         </StorageContext.Provider>
     );

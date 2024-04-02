@@ -46,10 +46,10 @@ const styles = `
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const { user, logout } = useContext(AuthContext);
-    const [application, setApplication] = useState();
+    const [application, setApplication] = useState(undefined);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { id } = useParams();
-    const { connected, storeApplicationWithProtocol, storePendingRequest } = useContext(StorageContext);
+    const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
     const modalRef = useRef(null);
     const galleryRef = useRef(null);
     const navigate = useNavigate();
@@ -178,39 +178,45 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
-        if (user.id !== null && user.token !== null) {
-            axios
-                .get(`http://localhost:3000/api/application/getApplicationWithProtocol/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    setApplication(response.data.data);
-
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    console.error(error.message);
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate('/login');
-                    }
-                });
+        //Search if the application is in localApplications
+        if (localApplications !== undefined && application === undefined) {
+            const localApplication = localApplications.find((app) => app.id === parseInt(id));
+            if (localApplication !== undefined) {
+                setApplication(localApplication);
+                setIsLoading(false);
+            } else if (user.id !== null && user.token !== null) {
+                axios
+                    .get(`http://localhost:3000/api/application/getApplicationWithProtocol/${id}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        setApplication(response.data.data);
+                        storeLocalApplication(response.data.data);
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        console.error(error.message);
+                        if (error.response.status === 401) {
+                            logout();
+                            navigate('/login');
+                        }
+                    });
+            }
         }
-    }, [id, user, logout, navigate]);
+    }, [id, user, logout, navigate, localApplications, storeLocalApplication, application]);
 
     useEffect(() => {
-        if (connected === false && application.id) {
+        if (connected === false && application?.id) {
             modalRef.current.showModal({
-                title: 'Você está offline. O protocolo ' + id + ' será armazenado localmente e continuará acessível.',
+                title: 'Você está offline. O protocolo ' + id + ' está armazenado localmente e continuará acessível.',
                 dismissHsl: [97, 43, 70],
                 dismissText: 'Ok',
                 dismissible: true,
             });
-            storeApplicationWithProtocol(application);
         }
-    }, [connected, application, storeApplicationWithProtocol, id]);
+    }, [connected, application, id]);
 
     if (isLoading) {
         return <SplashPage />;
