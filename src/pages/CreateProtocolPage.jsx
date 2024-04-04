@@ -114,7 +114,7 @@ function CreateProtocolPage(props) {
                     items: group.items.map((item, index) => ({
                         ...item,
                         placement: index + 1,
-                        itemOptions: item.itemOptions.map((option, index) => ({ ...option, placement: index + 1 })),
+                        itemOptions: item.itemOptions?.map((option, index) => ({ ...option, placement: index + 1 })),
                     })),
                 })),
             })),
