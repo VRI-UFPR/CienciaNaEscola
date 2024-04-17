@@ -84,7 +84,12 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, username, response.data.data.token);
+                    login(
+                        response.data.data.id,
+                        username,
+                        response.data.data.token,
+                        new Date(new Date().getTime() + response.data.data.expiresIn * 1000)
+                    );
                     console.log(response.data);
                     //navigate('/home');
                 } else {

@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
         id: null,
         username: null,
         token: null,
+        expiresIn: null,
     });
 
     const { clearDBObject } = useContext(StorageContext);
@@ -25,9 +26,9 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = (id, username, token) => {
-        setUser({ id, username, token });
-        localStorage.setItem('user', JSON.stringify({ id, username, token }));
+    const login = (id, username, token, expiresIn) => {
+        setUser({ id, username, token, expiresIn });
+        localStorage.setItem('user', JSON.stringify({ id, username, token, expiresIn }));
         setAcceptTerms({ value: true });
         localStorage.setItem('acceptTerms', JSON.stringify({ value: true }));
     };
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }) => {
             id: null,
             username: null,
             token: null,
+            expiresIn: null,
         });
         localStorage.removeItem('user');
         setAcceptTerms({ value: false });
