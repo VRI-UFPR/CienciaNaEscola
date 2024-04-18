@@ -6,17 +6,49 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const defaultUser = useMemo(() => ({ id: null, username: null, token: null, expiresIn: null }), []);
-    const { clearDBObject } = useContext(StorageContext);
+    const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
     const [acceptTerms, setAcceptTerms] = useState({ value: false });
     const [user, setUser] = useState(defaultUser);
+
+    // Send all pending requests to the server when the user is connected and logged in
+    useEffect(() => {
+        if (connected && user.id && user.token && pendingRequests?.length > 0) {
+            const promises = [];
+            for (const request of pendingRequests) {
+                if (request.userId === user.id) {
+                    try {
+                        // Axios request promise
+                        const promise = axios
+                            .post(request.url, request.data, {
+                                ...request.config,
+                                headers: { ...request.config?.headers, Authorization: `Bearer ${user.token}` },
+                            })
+                            .then((response) => {
+                                Notification.requestPermission().then((result) => {
+                                    new Notification('Envio pendente realizado! ', { body: request.title });
+                                });
+                            });
+                        promises.push(promise);
+                    } catch (error) {
+                        Notification.requestPermission().then((result) => {
+                            new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
+                        });
+                    }
+                }
+            }
+            Promise.all(promises).then(() => {
+                clearPendingRequests();
+            });
+        }
+    }, [clearPendingRequests, pendingRequests, connected, user]);
 
     // Clean up all user traces, except the user itself (acceptTerms, localStorage, indexedDB)
     const clearDBAndStorage = useCallback(() => {
         setAcceptTerms({ value: false });
         localStorage.removeItem('user');
         localStorage.removeItem('acceptTerms');
-        clearDBObject('applications');
-    }, [clearDBObject]);
+        clearLocalApplications();
+    }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
     const login = useCallback((id, username, token, expiresIn) => {
