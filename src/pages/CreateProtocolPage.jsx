@@ -1,4 +1,4 @@
-import { React, useState, useContext, useEffect, useRef, useCallback } from 'react';
+import { React, useState, useContext, useRef, useCallback } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
