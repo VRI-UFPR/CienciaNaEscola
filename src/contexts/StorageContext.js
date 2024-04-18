@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
+import { createContext, useState, useEffect, useCallback } from 'react';
 
 export const StorageContext = createContext();
 
@@ -7,7 +6,6 @@ export const StorageProvider = ({ children }) => {
     const [connected, setConnected] = useState(window.navigator.onLine);
     const [localApplications, setLocalApplications] = useState(undefined);
     const [pendingRequests, setPendingRequests] = useState(undefined);
-    const isRequesting = useRef(false);
 
     const getDBPendingRequests = useCallback(() => {
         const JSONtoFormData = (data) => {
@@ -101,6 +99,16 @@ export const StorageProvider = ({ children }) => {
         });
     }, []);
 
+    const clearLocalApplications = useCallback(() => {
+        setLocalApplications([]);
+        clearDBObject('applications');
+    }, [clearDBObject]);
+
+    const clearPendingRequests = useCallback(() => {
+        setPendingRequests([]);
+        clearDBObject('pendingRequests');
+    }, [clearDBObject]);
+
     // Retrieve stored data from localStorage
     useEffect(() => {
         const dbRequest = indexedDB.open('picceDB');
@@ -136,34 +144,6 @@ export const StorageProvider = ({ children }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (connected && pendingRequests?.length > 0 && !isRequesting.current) {
-            isRequesting.current = true;
-            const promises = [];
-            for (const request of pendingRequests) {
-                try {
-                    // Axios request promise
-                    const promise = axios.post(request.url, request.data, request.config).then((response) => {
-                        Notification.requestPermission().then((result) => {
-                            new Notification('Envio pendente realizado! ', { body: request.title });
-                        });
-                    });
-                    promises.push(promise);
-                } catch (error) {
-                    Notification.requestPermission().then((result) => {
-                        new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
-                    });
-                }
-            }
-            Promise.all(promises).then(() => {
-                setPendingRequests([]);
-                clearDBObject('pendingRequests').then(() => {
-                    isRequesting.current = false;
-                });
-            });
-        }
-    }, [connected, pendingRequests, clearDBObject]);
-
     const storeLocalApplication = useCallback(
         (application) => {
             setLocalApplications((prev) => {
@@ -195,7 +175,17 @@ export const StorageProvider = ({ children }) => {
     );
 
     return (
-        <StorageContext.Provider value={{ connected, localApplications, storeLocalApplication, storePendingRequest, clearDBObject }}>
+        <StorageContext.Provider
+            value={{
+                connected,
+                localApplications,
+                pendingRequests,
+                storeLocalApplication,
+                storePendingRequest,
+                clearLocalApplications,
+                clearPendingRequests,
+            }}
+        >
             {children}
         </StorageContext.Provider>
     );
