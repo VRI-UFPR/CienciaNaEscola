@@ -88,7 +88,7 @@ function LoginPage(props) {
                         response.data.data.id,
                         username,
                         response.data.data.token,
-                        new Date(new Date().getTime() + response.data.data.expiresIn * 1000)
+                        new Date(new Date().getTime() + response.data.data.expiresIn)
                     );
                     console.log(response.data);
                     //navigate('/home');

@@ -9,7 +9,7 @@ export const StorageProvider = ({ children }) => {
     const [pendingRequests, setPendingRequests] = useState(undefined);
     const isRequesting = useRef(false);
 
-    const getDBPendingRequests = () => {
+    const getDBPendingRequests = useCallback(() => {
         const JSONtoFormData = (data) => {
             const formData = new FormData();
             for (const key in data) {
@@ -40,9 +40,9 @@ export const StorageProvider = ({ children }) => {
                 reject([]);
             };
         });
-    };
+    }, []);
 
-    const getDBapplication = () => {
+    const getDBapplication = useCallback(() => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -65,9 +65,9 @@ export const StorageProvider = ({ children }) => {
                 reject([]);
             };
         });
-    };
+    }, []);
 
-    const storeDBObject = (storeName, data) => {
+    const storeDBObject = useCallback((storeName, data) => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -82,9 +82,9 @@ export const StorageProvider = ({ children }) => {
                 reject();
             };
         });
-    };
+    }, []);
 
-    const clearDBObject = (storeName) => {
+    const clearDBObject = useCallback((storeName) => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -99,7 +99,7 @@ export const StorageProvider = ({ children }) => {
                 reject();
             };
         });
-    };
+    }, []);
 
     // Retrieve stored data from localStorage
     useEffect(() => {
@@ -115,7 +115,7 @@ export const StorageProvider = ({ children }) => {
         getDBPendingRequests().then((result) => {
             setPendingRequests(result);
         });
-    }, []);
+    }, [getDBPendingRequests, getDBapplication]);
 
     // Add event listeners to update the connected state
     useEffect(() => {
@@ -162,31 +162,37 @@ export const StorageProvider = ({ children }) => {
                 });
             });
         }
-    }, [connected, pendingRequests]);
+    }, [connected, pendingRequests, clearDBObject]);
 
-    const storeLocalApplication = useCallback((application) => {
-        setLocalApplications((prev) => {
-            if (prev.find((app) => app.id === application.id)) {
-                return prev;
-            } else {
-                return [...prev, application];
-            }
-        });
-        storeDBObject('applications', application);
-    }, []);
+    const storeLocalApplication = useCallback(
+        (application) => {
+            setLocalApplications((prev) => {
+                if (prev.find((app) => app.id === application.id)) {
+                    return prev;
+                } else {
+                    return [...prev, application];
+                }
+            });
+            storeDBObject('applications', application);
+        },
+        [storeDBObject]
+    );
 
-    const storePendingRequest = (request) => {
-        const formDataToJSON = (formData) => {
-            const data = {};
-            for (const key of formData.keys()) {
-                data[key] = formData.get(key);
-            }
-            return data;
-        };
+    const storePendingRequest = useCallback(
+        (request) => {
+            const formDataToJSON = (formData) => {
+                const data = {};
+                for (const key of formData.keys()) {
+                    data[key] = formData.get(key);
+                }
+                return data;
+            };
 
-        setPendingRequests((prev) => [...prev, request]);
-        storeDBObject('pendingRequests', { ...request, data: formDataToJSON(request.data) });
-    };
+            setPendingRequests((prev) => [...prev, request]);
+            storeDBObject('pendingRequests', { ...request, data: formDataToJSON(request.data) });
+        },
+        [storeDBObject]
+    );
 
     return (
         <StorageContext.Provider value={{ connected, localApplications, storeLocalApplication, storePendingRequest, clearDBObject }}>
