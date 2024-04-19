@@ -15,18 +15,7 @@ import { aboutPICCE, terms } from '../utils/constants';
 function AppRoutes(props) {
     return (
         <Routes>
-            <Route
-                path="/"
-                element={
-                    <InfosPage
-                        content={terms}
-                        showAccept={true}
-                        showNavTogglerDesktop={false}
-                        showNavTogglerMobile={false}
-                        showSidebar={false}
-                    />
-                }
-            />
+            <Route path="/" element={<LoginPage />} />
             <Route
                 path="/dash"
                 element={
@@ -44,6 +33,10 @@ function AppRoutes(props) {
             <Route path="/home" element={<HomePage />} />
             <Route path="/about" element={<InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/terms" element={<InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} />} />
+            <Route
+                path="/acceptTerms"
+                element={<InfosPage content={terms} showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />}
+            />
             <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
             <Route path="/protocol/:id" element={<ProtocolPage />} />
             <Route path="/logout" element={<LogoutPage />} />
