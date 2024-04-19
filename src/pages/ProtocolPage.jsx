@@ -217,13 +217,8 @@ function ProtocolPage(props) {
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
             <NavBar />
-            <div className="d-flex flex-column flex-grow-1 bg-yellow-orange px-4 py-4">
-                <div className="row m-0 w-100">
-                    <div className="col-3 col-sm-2 p-0">
-                        <p className="rounded shadow text-center font-barlow gray-color bg-coral-red p-2 m-0">Prot. {id}</p>
-                    </div>
-                </div>
-                <div className="row justify-content-center m-0 pt-3">
+            <div className="d-flex flex-column flex-grow-1 bg-yellow-orange p-4">
+                <div className="row justify-content-center m-0">
                     {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
                 </div>
                 {application.protocol.pages.map((page) => {
@@ -313,14 +308,7 @@ function ProtocolPage(props) {
                                 case 'TEXT':
                                     return (
                                         <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                            {
-                                                <TextImageInput
-                                                    item={item}
-                                                    galleryModalRef={galleryModalRef}
-                                                    group={itemGroup.id}
-                                                    onAnswerChange={handleAnswerChange}
-                                                />
-                                            }
+                                            {<TextImageInput item={item} galleryModalRef={galleryModalRef} />}
                                         </div>
                                     );
                                 default:
@@ -329,6 +317,23 @@ function ProtocolPage(props) {
                         });
                     });
                 })}
+                <div className="row justify-content-center m-0 pt-3">
+                    {
+                        <TextImageInput
+                            item={{
+                                text:
+                                    'Identificador da aplicação: ' +
+                                    application.id +
+                                    '<br>Identificador do protocolo: ' +
+                                    application.protocol.id +
+                                    '<br>Versão do protocolo: ' +
+                                    application.protocol.createdAt.replace(/\D/g, ''),
+                                files: [],
+                            }}
+                            galleryModalRef={galleryModalRef}
+                        />
+                    }
+                </div>
                 <div className="col-4 align-self-center pt-4">
                     <TextButton
                         type="submit"
