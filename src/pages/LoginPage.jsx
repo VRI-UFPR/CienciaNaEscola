@@ -84,8 +84,8 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, username, response.data.data.token);
-                    navigate('/home');
+                    login(response.data.data.id, username, response.data.data.token, response.data.data.acceptedTerms);
+                    navigate('/acceptTerms');
                 } else {
                     throw new Error('Authentication failed!');
                 }
@@ -104,8 +104,8 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, 'Visitante', response.data.data.token);
-                    navigate('/home');
+                    login(response.data.data.id, 'Visitante', response.data.data.token, false);
+                    navigate('/acceptTerms');
                 } else {
                     throw new Error('Authentication failed!');
                 }
