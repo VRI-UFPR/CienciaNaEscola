@@ -75,7 +75,7 @@ function InfosPage(props) {
                         <div className="d-flex flex-column flex-grow-1">
                             <MarkdownText text={content} />
                         </div>
-                        <div className="row justify-content-center pb-4 m-0">
+                        <div className="row justify-content-center pt-4 m-0">
                             <div className="col-8 col-lg-4 p-0">
                                 <div className="row m-0">
                                     <div className="col-6 p-0 pe-2">

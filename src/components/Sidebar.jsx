@@ -120,6 +120,7 @@ function Sidebar(props) {
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
                                 actionOnClick: () => {
+                                    closeSidebar();
                                     logout();
                                     navigate('/login');
                                 },
