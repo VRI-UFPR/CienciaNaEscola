@@ -84,11 +84,29 @@ function LoginPage(props) {
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, username, response.data.data.token);
-                    console.log(response.data);
-                    //navigate('/home');
+                    login(response.data.data.id, username, response.data.data.token, response.data.data.acceptedTerms);
+                    navigate('/acceptTerms');
                 } else {
-                    console.log(response.data);
+                    throw new Error('Authentication failed!');
+                }
+            })
+            .catch((error) => {
+                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
+            });
+    };
+
+    const passwordlessLoginHandler = () => {
+        axios
+            .get('http://localhost:3000/api/auth/passwordlessSignIn', {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                if (response.data.data.token) {
+                    login(response.data.data.id, 'Visitante', response.data.data.token, false);
+                    navigate('/acceptTerms');
+                } else {
                     throw new Error('Authentication failed!');
                 }
             })
@@ -140,8 +158,17 @@ function LoginPage(props) {
                         )}
                     </div>
                     <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                        </div>
+                        <div className="col-12 col-lg-6">
+                            <TextButton
+                                hsl={[97, 43, 70]}
+                                text="Entrar como visitante"
+                                className="rounded-pill"
+                                type="button"
+                                onClick={passwordlessLoginHandler}
+                            />
                         </div>
                     </div>
                 </form>

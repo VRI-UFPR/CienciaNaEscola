@@ -16,7 +16,7 @@ function Gallery(props) {
     };
 
     return (
-        <div className={item.files.length > 0 && galleryModalRef && className}>
+        <div className={(item.files.length > 0 && galleryModalRef && className) || undefined}>
             {item.files.length > 0 && galleryModalRef && (
                 <div className="row justify-content-center m-0">
                     {item.files.slice(0, ImageVisibility ? item.files.length : 3).map((image, index) => {
