@@ -22,12 +22,11 @@ const styles = `
 `;
 
 function SimpleTextInput(props) {
-    const [text, setText] = useState(['']);
+    const [answer, setAnswer] = useState({ text: '', files: [] });
     const { onAnswerChange, item, group, galleryModalRef } = props;
-
     useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', text);
-    }, [text, item.id, onAnswerChange, group]);
+        onAnswerChange(group, item.id, 'ITEM', answer);
+    }, [answer, item.id, onAnswerChange, group]);
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
@@ -42,7 +41,7 @@ function SimpleTextInput(props) {
                 className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => setAnswer((prevText) => ({ ...prevText, text: e.target.value }))}
             ></input>
             <style>{styles}</style>
         </div>
