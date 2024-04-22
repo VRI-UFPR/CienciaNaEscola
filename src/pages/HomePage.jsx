@@ -1,5 +1,6 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -37,7 +38,7 @@ function HomePage(props) {
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             axios
-                .get(`http://localhost:3000/api/application/getVisibleApplications`, {
+                .get(baseUrl + `api/application/getVisibleApplications`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,

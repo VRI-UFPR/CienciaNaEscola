@@ -7,6 +7,7 @@ import CreateMultipleInputItens from '../components/inputs/protocol/CreateMultip
 import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 // import SplashPage from './SplashPage';
 // import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -123,7 +124,7 @@ function CreateProtocolPage(props) {
         const formData = serialize(placedProtocol, { indices: true });
 
         axios
-            .post('http://localhost:3000/api/protocol/createProtocol', formData, {
+            .post(baseUrl + 'api/protocol/createProtocol', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
