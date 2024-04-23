@@ -5,10 +5,14 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const defaultUser = useMemo(() => ({ id: null, username: null, token: null, expiresIn: null }), []);
+    const defaultUser = useMemo(() => ({ id: null, username: null, token: null, expiresIn: null, acceptedTerms: null }), []);
     const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
-    const [acceptTerms, setAcceptTerms] = useState({ value: false });
     const [user, setUser] = useState(defaultUser);
+
+    const acceptTerms = () => {
+        setUser({ ...user, acceptedTerms: true });
+        localStorage.setItem('user', JSON.stringify({ ...user, acceptedTerms: true }));
+    };
 
     // Send all pending requests to the server when the user is connected and logged in
     useEffect(() => {
@@ -42,21 +46,17 @@ export const AuthProvider = ({ children }) => {
         }
     }, [clearPendingRequests, pendingRequests, connected, user]);
 
-    // Clean up all user traces, except the user itself (acceptTerms, localStorage, indexedDB)
+    // Clean up all user traces, except the user itself (localStorage, indexedDB)
     const clearDBAndStorage = useCallback(() => {
-        setAcceptTerms({ value: false });
         localStorage.removeItem('user');
-        localStorage.removeItem('acceptTerms');
         clearLocalApplications();
     }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
-    const login = useCallback((id, username, token, expiresIn) => {
-        setUser({ id, username, token, expiresIn });
-        setAcceptTerms({ value: true });
+    const login = useCallback((id, username, token, expiresIn, acceptedTerms) => {
+        setUser({ id, username, token, expiresIn, acceptedTerms });
 
-        localStorage.setItem('user', JSON.stringify({ id, username, token, expiresIn }));
-        localStorage.setItem('acceptTerms', JSON.stringify({ value: true }));
+        localStorage.setItem('user', JSON.stringify({ id, username, token, expiresIn, acceptedTerms }));
     }, []);
 
     // Clear user object and clean up traces (through clearDBAndStorage)
@@ -104,10 +104,9 @@ export const AuthProvider = ({ children }) => {
         });
     }, [defaultUser, clearDBAndStorage]);
 
-    // Load user and acceptTerms from localStorage and schedule periodic token expiration check
+    // Load user from localStorage and schedule periodic token expiration check
     useEffect(() => {
         setUser((prev) => JSON.parse(localStorage.getItem('user')) || prev);
-        setAcceptTerms((prev) => JSON.parse(localStorage.getItem('acceptTerms')) || prev);
         renewLogin();
 
         const interval = setInterval(() => {
@@ -116,5 +115,5 @@ export const AuthProvider = ({ children }) => {
         return () => clearInterval(interval);
     }, [renewLogin]);
 
-    return <AuthContext.Provider value={{ user, acceptTerms, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
 };

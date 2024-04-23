@@ -105,7 +105,6 @@ function ImageInput(props) {
                         id="imageinput"
                         style={{ display: 'none' }}
                         onChange={insertImage}
-                        // disabled={answer !== undefined}
                         ref={fileInputRef}
                     />
                 </div>
