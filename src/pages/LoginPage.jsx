@@ -5,6 +5,7 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
@@ -75,9 +76,8 @@ function LoginPage(props) {
             username,
             hash: password,
         });
-        // .post('http://localhost:3333/user/signIn', {
         axios
-            .post('http://localhost:3000/api/auth/signIn', formData, {
+            .post(baseUrl + 'api/auth/signIn', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -97,7 +97,7 @@ function LoginPage(props) {
 
     const passwordlessLoginHandler = () => {
         axios
-            .get('http://localhost:3000/api/auth/passwordlessSignIn', {
+            .get(baseUrl + 'api/auth/passwordlessSignIn', {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
