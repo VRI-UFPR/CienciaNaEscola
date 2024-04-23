@@ -17,7 +17,7 @@ export const StorageProvider = ({ children }) => {
         };
 
         return new Promise((resolve, reject) => {
-            const dbRequest = indexedDB.open('picceDB');
+            const dbRequest = indexedDB.open('picceDB', 1);
             dbRequest.onsuccess = (event) => {
                 const db = event.target.result;
                 const tx = db.transaction(['pendingRequests'], 'readwrite');
@@ -42,7 +42,7 @@ export const StorageProvider = ({ children }) => {
 
     const getDBapplication = useCallback(() => {
         return new Promise((resolve, reject) => {
-            const dbRequest = indexedDB.open('picceDB');
+            const dbRequest = indexedDB.open('picceDB', 1);
             dbRequest.onsuccess = (event) => {
                 const db = event.target.result;
                 const tx = db.transaction(['applications'], 'readwrite');
@@ -67,7 +67,7 @@ export const StorageProvider = ({ children }) => {
 
     const storeDBObject = useCallback((storeName, data) => {
         return new Promise((resolve, reject) => {
-            const dbRequest = indexedDB.open('picceDB');
+            const dbRequest = indexedDB.open('picceDB', 1);
             dbRequest.onsuccess = (event) => {
                 const db = event.target.result;
                 const tx = db.transaction([storeName], 'readwrite');
@@ -84,7 +84,7 @@ export const StorageProvider = ({ children }) => {
 
     const clearDBObject = useCallback((storeName) => {
         return new Promise((resolve, reject) => {
-            const dbRequest = indexedDB.open('picceDB');
+            const dbRequest = indexedDB.open('picceDB', 1);
             dbRequest.onsuccess = (event) => {
                 const db = event.target.result;
                 const tx = db.transaction([storeName], 'readwrite');
@@ -111,9 +111,12 @@ export const StorageProvider = ({ children }) => {
 
     // Retrieve stored data from localStorage
     useEffect(() => {
-        const dbRequest = indexedDB.open('picceDB');
+        const dbRequest = indexedDB.open('picceDB', 1);
         dbRequest.onupgradeneeded = (event) => {
             const db = event.target.result;
+            Array.from(db.objectStoreNames).forEach((storeName) => {
+                db.deleteObjectStore(storeName);
+            });
             db.createObjectStore('applications', { keyPath: 'id' });
             db.createObjectStore('pendingRequests', { keyPath: 'id' });
         };
