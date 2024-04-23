@@ -59,6 +59,11 @@ function MarkdownText(props) {
                                 className: 'fw-bold fs-5 mb-3',
                             },
                         },
+                        p: {
+                            props: {
+                                className: ' mb-3',
+                            },
+                        },
                     },
                 }}
                 className="form-label color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0"

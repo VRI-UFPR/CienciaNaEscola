@@ -88,9 +88,9 @@ function Sidebar(props) {
                     </div>
                 )}
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
-                    <Link className="rounded-circle" to="/profile">
+                    <div className="rounded-circle">
                         <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
-                    </Link>
+                    </div>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
@@ -106,9 +106,9 @@ function Sidebar(props) {
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
+                    {/* <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
                         Perfil
-                    </Link>
+                    </Link> */}
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         type="button"
@@ -120,6 +120,7 @@ function Sidebar(props) {
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
                                 actionOnClick: () => {
+                                    closeSidebar();
                                     logout();
                                     navigate('/login');
                                 },
