@@ -31,16 +31,6 @@ yarn-error.log*
 *.swp
 *.env
 *.swo
-form-creator-back/form-creator-api/.trash
-form-creator-back/form-creator-api/pids
-form-creator-back/form-creator-api/vscode
-form-creator-back/form-creator-api/logs
-form-creator-back/form-creator-api/node_modules
-form-creator-back/form-creator-api/doc
-form-creator-back/form-creator-api/coverage
-form-creator-back/form-creator-api/build
-form-creator-back/form-creator-api/dist
-form-creator-back/form-creator-api/uploads
 *.bak
 .env
 .editorconfig
