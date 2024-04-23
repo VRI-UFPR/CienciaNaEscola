@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
         id: null,
         username: null,
         token: null,
+        acceptedTerms: null,
     });
 
     const { clearDBObject } = useContext(StorageContext);
@@ -16,21 +17,20 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
-        const storedTermsValidation = JSON.parse(localStorage.getItem('acceptTerms'));
         if (storedUser) {
             setUser(storedUser);
         }
-        if (storedTermsValidation) {
-            setAcceptTerms(storedTermsValidation);
-        }
     }, []);
 
-    const login = (id, username, token) => {
-        setUser({ id, username, token });
-        localStorage.setItem('user', JSON.stringify({ id, username, token }));
-        setAcceptTerms({ value: true });
-        localStorage.setItem('acceptTerms', JSON.stringify({ value: true }));
+    const login = (id, username, token, acceptedTerms) => {
+        setUser({ id, username, token, acceptedTerms });
+        localStorage.setItem('user', JSON.stringify({ id, username, token, acceptedTerms }));
     };
+
+    // const acceptTerms = () => {
+    //     setUser({ ...user, acceptedTerms: true });
+    //     localStorage.setItem('user', JSON.stringify({ ...user, acceptedTerms: true }));
+    // };
 
     const logout = () => {
         setUser({
@@ -44,5 +44,5 @@ export const AuthProvider = ({ children }) => {
         clearDBObject('applications');
     };
 
-    return <AuthContext.Provider value={{ user, acceptTerms, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
 };

@@ -1,4 +1,4 @@
-import { React, useState, useContext, useEffect, useRef, useCallback } from 'react';
+import { React, useState, useContext, useRef, useCallback } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -114,7 +114,7 @@ function CreateProtocolPage(props) {
                     items: group.items.map((item, index) => ({
                         ...item,
                         placement: index + 1,
-                        itemOptions: item.itemOptions.map((option, index) => ({ ...option, placement: index + 1 })),
+                        itemOptions: item.itemOptions?.map((option, index) => ({ ...option, placement: index + 1 })),
                     })),
                 })),
             })),
