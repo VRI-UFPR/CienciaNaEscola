@@ -12,6 +12,10 @@ const styles = `
         width: 85%;
         box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
     }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
 `;
 
 function HomeButton(props) {
@@ -20,7 +24,7 @@ function HomeButton(props) {
     return (
         <div className="custom-btn d-flex align-items-center justify-content-between font-barlow h-100 px-4">
             <div className="d-flex align-items-center h-100 w-100 py-2">
-                <h5 style={{ overflow: 'scroll' }} className="text-wrap fw-medium h-100 w-100 py-1 my-0">
+                <h5 style={{ overflowY: 'scroll', maxHeight: '100%' }} className="text-wrap fw-medium w-100 py-1 my-0">
                     {title}
                 </h5>
 

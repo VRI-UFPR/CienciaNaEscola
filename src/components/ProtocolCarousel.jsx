@@ -26,7 +26,7 @@ function ProtocolCarousel(props) {
     const { applications } = props;
 
     const carouselRef = useRef(null);
-    const itemsPerSlide = 5;
+    const itemsPerSlide = Math.round((window.screen.height - 300) / 120);
     const totalSlides = Math.ceil(applications.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
