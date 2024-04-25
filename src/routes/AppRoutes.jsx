@@ -11,11 +11,12 @@ import ProtocolPage from './../pages/ProtocolPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
 import { aboutPICCE, terms } from '../utils/constants';
+import InstallPage from '../pages/InstallPage';
 
 function AppRoutes(props) {
     return (
         <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<InstallPage />} />
             <Route
                 path="/dash"
                 element={
