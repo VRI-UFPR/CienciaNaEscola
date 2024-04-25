@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
+import { createContext, useState, useEffect, useCallback } from 'react';
 
 export const StorageContext = createContext();
 
@@ -7,9 +6,8 @@ export const StorageProvider = ({ children }) => {
     const [connected, setConnected] = useState(window.navigator.onLine);
     const [localApplications, setLocalApplications] = useState(undefined);
     const [pendingRequests, setPendingRequests] = useState(undefined);
-    const isRequesting = useRef(false);
 
-    const getDBPendingRequests = () => {
+    const getDBPendingRequests = useCallback(() => {
         const JSONtoFormData = (data) => {
             const formData = new FormData();
             for (const key in data) {
@@ -40,9 +38,9 @@ export const StorageProvider = ({ children }) => {
                 reject([]);
             };
         });
-    };
+    }, []);
 
-    const getDBapplication = () => {
+    const getDBapplication = useCallback(() => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -65,9 +63,9 @@ export const StorageProvider = ({ children }) => {
                 reject([]);
             };
         });
-    };
+    }, []);
 
-    const storeDBObject = (storeName, data) => {
+    const storeDBObject = useCallback((storeName, data) => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -82,9 +80,9 @@ export const StorageProvider = ({ children }) => {
                 reject();
             };
         });
-    };
+    }, []);
 
-    const clearDBObject = (storeName) => {
+    const clearDBObject = useCallback((storeName) => {
         return new Promise((resolve, reject) => {
             const dbRequest = indexedDB.open('picceDB');
             dbRequest.onsuccess = (event) => {
@@ -99,7 +97,17 @@ export const StorageProvider = ({ children }) => {
                 reject();
             };
         });
-    };
+    }, []);
+
+    const clearLocalApplications = useCallback(() => {
+        setLocalApplications([]);
+        clearDBObject('applications');
+    }, [clearDBObject]);
+
+    const clearPendingRequests = useCallback(() => {
+        setPendingRequests([]);
+        clearDBObject('pendingRequests');
+    }, [clearDBObject]);
 
     // Retrieve stored data from localStorage
     useEffect(() => {
@@ -115,7 +123,7 @@ export const StorageProvider = ({ children }) => {
         getDBPendingRequests().then((result) => {
             setPendingRequests(result);
         });
-    }, []);
+    }, [getDBPendingRequests, getDBapplication]);
 
     // Add event listeners to update the connected state
     useEffect(() => {
@@ -136,60 +144,48 @@ export const StorageProvider = ({ children }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (connected && pendingRequests?.length > 0 && !isRequesting.current) {
-            isRequesting.current = true;
-            const promises = [];
-            for (const request of pendingRequests) {
-                try {
-                    // Axios request promise
-                    const promise = axios.post(request.url, request.data, request.config).then((response) => {
-                        Notification.requestPermission().then((result) => {
-                            new Notification('Envio pendente realizado! ', { body: request.title });
-                        });
-                    });
-                    promises.push(promise);
-                } catch (error) {
-                    Notification.requestPermission().then((result) => {
-                        new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
-                    });
+    const storeLocalApplication = useCallback(
+        (application) => {
+            setLocalApplications((prev) => {
+                if (prev.find((app) => app.id === application.id)) {
+                    return prev;
+                } else {
+                    return [...prev, application];
                 }
-            }
-            Promise.all(promises).then(() => {
-                setPendingRequests([]);
-                clearDBObject('pendingRequests').then(() => {
-                    isRequesting.current = false;
-                });
             });
-        }
-    }, [connected, pendingRequests]);
+            storeDBObject('applications', application);
+        },
+        [storeDBObject]
+    );
 
-    const storeLocalApplication = useCallback((application) => {
-        setLocalApplications((prev) => {
-            if (prev.find((app) => app.id === application.id)) {
-                return prev;
-            } else {
-                return [...prev, application];
-            }
-        });
-        storeDBObject('applications', application);
-    }, []);
+    const storePendingRequest = useCallback(
+        (request) => {
+            const formDataToJSON = (formData) => {
+                const data = {};
+                for (const key of formData.keys()) {
+                    data[key] = formData.get(key);
+                }
+                return data;
+            };
 
-    const storePendingRequest = (request) => {
-        const formDataToJSON = (formData) => {
-            const data = {};
-            for (const key of formData.keys()) {
-                data[key] = formData.get(key);
-            }
-            return data;
-        };
-
-        setPendingRequests((prev) => [...prev, request]);
-        storeDBObject('pendingRequests', { ...request, data: formDataToJSON(request.data) });
-    };
+            setPendingRequests((prev) => [...prev, request]);
+            storeDBObject('pendingRequests', { ...request, data: formDataToJSON(request.data) });
+        },
+        [storeDBObject]
+    );
 
     return (
-        <StorageContext.Provider value={{ connected, localApplications, storeLocalApplication, storePendingRequest, clearDBObject }}>
+        <StorageContext.Provider
+            value={{
+                connected,
+                localApplications,
+                pendingRequests,
+                storeLocalApplication,
+                storePendingRequest,
+                clearLocalApplications,
+                clearPendingRequests,
+            }}
+        >
             {children}
         </StorageContext.Provider>
     );

@@ -1,48 +1,119 @@
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { StorageContext } from './StorageContext';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({
-        id: null,
-        username: null,
-        token: null,
-        acceptedTerms: null,
-    });
+    const defaultUser = useMemo(() => ({ id: null, username: null, token: null, expiresIn: null, acceptedTerms: null }), []);
+    const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
+    const [user, setUser] = useState(defaultUser);
 
-    const { clearDBObject } = useContext(StorageContext);
+    const acceptTerms = () => {
+        setUser({ ...user, acceptedTerms: true });
+        localStorage.setItem('user', JSON.stringify({ ...user, acceptedTerms: true }));
+    };
 
-    const [acceptTerms, setAcceptTerms] = useState({ value: false });
-
+    // Send all pending requests to the server when the user is connected and logged in
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem('user'));
-        if (storedUser) {
-            setUser(storedUser);
+        if (connected && user.id && user.token && pendingRequests?.length > 0) {
+            const promises = [];
+            for (const request of pendingRequests) {
+                if (request.userId === user.id) {
+                    try {
+                        // Axios request promise
+                        const promise = axios
+                            .post(request.url, request.data, {
+                                ...request.config,
+                                headers: { ...request.config?.headers, Authorization: `Bearer ${user.token}` },
+                            })
+                            .then((response) => {
+                                Notification.requestPermission().then((result) => {
+                                    new Notification('Envio pendente realizado! ', { body: request.title });
+                                });
+                            });
+                        promises.push(promise);
+                    } catch (error) {
+                        Notification.requestPermission().then((result) => {
+                            new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
+                        });
+                    }
+                }
+            }
+            Promise.all(promises).then(() => {
+                clearPendingRequests();
+            });
         }
+    }, [clearPendingRequests, pendingRequests, connected, user]);
+
+    // Clean up all user traces, except the user itself (localStorage, indexedDB)
+    const clearDBAndStorage = useCallback(() => {
+        localStorage.removeItem('user');
+        clearLocalApplications();
+    }, [clearLocalApplications]);
+
+    // Create a new user object and store it in localStorage
+    const login = useCallback((id, username, token, expiresIn, acceptedTerms) => {
+        setUser({ id, username, token, expiresIn, acceptedTerms });
+
+        localStorage.setItem('user', JSON.stringify({ id, username, token, expiresIn, acceptedTerms }));
     }, []);
 
-    const login = (id, username, token, acceptedTerms) => {
-        setUser({ id, username, token, acceptedTerms });
-        localStorage.setItem('user', JSON.stringify({ id, username, token, acceptedTerms }));
-    };
+    // Clear user object and clean up traces (through clearDBAndStorage)
+    const logout = useCallback(() => {
+        setUser(defaultUser);
+        clearDBAndStorage();
+    }, [clearDBAndStorage, defaultUser]);
 
-    // const acceptTerms = () => {
-    //     setUser({ ...user, acceptedTerms: true });
-    //     localStorage.setItem('user', JSON.stringify({ ...user, acceptedTerms: true }));
-    // };
-
-    const logout = () => {
-        setUser({
-            id: null,
-            username: null,
-            token: null,
+    // Check user's token expiration time and renew it if necessary or clear traces if expired
+    const renewLogin = useCallback(() => {
+        setUser((prev) => {
+            if (prev.expiresIn) {
+                const now = new Date();
+                const renewTime = new Date(new Date(prev.expiresIn).getTime() - 600000);
+                const expirationTime = new Date(prev.expiresIn);
+                if (now >= renewTime && now <= expirationTime) {
+                    axios
+                        .post('http://localhost:3000/api/auth/renewSignIn', null, {
+                            headers: {
+                                Authorization: `Bearer ${prev.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            if (response.data.data.token) {
+                                const token = response.data.data.token;
+                                const expiresIn = new Date(new Date().getTime() + response.data.data.expiresIn);
+                                localStorage.setItem('user', JSON.stringify({ ...prev, token, expiresIn }));
+                                return {
+                                    ...prev,
+                                    token,
+                                    expiresIn,
+                                };
+                            }
+                        })
+                        .catch((error) => {
+                            clearDBAndStorage();
+                            return defaultUser;
+                        });
+                } else if (now > expirationTime) {
+                    clearDBAndStorage();
+                    return defaultUser;
+                }
+            }
+            return prev;
         });
-        localStorage.removeItem('user');
-        setAcceptTerms({ value: false });
-        localStorage.removeItem('acceptTerms');
-        clearDBObject('applications');
-    };
+    }, [defaultUser, clearDBAndStorage]);
+
+    // Load user from localStorage and schedule periodic token expiration check
+    useEffect(() => {
+        setUser((prev) => JSON.parse(localStorage.getItem('user')) || prev);
+        renewLogin();
+
+        const interval = setInterval(() => {
+            renewLogin();
+        }, 300000);
+        return () => clearInterval(interval);
+    }, [renewLogin]);
 
     return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
 };
