@@ -6,6 +6,7 @@ import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 import MarkdownText from '../components/MarkdownText';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
 
 const infosPageStyles = `
@@ -36,7 +37,7 @@ function InfosPage(props) {
 
     const handleTermsAcceptance = () => {
         axios
-            .get('http://localhost:3000/api/auth/acceptTerms', {
+            .get(baseUrl + 'api/auth/acceptTerms', {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,

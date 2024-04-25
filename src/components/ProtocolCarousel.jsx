@@ -12,6 +12,12 @@ const style = `
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
+
+    .carousel-link {
+        height: 7rem;
+        max-height: 7rem;
+        color: #262626;
+    }
         
     .carousel-indicator {
         background-color: #9F9F9F !important;
@@ -26,7 +32,7 @@ function ProtocolCarousel(props) {
     const { applications } = props;
 
     const carouselRef = useRef(null);
-    const itemsPerSlide = 5;
+    const itemsPerSlide = Math.round((window.screen.height - 300) / 120);
     const totalSlides = Math.ceil(applications.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -41,17 +47,16 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideButtons = applications.slice(startIndex, endIndex);
+            const slideApplications = applications.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
                     <div className="d-flex flex-column align-items-center h-100 pb-3">
-                        {slideButtons.map((application, index) => (
+                        {slideApplications.map((application, index) => (
                             <Link
                                 to={`/protocol/${application.id}`}
                                 key={'protocol-' + application.id}
-                                className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
-                                style={{ height: '4rem', maxHeight: '4rem', color: '#262626' }}
+                                className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >
                                 {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
                                 <HomeButton title={application.protocol.title} />
