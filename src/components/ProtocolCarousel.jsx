@@ -12,6 +12,12 @@ const style = `
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
+
+    .carousel-link {
+        height: 7rem;
+        max-height: 7rem;
+        color: #262626;
+    }
         
     .carousel-indicator {
         background-color: #9F9F9F !important;
@@ -50,8 +56,7 @@ function ProtocolCarousel(props) {
                             <Link
                                 to={`/protocol/${application.id}`}
                                 key={'protocol-' + application.id}
-                                className="d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
-                                style={{ height: '7rem', maxHeight: '7rem', color: '#262626' }}
+                                className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >
                                 {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
                                 <HomeButton title={application.protocol.title} />
