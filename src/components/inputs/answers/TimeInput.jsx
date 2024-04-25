@@ -32,14 +32,14 @@ const styles = `
 `;
 
 function TimeInput(props) {
-    const [time, setTime] = useState('');
+    const [time, setTime] = useState({ text: '', files: [] });
     const { onAnswerChange, item, group } = props;
 
     useEffect(() => {
         const date = new Date();
         const hour = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-        setTime([hour + ':' + minutes]);
+        setTime((prev) => ({ ...prev, text: `${hour}:${minutes}` }));
     }, []);
 
     useEffect(() => {
@@ -65,8 +65,8 @@ function TimeInput(props) {
                             type="time"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
-                            onChange={(e) => setTime([e.target.value])}
-                            defaultValue={time}
+                            onChange={(e) => setTime((prev) => ({ ...prev, text: e.target.value }))}
+                            defaultValue={time.text}
                         ></input>
                     </div>
                 </div>

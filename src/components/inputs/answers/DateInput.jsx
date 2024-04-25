@@ -32,7 +32,7 @@ const styles = `
 `;
 
 function DateInput(props) {
-    const [date, setDate] = useState(['']);
+    const [date, setDate] = useState({ text: '', files: [] });
     const { onAnswerChange, item, group } = props;
 
     useEffect(() => {
@@ -40,7 +40,7 @@ function DateInput(props) {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = String(date.getFullYear());
-        setDate([year + '-' + month + '-' + day]);
+        setDate((prev) => ({ ...prev, text: `${year}-${month}-${day}` }));
     }, []);
 
     useEffect(() => {
@@ -66,8 +66,8 @@ function DateInput(props) {
                             type="date"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            onChange={(e) => setDate([e.target.value])}
-                            defaultValue={date}
+                            onChange={(e) => setDate((prev) => ({ ...prev, text: e.target.value }))}
+                            defaultValue={date.text}
                         ></input>
                     </div>
                 </div>
