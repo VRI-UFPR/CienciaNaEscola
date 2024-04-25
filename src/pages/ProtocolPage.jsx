@@ -158,6 +158,7 @@ function ProtocolPage(props) {
                 });
         } else {
             storePendingRequest({
+                title: 'Resposta da aplicação ' + id + ' referente ao protocolo ' + application.protocol.title,
                 url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
                 data: formData,
                 config: {

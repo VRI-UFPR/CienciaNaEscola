@@ -87,6 +87,9 @@ export const StorageProvider = ({ children }) => {
             pendingRequests.forEach(async (request) => {
                 try {
                     await axios.post(request.url, request.data, request.config);
+                    Notification.requestPermission().then((result) => {
+                        new Notification('Envio pendente realizado! ', { body: request.title });
+                    });
                 } catch (error) {
                     console.error(error);
                 }

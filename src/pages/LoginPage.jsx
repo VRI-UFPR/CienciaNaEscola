@@ -65,9 +65,9 @@ function LoginPage(props) {
     const modalRef = useRef(null);
 
     useEffect(() => {
-        if (localStorage.getItem('user') != null) {
-            navigate('/home');
-        }
+        // if (localStorage.getItem('user') != null) {
+        //     navigate('/home');
+        // }
     }, [navigate]);
 
     const loginHandler = (event) => {
