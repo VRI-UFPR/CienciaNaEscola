@@ -19,6 +19,7 @@ import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 
 const styles = `
@@ -129,7 +130,7 @@ function ProtocolPage(props) {
 
         if (connected === true) {
             axios
-                .post(`http://localhost:3000/api/applicationAnswer/createApplicationAnswer`, formData, {
+                .post(baseUrl + `api/applicationAnswer/createApplicationAnswer`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -159,7 +160,7 @@ function ProtocolPage(props) {
             storePendingRequest({
                 id: id,
                 title: 'Resposta da aplicação ' + id + ' referente ao protocolo ' + application.protocol.title,
-                url: `http://localhost:3000/api/applicationAnswer/createApplicationAnswer`,
+                url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
                 data: formData,
                 config: {
                     headers: {
@@ -186,7 +187,7 @@ function ProtocolPage(props) {
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
                 axios
-                    .get(`http://localhost:3000/api/application/getApplicationWithProtocol/${id}`, {
+                    .get(baseUrl + `api/application/getApplicationWithProtocol/${id}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },

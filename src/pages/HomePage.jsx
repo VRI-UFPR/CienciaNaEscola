@@ -1,5 +1,6 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -44,7 +45,7 @@ function HomePage(props) {
             }
         } else if (user.id !== null && user.token !== null && connected) {
             axios
-                .get(`http://localhost:3000/api/application/getVisibleApplications`, {
+                .get(baseUrl + `api/application/getVisibleApplications`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -91,7 +92,7 @@ function HomePage(props) {
                             <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Protocolos</h1>
                             <div
                                 className={`d-flex justify-content-center flex-grow-1 ${
-                                    location.pathname === '/home' ? 'pb-5' : 'pb-2'
+                                    location.pathname === '/home' ? 'pb-3' : 'pb-2'
                                 } pb-lg-0 m-0`}
                             >
                                 <ProtocolCarousel applications={userApplications} />
