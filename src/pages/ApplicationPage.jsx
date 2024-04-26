@@ -44,7 +44,7 @@ const styles = `
     }
 `;
 
-function ProtocolPage(props) {
+function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
@@ -373,4 +373,4 @@ function ProtocolPage(props) {
     );
 }
 
-export default ProtocolPage;
+export default ApplicationPage;

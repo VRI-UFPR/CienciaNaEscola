@@ -68,7 +68,7 @@ const styles = `
     }
 `;
 
-function LoginPage(props) {
+function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
@@ -208,4 +208,4 @@ function LoginPage(props) {
     );
 }
 
-export default LoginPage;
+export default SignInPage;

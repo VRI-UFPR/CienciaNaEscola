@@ -47,8 +47,8 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { modalRef, showExitButton } = props;
-    const { logout } = useContext(AuthContext);
+    const { modalRef, showExitButton, isDashboard } = props;
+    const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
@@ -94,21 +94,43 @@ function Sidebar(props) {
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/applications" onClick={() => closeSidebar()}>
-                        Protocolos
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/applications' : '/applications'}
+                        onClick={() => closeSidebar()}
+                    >
+                        Aplicações
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about" onClick={() => closeSidebar()}>
+                    {isDashboard && user.role !== 'USER' && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/protocols" onClick={() => closeSidebar()}>
+                            Protocolos
+                        </Link>
+                    )}
+                    {isDashboard && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/institutions" onClick={() => closeSidebar()}>
+                            Instituições
+                        </Link>
+                    )}
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/about' : '/about'}
+                        onClick={() => closeSidebar()}
+                    >
                         Sobre o App
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms" onClick={() => closeSidebar()}>
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/terms' : '/terms'}
+                        onClick={() => closeSidebar()}
+                    >
                         Termos de Uso
                     </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    {/* <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
+                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
                         Perfil
-                    </Link> */}
+                    </Link>
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         type="button"
@@ -135,5 +157,10 @@ function Sidebar(props) {
         </div>
     );
 }
+
+Sidebar.defaultProps = {
+    showExitButton: true,
+    isDashboard: false,
+};
 
 export default Sidebar;

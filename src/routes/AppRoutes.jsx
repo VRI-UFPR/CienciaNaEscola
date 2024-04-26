@@ -1,13 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import LoginPage from './../pages/LoginPage';
+import SignInPage from '../pages/SignInPage';
 import HomePage from './../pages/HomePage';
 import InfosPage from './../pages/InfosPage';
 import ProfilePage from './../pages/ProfilePage';
-import LogoutPage from './../pages/LogoutPage';
-import SignUpPage from './../pages/SignUpPage';
-import ProtocolPage from './../pages/ProtocolPage';
+import ApplicationPage from '../pages/ApplicationPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
 import { aboutPICCE, terms } from '../utils/constants';
@@ -37,7 +35,7 @@ function AppRoutes(props) {
     return (
         <Routes>
             <Route path="/" element={<InstallPage />} />
-            <Route path="/signin" element={<LoginPage />} />
+            <Route path="/signin" element={<SignInPage />} />
             <Route path="/about" element={<InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/terms" element={<InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
@@ -46,7 +44,7 @@ function AppRoutes(props) {
                 element={<InfosPage content={terms} showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />}
             />
             <Route path="/applications" element={<HomePage />} />
-            <Route path="/applications/:id" element={<ProtocolPage />} />
+            <Route path="/applications/:id" element={<ApplicationPage />} />
 
             <Route
                 path="/dash"
@@ -60,7 +58,7 @@ function AppRoutes(props) {
                     />
                 }
             />
-            <Route path="/dash/signin" element={<LoginPage />} />
+            <Route path="/dash/signin" element={<SignInPage />} />
             <Route path="/dash/about" element={<InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/dash/terms" element={<InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} />} />
             <Route path="/dash/profile" element={<ProfilePage allowEdit={false} />} />
@@ -70,7 +68,7 @@ function AppRoutes(props) {
             />
             <Route path="/dash/applications" element={<HomePage showNavTogglerMobile={true} showNavTogglerDesktop={false} />} />
             <Route path="/dash/protocols/create" element={<CreateProtocolPage />} />
-            <Route path="/dash/applications/:id" element={<ProtocolPage />} />
+            <Route path="/dash/applications/:id" element={<ApplicationPage />} />
             <Route path="/dash/applications/:id/manage" element={<SplashPage />} />
             <Route path="/dash/protocols" element={<SplashPage />} />
             <Route path="/dash/protocols/create" element={<SplashPage />} />
