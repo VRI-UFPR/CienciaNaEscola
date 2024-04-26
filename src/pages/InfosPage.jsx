@@ -31,7 +31,7 @@ function InfosPage(props) {
 
     useEffect(() => {
         if (user.acceptedTerms === true && showAccept === true) {
-            navigate('/home');
+            navigate('/applications');
         }
     }, [user.acceptedTerms, navigate, showAccept]);
 
@@ -45,7 +45,7 @@ function InfosPage(props) {
             })
             .then((response) => {
                 acceptTerms();
-                navigate('/home');
+                navigate('/applications');
             })
             .catch((error) => {
                 if (error.response.status === 401) {
@@ -53,7 +53,7 @@ function InfosPage(props) {
                     navigate('/');
                 } else {
                     acceptTerms();
-                    navigate('/home');
+                    navigate('/applications');
                 }
             });
     };

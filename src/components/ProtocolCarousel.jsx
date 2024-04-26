@@ -54,7 +54,7 @@ function ProtocolCarousel(props) {
                     <div className="d-flex flex-column align-items-center h-100 pb-3">
                         {slideApplications.map((application, index) => (
                             <Link
-                                to={`/protocol/${application.id}`}
+                                to={`/applications/${application.id}`}
                                 key={'protocol-' + application.id}
                                 className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >

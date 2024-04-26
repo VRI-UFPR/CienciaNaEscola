@@ -103,7 +103,7 @@ function AnswerPage(props) {
             <div className="d-flex flex-column flex-grow-1 bg-white p-4 p-lg-5">
                 <div className="row m-0 mb-4 p-0">
                     <h1 className="color-dark-gray w-auto fw-bold fs-4 m-0 p-0">
-                        <Link className="color-dark-gray" to={`/protocol/${id}`}>
+                        <Link className="color-dark-gray" to={`/applications/${id}`}>
                             {protocolAnswer.length > 0 ? protocolAnswer[0].form.title : 'Inválido'}
                         </Link>{' '}
                         -
@@ -114,7 +114,11 @@ function AnswerPage(props) {
                 <div className="bg-light-gray rounded-4 mb-3 p-3">
                     <h2 className="color-dark-gray fw-medium fs-5 m-0">
                         {protocolAnswer.length} respostas{' '}
-                        <a href="#answerTab" onClick={() => setVisualization(undefined, undefined)} className="color-dark-gray fw-bold fs-6">
+                        <a
+                            href="#answerTab"
+                            onClick={() => setVisualization(undefined, undefined)}
+                            className="color-dark-gray fw-bold fs-6"
+                        >
                             (ver todas)
                         </a>
                     </h2>
@@ -125,7 +129,11 @@ function AnswerPage(props) {
                         return (
                             <div key={'Person ' + answer.id} className="bg-white rounded-4 mb-3 p-2 px-3">
                                 <p className="fw-medium fs-6 m-0">
-                                    <a className="color-dark-gray fw-bold" href="#answerTab" onClick={() => setVisualization(answerIndex, undefined)}>
+                                    <a
+                                        className="color-dark-gray fw-bold"
+                                        href="#answerTab"
+                                        onClick={() => setVisualization(answerIndex, undefined)}
+                                    >
                                         Pessoa {answerIndex}
                                     </a>
                                 </p>

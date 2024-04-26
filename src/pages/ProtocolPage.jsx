@@ -143,7 +143,7 @@ function ProtocolPage(props) {
                         dismissText: 'Ok',
                         dismissible: true,
                         onHide: () => {
-                            navigate('/home');
+                            navigate('/applications');
                         },
                     });
                 })
@@ -201,7 +201,7 @@ function ProtocolPage(props) {
                         console.error(error.message);
                         if (error.response.status === 401) {
                             logout();
-                            navigate('/login');
+                            navigate('/signin');
                         }
                     });
             }

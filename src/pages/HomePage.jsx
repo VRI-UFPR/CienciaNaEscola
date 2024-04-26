@@ -59,7 +59,7 @@ function HomePage(props) {
                     console.error(error.message);
                     if (error.response.status === 401) {
                         logout();
-                        navigate('/login');
+                        navigate('/signin');
                     }
                 });
         }
@@ -86,27 +86,27 @@ function HomePage(props) {
                     <div className="row d-flex align-items-center justify-content-center font-barlow bg-white h-100 p-0 m-0">
                         <div
                             className={`col col-md-10 ${
-                                location.pathname === '/home' ? 'col-lg-9' : 'col-lg-12'
+                                location.pathname === '/applications' ? 'col-lg-9' : 'col-lg-12'
                             } d-flex flex-column h-100 p-4 p-lg-5 pb-lg-4`}
                         >
                             <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Protocolos</h1>
                             <div
                                 className={`d-flex justify-content-center flex-grow-1 ${
-                                    location.pathname === '/home' ? 'pb-3' : 'pb-2'
+                                    location.pathname === '/applications' ? 'pb-3' : 'pb-2'
                                 } pb-lg-0 m-0`}
                             >
                                 <ProtocolCarousel applications={userApplications} />
                             </div>
                         </div>
                     </div>
-                    {location.pathname === '/dash/home' && (
+                    {location.pathname === '/dash/applications' && (
                         <div className="row d-flex justify-content-center pb-4 p-0 m-0">
                             <div className="col col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column m-0">
                                 <TextButton
                                     text={'Criar novo protocolo'}
                                     hsl={[97, 43, 70]}
                                     onClick={() => {
-                                        navigate('/createprotocol');
+                                        navigate('/protocols/create');
                                     }}
                                 />
                             </div>
