@@ -16,7 +16,6 @@ import { LayoutProvider } from '../contexts/LayoutContext';
 //                                                               -> About/Developers
 //                                       -> Terms of use
 //                                       -> Profile (?)
-
 // Dashboard navigation flow
 // Terms of use -> Login -> Created applications -> Manage application
 //                                               -> Application statistics/details
