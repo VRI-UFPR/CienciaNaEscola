@@ -3,7 +3,7 @@ import picceTitle from '../assets/images/picceTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
@@ -11,6 +11,7 @@ import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
 
@@ -71,16 +72,16 @@ const styles = `
 function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
-    const location = useLocation();
+    const { login, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const modalRef = useRef(null);
+    const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        // if (localStorage.getItem('user') != null) {
-        //     navigate('/applications');
-        // }
-    }, [navigate]);
+        if (user.id !== null) {
+            navigate(isDashboard ? '/dash/applications' : '/applications');
+        }
+    }, [navigate, isDashboard, user]);
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -99,11 +100,12 @@ function SignInPage(props) {
                     login(
                         response.data.data.id,
                         username,
+                        response.data.data.role,
                         response.data.data.token,
                         new Date(new Date().getTime() + response.data.data.expiresIn),
                         response.data.data.acceptedTerms
                     );
-                    navigate('/acceptTerms');
+                    navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
                     throw new Error('Authentication failed!');
                 }
@@ -125,11 +127,12 @@ function SignInPage(props) {
                     login(
                         response.data.data.id,
                         'Visitante',
+                        response.data.data.role,
                         response.data.data.token,
                         new Date(new Date().getTime() + response.data.data.expiresIn),
                         false
                     );
-                    navigate('/acceptTerms');
+                    navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
                     throw new Error('Authentication failed!');
                 }
@@ -171,25 +174,22 @@ function SignInPage(props) {
                         >
                             Esqueci minha senha
                         </p>
-                        {location.pathname === '/dash/signin' && (
-                            <Link classname="login-links text-decoration-underline fs-6 cursor-pointer" to="/signup">
-                                Não é cadastrado?
-                            </Link>
-                        )}
                     </div>
                     <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
                         <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
-                        <div className="col-12 col-lg-6">
-                            <TextButton
-                                hsl={[97, 43, 70]}
-                                text="Entrar como visitante"
-                                className="rounded-pill"
-                                type="button"
-                                onClick={passwordlessLoginHandler}
-                            />
-                        </div>
+                        {!isDashboard && (
+                            <div className="col-12 col-lg-6">
+                                <TextButton
+                                    hsl={[97, 43, 70]}
+                                    text="Entrar como visitante"
+                                    className="rounded-pill"
+                                    type="button"
+                                    onClick={passwordlessLoginHandler}
+                                />
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>
@@ -202,7 +202,7 @@ function SignInPage(props) {
                 </div>
             </div>
 
-            <Alert id="LoginModal" ref={modalRef} />
+            <Alert id="SignInPageAlert" ref={modalRef} />
             <style> {styles}</style>
         </div>
     );

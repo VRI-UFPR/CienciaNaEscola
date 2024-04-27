@@ -5,7 +5,7 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const defaultUser = useMemo(() => ({ id: null, username: null, token: null, expiresIn: null, acceptedTerms: null }), []);
+    const defaultUser = useMemo(() => ({ id: null, username: null, role: null, token: null, expiresIn: null, acceptedTerms: null }), []);
     const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
     const [user, setUser] = useState(defaultUser);
 
@@ -53,10 +53,10 @@ export const AuthProvider = ({ children }) => {
     }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
-    const login = useCallback((id, username, token, expiresIn, acceptedTerms) => {
-        setUser({ id, username, token, expiresIn, acceptedTerms });
+    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms) => {
+        setUser({ id, username, role, token, expiresIn, acceptedTerms });
 
-        localStorage.setItem('user', JSON.stringify({ id, username, token, expiresIn, acceptedTerms }));
+        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms }));
     }, []);
 
     // Clear user object and clean up traces (through clearDBAndStorage)
@@ -83,9 +83,11 @@ export const AuthProvider = ({ children }) => {
                             if (response.data.data.token) {
                                 const token = response.data.data.token;
                                 const expiresIn = new Date(new Date().getTime() + response.data.data.expiresIn);
+                                const role = response.data.data.role;
                                 localStorage.setItem('user', JSON.stringify({ ...prev, token, expiresIn }));
                                 return {
                                     ...prev,
+                                    role,
                                     token,
                                     expiresIn,
                                 };
