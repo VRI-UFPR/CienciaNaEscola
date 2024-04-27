@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import SplashPage from './SplashPage';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
@@ -42,7 +42,8 @@ function InstitutionPage(props) {
             <p>
                 Endereço: {institution.address.id}, {institution.address.city}, {institution.address.state}, {institution.address.country}
             </p>
-            <p>Salas de aula: {JSON.stringify(institution.classrooms.map((classroom) => classroom.id))}</p>
+            <Link to={'classrooms/create'}>Criar</Link>
+            <p>Salas de aula: {JSON.stringify(institution.classrooms.map((classroom) => classroom.users.map((user) => user.username)))}</p>
             <p>Usuários: {JSON.stringify(institution.users.map((user) => user.username))}</p>
             <p>Criada em: {institution.createdAt}</p>
             <p>Atualizada em: {institution.updateAt}</p>
