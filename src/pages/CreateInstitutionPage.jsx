@@ -1,32 +1,79 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function CreateInstitutionPage(props) {
+    const { id: institutionId } = useParams();
+    const { isEditing } = props;
     const { user } = useContext(AuthContext);
+
     const [institution, setInstitution] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoading) {
+            if (isEditing) {
+                if (user.token) {
+                    axios
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setInstitution({ name: d.name, type: d.type, addressId: d.address.id });
+                            setIsLoading(false);
+                        })
+                        .catch((error) => {
+                            alert('Erro ao buscar instituição');
+                        });
+                }
+            } else {
+                setIsLoading(false);
+            }
+        }
+    }, [institutionId, isEditing, isLoading, user.token]);
 
     const submitInstitution = (e) => {
         e.preventDefault();
         const formData = serialize(institution, { indices: true });
-        axios
-            .post(`${baseUrl}api/institution/createInstitution`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                alert('Instituição criada com sucesso');
-                navigate(`dash/institutions/${response.data.data.id}`);
-            })
-            .catch((error) => {
-                alert('Erro ao criar instituição');
-            });
+        if (isEditing) {
+            axios
+                .put(`${baseUrl}api/institution/updateInstitution/${institutionId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Instituição atualizada com sucesso');
+                    navigate(`/dash/institutions/${response.data.data.id}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao atualizar instituição');
+                });
+        } else {
+            axios
+                .post(`${baseUrl}api/institution/createInstitution`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Instituição criada com sucesso');
+                    navigate(`/dash/institutions/${response.data.data.id}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao criar instituição');
+                });
+        }
     };
 
     return (
@@ -37,6 +84,7 @@ function CreateInstitutionPage(props) {
                     <input
                         type="text"
                         name="name"
+                        value={institution.name || ''}
                         form="institution-form"
                         id="name"
                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
@@ -46,6 +94,7 @@ function CreateInstitutionPage(props) {
                     <label label="type">Selecione o tipo da instituição</label>
                     <select
                         name="type"
+                        value={institution.type || ''}
                         id="type"
                         form="institution-form"
                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
@@ -62,6 +111,7 @@ function CreateInstitutionPage(props) {
                     <input
                         type="number"
                         name="address-id"
+                        value={institution.addressId || ''}
                         form="institution-form"
                         id="address-id"
                         onChange={(e) => setInstitution({ ...institution, addressId: e.target.value })}

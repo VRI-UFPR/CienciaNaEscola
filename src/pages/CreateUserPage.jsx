@@ -1,34 +1,87 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
+import SplashPage from './SplashPage';
 
 function CreateUserPage(props) {
+    const { id: institutionId, userId } = useParams();
+    const { isEditing } = props;
     const { user } = useContext(AuthContext);
-    const { id } = useParams();
-    const [newUser, setNewUser] = useState({ institutionId: id, classrooms: [] });
+
+    const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoading) {
+            if (isEditing) {
+                if (user.token) {
+                    axios
+                        .get(`${baseUrl}api/user/getUser/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setNewUser({
+                                name: d.name,
+                                username: d.username,
+                                role: d.role,
+                                hash: d.hash,
+                                classrooms: d.classrooms.map((c) => c.id),
+                            });
+                            setIsLoading(false);
+                        })
+                        .catch((error) => {
+                            alert('Erro ao buscar usuário');
+                        });
+                }
+            } else {
+                setIsLoading(false);
+            }
+        }
+    }, [userId, isEditing, isLoading, user.token]);
 
     const submitNewUser = (e) => {
         e.preventDefault();
         const formData = serialize(newUser, { indices: true });
-        axios
-            .post(`${baseUrl}api/user/createUser`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                alert('Usuário criado com sucesso');
-                navigate(`/dash/institutions/${id}`);
-            })
-            .catch((error) => {
-                alert('Erro ao criar usuário');
-            });
+        if (isEditing) {
+            axios
+                .put(`${baseUrl}api/user/updateUser/${userId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Usuário atualizado com sucesso');
+                    navigate(`/dash/institutions/${institutionId}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao atualizar usuário');
+                });
+        } else {
+            axios
+                .post(`${baseUrl}api/user/createUser`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Usuário criado com sucesso');
+                    navigate(`/dash/institutions/${institutionId}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao criar usuário');
+                });
+        }
     };
 
     const generateRandomHash = () => {
@@ -36,6 +89,10 @@ function CreateUserPage(props) {
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
         setNewUser((prev) => ({ ...prev, hash: randomHash }));
     };
+
+    if (isLoading) {
+        return <SplashPage />;
+    }
 
     return (
         <div>
@@ -45,6 +102,7 @@ function CreateUserPage(props) {
                     <input
                         type="text"
                         name="name"
+                        value={newUser.name || ''}
                         form="user-form"
                         id="name"
                         onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
@@ -55,6 +113,7 @@ function CreateUserPage(props) {
                     <input
                         type="text"
                         name="username"
+                        value={newUser.username || ''}
                         form="user-form"
                         id="username"
                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
@@ -65,9 +124,9 @@ function CreateUserPage(props) {
                     <input
                         type={passwordVisibility ? 'text' : 'password'}
                         name="hash"
+                        value={newUser.hash || ''}
                         form="user-form"
                         id="hash"
-                        value={newUser.hash || ''}
                         onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
                     />
                     <button type="button" onClick={() => setPasswordVisibility((prev) => !prev)}>
@@ -84,6 +143,7 @@ function CreateUserPage(props) {
                         id="role"
                         form="user-form"
                         onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value || undefined }))}
+                        value={newUser.role || ''}
                     >
                         <option value="">Selecione uma opção:</option>
                         <option value="USER">Usuário</option>

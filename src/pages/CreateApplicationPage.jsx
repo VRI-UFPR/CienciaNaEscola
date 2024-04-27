@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function CreateApplicationPage(props) {
-    const { user } = useContext(AuthContext);
     const { id } = useParams();
+    const { isEditing } = props;
+    const { user } = useContext(AuthContext);
+
     const [application, setApplication] = useState({
         protocolId: id,
         viewersUser: [],
@@ -15,25 +17,75 @@ function CreateApplicationPage(props) {
         answersViewersUser: [],
         answersViewersClassroom: [],
     });
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoading) {
+            if (isEditing) {
+                if (user.token) {
+                    axios
+                        .get(`${baseUrl}api/application/getApplication/${id}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setApplication({
+                                visibility: d.visibility,
+                                answersVisibility: d.answersVisibility,
+                                viewersUser: d.viewersUser.map((v) => v.id),
+                                viewersClassroom: d.viewersClassroom.map((v) => v.id),
+                                answersViewersUser: d.answersViewersUser.map((v) => v.id),
+                                answersViewersClassroom: d.answersViewersClassroom.map((v) => v.id),
+                            });
+                        })
+                        .catch((error) => {
+                            alert('Erro ao buscar aplicação');
+                        });
+                }
+            } else {
+                setIsLoading(false);
+            }
+        }
+    }, [id, isEditing, isLoading, user.token]);
 
     const submitApplication = (e) => {
         e.preventDefault();
         const formData = serialize(application, { indices: true });
-        axios
-            .post(`${baseUrl}api/application/createApplication`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                alert('Aplicação criada com sucesso');
-                navigate(`/dash/applications/${response.data.data.id}`);
-            })
-            .catch((error) => {
-                alert('Erro ao criar aplicação');
-            });
+        if (isEditing) {
+            axios
+                .put(`${baseUrl}api/application/updateApplication/${id}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Aplicação atualizada com sucesso');
+                    navigate(`/dash/applications/${response.data.data.id}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao atualizarr aplicação');
+                });
+        } else {
+            axios
+                .post(`${baseUrl}api/application/createApplication`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    alert('Aplicação criada com sucesso');
+                    navigate(`/dash/applications/${response.data.data.id}`);
+                })
+                .catch((error) => {
+                    alert('Erro ao criar aplicação');
+                });
+        }
     };
 
     return (
@@ -43,6 +95,7 @@ function CreateApplicationPage(props) {
                     <label label="visibility">Selecione a visibilidade da aplicação</label>
                     <select
                         name="visibility"
+                        value={application.visibility || ''}
                         id="visibility"
                         form="application-form"
                         onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
@@ -56,6 +109,7 @@ function CreateApplicationPage(props) {
                     <label label="answer-visibility">Selecione a visibilidade das respostas da aplicação</label>
                     <select
                         name="answer-visibility"
+                        value={application.answersVisibility || ''}
                         id="answer-visibility"
                         form="application-form"
                         onChange={(e) => setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))}
