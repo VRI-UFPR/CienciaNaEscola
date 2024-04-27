@@ -94,6 +94,9 @@ function ProtocolPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
+                                <div className="col-4 align-self-center pb-4">
+                                    <TextButton type="submit" hsl={[97, 43, 70]} text="Gerenciar" onClick={() => navigate('manage')} />
+                                </div>
                                 <div className="row justify-content-center m-0">
                                     {<ProtocolInfo title={protocol.title} description={protocol.description} />}
                                 </div>

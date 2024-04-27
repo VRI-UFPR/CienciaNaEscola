@@ -76,6 +76,22 @@ function CreateClassroomPage(props) {
         }
     };
 
+    const deleteClassroom = () => {
+        axios
+            .delete(`${baseUrl}api/classroom/deleteClassroom/${classroomId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Sala de aula excluída com sucesso');
+                navigate(`/dash/institutions/${institutionId}`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir sala de aula');
+            });
+    };
+
     return (
         <div>
             <form name="classroom-form" id="classroom-form" onSubmit={(e) => submitClassroom(e)}>
@@ -113,6 +129,14 @@ function CreateClassroomPage(props) {
                     <button type="submit">Enviar</button>
                 </div>
             </form>
+            <div>
+                <p>{JSON.stringify(classroom)}</p>
+            </div>
+            <div>
+                <button type="button" onClick={deleteClassroom}>
+                    Excluir
+                </button>
+            </div>
         </div>
     );
 }

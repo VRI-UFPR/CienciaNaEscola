@@ -88,6 +88,22 @@ function CreateApplicationPage(props) {
         }
     };
 
+    const deleteApplication = () => {
+        axios
+            .delete(`${baseUrl}api/application/deleteApplication/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Aplicação excluída com sucesso');
+                navigate(`/dash/applications/`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir aplicação');
+            });
+    };
+
     return (
         <div>
             <form name="application-form" id="application-form" onSubmit={(e) => submitApplication(e)}>
@@ -287,7 +303,14 @@ function CreateApplicationPage(props) {
                     <button type="submit">Enviar</button>
                 </div>
             </form>
-            <p>{JSON.stringify(application, null, 2)}</p>
+            <div>
+                <p>{JSON.stringify(application, null, 2)}</p>
+            </div>
+            <div>
+                <button type="button" onClick={deleteApplication}>
+                    Excluir
+                </button>
+            </div>
         </div>
     );
 }

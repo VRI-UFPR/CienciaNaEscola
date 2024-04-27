@@ -84,6 +84,22 @@ function CreateUserPage(props) {
         }
     };
 
+    const deleteUser = () => {
+        axios
+            .delete(`${baseUrl}api/user/deleteUser/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Usuário excluído com sucesso');
+                navigate(`/dash/institutions/${institutionId}`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir usuário');
+            });
+    };
+
     const generateRandomHash = () => {
         //Random hash with special chars and exactly 12 characters
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
@@ -189,7 +205,14 @@ function CreateUserPage(props) {
                     <button type="submit">Enviar</button>
                 </div>
             </form>
-            <p>{JSON.stringify(newUser)}</p>
+            <div>
+                <p>{JSON.stringify(newUser)}</p>
+            </div>
+            <div>
+                <button type="button" onClick={deleteUser}>
+                    Excluir
+                </button>
+            </div>
         </div>
     );
 }

@@ -36,6 +36,7 @@ function InstitutionPage(props) {
 
     return (
         <div>
+            <Link to={'manage'}>Gerenciar</Link>
             <p>ID: {institution.id}</p>
             <p>Nome: {institution.name}</p>
             <p>Tipo: {institution.type}</p>

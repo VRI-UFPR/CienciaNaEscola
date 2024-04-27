@@ -76,6 +76,22 @@ function CreateInstitutionPage(props) {
         }
     };
 
+    const deleteInstitution = () => {
+        axios
+            .delete(`${baseUrl}api/institution/deleteInstitution/${institutionId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Instituição excluída com sucesso');
+                navigate(`/dash/institutions/`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir instituição');
+            });
+    };
+
     return (
         <div>
             <form name="institution-form" id="institution-form" onSubmit={(e) => submitInstitution(e)}>
@@ -121,7 +137,14 @@ function CreateInstitutionPage(props) {
                     <button type="submit">Enviar</button>
                 </div>
             </form>
-            <p>{JSON.stringify(institution)}</p>
+            <div>
+                <p>{JSON.stringify(institution)}</p>
+            </div>
+            <div>
+                <button type="button" onClick={deleteInstitution}>
+                    Excluir
+                </button>
+            </div>
         </div>
     );
 }
