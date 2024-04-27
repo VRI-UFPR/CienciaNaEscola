@@ -3,14 +3,22 @@ import { serialize } from 'object-to-formdata';
 import React, { useContext, useState } from 'react';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function CreateApplicationPage(props) {
     const { user } = useContext(AuthContext);
     const { id } = useParams();
-    const [application, setApplication] = useState({ protocolId: id });
+    const [application, setApplication] = useState({
+        protocolId: id,
+        viewersUser: [],
+        viewersClassroom: [],
+        answersViewersUser: [],
+        answersViewersClassroom: [],
+    });
+    const navigate = useNavigate();
 
-    const submitApplication = () => {
+    const submitApplication = (e) => {
+        e.preventDefault();
         const formData = serialize(application, { indices: true });
         axios
             .post(`${baseUrl}api/application/createApplication`, formData, {
@@ -21,6 +29,7 @@ function CreateApplicationPage(props) {
             })
             .then((response) => {
                 alert('Aplicação criada com sucesso');
+                navigate(`/dash/applications/${response.data.data.id}`);
             })
             .catch((error) => {
                 alert('Erro ao criar aplicação');
@@ -29,23 +38,14 @@ function CreateApplicationPage(props) {
 
     return (
         <div>
-            <form
-                name="application-form"
-                id="application-form"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    submitApplication();
-                }}
-            >
+            <form name="application-form" id="application-form" onSubmit={(e) => submitApplication(e)}>
                 <div>
                     <label label="visibility">Selecione a visibilidade da aplicação</label>
                     <select
                         name="visibility"
                         id="visibility"
                         form="application-form"
-                        onChange={(e) => {
-                            setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }));
-                        }}
+                        onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
                         <option value="PUBLIC">Visível para todos</option>
@@ -58,9 +58,7 @@ function CreateApplicationPage(props) {
                         name="answer-visibility"
                         id="answer-visibility"
                         form="application-form"
-                        onChange={(e) => {
-                            setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }));
-                        }}
+                        onChange={(e) => setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
                         <option value="PUBLIC">Visível para todos</option>
@@ -70,9 +68,7 @@ function CreateApplicationPage(props) {
                 <div>
                     <button
                         type="button"
-                        onClick={() => {
-                            setApplication((prev) => ({ ...prev, viewersUser: [...(prev.viewersUser || []), ''] }));
-                        }}
+                        onClick={() => setApplication((prev) => ({ ...prev, viewersUser: [...(prev.viewersUser || []), ''] }))}
                     >
                         Adicionar usuário visualizador
                     </button>
@@ -86,13 +82,14 @@ function CreateApplicationPage(props) {
                                     type="number"
                                     name={`viewer-user-${index}`}
                                     id={`viewer-user-${index}`}
+                                    form="application-form"
                                     value={viewer || ''}
-                                    onChange={(e) => {
+                                    onChange={(e) =>
                                         setApplication((prev) => ({
                                             ...prev,
                                             viewersUser: prev.viewersUser.map((v, i) => (i === index ? parseInt(e.target.value) : v)),
-                                        }));
-                                    }}
+                                        }))
+                                    }
                                 />
                                 <button
                                     type="button"
@@ -108,9 +105,7 @@ function CreateApplicationPage(props) {
                 <div>
                     <button
                         type="button"
-                        onClick={() => {
-                            setApplication((prev) => ({ ...prev, viewersClassroom: [...(prev.viewersClassroom || []), ''] }));
-                        }}
+                        onClick={() => setApplication((prev) => ({ ...prev, viewersClassroom: [...(prev.viewersClassroom || []), ''] }))}
                     >
                         Adicionar sala de aula visualizadora
                     </button>
@@ -125,14 +120,14 @@ function CreateApplicationPage(props) {
                                     name={`viewer-classroom-${index}`}
                                     id={`viewer-classroom-${index}`}
                                     value={viewer || ''}
-                                    onChange={(e) => {
+                                    onChange={(e) =>
                                         setApplication((prev) => ({
                                             ...prev,
                                             viewersClassroom: prev.viewersClassroom.map((v, i) =>
                                                 i === index ? parseInt(e.target.value) : v
                                             ),
-                                        }));
-                                    }}
+                                        }))
+                                    }
                                 />
                                 <button
                                     type="button"
@@ -151,9 +146,9 @@ function CreateApplicationPage(props) {
                 <div>
                     <button
                         type="button"
-                        onClick={() => {
-                            setApplication((prev) => ({ ...prev, answersViewersUser: [...(prev.answersViewersUser || []), ''] }));
-                        }}
+                        onClick={() =>
+                            setApplication((prev) => ({ ...prev, answersViewersUser: [...(prev.answersViewersUser || []), ''] }))
+                        }
                     >
                         Adicionar usuário visualizador de resposta
                     </button>
@@ -168,14 +163,14 @@ function CreateApplicationPage(props) {
                                     name={`answer-viewer-user-${index}`}
                                     id={`answer-viewer-user-${index}`}
                                     value={viewer || ''}
-                                    onChange={(e) => {
+                                    onChange={(e) =>
                                         setApplication((prev) => ({
                                             ...prev,
                                             answersViewersUser: prev.answersViewersUser.map((v, i) =>
                                                 i === index ? parseInt(e.target.value) : v
                                             ),
-                                        }));
-                                    }}
+                                        }))
+                                    }
                                 />
                                 <button
                                     type="button"
@@ -194,9 +189,9 @@ function CreateApplicationPage(props) {
                 <div>
                     <button
                         type="button"
-                        onClick={() => {
-                            setApplication((prev) => ({ ...prev, answersViewersClassroom: [...(prev.answersViewersClassroom || []), ''] }));
-                        }}
+                        onClick={() =>
+                            setApplication((prev) => ({ ...prev, answersViewersClassroom: [...(prev.answersViewersClassroom || []), ''] }))
+                        }
                     >
                         Adicionar sala de aula visualizadora de resposta
                     </button>
@@ -211,14 +206,14 @@ function CreateApplicationPage(props) {
                                     name={`answer-viewer-classroom-${index}`}
                                     id={`answer-viewer-classroom-${index}`}
                                     value={viewer || ''}
-                                    onChange={(e) => {
+                                    onChange={(e) =>
                                         setApplication((prev) => ({
                                             ...prev,
                                             answersViewersClassroom: prev.answersViewersClassroom.map((v, i) =>
                                                 i === index ? parseInt(e.target.value) : v
                                             ),
-                                        }));
-                                    }}
+                                        }))
+                                    }
                                 />
                                 <button
                                     type="button"
