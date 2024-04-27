@@ -4,6 +4,7 @@ import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .font-barlow {
@@ -47,9 +48,10 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { modalRef, showExitButton, isDashboard } = props;
+    const { modalRef, showExitButton } = props;
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { isDashboard } = useContext(LayoutContext);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 

@@ -71,7 +71,7 @@ function InstitutionsPage(props) {
                         <div className="col col-md-10 col-lg-10 d-flex flex-column h-100 p-4 p-lg-5 pb-lg-4">
                             <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Instituições</h1>
                             <div className={`d-flex justify-content-center flex-grow-1 ${!isDashboard ? 'pb-3' : 'pb-2'} pb-lg-0 m-0`}>
-                                <ProtocolCarousel objects={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))} />
+                                <ProtocolCarousel listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))} />
                             </div>
                         </div>
                     </div>

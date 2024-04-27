@@ -8,6 +8,7 @@ import MarkdownText from '../components/MarkdownText';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const infosPageStyles = `
     .bg-coral-red {
@@ -28,10 +29,11 @@ function InfosPage(props) {
     const navigate = useNavigate();
     const modalRef = useRef(null);
     const { user, logout, acceptTerms } = useContext(AuthContext);
+    const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
         if (user.acceptedTerms === true && showAccept === true) {
-            navigate('/applications');
+            navigate(isDashboard ? '/dash/applications' : '/applications');
         }
     }, [user.acceptedTerms, navigate, showAccept]);
 
@@ -45,15 +47,15 @@ function InfosPage(props) {
             })
             .then((response) => {
                 acceptTerms();
-                navigate('/applications');
+                navigate(isDashboard ? '/dash/applications' : '/applications');
             })
             .catch((error) => {
                 if (error.response.status === 401) {
                     logout();
-                    navigate('/');
+                    navigate(isDashboard ? '/dash' : '/');
                 } else {
                     acceptTerms();
-                    navigate('/applications');
+                    navigate(isDashboard ? '/dash/applications' : '/applications');
                 }
             });
     };
@@ -84,7 +86,7 @@ function InfosPage(props) {
                                             role="link"
                                             onClick={() => {
                                                 logout();
-                                                navigate('/');
+                                                navigate(isDashboard ? '/dash' : '/');
                                             }}
                                             className={showAccept ? '' : 'd-none'}
                                             hsl={[37, 98, 76]}
