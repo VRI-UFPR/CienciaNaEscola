@@ -18,7 +18,7 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, group, disabled } = props;
 
     const [answer, setAnswers] = useState({ text: '...', files: [] });
     const [ImageVisibility, setImageVisibility] = useState(false);
@@ -64,6 +64,7 @@ function ImageInput(props) {
                             size={41}
                             alt={'Selecionar Arquivo'}
                             onClick={handleButtonClick}
+                            disabled={disabled}
                         />
                         <div className="row row-cols-2 flex-row position-relative color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
                             {answer.files.length > 0 ? (
@@ -106,6 +107,7 @@ function ImageInput(props) {
                         style={{ display: 'none' }}
                         onChange={insertImage}
                         ref={fileInputRef}
+                        disabled={disabled}
                     />
                 </div>
                 <div

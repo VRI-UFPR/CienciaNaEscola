@@ -21,6 +21,7 @@ import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -54,6 +55,7 @@ function ApplicationPage(props) {
     const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
+    const { isDashboard } = useContext(LayoutContext);
 
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
         setItemAnswerGroups((prevItemAnswerGroups) => {
@@ -143,7 +145,7 @@ function ApplicationPage(props) {
                         dismissText: 'Ok',
                         dismissible: true,
                         onHide: () => {
-                            navigate('/applications');
+                            navigate(isDashboard ? '/dash/applications' : '/applications');
                         },
                     });
                 })
@@ -201,7 +203,7 @@ function ApplicationPage(props) {
                         console.error(error.message);
                         if (error.response.status === 401) {
                             logout();
-                            navigate('/signin');
+                            navigate(isDashboard ? '/dash/signin' : '/signin');
                         }
                     });
             }
