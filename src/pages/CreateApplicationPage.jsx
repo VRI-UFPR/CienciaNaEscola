@@ -1,8 +1,246 @@
-import React from 'react';
-import SplashPage from './SplashPage';
+import axios from 'axios';
+import { serialize } from 'object-to-formdata';
+import React, { useContext, useState } from 'react';
+import baseUrl from '../contexts/RouteContext';
+import { AuthContext } from '../contexts/AuthContext';
+import { useParams } from 'react-router-dom';
 
 function CreateApplicationPage(props) {
-    return <SplashPage />;
+    const { user } = useContext(AuthContext);
+    const { id } = useParams();
+    const [application, setApplication] = useState({ protocolId: id });
+
+    const submitApplication = () => {
+        const formData = serialize(application, { indices: true });
+        axios
+            .post(`${baseUrl}api/application/createApplication`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Aplicação criada com sucesso');
+            })
+            .catch((error) => {
+                alert('Erro ao criar aplicação');
+            });
+    };
+
+    return (
+        <div>
+            <form
+                name="application-form"
+                id="application-form"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    submitApplication();
+                }}
+            >
+                <div>
+                    <label label="visibility">Selecione a visibilidade da aplicação</label>
+                    <select
+                        name="visibility"
+                        id="visibility"
+                        form="application-form"
+                        onChange={(e) => {
+                            setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }));
+                        }}
+                    >
+                        <option value="">Selecione uma opção:</option>
+                        <option value="PUBLIC">Visível para todos</option>
+                        <option value="RESTRICT">Restringir visualizadores</option>
+                    </select>
+                </div>
+                <div>
+                    <label label="answer-visibility">Selecione a visibilidade das respostas da aplicação</label>
+                    <select
+                        name="answer-visibility"
+                        id="answer-visibility"
+                        form="application-form"
+                        onChange={(e) => {
+                            setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }));
+                        }}
+                    >
+                        <option value="">Selecione uma opção:</option>
+                        <option value="PUBLIC">Visível para todos</option>
+                        <option value="RESTRICT">Restringir visualizadores</option>
+                    </select>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setApplication((prev) => ({ ...prev, viewersUser: [...(prev.viewersUser || []), ''] }));
+                        }}
+                    >
+                        Adicionar usuário visualizador
+                    </button>
+                </div>
+                <div>
+                    {application.viewersUser &&
+                        application.viewersUser.map((viewer, index) => (
+                            <div key={'viewer-user-' + index}>
+                                <label label={`viewer-user-${index}`}>Digite o id do usuário {index + 1}</label>
+                                <input
+                                    type="number"
+                                    name={`viewer-user-${index}`}
+                                    id={`viewer-user-${index}`}
+                                    value={viewer || ''}
+                                    onChange={(e) => {
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            viewersUser: prev.viewersUser.map((v, i) => (i === index ? parseInt(e.target.value) : v)),
+                                        }));
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setApplication((prev) => ({ ...prev, viewersUser: prev.viewersUser.filter((v, i) => i !== index) }))
+                                    }
+                                >
+                                    Remover visualizador
+                                </button>
+                            </div>
+                        ))}
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setApplication((prev) => ({ ...prev, viewersClassroom: [...(prev.viewersClassroom || []), ''] }));
+                        }}
+                    >
+                        Adicionar sala de aula visualizadora
+                    </button>
+                </div>
+                <div>
+                    {application.viewersClassroom &&
+                        application.viewersClassroom.map((viewer, index) => (
+                            <div key={'viewer-classroom-' + index}>
+                                <label label={`viewer-classroom-${index}`}>Digite o id do usuário {index + 1}</label>
+                                <input
+                                    type="number"
+                                    name={`viewer-classroom-${index}`}
+                                    id={`viewer-classroom-${index}`}
+                                    value={viewer || ''}
+                                    onChange={(e) => {
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            viewersClassroom: prev.viewersClassroom.map((v, i) =>
+                                                i === index ? parseInt(e.target.value) : v
+                                            ),
+                                        }));
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            viewersClassroom: prev.viewersClassroom.filter((v, i) => i !== index),
+                                        }))
+                                    }
+                                >
+                                    Remover visualizador
+                                </button>
+                            </div>
+                        ))}
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setApplication((prev) => ({ ...prev, answersViewersUser: [...(prev.answersViewersUser || []), ''] }));
+                        }}
+                    >
+                        Adicionar usuário visualizador de resposta
+                    </button>
+                </div>
+                <div>
+                    {application.answersViewersUser &&
+                        application.answersViewersUser.map((viewer, index) => (
+                            <div key={'answer-viewer-user-' + index}>
+                                <label label={`viewer-user-${index}`}>Digite o id do usuário {index + 1}</label>
+                                <input
+                                    type="number"
+                                    name={`answer-viewer-user-${index}`}
+                                    id={`answer-viewer-user-${index}`}
+                                    value={viewer || ''}
+                                    onChange={(e) => {
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            answersViewersUser: prev.answersViewersUser.map((v, i) =>
+                                                i === index ? parseInt(e.target.value) : v
+                                            ),
+                                        }));
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            answersViewersUser: prev.answersViewersUser.filter((v, i) => i !== index),
+                                        }))
+                                    }
+                                >
+                                    Remover visualizador
+                                </button>
+                            </div>
+                        ))}
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setApplication((prev) => ({ ...prev, answersViewersClassroom: [...(prev.answersViewersClassroom || []), ''] }));
+                        }}
+                    >
+                        Adicionar sala de aula visualizadora de resposta
+                    </button>
+                </div>
+                <div>
+                    {application.answersViewersClassroom &&
+                        application.answersViewersClassroom.map((viewer, index) => (
+                            <div key={'answer-viewer-classroom-' + index}>
+                                <label label={`viewer-classroom-${index}`}>Digite o id do usuário {index + 1}</label>
+                                <input
+                                    type="number"
+                                    name={`answer-viewer-classroom-${index}`}
+                                    id={`answer-viewer-classroom-${index}`}
+                                    value={viewer || ''}
+                                    onChange={(e) => {
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            answersViewersClassroom: prev.answersViewersClassroom.map((v, i) =>
+                                                i === index ? parseInt(e.target.value) : v
+                                            ),
+                                        }));
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setApplication((prev) => ({
+                                            ...prev,
+                                            answersViewersClassroom: prev.answersViewersClassroom.filter((v, i) => i !== index),
+                                        }))
+                                    }
+                                >
+                                    Remover visualizador
+                                </button>
+                            </div>
+                        ))}
+                </div>
+                <div>
+                    <button type="submit">Enviar</button>
+                </div>
+            </form>
+            <p>{JSON.stringify(application, null, 2)}</p>
+        </div>
+    );
 }
 
 export default CreateApplicationPage;
