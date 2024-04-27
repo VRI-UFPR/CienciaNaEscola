@@ -60,7 +60,7 @@ function InstitutionsPage(props) {
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
             <div className="row m-0 flex-grow-1">
-                <div className="col-auto bg-coral-red p-0 d-flex">
+                <div className="col-auto bg-coral-red p-0 d-flex position-sticky vh-100 top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>
@@ -68,9 +68,9 @@ function InstitutionsPage(props) {
                 <div className="col d-flex flex-column flex-grow-1 bg-white p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row d-flex align-items-center justify-content-center font-barlow bg-white h-100 p-0 m-0">
-                        <div className="col col-md-10 col-lg-10 d-flex flex-column h-100 p-4 p-lg-5 pb-lg-4">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-1 pb-4 m-0">Instituições</h1>
-                            <div className={`d-flex justify-content-center flex-grow-1 ${!isDashboard ? 'pb-3' : 'pb-2'} pb-lg-0 m-0`}>
+                        <div className="col col-md-10 col-lg-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
+                            <h1 className="color-grey font-century-gothic fw-bold fs-2 pb-4 m-0">Instituições</h1>
+                            <div className="d-flex justify-content-center flex-grow-1 pb-0 pb-lg-0 m-0">
                                 <ProtocolCarousel listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))} />
                             </div>
                         </div>
