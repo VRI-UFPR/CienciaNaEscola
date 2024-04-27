@@ -1,8 +1,53 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SplashPage from './SplashPage';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import baseUrl from '../contexts/RouteContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 function InstitutionPage(props) {
-    return <SplashPage />;
+    const [isLoading, setIsLoading] = useState(true);
+    const [institution, setInstitution] = useState(null);
+    const { id } = useParams();
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user.token) {
+            axios
+                .get(`${baseUrl}api/institution/getInstitution/${id}`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    setInstitution(response.data.data);
+                    setIsLoading(false);
+                })
+                .catch((error) => {
+                    alert('Falha ao carregar a instituição');
+                });
+        }
+    }, [id, user.token]);
+
+    if (isLoading) {
+        return <SplashPage />;
+    }
+
+    return (
+        <div>
+            <p>ID: {institution.id}</p>
+            <p>Nome: {institution.name}</p>
+            <p>Tipo: {institution.type}</p>
+            <p>
+                Endereço: {institution.address.id}, {institution.address.city}, {institution.address.state}, {institution.address.country}
+            </p>
+            <p>Salas de aula: {JSON.stringify(institution.classrooms.map((classroom) => classroom.id))}</p>
+            <p>Usuários: {JSON.stringify(institution.users.map((user) => user.username))}</p>
+            <p>Criada em: {institution.createdAt}</p>
+            <p>Atualizada em: {institution.updateAt}</p>
+        </div>
+    );
 }
 
 export default InstitutionPage;
