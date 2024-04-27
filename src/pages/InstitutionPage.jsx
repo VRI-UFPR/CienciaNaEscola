@@ -42,8 +42,9 @@ function InstitutionPage(props) {
             <p>
                 Endereço: {institution.address.id}, {institution.address.city}, {institution.address.state}, {institution.address.country}
             </p>
-            <Link to={'classrooms/create'}>Criar</Link>
+            <Link to={'classrooms/create'}>Criar sala de aula</Link>
             <p>Salas de aula: {JSON.stringify(institution.classrooms.map((classroom) => classroom.users.map((user) => user.username)))}</p>
+            <Link to={'users/create'}>Criar usuário</Link>
             <p>Usuários: {JSON.stringify(institution.users.map((user) => user.username))}</p>
             <p>Criada em: {institution.createdAt}</p>
             <p>Atualizada em: {institution.updateAt}</p>

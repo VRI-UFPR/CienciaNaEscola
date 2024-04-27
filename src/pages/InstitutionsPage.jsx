@@ -9,6 +9,7 @@ import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
 import Alert from '../components/Alert';
 import { LayoutContext } from '../contexts/LayoutContext';
+import TextButton from '../components/TextButton';
 
 const style = `
     .font-barlow {
@@ -73,6 +74,17 @@ function InstitutionsPage(props) {
                             <div className="d-flex justify-content-center flex-grow-1 pb-0 pb-lg-0 m-0">
                                 <ProtocolCarousel listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))} />
                             </div>
+                        </div>
+                    </div>
+                    <div className="row d-flex justify-content-center pb-4 p-0 m-0">
+                        <div className="col col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column m-0">
+                            <TextButton
+                                text={'Criar nova instituição'}
+                                hsl={[97, 43, 70]}
+                                onClick={() => {
+                                    navigate('create');
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
