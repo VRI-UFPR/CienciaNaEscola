@@ -8,7 +8,6 @@ import HomeButton from './HomeButton';
 const style = `
     .custom-carousel {
         background-color: #FECF86B2;
-        border-radius: 20px;
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
@@ -29,11 +28,11 @@ const style = `
 `;
 
 function ProtocolCarousel(props) {
-    const { applications } = props;
+    const { listItems } = props;
 
     const carouselRef = useRef(null);
     const itemsPerSlide = Math.round((window.screen.height - 300) / 120);
-    const totalSlides = Math.ceil(applications.length / itemsPerSlide);
+    const totalSlides = Math.ceil(listItems.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -47,19 +46,18 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideApplications = applications.slice(startIndex, endIndex);
+            const slideItems = listItems.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
                     <div className="d-flex flex-column align-items-center h-100 pb-3">
-                        {slideApplications.map((application, index) => (
+                        {slideItems.map((si) => (
                             <Link
-                                to={`/applications/${application.id}`}
-                                key={'protocol-' + application.id}
+                                to={`${si.id}`}
+                                key={'slide-item-' + si.id}
                                 className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >
-                                {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
-                                <HomeButton title={application.protocol.title} />
+                                <HomeButton title={si.title} />
                             </Link>
                         ))}
                     </div>
@@ -94,7 +92,7 @@ function ProtocolCarousel(props) {
     };
 
     return (
-        <div id="dynamic-carousel" className="custom-carousel carousel slide w-100" ref={carouselRef}>
+        <div id="dynamic-carousel" className="custom-carousel carousel slide w-100 rounded-4" ref={carouselRef}>
             <div className="carousel-inner h-100">{renderCarouselItems()}</div>
             <div className="carousel-indicators">{renderPageIndicators()}</div>
             <style>{style}</style>
