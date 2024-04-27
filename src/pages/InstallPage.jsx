@@ -86,26 +86,42 @@ function InstallPage(props) {
                         Bem-vindo(a) ao Ciência Cidadã na Escola!
                     </span>
                     <span className="install-title text-center fw-medium lh-sm pt-4 fs-6 w-75 w-sm-50">
-                        As funcionalidades do app só estão disponíveis após a instalação. Clique no botão abaixo para instalar.
+                        As funcionalidades do app só estão disponíveis após a instalação. Clique no botão abaixo para instalar ou siga para
+                        a dashboard.
                     </span>
                 </div>
 
-                <div className={`row justify-content-center g-0 w-75 pt-5 ${installPrompt ? '' : 'd-none'}`}>
-                    <div className="button-position row flex-column justify-content-end align-items-center g-0">
+                <div className="row justify-content-center g-0 w-75 pt-5">
+                    {installPrompt && (
+                        <div className="button-position row flex-column justify-content-end align-items-center g-0">
+                            <div className="col-12 col-lg-6">
+                                <TextButton
+                                    hsl={[97, 43, 70]}
+                                    text="Instalar app"
+                                    className="rounded-pill"
+                                    type="button"
+                                    onClick={installApp}
+                                />
+                            </div>
+                        </div>
+                    )}
+                    {!installPrompt && (
+                        <div className="spinner-border text-secondary spinner-splash" role="status">
+                            <span className="sr-only"></span>
+                        </div>
+                    )}
+                    <div className="button-position row flex-column justify-content-end align-items-center mt-4 g-0">
                         <div className="col-12 col-lg-6">
                             <TextButton
                                 hsl={[97, 43, 70]}
-                                text="Instalar app"
+                                text="Ir para a dashboard"
                                 className="rounded-pill"
                                 type="button"
-                                onClick={installApp}
+                                onClick={() => {
+                                    navigate('/dash');
+                                }}
                             />
                         </div>
-                    </div>
-                </div>
-                <div className={`row justify-content-center g-0 w-75 pt-5 ${installPrompt ? 'd-none' : ''}`}>
-                    <div className="spinner-border text-secondary spinner-splash" role="status">
-                        <span className="sr-only"></span>
                     </div>
                 </div>
             </div>
