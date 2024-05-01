@@ -40,6 +40,13 @@ const styles = `
     .name-col input:focus{
         outline: none;
     }
+
+    @media (min-width: 992px) {
+      .position-lg-sticky {
+        position: sticky !important;
+        top: 0;
+      }
+    }
 `;
 
 function ProtocolPage(props) {
@@ -83,7 +90,7 @@ function ProtocolPage(props) {
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
             <div className="row m-0 flex-grow-1">
-                <div className="col-auto bg-coral-red p-0 d-flex position-sticky vh-100 top-0">
+                <div className="col-auto bg-coral-red p-0 d-flex position-lg-sticky vh-100 top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>

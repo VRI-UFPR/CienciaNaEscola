@@ -23,6 +23,13 @@ const style = `
     .color-grey {
         color: #535353;
     }
+
+    @media (min-width: 992px) {
+      .position-lg-sticky {
+        position: sticky !important;
+        top: 0;
+      }
+    }
 `;
 
 function ApplicationsPage(props) {
@@ -67,7 +74,7 @@ function ApplicationsPage(props) {
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
             <div className="row m-0 flex-grow-1">
-                <div className="col-auto bg-coral-red p-0 d-flex position-sticky vh-100 top-0">
+                <div className="col-auto bg-coral-red p-0 d-flex position-lg-sticky vh-100 top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>

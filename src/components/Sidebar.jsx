@@ -130,7 +130,11 @@ function Sidebar(props) {
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/profile' : '/profile'}
+                        onClick={() => closeSidebar()}
+                    >
                         Perfil
                     </Link>
                     <button
@@ -146,7 +150,7 @@ function Sidebar(props) {
                                 actionOnClick: () => {
                                     closeSidebar();
                                     logout();
-                                    navigate('/signin');
+                                    navigate(isDashboard ? '/dash/signin' : '/signin');
                                 },
                             });
                         }}
