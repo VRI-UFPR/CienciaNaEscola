@@ -152,13 +152,6 @@ function CreateProtocolPage(props) {
                             Gerador de formulários
                         </h1>
                     </div>
-                    <div className="col-lg-3 col-md-1"></div>
-                    <div id="button" className="col-lg-2 col-md-3 botao-form">
-                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
-                    </div>
-                    <div id="button1" className="col-lg-2 col-md-3 botao-form">
-                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
-                    </div>
                 </div>
 
                 <div className="row flex-grow-1 m-0">
