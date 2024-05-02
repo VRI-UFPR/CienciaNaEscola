@@ -104,31 +104,34 @@ function AnswerPage(props) {
                         </a>
                     </h2>
                 </div>
-                <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
-                    <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
-                    {Object.entries(answer.answers).map(([key, value]) => {
-                        return (
-                            <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
-                                <p className="fw-medium fs-6 m-0">
-                                    <a
-                                        className="color-dark-gray fw-bold"
-                                        href="#answerTab"
-                                        onClick={() => setVisualization(key, undefined)}
-                                    >
-                                        {value.user.username + ' - ' + new Date(value.date).toLocaleDateString() + ''}
-                                    </a>
-                                </p>
-                            </div>
-                        );
-                    })}
-                </div>
+                {Object.entries(answer.answers).lenght > 0 && (
+                    <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                        <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
+                        {Object.entries(answer.answers).map(([key, value]) => {
+                            return (
+                                <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
+                                    <p className="fw-medium fs-6 m-0">
+                                        <a
+                                            className="color-dark-gray fw-bold"
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(key, undefined)}
+                                        >
+                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString() + ''}
+                                        </a>
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
 
                 <div id="answerTab" className=" mb-lg-4">
                     {answer.protocol.pages.map((page, pageIndex) => {
                         return page.itemGroups.map((itemGroup, itemGroupIndex) => {
                             return itemGroup.items.map((item, itemIndex) => {
                                 return (
-                                    (selectedItem === undefined || selectedItem === item.id) && (
+                                    (selectedItem === undefined || selectedItem === item.id) &&
+                                    item.type !== 'TEXT' && (
                                         <div key={'input-' + item.id} className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                             <a
                                                 href="#answerTab"
@@ -160,6 +163,11 @@ function AnswerPage(props) {
                                                     });
                                                 });
                                             })}
+                                            {Object.entries(item.itemAnswers).length === 0 && item.itemOptions.length === 0 && (
+                                                <div className="bg-white rounded-4 mb-3 p-2 px-3">
+                                                    <p className="fw-medium fs-6 color-dark-gray m-0">0 respostas</p>
+                                                </div>
+                                            )}
                                             {item.itemOptions.map((option, index) => {
                                                 return (
                                                     <div key={'answer-' + option.id} className="bg-white rounded-4 mb-3 p-2 px-3">
