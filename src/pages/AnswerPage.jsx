@@ -7,6 +7,7 @@ import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
+import baseUrl from '../contexts/RouteContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -59,7 +60,7 @@ function AnswerPage(props) {
     useEffect(() => {
         if (user.token) {
             axios
-                .get(`http://localhost:3000/api/applicationAnswer/getApplicationWithAnswers/${id}`, {
+                .get(`${baseUrl}api/applicationAnswer/getApplicationWithAnswers/${id}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
