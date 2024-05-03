@@ -17,14 +17,17 @@ function CreateApplicationPage(props) {
         answersViewersUser: [],
         answersViewersClassroom: [],
     });
+    const [institutionUsers, setInstitutionUsers] = useState([]);
+    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && user.token) {
+            const promises = [];
             if (isEditing) {
-                if (user.token) {
+                promises.push(
                     axios
                         .get(`${baseUrl}api/application/getApplication/${id}`, {
                             headers: {
@@ -44,13 +47,44 @@ function CreateApplicationPage(props) {
                         })
                         .catch((error) => {
                             alert('Erro ao buscar aplicação');
-                        });
-                }
-            } else {
-                setIsLoading(false);
+                        })
+                );
             }
+            promises.push(
+                axios
+                    .get(`${baseUrl}api/user/getInstitutionUsers/${user.institutionId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setInstitutionUsers(d.map((u) => ({ id: u.id, username: u.username })));
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar usuários da instituição');
+                    })
+            );
+            promises.push(
+                axios
+                    .get(`${baseUrl}api/classroom/getInstitutionClassrooms/${user.institutionId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setInstitutionClassrooms(d.map((c) => ({ id: c.id })));
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar salas de aula da instituição');
+                    })
+            );
+            Promise.all(promises).then(() => {
+                setIsLoading(false);
+            });
         }
-    }, [id, isEditing, isLoading, user.token]);
+    }, [id, isEditing, isLoading, user.token, user.institutionId]);
 
     const submitApplication = (e) => {
         e.preventDefault();
@@ -136,168 +170,130 @@ function CreateApplicationPage(props) {
                     </select>
                 </div>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() => setApplication((prev) => ({ ...prev, viewersUser: [...(prev.viewersUser || []), ''] }))}
-                    >
-                        Adicionar usuário visualizador
-                    </button>
-                </div>
-                <div>
-                    {application.viewersUser &&
-                        application.viewersUser.map((viewer, index) => (
-                            <div key={'viewer-user-' + index}>
-                                <label label={`viewer-user-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione os usuários visualizadores</span>
+                        {institutionUsers.map((u) => (
+                            <div key={'viewer-user-' + u.id}>
                                 <input
-                                    type="number"
-                                    name={`viewer-user-${index}`}
-                                    id={`viewer-user-${index}`}
                                     form="application-form"
-                                    value={viewer || ''}
-                                    onChange={(e) =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            viewersUser: prev.viewersUser.map((v, i) => (i === index ? parseInt(e.target.value) : v)),
-                                        }))
-                                    }
+                                    type="checkbox"
+                                    name="viewers-user"
+                                    id={`viewer-user-${u.id}`}
+                                    value={u.id}
+                                    checked={application.viewersUser.includes(u.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                viewersUser: [...prev.viewersUser, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                viewersUser: prev.viewersUser.filter((id) => id !== parseInt(e.target.value)),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setApplication((prev) => ({ ...prev, viewersUser: prev.viewersUser.filter((v, i) => i !== index) }))
-                                    }
-                                >
-                                    Remover visualizador
-                                </button>
+                                <label htmlFor={`viewer-user-${u.id}`}>{u.username}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() => setApplication((prev) => ({ ...prev, viewersClassroom: [...(prev.viewersClassroom || []), ''] }))}
-                    >
-                        Adicionar sala de aula visualizadora
-                    </button>
-                </div>
-                <div>
-                    {application.viewersClassroom &&
-                        application.viewersClassroom.map((viewer, index) => (
-                            <div key={'viewer-classroom-' + index}>
-                                <label label={`viewer-classroom-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione as salas de aula visualizadoras</span>
+                        {institutionClassrooms.map((c) => (
+                            <div key={'viewer-classroom-' + c.id}>
                                 <input
-                                    type="number"
-                                    name={`viewer-classroom-${index}`}
-                                    id={`viewer-classroom-${index}`}
-                                    value={viewer || ''}
-                                    onChange={(e) =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            viewersClassroom: prev.viewersClassroom.map((v, i) =>
-                                                i === index ? parseInt(e.target.value) : v
-                                            ),
-                                        }))
-                                    }
+                                    form="application-form"
+                                    type="checkbox"
+                                    name="viewers-classroom"
+                                    id={`viewer-classroom-${c.id}`}
+                                    value={c.id}
+                                    checked={application.viewersClassroom.includes(c.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                viewersClassroom: [...prev.viewersClassroom, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                viewersClassroom: prev.viewersClassroom.filter((id) => id !== parseInt(e.target.value)),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            viewersClassroom: prev.viewersClassroom.filter((v, i) => i !== index),
-                                        }))
-                                    }
-                                >
-                                    Remover visualizador
-                                </button>
+                                <label htmlFor={`viewer-classroom-${c.id}`}>{c.id}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() =>
-                            setApplication((prev) => ({ ...prev, answersViewersUser: [...(prev.answersViewersUser || []), ''] }))
-                        }
-                    >
-                        Adicionar usuário visualizador de resposta
-                    </button>
-                </div>
-                <div>
-                    {application.answersViewersUser &&
-                        application.answersViewersUser.map((viewer, index) => (
-                            <div key={'answer-viewer-user-' + index}>
-                                <label label={`viewer-user-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione os usuários visualizadores de resposta</span>
+                        {institutionUsers.map((u) => (
+                            <div key={'answer-viewer-user-' + u.id}>
                                 <input
-                                    type="number"
-                                    name={`answer-viewer-user-${index}`}
-                                    id={`answer-viewer-user-${index}`}
-                                    value={viewer || ''}
-                                    onChange={(e) =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            answersViewersUser: prev.answersViewersUser.map((v, i) =>
-                                                i === index ? parseInt(e.target.value) : v
-                                            ),
-                                        }))
-                                    }
+                                    form="application-form"
+                                    type="checkbox"
+                                    name="answer-viewers-user"
+                                    id={`answer-viewer-user-${u.id}`}
+                                    value={u.id}
+                                    checked={application.answersViewersUser.includes(u.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                answersViewersUser: [...prev.answersViewersUser, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                answersViewersUser: prev.answersViewersUser.filter((id) => id !== parseInt(e.target.value)),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            answersViewersUser: prev.answersViewersUser.filter((v, i) => i !== index),
-                                        }))
-                                    }
-                                >
-                                    Remover visualizador
-                                </button>
+                                <label htmlFor={`answer-viewer-user-${u.id}`}>{u.username}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() =>
-                            setApplication((prev) => ({ ...prev, answersViewersClassroom: [...(prev.answersViewersClassroom || []), ''] }))
-                        }
-                    >
-                        Adicionar sala de aula visualizadora de resposta
-                    </button>
-                </div>
-                <div>
-                    {application.answersViewersClassroom &&
-                        application.answersViewersClassroom.map((viewer, index) => (
-                            <div key={'answer-viewer-classroom-' + index}>
-                                <label label={`viewer-classroom-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione as salas de aula visualizadoras de resposta</span>
+                        {institutionClassrooms.map((c) => (
+                            <div key={'answer-viewer-classroom-' + c.id}>
                                 <input
-                                    type="number"
-                                    name={`answer-viewer-classroom-${index}`}
-                                    id={`answer-viewer-classroom-${index}`}
-                                    value={viewer || ''}
-                                    onChange={(e) =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            answersViewersClassroom: prev.answersViewersClassroom.map((v, i) =>
-                                                i === index ? parseInt(e.target.value) : v
-                                            ),
-                                        }))
-                                    }
+                                    form="application-form"
+                                    type="checkbox"
+                                    name="answer-viewers-classroom"
+                                    id={`answer-viewer-classroom-${c.id}`}
+                                    value={c.id}
+                                    checked={application.answersViewersClassroom.includes(c.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                answersViewersClassroom: [...prev.answersViewersClassroom, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setApplication((prev) => ({
+                                                ...prev,
+                                                answersViewersClassroom: prev.answersViewersClassroom.filter(
+                                                    (id) => id !== parseInt(e.target.value)
+                                                ),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setApplication((prev) => ({
-                                            ...prev,
-                                            answersViewersClassroom: prev.answersViewersClassroom.filter((v, i) => i !== index),
-                                        }))
-                                    }
-                                >
-                                    Remover visualizador
-                                </button>
+                                <label htmlFor={`answer-viewer-classroom-${c.id}`}>{c.id}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
                     <button type="submit">Enviar</button>

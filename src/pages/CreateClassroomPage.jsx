@@ -11,14 +11,16 @@ function CreateClassroomPage(props) {
     const { user } = useContext(AuthContext);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
+    const [institutionUsers, setInstitutionUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && user.token) {
+            const promises = [];
             if (isEditing) {
-                if (user.token) {
+                promises.push(
                     axios
                         .get(`${baseUrl}api/classroom/getClassroom/${classroomId}`, {
                             headers: {
@@ -28,17 +30,32 @@ function CreateClassroomPage(props) {
                         .then((response) => {
                             const d = response.data.data;
                             setClassroom({ users: d.users.map((u) => u.id) });
-                            setIsLoading(false);
                         })
                         .catch((error) => {
                             alert('Erro ao buscar sala de aula');
-                        });
-                }
-            } else {
-                setIsLoading(false);
+                        })
+                );
             }
+            promises.push(
+                axios
+                    .get(`${baseUrl}api/user/getInstitutionUsers/${institutionId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setInstitutionUsers(d.map((u) => ({ id: u.id, username: u.username })));
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar usuários da instituição');
+                    })
+            );
+            Promise.all(promises).then(() => {
+                setIsLoading(false);
+            });
         }
-    }, [classroomId, isEditing, isLoading, user.token]);
+    }, [classroomId, isEditing, isLoading, user.token, institutionId]);
 
     const submitClassroom = (e) => {
         e.preventDefault();
@@ -96,34 +113,35 @@ function CreateClassroomPage(props) {
         <div>
             <form name="classroom-form" id="classroom-form" onSubmit={(e) => submitClassroom(e)}>
                 <div>
-                    <button type="button" onClick={(e) => setClassroom((prev) => ({ ...prev, users: [...(prev.users || []), ''] }))}>
-                        Adicionar usuário
-                    </button>
-                    {classroom.users &&
-                        classroom.users.map((user, index) => (
-                            <div key={'classroom-user-' + index}>
-                                <label label={`classroom-user-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione os alunos da sala</span>
+                        {institutionUsers.map((u) => (
+                            <div key={u.id}>
                                 <input
-                                    type="number"
-                                    name={`classroom-user-${index}`}
-                                    id={`classroom-user-${index}`}
                                     form="classroom-form"
-                                    value={user || ''}
-                                    onChange={(e) =>
-                                        setClassroom((prev) => ({
-                                            ...prev,
-                                            users: prev.users.map((v, i) => (i === index ? parseInt(e.target.value) : v)),
-                                        }))
-                                    }
+                                    type="checkbox"
+                                    name="users"
+                                    id={`user-${u.id}`}
+                                    value={u.id}
+                                    checked={classroom.users.includes(u.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setClassroom((prev) => ({
+                                                ...prev,
+                                                users: [...prev.users, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setClassroom((prev) => ({
+                                                ...prev,
+                                                users: prev.users.filter((id) => id !== parseInt(e.target.value)),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => setClassroom((prev) => ({ ...prev, users: prev.users.filter((v, i) => i !== index) }))}
-                                >
-                                    Remover usuário
-                                </button>
+                                <label htmlFor={`user-${u.id}`}>{u.username}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
                     <button type="submit">Enviar</button>

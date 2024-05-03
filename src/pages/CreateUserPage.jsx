@@ -13,14 +13,16 @@ function CreateUserPage(props) {
 
     const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && user.token) {
+            const promises = [];
             if (isEditing) {
-                if (user.token) {
+                promises.push(
                     axios
                         .get(`${baseUrl}api/user/getUser/${userId}`, {
                             headers: {
@@ -36,17 +38,32 @@ function CreateUserPage(props) {
                                 hash: d.hash,
                                 classrooms: d.classrooms.map((c) => c.id),
                             });
-                            setIsLoading(false);
                         })
                         .catch((error) => {
                             alert('Erro ao buscar usuário');
-                        });
-                }
-            } else {
-                setIsLoading(false);
+                        })
+                );
             }
+            promises.push(
+                axios
+                    .get(`${baseUrl}api/classroom/getInstitutionClassrooms/${institutionId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setInstitutionClassrooms(d.map((c) => ({ id: c.id })));
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar salas de aula da instituição');
+                    })
+            );
+            Promise.all(promises).then(() => {
+                setIsLoading(false);
+            });
         }
-    }, [userId, isEditing, isLoading, user.token]);
+    }, [userId, isEditing, isLoading, user.token, institutionId]);
 
     const submitNewUser = (e) => {
         e.preventDefault();
@@ -168,38 +185,35 @@ function CreateUserPage(props) {
                     </select>
                 </div>
                 <div>
-                    <button type="button" onClick={() => setNewUser((prev) => ({ ...prev, classrooms: [...(prev.classrooms || []), ''] }))}>
-                        Adicionar sala de aula
-                    </button>
-                </div>
-                <div>
-                    {newUser.classrooms &&
-                        newUser.classrooms.map((classroom, index) => (
-                            <div key={'classroom-' + index}>
-                                <label label={`classroom-${index}`}>Digite o id do usuário {index + 1}</label>
+                    <fieldset>
+                        <span>Selecione as salas de aula do usuário</span>
+                        {institutionClassrooms.map((c) => (
+                            <div key={c}>
                                 <input
-                                    type="number"
-                                    name={`classroom-${index}`}
-                                    id={`classroom-${index}`}
                                     form="user-form"
-                                    value={classroom || ''}
-                                    onChange={(e) =>
-                                        setNewUser((prev) => ({
-                                            ...prev,
-                                            classrooms: prev.classrooms.map((v, i) => (i === index ? parseInt(e.target.value) : v)),
-                                        }))
-                                    }
+                                    type="checkbox"
+                                    name="classrooms"
+                                    id={`classroom-${c.id}`}
+                                    value={c.id}
+                                    checked={newUser.classrooms.includes(c.id)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setNewUser((prev) => ({
+                                                ...prev,
+                                                classrooms: [...prev.classrooms, parseInt(e.target.value)],
+                                            }));
+                                        } else {
+                                            setNewUser((prev) => ({
+                                                ...prev,
+                                                classrooms: prev.classrooms.filter((id) => id !== parseInt(e.target.value)),
+                                            }));
+                                        }
+                                    }}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setNewUser((prev) => ({ ...prev, classrooms: prev.classrooms.filter((v, i) => i !== index) }))
-                                    }
-                                >
-                                    Remover visualizador
-                                </button>
+                                <label htmlFor={`classroom-${c.id}`}>{c.id}</label>
                             </div>
                         ))}
+                    </fieldset>
                 </div>
                 <div>
                     <button type="submit">Enviar</button>
