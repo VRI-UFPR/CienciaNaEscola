@@ -8,6 +8,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import baseUrl from '../contexts/RouteContext';
+import { Chart } from 'react-google-charts';
 
 const styles = `
     .bg-yellow-orange {
@@ -117,7 +118,7 @@ function AnswerPage(props) {
                                     </a>
                                 </h2>
                             </div>
-                            {Object.entries(answer.answers).lenght > 0 && (
+                            {Object.entries(answer.answers).length > 0 && (
                                 <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
                                     {Object.entries(answer.answers).map(([key, value]) => {
@@ -235,6 +236,76 @@ function AnswerPage(props) {
                                                                 </div>
                                                             );
                                                         })}
+                                                        {item.itemOptions.length > 0 && selectedAnswer === undefined && (
+                                                            <div className="rounded-4 overflow-hidden mb-3">
+                                                                <Chart
+                                                                    chartType="PieChart"
+                                                                    data={[['Resposta', 'Quantidade']].concat(
+                                                                        item.itemOptions.map((io) => {
+                                                                            return [io.text, Object.keys(io.optionAnswers).length];
+                                                                        })
+                                                                    )}
+                                                                    options={{
+                                                                        chartArea: { top: 8, height: '90%', width: '90%' },
+                                                                        legend: { position: 'bottom' },
+                                                                        colors: [
+                                                                            '#F59489',
+                                                                            '#91CAD6',
+                                                                            '#FECF86',
+                                                                            '#4E9BB9',
+                                                                            '#EC6571',
+                                                                            '#AAD390',
+                                                                            '#8C6A80',
+                                                                            '#70A6A6',
+                                                                            '#FACD63',
+                                                                            '#578AA2',
+                                                                            '#E64E5E',
+                                                                            '#91BD7E',
+                                                                            '#F9A98F',
+                                                                            '#76C4D1',
+                                                                            '#FEDB8A',
+                                                                            '#5C97B2',
+                                                                            '#D85A6A',
+                                                                            '#89A86B',
+                                                                            '#F7BC92',
+                                                                            '#6FACB5',
+                                                                            '#E14953',
+                                                                            '#A1C588',
+                                                                            '#F5D39A',
+                                                                            '#568BA5',
+                                                                            '#C44D59',
+                                                                            '#7FA569',
+                                                                            '#E6A17C',
+                                                                            '#619BB0',
+                                                                            '#F39C9F',
+                                                                            '#ADC192',
+                                                                            '#FFD07D',
+                                                                            '#5499AE',
+                                                                            '#E6606F',
+                                                                            '#97BD83',
+                                                                            '#F6C2A3',
+                                                                            '#6BA3B8',
+                                                                            '#E15661',
+                                                                            '#90B67A',
+                                                                            '#F7AE9C',
+                                                                            '#75BFCB',
+                                                                            '#E6737D',
+                                                                            '#A2CA93',
+                                                                            '#FAD4AC',
+                                                                            '#639FB7',
+                                                                            '#D45B66',
+                                                                            '#83AB77',
+                                                                            '#F9B69B',
+                                                                            '#71B4C6',
+                                                                            '#E75762',
+                                                                            '#A8C599',
+                                                                        ],
+                                                                        is3D: true,
+                                                                    }}
+                                                                    height={'400px'}
+                                                                />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )
                                             );
