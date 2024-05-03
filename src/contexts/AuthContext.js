@@ -1,11 +1,15 @@
 import { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { StorageContext } from './StorageContext';
 import axios from 'axios';
+import baseUrl from './RouteContext';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const defaultUser = useMemo(() => ({ id: null, username: null, role: null, token: null, expiresIn: null, acceptedTerms: null }), []);
+    const defaultUser = useMemo(
+        () => ({ id: null, username: null, role: null, token: null, expiresIn: null, acceptedTerms: null, institutionId: null }),
+        []
+    );
     const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
     const [user, setUser] = useState(defaultUser);
 
@@ -53,10 +57,10 @@ export const AuthProvider = ({ children }) => {
     }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
-    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms) => {
-        setUser({ id, username, role, token, expiresIn, acceptedTerms });
+    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId) => {
+        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId });
 
-        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms }));
+        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId }));
     }, []);
 
     // Clear user object and clean up traces (through clearDBAndStorage)
@@ -74,7 +78,7 @@ export const AuthProvider = ({ children }) => {
                 const expirationTime = new Date(prev.expiresIn);
                 if (now >= renewTime && now <= expirationTime) {
                     axios
-                        .post('http://localhost:3000/api/auth/renewSignIn', null, {
+                        .post(`${baseUrl}api/auth/renewSignIn`, null, {
                             headers: {
                                 Authorization: `Bearer ${prev.token}`,
                             },

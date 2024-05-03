@@ -103,7 +103,8 @@ function SignInPage(props) {
                         response.data.data.role,
                         response.data.data.token,
                         new Date(new Date().getTime() + response.data.data.expiresIn),
-                        response.data.data.acceptedTerms
+                        response.data.data.acceptedTerms,
+                        response.data.data.institutionId
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
@@ -130,7 +131,8 @@ function SignInPage(props) {
                         response.data.data.role,
                         response.data.data.token,
                         new Date(new Date().getTime() + response.data.data.expiresIn),
-                        false
+                        false,
+                        response.data.data.institutionId
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
