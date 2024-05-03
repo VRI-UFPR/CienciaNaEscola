@@ -1,100 +1,14 @@
-export const defaultInputs = [
-    {
-        description: 'date',
-        question: 'date',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-    {
-        description: 'time',
-        question: 'time',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-    {
-        description: 'location',
-        question: 'location',
-        type: 0,
-        validation: [],
-        sugestions: [],
-        subForm: null,
-        id: null,
-    },
-];
-
 export const defaultNewInput = (type) => {
     return {
+        text: '',
         description: '',
-        question: '',
         type: type,
-        validation: [
-            {
-                type: 'required',
-                value: false,
-            },
-        ],
-        sugestions: [],
-        inputId: null,
-        id: null,
+        enabled: true,
     };
 };
 
-export const aboutPICCE = (
-    <>
-        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad
-        minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute
-        iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident,
-        sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod
-        tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit
-        laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat
-        nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem
-        ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrum exercitationem ullam corporis.
-    </>
-);
+export const aboutPICCE =
+    '## Sobre o PICCE\n### Missão\nA missão do PICCE é promover a construção da Ciência Cidadã nas escolas da rede de ensino do estado do Paraná por meio de um processo formativo, pautado em metodologias de ensino e aprendizagem sempre aliadas à inovação e ao pensamento crítico. Para isso, conta com o desenvolvimento de uma estratégia educacional cujo alicerce é a aliança entre a Base Nacional Comum Curricular (BNCC), os pressupostos da Ciência Cidadã e a integração entre instituições de ensino de nível federal e estadual com a Secretaria Estadual de Ensino.\n### Visão\nA partir de suas ações, o PICCE busca transformar o ensino de Ciências nas escolas paranaenses, ao ressignificar conceitos e práticas, bem como ao exercitar novas formas de apropriação da comunidade a partir do conhecimento científico. A longo prazo, o objetivo é que o Programa expanda suas atividades para todo o país, criando uma rede nacional de Ciência Cidadã.\n### Valores\nO PICCE considera estudantes e professores como co-produtores de conhecimentos científicos, e para contribuir com a inovação cidadã, estimula o aprendizado conjunto, por meio de infraestrutura compartilhada. Para tanto, está baseado em três pilares:\n### Ciência Aberta\nÉ a prática de fazer ciência de modo colaborativo. Ou seja, os dados das pesquisas e outros processos estão disponíveis livremente, podem ser reutilizados, distribuídos e reproduzidos por outros pesquisadores e pela sociedade em geral. A Ciência Aberta permite aumentar o conhecimento público da ciência e também contribui para que os pesquisadores ampliem sua produção e possam buscar mais investimentos em ciência e tecnologia.\nPensando no livre acesso à informação, também busca ampliar a divulgação científica, possibilitando a visibilidade e o reconhecimento dos investigadores e das instituições, a promoção da responsabilidade social científica, a apropriação social do conhecimento, a transparência do processo científico e a democratização do acesso ao conhecimento científico.\n### Ciência Cidadã\nA Ciência Cidadã integra o movimento de Ciência Aberta. Seu aspecto central é a pluralidade de atores sociais, que vivenciam diferentes dinâmicas de experimentação da ciência e contribuem para um aprendizado coletivo, contextualizado para cada realidade e com foco na inovação. Sua proposta fundamental é que os estudantes sejam cidadãos cientistas, participando em várias etapas do processo científico, desde o desenvolvimento de uma questão científica, passando pela escolha da abordagem utilizada, a coleta e análise dos dados, até chegar na comunicação dos resultados.\n### Ciência Cidadã na Escola\nOs princípios da Ciência Cidadã podem e devem ser aplicados diretamente à educação básica. Os professores da rede de ensino municipal e estadual são responsáveis por mostrar aos estudantes que a ciência está além do que é aprendido em sala de aula e anda ao lado da cidadania. Desta forma, as crianças e os adolescentes entendem desde cedo que a experimentação científica pode ser usada para entender o contexto onde estão inseridas e, a partir das suas descobertas, propor formas de mudar a sua realidade.\n## Equipe de desenvolvimento\n - Ana de Vasconcelos Oporto\n - Clara Drimel\n - Daniel Lins\n - Eduarda de Aguiar Freitas\n - Eduardo Mathias de Souza\n - Eloisa Nielsen\n - Guilherme Stonoga Tedardi\n - Izalorran Bonaldi\n - João Armênio\n - José Guilherme de Oliveira Pedroso\n - Juliana Zambon\n - Matheus Moraes Piovesan\n - Tiago Mendes Bottamedi\n - Yuri Junqueira Tobias';
 
-export const terms = (
-    <>
-        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad
-        minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute
-        iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident,
-        sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod
-        tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit
-        laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat
-        nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem
-        ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrum exercitationem ullam corporis.    
-    </>
-);
-
-const styles = `
-    .mb-2-5 {
-        margin-bottom: 12px !important;
-    }
-`;
-
-export const teamMembers = (
-    <>
-        <p className="mb-2-5">Ana de Vasconcelos Oporto</p>
-        <p className="mb-2-5">Clara Drimel</p>
-        <p className="mb-2-5">Daniel Lins</p>
-        <p className="mb-2-5">Eduarda de Aguiar Freitas</p>
-        <p className="mb-2-5">Eduardo Mathias de Souza</p>
-        <p className="mb-2-5">Eloisa Nielsen</p>
-        <p className="mb-2-5">Guilherme Stonoga Tedardi</p>
-        <p className="mb-2-5">Izalorran Bonaldi</p>
-        <p className="mb-2-5">João Armênio</p>
-        <p className="mb-2-5">José Guilherme de Oliveira Pedroso</p>
-        <p className="mb-2-5">Juliana Zambon</p>
-        <p className="mb-2-5">Matheus Moraes Piovesan</p>
-        <p className="mb-2-5">Tiago Mendes Bottamedi</p>
-        <p className="mb-2-5">Yuri Junqueira Tobias</p>
-        <style>{styles}</style>
-    </>
-);
+export const terms =
+    '### Disposições Gerais:\nIdentificação das partes envolvidas: Universidade Federal do Paraná e o usuário do aplicativo. Estes termos de uso regem o uso do aplicativo em tela. O usuário concorda em cumprir os termos ao utilizar o aplicativo.\n\n### Responsabilidade Limitada:\nOs autores do aplicativo não são responsáveis por danos diretos, indiretos, incidentais, consequenciais, especiais ou punitivos decorrentes do uso ou impossibilidade de uso do aplicativo. Os autores não são responsáveis por qualquer conteúdo gerado pelo usuário ou por terceiros. Os autores não garantem a precisão, integridade, atualidade ou utilidade de qualquer conteúdo fornecido pelo aplicativo.\n\n### Isenção de Garantias:\nO aplicativo é fornecido "no estado em que se encontra", sem garantias de qualquer tipo, expressas ou implícitas. Os autores não garantem que o aplicativo seja livre de erros ou que funcionará sem interrupções.\n\n### Disposições Adicionais:\nDisputas eventuais serão resolvidas exclusivamente no forum de Curitiba - PR.\n\n### Atualizações e Revisões:\nOs termos de uso podem ser atualizados periodicamente. O usuário concorda em ficar vinculado às versões mais recentes.';

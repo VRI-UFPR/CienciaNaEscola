@@ -5,6 +5,7 @@ import RoundedButton from '../../RoundedButton';
 import iconFile from '../../../assets/images/iconFile.svg';
 import eyeIcon from '../../../assets/images/eyeIcon.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
+import MarkdownText from '../../MarkdownText';
 
 const styles = `
     .color-dark-gray {
@@ -19,8 +20,7 @@ const styles = `
 function ImageInput(props) {
     const { onAnswerChange, item, group } = props;
 
-    const [images, setImages] = useState([]);
-    const [index, setIndex] = useState(0);
+    const [answer, setAnswers] = useState({ text: '...', files: [] });
     const [ImageVisibility, setImageVisibility] = useState(false);
     const fileInputRef = useRef(null);
 
@@ -29,34 +29,34 @@ function ImageInput(props) {
     };
 
     useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', images);
-    }, [images, item.id, onAnswerChange, group]);
+        onAnswerChange(group, item.id, 'ITEM', answer);
+    }, [answer, item.id, onAnswerChange, group]);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileInputChange = (e) => {
-        setImages((prevImages) => {
-            const newImages = [...prevImages];
-            newImages[index] = e.target.files[0];
-            setIndex(index + 1);
-            console.log(newImages);
-            return newImages;
+    const insertImage = (e) => {
+        setAnswers((prevAnswers) => {
+            const newAnswers = { ...prevAnswers };
+            newAnswers.files.push(e.target.files[0]);
+            return newAnswers;
         });
     };
 
-    const handleFileInputRemove = (indexToRemove) => {
-        setImages(images.filter((_, index) => index !== indexToRemove));
+    const removeImage = (indexToRemove) => {
+        setAnswers((prevAnswers) => {
+            const newAnswers = { ...prevAnswers };
+            newAnswers.files = newAnswers.files.filter((_, index) => index !== indexToRemove);
+            return newAnswers;
+        });
     };
 
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <form className="d-flex flex-column flex-grow-1">
                 <div className="row rounded p-0 pb-3 m-0">
-                    <label htmlFor="imageinput" className="control-label color-dark-gray font-barlow fw-medium fs-6 p-0 pb-3">
-                        {item.text}
-                    </label>
+                    <MarkdownText text={item.text} />
                     <div className="d-flex align-items-center p-0">
                         <RoundedButton
                             hsl={[190, 46, 70]}
@@ -66,8 +66,8 @@ function ImageInput(props) {
                             onClick={handleButtonClick}
                         />
                         <div className="row row-cols-2 flex-row position-relative color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
-                            {images.length > 0 ? (
-                                images.slice(0, ImageVisibility ? images.length : 2).map((image, i) => {
+                            {answer.files.length > 0 ? (
+                                answer.files.slice(0, ImageVisibility ? answer.files.length : 2).map((image, i) => {
                                     return (
                                         <div
                                             key={i}
@@ -78,14 +78,14 @@ function ImageInput(props) {
                                             <div className="d-flex justify-content-center align-items-center position-relative border border-black border-opacity-50 rounded-4">
                                                 <img
                                                     className="img-fluid rounded-4 object-fit-contain"
-                                                    src={URL.createObjectURL(images[i])}
+                                                    src={URL.createObjectURL(answer.files[i])}
                                                     alt="Imagem selecionada"
                                                 />
                                                 <RoundedButton
                                                     className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                                     hsl={[190, 46, 70]}
                                                     icon={iconTrash}
-                                                    onClick={() => handleFileInputRemove(i)}
+                                                    onClick={() => removeImage(i)}
                                                 />
                                             </div>
                                         </div>
@@ -104,12 +104,13 @@ function ImageInput(props) {
                         name="imageinput"
                         id="imageinput"
                         style={{ display: 'none' }}
-                        onChange={handleFileInputChange}
-                        // disabled={answer !== undefined}
+                        onChange={insertImage}
                         ref={fileInputRef}
                     />
                 </div>
-                <div className={`${images.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 p-1 p-lg-2`}>
+                <div
+                    className={`${answer.files.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 p-1 p-lg-2`}
+                >
                     <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon={eyeIcon} onClick={toggleImageVisibility} />
                 </div>
             </form>

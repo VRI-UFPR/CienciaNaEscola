@@ -1,8 +1,8 @@
-import React from 'react';
-import { useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import iconFile from '../../../assets/images/iconFile.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 import iconPlus from '../../../assets/images/iconPlus.svg';
+import { defaultNewInput } from '../../../utils/constants';
 
 import RoundedButton from '../../RoundedButton';
 
@@ -34,49 +34,44 @@ const styles = `
     `;
 
 function CreateSingleSelectionInput(props) {
-    const { title, input, onInputChange, onInputRemove } = props;
+    const [title, setTitle] = useState('');
+    const { type, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+    const [item, setItem] = useState({ ...defaultNewInput(type), itemOptions: [] });
 
-    const [inputEmpty, setInputEmpty] = useState([true, true]);
-    const [inputs, setInputs] = useState([[]]);
-
-    const updateInputEmpty = (i, reason) => {
-        const old = [...inputEmpty];
-        reason === 0 ? (old[i] = true) : (old[i] = false);
-        setInputEmpty(old);
-    };
-
-    const handleTextBoxChange = (event, field) => {
-        const updatedTextBox = { ...input };
-        updatedTextBox[field] = event.target.value;
-        onInputChange(updatedTextBox);
-        if (event.target.id === 'question') {
-            event.target.value === '' ? updateInputEmpty(0, 0) : updateInputEmpty(0, 1);
+    useEffect(() => {
+        switch (type) {
+            case 'SELECT': {
+                setTitle('Lista Suspensa');
+                break;
+            }
+            case 'RADIO': {
+                setTitle('Seleção única');
+                break;
+            }
+            case 'CHECKBOX': {
+                setTitle('Múltipla escolha');
+                break;
+            }
+            default: {
+                break;
+            }
         }
+    }, [type]);
+
+    useEffect(() => {
+        updateItem(item, pageIndex, groupIndex, itemIndex);
+    }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
+
+    const addOption = () => {
+        setItem((prev) => ({ ...prev, itemOptions: [...prev.itemOptions, { text: '' }] }));
     };
 
-    const handleAdd = () => {
-        const inp = [...inputs, []];
-        const inpEmp = [...inputEmpty, true];
-        setInputs(inp);
-        setInputEmpty(inpEmp);
-        onInputChange({ ...input, options: inp });
+    const removeOption = (index) => {
+        setItem((prev) => ({ ...prev, itemOptions: prev.itemOptions.filter((_, i) => i !== index) }));
     };
 
-    const handleDeleteInput = (i) => {
-        const deleteInp = [...inputs];
-        deleteInp.splice(i, 1);
-        setInputs(deleteInp);
-        onInputChange({ ...input, options: deleteInp });
-    };
-
-    const handleInputChange = (onChangeValue, i) => {
-        const inputData = [...inputs];
-        inputData[i] = onChangeValue.target.value;
-        setInputs(inputData);
-        onInputChange({ ...input, options: inputData });
-        if (onChangeValue.target.id === String(i)) {
-            onChangeValue.target.value === '' ? updateInputEmpty(i + 1, 0) : updateInputEmpty(i + 1, 1);
-        }
+    const updateOption = (index, value) => {
+        setItem((prev) => ({ ...prev, itemOptions: prev.itemOptions.map((item, i) => (i === index ? { text: value } : item)) }));
     };
 
     return (
@@ -87,7 +82,12 @@ function CreateSingleSelectionInput(props) {
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
+                    <RoundedButton
+                        className="ms-2"
+                        hsl={[190, 46, 70]}
+                        icon={iconTrash}
+                        onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
@@ -96,15 +96,15 @@ function CreateSingleSelectionInput(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
-                    onChange={(event) =>
-                        onInputChange({
-                            ...input,
-                            validation: input.validation.map((item) =>
-                                item.type === 'required' ? { ...item, value: event.target.checked } : { item }
-                            ),
-                        })
-                    }
+                    // defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
+                    // onChange={(event) =>
+                    //     onInputChange({
+                    //         ...input,
+                    //         validation: input.validation.map((item) =>
+                    //             item.type === 'required' ? { ...item, value: event.target.checked } : { item }
+                    //         ),
+                    //     })
+                    // }
                 />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
@@ -120,9 +120,9 @@ function CreateSingleSelectionInput(props) {
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
                         aria-describedby="questionHelp"
-                        onChange={(event) => handleTextBoxChange(event, 'question')}
+                        onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                     />
-                    {inputEmpty[0] && (
+                    {!item.text && (
                         <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                             *Este campo é obrigatório.
                         </div>
@@ -136,10 +136,10 @@ function CreateSingleSelectionInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
-                        onChange={(event) => handleTextBoxChange(event, 'description')}
+                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
                     />
                 </div>
-                {inputs.map((data, i) => {
+                {item.itemOptions.map((data, i) => {
                     return (
                         <div key={i + 1} className="mb-3">
                             <label htmlFor={i} className="form-label fw-medium fs-5">
@@ -148,15 +148,14 @@ function CreateSingleSelectionInput(props) {
                             <div className="d-flex">
                                 <input
                                     type="text"
-                                    value={data}
                                     className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                                     id={i}
                                     aria-describedby="questionHelp"
-                                    onChange={(event) => handleInputChange(event, i)}
+                                    onChange={(event) => updateOption(i, event.target.value)}
                                 />
-                                <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={() => handleDeleteInput(i)} />
+                                <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeOption(i)} />
                             </div>
-                            {inputEmpty[i + 1] && (
+                            {!item.itemOptions[i] && (
                                 <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                                     *Por favor, preencha esta opção
                                 </div>
@@ -164,13 +163,13 @@ function CreateSingleSelectionInput(props) {
                         </div>
                     );
                 })}
-                {inputs.length < 2 && (
+                {item.itemOptions.length < 2 && (
                     <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                         O campo precisa ter pelo menos duas opções!
                     </div>
                 )}
                 <div className="d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} size={22} icon={iconPlus} onClick={handleAdd} />
+                    <RoundedButton hsl={[190, 46, 70]} size={22} icon={iconPlus} onClick={() => addOption()} />
                 </div>
             </div>
             <style>{styles}</style>

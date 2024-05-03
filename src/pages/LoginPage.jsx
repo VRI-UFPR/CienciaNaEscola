@@ -5,6 +5,7 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
@@ -64,9 +65,9 @@ function LoginPage(props) {
     const modalRef = useRef(null);
 
     useEffect(() => {
-        if (localStorage.getItem('user') != null) {
-            navigate('/home');
-        }
+        // if (localStorage.getItem('user') != null) {
+        //     navigate('/home');
+        // }
     }, [navigate]);
 
     const loginHandler = (event) => {
@@ -75,20 +76,49 @@ function LoginPage(props) {
             username,
             hash: password,
         });
-        // .post('http://localhost:3333/user/signIn', {
         axios
-            .post('http://localhost:3000/api/auth/signIn', formData, {
+            .post(baseUrl + 'api/auth/signIn', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, username, response.data.data.token);
-                    console.log(response.data);
-                    //navigate('/home');
+                    login(
+                        response.data.data.id,
+                        username,
+                        response.data.data.token,
+                        new Date(new Date().getTime() + response.data.data.expiresIn),
+                        response.data.data.acceptedTerms
+                    );
+                    navigate('/acceptTerms');
                 } else {
-                    console.log(response.data);
+                    throw new Error('Authentication failed!');
+                }
+            })
+            .catch((error) => {
+                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
+            });
+    };
+
+    const passwordlessLoginHandler = () => {
+        axios
+            .get(baseUrl + 'api/auth/passwordlessSignIn', {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                if (response.data.data.token) {
+                    login(
+                        response.data.data.id,
+                        'Visitante',
+                        response.data.data.token,
+                        new Date(new Date().getTime() + response.data.data.expiresIn),
+                        false
+                    );
+                    navigate('/acceptTerms');
+                } else {
                     throw new Error('Authentication failed!');
                 }
             })
@@ -140,9 +170,18 @@ function LoginPage(props) {
                         )}
                     </div>
                     <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
+                        {/* <div className="col-12 col-lg-6">
+                            <TextButton
+                                hsl={[97, 43, 70]}
+                                text="Entrar como visitante"
+                                className="rounded-pill"
+                                type="button"
+                                onClick={passwordlessLoginHandler}
+                            />
+                        </div> */}
                     </div>
                 </form>
             </div>
