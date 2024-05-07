@@ -185,7 +185,7 @@ function SignInPage(props) {
                             <div className="col-12 col-lg-6">
                                 <TextButton
                                     hsl={[97, 43, 70]}
-                                    text="Entrar como visitante"
+                                    text="Entrar sem senha"
                                     className="rounded-pill"
                                     type="button"
                                     onClick={passwordlessLoginHandler}
