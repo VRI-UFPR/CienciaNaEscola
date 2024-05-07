@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { StorageContext } from './StorageContext';
 import axios from 'axios';
+import baseUrl from './RouteContext';
 
 export const AuthContext = createContext();
 
@@ -74,7 +75,7 @@ export const AuthProvider = ({ children }) => {
                 const expirationTime = new Date(prev.expiresIn);
                 if (now >= renewTime && now <= expirationTime) {
                     axios
-                        .post('http://localhost:3000/api/auth/renewSignIn', null, {
+                        .post(baseUrl + 'api/auth/renewSignIn', null, {
                             headers: {
                                 Authorization: `Bearer ${prev.token}`,
                             },
