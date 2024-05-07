@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import InstallTitle from '../assets/images/loginTitle.svg';
+import picceTitle from '../assets/images/picceTitle.svg';
 import Background from '../assets/images/loginPageBackground.png';
 import { useNavigate } from 'react-router-dom';
 import TextButton from '../components/TextButton';
@@ -31,6 +31,18 @@ const styles = `
     .spinner-splash{
         width: 50px;
         height: 50px;
+    }
+
+    .mw-200{
+        max-width: 200px;
+    }
+
+    .mw-150{
+        max-width: 150px;
+    }
+
+    .mw-270{
+        max-width: 270px;
     }
 `;
 
@@ -69,7 +81,7 @@ function InstallPage(props) {
         <div className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100">
             <div className="d-flex flex-column align-items-center justify-content-center h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end">
-                    <img src={InstallTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '270px' }} />
+                    <img src={picceTitle} alt="PICCE" className="mw-270 pb-4" />
                     <span className="install-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">
                         Bem-vindo(a) ao Ciência Cidadã na Escola!
                     </span>
@@ -99,15 +111,10 @@ function InstallPage(props) {
             </div>
             <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
                 <div className="col-4 justify-content-start d-flex align-items-center">
-                    <img
-                        className="d-h-auto w-100"
-                        src={logoUFPR}
-                        style={{ maxWidth: '150px' }}
-                        alt="Logomarca da Universidade Federal do Paraná"
-                    />
+                    <img className="d-h-auto mw-150 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                 </div>
                 <div className="col-6 justify-content-end d-flex align-items-center">
-                    <img className="h-auto w-100" src={logoFA} style={{ maxWidth: '200px' }} alt="Logomarca da Fundação Araucária" />
+                    <img className="h-auto mw-200 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
                 </div>
             </div>
             <style> {styles}</style>
