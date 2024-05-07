@@ -173,15 +173,15 @@ function LoginPage(props) {
                         <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
-                        {/* <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6">
                             <TextButton
-                                hsl={[97, 43, 70]}
-                                text="Entrar como visitante"
+                                hsl={[190, 46, 70]}
+                                text="Entrar sem senha"
                                 className="rounded-pill"
                                 type="button"
                                 onClick={passwordlessLoginHandler}
                             />
-                        </div> */}
+                        </div>
                     </div>
                 </form>
             </div>
