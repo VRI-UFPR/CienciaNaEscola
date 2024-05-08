@@ -30,7 +30,7 @@ const Alert = forwardRef((props, ref) => {
             setModal({
                 id: modal.id,
                 title: modalData.title || modal.title,
-                description: modalData.description || modal.description,
+                description: modalData.description,
                 dismissible: modalData.dismissible === undefined ? modal.dismissible : modalData.dismissible,
                 dismissHsl: modalData.dismissHsl || modal.dismissHsl,
                 dismissText: modalData.dismissText || modal.dismissText,
