@@ -10,7 +10,7 @@ const styles = `
         background-color: #F8F8F8;
         border-radius: 10px;
         width: 85%;
-        box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.25);
     }
 
     .home-btn-title {
