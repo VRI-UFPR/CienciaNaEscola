@@ -78,13 +78,13 @@ function ProtocolCarousel(props) {
                 <button
                     key={i}
                     type="button"
-                    className={`carousel-indicator ${i === currentPage ? ' active' : ''} rounded-circle border-0 mx-1`}
+                    className={`carousel-indicator ${i === currentPage ? ' active' : ''} rounded-circle border-5 mx-1`}
                     data-bs-target="#dynamic-carousel"
                     data-bs-slide-to={i}
                     onClick={() => setCurrentPage(i)}
                     style={{
-                        width: '1rem',
-                        height: '1rem',
+                        width: '0.7rem',
+                        height: '0.7rem',
                     }}
                 ></button>
             );
