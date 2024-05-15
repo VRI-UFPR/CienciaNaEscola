@@ -13,7 +13,7 @@ const styles = `
 `;
 
 function SelectInput(props) {
-    const { onAnswerChange, item, group, galleryRef } = props;
+    const { onAnswerChange, item, group, galleryRef, disabled } = props;
     const [options, setOptions] = useState({});
     const [ImageVisibility, setImageVisibility] = useState(false);
 
@@ -86,7 +86,9 @@ function SelectInput(props) {
                     <option value="-1" label="Selecione uma opção:"></option>
                     {item.itemOptions.map((option) => {
                         const optname = option.text.toLowerCase().replace(/\s/g, '');
-                        return <option key={optname + 'input' + item.id} value={option.id} label={option.text}></option>;
+                        return (
+                            <option key={optname + 'input' + item.id} value={option.id} label={option.text} disabled={disabled}></option>
+                        );
                     })}
                 </select>
             </div>

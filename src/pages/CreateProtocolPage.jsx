@@ -131,7 +131,7 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
-                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/home') });
+                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/applications') });
             })
             .catch((error) => {
                 console.error(error.message);
@@ -151,13 +151,6 @@ function CreateProtocolPage(props) {
                         <h1 className="font-century-gothic color-grey fs-3 fw-bold p-0 pb-4 pb-lg-5 m-0 titulo-form">
                             Gerador de formulários
                         </h1>
-                    </div>
-                    <div className="col-lg-3 col-md-1"></div>
-                    <div id="button" className="col-lg-2 col-md-3 botao-form">
-                        <TextButton type="submit" hsl={[6, 84, 75]} text="Estatísticas" />
-                    </div>
-                    <div id="button1" className="col-lg-2 col-md-3 botao-form">
-                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" />
                     </div>
                 </div>
 

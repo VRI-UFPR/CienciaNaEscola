@@ -33,7 +33,7 @@ const styles = `
 
 function TimeInput(props) {
     const [time, setTime] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, group, disabled } = props;
 
     useEffect(() => {
         const date = new Date();
@@ -67,6 +67,7 @@ function TimeInput(props) {
                             id="timeinput"
                             onChange={(e) => setTime((prev) => ({ ...prev, text: e.target.value }))}
                             defaultValue={time.text}
+                            disabled={disabled}
                         ></input>
                     </div>
                 </div>

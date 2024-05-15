@@ -121,7 +121,7 @@ function SignUpPage(props) {
                 })
                 .then((response) => {
                     if (response.data.message === 'User registered with sucess.') {
-                        modalRef.current.showModal({ title: 'Cadastrado com sucesso', onHide: () => navigate('/login') });
+                        modalRef.current.showModal({ title: 'Cadastrado com sucesso', onHide: () => navigate('/signin') });
                     } else {
                         modalRef.current.showModal({ title: 'Falha no cadastro: erro no servidor' });
                     }

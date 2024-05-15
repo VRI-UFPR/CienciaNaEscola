@@ -17,7 +17,7 @@ const styles = `
 `;
 
 function CheckBoxInput(props) {
-    const { onAnswerChange, item, group, galleryModalRef } = props;
+    const { onAnswerChange, item, group, galleryModalRef, disabled } = props;
     const [options, setOptions] = useState({});
 
     useEffect(() => {
@@ -56,6 +56,7 @@ function CheckBoxInput(props) {
                                 name={'checkboxoptions' + item.id}
                                 id={optname + 'input' + item.id}
                                 onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
+                                disabled={disabled}
                             ></input>
                             <label
                                 className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}
