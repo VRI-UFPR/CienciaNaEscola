@@ -72,19 +72,19 @@ function ApplicationsPage(props) {
     }
 
     return (
-        <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
-            <div className="row m-0 flex-grow-1">
-                <div className="col-auto bg-coral-red p-0 d-flex position-lg-sticky vh-100 top-0">
-                    <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
+        <div className="d-flex flex-column vh-100">
+            <div className="row h-100 m-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+                    <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column flex-grow-1 bg-white p-0">
+                <div className="col d-flex flex-column h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row d-flex align-items-center justify-content-center font-barlow bg-white h-100 p-0 m-0">
-                        <div className="col col-md-10 col-lg-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 pb-4 m-0">Aplicações</h1>
-                            <div className="d-flex justify-content-center flex-grow-1 pb-0 m-0">
+                    <div className="row align-items-center justify-content-center font-barlow flex-grow-1 m-0 overflow-hidden">
+                        <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
+                            <h1 className="color-grey font-century-gothic fw-bold fs-2 pb-4 m-0">Protocolos</h1>
+                            <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                 <ProtocolCarousel listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))} />
                             </div>
                         </div>
