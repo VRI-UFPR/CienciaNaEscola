@@ -16,7 +16,7 @@ const styles = `
         max-height: 100%;
     }
 
-    ::-webkit-scrollbar {
+    .home-btn-title::-webkit-scrollbar  {
         width: 0px;
     }
 `;

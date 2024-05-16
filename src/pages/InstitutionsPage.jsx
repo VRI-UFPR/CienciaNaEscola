@@ -10,6 +10,7 @@ import ProtocolCarousel from '../components/ProtocolCarousel';
 import Alert from '../components/Alert';
 import { LayoutContext } from '../contexts/LayoutContext';
 import TextButton from '../components/TextButton';
+import ProtocolList from '../components/ProtocolList';
 
 const style = `
     .font-barlow {
@@ -75,11 +76,19 @@ function InstitutionsPage(props) {
                 </div>
                 <div className="col d-flex flex-column h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
+                    <div className="row align-items-center justify-content-center font-barlow m-0">
+                        <div className="col-12 col-md-10 p-4 pb-0">
+                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Instituições</h1>
+                        </div>
+                    </div>
                     <div className="row align-items-center justify-content-center font-barlow flex-grow-1 m-0 overflow-hidden">
-                        <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 pb-4 m-0">Instituições</h1>
+                        <div className="col col-md-10 d-flex flex-column h-100 p-4">
+                            <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Minhas instituições</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                <ProtocolCarousel listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))} />
+                                <ProtocolList
+                                    listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))}
+                                    hsl={[36, 98, 83]}
+                                />
                             </div>
                         </div>
                     </div>
