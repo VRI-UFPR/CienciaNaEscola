@@ -12,6 +12,10 @@ const MarkdownStyles = `
     .color-dark-gray {
         color: #535353;
     }
+
+    .color-steel-blue {
+        color: #4E9BB9;
+    }
 `;
 
 function MarkdownText(props) {
@@ -31,37 +35,42 @@ function MarkdownText(props) {
                         },
                         h6: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         h5: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         h4: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         h3: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         h2: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         h1: {
                             props: {
-                                className: 'fw-bold fs-5 mb-3',
+                                className: 'fw-bold fs-5 mb-3 text-break',
                             },
                         },
                         p: {
                             props: {
-                                className: ' mb-3',
+                                className: 'mb-3 text-break',
+                            },
+                        },
+                        a: {
+                            props: {
+                                className: 'color-steel-blue mb-3 text-break',
                             },
                         },
                     },
