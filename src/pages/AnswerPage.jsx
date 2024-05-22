@@ -9,6 +9,8 @@ import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import baseUrl from '../contexts/RouteContext';
 import { Chart } from 'react-google-charts';
+import Gallery from '../components/Gallery';
+import GalleryModal from '../components/GalleryModal';
 
 const styles = `
     .bg-yellow-orange {
@@ -56,6 +58,7 @@ function AnswerPage(props) {
     const [answer, setAnswer] = useState();
     const [selectedAnswer, setSelectedAnswer] = useState(undefined);
     const [selectedItem, setSelectedItem] = useState(undefined);
+    const galleryModalRef = useRef(null);
     const { id } = useParams();
     const { user } = useContext(AuthContext);
     const modalRef = useRef(null);
@@ -171,9 +174,21 @@ function AnswerPage(props) {
                                                                                             answer.answers[applicationAnswerId].date
                                                                                         ).toLocaleDateString()}
                                                                                 </p>
-                                                                                <p className="fw-medium fs-6 color-dark-gray m-0">
-                                                                                    {groupAnswer.text}
-                                                                                </p>
+                                                                                {item.type === 'UPLOAD' ? (
+                                                                                    <Gallery
+                                                                                        className="mb-3"
+                                                                                        item={{
+                                                                                            files: groupAnswer.files.map((file) => ({
+                                                                                                path: baseUrl + file.path,
+                                                                                            })),
+                                                                                        }}
+                                                                                        galleryModalRef={galleryModalRef}
+                                                                                    />
+                                                                                ) : (
+                                                                                    <p className="fw-medium fs-6 color-dark-gray m-0">
+                                                                                        {groupAnswer.text}
+                                                                                    </p>
+                                                                                )}
                                                                             </div>
                                                                         )
                                                                     );
@@ -318,6 +333,7 @@ function AnswerPage(props) {
                 </div>
             </div>
             <Alert id="AnswerPageAlert" ref={modalRef} />
+            <GalleryModal id="ProtocolPageGallery" ref={galleryModalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
                 <Sidebar modalRef={modalRef} />
             </div>
