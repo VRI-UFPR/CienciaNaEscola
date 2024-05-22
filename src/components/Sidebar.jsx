@@ -4,6 +4,7 @@ import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
+import { version } from '../utils/constants';
 
 const styles = `
     .font-barlow {
@@ -130,6 +131,9 @@ function Sidebar(props) {
                         Logout
                     </button>
                 </div>
+            </div>
+            <div>
+                <p className="text-start text-white ps-4 fw-medium">{version}</p>
             </div>
             <style>{styles}</style>
         </div>

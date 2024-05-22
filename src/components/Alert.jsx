@@ -30,6 +30,7 @@ const Alert = forwardRef((props, ref) => {
             setModal({
                 id: modal.id,
                 title: modalData.title || modal.title,
+                description: modalData.description,
                 dismissible: modalData.dismissible === undefined ? modal.dismissible : modalData.dismissible,
                 dismissHsl: modalData.dismissHsl || modal.dismissHsl,
                 dismissText: modalData.dismissText || modal.dismissText,
@@ -59,9 +60,19 @@ const Alert = forwardRef((props, ref) => {
         <div className="modal fade" id={modal.id} tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
             <div className="modal-dialog modal-dialog-centered p-5">
                 <div className="modal-content bg-transparent border-0">
-                    <div className="d-flex flex-column shadow bg-white rounded-4 w-100 mx-0 p-4 py-5 p-md-5">
-                        <h1 className="font-century-gothic color-dark-gray text-center mb-4 mb-md-5 fs-3 fw-bold">{modal.title}</h1>
-
+                    <div className="d-flex flex-column shadow text-break bg-white rounded-4 w-100 mx-0 p-4 py-5 p-md-5">
+                        <h1
+                            className={`font-century-gothic color-dark-gray text-center fs-3 fw-bold ${
+                                modal.description ? 'mb-3' : 'mb-4 mb-md-5'
+                            }`}
+                        >
+                            {modal.title}
+                        </h1>
+                        {modal.description && (
+                            <p className="font-century-gothic color-dark-gray text-center mb-4 mb-md-5 fs-5 fw-medium">
+                                {modal.description}
+                            </p>
+                        )}
                         <div className={`row ${modal.dismissible ? '' : 'd-none'} justify-content-center m-0`}>
                             <div className={`${modal.actionHsl ? 'col' : 'col-auto'} d-flex px-1`}>
                                 <TextButton

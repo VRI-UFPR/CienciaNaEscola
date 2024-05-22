@@ -1,5 +1,5 @@
 import { React, useContext, useState, useRef, useEffect } from 'react';
-import LoginTitle from '../assets/images/loginTitle.svg';
+import picceTitle from '../assets/images/picceTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
@@ -53,6 +53,18 @@ const styles = `
         .background-style{
             background-image: url(${BackgroundWeb});
         }
+    }
+
+    .mw-200{
+        max-width: 200px;
+    }
+
+    .mw-150{
+        max-width: 150px;
+    }
+
+    .mw-270{
+        max-width: 270px;
     }
 `;
 
@@ -131,7 +143,7 @@ function LoginPage(props) {
         <div className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100">
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end h-50">
-                    <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '270px' }} />
+                    <img src={picceTitle} alt="PICCE" className="mw-270 pb-4" />
                     <span className="login-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">
                         Bem-vindo(a) ao Ciência Cidadã na Escola!
                     </span>
@@ -160,11 +172,7 @@ function LoginPage(props) {
                             Esqueci minha senha
                         </p>
                         {location.pathname === '/dash/login' && (
-                            <Link
-                                classname="login-links text-decoration-underline fs-6 cursor-pointer"
-                                to="/signup"
-                                style={{ color: '#91CAD6' }}
-                            >
+                            <Link classname="login-links text-decoration-underline fs-6 cursor-pointer" to="/signup">
                                 Não é cadastrado?
                             </Link>
                         )}
@@ -173,29 +181,24 @@ function LoginPage(props) {
                         <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
-                        {/* <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6">
                             <TextButton
-                                hsl={[97, 43, 70]}
-                                text="Entrar como visitante"
+                                hsl={[190, 46, 70]}
+                                text="Entrar sem senha"
                                 className="rounded-pill"
                                 type="button"
                                 onClick={passwordlessLoginHandler}
                             />
-                        </div> */}
+                        </div>
                     </div>
                 </form>
             </div>
             <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
                 <div className="col-4 justify-content-start d-flex align-items-center">
-                    <img
-                        className="d-h-auto w-100"
-                        src={logoUFPR}
-                        style={{ maxWidth: '150px' }}
-                        alt="Logomarca da Universidade Federal do Paraná"
-                    />
+                    <img className="d-h-auto mw-150 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                 </div>
                 <div className="col-6 justify-content-end d-flex align-items-center">
-                    <img className="h-auto w-100" src={logoFA} style={{ maxWidth: '200px' }} alt="Logomarca da Fundação Araucária" />
+                    <img className="h-auto mw-200 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
                 </div>
             </div>
 
