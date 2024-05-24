@@ -131,7 +131,7 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
-                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/applications') });
+                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/protocols') });
             })
             .catch((error) => {
                 console.error(error.message);

@@ -69,8 +69,8 @@ function InfosPage(props) {
 
     return (
         <div className={`d-flex flex-column font-barlow vh-100`}>
-            <div className="row m-0 flex-grow-1">
-                <div className={`col-auto bg-coral-red p-0 ${showSidebar ? 'd-flex position-lg-sticky vh-100 top-0' : 'd-lg-none'}`}>
+            <div className="row flex-grow-1 m-0">
+                <div className={`col-auto bg-coral-red ${showSidebar ? 'd-flex position-lg-sticky vh-100 top-0' : 'd-lg-none'}  p-0`}>
                     <div
                         className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
                         tabIndex="-1"

@@ -234,8 +234,8 @@ function ApplicationPage(props) {
 
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
-            <div className="row m-0 flex-grow-1">
-                <div className="col-auto bg-coral-red p-0 d-flex position-lg-sticky vh-100 top-0">
+            <div className="row flex-grow-1 m-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>
@@ -246,14 +246,28 @@ function ApplicationPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
-                                <div className="row m-0 justify-content-center">
-                                    <div className="col-4 align-self-center pb-4">
-                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Gerenciar" onClick={() => navigate('manage')} />
+                                {isDashboard && (
+                                    <div className="row m-0 justify-content-center">
+                                        {(application.creatorId === user.id || user.role === 'ADMIN') && (
+                                            <div className="col-4 align-self-center pb-4">
+                                                <TextButton
+                                                    type="submit"
+                                                    hsl={[97, 43, 70]}
+                                                    text="Gerenciar"
+                                                    onClick={() => navigate('manage')}
+                                                />
+                                            </div>
+                                        )}
+                                        <div className="col-4 align-self-center pb-4">
+                                            <TextButton
+                                                type="submit"
+                                                hsl={[97, 43, 70]}
+                                                text="Respostas"
+                                                onClick={() => navigate('answers')}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-4 align-self-center pb-4">
-                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Respostas" onClick={() => navigate('answers')} />
-                                    </div>
-                                </div>
+                                )}
                                 <div className="row justify-content-center m-0">
                                     {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
                                 </div>
