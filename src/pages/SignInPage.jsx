@@ -184,7 +184,7 @@ function SignInPage(props) {
                         {!isDashboard && (
                             <div className="col-12 col-lg-6">
                                 <TextButton
-                                    hsl={[97, 43, 70]}
+                                    hsl={[190, 46, 70]}
                                     text="Entrar sem senha"
                                     className="rounded-pill"
                                     type="button"
