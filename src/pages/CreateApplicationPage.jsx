@@ -52,14 +52,14 @@ function CreateApplicationPage(props) {
             }
             promises.push(
                 axios
-                    .get(`${baseUrl}api/user/getInstitutionUsers/${user.institutionId}`, {
+                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionUsers(d.map((u) => ({ id: u.id, username: u.username })));
+                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
                         alert('Erro ao buscar usuários da instituição');
@@ -67,14 +67,14 @@ function CreateApplicationPage(props) {
             );
             promises.push(
                 axios
-                    .get(`${baseUrl}api/classroom/getInstitutionClassrooms/${user.institutionId}`, {
+                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionClassrooms(d.map((c) => ({ id: c.id })));
+                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
                         alert('Erro ao buscar salas de aula da instituição');

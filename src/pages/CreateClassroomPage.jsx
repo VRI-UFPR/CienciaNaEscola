@@ -38,14 +38,14 @@ function CreateClassroomPage(props) {
             }
             promises.push(
                 axios
-                    .get(`${baseUrl}api/user/getInstitutionUsers/${institutionId}`, {
+                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionUsers(d.map((u) => ({ id: u.id, username: u.username })));
+                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
                         alert('Erro ao buscar usuários da instituição');

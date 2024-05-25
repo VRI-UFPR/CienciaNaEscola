@@ -6,7 +6,6 @@ import axios from 'axios';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
-import ProtocolCarousel from '../components/ProtocolCarousel';
 import Alert from '../components/Alert';
 import { LayoutContext } from '../contexts/LayoutContext';
 import TextButton from '../components/TextButton';
@@ -46,7 +45,7 @@ function InstitutionsPage(props) {
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             axios
-                .get(baseUrl + `api/institution/getAllInstitutions`, {
+                .get(baseUrl + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
@@ -92,17 +91,19 @@ function InstitutionsPage(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="row d-flex justify-content-center pb-4 m-0">
-                        <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
-                            <TextButton
-                                text={'Criar nova instituição'}
-                                hsl={[97, 43, 70]}
-                                onClick={() => {
-                                    navigate('create');
-                                }}
-                            />
+                    {user.role === 'ADMIN' && (
+                        <div className="row d-flex justify-content-center pb-4 m-0">
+                            <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
+                                <TextButton
+                                    text={'Criar nova instituição'}
+                                    hsl={[97, 43, 70]}
+                                    onClick={() => {
+                                        navigate('create');
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
             <Alert id="InstitutionsPageAlert" ref={modalRef} />

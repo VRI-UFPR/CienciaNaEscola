@@ -108,17 +108,19 @@ function ProtocolsPage(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="row d-flex justify-content-center py-4 m-0">
-                        <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
-                            <TextButton
-                                text={'Criar novo protocolo'}
-                                hsl={[97, 43, 70]}
-                                onClick={() => {
-                                    navigate('create');
-                                }}
-                            />
+                    {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
+                        <div className="row d-flex justify-content-center py-4 m-0">
+                            <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
+                                <TextButton
+                                    text={'Criar novo protocolo'}
+                                    hsl={[97, 43, 70]}
+                                    onClick={() => {
+                                        navigate('create');
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
             <Alert id="ProtocolsPageAlert" ref={modalRef} />
