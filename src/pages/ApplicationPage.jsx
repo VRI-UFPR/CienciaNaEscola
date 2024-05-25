@@ -401,7 +401,7 @@ function ApplicationPage(props) {
                                                     '<br>Identificador do protocolo: ' +
                                                     application.protocol.id +
                                                     '<br>Versão do protocolo: ' +
-                                                    application.protocol.createdAt.replace(/\D/g, ''),
+                                                    application.protocol.updateAt.replace(/\D/g, ''),
                                                 files: [],
                                             }}
                                             galleryModalRef={galleryModalRef}

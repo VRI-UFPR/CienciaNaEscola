@@ -71,7 +71,7 @@ function AnswerPage(props) {
     useEffect(() => {
         if (user.token) {
             axios
-                .get(`${baseUrl}api/applicationAnswer/getApplicationWithAnswers/${id}`, {
+                .get(`${baseUrl}api/application/getApplicationWithAnswers/${id}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },

@@ -45,7 +45,7 @@ function InstitutionsPage(props) {
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             axios
-                .get(baseUrl + `api/institution/getAllInstitutions`, {
+                .get(baseUrl + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {

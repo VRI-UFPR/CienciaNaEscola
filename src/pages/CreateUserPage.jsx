@@ -46,14 +46,14 @@ function CreateUserPage(props) {
             }
             promises.push(
                 axios
-                    .get(`${baseUrl}api/classroom/getInstitutionClassrooms/${institutionId}`, {
+                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionClassrooms(d.map((c) => ({ id: c.id })));
+                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
                         alert('Erro ao buscar salas de aula da instituição');
