@@ -54,7 +54,6 @@ function jsonToCsv(ans) {
                 case 'TIMEBOX':
                 case 'DATEBOX':
                 case 'LOCATIONBOX':
-                case 'UPLOAD':
                 case 'TEXTBOX':
                     userAnswers[j + 1] = String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].text).replace(/\n/g, ' ');
                     break;
@@ -79,6 +78,10 @@ function jsonToCsv(ans) {
                                 userAnswers[j + 1] = userAnswers[j + 1] + ' | ' + String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
                             else userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
                     }
+                    break;
+
+                case 'UPLOAD':
+                    userAnswers[j + 1] = baseUrl.concat(String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[0].path));
                     break;
 
                 case 'NUMBERBOX':
