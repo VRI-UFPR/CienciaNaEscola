@@ -187,7 +187,7 @@ function AnswerPage(props) {
                                                                                         className="mb-3"
                                                                                         item={{
                                                                                             files: groupAnswer.files.map((file) => ({
-                                                                                                path: baseUrl + file.path,
+                                                                                                path: baseUrl + "api/" + file.path,
                                                                                             })),
                                                                                         }}
                                                                                         galleryModalRef={galleryModalRef}
