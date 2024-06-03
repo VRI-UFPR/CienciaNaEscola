@@ -39,6 +39,7 @@ function RoundedButton(props) {
         className,
         onClick,
         role,
+        disabled,
         'data-bs-toggle': dataBsToggle,
     } = props;
     return (
@@ -50,6 +51,7 @@ function RoundedButton(props) {
                 'hsl-' + hue + '-' + sat + '-' + lig
             } rounded-button d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1 ${className} `}
             onClick={onClick}
+            disabled={disabled}
         >
             <img src={icon} alt={alt} className="ratio ratio-1x1 w-100"></img>
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>

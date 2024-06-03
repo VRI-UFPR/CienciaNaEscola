@@ -24,7 +24,7 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, group, disabled } = props;
 
     const [answer, setAnswers] = useState({ text: '...', files: [] });
     const [ImageVisibility, setImageVisibility] = useState(false);
@@ -76,6 +76,7 @@ function ImageInput(props) {
                                 size={41}
                                 alt={'Selecionar imagem'}
                                 data-bs-toggle="dropdown"
+                                disabled={disabled}
                             />
                             <ul class="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
                                 <li className="dropdown-item">
@@ -145,6 +146,7 @@ function ImageInput(props) {
                         style={{ display: 'none' }}
                         onChange={insertImage}
                         ref={galleryInputRef}
+                        disabled={disabled}
                     />
                     <input
                         type="file"
@@ -155,6 +157,7 @@ function ImageInput(props) {
                         style={{ display: 'none' }}
                         onChange={insertImage}
                         ref={cameraInputRef}
+                        disabled={disabled}
                     />
                 </div>
                 <div

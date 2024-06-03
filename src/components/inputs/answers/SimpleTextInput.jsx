@@ -23,7 +23,7 @@ const styles = `
 
 function SimpleTextInput(props) {
     const [answer, setAnswer] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group, galleryModalRef } = props;
+    const { onAnswerChange, item, group, galleryModalRef, disabled } = props;
     useEffect(() => {
         onAnswerChange(group, item.id, 'ITEM', answer);
     }, [answer, item.id, onAnswerChange, group]);
@@ -42,6 +42,7 @@ function SimpleTextInput(props) {
                 id="simpletextinput"
                 placeholder="Digite sua resposta aqui"
                 onChange={(e) => setAnswer((prevText) => ({ ...prevText, text: e.target.value }))}
+                disabled={disabled}
             ></input>
             <style>{styles}</style>
         </div>

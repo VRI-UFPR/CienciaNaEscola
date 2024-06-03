@@ -8,9 +8,6 @@ import HomeButton from './HomeButton';
 const style = `
     .custom-carousel {
         background-color: #FECF86B2;
-        border-radius: 20px;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
     }
 
     .carousel-link {
@@ -26,14 +23,19 @@ const style = `
     .carousel-indicator.active {
         background-color: #5C5C5C !important;
     }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+    }
 `;
 
 function ProtocolCarousel(props) {
-    const { applications } = props;
+    const { listItems } = props;
 
     const carouselRef = useRef(null);
     const itemsPerSlide = Math.round((window.screen.height - 300) / 120);
-    const totalSlides = Math.ceil(applications.length / itemsPerSlide);
+    const totalSlides = Math.ceil(listItems.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
@@ -47,19 +49,18 @@ function ProtocolCarousel(props) {
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * itemsPerSlide;
             const endIndex = (i + 1) * itemsPerSlide;
-            const slideApplications = applications.slice(startIndex, endIndex);
+            const slideItems = listItems.slice(startIndex, endIndex);
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
-                    <div className="d-flex flex-column align-items-center h-100 pb-3">
-                        {slideApplications.map((application, index) => (
+                    <div className="d-flex flex-column align-items-center h-100">
+                        {slideItems.map((si) => (
                             <Link
-                                to={`/protocol/${application.id}`}
-                                key={'protocol-' + application.id}
+                                to={`${si.id}`}
+                                key={'slide-item-' + si.id}
                                 className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >
-                                {/* <HomeButton title={protocol.title} check={protocol.answersNumber > 0 ? true : false} /> */}
-                                <HomeButton title={application.protocol.title} />
+                                <HomeButton title={si.title} />
                             </Link>
                         ))}
                     </div>
@@ -94,9 +95,13 @@ function ProtocolCarousel(props) {
     };
 
     return (
-        <div id="dynamic-carousel" className="custom-carousel carousel slide w-100" ref={carouselRef}>
-            <div className="carousel-inner h-100">{renderCarouselItems()}</div>
-            <div className="carousel-indicators">{renderPageIndicators()}</div>
+        <div
+            id="dynamic-carousel"
+            className="custom-carousel d-flex flex-column flex-grow-1 carousel slide overflow-scroll rounded-4 w-100 m-0 p-0 px-4 px-lg-5 py-4"
+            ref={carouselRef}
+        >
+            <div className="carousel-inner h-100 px-1">{renderCarouselItems()}</div>
+            <div className="carousel-indicators position-relative m-0 mt-2">{renderPageIndicators()}</div>
             <style>{style}</style>
         </div>
     );

@@ -4,6 +4,7 @@ export const defaultNewInput = (type) => {
         description: '',
         type: type,
         enabled: true,
+        itemOptions: [],
     };
 };
 

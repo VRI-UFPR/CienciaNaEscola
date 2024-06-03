@@ -44,7 +44,7 @@ const styles = `
 
 export function Location(props) {
     const [location, setLocation] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, group, disabled } = props;
 
     const defaultLocation = useCallback(() => {
         if (navigator.geolocation) {
@@ -86,6 +86,7 @@ export function Location(props) {
                                 placeholder="Forneça sua localização"
                                 onChange={(e) => setLocation((prev) => ({ ...prev, text: e.target.value }))}
                                 defaultValue={location.text}
+                                disabled={disabled}
                             ></input>
                         </div>
                         <div className="col-auto search-col d-flex justify-content-end m-0 p-0">
