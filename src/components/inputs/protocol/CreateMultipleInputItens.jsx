@@ -35,8 +35,8 @@ const styles = `
 
 function CreateSingleSelectionInput(props) {
     const [title, setTitle] = useState('');
-    const { type, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
-    const [item, setItem] = useState({ ...defaultNewInput(type), itemOptions: [] });
+    const { currentItem, type, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+    const [item, setItem] = useState(currentItem || defaultNewInput(type));
 
     useEffect(() => {
         switch (type) {
@@ -119,6 +119,7 @@ function CreateSingleSelectionInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
+                        value={item.text || ''}
                         aria-describedby="questionHelp"
                         onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                     />
@@ -136,6 +137,7 @@ function CreateSingleSelectionInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
+                        value={item.description || ''}
                         onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
                     />
                 </div>
@@ -150,6 +152,7 @@ function CreateSingleSelectionInput(props) {
                                     type="text"
                                     className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                                     id={i}
+                                    value={data.text || ''}
                                     aria-describedby="questionHelp"
                                     onChange={(event) => updateOption(i, event.target.value)}
                                 />

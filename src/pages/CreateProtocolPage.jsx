@@ -63,7 +63,7 @@ const CreateProtocolStyles = `
 `;
 
 function CreateProtocolPage(props) {
-    const { protocolId } = useParams();
+    const { id: protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
@@ -164,19 +164,35 @@ function CreateProtocolPage(props) {
 
         const formData = serialize(placedProtocol, { indices: true });
 
-        axios
-            .post(baseUrl + 'api/protocol/createProtocol', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/dash/protocols') });
-            })
-            .catch((error) => {
-                console.error(error.message);
-            });
+        if (isEditing) {
+            axios
+                .put(baseUrl + 'api/protocol/updateProtocol/' + protocolId, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário atualizado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } else {
+            axios
+                .post(baseUrl + 'api/protocol/createProtocol', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        }
     };
 
     useEffect(() => {
@@ -192,7 +208,39 @@ function CreateProtocolPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setProtocol(d);
+                            setProtocol({
+                                id: d.id,
+                                title: d.title,
+                                description: d.description,
+                                enabled: d.enabled,
+                                replicable: d.replicable,
+                                visibility: d.visibility,
+                                applicability: d.applicability,
+                                answersVisibility: d.answersVisibility,
+                                pages: d.pages.map((p) => ({
+                                    type: p.type,
+                                    itemGroups: p.itemGroups.map((g) => ({
+                                        type: g.type,
+                                        isRepeatable: g.isRepeatable,
+                                        items: g.items.map((i) => ({
+                                            text: i.text,
+                                            description: i.description,
+                                            type: i.type,
+                                            enabled: i.enabled,
+                                            itemOptions: i.itemOptions.map((o) => ({
+                                                text: o.text,
+                                                files: o.files.map((f) => ({ id: f.id, path: f.path })),
+                                            })),
+                                            files: i.files.map((f) => ({ id: f.id, path: f.path })),
+                                        })),
+                                    })),
+                                })),
+                                viewersUser: d.viewersUser.map((u) => u.id),
+                                viewersClassroom: d.viewersClassroom.map((c) => c.id),
+                                answersViewersUser: d.answersViewersUser.map((u) => u.id),
+                                answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
+                                appliers: d.appliers.map((u) => u.id),
+                            });
                         })
                         .catch((error) => {
                             console.error(error.message);
@@ -326,6 +374,7 @@ function CreateProtocolPage(props) {
                                             className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="title"
                                             rows="3"
+                                            value={protocol.title || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, title: event.target.value }))}
                                         ></textarea>
                                         <label htmlFor="description" className="form-label fs-5 fw-medium">
@@ -335,6 +384,7 @@ function CreateProtocolPage(props) {
                                             className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="description"
                                             rows="6"
+                                            value={protocol.description || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, description: event.target.value }))}
                                         ></textarea>
                                         <label htmlFor="enabled" className="form-label fs-5 fw-medium">
@@ -343,6 +393,7 @@ function CreateProtocolPage(props) {
                                         <select
                                             className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="enabled"
+                                            value={protocol.enabled ? 'true' : 'false'}
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, enabled: event.target.value === 'true' }))
                                             }
@@ -356,6 +407,7 @@ function CreateProtocolPage(props) {
                                         <select
                                             className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="visibility"
+                                            value={protocol.visibility || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
                                         >
                                             <option value="PUBLIC">Público</option>
@@ -429,6 +481,7 @@ function CreateProtocolPage(props) {
                                         <select
                                             className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="applicability"
+                                            value={protocol.applicability || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
                                         >
                                             <option value="PUBLIC">Público</option>
@@ -469,6 +522,7 @@ function CreateProtocolPage(props) {
                                         <select
                                             className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="answer-visiblity"
+                                            value={protocol.answersVisibility || ''}
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))
                                             }
@@ -550,6 +604,7 @@ function CreateProtocolPage(props) {
                                         <select
                                             className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                             id="replicable"
+                                            value={protocol.replicable ? 'true' : 'false'}
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, replicable: event.target.value === 'true' }))
                                             }
@@ -578,6 +633,7 @@ function CreateProtocolPage(props) {
                                                                         return (
                                                                             <CreateTextBoxInput
                                                                                 key={itemIndex}
+                                                                                currentItem={item}
                                                                                 pageIndex={pageIndex}
                                                                                 groupIndex={groupIndex}
                                                                                 itemIndex={itemIndex}
@@ -590,6 +646,7 @@ function CreateProtocolPage(props) {
                                                                             <CreateMultipleInputItens
                                                                                 key={itemIndex}
                                                                                 type={item.type}
+                                                                                currentItem={item}
                                                                                 pageIndex={pageIndex}
                                                                                 groupIndex={groupIndex}
                                                                                 itemIndex={itemIndex}
@@ -602,6 +659,7 @@ function CreateProtocolPage(props) {
                                                                             <CreateMultipleInputItens
                                                                                 key={itemIndex}
                                                                                 type={item.type}
+                                                                                currentItem={item}
                                                                                 pageIndex={pageIndex}
                                                                                 groupIndex={groupIndex}
                                                                                 itemIndex={itemIndex}
@@ -614,6 +672,7 @@ function CreateProtocolPage(props) {
                                                                             <CreateMultipleInputItens
                                                                                 key={itemIndex}
                                                                                 type={item.type}
+                                                                                currentItem={item}
                                                                                 pageIndex={pageIndex}
                                                                                 groupIndex={groupIndex}
                                                                                 itemIndex={itemIndex}
@@ -658,7 +717,7 @@ function CreateProtocolPage(props) {
 }
 
 CreateProtocolPage.defaultProps = {
-    edit: false,
+    isEditing: false,
 };
 
 export default CreateProtocolPage;

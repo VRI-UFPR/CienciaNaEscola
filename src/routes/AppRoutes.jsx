@@ -75,7 +75,7 @@ const appRoutes = [
             { path: 'protocols', element: <ProtocolsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
             { path: 'protocols/create', element: <CreateProtocolPage /> },
             { path: 'protocols/:id', element: <ProtocolPage /> },
-            { path: 'protocols/:id/manage', element: <CreateProtocolPage edit={true} /> },
+            { path: 'protocols/:id/manage', element: <CreateProtocolPage isEditing={true} /> },
             { path: 'protocols/:id/apply', element: <CreateApplicationPage /> },
             { path: 'applications/:id/answers', element: <AnswerPage /> },
             { path: 'institutions', element: <InstitutionsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
