@@ -71,7 +71,7 @@ function ProtocolsPage(props) {
     }, [user, logout, navigate, isDashboard]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando protocolos..." />;
     }
 
     return (

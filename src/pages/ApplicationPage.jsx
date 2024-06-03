@@ -220,7 +220,7 @@ function ApplicationPage(props) {
     useEffect(() => {
         if (connected === false && application?.id) {
             modalRef.current.showModal({
-                title: 'Você está offline. O protocolo ' + id + ' está armazenado localmente e continuará acessível.',
+                title: 'Você está offline. A aplicação ' + id + ' está armazenada localmente e continuará acessível.',
                 dismissHsl: [97, 43, 70],
                 dismissText: 'Ok',
                 dismissible: true,
@@ -229,7 +229,7 @@ function ApplicationPage(props) {
     }, [connected, application, id]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando aplicação..." />;
     }
 
     return (

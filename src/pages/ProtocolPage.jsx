@@ -84,7 +84,7 @@ function ProtocolPage(props) {
     }, [protocolId, user, logout, navigate]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando protocolo..." />;
     }
 
     return (

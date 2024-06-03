@@ -31,7 +31,7 @@ function InstitutionPage(props) {
     }, [id, user.token]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando instituição..." />;
     }
 
     return (

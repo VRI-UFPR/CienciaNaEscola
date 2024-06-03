@@ -62,7 +62,7 @@ function InstitutionsPage(props) {
     }, [user, logout, navigate, isDashboard]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando instituições..." />;
     }
 
     return (

@@ -87,7 +87,7 @@ function AnswerPage(props) {
     }, [id, user]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando respostas de aplicação..." />;
     }
 
     return (

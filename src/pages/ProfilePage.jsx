@@ -50,7 +50,7 @@ function ProfilePage(props) {
     const modalRef = useRef(null);
 
     if (user === null) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando perfil..." />;
     }
 
     return (
