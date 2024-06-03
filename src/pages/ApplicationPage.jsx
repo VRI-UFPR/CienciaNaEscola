@@ -22,6 +22,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
+import ErrorPage from './ErrorPage';
 
 const styles = `
     .bg-yellow-orange {
@@ -54,6 +55,7 @@ const styles = `
 
 function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
@@ -207,11 +209,7 @@ function ApplicationPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        console.error(error.message);
-                        if (error.response.status === 401) {
-                            logout();
-                            navigate(isDashboard ? '/dash/signin' : '/signin');
-                        }
+                        setError({ text: 'Erro ao carregar aplicação', description: error.response.data.message || '' });
                     });
             }
         }
@@ -227,6 +225,10 @@ function ApplicationPage(props) {
             });
         }
     }, [connected, application, id]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando aplicação..." />;

@@ -10,6 +10,7 @@ import Alert from '../components/Alert';
 import TextButton from '../components/TextButton';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
+import ErrorPage from './ErrorPage';
 
 const style = `
     .font-barlow {
@@ -43,6 +44,7 @@ const style = `
 
 function ProtocolsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
     const [visibleProtocols, setVisibleProtocols] = useState([]);
@@ -52,7 +54,7 @@ function ProtocolsPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.id !== null && user.token !== null) {
+        if (isLoading && user.status !== 'loading') {
             axios
                 .get(baseUrl + `api/protocol/getVisibleProtocols`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -62,13 +64,14 @@ function ProtocolsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate(isDashboard ? '/dash/signin' : '/signin');
-                    }
+                    setError({ text: 'Erro ao carregar protocolos', description: error.response.data.message || '' });
                 });
         }
-    }, [user, logout, navigate, isDashboard]);
+    }, [user.token, logout, navigate, isDashboard, user.status, isLoading]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando protocolos..." />;

@@ -24,7 +24,7 @@ function CreateApplicationPage(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -84,7 +84,7 @@ function CreateApplicationPage(props) {
                 setIsLoading(false);
             });
         }
-    }, [id, isEditing, isLoading, user.token, user.institutionId]);
+    }, [id, isEditing, isLoading, user.status, user.institutionId, user.token]);
 
     const submitApplication = (e) => {
         e.preventDefault();

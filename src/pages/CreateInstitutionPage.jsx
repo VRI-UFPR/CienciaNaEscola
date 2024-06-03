@@ -18,7 +18,7 @@ function CreateInstitutionPage(props) {
     useEffect(() => {
         if (isLoading) {
             if (isEditing) {
-                if (user.token) {
+                if (user.status !== 'loading') {
                     axios
                         .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
                             headers: {
@@ -38,7 +38,7 @@ function CreateInstitutionPage(props) {
                 setIsLoading(false);
             }
         }
-    }, [institutionId, isEditing, isLoading, user.token]);
+    }, [institutionId, isEditing, isLoading, user.token, user.status]);
 
     const submitInstitution = (e) => {
         e.preventDefault();

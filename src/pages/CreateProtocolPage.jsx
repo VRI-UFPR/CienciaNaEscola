@@ -13,6 +13,7 @@ import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
+import ErrorPage from './ErrorPage';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -86,6 +87,7 @@ function CreateProtocolPage(props) {
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -196,7 +198,7 @@ function CreateProtocolPage(props) {
     };
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -243,7 +245,7 @@ function CreateProtocolPage(props) {
                             });
                         })
                         .catch((error) => {
-                            console.error(error.message);
+                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
                         })
                 );
             }
@@ -259,7 +261,7 @@ function CreateProtocolPage(props) {
                         setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição');
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
                     })
             );
             promises.push(
@@ -274,14 +276,18 @@ function CreateProtocolPage(props) {
                         setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar salas de aula da instituição');
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
                     })
             );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [isLoading, user.token, isEditing, protocolId, user.institutionId]);
+    }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando criação de protocolo..." />;

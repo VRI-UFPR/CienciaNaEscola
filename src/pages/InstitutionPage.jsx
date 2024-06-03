@@ -4,15 +4,17 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
+import ErrorPage from './ErrorPage';
 
 function InstitutionPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [institution, setInstitution] = useState(null);
     const { id } = useParams();
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        if (user.token) {
+        if (user.status !== 'loading') {
             axios
                 .get(`${baseUrl}api/institution/getInstitution/${id}`, {
                     headers: {
@@ -25,10 +27,14 @@ function InstitutionPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    alert('Falha ao carregar a instituição');
+                    setError({ text: 'Erro ao carregar a instituição', description: error.response.data.message || '' });
                 });
         }
-    }, [id, user.token]);
+    }, [id, user.token, user.status]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando instituição..." />;

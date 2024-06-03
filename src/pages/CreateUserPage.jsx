@@ -5,6 +5,7 @@ import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
 import SplashPage from './SplashPage';
+import ErrorPage from './ErrorPage';
 
 function CreateUserPage(props) {
     const { id: institutionId, userId } = useParams();
@@ -15,11 +16,12 @@ function CreateUserPage(props) {
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -40,7 +42,7 @@ function CreateUserPage(props) {
                             });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar usuário');
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
                         })
                 );
             }
@@ -56,14 +58,14 @@ function CreateUserPage(props) {
                         setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar salas de aula da instituição');
+                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
                     })
             );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [userId, isEditing, isLoading, user.token, institutionId]);
+    }, [userId, isEditing, isLoading, user.token, institutionId, user.status]);
 
     const submitNewUser = (e) => {
         e.preventDefault();
@@ -122,6 +124,10 @@ function CreateUserPage(props) {
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
         setNewUser((prev) => ({ ...prev, hash: randomHash }));
     };
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando criação de usuário..." />;

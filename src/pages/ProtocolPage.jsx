@@ -19,6 +19,7 @@ import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
+import ErrorPage from './ErrorPage';
 
 const styles = `
     .bg-yellow-orange {
@@ -51,6 +52,7 @@ const styles = `
 
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
     const { id: protocolId } = useParams();
@@ -62,7 +64,7 @@ function ProtocolPage(props) {
 
     useEffect(() => {
         //Search if the application is in localApplications
-        if (user.id !== null && user.token !== null) {
+        if (isLoading && user.status !== 'loading') {
             axios
                 .get(baseUrl + `api/protocol/getProtocol/${protocolId}`, {
                     headers: {
@@ -74,14 +76,14 @@ function ProtocolPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    console.error(error.message);
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate('dash/signin');
-                    }
+                    setError({ text: 'Erro ao carregar protocolo', description: error.response.data.message || '' });
                 });
         }
-    }, [protocolId, user, logout, navigate]);
+    }, [protocolId, user.status, logout, navigate, user.token, isLoading]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando protocolo..." />;

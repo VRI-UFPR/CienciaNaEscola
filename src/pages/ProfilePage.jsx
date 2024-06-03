@@ -49,7 +49,7 @@ function ProfilePage(props) {
     const { showSidebar, allowEdit } = props;
     const modalRef = useRef(null);
 
-    if (user === null) {
+    if (user.status !== 'authenticated') {
         return <SplashPage text="Carregando perfil..." />;
     }
 

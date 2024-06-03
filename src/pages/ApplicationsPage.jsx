@@ -11,6 +11,7 @@ import Alert from '../components/Alert';
 import { StorageContext } from '../contexts/StorageContext';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
+import ErrorPage from './ErrorPage';
 
 const style = `
     .font-barlow {
@@ -44,6 +45,7 @@ const style = `
 
 function ApplicationsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
     const [visibleApplications, setVisibleApplications] = useState([]);
@@ -59,7 +61,7 @@ function ApplicationsPage(props) {
                 setVisibleApplications(localApplications);
                 setIsLoading(false);
             }
-        } else if (user.id !== null && user.token !== null && connected) {
+        } else if (isLoading && user.status !== 'loading') {
             axios
                 .get(baseUrl + `api/application/getVisibleApplications`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -69,13 +71,14 @@ function ApplicationsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate(isDashboard ? '/dash/signin' : '/signin');
-                    }
+                    setError({ text: 'Erro ao carregar aplicações', description: error.response.data.message || '' });
                 });
         }
-    }, [user, logout, navigate, connected, localApplications, isDashboard]);
+    }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando aplicações..." />;

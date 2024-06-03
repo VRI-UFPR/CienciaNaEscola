@@ -17,7 +17,7 @@ function CreateClassroomPage(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -55,7 +55,7 @@ function CreateClassroomPage(props) {
                 setIsLoading(false);
             });
         }
-    }, [classroomId, isEditing, isLoading, user.token, institutionId]);
+    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status]);
 
     const submitClassroom = (e) => {
         e.preventDefault();
