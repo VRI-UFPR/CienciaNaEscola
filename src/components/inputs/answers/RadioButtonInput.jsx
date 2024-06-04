@@ -17,7 +17,7 @@ const styles = `
 `;
 
 function RadioButtonInput(props) {
-    const { onAnswerChange, item, group, galleryModalRef } = props;
+    const { onAnswerChange, item, group, galleryModalRef, disabled } = props;
     const [options, setOptions] = useState({});
 
     useEffect(() => {
@@ -51,6 +51,7 @@ function RadioButtonInput(props) {
                                 name={'radiooptions' + item.id}
                                 id={optname + 'input' + item.id}
                                 onChange={() => handleOptionsUpdate(option.id)}
+                                disabled={disabled}
                             ></input>
                             <label
                                 className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}

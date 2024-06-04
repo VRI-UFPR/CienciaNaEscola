@@ -35,6 +35,13 @@ const profilePageStyles = `
     .profile-label {
         min-width: 5em;
     }
+
+    @media (min-width: 992px) {
+      .position-lg-sticky {
+        position: sticky !important;
+        top: 0;
+      }
+    }
 `;
 
 function ProfilePage(props) {
@@ -49,9 +56,9 @@ function ProfilePage(props) {
     return (
         <>
             <div className="row flex-grow-1 font-barlow min-vh-100 m-0">
-                <div className={`col-auto bg-coral-red ${showSidebar ? 'd-flex' : 'd-lg-none'} p-0`}>
+                <div className={`col-auto bg-coral-red ${showSidebar ? 'd-flex position-lg-sticky vh-100 top-0' : 'd-lg-none'} p-0`}>
                     <div className={`offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} />
+                        <Sidebar modalRef={modalRef} showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">

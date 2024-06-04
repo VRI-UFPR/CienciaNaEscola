@@ -39,21 +39,23 @@ function RoundedButton(props) {
         className,
         onClick,
         role,
+        disabled,
+        'data-bs-toggle': dataBsToggle,
     } = props;
     return (
-        <div className={`ratio ratio-1x1 rounded-button p-0 ${className}`}>
-            <button
-                type="button"
-                role={role}
-                className={`btn btn-${
-                    'hsl-' + hue + '-' + sat + '-' + lig
-                } d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1`}
-                onClick={onClick}
-            >
-                <img src={icon} alt={alt} className="w-100"></img>
-            </button>
+        <button
+            type="button"
+            data-bs-toggle={dataBsToggle}
+            role={role}
+            className={`btn btn-${
+                'hsl-' + hue + '-' + sat + '-' + lig
+            } rounded-button d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1 ${className} `}
+            onClick={onClick}
+            disabled={disabled}
+        >
+            <img src={icon} alt={alt} className="ratio ratio-1x1 w-100"></img>
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
-        </div>
+        </button>
     );
 }
 
