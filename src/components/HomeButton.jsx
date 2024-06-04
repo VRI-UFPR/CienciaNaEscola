@@ -25,7 +25,7 @@ function HomeButton(props) {
     const { title, check } = props;
 
     return (
-        <div className="custom-btn d-flex align-items-center justify-content-between font-barlow rounded-4 h-100 w-100 px-4">
+        <div className="custom-btn rounded-4 d-flex align-items-center justify-content-between font-barlow h-100 w-100 px-4">
             <div className="d-flex align-items-center h-100 w-100 py-2">
                 <h5 className="home-btn-title text-wrap fw-medium w-100 py-1 my-0">{title}</h5>
 
