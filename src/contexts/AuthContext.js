@@ -30,13 +30,19 @@ export const AuthProvider = ({ children }) => {
                             })
                             .then((response) => {
                                 Notification.requestPermission().then((result) => {
-                                    new Notification('Envio pendente realizado! ', { body: request.title });
+                                    navigator.serviceWorker.ready.then((registration) => {
+                                        registration.showNotification('Envio pendente realizado!', { body: request.title });
+                                    });
                                 });
                             });
                         promises.push(promise);
                     } catch (error) {
                         Notification.requestPermission().then((result) => {
-                            new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
+                            navigator.serviceWorker.ready.then((registration) => {
+                                registration.showNotification('Envio pendente falhou. Submeta a resposta novamente!', {
+                                    body: request.title,
+                                });
+                            });
                         });
                     }
                 }
