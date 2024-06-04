@@ -62,11 +62,14 @@ const GalleryModal = forwardRef((props, ref) => {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content rounded-4">
                     <div className="modal-header">
-                        <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
+                        <h5 className="modal-title font-century-gothic color-dark-gray text-center text-nowrap fs-3 fw-bold">
                             Figura {modal.currentImage + 1}
                         </h5>
-                        <RoundedButton hsl={[355, 78, 66]} icon={iconExit} onClick={hideModal} />
+                        <div className="container d-flex flex-column align-items-end ">
+                            <RoundedButton hsl={[355, 78, 66]} icon={iconExit} onClick={hideModal}/>
+                        </div>
                     </div>
+
                     <div className="modal-body">
                         <div id={modal.id + '-carousel'} className="carousel slide">
                             <div className="carousel-inner">
