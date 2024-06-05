@@ -46,6 +46,10 @@ function InstitutionsPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
+            if (user.role === 'USER') {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar instituições' });
+                return;
+            }
             axios
                 .get(baseUrl + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -58,7 +62,7 @@ function InstitutionsPage(props) {
                     setError({ text: 'Erro ao carregar as instituições', description: error.response.data.message || '' });
                 });
         }
-    }, [user.token, logout, navigate, isDashboard, user.status, isLoading]);
+    }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;

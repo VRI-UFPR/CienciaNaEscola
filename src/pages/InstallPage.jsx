@@ -72,7 +72,6 @@ function InstallPage(props) {
     const installApp = () => {
         installPrompt.prompt();
         installPrompt.userChoice.then((choiceResult) => {
-            console.log(choiceResult);
             setInstallPrompt(null);
         });
     };

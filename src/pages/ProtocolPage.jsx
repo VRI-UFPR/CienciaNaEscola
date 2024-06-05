@@ -55,7 +55,7 @@ function ProtocolPage(props) {
     const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
-    const { id: protocolId } = useParams();
+    const { protocolId } = useParams();
     const [protocol, setProtocol] = useState(undefined);
 
     const modalRef = useRef(null);
@@ -65,6 +65,13 @@ function ProtocolPage(props) {
     useEffect(() => {
         //Search if the application is in localApplications
         if (isLoading && user.status !== 'loading') {
+            if (user.role === 'USER') {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para visualizar este protocolo',
+                });
+                return;
+            }
             axios
                 .get(baseUrl + `api/protocol/getProtocol/${protocolId}`, {
                     headers: {
@@ -79,7 +86,7 @@ function ProtocolPage(props) {
                     setError({ text: 'Erro ao carregar protocolo', description: error.response.data.message || '' });
                 });
         }
-    }, [protocolId, user.status, logout, navigate, user.token, isLoading]);
+    }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
@@ -104,7 +111,7 @@ function ProtocolPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
                                 <div className="row m-0 justify-content-center">
-                                    {(protocol.creatorId === user.id || user.role === 'ADMIN') && (
+                                    {(protocol.creator.id === user.id || user.role === 'ADMIN') && (
                                         <div className="col-4 align-self-center pb-4">
                                             <TextButton
                                                 type="submit"

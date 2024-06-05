@@ -64,7 +64,7 @@ const CreateProtocolStyles = `
 `;
 
 function CreateProtocolPage(props) {
-    const { id: protocolId } = useParams();
+    const { protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
@@ -189,10 +189,10 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                    modalRef.current.showModal({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    console.error(error.message);
+                    modalRef.current.showModal({ title: 'Erro ao criar protocolo.', description: error.response.data.message || '' });
                 });
         }
     };
@@ -201,6 +201,16 @@ function CreateProtocolPage(props) {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
             if (isEditing) {
+                if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                    setError({
+                        text: 'Operação não permitida',
+                        description: 'Você não tem permissão para criar protocolos',
+                    });
+                    return;
+                } else if (isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                    setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este protocolo' });
+                    return;
+                }
                 promises.push(
                     axios
                         .get(`${baseUrl}api/protocol/getProtocol/${protocolId}`, {
@@ -283,7 +293,7 @@ function CreateProtocolPage(props) {
                 setIsLoading(false);
             });
         }
-    }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status]);
+    }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status, user.role, user.id]);
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;

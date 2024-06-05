@@ -8,7 +8,7 @@ import SplashPage from './SplashPage';
 import ErrorPage from './ErrorPage';
 
 function CreateUserPage(props) {
-    const { id: institutionId, userId } = useParams();
+    const { institutionId, userId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
@@ -22,6 +22,13 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
+            if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
+                return;
+            } else if (isEditing && user.role !== 'ADMIN' && user.id !== parseInt(userId)) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
+                return;
+            }
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -46,26 +53,28 @@ function CreateUserPage(props) {
                         })
                 );
             }
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
-                    })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
-                    })
-            );
+            if (user.role === 'USER') {
+                promises.push(
+                    axios
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
+                        })
+                        .catch((error) => {
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
+                        })
+                );
+            }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [userId, isEditing, isLoading, user.token, institutionId, user.status]);
+    }, [userId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.id, user.institutionId]);
 
     const submitNewUser = (e) => {
         e.preventDefault();
@@ -83,7 +92,7 @@ function CreateUserPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar usuário');
+                    alert('Erro ao atualizar usuário. ' + error.response.data.message);
                 });
         } else {
             axios
@@ -98,7 +107,7 @@ function CreateUserPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar usuário');
+                    alert('Erro ao criar usuário. ' + error.response.data.message);
                 });
         }
     };
@@ -115,7 +124,7 @@ function CreateUserPage(props) {
                 navigate(`/dash/institutions/${institutionId}`);
             })
             .catch((error) => {
-                alert('Erro ao excluir usuário');
+                alert('Erro ao excluir usuário. ' + error.response.data.message);
             });
     };
 
@@ -175,52 +184,57 @@ function CreateUserPage(props) {
                         Gerar senha
                     </button>
                 </div>
-                <div>
-                    <label label="role">Selecione a visibilidade da aplicação</label>
-                    <select
-                        name="role"
-                        id="role"
-                        form="user-form"
-                        onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value || undefined }))}
-                        value={newUser.role || ''}
-                    >
-                        <option value="">Selecione uma opção:</option>
-                        <option value="USER">Usuário</option>
-                        <option value="APPLIER">Aplicador</option>
-                        <option value="PUBLISHER">Publicador</option>
-                    </select>
-                </div>
-                <div>
-                    <fieldset>
-                        <span>Selecione as salas de aula do usuário</span>
-                        {institutionClassrooms.map((c) => (
-                            <div key={c}>
-                                <input
-                                    form="user-form"
-                                    type="checkbox"
-                                    name="classrooms"
-                                    id={`classroom-${c.id}`}
-                                    value={c.id}
-                                    checked={newUser.classrooms.includes(c.id)}
-                                    onChange={(e) => {
-                                        if (e.target.checked) {
-                                            setNewUser((prev) => ({
-                                                ...prev,
-                                                classrooms: [...prev.classrooms, parseInt(e.target.value)],
-                                            }));
-                                        } else {
-                                            setNewUser((prev) => ({
-                                                ...prev,
-                                                classrooms: prev.classrooms.filter((id) => id !== parseInt(e.target.value)),
-                                            }));
-                                        }
-                                    }}
-                                />
-                                <label htmlFor={`classroom-${c.id}`}>{c.id}</label>
-                            </div>
-                        ))}
-                    </fieldset>
-                </div>
+                {(user.role === 'ADMIN' || !isEditing) && (
+                    <div>
+                        <label label="role">Selecione o papel do usuário</label>
+                        <select
+                            name="role"
+                            id="role"
+                            form="user-form"
+                            onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value || undefined }))}
+                            value={newUser.role || ''}
+                        >
+                            <option value="">Selecione uma opção:</option>
+                            <option value="USER">Usuário</option>
+                            {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && <option value="APPLIER">Aplicador</option>}
+                            {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && <option value="PUBLISHER">Publicador</option>}
+                            {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
+                        </select>
+                    </div>
+                )}
+                {(user.role === 'ADMIN' || !isEditing) && (
+                    <div>
+                        <fieldset>
+                            <span>Selecione as salas de aula do usuário</span>
+                            {institutionClassrooms.map((c) => (
+                                <div key={c}>
+                                    <input
+                                        form="user-form"
+                                        type="checkbox"
+                                        name="classrooms"
+                                        id={`classroom-${c.id}`}
+                                        value={c.id}
+                                        checked={newUser.classrooms.includes(c.id)}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setNewUser((prev) => ({
+                                                    ...prev,
+                                                    classrooms: [...prev.classrooms, parseInt(e.target.value)],
+                                                }));
+                                            } else {
+                                                setNewUser((prev) => ({
+                                                    ...prev,
+                                                    classrooms: prev.classrooms.filter((id) => id !== parseInt(e.target.value)),
+                                                }));
+                                            }
+                                        }}
+                                    />
+                                    <label htmlFor={`classroom-${c.id}`}>{c.id}</label>
+                                </div>
+                            ))}
+                        </fieldset>
+                    </div>
+                )}
                 <div>
                     <button type="submit">Enviar</button>
                 </div>
@@ -228,11 +242,13 @@ function CreateUserPage(props) {
             <div>
                 <p>{JSON.stringify(newUser)}</p>
             </div>
-            <div>
-                <button type="button" onClick={deleteUser}>
-                    Excluir
-                </button>
-            </div>
+            {isEditing && (
+                <div>
+                    <button type="button" onClick={deleteUser}>
+                        Excluir
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
