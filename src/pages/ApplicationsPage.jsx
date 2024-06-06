@@ -96,7 +96,7 @@ function ApplicationsPage(props) {
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Aplicações</h1>
                         </div>
                     </div>
-                    <div className="row align-items-center justify-content-center font-barlow flex-grow-1 m-0 overflow-scroll scrollbar-none">
+                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-scroll scrollbar-none">
                         {isDashboard ? (
                             <>
                                 <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0 pb-lg-4">

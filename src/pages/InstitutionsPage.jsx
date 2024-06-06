@@ -80,7 +80,7 @@ function InstitutionsPage(props) {
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Instituições</h1>
                         </div>
                     </div>
-                    <div className="row align-items-center justify-content-center font-barlow flex-grow-1 m-0 overflow-hidden">
+                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-hidden">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4">
                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Minhas instituições</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
