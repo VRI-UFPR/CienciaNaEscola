@@ -31,7 +31,7 @@ function InstitutionPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar a instituição', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' });
                 });
         }
     }, [institutionId, user.token, user.status, user.role, user.institutionId]);
@@ -46,7 +46,7 @@ function InstitutionPage(props) {
 
     return (
         <div>
-            {(user.role === 'USER' || user.role === 'COORDINATOR') && <Link to={'manage'}>Gerenciar</Link>}
+            {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && <Link to={'manage'}>Gerenciar</Link>}
             <p>ID: {institution.id}</p>
             <p>Nome: {institution.name}</p>
             <p>Tipo: {institution.type}</p>

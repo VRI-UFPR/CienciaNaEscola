@@ -59,7 +59,7 @@ function InstitutionsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar as instituições', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar as instituições', description: error.response?.data.message || '' });
                 });
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);

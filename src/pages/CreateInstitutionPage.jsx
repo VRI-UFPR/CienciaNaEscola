@@ -44,7 +44,7 @@ function CreateInstitutionPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar instituição. ' + error.response.data.message);
+                        alert('Erro ao buscar instituição. ' + error.response?.data.message || '');
                     });
             } else {
                 setIsLoading(false);
@@ -68,7 +68,7 @@ function CreateInstitutionPage(props) {
                     navigate(`/dash/institutions/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar instituição. ' + error.response.data.message);
+                    alert('Erro ao atualizar instituição. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -83,7 +83,7 @@ function CreateInstitutionPage(props) {
                     navigate(`/dash/institutions/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar instituição. ' + error.response.data.message);
+                    alert('Erro ao criar instituição. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -100,7 +100,7 @@ function CreateInstitutionPage(props) {
                 navigate(`/dash/institutions/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir instituição. ' + error.response.data.message);
+                alert('Erro ao excluir instituição. ' + error.response?.data.message || '');
             });
     };
 

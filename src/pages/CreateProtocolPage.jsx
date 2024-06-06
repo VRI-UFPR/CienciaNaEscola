@@ -178,7 +178,7 @@ function CreateProtocolPage(props) {
                     modalRef.current.showModal({ title: 'Formulário atualizado com sucesso.', onHide: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    console.error(error.message);
+                    modalRef.current.showModal({ title: 'Erro ao atualizar protocolo.', description: error.response?.data.message || '' });
                 });
         } else {
             axios
@@ -192,7 +192,7 @@ function CreateProtocolPage(props) {
                     modalRef.current.showModal({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    modalRef.current.showModal({ title: 'Erro ao criar protocolo.', description: error.response.data.message || '' });
+                    modalRef.current.showModal({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '' });
                 });
         }
     };
@@ -200,17 +200,17 @@ function CreateProtocolPage(props) {
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
+            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para criar protocolos',
+                });
+                return;
+            } else if (isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este protocolo' });
+                return;
+            }
             if (isEditing) {
-                if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
-                    setError({
-                        text: 'Operação não permitida',
-                        description: 'Você não tem permissão para criar protocolos',
-                    });
-                    return;
-                } else if (isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
-                    setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este protocolo' });
-                    return;
-                }
                 promises.push(
                     axios
                         .get(`${baseUrl}api/protocol/getProtocol/${protocolId}`, {
@@ -220,6 +220,13 @@ function CreateProtocolPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
+                            if (user.id !== d.creator.id) {
+                                setError({
+                                    text: 'Operação não permitida',
+                                    description: 'Você não tem permissão para editar este protocolo',
+                                });
+                                return;
+                            }
                             setProtocol({
                                 id: d.id,
                                 title: d.title,
@@ -255,7 +262,7 @@ function CreateProtocolPage(props) {
                             });
                         })
                         .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
+                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                         })
                 );
             }
@@ -268,10 +275,10 @@ function CreateProtocolPage(props) {
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, role: u.role })));
                     })
                     .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                     })
             );
             promises.push(
@@ -286,7 +293,7 @@ function CreateProtocolPage(props) {
                         setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response.data.message || '' });
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                     })
             );
             Promise.all(promises).then(() => {
@@ -505,32 +512,36 @@ function CreateProtocolPage(props) {
                                         </select>
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione os usuários aplicadores</span>
-                                            {institutionUsers.map((u) => (
-                                                <div key={'applier-' + u.id}>
-                                                    <input
-                                                        form="application-form"
-                                                        type="checkbox"
-                                                        name="applier"
-                                                        id={`applier-${u.id}`}
-                                                        value={u.id}
-                                                        checked={protocol.appliers.includes(u.id)}
-                                                        onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setProtocol((prev) => ({
-                                                                    ...prev,
-                                                                    appliers: [...prev.appliers, parseInt(e.target.value)],
-                                                                }));
-                                                            } else {
-                                                                setProtocol((prev) => ({
-                                                                    ...prev,
-                                                                    appliers: prev.appliers.filter((id) => id !== parseInt(e.target.value)),
-                                                                }));
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label htmlFor={`applier-${u.id}`}>{u.username}</label>
-                                                </div>
-                                            ))}
+                                            {institutionUsers
+                                                .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
+                                                .map((u) => (
+                                                    <div key={'applier-' + u.id}>
+                                                        <input
+                                                            form="application-form"
+                                                            type="checkbox"
+                                                            name="applier"
+                                                            id={`applier-${u.id}`}
+                                                            value={u.id}
+                                                            checked={protocol.appliers.includes(u.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setProtocol((prev) => ({
+                                                                        ...prev,
+                                                                        appliers: [...prev.appliers, parseInt(e.target.value)],
+                                                                    }));
+                                                                } else {
+                                                                    setProtocol((prev) => ({
+                                                                        ...prev,
+                                                                        appliers: prev.appliers.filter(
+                                                                            (id) => id !== parseInt(e.target.value)
+                                                                        ),
+                                                                    }));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label htmlFor={`applier-${u.id}`}>{u.username}</label>
+                                                    </div>
+                                                ))}
                                         </fieldset>
                                         <label htmlFor="answer-visiblity" className="form-label fs-5 fw-medium">
                                             Visibilidade das respostas

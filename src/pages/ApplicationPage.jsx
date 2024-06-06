@@ -161,7 +161,7 @@ function ApplicationPage(props) {
                 .catch((error) => {
                     modalRef.current.showModal({
                         title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                        description: error.response.data.message,
+                        description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -209,7 +209,7 @@ function ApplicationPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        setError({ text: 'Erro ao carregar aplicação', description: error.response.data.message || '' });
+                        setError({ text: 'Erro ao carregar aplicação', description: error.response?.data.message || '' });
                     });
             }
         }

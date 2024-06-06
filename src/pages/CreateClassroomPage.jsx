@@ -49,7 +49,7 @@ function CreateClassroomPage(props) {
                             setClassroom({ users: d.users.map((u) => u.id) });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar sala de aula. ' + error.response.data.message);
+                            alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
                         })
                 );
             }
@@ -65,7 +65,7 @@ function CreateClassroomPage(props) {
                         setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição. ' + error.response.data.message);
+                        alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
                     })
             );
             Promise.all(promises).then(() => {
@@ -90,7 +90,7 @@ function CreateClassroomPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar sala de aula. ' + error.response.data.message);
+                    alert('Erro ao atualizar sala de aula. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -105,7 +105,7 @@ function CreateClassroomPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar sala de aula. ' + error.response.data.message);
+                    alert('Erro ao criar sala de aula. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -122,7 +122,7 @@ function CreateClassroomPage(props) {
                 navigate(`/dash/institutions/${institutionId}`);
             })
             .catch((error) => {
-                alert('Erro ao excluir sala de aula. ' + error.response.data.message);
+                alert('Erro ao excluir sala de aula. ' + error.response?.data.message || '');
             });
     };
 

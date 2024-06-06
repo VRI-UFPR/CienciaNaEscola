@@ -49,11 +49,11 @@ function CreateUserPage(props) {
                             });
                         })
                         .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
                         })
                 );
             }
-            if (user.role === 'USER') {
+            if (user.role !== 'USER') {
                 promises.push(
                     axios
                         .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
@@ -66,7 +66,7 @@ function CreateUserPage(props) {
                             setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                         })
                         .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response.data.message || '' });
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
                         })
                 );
             }
@@ -92,7 +92,7 @@ function CreateUserPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar usuário. ' + error.response.data.message);
+                    alert('Erro ao atualizar usuário. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -107,7 +107,7 @@ function CreateUserPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar usuário. ' + error.response.data.message);
+                    alert('Erro ao criar usuário. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -124,7 +124,7 @@ function CreateUserPage(props) {
                 navigate(`/dash/institutions/${institutionId}`);
             })
             .catch((error) => {
-                alert('Erro ao excluir usuário. ' + error.response.data.message);
+                alert('Erro ao excluir usuário. ' + error.response?.data.message || '');
             });
     };
 
@@ -202,7 +202,7 @@ function CreateUserPage(props) {
                         </select>
                     </div>
                 )}
-                {(user.role === 'ADMIN' || !isEditing) && (
+                {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
                     <div>
                         <fieldset>
                             <span>Selecione as salas de aula do usuário</span>

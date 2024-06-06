@@ -83,7 +83,7 @@ function AnswerPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar respostas de aplicação', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar respostas de aplicação', description: error.response?.data.message || '' });
                 });
         }
     }, [applicationId, isLoading, user.status, user.token]);

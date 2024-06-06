@@ -71,7 +71,7 @@ function ProtocolsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar protocolos', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar protocolos', description: error.response?.data.message || '' });
                 });
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role, user.id]);
@@ -105,7 +105,7 @@ function ProtocolsPage(props) {
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                 <ProtocolList
                                     listItems={visibleProtocols
-                                        .filter((p) => p.creatorId === user.id)
+                                        .filter((p) => p.creator.id === user.id)
                                         .map((p) => ({ id: p.id, title: p.title }))}
                                     hsl={[36, 98, 83]}
                                 />

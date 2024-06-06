@@ -71,7 +71,7 @@ function ApplicationsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar aplicações', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar aplicações', description: error.response?.data.message || '' });
                 });
         }
     }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);

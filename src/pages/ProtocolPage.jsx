@@ -83,7 +83,7 @@ function ProtocolPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar protocolo', description: error.response.data.message || '' });
+                    setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' });
                 });
         }
     }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);

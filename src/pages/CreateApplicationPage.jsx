@@ -19,6 +19,9 @@ function CreateApplicationPage(props) {
         answersViewersUser: [],
         answersViewersClassroom: [],
     });
+
+    const [protocolVisibility, setProtocolVisibility] = useState([]);
+    const [protocolAnswersVisibility, setProtocolAnswersVisibility] = useState([]);
     const [viewersUser, setViewersUser] = useState([]);
     const [viewersClassroom, setViewersClassroom] = useState([]);
     const [answersViewersUser, setAnswersViewersUser] = useState([]);
@@ -53,6 +56,13 @@ function CreateApplicationPage(props) {
                         .then((response) => {
                             const d = response.data.data;
                             reqProtocolId = d.protocol.id;
+                            if (d.applier.id !== user.id) {
+                                setError({
+                                    text: 'Operação não permitida',
+                                    description: 'Você não tem permissão para editar esta aplicação',
+                                });
+                                return;
+                            }
                             setApplication({
                                 visibility: d.visibility,
                                 answersVisibility: d.answersVisibility,
@@ -63,7 +73,7 @@ function CreateApplicationPage(props) {
                             });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar aplicação. ' + error.response.data.message);
+                            alert('Erro ao buscar aplicação. ' + error.response?.data.message || '');
                         })
                 );
             }
@@ -80,14 +90,16 @@ function CreateApplicationPage(props) {
                         setViewersClassroom(d.viewersClassroom.map((c) => ({ id: c.id })));
                         setAnswersViewersUser(d.answersViewersUser.map((u) => ({ id: u.id, username: u.username })));
                         setAnswersViewersClassroom(d.answersViewersClassroom.map((c) => ({ id: c.id })));
+                        setProtocolVisibility(d.visibility);
+                        setProtocolAnswersVisibility(d.answersVisibility);
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar visualizadores do protocolo. ' + error.response?.data.message);
+                        alert('Erro ao buscar visualizadores do protocolo. ' + error.response?.data.message || '');
                     });
             });
         }
-    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId]);
+    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id]);
 
     const submitApplication = (e) => {
         e.preventDefault();
@@ -105,7 +117,7 @@ function CreateApplicationPage(props) {
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizarr aplicação. ' + error.response.data.message);
+                    alert('Erro ao atualizar aplicação. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -120,7 +132,7 @@ function CreateApplicationPage(props) {
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar aplicação. ' + error.response.data.message);
+                    alert('Erro ao criar aplicação. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -137,7 +149,7 @@ function CreateApplicationPage(props) {
                 navigate(`/dash/applications/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir aplicação. ' + error.response.data.message);
+                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
             });
     };
 
@@ -162,7 +174,7 @@ function CreateApplicationPage(props) {
                         onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
-                        <option value="PUBLIC">Visível para todos</option>
+                        {protocolVisibility === 'PUBLIC  ' && <option value="PUBLIC">Visível para todos</option>}
                         <option value="RESTRICT">Restringir visualizadores</option>
                     </select>
                 </div>
@@ -176,7 +188,7 @@ function CreateApplicationPage(props) {
                         onChange={(e) => setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
-                        <option value="PUBLIC">Visível para todos</option>
+                        {protocolAnswersVisibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
                         <option value="RESTRICT">Restringir visualizadores</option>
                     </select>
                 </div>
