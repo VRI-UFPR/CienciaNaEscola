@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext, useRef } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,6 @@ import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
 import ProtocolCarousel from '../components/ProtocolCarousel';
-import Alert from '../components/Alert';
 import { StorageContext } from '../contexts/StorageContext';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
@@ -52,7 +51,6 @@ function ApplicationsPage(props) {
     const { localApplications, connected } = useContext(StorageContext);
 
     const navigate = useNavigate();
-    const modalRef = useRef(null);
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
@@ -89,7 +87,7 @@ function ApplicationsPage(props) {
             <div className="row h-100 m-0">
                 <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column h-100 p-0">
@@ -136,7 +134,6 @@ function ApplicationsPage(props) {
                     </div>
                 </div>
             </div>
-            <Alert id="ApplicationsPageAlert" ref={modalRef} />
             <style>{style}</style>
         </div>
     );

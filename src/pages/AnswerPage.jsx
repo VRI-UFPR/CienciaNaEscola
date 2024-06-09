@@ -1,12 +1,10 @@
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
-import Alert from '../components/Alert';
 import baseUrl from '../contexts/RouteContext';
 import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
@@ -63,7 +61,6 @@ function AnswerPage(props) {
     const galleryModalRef = useRef(null);
     const { applicationId } = useParams();
     const { user } = useContext(AuthContext);
-    const modalRef = useRef(null);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
@@ -101,7 +98,7 @@ function AnswerPage(props) {
             <div className="row flex-grow-1 m-0">
                 <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column flex-grow-1 bg-white p-0">
@@ -338,10 +335,9 @@ function AnswerPage(props) {
                     </div>
                 </div>
             </div>
-            <Alert id="AnswerPageAlert" ref={modalRef} />
             <GalleryModal id="ProtocolPageGallery" ref={galleryModalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} />
+                <Sidebar />
             </div>
             <style>{styles}</style>
         </div>

@@ -6,6 +6,7 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import baseUrl from '../contexts/RouteContext';
 import Alert from '../components/Alert';
+import { AlertContext } from '../contexts/AlertContext';
 
 const PrototypeAnswersStyles = `
     .font-barlow {
@@ -108,7 +109,7 @@ function jsonToCsv(ans) {
     return csv;
 }
 
-const createFile = (user, id, modalRef) => {
+const createFile = (user, id, showAlert) => {
     let obj, csv;
 
     axios
@@ -138,7 +139,7 @@ const createFile = (user, id, modalRef) => {
                     }
                 }
             } else {
-                modalRef.current.showModal({ title: 'O seguinte protocolo não possui respostas: ' + obj.data.protocol.title });
+                showAlert({ title: 'O seguinte protocolo não possui respostas: ' + obj.data.protocol.title, dismissible: true });
             }
         });
 };
@@ -146,7 +147,7 @@ const createFile = (user, id, modalRef) => {
 function PrototypeAnswersPage(props) {
     const { user } = useContext(AuthContext);
     const { id } = useParams();
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     return (
         <div className="d-flex flex-column min-vh-100">
@@ -158,11 +159,10 @@ function PrototypeAnswersPage(props) {
                     </div>
                     <div className="col-0 col-lg-4 p-0"></div>
                     <div className="col-12 col-lg-4 p-0 mb-3 mb-lg-0 ps-lg-2">
-                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" onClick={() => createFile(user, id, modalRef)} />
+                        <TextButton type="submit" hsl={[37, 98, 76]} text="Respostas" onClick={() => createFile(user, id, showAlert)} />
                     </div>
                 </div>
             </div>
-            <Alert id="PrototypeAnswerPage" ref={modalRef} />
             <style>{PrototypeAnswersStyles}</style>
         </div>
     );

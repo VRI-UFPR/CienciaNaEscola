@@ -6,6 +6,7 @@ import { Offcanvas } from 'bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
 import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .font-barlow {
@@ -49,10 +50,11 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { modalRef, showExitButton } = props;
+    const { showExitButton } = props;
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
+    const { showAlert } = useContext(AlertContext);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
@@ -142,12 +144,13 @@ function Sidebar(props) {
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         type="button"
                         onClick={() => {
-                            modalRef.current.showModal({
+                            showAlert({
                                 title: 'Tem certeza que deseja fazer logout?',
                                 dismissHsl: [355, 78, 66],
                                 dismissText: 'Não',
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
+                                dismissible: true,
                                 actionOnClick: () => {
                                     closeSidebar();
                                     logout();

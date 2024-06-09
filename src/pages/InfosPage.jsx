@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import TextButton from '../components/TextButton';
-import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 import MarkdownText from '../components/MarkdownText';
 import { AuthContext } from '../contexts/AuthContext';
@@ -34,7 +33,6 @@ const infosPageStyles = `
 function InfosPage(props) {
     const { content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
     const navigate = useNavigate();
-    const modalRef = useRef(null);
     const { user, logout, acceptTerms } = useContext(AuthContext);
     const { isDashboard } = useContext(LayoutContext);
 
@@ -76,7 +74,7 @@ function InfosPage(props) {
                         tabIndex="-1"
                         id="sidebar"
                     >
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column bg-white p-0">
@@ -115,7 +113,6 @@ function InfosPage(props) {
                     </div>
                 </div>
             </div>
-            <Alert id="InfosPageAlert" ref={modalRef} />
             <style>{infosPageStyles}</style>
         </div>
     );

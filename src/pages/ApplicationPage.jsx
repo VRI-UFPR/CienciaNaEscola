@@ -11,7 +11,6 @@ import ImageInput from '../components/inputs/answers/ImageInput';
 import SelectInput from '../components/inputs/answers/SelectInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
-import Alert from '../components/Alert';
 import GalleryModal from '../components/GalleryModal';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
@@ -23,6 +22,7 @@ import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -61,7 +61,7 @@ function ApplicationPage(props) {
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { applicationId } = useParams();
     const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
@@ -92,7 +92,7 @@ function ApplicationPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
-        modalRef.current.showModal({
+        showAlert({
             title: 'Aguarde o processamento da resposta',
             dismissible: false,
         });
@@ -148,7 +148,7 @@ function ApplicationPage(props) {
                     },
                 })
                 .then((response) => {
-                    modalRef.current.showModal({
+                    showAlert({
                         title: 'Muito obrigado por sua participação no projeto!',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
@@ -159,7 +159,7 @@ function ApplicationPage(props) {
                     });
                 })
                 .catch((error) => {
-                    modalRef.current.showModal({
+                    showAlert({
                         title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
                         description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
@@ -180,7 +180,7 @@ function ApplicationPage(props) {
                     },
                 },
             });
-            modalRef.current.showModal({
+            showAlert({
                 title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
                 dismissHsl: [97, 43, 70],
                 dismissText: 'Ok',
@@ -217,14 +217,14 @@ function ApplicationPage(props) {
 
     useEffect(() => {
         if (connected === false && application?.id) {
-            modalRef.current.showModal({
+            showAlert({
                 title: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
                 dismissHsl: [97, 43, 70],
                 dismissText: 'Ok',
                 dismissible: true,
             });
         }
-    }, [connected, application, applicationId]);
+    }, [connected, application, applicationId, showAlert]);
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
@@ -239,7 +239,7 @@ function ApplicationPage(props) {
             <div className="row flex-grow-1 m-0">
                 <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column flex-grow-1 bg-yellow-orange p-0">
@@ -416,12 +416,13 @@ function ApplicationPage(props) {
                                         hsl={[97, 43, 70]}
                                         text="Enviar"
                                         onClick={() => {
-                                            modalRef.current.showModal({
+                                            showAlert({
                                                 title: 'Tem certeza que deseja enviar o protocolo?',
                                                 dismissHsl: [355, 78, 66],
                                                 dismissText: 'Não',
                                                 actionHsl: [97, 43, 70],
                                                 actionText: 'Sim',
+                                                dismissible: true,
                                                 actionOnClick: () => {
                                                     handleProtocolSubmit();
                                                 },
@@ -435,10 +436,9 @@ function ApplicationPage(props) {
                 </div>
             </div>
 
-            <Alert id="ProtocolPageAlert" ref={modalRef} />
             <GalleryModal id="ProtocolPageGallery" ref={galleryModalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} showExitButton={true} />
+                <Sidebar showExitButton={true} />
             </div>
             <style>{styles}</style>
         </div>
