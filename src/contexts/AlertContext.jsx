@@ -24,27 +24,30 @@ export const AlertProvider = ({ children }) => {
     const showAlert = (data) => {
         if (data) {
             const element = document.getElementById('alert-modal');
-            element.removeEventListener('hidden.bs.modal', alert?.onHide);
-            if (alert?.actionOnClick) {
-                element.removeEventListener('hidden.bs.modal', alert?.actionOnClick);
-            }
 
-            setAlert(data);
+            setAlert((prev) => {
+                element.removeEventListener('hidden.bs.modal', prev?.onHide);
+                if (prev?.actionOnClick) {
+                    element.removeEventListener('hidden.bs.modal', prev?.actionOnClick);
+                }
+                return data;
+            });
 
             Modal.getOrCreateInstance(element).show();
         }
     };
 
     const hideAlert = (action) => {
-        const alert = document.getElementById('alert-modal');
+        const element = document.getElementById('alert-modal');
         if (action) {
-            alert.addEventListener('hidden.bs.modal', action);
+            element.addEventListener('hidden.bs.modal', action);
         }
-        Modal.getInstance(alert).hide();
+
+        Modal.getInstance(element)?.hide();
     };
 
     return (
-        <AlertContext.Provider value={{ showAlert }}>
+        <AlertContext.Provider value={{ showAlert, hideAlert }}>
             {children}
             <div className="modal fade" id="alert-modal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
                 <div className="modal-dialog modal-dialog-centered p-5">
