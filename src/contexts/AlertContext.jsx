@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { Modal } from 'bootstrap';
 import TextButton from '../components/TextButton';
 
@@ -20,8 +20,9 @@ const AlertStyles = `
 
 export const AlertProvider = ({ children }) => {
     const [alert, setAlert] = useState();
+    const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-    const showAlert = (data) => {
+    const showAlert = useCallback((data) => {
         if (data) {
             const element = document.getElementById('alert-modal');
 
@@ -32,22 +33,24 @@ export const AlertProvider = ({ children }) => {
                 }
                 return data;
             });
+            setIsAlertVisible(true);
 
             Modal.getOrCreateInstance(element).show();
         }
-    };
+    }, []);
 
-    const hideAlert = (action) => {
+    const hideAlert = useCallback((action) => {
         const element = document.getElementById('alert-modal');
         if (action) {
             element.addEventListener('hidden.bs.modal', action);
         }
+        setIsAlertVisible(false);
 
         Modal.getInstance(element)?.hide();
-    };
+    }, []);
 
     return (
-        <AlertContext.Provider value={{ showAlert, hideAlert }}>
+        <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isDismissable: alert?.dismissible }}>
             {children}
             <div className="modal fade" id="alert-modal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
                 <div className="modal-dialog modal-dialog-centered p-5">
