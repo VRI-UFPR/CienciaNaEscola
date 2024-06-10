@@ -200,7 +200,7 @@ function ProtocolPage(props) {
                     })
                     .catch((error) => {
                         console.error(error.message);
-                        if (error.response.status === 401) {
+                        if ((error.response?.status ?? 401) === 401) {
                             logout();
                             navigate('/login');
                         }
