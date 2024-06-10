@@ -54,7 +54,7 @@ function ProtocolsPage(props) {
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             axios
-                .get(baseUrl + `api/protocol/getAllProtocols`, {
+                .get(baseUrl + `api/protocol/getVisibleProtocols`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {

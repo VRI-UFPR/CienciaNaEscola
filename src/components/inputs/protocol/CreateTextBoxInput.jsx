@@ -27,8 +27,8 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const [item, setItem] = useState(defaultNewInput('TEXTBOX'));
-    const { pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+    const [item, setItem] = useState(currentItem || defaultNewInput('TEXTBOX'));
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);
@@ -65,6 +65,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="question"
+                        value={item.text || ''}
                         aria-describedby="questionHelp"
                         onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                     />
@@ -82,6 +83,7 @@ function CreateTextBoxInput(props) {
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="description"
+                        value={item.description || ''}
                         onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
                     />
                 </div>
