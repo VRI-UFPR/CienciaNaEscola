@@ -4,38 +4,65 @@ import React, { useContext, useEffect, useState } from 'react';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
+import SplashPage from './SplashPage';
 
 function CreateApplicationPage(props) {
-    const { id } = useParams();
+    const { applicationId, protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
     const [application, setApplication] = useState({
-        protocolId: id,
+        protocolId: protocolId,
         viewersUser: [],
         viewersClassroom: [],
         answersViewersUser: [],
         answersViewersClassroom: [],
     });
-    const [institutionUsers, setInstitutionUsers] = useState([]);
-    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+
+    const [protocolVisibility, setProtocolVisibility] = useState([]);
+    const [protocolAnswersVisibility, setProtocolAnswersVisibility] = useState([]);
+    const [viewersUser, setViewersUser] = useState([]);
+    const [viewersClassroom, setViewersClassroom] = useState([]);
+    const [answersViewersUser, setAnswersViewersUser] = useState([]);
+    const [answersViewersClassroom, setAnswersViewersClassroom] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
+            if (!isEditing && user.role === 'USER') {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para criar aplicações',
+                });
+                return;
+            } else if (isEditing && user.role === 'USER') {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta aplicação' });
+                return;
+            }
             const promises = [];
+            let reqProtocolId = protocolId;
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/application/getApplication/${id}`, {
+                        .get(`${baseUrl}api/application/getApplication/${applicationId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
                         })
                         .then((response) => {
                             const d = response.data.data;
+                            reqProtocolId = d.protocol.id;
+                            if (d.applier.id !== user.id) {
+                                setError({
+                                    text: 'Operação não permitida',
+                                    description: 'Você não tem permissão para editar esta aplicação',
+                                });
+                                return;
+                            }
                             setApplication({
                                 visibility: d.visibility,
                                 answersVisibility: d.answersVisibility,
@@ -46,52 +73,40 @@ function CreateApplicationPage(props) {
                             });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar aplicação');
+                            alert('Erro ao buscar aplicação. ' + error.response?.data.message || '');
                         })
                 );
             }
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
-                    })
-                    .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição');
-                    })
-            );
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
-                    })
-                    .catch((error) => {
-                        alert('Erro ao buscar salas de aula da instituição');
-                    })
-            );
             Promise.all(promises).then(() => {
-                setIsLoading(false);
+                axios
+                    .get(`${baseUrl}api/protocol/getProtocol/${reqProtocolId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setViewersUser(d.viewersUser.map((u) => ({ id: u.id, username: u.username })));
+                        setViewersClassroom(d.viewersClassroom.map((c) => ({ id: c.id })));
+                        setAnswersViewersUser(d.answersViewersUser.map((u) => ({ id: u.id, username: u.username })));
+                        setAnswersViewersClassroom(d.answersViewersClassroom.map((c) => ({ id: c.id })));
+                        setProtocolVisibility(d.visibility);
+                        setProtocolAnswersVisibility(d.answersVisibility);
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar visualizadores do protocolo. ' + error.response?.data.message || '');
+                    });
             });
         }
-    }, [id, isEditing, isLoading, user.token, user.institutionId]);
+    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id]);
 
     const submitApplication = (e) => {
         e.preventDefault();
         const formData = serialize(application, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/application/updateApplication/${id}`, formData, {
+                .put(`${baseUrl}api/application/updateApplication/${applicationId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -102,7 +117,7 @@ function CreateApplicationPage(props) {
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizarr aplicação');
+                    alert('Erro ao atualizar aplicação. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -117,14 +132,14 @@ function CreateApplicationPage(props) {
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar aplicação');
+                    alert('Erro ao criar aplicação. ' + error.response?.data.message || '');
                 });
         }
     };
 
     const deleteApplication = () => {
         axios
-            .delete(`${baseUrl}api/application/deleteApplication/${id}`, {
+            .delete(`${baseUrl}api/application/deleteApplication/${applicationId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -134,9 +149,17 @@ function CreateApplicationPage(props) {
                 navigate(`/dash/applications/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir aplicação');
+                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
             });
     };
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
+
+    if (isLoading) {
+        return <SplashPage text="Carregando criação de instituição..." />;
+    }
 
     return (
         <div>
@@ -151,7 +174,7 @@ function CreateApplicationPage(props) {
                         onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
-                        <option value="PUBLIC">Visível para todos</option>
+                        {protocolVisibility === 'PUBLIC  ' && <option value="PUBLIC">Visível para todos</option>}
                         <option value="RESTRICT">Restringir visualizadores</option>
                     </select>
                 </div>
@@ -165,14 +188,14 @@ function CreateApplicationPage(props) {
                         onChange={(e) => setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
-                        <option value="PUBLIC">Visível para todos</option>
+                        {protocolAnswersVisibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
                         <option value="RESTRICT">Restringir visualizadores</option>
                     </select>
                 </div>
                 <div>
                     <fieldset>
                         <span>Selecione os usuários visualizadores</span>
-                        {institutionUsers.map((u) => (
+                        {viewersUser.map((u) => (
                             <div key={'viewer-user-' + u.id}>
                                 <input
                                     form="application-form"
@@ -203,7 +226,7 @@ function CreateApplicationPage(props) {
                 <div>
                     <fieldset>
                         <span>Selecione as salas de aula visualizadoras</span>
-                        {institutionClassrooms.map((c) => (
+                        {viewersClassroom.map((c) => (
                             <div key={'viewer-classroom-' + c.id}>
                                 <input
                                     form="application-form"
@@ -234,7 +257,7 @@ function CreateApplicationPage(props) {
                 <div>
                     <fieldset>
                         <span>Selecione os usuários visualizadores de resposta</span>
-                        {institutionUsers.map((u) => (
+                        {answersViewersUser.map((u) => (
                             <div key={'answer-viewer-user-' + u.id}>
                                 <input
                                     form="application-form"
@@ -265,7 +288,7 @@ function CreateApplicationPage(props) {
                 <div>
                     <fieldset>
                         <span>Selecione as salas de aula visualizadoras de resposta</span>
-                        {institutionClassrooms.map((c) => (
+                        {answersViewersClassroom.map((c) => (
                             <div key={'answer-viewer-classroom-' + c.id}>
                                 <input
                                     form="application-form"

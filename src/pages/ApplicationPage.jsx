@@ -22,6 +22,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
+import ErrorPage from './ErrorPage';
 
 const styles = `
     .bg-yellow-orange {
@@ -54,10 +55,11 @@ const styles = `
 
 function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
-    const { id } = useParams();
+    const { applicationId } = useParams();
     const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
     const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
@@ -159,7 +161,7 @@ function ApplicationPage(props) {
                 .catch((error) => {
                     modalRef.current.showModal({
                         title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                        description: error.response.data.message,
+                        description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -167,9 +169,9 @@ function ApplicationPage(props) {
                 });
         } else {
             storePendingRequest({
-                id: id,
+                id: applicationId,
                 userId: user.id,
-                title: 'Resposta da aplicação ' + id + ' referente ao protocolo ' + application.protocol.title,
+                title: 'Resposta da aplicação ' + applicationId + ' referente ao protocolo ' + application.protocol.title,
                 url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
                 data: formData,
                 config: {
@@ -190,13 +192,13 @@ function ApplicationPage(props) {
     useEffect(() => {
         //Search if the application is in localApplications
         if (localApplications !== undefined && application === undefined) {
-            const localApplication = localApplications.find((app) => app.id === parseInt(id));
+            const localApplication = localApplications.find((app) => app.id === parseInt(applicationId));
             if (localApplication !== undefined) {
                 setApplication(localApplication);
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
                 axios
-                    .get(baseUrl + `api/application/getApplicationWithProtocol/${id}`, {
+                    .get(baseUrl + `api/application/getApplicationWithProtocol/${applicationId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
@@ -207,26 +209,26 @@ function ApplicationPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        console.error(error.message);
-                        if (error.response.status === 401) {
-                            logout();
-                            navigate(isDashboard ? '/dash/signin' : '/signin');
-                        }
+                        setError({ text: 'Erro ao carregar aplicação', description: error.response?.data.message || '' });
                     });
             }
         }
-    }, [id, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard]);
+    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard]);
 
     useEffect(() => {
         if (connected === false && application?.id) {
             modalRef.current.showModal({
-                title: 'Você está offline. A aplicação ' + id + ' está armazenada localmente e continuará acessível.',
+                title: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
                 dismissHsl: [97, 43, 70],
                 dismissText: 'Ok',
                 dismissible: true,
             });
         }
-    }, [connected, application, id]);
+    }, [connected, application, applicationId]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando aplicação..." />;
@@ -248,7 +250,7 @@ function ApplicationPage(props) {
                             <div className="d-flex flex-column flex-grow-1">
                                 {isDashboard && (
                                     <div className="row m-0 justify-content-center">
-                                        {(application.creatorId === user.id || user.role === 'ADMIN') && (
+                                        {(application.applier.id === user.id || user.role === 'ADMIN') && (
                                             <div className="col-4 align-self-center pb-4">
                                                 <TextButton
                                                     type="submit"

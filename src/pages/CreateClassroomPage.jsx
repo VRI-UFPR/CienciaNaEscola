@@ -4,20 +4,37 @@ import { AuthContext } from '../contexts/AuthContext';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
+import ErrorPage from './ErrorPage';
+import SplashPage from './SplashPage';
 
 function CreateClassroomPage(props) {
-    const { id: institutionId, classroomId } = useParams();
+    const { institutionId, classroomId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
+            if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para criar salas de aula nesta instituição',
+                });
+                return;
+            } else if (
+                isEditing &&
+                user.role !== 'ADMIN' &&
+                (user.role === 'USER' || user.role === 'APPLIER' || user.institutionId !== parseInt(institutionId))
+            ) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta sala de aula' });
+                return;
+            }
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -32,7 +49,7 @@ function CreateClassroomPage(props) {
                             setClassroom({ users: d.users.map((u) => u.id) });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar sala de aula');
+                            alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
                         })
                 );
             }
@@ -48,14 +65,14 @@ function CreateClassroomPage(props) {
                         setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição');
+                        alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
                     })
             );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [classroomId, isEditing, isLoading, user.token, institutionId]);
+    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId]);
 
     const submitClassroom = (e) => {
         e.preventDefault();
@@ -73,7 +90,7 @@ function CreateClassroomPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar sala de aula');
+                    alert('Erro ao atualizar sala de aula. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -88,7 +105,7 @@ function CreateClassroomPage(props) {
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar sala de aula');
+                    alert('Erro ao criar sala de aula. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -105,9 +122,17 @@ function CreateClassroomPage(props) {
                 navigate(`/dash/institutions/${institutionId}`);
             })
             .catch((error) => {
-                alert('Erro ao excluir sala de aula');
+                alert('Erro ao excluir sala de aula. ' + error.response?.data.message || '');
             });
     };
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
+
+    if (isLoading) {
+        return <SplashPage text="Carregando criação de sala de aula..." />;
+    }
 
     return (
         <div>
@@ -150,11 +175,13 @@ function CreateClassroomPage(props) {
             <div>
                 <p>{JSON.stringify(classroom)}</p>
             </div>
-            <div>
-                <button type="button" onClick={deleteClassroom}>
-                    Excluir
-                </button>
-            </div>
+            {isEditing && (
+                <div>
+                    <button type="button" onClick={deleteClassroom}>
+                        Excluir
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

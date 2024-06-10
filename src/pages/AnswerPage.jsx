@@ -11,6 +11,7 @@ import baseUrl from '../contexts/RouteContext';
 import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
+import ErrorPage from './ErrorPage';
 
 const styles = `
     .bg-yellow-orange {
@@ -55,11 +56,12 @@ const styles = `
 
 function AnswerPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(undefined);
     const [answer, setAnswer] = useState();
     const [selectedAnswer, setSelectedAnswer] = useState(undefined);
     const [selectedItem, setSelectedItem] = useState(undefined);
     const galleryModalRef = useRef(null);
-    const { id } = useParams();
+    const { applicationId } = useParams();
     const { user } = useContext(AuthContext);
     const modalRef = useRef(null);
 
@@ -69,9 +71,9 @@ function AnswerPage(props) {
     };
 
     useEffect(() => {
-        if (user.token) {
+        if (isLoading && user.status !== 'loading') {
             axios
-                .get(`${baseUrl}api/application/getApplicationWithAnswers/${id}`, {
+                .get(`${baseUrl}api/application/getApplicationWithAnswers/${applicationId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
@@ -81,10 +83,14 @@ function AnswerPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    console.error(error.message);
+                    setError({ text: 'Erro ao carregar respostas de aplicação', description: error.response?.data.message || '' });
                 });
         }
-    }, [id, user]);
+    }, [applicationId, isLoading, user.status, user.token]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando respostas de aplicação..." />;
@@ -103,7 +109,7 @@ function AnswerPage(props) {
                     <div className="row d-flex align-items-center justify-content-center font-barlow h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
                             <h1 className="color-dark-gray font-century-gothic fw-bold fs-2 pb-4 m-0">
-                                <Link className="color-dark-gray" to={`/applications/${id}`}>
+                                <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
                                     {answer.protocol.title}
                                 </Link>{' '}
                                 - Respostas

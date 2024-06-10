@@ -10,6 +10,7 @@ import Alert from '../components/Alert';
 import { LayoutContext } from '../contexts/LayoutContext';
 import TextButton from '../components/TextButton';
 import ProtocolList from '../components/ProtocolList';
+import ErrorPage from './ErrorPage';
 
 const style = `
     .font-barlow {
@@ -34,6 +35,7 @@ const style = `
 
 function InstitutionsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
     const [visibleInstitutions, setVisibleInstitutions] = useState([]);
@@ -43,7 +45,11 @@ function InstitutionsPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.id !== null && user.token !== null) {
+        if (isLoading && user.status !== 'loading') {
+            if (user.role === 'USER') {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar instituições' });
+                return;
+            }
             axios
                 .get(baseUrl + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -53,13 +59,14 @@ function InstitutionsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate(isDashboard ? '/dash/signin' : '/signin');
-                    }
+                    setError({ text: 'Erro ao carregar as instituições', description: error.response?.data.message || '' });
                 });
         }
-    }, [user, logout, navigate, isDashboard]);
+    }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando instituições..." />;

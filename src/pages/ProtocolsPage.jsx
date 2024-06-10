@@ -10,6 +10,7 @@ import Alert from '../components/Alert';
 import TextButton from '../components/TextButton';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
+import ErrorPage from './ErrorPage';
 
 const style = `
     .font-barlow {
@@ -43,6 +44,7 @@ const style = `
 
 function ProtocolsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
 
     const [visibleProtocols, setVisibleProtocols] = useState([]);
@@ -52,7 +54,14 @@ function ProtocolsPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.id !== null && user.token !== null) {
+        if (isLoading && user.status !== 'loading') {
+            if (user.role === 'USER') {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para visualizar protocolos',
+                });
+                return;
+            }
             axios
                 .get(baseUrl + `api/protocol/getVisibleProtocols`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -62,13 +71,14 @@ function ProtocolsPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) => {
-                    if (error.response.status === 401) {
-                        logout();
-                        navigate(isDashboard ? '/dash/signin' : '/signin');
-                    }
+                    setError({ text: 'Erro ao carregar protocolos', description: error.response?.data.message || '' });
                 });
         }
-    }, [user, logout, navigate, isDashboard]);
+    }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role, user.id]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando protocolos..." />;
@@ -89,13 +99,13 @@ function ProtocolsPage(props) {
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Protocolos</h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none">
+                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
                         <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Meus protocolos</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                 <ProtocolList
                                     listItems={visibleProtocols
-                                        .filter((p) => p.creatorId === user.id)
+                                        .filter((p) => p.creator.id === user.id)
                                         .map((p) => ({ id: p.id, title: p.title }))}
                                     hsl={[36, 98, 83]}
                                 />
@@ -109,7 +119,7 @@ function ProtocolsPage(props) {
                         </div>
                     </div>
                     {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
-                        <div className="row d-flex justify-content-center py-4 m-0">
+                        <div className="row d-flex justify-content-center pb-4 m-0">
                             <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
                                 <TextButton
                                     text={'Criar novo protocolo'}

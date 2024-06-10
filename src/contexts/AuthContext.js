@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { StorageContext } from './StorageContext';
 import axios from 'axios';
 import baseUrl from './RouteContext';
@@ -6,12 +6,8 @@ import baseUrl from './RouteContext';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const defaultUser = useMemo(
-        () => ({ id: null, username: null, role: null, token: null, expiresIn: null, acceptedTerms: null, institutionId: null }),
-        []
-    );
     const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
-    const [user, setUser] = useState(defaultUser);
+    const [user, setUser] = useState({ status: 'loading' });
 
     const acceptTerms = () => {
         setUser({ ...user, acceptedTerms: true });
@@ -33,13 +29,19 @@ export const AuthProvider = ({ children }) => {
                             })
                             .then((response) => {
                                 Notification.requestPermission().then((result) => {
-                                    new Notification('Envio pendente realizado! ', { body: request.title });
+                                    navigator.serviceWorker.ready.then((registration) => {
+                                        registration.showNotification('Envio pendente realizado!', { body: request.title });
+                                    });
                                 });
                             });
                         promises.push(promise);
                     } catch (error) {
                         Notification.requestPermission().then((result) => {
-                            new Notification('Envio pendente falhou. Submeta a resposta novamente! ', { body: request.title });
+                            navigator.serviceWorker.ready.then((registration) => {
+                                registration.showNotification('Envio pendente falhou. Submeta a resposta novamente!', {
+                                    body: request.title,
+                                });
+                            });
                         });
                     }
                 }
@@ -58,21 +60,21 @@ export const AuthProvider = ({ children }) => {
 
     // Create a new user object and store it in localStorage
     const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId) => {
-        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId });
+        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated' });
 
         localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId }));
     }, []);
 
     // Clear user object and clean up traces (through clearDBAndStorage)
     const logout = useCallback(() => {
-        setUser(defaultUser);
+        setUser({ status: 'unauthenticated' });
         clearDBAndStorage();
-    }, [clearDBAndStorage, defaultUser]);
+    }, [clearDBAndStorage]);
 
     // Check user's token expiration time and renew it if necessary or clear traces if expired
     const renewLogin = useCallback(() => {
         setUser((prev) => {
-            if (prev.expiresIn) {
+            if (prev.status === 'authenticated') {
                 const now = new Date();
                 const renewTime = new Date(new Date(prev.expiresIn).getTime() - 600000);
                 const expirationTime = new Date(prev.expiresIn);
@@ -94,32 +96,40 @@ export const AuthProvider = ({ children }) => {
                                     role,
                                     token,
                                     expiresIn,
+                                    status: 'authenticated',
                                 };
                             }
                         })
                         .catch((error) => {
                             clearDBAndStorage();
-                            return defaultUser;
+                            return { status: 'unauthenticated' };
                         });
                 } else if (now > expirationTime) {
                     clearDBAndStorage();
-                    return defaultUser;
+                    return { status: 'unauthenticated' };
                 }
             }
             return prev;
         });
-    }, [defaultUser, clearDBAndStorage]);
+    }, [clearDBAndStorage]);
 
     // Load user from localStorage and schedule periodic token expiration check
     useEffect(() => {
-        setUser((prev) => JSON.parse(localStorage.getItem('user')) || prev);
-        renewLogin();
+        setUser((prev) =>
+            JSON.parse(localStorage.getItem('user'))
+                ? { ...JSON.parse(localStorage.getItem('user')), status: 'authenticated' }
+                : { status: 'unauthenticated' }
+        );
 
         const interval = setInterval(() => {
             renewLogin();
         }, 300000);
         return () => clearInterval(interval);
     }, [renewLogin]);
+
+    useEffect(() => {
+        if (user.status === 'authenticated') renewLogin();
+    }, [user.status, renewLogin]);
 
     return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
 };

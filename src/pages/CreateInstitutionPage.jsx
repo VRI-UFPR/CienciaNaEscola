@@ -4,41 +4,53 @@ import { serialize } from 'object-to-formdata';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import SplashPage from './SplashPage';
+import ErrorPage from './ErrorPage';
 
 function CreateInstitutionPage(props) {
-    const { id: institutionId } = useParams();
+    const { institutionId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
     const [institution, setInstitution] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && user.status !== 'loading') {
+            if (!isEditing && user.role !== 'ADMIN') {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar instituições' });
+                return;
+            } else if (
+                isEditing &&
+                user.role !== 'ADMIN' &&
+                (user.role !== 'COORDINATOR' || user.institutionId !== parseInt(institutionId))
+            ) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta instituição' });
+                return;
+            }
             if (isEditing) {
-                if (user.token) {
-                    axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
-                        })
-                        .then((response) => {
-                            const d = response.data.data;
-                            setInstitution({ name: d.name, type: d.type, addressId: d.address.id });
-                            setIsLoading(false);
-                        })
-                        .catch((error) => {
-                            alert('Erro ao buscar instituição');
-                        });
-                }
+                axios
+                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setInstitution({ name: d.name, type: d.type, addressId: d.address.id });
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        alert('Erro ao buscar instituição. ' + error.response?.data.message || '');
+                    });
             } else {
                 setIsLoading(false);
             }
         }
-    }, [institutionId, isEditing, isLoading, user.token]);
+    }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId]);
 
     const submitInstitution = (e) => {
         e.preventDefault();
@@ -56,7 +68,7 @@ function CreateInstitutionPage(props) {
                     navigate(`/dash/institutions/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar instituição');
+                    alert('Erro ao atualizar instituição. ' + error.response?.data.message || '');
                 });
         } else {
             axios
@@ -71,7 +83,7 @@ function CreateInstitutionPage(props) {
                     navigate(`/dash/institutions/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar instituição');
+                    alert('Erro ao criar instituição. ' + error.response?.data.message || '');
                 });
         }
     };
@@ -88,9 +100,17 @@ function CreateInstitutionPage(props) {
                 navigate(`/dash/institutions/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir instituição');
+                alert('Erro ao excluir instituição. ' + error.response?.data.message || '');
             });
     };
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
+
+    if (isLoading) {
+        return <SplashPage text="Carregando criação de instituição..." />;
+    }
 
     return (
         <div>

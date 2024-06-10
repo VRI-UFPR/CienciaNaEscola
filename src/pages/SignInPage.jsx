@@ -78,7 +78,7 @@ function SignInPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.id !== null) {
+        if (user.status === 'authenticated') {
             navigate(isDashboard ? '/dash/applications' : '/applications');
         }
     }, [navigate, isDashboard, user]);

@@ -13,6 +13,7 @@ import Sidebar from '../components/Sidebar';
 import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
+import ErrorPage from './ErrorPage';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -63,7 +64,7 @@ const CreateProtocolStyles = `
 `;
 
 function CreateProtocolPage(props) {
-    const { id: protocolId } = useParams();
+    const { protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
 
@@ -86,6 +87,7 @@ function CreateProtocolPage(props) {
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
     const modalRef = useRef(null);
@@ -176,7 +178,7 @@ function CreateProtocolPage(props) {
                     modalRef.current.showModal({ title: 'Formulário atualizado com sucesso.', onHide: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    console.error(error.message);
+                    modalRef.current.showModal({ title: 'Erro ao atualizar protocolo.', description: error.response?.data.message || '' });
                 });
         } else {
             axios
@@ -187,17 +189,27 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    modalRef.current.showModal({ title: 'Formulário criado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                    modalRef.current.showModal({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    console.error(error.message);
+                    modalRef.current.showModal({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '' });
                 });
         }
     };
 
     useEffect(() => {
-        if (isLoading && user.token) {
+        if (isLoading && user.status !== 'loading') {
             const promises = [];
+            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para criar protocolos',
+                });
+                return;
+            } else if (isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este protocolo' });
+                return;
+            }
             if (isEditing) {
                 promises.push(
                     axios
@@ -208,6 +220,13 @@ function CreateProtocolPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
+                            if (user.id !== d.creator.id) {
+                                setError({
+                                    text: 'Operação não permitida',
+                                    description: 'Você não tem permissão para editar este protocolo',
+                                });
+                                return;
+                            }
                             setProtocol({
                                 id: d.id,
                                 title: d.title,
@@ -243,7 +262,7 @@ function CreateProtocolPage(props) {
                             });
                         })
                         .catch((error) => {
-                            console.error(error.message);
+                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                         })
                 );
             }
@@ -256,10 +275,10 @@ function CreateProtocolPage(props) {
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, role: u.role })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição');
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                     })
             );
             promises.push(
@@ -274,14 +293,18 @@ function CreateProtocolPage(props) {
                         setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar salas de aula da instituição');
+                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                     })
             );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [isLoading, user.token, isEditing, protocolId, user.institutionId]);
+    }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status, user.role, user.id]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
 
     if (isLoading) {
         return <SplashPage text="Carregando criação de protocolo..." />;
@@ -489,32 +512,36 @@ function CreateProtocolPage(props) {
                                         </select>
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione os usuários aplicadores</span>
-                                            {institutionUsers.map((u) => (
-                                                <div key={'applier-' + u.id}>
-                                                    <input
-                                                        form="application-form"
-                                                        type="checkbox"
-                                                        name="applier"
-                                                        id={`applier-${u.id}`}
-                                                        value={u.id}
-                                                        checked={protocol.appliers.includes(u.id)}
-                                                        onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setProtocol((prev) => ({
-                                                                    ...prev,
-                                                                    appliers: [...prev.appliers, parseInt(e.target.value)],
-                                                                }));
-                                                            } else {
-                                                                setProtocol((prev) => ({
-                                                                    ...prev,
-                                                                    appliers: prev.appliers.filter((id) => id !== parseInt(e.target.value)),
-                                                                }));
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label htmlFor={`applier-${u.id}`}>{u.username}</label>
-                                                </div>
-                                            ))}
+                                            {institutionUsers
+                                                .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
+                                                .map((u) => (
+                                                    <div key={'applier-' + u.id}>
+                                                        <input
+                                                            form="application-form"
+                                                            type="checkbox"
+                                                            name="applier"
+                                                            id={`applier-${u.id}`}
+                                                            value={u.id}
+                                                            checked={protocol.appliers.includes(u.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setProtocol((prev) => ({
+                                                                        ...prev,
+                                                                        appliers: [...prev.appliers, parseInt(e.target.value)],
+                                                                    }));
+                                                                } else {
+                                                                    setProtocol((prev) => ({
+                                                                        ...prev,
+                                                                        appliers: prev.appliers.filter(
+                                                                            (id) => id !== parseInt(e.target.value)
+                                                                        ),
+                                                                    }));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label htmlFor={`applier-${u.id}`}>{u.username}</label>
+                                                    </div>
+                                                ))}
                                         </fieldset>
                                         <label htmlFor="answer-visiblity" className="form-label fs-5 fw-medium">
                                             Visibilidade das respostas
