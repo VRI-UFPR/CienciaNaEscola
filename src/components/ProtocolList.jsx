@@ -67,6 +67,9 @@ function ProtocolList(props) {
                         <HomeButton title={li.title} />
                     </Link>
                 ))}
+                {listItems.length === 0 && (
+                    <p className="font-barlow text-center color-grey fw-medium m-0">Nada para mostrar por enquanto</p>
+                )}
             </div>
             <style>{ProtocolListStyles(hue, sat, lig)}</style>
         </div>
