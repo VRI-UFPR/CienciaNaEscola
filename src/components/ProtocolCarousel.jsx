@@ -8,8 +8,6 @@ import HomeButton from './HomeButton';
 const style = `
     .custom-carousel {
         background-color: #FECF86B2;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
     }
 
     .carousel-link {
@@ -24,6 +22,11 @@ const style = `
       
     .carousel-indicator.active {
         background-color: #5C5C5C !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
     }
 `;
 
@@ -50,7 +53,7 @@ function ProtocolCarousel(props) {
 
             carouselItems.push(
                 <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
-                    <div className="d-flex flex-column align-items-center h-100 pb-3">
+                    <div className="d-flex flex-column align-items-center h-100">
                         {slideItems.map((si) => (
                             <Link
                                 to={`${si.id}`}
@@ -92,9 +95,13 @@ function ProtocolCarousel(props) {
     };
 
     return (
-        <div id="dynamic-carousel" className="custom-carousel carousel slide w-100 rounded-4" ref={carouselRef}>
-            <div className="carousel-inner h-100">{renderCarouselItems()}</div>
-            <div className="carousel-indicators">{renderPageIndicators()}</div>
+        <div
+            id="dynamic-carousel"
+            className="custom-carousel d-flex flex-column flex-grow-1 carousel slide overflow-scroll rounded-4 w-100 m-0 p-0 px-4 px-lg-5 py-4"
+            ref={carouselRef}
+        >
+            <div className="carousel-inner h-100 px-1">{renderCarouselItems()}</div>
+            <div className="carousel-indicators position-relative m-0 mt-2">{renderPageIndicators()}</div>
             <style>{style}</style>
         </div>
     );

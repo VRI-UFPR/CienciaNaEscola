@@ -4,8 +4,8 @@ import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
-import { LayoutContext } from '../contexts/LayoutContext';
 import { version } from '../utils/constants';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .font-barlow {
