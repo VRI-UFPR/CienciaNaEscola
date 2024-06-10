@@ -10,7 +10,6 @@ import ImageInput from '../components/inputs/answers/ImageInput';
 import SelectInput from '../components/inputs/answers/SelectInput';
 import SimpleTextInput from '../components/inputs/answers/SimpleTextInput';
 import RadioButtonInput from '../components/inputs/answers/RadioButtonInput';
-import Alert from '../components/Alert';
 import GalleryModal from '../components/GalleryModal';
 import CheckBoxInput from '../components/inputs/answers/CheckBoxInput';
 import TextButton from '../components/TextButton';
@@ -58,7 +57,6 @@ function ProtocolPage(props) {
     const { protocolId } = useParams();
     const [protocol, setProtocol] = useState(undefined);
 
-    const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
@@ -101,7 +99,7 @@ function ProtocolPage(props) {
             <div className="row flex-grow-1 m-0">
                 <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column flex-grow-1 bg-yellow-orange p-0">
@@ -277,10 +275,9 @@ function ProtocolPage(props) {
                 </div>
             </div>
 
-            <Alert id="ProtocolPageAlert" ref={modalRef} />
             <GalleryModal id="ProtocolPageGallery" ref={galleryModalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} showExitButton={true} />
+                <Sidebar showExitButton={true} />
             </div>
             <style>{styles}</style>
         </div>

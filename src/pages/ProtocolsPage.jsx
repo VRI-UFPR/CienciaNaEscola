@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext, useRef } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,6 @@ import axios from 'axios';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SplashPage from './SplashPage';
-import Alert from '../components/Alert';
 import TextButton from '../components/TextButton';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
@@ -50,7 +49,6 @@ function ProtocolsPage(props) {
     const [visibleProtocols, setVisibleProtocols] = useState([]);
 
     const navigate = useNavigate();
-    const modalRef = useRef(null);
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
@@ -89,7 +87,7 @@ function ProtocolsPage(props) {
             <div className="row h-100 m-0">
                 <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
-                        <Sidebar modalRef={modalRef} showExitButton={false} />
+                        <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column h-100 p-0">
@@ -133,7 +131,6 @@ function ProtocolsPage(props) {
                     )}
                 </div>
             </div>
-            <Alert id="ProtocolsPageAlert" ref={modalRef} />
             <style>{style}</style>
         </div>
     );

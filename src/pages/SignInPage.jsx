@@ -1,4 +1,4 @@
-import { React, useContext, useState, useRef, useEffect } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
 import picceTitle from '../assets/images/picceTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
-import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
 
@@ -74,7 +74,7 @@ function SignInPage(props) {
     const [password, setPassword] = useState('');
     const { login, user } = useContext(AuthContext);
     const navigate = useNavigate();
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
@@ -112,7 +112,7 @@ function SignInPage(props) {
                 }
             })
             .catch((error) => {
-                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
+                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
             });
     };
 
@@ -140,7 +140,7 @@ function SignInPage(props) {
                 }
             })
             .catch((error) => {
-                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
+                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
             });
     };
 
@@ -172,7 +172,7 @@ function SignInPage(props) {
                         />
                         <p
                             className="login-links text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
+                            onClick={() => showAlert({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>
@@ -204,7 +204,6 @@ function SignInPage(props) {
                 </div>
             </div>
 
-            <Alert id="SignInPageAlert" ref={modalRef} />
             <style> {styles}</style>
         </div>
     );

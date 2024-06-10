@@ -1,4 +1,4 @@
-import { React, useState, useContext, useRef, useCallback, useEffect } from 'react';
+import { React, useState, useContext, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -10,10 +10,10 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
-import Alert from '../components/Alert';
 import { defaultNewInput } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -90,7 +90,7 @@ function CreateProtocolPage(props) {
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     const insertItem = (type, page, group) => {
         const newProtocol = { ...protocol };
@@ -175,10 +175,18 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    modalRef.current.showModal({ title: 'Formulário atualizado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                    showAlert({
+                        title: 'Formulário atualizado com sucesso.',
+                        onHide: () => navigate('/dash/protocols'),
+                        dismissible: true,
+                    });
                 })
                 .catch((error) => {
-                    modalRef.current.showModal({ title: 'Erro ao atualizar protocolo.', description: error.response?.data.message || '' });
+                    showAlert({
+                        title: 'Erro ao atualizar protocolo.',
+                        description: error.response?.data.message || '',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -189,10 +197,10 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
-                    modalRef.current.showModal({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols') });
+                    showAlert({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols'), dismissible: true });
                 })
                 .catch((error) => {
-                    modalRef.current.showModal({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '' });
+                    showAlert({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '', dismissible: true });
                 });
         }
     };
@@ -734,9 +742,8 @@ function CreateProtocolPage(props) {
                     </div>
                 </div>
             </div>
-            <Alert id="CreateProtocolAlert" ref={modalRef} />
             <div className={`offcanvas offcanvas-start bg-coral-red w-auto d-flex`} tabIndex="-1" id="sidebar">
-                <Sidebar modalRef={modalRef} showExitButton={true} />
+                <Sidebar showExitButton={true} />
             </div>
             <style>{CreateProtocolStyles}</style>
         </div>
