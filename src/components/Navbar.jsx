@@ -1,6 +1,5 @@
 import { React } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
-import iconToggler from '../assets/images/navToggler.svg';
 import ColoredBorder from './ColoredBorder';
 
 const styles = `
@@ -19,6 +18,15 @@ const styles = `
     .icon-toggler{
         max-width: 50px;
     }
+
+    .icon-toggler:hover .toggler-div{
+        box-shadow: inset 0px 1px 4px 0px #00000040;
+    }
+
+    .toggler-div{
+        height: 4px;
+        width: 32px;
+    }
 `;
 
 function NavBar(props) {
@@ -33,13 +41,15 @@ function NavBar(props) {
                         <button
                             className={`navbar-toggler icon-toggler btn border-0 h-auto shadow-none p-1 ${
                                 showNavTogglerMobile ? 'd-flex' : 'd-none'
-                            } ${showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'}`}
+                            } ${showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'} flex-column`}
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#sidebar"
                             aria-controls="sidebar"
                         >
-                            <img src={iconToggler} width="100%" alt="Ícone"></img>
+                            <div className="toggler-div rounded bg-white"></div>
+                            <div className="toggler-div rounded bg-white mt-1"></div>
+                            <div className="toggler-div rounded bg-white mt-1"></div>
                         </button>
                     </div>
                     <div className="col-7 d-flex justify-content-center p-0">

@@ -10,10 +10,6 @@ const styles = `
     .bg-grey {
         background-color: #D9D9D9
     }
-
-    .color-dark-gray {
-        color: #535353;
-    }
 `;
 
 function CheckBoxInput(props) {
@@ -58,10 +54,7 @@ function CheckBoxInput(props) {
                                 onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
                                 disabled={disabled}
                             ></input>
-                            <label
-                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}
-                                htmlFor={optname + 'input' + item.id}
-                            >
+                            <label className={`form-check-label font-barlow fw-medium fs-6`} htmlFor={optname + 'input' + item.id}>
                                 {option.text}
                             </label>
                             <Gallery className="mt-1" item={option} galleryModalRef={galleryModalRef} />
