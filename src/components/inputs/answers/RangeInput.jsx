@@ -23,10 +23,14 @@ const styles = `
         border-radius: 5px;
         background-color: #535353;
     }
+
+    .range-subtitle span {
+        width: 40px;
+    }
 `;
 
 function RangeInput(props) {
-    const { item, min, max, step } = props;
+    const { item, min = 0, max = 10, step = 1 } = props;
     const [value, setValue] = useState(Math.floor((min + max) / 2));
 
     const handleInputChange = (e) => {
@@ -58,8 +62,10 @@ function RangeInput(props) {
                     value={value}
                 />
             </div>
-            <div className="d-flex justify-content-center pt-2">
-                <span className="text-decoration-underline text-center">{value}</span>
+            <div className="range-subtitle d-flex justify-content-between pt-2">
+                <span className={`${parseFloat(value) === parseFloat(min) ? 'd-none' : ''} fw-normal fs-6`}>{min}</span>
+                <span className="text-decoration-underline text-center fw-medium fs-5">{value}</span>
+                <span className={`${parseFloat(value) === parseFloat(max) ? 'd-none' : ''} text-end fw-normal fs-6`}>{max}</span>
             </div>
             <style>{styles}</style>
         </div>
