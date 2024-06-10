@@ -54,6 +54,7 @@ const appRoutes = [
             },
             { path: 'applications', element: <ApplicationsPage /> },
             { path: 'applications/:id', element: <ApplicationPage /> },
+            { path: 'applications/:id/answers', element: <AnswerPage /> },
         ],
     },
     {

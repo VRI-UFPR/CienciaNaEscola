@@ -124,7 +124,7 @@ function CreateUserPage(props) {
     };
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando criação de usuário..." />;
     }
 
     return (

@@ -17,23 +17,36 @@ const styles = `
         width: 50px;
         height: 50px;
     }
+
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .color-grey {
+        color: #535353;
+    }
 `;
 
 function SplashPage(props) {
+    const { text } = props;
+
     return (
         <div className="d-flex flex-column align-items-center vh-100">
             <ColoredBorder />
-            <div className="row flex-grow-1 align-items-end justify-content-center w-75 m-0">
+            <div className="d-flex flex-grow-1 align-items-end justify-content-center w-75 m-0">
                 <div className="ratio ratio-1x1 logo-picce-circular h-75">
                     <img src={logoPicceCircular} className="w-100" alt="Logo gráfico Picce"></img>
                 </div>
             </div>
-            <div className="row align-items-center justify-content-center h-25 m-0">
+            <div className="d-flex flex-column align-items-center justify-content-center h-25 m-0">
                 <div className="spinner-border text-secondary spinner-splash" role="status">
                     <span className="sr-only"></span>
                 </div>
             </div>
-            <div className="row align-items-center justify-content-center h-25 w-75 px-2 m-0">
+            <div className="d-flex flex-column align-items-center justify-content-center">
+                <span className="font-barlow color-grey fw-medium fs-3">{text || ''}</span>
+            </div>
+            <div className="d-flex flex-column align-items-center justify-content-center h-25 w-75 px-2 m-0">
                 <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
             </div>
             <ColoredBorder />

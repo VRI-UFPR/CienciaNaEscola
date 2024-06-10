@@ -78,7 +78,7 @@ function ApplicationsPage(props) {
     }, [user, logout, navigate, connected, localApplications, isDashboard]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando aplicações..." />;
     }
 
     return (

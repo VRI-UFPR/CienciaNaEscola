@@ -284,7 +284,7 @@ function CreateProtocolPage(props) {
     }, [isLoading, user.token, isEditing, protocolId, user.institutionId]);
 
     if (isLoading) {
-        return <SplashPage />;
+        return <SplashPage text="Carregando criação de protocolo..." />;
     }
 
     return (
