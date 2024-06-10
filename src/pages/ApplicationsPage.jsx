@@ -99,7 +99,7 @@ function ApplicationsPage(props) {
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Aplicações</h1>
                         </div>
                     </div>
-                    <div className="row align-items-center justify-content-center font-barlow flex-grow-1 m-0 overflow-scroll scrollbar-none">
+                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-scroll scrollbar-none">
                         {isDashboard ? (
                             <>
                                 <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0 pb-lg-4">
@@ -126,8 +126,8 @@ function ApplicationsPage(props) {
                                 </div>
                             </>
                         ) : (
-                            <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
-                                <h1 className="color-grey font-century-gothic fw-bold fs-2 pb-4 m-0">Minhas aplicações</h1>
+                            <div className="col col-md-10 d-flex flex-column mh-100 h-lg-100 p-4 pt-0">
+                                <h1 className="color-grey font-century-gothic fw-bold fs-3 pb-4 m-0">Minhas aplicações</h1>
                                 <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                     <ProtocolCarousel listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))} />
                                 </div>
