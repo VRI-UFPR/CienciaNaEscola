@@ -4,6 +4,9 @@ import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
+import { version } from '../utils/constants';
+import { LayoutContext } from '../contexts/LayoutContext';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .font-barlow {
@@ -47,9 +50,11 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { modalRef, showExitButton } = props;
-    const { logout } = useContext(AuthContext);
+    const { showExitButton } = props;
+    const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { isDashboard } = useContext(LayoutContext);
+    const { showAlert } = useContext(AlertContext);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
@@ -88,40 +93,68 @@ function Sidebar(props) {
                     </div>
                 )}
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
-                    <Link className="rounded-circle" to="/profile">
+                    <div className="rounded-circle">
                         <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
-                    </Link>
+                    </div>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/home" onClick={() => closeSidebar()}>
-                        Protocolos
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/applications' : '/applications'}
+                        onClick={() => closeSidebar()}
+                    >
+                        Aplicações
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/about" onClick={() => closeSidebar()}>
+                    {isDashboard && user.role !== 'USER' && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/protocols" onClick={() => closeSidebar()}>
+                            Protocolos
+                        </Link>
+                    )}
+                    {isDashboard && user.role !== 'USER' && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/institutions" onClick={() => closeSidebar()}>
+                            Instituições
+                        </Link>
+                    )}
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/about' : '/about'}
+                        onClick={() => closeSidebar()}
+                    >
                         Sobre o App
                     </Link>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/terms" onClick={() => closeSidebar()}>
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/terms' : '/terms'}
+                        onClick={() => closeSidebar()}
+                    >
                         Termos de Uso
                     </Link>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link className="text-white text-decoration-none ps-5 py-2" to="/profile" onClick={() => closeSidebar()}>
+                    <Link
+                        className="text-white text-decoration-none ps-5 py-2"
+                        to={isDashboard ? '/dash/profile' : '/profile'}
+                        onClick={() => closeSidebar()}
+                    >
                         Perfil
                     </Link>
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         type="button"
                         onClick={() => {
-                            modalRef.current.showModal({
+                            showAlert({
                                 title: 'Tem certeza que deseja fazer logout?',
                                 dismissHsl: [355, 78, 66],
                                 dismissText: 'Não',
                                 actionHsl: [97, 43, 70],
                                 actionText: 'Sim',
+                                dismissible: true,
                                 actionOnClick: () => {
+                                    closeSidebar();
                                     logout();
-                                    navigate('/login');
+                                    navigate(isDashboard ? '/dash/signin' : '/signin');
                                 },
                             });
                         }}
@@ -130,9 +163,17 @@ function Sidebar(props) {
                     </button>
                 </div>
             </div>
+            <div>
+                <p className="text-start text-white ps-4 fw-medium">{version}</p>
+            </div>
             <style>{styles}</style>
         </div>
     );
 }
+
+Sidebar.defaultProps = {
+    showExitButton: true,
+    isDashboard: false,
+};
 
 export default Sidebar;

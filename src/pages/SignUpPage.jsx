@@ -1,9 +1,10 @@
-import { React, useState, useRef } from 'react';
+import { React, useState, useContext } from 'react';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
 import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { AlertContext } from '../contexts/AlertContext';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -54,7 +55,7 @@ function SignUpPage(props) {
     /*  const [username, setUsername] = useState('');
     const [institution, setInstitution] = useState('');
     const [role, setRole] = useState(''); */
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
     const validateEmptyFields = () => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
@@ -95,23 +96,24 @@ function SignUpPage(props) {
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: preencha todos os campos' });
+            showAlert({ title: 'Falha no cadastro: preencha todos os campos', dismissible: true });
         } else if (!validateEmail()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: email inválido' });
+            showAlert({ title: 'Falha no cadastro: email inválido', dismissible: true });
         } else if (!validateName()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: nome inválido' });
+            showAlert({ title: 'Falha no cadastro: nome inválido', dismissible: true });
         } else if (!validatePassword()) {
-            modalRef.current.showModal({
+            showAlert({
                 title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula',
+                dismissible: true,
             });
         } else if (!validatePasswordMatch()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: as senhas não coincidem' });
+            showAlert({ title: 'Falha no cadastro: as senhas não coincidem', dismissible: true });
             /*  } else if (!validateUsername()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: nome de usuário inválido' });
+            showAlert({ title: 'Falha no cadastro: nome de usuário inválido', dismissible: true });
         } else if (!validateInstitution()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: insituição inválida' });
+            showAlert({ title: 'Falha no cadastro: insituição inválida', dismissible: true });
         } else if (!validateRole()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: função inválida' }); */
+            showAlert({ title: 'Falha no cadastro: função inválida', dismissible: true }); */
         } else {
             axios
                 .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
@@ -121,9 +123,9 @@ function SignUpPage(props) {
                 })
                 .then((response) => {
                     if (response.data.message === 'User registered with sucess.') {
-                        modalRef.current.showModal({ title: 'Cadastrado com sucesso', onHide: () => navigate('/login') });
+                        showAlert({ title: 'Cadastrado com sucesso', onHide: () => navigate('/signin'), dismissible: true });
                     } else {
-                        modalRef.current.showModal({ title: 'Falha no cadastro: erro no servidor' });
+                        showAlert({ title: 'Falha no cadastro: erro no servidor', dismissible: true });
                     }
                 })
                 .catch((error) => {
@@ -257,7 +259,6 @@ function SignUpPage(props) {
                 </div>
             </div>
 
-            <Alert id="SignUpModal" ref={modalRef} />
             <style>{signUpPageStyles}</style>
         </div>
     );

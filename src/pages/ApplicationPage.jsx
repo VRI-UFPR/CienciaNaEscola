@@ -1,6 +1,7 @@
-import { React, useState, useEffect, useRef, useContext } from 'react';
+import { React, useState, useEffect, useCallback, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { StorageContext } from '../contexts/StorageContext';
 import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import DateInput from '../components/inputs/answers/DateInput';
@@ -18,7 +19,10 @@ import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
+import { serialize } from 'object-to-formdata';
+import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -49,49 +53,185 @@ const styles = `
     }
 `;
 
-function ProtocolPage(props) {
+function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
-
-    const { protocolId } = useParams();
-    const [protocol, setProtocol] = useState(undefined);
-
+    const [application, setApplication] = useState(undefined);
+    const [itemAnswerGroups, setItemAnswerGroups] = useState({});
+    const { applicationId } = useParams();
+    const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
+    const { showAlert } = useContext(AlertContext);
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
+    const { isDashboard } = useContext(LayoutContext);
 
-    useEffect(() => {
-        //Search if the application is in localApplications
-        if (isLoading && user.status !== 'loading') {
-            if (user.role === 'USER') {
-                setError({
-                    text: 'Operação não permitida',
-                    description: 'Você não tem permissão para visualizar este protocolo',
-                });
-                return;
+    const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
+        setItemAnswerGroups((prevItemAnswerGroups) => {
+            const newItemAnswerGroups = { ...prevItemAnswerGroups };
+
+            if (newItemAnswerGroups[groupToUpdate] === undefined) {
+                newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
             }
+
+            switch (itemType) {
+                case 'ITEM':
+                    newItemAnswerGroups[groupToUpdate]['itemAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'OPTION':
+                    newItemAnswerGroups[groupToUpdate]['optionAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                case 'TABLE':
+                    newItemAnswerGroups[groupToUpdate]['tableAnswers'][itemToUpdate] = updatedAnswer;
+                    break;
+                default:
+                    break;
+            }
+            return newItemAnswerGroups;
+        });
+    }, []);
+
+    const handleProtocolSubmit = () => {
+        showAlert({
+            title: 'Aguarde o processamento da resposta',
+            dismissible: false,
+        });
+
+        const applicationAnswer = {
+            applicationId: application.id,
+            addressId: 1,
+            date: new Date(),
+            itemAnswerGroups: [],
+        };
+        for (const group in itemAnswerGroups) {
+            const itemAnswerGroup = {
+                itemAnswers: [],
+                optionAnswers: [],
+                tableAnswers: [],
+            };
+            for (const item in itemAnswerGroups[group].itemAnswers) {
+                itemAnswerGroup.itemAnswers.push({
+                    itemId: item,
+                    text: itemAnswerGroups[group].itemAnswers[item].text,
+                    files: itemAnswerGroups[group].itemAnswers[item].files,
+                });
+            }
+            for (const item in itemAnswerGroups[group].optionAnswers) {
+                for (const option in itemAnswerGroups[group].optionAnswers[item]) {
+                    itemAnswerGroup.optionAnswers.push({
+                        itemId: item,
+                        optionId: option,
+                        text: itemAnswerGroups[group].optionAnswers[item][option],
+                    });
+                }
+            }
+            for (const item in itemAnswerGroups[group].tableAnswers) {
+                for (const column in itemAnswerGroups[group].tableAnswers[item]) {
+                    itemAnswerGroup.tableAnswers.push({
+                        itemId: item,
+                        columnId: column,
+                        text: itemAnswerGroups[group].tableAnswers[item][column],
+                    });
+                }
+            }
+            applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
+        }
+
+        const formData = serialize(applicationAnswer, { indices: true });
+
+        if (connected === true) {
             axios
-                .get(baseUrl + `api/protocol/getProtocol/${protocolId}`, {
+                .post(baseUrl + `api/applicationAnswer/createApplicationAnswer`, formData, {
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
                 .then((response) => {
-                    setProtocol(response.data.data);
-                    setIsLoading(false);
+                    showAlert({
+                        title: 'Muito obrigado por sua participação no projeto!',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(isDashboard ? '/dash/applications' : '/applications');
+                        },
+                    });
                 })
                 .catch((error) => {
-                    setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' });
+                    showAlert({
+                        title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
+        } else {
+            storePendingRequest({
+                id: applicationId,
+                userId: user.id,
+                title: 'Resposta da aplicação ' + applicationId + ' referente ao protocolo ' + application.protocol.title,
+                url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
+                data: formData,
+                config: {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            });
+            showAlert({
+                title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
         }
-    }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);
+    };
+
+    useEffect(() => {
+        //Search if the application is in localApplications
+        if (localApplications !== undefined && application === undefined) {
+            const localApplication = localApplications.find((app) => app.id === parseInt(applicationId));
+            if (localApplication !== undefined) {
+                setApplication(localApplication);
+                setIsLoading(false);
+            } else if (user.id !== null && user.token !== null) {
+                axios
+                    .get(baseUrl + `api/application/getApplicationWithProtocol/${applicationId}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        setApplication(response.data.data);
+                        storeLocalApplication(response.data.data);
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        setError({ text: 'Erro ao carregar aplicação', description: error.response?.data.message || '' });
+                    });
+            }
+        }
+    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard]);
+
+    useEffect(() => {
+        if (connected === false && application?.id) {
+            showAlert({
+                title: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
+        }
+    }, [connected, application, applicationId, showAlert]);
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
     }
 
     if (isLoading) {
-        return <SplashPage text="Carregando protocolo..." />;
+        return <SplashPage text="Carregando aplicação..." />;
     }
 
     return (
@@ -108,25 +248,32 @@ function ProtocolPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
-                                <div className="row m-0 justify-content-center">
-                                    {(protocol.creator.id === user.id || user.role === 'ADMIN') && (
+                                {isDashboard && (
+                                    <div className="row m-0 justify-content-center">
+                                        {(application.applier.id === user.id || user.role === 'ADMIN') && (
+                                            <div className="col-4 align-self-center pb-4">
+                                                <TextButton
+                                                    type="submit"
+                                                    hsl={[97, 43, 70]}
+                                                    text="Gerenciar"
+                                                    onClick={() => navigate('manage')}
+                                                />
+                                            </div>
+                                        )}
                                         <div className="col-4 align-self-center pb-4">
                                             <TextButton
                                                 type="submit"
                                                 hsl={[97, 43, 70]}
-                                                text="Gerenciar"
-                                                onClick={() => navigate('manage')}
+                                                text="Respostas"
+                                                onClick={() => navigate('answers')}
                                             />
                                         </div>
-                                    )}
-                                    <div className="col-4 align-self-center pb-4">
-                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Aplicar" onClick={() => navigate('apply')} />
                                     </div>
-                                </div>
+                                )}
                                 <div className="row justify-content-center m-0">
-                                    {<ProtocolInfo title={protocol.title} description={protocol.description} />}
+                                    {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
                                 </div>
-                                {protocol.pages.map((page) => {
+                                {application.protocol.pages.map((page) => {
                                     return page.itemGroups.map((itemGroup) => {
                                         return itemGroup.items.map((item) => {
                                             switch (item.type) {
@@ -139,8 +286,7 @@ function ProtocolPage(props) {
                                                                     item={item}
                                                                     galleryModalRef={galleryModalRef}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -154,8 +300,7 @@ function ProtocolPage(props) {
                                                                     item={item}
                                                                     galleryModalRef={galleryModalRef}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -169,8 +314,7 @@ function ProtocolPage(props) {
                                                                     item={item}
                                                                     galleryModalRef={galleryModalRef}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -184,8 +328,7 @@ function ProtocolPage(props) {
                                                                     item={item}
                                                                     galleryRef={galleryModalRef}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -197,8 +340,7 @@ function ProtocolPage(props) {
                                                                 <DateInput
                                                                     item={item}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -210,8 +352,7 @@ function ProtocolPage(props) {
                                                                 <TimeInput
                                                                     item={item}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -223,8 +364,7 @@ function ProtocolPage(props) {
                                                                 <LocationInput
                                                                     item={item}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -236,8 +376,7 @@ function ProtocolPage(props) {
                                                                 <ImageInput
                                                                     item={item}
                                                                     group={itemGroup.id}
-                                                                    onAnswerChange={() => {}}
-                                                                    disabled={true}
+                                                                    onAnswerChange={handleAnswerChange}
                                                                 />
                                                             }
                                                         </div>
@@ -259,15 +398,37 @@ function ProtocolPage(props) {
                                         <TextImageInput
                                             item={{
                                                 text:
-                                                    'Identificador do protocolo: ' +
-                                                    protocol.id +
+                                                    'Identificador da aplicação: ' +
+                                                    application.id +
+                                                    '<br>Identificador do protocolo: ' +
+                                                    application.protocol.id +
                                                     '<br>Versão do protocolo: ' +
-                                                    protocol.createdAt.replace(/\D/g, ''),
+                                                    application.protocol.updateAt.replace(/\D/g, ''),
                                                 files: [],
                                             }}
                                             galleryModalRef={galleryModalRef}
                                         />
                                     }
+                                </div>
+                                <div className="col-4 align-self-center pt-4">
+                                    <TextButton
+                                        type="submit"
+                                        hsl={[97, 43, 70]}
+                                        text="Enviar"
+                                        onClick={() => {
+                                            showAlert({
+                                                title: 'Tem certeza que deseja enviar o protocolo?',
+                                                dismissHsl: [355, 78, 66],
+                                                dismissText: 'Não',
+                                                actionHsl: [97, 43, 70],
+                                                actionText: 'Sim',
+                                                dismissible: true,
+                                                actionOnClick: () => {
+                                                    handleProtocolSubmit();
+                                                },
+                                            });
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -284,4 +445,4 @@ function ProtocolPage(props) {
     );
 }
 
-export default ProtocolPage;
+export default ApplicationPage;

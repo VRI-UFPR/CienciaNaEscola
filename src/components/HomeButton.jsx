@@ -8,9 +8,16 @@ const styles = `
 
     .custom-btn {
         background-color: #F8F8F8;
-        border-radius: 10px;
-        width: 85%;
         box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .home-btn-title {
+        overflow-y: scroll;
+        max-height: 100%;
+    }
+
+    .home-btn-title::-webkit-scrollbar  {
+        width: 0px;
     }
 `;
 
@@ -18,9 +25,9 @@ function HomeButton(props) {
     const { title, check } = props;
 
     return (
-        <div className="custom-btn d-flex align-items-center justify-content-between font-barlow h-100 px-4">
-            <div className="d-flex align-items-center h-100 w-100 p-0">
-                <h4 className="text-truncate fw-medium w-100 py-2 m-0">{title}</h4>
+        <div className="custom-btn rounded-4 d-flex align-items-center justify-content-between font-barlow h-100 w-100 px-4">
+            <div className="d-flex align-items-center h-100 w-100 py-2">
+                <h5 className="home-btn-title text-wrap fw-medium w-100 py-1 my-0">{title}</h5>
 
                 {check && (
                     <div className="d-flex justify-content-end align-items-center p-0 m-0">

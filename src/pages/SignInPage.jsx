@@ -1,15 +1,17 @@
-import { React, useContext, useState, useRef, useEffect } from 'react';
-import LoginTitle from '../assets/images/loginTitle.svg';
+import { React, useContext, useState, useEffect } from 'react';
+import picceTitle from '../assets/images/picceTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
-import Alert from '../components/Alert';
 import logoFA from '../assets/images/logoFA.svg';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
+import { LayoutContext } from '../contexts/LayoutContext';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
 
@@ -53,21 +55,33 @@ const styles = `
             background-image: url(${BackgroundWeb});
         }
     }
+
+    .mw-200{
+        max-width: 200px;
+    }
+
+    .mw-150{
+        max-width: 150px;
+    }
+
+    .mw-270{
+        max-width: 270px;
+    }
 `;
 
-function LoginPage(props) {
+function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
-    const location = useLocation();
+    const { login, user } = useContext(AuthContext);
     const navigate = useNavigate();
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
+    const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (localStorage.getItem('user') != null) {
-            navigate('/home');
+        if (user.status === 'authenticated') {
+            navigate(isDashboard ? '/dash/applications' : '/applications');
         }
-    }, [navigate]);
+    }, [navigate, isDashboard, user]);
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -75,25 +89,58 @@ function LoginPage(props) {
             username,
             hash: password,
         });
-        // .post('http://localhost:3333/user/signIn', {
         axios
-            .post('http://localhost:3000/api/auth/signIn', formData, {
+            .post(baseUrl + 'api/auth/signIn', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
             .then((response) => {
                 if (response.data.data.token) {
-                    login(response.data.data.id, username, response.data.data.token);
-                    console.log(response.data);
-                    //navigate('/home');
+                    login(
+                        response.data.data.id,
+                        username,
+                        response.data.data.role,
+                        response.data.data.token,
+                        new Date(new Date().getTime() + response.data.data.expiresIn),
+                        response.data.data.acceptedTerms,
+                        response.data.data.institutionId
+                    );
+                    navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
-                    console.log(response.data);
                     throw new Error('Authentication failed!');
                 }
             })
             .catch((error) => {
-                modalRef.current.showModal({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' });
+                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
+            });
+    };
+
+    const passwordlessLoginHandler = () => {
+        axios
+            .get(baseUrl + 'api/auth/passwordlessSignIn', {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                if (response.data.data.token) {
+                    login(
+                        response.data.data.id,
+                        'Visitante',
+                        response.data.data.role,
+                        response.data.data.token,
+                        new Date(new Date().getTime() + response.data.data.expiresIn),
+                        false,
+                        response.data.data.institutionId
+                    );
+                    navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
+                } else {
+                    throw new Error('Authentication failed!');
+                }
+            })
+            .catch((error) => {
+                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
             });
     };
 
@@ -101,7 +148,7 @@ function LoginPage(props) {
         <div className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100">
             <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
                 <div className="d-flex flex-column align-items-center justify-content-end h-50">
-                    <img src={LoginTitle} alt="PICCE" className="pb-4" style={{ maxWidth: '270px' }} />
+                    <img src={picceTitle} alt="PICCE" className="mw-270 pb-4" />
                     <span className="login-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">
                         Bem-vindo(a) ao Ciência Cidadã na Escola!
                     </span>
@@ -125,45 +172,41 @@ function LoginPage(props) {
                         />
                         <p
                             className="login-links text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => modalRef.current.showModal({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
+                            onClick={() => showAlert({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>
-                        {location.pathname === '/dash/login' && (
-                            <Link
-                                classname="login-links text-decoration-underline fs-6 cursor-pointer"
-                                to="/signup"
-                                style={{ color: '#91CAD6' }}
-                            >
-                                Não é cadastrado?
-                            </Link>
-                        )}
                     </div>
                     <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 mb-3">
                             <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                         </div>
+                        {!isDashboard && (
+                            <div className="col-12 col-lg-6">
+                                <TextButton
+                                    hsl={[190, 46, 70]}
+                                    text="Entrar sem senha"
+                                    className="rounded-pill"
+                                    type="button"
+                                    onClick={passwordlessLoginHandler}
+                                />
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>
             <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
                 <div className="col-4 justify-content-start d-flex align-items-center">
-                    <img
-                        className="d-h-auto w-100"
-                        src={logoUFPR}
-                        style={{ maxWidth: '150px' }}
-                        alt="Logomarca da Universidade Federal do Paraná"
-                    />
+                    <img className="d-h-auto mw-150 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                 </div>
                 <div className="col-6 justify-content-end d-flex align-items-center">
-                    <img className="h-auto w-100" src={logoFA} style={{ maxWidth: '200px' }} alt="Logomarca da Fundação Araucária" />
+                    <img className="h-auto mw-200 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
                 </div>
             </div>
 
-            <Alert id="LoginModal" ref={modalRef} />
             <style> {styles}</style>
         </div>
     );
 }
 
-export default LoginPage;
+export default SignInPage;

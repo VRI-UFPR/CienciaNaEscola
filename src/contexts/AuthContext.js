@@ -1,42 +1,135 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import { StorageContext } from './StorageContext';
+import axios from 'axios';
+import baseUrl from './RouteContext';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({
-        id: null,
-        username: null,
-        token: null,
-    });
+    const { clearLocalApplications, clearPendingRequests, pendingRequests, connected } = useContext(StorageContext);
+    const [user, setUser] = useState({ status: 'loading' });
 
-    const [acceptTerms, setAcceptTerms] = useState({ value: false });
+    const acceptTerms = () => {
+        setUser({ ...user, acceptedTerms: true });
+        localStorage.setItem('user', JSON.stringify({ ...user, acceptedTerms: true }));
+    };
 
+    // Send all pending requests to the server when the user is connected and logged in
     useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem('user'));
-        const storedTermsValidation = JSON.parse(localStorage.getItem('acceptTerms'));
-        if (storedUser) {
-            setUser(storedUser);
+        if (connected && user.id && user.token && pendingRequests?.length > 0) {
+            const promises = [];
+            for (const request of pendingRequests) {
+                if (request.userId === user.id) {
+                    try {
+                        // Axios request promise
+                        const promise = axios
+                            .post(request.url, request.data, {
+                                ...request.config,
+                                headers: { ...request.config?.headers, Authorization: `Bearer ${user.token}` },
+                            })
+                            .then((response) => {
+                                Notification.requestPermission().then((result) => {
+                                    navigator.serviceWorker.ready.then((registration) => {
+                                        registration.showNotification('Envio pendente realizado!', { body: request.title });
+                                    });
+                                });
+                            });
+                        promises.push(promise);
+                    } catch (error) {
+                        Notification.requestPermission().then((result) => {
+                            navigator.serviceWorker.ready.then((registration) => {
+                                registration.showNotification('Envio pendente falhou. Submeta a resposta novamente!', {
+                                    body: request.title,
+                                });
+                            });
+                        });
+                    }
+                }
+            }
+            Promise.all(promises).then(() => {
+                clearPendingRequests();
+            });
         }
-        if (storedTermsValidation) {
-            setAcceptTerms(storedTermsValidation);
-        }
+    }, [clearPendingRequests, pendingRequests, connected, user]);
+
+    // Clean up all user traces, except the user itself (localStorage, indexedDB)
+    const clearDBAndStorage = useCallback(() => {
+        localStorage.removeItem('user');
+        clearLocalApplications();
+    }, [clearLocalApplications]);
+
+    // Create a new user object and store it in localStorage
+    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId) => {
+        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated' });
+
+        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId }));
     }, []);
 
-    const login = (id, username, token) => {
-        setUser({ id, username, token });
-        localStorage.setItem('user', JSON.stringify({ id, username, token }));
-        setAcceptTerms({ value: true });
-        localStorage.setItem('acceptTerms', JSON.stringify({ value: true }));
-    };
+    // Clear user object and clean up traces (through clearDBAndStorage)
+    const logout = useCallback(() => {
+        setUser({ status: 'unauthenticated' });
+        clearDBAndStorage();
+    }, [clearDBAndStorage]);
 
-    const logout = () => {
-        setUser({
-            id: null,
-            username: null,
-            token: null,
+    // Check user's token expiration time and renew it if necessary or clear traces if expired
+    const renewLogin = useCallback(() => {
+        setUser((prev) => {
+            if (prev.status === 'authenticated') {
+                const now = new Date();
+                const renewTime = new Date(new Date(prev.expiresIn).getTime() - 600000);
+                const expirationTime = new Date(prev.expiresIn);
+                if (now >= renewTime && now <= expirationTime) {
+                    axios
+                        .post(`${baseUrl}api/auth/renewSignIn`, null, {
+                            headers: {
+                                Authorization: `Bearer ${prev.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            if (response.data.data.token) {
+                                const token = response.data.data.token;
+                                const expiresIn = new Date(new Date().getTime() + response.data.data.expiresIn);
+                                const role = response.data.data.role;
+                                localStorage.setItem('user', JSON.stringify({ ...prev, token, expiresIn }));
+                                return {
+                                    ...prev,
+                                    role,
+                                    token,
+                                    expiresIn,
+                                    status: 'authenticated',
+                                };
+                            }
+                        })
+                        .catch((error) => {
+                            clearDBAndStorage();
+                            return { status: 'unauthenticated' };
+                        });
+                } else if (now > expirationTime) {
+                    clearDBAndStorage();
+                    return { status: 'unauthenticated' };
+                }
+            }
+            return prev;
         });
-        localStorage.removeItem('user');
-    };
+    }, [clearDBAndStorage]);
 
-    return <AuthContext.Provider value={{ user, acceptTerms, login, logout }}>{children}</AuthContext.Provider>;
+    // Load user from localStorage and schedule periodic token expiration check
+    useEffect(() => {
+        setUser((prev) =>
+            JSON.parse(localStorage.getItem('user'))
+                ? { ...JSON.parse(localStorage.getItem('user')), status: 'authenticated' }
+                : { status: 'unauthenticated' }
+        );
+
+        const interval = setInterval(() => {
+            renewLogin();
+        }, 300000);
+        return () => clearInterval(interval);
+    }, [renewLogin]);
+
+    useEffect(() => {
+        if (user.status === 'authenticated') renewLogin();
+    }, [user.status, renewLogin]);
+
+    return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
 };

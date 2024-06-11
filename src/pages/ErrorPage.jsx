@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
+import { useNavigate } from 'react-router-dom';
+import TextButton from '../components/TextButton';
+import { AuthContext } from '../contexts/AuthContext';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .logo-picce-circular{
@@ -13,11 +17,6 @@ const styles = `
         max-width: 200px;
     }
 
-    .spinner-splash{
-        width: 50px;
-        height: 50px;
-    }
-
     .font-barlow {
         font-family: 'Barlow', sans-serif;
     }
@@ -27,8 +26,11 @@ const styles = `
     }
 `;
 
-function SplashPage(props) {
-    const { text } = props;
+function ErrorPage(props) {
+    const { text, description } = props;
+    const navigate = useNavigate();
+    const { logout } = useContext(AuthContext);
+    const { isDashboard } = useContext(LayoutContext);
 
     return (
         <div className="d-flex flex-column align-items-center vh-100">
@@ -38,13 +40,17 @@ function SplashPage(props) {
                     <img src={logoPicceCircular} className="w-100" alt="Logo gráfico Picce"></img>
                 </div>
             </div>
-            <div className="d-flex flex-column align-items-center justify-content-center h-25 m-0">
-                <div className="spinner-border text-secondary spinner-splash" role="status">
-                    <span className="sr-only"></span>
-                </div>
-            </div>
-            <div className="d-flex flex-column align-items-center justify-content-center">
-                <span className="font-barlow color-grey fw-medium fs-3">{text || ''}</span>
+            <div className="d-flex flex-column align-items-center justify-content-center h-25 px-4 m-0">
+                <span className="font-barlow color-grey text-center fw-medium fs-3 mb-2">{text || ''}</span>
+                <span className="font-barlow color-grey text-center fw-medium fs-5 mb-4">{description || ''}</span>
+                <TextButton
+                    text="Voltar ao início"
+                    onClick={() => {
+                        logout();
+                        navigate(isDashboard ? '/dash/' : '/');
+                    }}
+                    hsl={[355, 78, 66]}
+                ></TextButton>
             </div>
             <div className="d-flex flex-column align-items-center justify-content-center h-25 w-75 px-2 m-0">
                 <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
@@ -55,4 +61,4 @@ function SplashPage(props) {
     );
 }
 
-export default SplashPage;
+export default ErrorPage;

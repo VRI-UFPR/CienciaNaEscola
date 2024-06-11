@@ -1,23 +1,24 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
-import { BrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { StorageProvider } from './contexts/StorageContext';
-import AppRoutes from './routes/AppRoutes';
+import appRoutes from './routes/AppRoutes';
+import { AlertProvider } from './contexts/AlertContext';
 
 const styles = ``;
 
 function App(props) {
     return (
-        <AuthProvider>
-            <StorageProvider>
-                <BrowserRouter>
-                    <AppRoutes />
+        <StorageProvider>
+            <AuthProvider>
+                <AlertProvider>
+                    <RouterProvider router={createBrowserRouter(appRoutes)} />
                     <style> {styles} </style>
-                </BrowserRouter>
-            </StorageProvider>
-        </AuthProvider>
+                </AlertProvider>
+            </AuthProvider>
+        </StorageProvider>
     );
 }
 

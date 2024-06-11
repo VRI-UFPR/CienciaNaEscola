@@ -43,14 +43,14 @@ const styles = `
 `;
 
 export function Location(props) {
-    const [location, setLocation] = useState(['']);
-    const { onAnswerChange, item, group } = props;
+    const [location, setLocation] = useState({ text: '', files: [] });
+    const { onAnswerChange, item, group, disabled } = props;
 
     const defaultLocation = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
-                setLocation([latitude + ', ' + longitude]);
+                setLocation((prev) => ({ ...prev, text: `${latitude}, ${longitude}` }));
             });
         }
     }, []);
@@ -84,10 +84,9 @@ export function Location(props) {
                                 className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                                 id="locationinput"
                                 placeholder="Forneça sua localização"
-                                onChange={(e) => setLocation([e.target.value])}
-                                defaultValue={location}
-                                // value={answer ? answer[0].value : location}
-                                // disabled={answer !== undefined}
+                                onChange={(e) => setLocation((prev) => ({ ...prev, text: e.target.value }))}
+                                defaultValue={location.text}
+                                disabled={disabled}
                             ></input>
                         </div>
                         <div className="col-auto search-col d-flex justify-content-end m-0 p-0">
