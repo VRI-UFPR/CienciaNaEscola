@@ -114,33 +114,97 @@ function CreateProtocolPage(props) {
         });
     }, []);
 
-    const insertPage = () => {
+    const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
-        newProtocol.pages.push({ type: 'ITEMS', itemGroups: [] });
+        newProtocol.pages.push({ type: 'ITEMS', itemGroups: [], dependencies: [] });
         setProtocol(newProtocol);
-    };
+    }, [protocol]);
 
-    const removePage = (index) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
+    const removePage = useCallback(
+        (index) => {
+            const newProtocol = { ...protocol };
             newProtocol.pages.splice(index, 1);
-            return newProtocol;
-        });
-    };
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
 
-    const insertItemGroup = (page) => {
-        const newProtocol = { ...protocol };
-        newProtocol.pages[page].itemGroups.push({ type: 'MULTIPLE_ITEMS', isRepeatable: false, items: [] });
-        setProtocol(newProtocol);
-    };
+    const insertItemGroup = useCallback(
+        (page) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups.push({ type: 'MULTIPLE_ITEMS', isRepeatable: false, items: [], dependencies: [] });
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
 
-    const removeItemGroup = (page, index) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
+    const removeItemGroup = useCallback(
+        (page, index) => {
+            const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups.splice(index, 1);
-            return newProtocol;
-        });
-    };
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const insertItemGroupDependency = useCallback(
+        (page, group) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].dependencies.push({
+                type: 'EXACT_ANSWER',
+                argument: '',
+                itemTempId: '',
+                customMessage: '',
+            });
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const removeItemGroupDependency = useCallback(
+        (page, group, index) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].dependencies.splice(index, 1);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const insertPageDependency = useCallback(
+        (pageIndex) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[pageIndex].dependencies.push({ type: 'EXACT_ANSWER', argument: '', itemTempId: '', customMessage: '' });
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const removePageDependency = useCallback(
+        (page, index) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].dependencies.splice(index, 1);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const insertItemValidation = useCallback(
+        (page, group, item) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push({ type: 'MIN', argument: '', customMessage: '' });
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const removeItemValidation = useCallback(
+        (page, group, item, index) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.splice(index, 1);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -259,8 +323,11 @@ function CreateProtocolPage(props) {
                                                 files: o.files.map((f) => ({ id: f.id, path: f.path })),
                                             })),
                                             files: i.files.map((f) => ({ id: f.id, path: f.path })),
+                                            itemValidations: i.itemValidations,
                                         })),
+                                        dependencies: g.dependencies,
                                     })),
+                                    dependencies: p.dependencies,
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),
                                 viewersClassroom: d.viewersClassroom.map((c) => c.id),
@@ -365,6 +432,14 @@ function CreateProtocolPage(props) {
                                         <IconPlus className="icon-plus" />
                                         <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
                                     </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                        onClick={() => insertItem('SCALE', itemTarget.page, itemTarget.group)}
+                                    >
+                                        <IconPlus className="icon-plus" />
+                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Escala</span>
+                                    </button>
                                     <label htmlFor="item-target-page" className="form-label fs-5 fw-medium">
                                         Página
                                     </label>
@@ -374,7 +449,7 @@ function CreateProtocolPage(props) {
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
                                     >
                                         {protocol.pages.map((page, index) => (
-                                            <option key={index} value={index}>
+                                            <option key={'page-' + index + '-option'} value={index}>
                                                 Página {index + 1}
                                             </option>
                                         ))}
@@ -388,7 +463,7 @@ function CreateProtocolPage(props) {
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
                                     >
                                         {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
-                                            <option key={index} value={index}>
+                                            <option key={'page-' + itemTarget.page + '-group-' + index + '-option'} value={index}>
                                                 Grupo {index + 1}
                                             </option>
                                         ))}
@@ -650,75 +725,454 @@ function CreateProtocolPage(props) {
                                     </div>
                                     {protocol.pages?.map((page, pageIndex) => {
                                         return (
-                                            <div>
+                                            <div key={'page-' + pageIndex}>
                                                 <p className="m-0 p-0">Página {pageIndex + 1}</p>
                                                 <button type="button" onClick={() => removePage(pageIndex)}>
                                                     Remover página
                                                 </button>
+                                                {page.dependencies?.map((dependency, dependencyIndex) => (
+                                                    <div key={'page-' + pageIndex + '-dependency-' + dependencyIndex}>
+                                                        <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
+                                                        <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
+                                                            Tipo de dependência
+                                                        </label>
+                                                        <select
+                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                            id="page-dependency-type"
+                                                            value={dependency.type || ''}
+                                                            onChange={(event) => {
+                                                                setProtocol((prev) => {
+                                                                    const newProtocol = { ...prev };
+                                                                    newProtocol.pages[pageIndex].dependencies[dependencyIndex].type =
+                                                                        event.target.value;
+                                                                    return newProtocol;
+                                                                });
+                                                            }}
+                                                        >
+                                                            <option value="EXACT_ANSWER">Resposta exata</option>
+                                                            <option value="OPTION_SELECTED">Opção selecionada</option>
+                                                            <option value="MIN_SELECTED">Mínimo selecionado</option>
+                                                        </select>
+                                                        <label htmlFor="page-dependency-argument" className="form-label fs-5 fw-medium">
+                                                            Argumento
+                                                        </label>
+                                                        <input
+                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                            id="page-dependency-argument"
+                                                            type="text"
+                                                            value={dependency.argument || ''}
+                                                            onChange={(event) => {
+                                                                setProtocol((prev) => {
+                                                                    const newProtocol = { ...prev };
+                                                                    newProtocol.pages[pageIndex].dependencies[dependencyIndex].argument =
+                                                                        event.target.value;
+                                                                    return newProtocol;
+                                                                });
+                                                            }}
+                                                        />
+                                                        <label htmlFor="page-dependency-target" className="form-label fs-5 fw-medium">
+                                                            Alvo da dependência
+                                                        </label>
+                                                        <select
+                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                            id="page-dependency-target"
+                                                            value={dependency.itemTempId || ''}
+                                                            onChange={(event) => {
+                                                                setProtocol((prev) => {
+                                                                    const newProtocol = { ...prev };
+                                                                    newProtocol.pages[pageIndex].dependencies[dependencyIndex].itemTempId =
+                                                                        event.target.value;
+                                                                    return newProtocol;
+                                                                });
+                                                            }}
+                                                        >
+                                                            {protocol.pages
+                                                                .filter((p, i) => i < pageIndex)
+                                                                .map((p, i) =>
+                                                                    p.itemGroups.map((g, j) =>
+                                                                        g.items.map((it, k) => (
+                                                                            <option
+                                                                                key={
+                                                                                    'page-' +
+                                                                                    i +
+                                                                                    '-dependency-' +
+                                                                                    dependencyIndex +
+                                                                                    '-target-' +
+                                                                                    k +
+                                                                                    '-option'
+                                                                                }
+                                                                                value={it.tempId}
+                                                                            >
+                                                                                {it.text}
+                                                                            </option>
+                                                                        ))
+                                                                    )
+                                                                )}
+                                                        </select>
+                                                        <label
+                                                            htmlFor="page-dependency-custom-message"
+                                                            className="form-label fs-5 fw-medium"
+                                                        >
+                                                            Mensagem personalizada
+                                                        </label>
+                                                        <input
+                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                            id="page-dependency-custom-message"
+                                                            type="text"
+                                                            value={dependency.customMessage || ''}
+                                                            onChange={(event) => {
+                                                                setProtocol((prev) => {
+                                                                    const newProtocol = { ...prev };
+                                                                    newProtocol.pages[pageIndex].dependencies[
+                                                                        dependencyIndex
+                                                                    ].customMessage = event.target.value;
+                                                                    return newProtocol;
+                                                                });
+                                                            }}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removePageDependency(pageIndex, dependencyIndex)}
+                                                        >
+                                                            Remover dependência de página
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                <button type="button" onClick={() => insertPageDependency(pageIndex)}>
+                                                    Adicionar dependência de página
+                                                </button>
                                                 {page.itemGroups?.map((group, groupIndex) => {
                                                     return (
-                                                        <div>
+                                                        <div key={'page-' + pageIndex + '-group-' + groupIndex}>
                                                             <p className="m-0 p-0">Grupo {groupIndex + 1}</p>
                                                             <button type="button" onClick={() => removeItemGroup(pageIndex, groupIndex)}>
                                                                 Remover grupo
                                                             </button>
-                                                            {group.items?.map((item, itemIndex) => {
-                                                                switch (item.type) {
-                                                                    case 'TEXTBOX':
-                                                                        return (
-                                                                            <CreateTextBoxInput
-                                                                                key={itemIndex}
-                                                                                currentItem={item}
-                                                                                pageIndex={pageIndex}
-                                                                                groupIndex={groupIndex}
-                                                                                itemIndex={itemIndex}
-                                                                                updateItem={updateItem}
-                                                                                removeItem={removeItem}
+                                                            {group.dependencies?.map((dependency, dependencyIndex) => (
+                                                                <div
+                                                                    key={
+                                                                        'page-' +
+                                                                        pageIndex +
+                                                                        '-group-' +
+                                                                        groupIndex +
+                                                                        '-dependency-' +
+                                                                        dependencyIndex
+                                                                    }
+                                                                >
+                                                                    <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
+                                                                    <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
+                                                                        Tipo de dependência
+                                                                    </label>
+                                                                    <select
+                                                                        className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                        id="dependency-type"
+                                                                        value={dependency.type || ''}
+                                                                        onChange={(event) => {
+                                                                            setProtocol((prev) => {
+                                                                                const newProtocol = { ...prev };
+                                                                                newProtocol.pages[pageIndex].itemGroups[
+                                                                                    groupIndex
+                                                                                ].dependencies[dependencyIndex].type = event.target.value;
+                                                                                return newProtocol;
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        <option value="EXACT_ANSWER">Resposta exata</option>
+                                                                        <option value="OPTION_SELECTED">Opção selecionada</option>
+                                                                        <option value="MIN_SELECTED">Mínimo selecionado</option>
+                                                                    </select>
+                                                                    <label
+                                                                        htmlFor="dependency-argument"
+                                                                        className="form-label fs-5 fw-medium"
+                                                                    >
+                                                                        Argumento
+                                                                    </label>
+                                                                    <input
+                                                                        className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                        id="dependency-argument"
+                                                                        type="text"
+                                                                        value={dependency.argument || ''}
+                                                                        onChange={(event) => {
+                                                                            setProtocol((prev) => {
+                                                                                const newProtocol = { ...prev };
+                                                                                newProtocol.pages[pageIndex].itemGroups[
+                                                                                    groupIndex
+                                                                                ].dependencies[dependencyIndex].argument =
+                                                                                    event.target.value;
+                                                                                return newProtocol;
+                                                                            });
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor="dependency-target"
+                                                                        className="form-label fs-5 fw-medium"
+                                                                    >
+                                                                        Alvo da dependência
+                                                                    </label>
+                                                                    <select
+                                                                        className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                        id="dependency-target"
+                                                                        value={dependency.itemTempId || ''}
+                                                                        onChange={(event) => {
+                                                                            setProtocol((prev) => {
+                                                                                const newProtocol = { ...prev };
+                                                                                newProtocol.pages[pageIndex].itemGroups[
+                                                                                    groupIndex
+                                                                                ].dependencies[dependencyIndex].itemTempId =
+                                                                                    event.target.value;
+                                                                                return newProtocol;
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        {protocol.pages
+                                                                            .filter((p, i) => i <= pageIndex)
+                                                                            .map((p, i) =>
+                                                                                p.itemGroups
+                                                                                    .filter(
+                                                                                        (g, j) =>
+                                                                                            i < pageIndex ||
+                                                                                            (i === pageIndex && j < groupIndex)
+                                                                                    )
+                                                                                    .map((g, j) =>
+                                                                                        g.items.map((it, k) => (
+                                                                                            <option
+                                                                                                key={
+                                                                                                    'page-' +
+                                                                                                    i +
+                                                                                                    '-group-' +
+                                                                                                    j +
+                                                                                                    '-dependency-' +
+                                                                                                    dependencyIndex +
+                                                                                                    '-target-' +
+                                                                                                    k +
+                                                                                                    '-option'
+                                                                                                }
+                                                                                                value={it.tempId}
+                                                                                            >
+                                                                                                {it.text}
+                                                                                            </option>
+                                                                                        ))
+                                                                                    )
+                                                                            )}
+                                                                    </select>
+                                                                    <label
+                                                                        htmlFor="dependency-custom-message"
+                                                                        className="form-label fs-5 fw-medium"
+                                                                    >
+                                                                        Mensagem personalizada
+                                                                    </label>
+                                                                    <input
+                                                                        className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                        id="dependency-custom-message"
+                                                                        type="text"
+                                                                        value={dependency.customMessage || ''}
+                                                                        onChange={(event) => {
+                                                                            setProtocol((prev) => {
+                                                                                const newProtocol = { ...prev };
+                                                                                newProtocol.pages[pageIndex].itemGroups[
+                                                                                    groupIndex
+                                                                                ].dependencies[dependencyIndex].customMessage =
+                                                                                    event.target.value;
+                                                                                return newProtocol;
+                                                                            });
+                                                                        }}
+                                                                    />
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            removeItemGroupDependency(
+                                                                                pageIndex,
+                                                                                groupIndex,
+                                                                                dependencyIndex
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Remover dependência de grupo
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => insertItemGroupDependency(pageIndex, groupIndex)}
+                                                            >
+                                                                Adicionar dependência de grupo
+                                                            </button>
+                                                            {group.items?.map((item, itemIndex) => (
+                                                                <div
+                                                                    key={
+                                                                        'page-' + pageIndex + '-group-' + groupIndex + '-item-' + itemIndex
+                                                                    }
+                                                                >
+                                                                    {(() => {
+                                                                        switch (item.type) {
+                                                                            case 'TEXTBOX':
+                                                                            case 'SCALE':
+                                                                                return (
+                                                                                    <CreateTextBoxInput
+                                                                                        key={itemIndex}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                    />
+                                                                                );
+                                                                            case 'SELECT':
+                                                                                return (
+                                                                                    <CreateMultipleInputItens
+                                                                                        key={itemIndex}
+                                                                                        type={item.type}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                    />
+                                                                                );
+                                                                            case 'RADIO':
+                                                                                return (
+                                                                                    <CreateMultipleInputItens
+                                                                                        key={itemIndex}
+                                                                                        type={item.type}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                    />
+                                                                                );
+                                                                            case 'CHECKBOX':
+                                                                                return (
+                                                                                    <CreateMultipleInputItens
+                                                                                        key={itemIndex}
+                                                                                        type={item.type}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                    />
+                                                                                );
+                                                                            default:
+                                                                                return null;
+                                                                        }
+                                                                    })()}
+                                                                    {item.itemValidations?.map((validation, validationIndex) => (
+                                                                        <div
+                                                                            key={
+                                                                                'page-' +
+                                                                                pageIndex +
+                                                                                '-group-' +
+                                                                                groupIndex +
+                                                                                '-item-' +
+                                                                                itemIndex +
+                                                                                '-validation-' +
+                                                                                validationIndex
+                                                                            }
+                                                                        >
+                                                                            <p className="m-0 p-0">Validação {validationIndex + 1}</p>
+                                                                            <label
+                                                                                htmlFor="validation-type"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Tipo de validação
+                                                                            </label>
+                                                                            <select
+                                                                                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                id="validation-type"
+                                                                                value={validation.type || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[pageIndex].itemGroups[
+                                                                                            groupIndex
+                                                                                        ].items[itemIndex].itemValidations[
+                                                                                            validationIndex
+                                                                                        ].type = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                <option value="MIN">Mínimo</option>
+                                                                                <option value="MAX">Máximo</option>
+                                                                                <option value="STEP">Salto</option>
+                                                                                <option value="MANDATORY">Obrigatório</option>
+                                                                            </select>
+                                                                            <label
+                                                                                htmlFor="validation-argument"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Argumento
+                                                                            </label>
+                                                                            <input
+                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                id="validation-argument"
+                                                                                type="text"
+                                                                                value={validation.argument || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[pageIndex].itemGroups[
+                                                                                            groupIndex
+                                                                                        ].items[itemIndex].itemValidations[
+                                                                                            validationIndex
+                                                                                        ].argument = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
                                                                             />
-                                                                        );
-                                                                    case 'SELECT':
-                                                                        return (
-                                                                            <CreateMultipleInputItens
-                                                                                key={itemIndex}
-                                                                                type={item.type}
-                                                                                currentItem={item}
-                                                                                pageIndex={pageIndex}
-                                                                                groupIndex={groupIndex}
-                                                                                itemIndex={itemIndex}
-                                                                                updateItem={updateItem}
-                                                                                removeItem={removeItem}
+                                                                            <label
+                                                                                htmlFor="validation-custom-message"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Mensagem personalizada
+                                                                            </label>
+                                                                            <input
+                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                id="validation-custom-message"
+                                                                                type="text"
+                                                                                value={validation.customMessage || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[pageIndex].itemGroups[
+                                                                                            groupIndex
+                                                                                        ].items[itemIndex].itemValidations[
+                                                                                            validationIndex
+                                                                                        ].customMessage = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
                                                                             />
-                                                                        );
-                                                                    case 'RADIO':
-                                                                        return (
-                                                                            <CreateMultipleInputItens
-                                                                                key={itemIndex}
-                                                                                type={item.type}
-                                                                                currentItem={item}
-                                                                                pageIndex={pageIndex}
-                                                                                groupIndex={groupIndex}
-                                                                                itemIndex={itemIndex}
-                                                                                updateItem={updateItem}
-                                                                                removeItem={removeItem}
-                                                                            />
-                                                                        );
-                                                                    case 'CHECKBOX':
-                                                                        return (
-                                                                            <CreateMultipleInputItens
-                                                                                key={itemIndex}
-                                                                                type={item.type}
-                                                                                currentItem={item}
-                                                                                pageIndex={pageIndex}
-                                                                                groupIndex={groupIndex}
-                                                                                itemIndex={itemIndex}
-                                                                                updateItem={updateItem}
-                                                                                removeItem={removeItem}
-                                                                            />
-                                                                        );
-                                                                    default:
-                                                                        return null;
-                                                                }
-                                                            })}
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() =>
+                                                                                    removeItemValidation(
+                                                                                        pageIndex,
+                                                                                        groupIndex,
+                                                                                        itemIndex,
+                                                                                        validationIndex
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                Remover validação
+                                                                            </button>
+                                                                        </div>
+                                                                    ))}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            insertItemValidation(pageIndex, groupIndex, itemIndex)
+                                                                        }
+                                                                    >
+                                                                        Adicionar validação
+                                                                    </button>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     );
                                                 })}
