@@ -14,6 +14,7 @@ import { defaultNewInput } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
+import CreateRangeInput from '../components/inputs/protocol/CreateRangeInput';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -438,7 +439,7 @@ function CreateProtocolPage(props) {
                                         onClick={() => insertItem('SCALE', itemTarget.page, itemTarget.group)}
                                     >
                                         <IconPlus className="icon-plus" />
-                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Escala</span>
+                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Intervalo numérico</span>
                                     </button>
                                     <label htmlFor="item-target-page" className="form-label fs-5 fw-medium">
                                         Página
@@ -1006,9 +1007,21 @@ function CreateProtocolPage(props) {
                                                                     {(() => {
                                                                         switch (item.type) {
                                                                             case 'TEXTBOX':
-                                                                            case 'SCALE':
                                                                                 return (
                                                                                     <CreateTextBoxInput
+                                                                                        key={itemIndex}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                    />
+                                                                                );
+
+                                                                            case 'SCALE':
+                                                                                return (
+                                                                                    <CreateRangeInput
                                                                                         key={itemIndex}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
@@ -1061,108 +1074,110 @@ function CreateProtocolPage(props) {
                                                                                 return null;
                                                                         }
                                                                     })()}
-                                                                    {item.itemValidations?.map((validation, validationIndex) => (
-                                                                        <div
-                                                                            key={
-                                                                                'page-' +
-                                                                                pageIndex +
-                                                                                '-group-' +
-                                                                                groupIndex +
-                                                                                '-item-' +
-                                                                                itemIndex +
-                                                                                '-validation-' +
-                                                                                validationIndex
-                                                                            }
-                                                                        >
-                                                                            <p className="m-0 p-0">Validação {validationIndex + 1}</p>
-                                                                            <label
-                                                                                htmlFor="validation-type"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Tipo de validação
-                                                                            </label>
-                                                                            <select
-                                                                                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                id="validation-type"
-                                                                                value={validation.type || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[pageIndex].itemGroups[
-                                                                                            groupIndex
-                                                                                        ].items[itemIndex].itemValidations[
-                                                                                            validationIndex
-                                                                                        ].type = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            >
-                                                                                <option value="MIN">Mínimo</option>
-                                                                                <option value="MAX">Máximo</option>
-                                                                                <option value="STEP">Salto</option>
-                                                                                <option value="MANDATORY">Obrigatório</option>
-                                                                            </select>
-                                                                            <label
-                                                                                htmlFor="validation-argument"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Argumento
-                                                                            </label>
-                                                                            <input
-                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                id="validation-argument"
-                                                                                type="text"
-                                                                                value={validation.argument || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[pageIndex].itemGroups[
-                                                                                            groupIndex
-                                                                                        ].items[itemIndex].itemValidations[
-                                                                                            validationIndex
-                                                                                        ].argument = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            />
-                                                                            <label
-                                                                                htmlFor="validation-custom-message"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Mensagem personalizada
-                                                                            </label>
-                                                                            <input
-                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                id="validation-custom-message"
-                                                                                type="text"
-                                                                                value={validation.customMessage || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[pageIndex].itemGroups[
-                                                                                            groupIndex
-                                                                                        ].items[itemIndex].itemValidations[
-                                                                                            validationIndex
-                                                                                        ].customMessage = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            />
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() =>
-                                                                                    removeItemValidation(
-                                                                                        pageIndex,
-                                                                                        groupIndex,
-                                                                                        itemIndex,
-                                                                                        validationIndex
-                                                                                    )
+                                                                    {item.itemValidations
+                                                                        ?.filter((v) => item.type !== 'SCALE' && v.type !== 'MANDATORY')
+                                                                        .map((validation, validationIndex) => (
+                                                                            <div
+                                                                                key={
+                                                                                    'page-' +
+                                                                                    pageIndex +
+                                                                                    '-group-' +
+                                                                                    groupIndex +
+                                                                                    '-item-' +
+                                                                                    itemIndex +
+                                                                                    '-validation-' +
+                                                                                    validationIndex
                                                                                 }
                                                                             >
-                                                                                Remover validação
-                                                                            </button>
-                                                                        </div>
-                                                                    ))}
+                                                                                <p className="m-0 p-0">Validação {validationIndex + 1}</p>
+                                                                                <label
+                                                                                    htmlFor="validation-type"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Tipo de validação
+                                                                                </label>
+                                                                                <select
+                                                                                    className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                    id="validation-type"
+                                                                                    value={validation.type || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[pageIndex].itemGroups[
+                                                                                                groupIndex
+                                                                                            ].items[itemIndex].itemValidations[
+                                                                                                validationIndex
+                                                                                            ].type = event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                >
+                                                                                    <option value="MIN">Mínimo</option>
+                                                                                    <option value="MAX">Máximo</option>
+                                                                                    <option value="STEP">Salto</option>
+                                                                                    <option value="MANDATORY">Obrigatório</option>
+                                                                                </select>
+                                                                                <label
+                                                                                    htmlFor="validation-argument"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Argumento
+                                                                                </label>
+                                                                                <input
+                                                                                    className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                    id="validation-argument"
+                                                                                    type="text"
+                                                                                    value={validation.argument || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[pageIndex].itemGroups[
+                                                                                                groupIndex
+                                                                                            ].items[itemIndex].itemValidations[
+                                                                                                validationIndex
+                                                                                            ].argument = event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                />
+                                                                                <label
+                                                                                    htmlFor="validation-custom-message"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Mensagem personalizada
+                                                                                </label>
+                                                                                <input
+                                                                                    className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                    id="validation-custom-message"
+                                                                                    type="text"
+                                                                                    value={validation.customMessage || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[pageIndex].itemGroups[
+                                                                                                groupIndex
+                                                                                            ].items[itemIndex].itemValidations[
+                                                                                                validationIndex
+                                                                                            ].customMessage = event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={() =>
+                                                                                        removeItemValidation(
+                                                                                            pageIndex,
+                                                                                            groupIndex,
+                                                                                            itemIndex,
+                                                                                            validationIndex
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Remover validação
+                                                                                </button>
+                                                                            </div>
+                                                                        ))}
                                                                     <button
                                                                         type="button"
                                                                         onClick={() =>

@@ -7,7 +7,14 @@ export const defaultNewInput = (type) => {
         type: type,
         enabled: true,
         itemOptions: [],
-        itemValidations: [],
+        itemValidations:
+            type === 'SCALE'
+                ? [
+                      { type: 'MIN', argument: 1 },
+                      { type: 'MAX', argument: 1 },
+                      { type: 'STEP', argument: 1 },
+                  ]
+                : [],
     };
 };
 
