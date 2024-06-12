@@ -264,6 +264,4 @@ function SignUpPage(props) {
     );
 }
 
-SignUpPage.defaultProps = {};
-
 export default SignUpPage;
