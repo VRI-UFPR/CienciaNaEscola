@@ -753,6 +753,7 @@ function CreateProtocolPage(props) {
                                                             <option value="EXACT_ANSWER">Resposta exata</option>
                                                             <option value="OPTION_SELECTED">Opção selecionada</option>
                                                             <option value="MIN_SELECTED">Mínimo selecionado</option>
+                                                            <option value="MAX_SELECTED">Mínimo selecionado</option>
                                                         </select>
                                                         <label htmlFor="page-dependency-argument" className="form-label fs-5 fw-medium">
                                                             Argumento
@@ -760,7 +761,11 @@ function CreateProtocolPage(props) {
                                                         <input
                                                             className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                                             id="page-dependency-argument"
-                                                            type="text"
+                                                            type={
+                                                                dependency.type === 'MIN_SELECTED' || dependency.type === 'MAX_SELECTED'
+                                                                    ? 'number'
+                                                                    : 'text'
+                                                            }
                                                             value={dependency.argument || ''}
                                                             onChange={(event) => {
                                                                 setProtocol((prev) => {
@@ -1114,8 +1119,8 @@ function CreateProtocolPage(props) {
                                                                                 >
                                                                                     <option value="MIN">Mínimo</option>
                                                                                     <option value="MAX">Máximo</option>
-                                                                                    <option value="STEP">Salto</option>
-                                                                                    <option value="MANDATORY">Obrigatório</option>
+                                                                                    <option value="MIN_SELECTED">Mínimo de opções</option>
+                                                                                    <option value="MAX_SELECTED">Máximo de opções</option>
                                                                                 </select>
                                                                                 <label
                                                                                     htmlFor="validation-argument"
@@ -1126,7 +1131,7 @@ function CreateProtocolPage(props) {
                                                                                 <input
                                                                                     className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                                                                     id="validation-argument"
-                                                                                    type="text"
+                                                                                    type="number"
                                                                                     value={validation.argument || ''}
                                                                                     onChange={(event) => {
                                                                                         setProtocol((prev) => {
