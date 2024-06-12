@@ -51,7 +51,26 @@ function CreateTextBoxInput(props) {
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">
-                <input className="form-check-input border-0 fs-5 p-0" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                <input
+                    className="form-check-input border-0 fs-5 p-0"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
+                    onChange={(event) =>
+                        setItem((prev) => {
+                            if (event.target.checked) {
+                                const newItem = { ...prev };
+                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
+                                return newItem;
+                            } else {
+                                const newItem = { ...prev };
+                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
+                                return newItem;
+                            }
+                        })
+                    }
+                />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>

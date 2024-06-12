@@ -96,15 +96,20 @@ function CreateSingleSelectionInput(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    // defaultChecked={input.validation.find((validation) => validation.type === 'required')?.value ?? false}
-                    // onChange={(event) =>
-                    //     onInputChange({
-                    //         ...input,
-                    //         validation: input.validation.map((item) =>
-                    //             item.type === 'required' ? { ...item, value: event.target.checked } : { item }
-                    //         ),
-                    //     })
-                    // }
+                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
+                    onChange={(event) =>
+                        setItem((prev) => {
+                            if (event.target.checked) {
+                                const newItem = { ...prev };
+                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
+                                return newItem;
+                            } else {
+                                const newItem = { ...prev };
+                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
+                                return newItem;
+                            }
+                        })
+                    }
                 />
                 <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
                     Obrigatório

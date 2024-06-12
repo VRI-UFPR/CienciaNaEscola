@@ -56,6 +56,7 @@ function CreateRangeInput(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
+                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
                     onChange={(event) =>
                         setItem((prev) => {
                             if (event.target.checked) {
