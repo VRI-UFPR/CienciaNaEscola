@@ -27,8 +27,8 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput('TEXTBOX'));
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, isNumberBox = false } = props;
+    const [item, setItem] = useState(currentItem || defaultNewInput(isNumberBox ? 'NUMBERBOX' : 'TEXTBOX'));
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);
@@ -38,7 +38,9 @@ function CreateTextBoxInput(props) {
         <div className="pb-4 pb-lg-5">
             <div className="row justify-content-between pb-2 m-0">
                 <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Caixa de texto</h1>
+                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
+                        {item.type === 'NUMBERBOX' ? 'Caixa numérica' : 'Caixa de texto'}
+                    </h1>
                 </div>
                 <div className="col d-flex justify-content-end p-0">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />

@@ -412,6 +412,14 @@ function CreateProtocolPage(props) {
                                     <button
                                         type="button"
                                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                        onClick={() => insertItem('NUMBERBOX', itemTarget.page, itemTarget.group)}
+                                    >
+                                        <IconPlus className="icon-plus" />
+                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa numérica</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
                                         onClick={() => insertItem('SELECT', itemTarget.page, itemTarget.group)}
                                     >
                                         <IconPlus className="icon-plus" />
@@ -796,22 +804,35 @@ function CreateProtocolPage(props) {
                                                                 .filter((p, i) => i < pageIndex)
                                                                 .map((p, i) =>
                                                                     p.itemGroups.map((g, j) =>
-                                                                        g.items.map((it, k) => (
-                                                                            <option
-                                                                                key={
-                                                                                    'page-' +
-                                                                                    i +
-                                                                                    '-dependency-' +
-                                                                                    dependencyIndex +
-                                                                                    '-target-' +
-                                                                                    k +
-                                                                                    '-option'
-                                                                                }
-                                                                                value={it.tempId}
-                                                                            >
-                                                                                {it.text}
-                                                                            </option>
-                                                                        ))
+                                                                        g.items
+                                                                            .filter(
+                                                                                (it, k) =>
+                                                                                    ((dependency.type === 'MIN_SELECTED' ||
+                                                                                        dependency.type === 'MAX_SELECTED') &&
+                                                                                        it.type === 'CHECKBOX') ||
+                                                                                    (dependency.type === 'OPTION_SELECTED' &&
+                                                                                        (it.type === 'SELECT' ||
+                                                                                            it.type === 'RADIO' ||
+                                                                                            it.type === 'CHECKBOX')) ||
+                                                                                    (dependency.type === 'EXACT_ANSWER' &&
+                                                                                        it.type !== 'CHECKBOX')
+                                                                            )
+                                                                            .map((it, k) => (
+                                                                                <option
+                                                                                    key={
+                                                                                        'page-' +
+                                                                                        i +
+                                                                                        '-dependency-' +
+                                                                                        dependencyIndex +
+                                                                                        '-target-' +
+                                                                                        k +
+                                                                                        '-option'
+                                                                                    }
+                                                                                    value={it.tempId}
+                                                                                >
+                                                                                    {it.text}
+                                                                                </option>
+                                                                            ))
                                                                     )
                                                                 )}
                                                         </select>
@@ -1023,7 +1044,19 @@ function CreateProtocolPage(props) {
                                                                                         removeItem={removeItem}
                                                                                     />
                                                                                 );
-
+                                                                            case 'NUMBERBOX':
+                                                                                return (
+                                                                                    <CreateTextBoxInput
+                                                                                        key={itemIndex}
+                                                                                        currentItem={item}
+                                                                                        pageIndex={pageIndex}
+                                                                                        groupIndex={groupIndex}
+                                                                                        itemIndex={itemIndex}
+                                                                                        updateItem={updateItem}
+                                                                                        removeItem={removeItem}
+                                                                                        isNumberBox={true}
+                                                                                    />
+                                                                                );
                                                                             case 'SCALE':
                                                                                 return (
                                                                                     <CreateRangeInput
@@ -1080,7 +1113,11 @@ function CreateProtocolPage(props) {
                                                                         }
                                                                     })()}
                                                                     {item.itemValidations
-                                                                        ?.filter((v) => item.type !== 'SCALE' && v.type !== 'MANDATORY')
+                                                                        ?.filter(
+                                                                            (v) =>
+                                                                                (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX') &&
+                                                                                v.type !== 'MANDATORY'
+                                                                        )
                                                                         .map((validation, validationIndex) => (
                                                                             <div
                                                                                 key={
@@ -1117,10 +1154,22 @@ function CreateProtocolPage(props) {
                                                                                         });
                                                                                     }}
                                                                                 >
-                                                                                    <option value="MIN">Mínimo</option>
-                                                                                    <option value="MAX">Máximo</option>
-                                                                                    <option value="MIN_SELECTED">Mínimo de opções</option>
-                                                                                    <option value="MAX_SELECTED">Máximo de opções</option>
+                                                                                    {item.type === 'NUMBERBOX' && (
+                                                                                        <option value="MIN">Mínimo</option>
+                                                                                    )}
+                                                                                    {item.type === 'NUMBERBOX' && (
+                                                                                        <option value="MAX">Máximo</option>
+                                                                                    )}
+                                                                                    {item.type === 'CHECKBOX' && (
+                                                                                        <option value="MIN_SELECTED">
+                                                                                            Mínimo de opções
+                                                                                        </option>
+                                                                                    )}
+                                                                                    {item.type === 'CHECKBOX' && (
+                                                                                        <option value="MAX_SELECTED">
+                                                                                            Máximo de opções
+                                                                                        </option>
+                                                                                    )}
                                                                                 </select>
                                                                                 <label
                                                                                     htmlFor="validation-argument"
@@ -1183,14 +1232,16 @@ function CreateProtocolPage(props) {
                                                                                 </button>
                                                                             </div>
                                                                         ))}
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            insertItemValidation(pageIndex, groupIndex, itemIndex)
-                                                                        }
-                                                                    >
-                                                                        Adicionar validação
-                                                                    </button>
+                                                                    {(item.type === 'CHECKBOX' || item.type === 'NUMBERBOX') && (
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() =>
+                                                                                insertItemValidation(pageIndex, groupIndex, itemIndex)
+                                                                            }
+                                                                        >
+                                                                            Adicionar validação
+                                                                        </button>
+                                                                    )}
                                                                 </div>
                                                             ))}
                                                         </div>
