@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback } from 'react';
 import MarkdownText from '../../MarkdownText';
 import Gallery from '../../Gallery';
 
@@ -17,19 +17,19 @@ const styles = `
 `;
 
 function RadioButtonInput(props) {
-    const { onAnswerChange, item, group, galleryModalRef, disabled } = props;
-    const [options, setOptions] = useState({});
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'OPTION', options);
-    }, [options, item.id, onAnswerChange, group]);
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     const handleOptionsUpdate = (optionId) => {
-        setOptions(() => {
-            const newOptions = {};
-            newOptions[optionId] = '';
-            return newOptions;
-        });
+        const newOptions = {};
+        newOptions[optionId] = '';
+        updateAnswer({ ...newOptions, group: answer.group });
     };
 
     return (
@@ -50,6 +50,7 @@ function RadioButtonInput(props) {
                                 type="radio"
                                 name={'radiooptions' + item.id}
                                 id={optname + 'input' + item.id}
+                                value={answer[option.id] !== undefined}
                                 onChange={() => handleOptionsUpdate(option.id)}
                                 disabled={disabled}
                             ></input>

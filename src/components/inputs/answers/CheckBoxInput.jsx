@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback } from 'react';
 import MarkdownText from '../../MarkdownText';
 import Gallery from '../../Gallery';
 
@@ -17,23 +17,23 @@ const styles = `
 `;
 
 function CheckBoxInput(props) {
-    const { onAnswerChange, item, group, galleryModalRef, disabled } = props;
-    const [options, setOptions] = useState({});
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'OPTION', options);
-    }, [options, item.id, onAnswerChange, group]);
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     const handleOptionsUpdate = (optionId, updatedOption) => {
-        setOptions((prevOptions) => {
-            const newOptions = { ...prevOptions };
-            if (updatedOption) {
-                newOptions[optionId] = '';
-            } else {
-                delete newOptions[optionId];
-            }
-            return newOptions;
-        });
+        const newOptions = { ...answer };
+        if (updatedOption) {
+            newOptions[optionId] = '';
+        } else {
+            delete newOptions[optionId];
+        }
+        updateAnswer({ ...newOptions, group: answer.group });
     };
 
     return (
@@ -54,6 +54,7 @@ function CheckBoxInput(props) {
                                 className={`form-check-input bg-grey`}
                                 type="checkbox"
                                 name={'checkboxoptions' + item.id}
+                                value={answer[option.id] !== undefined}
                                 id={optname + 'input' + item.id}
                                 onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
                                 disabled={disabled}

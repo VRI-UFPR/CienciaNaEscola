@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect } from 'react';
 import iconDate from '../../../assets/images/iconDate.svg';
 
 const styles = `
@@ -32,20 +32,24 @@ const styles = `
 `;
 
 function DateInput(props) {
-    const [date, setDate] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group, disabled } = props;
+    const { onAnswerChange, item, answer, disabled } = props;
+
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     useEffect(() => {
-        const date = new Date();
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear());
-        setDate((prev) => ({ ...prev, text: `${year}-${month}-${day}` }));
-    }, []);
-
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', date);
-    }, [date, item.id, onAnswerChange, group]);
+        if (!answer.text) {
+            const date = new Date();
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear());
+            updateAnswer({ ...answer, text: `${year}-${month}-${day}` });
+        }
+    }, [answer, updateAnswer]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -66,8 +70,8 @@ function DateInput(props) {
                             type="date"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            onChange={(e) => setDate((prev) => ({ ...prev, text: e.target.value }))}
-                            defaultValue={date.text}
+                            onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
+                            value={answer.text}
                             disabled={disabled}
                         ></input>
                     </div>
