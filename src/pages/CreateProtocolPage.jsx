@@ -315,6 +315,7 @@ function CreateProtocolPage(props) {
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
                                         items: g.items.map((i) => ({
+                                            tempId: Date.now() + Math.random() * 1000,
                                             text: i.text,
                                             description: i.description,
                                             type: i.type,
@@ -456,7 +457,11 @@ function CreateProtocolPage(props) {
                                         name="item-target-page"
                                         id="item-target-page"
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
+                                        defaultValue={''}
                                     >
+                                        <option value={''} disabled>
+                                            Selecione...
+                                        </option>
                                         {protocol.pages.map((page, index) => (
                                             <option key={'page-' + index + '-option'} value={index}>
                                                 Página {index + 1}
@@ -470,7 +475,11 @@ function CreateProtocolPage(props) {
                                         name="item-target-group"
                                         id="item-target-group"
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
+                                        defaultValue={''}
                                     >
+                                        <option value={''} disabled>
+                                            Selecione...
+                                        </option>
                                         {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
                                             <option key={'page-' + itemTarget.page + '-group-' + index + '-option'} value={index}>
                                                 Grupo {index + 1}
@@ -512,7 +521,11 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, enabled: event.target.value === 'true' }))
                                             }
+                                            defaultValue={''}
                                         >
+                                            <option value="" disabled>
+                                                Selecione...
+                                            </option>
                                             <option value="true">Sim</option>
                                             <option value="false">Não</option>
                                         </select>
@@ -524,7 +537,11 @@ function CreateProtocolPage(props) {
                                             id="visibility"
                                             value={protocol.visibility || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
+                                            defaultValue={''}
                                         >
+                                            <option value="" disabled>
+                                                Selecione...
+                                            </option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -598,7 +615,11 @@ function CreateProtocolPage(props) {
                                             id="applicability"
                                             value={protocol.applicability || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
+                                            defaultValue={''}
                                         >
+                                            <option value="" disabled>
+                                                Selecione...
+                                            </option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -645,7 +666,11 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))
                                             }
+                                            defaultValue={''}
                                         >
+                                            <option value="" disabled>
+                                                Selecione...
+                                            </option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -727,7 +752,11 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, replicable: event.target.value === 'true' }))
                                             }
+                                            defaultValue={''}
                                         >
+                                            <option value="" disabled>
+                                                Selecione...
+                                            </option>
                                             <option value="true">Sim</option>
                                             <option value="false">Não</option>
                                         </select>
@@ -757,7 +786,11 @@ function CreateProtocolPage(props) {
                                                                     return newProtocol;
                                                                 });
                                                             }}
+                                                            defaultValue={''}
                                                         >
+                                                            <option value="" disabled>
+                                                                Selecione...
+                                                            </option>
                                                             <option value="EXACT_ANSWER">Resposta exata</option>
                                                             <option value="OPTION_SELECTED">Opção selecionada</option>
                                                             <option value="MIN_SELECTED">Mínimo selecionado</option>
@@ -799,7 +832,11 @@ function CreateProtocolPage(props) {
                                                                     return newProtocol;
                                                                 });
                                                             }}
+                                                            defaultValue={''}
                                                         >
+                                                            <option value="" disabled>
+                                                                Selecione...
+                                                            </option>
                                                             {protocol.pages
                                                                 .filter((p, i) => i < pageIndex)
                                                                 .map((p, i) =>
@@ -903,7 +940,11 @@ function CreateProtocolPage(props) {
                                                                                 return newProtocol;
                                                                             });
                                                                         }}
+                                                                        defaultValue={''}
                                                                     >
+                                                                        <option value="" disabled>
+                                                                            Selecione...
+                                                                        </option>
                                                                         <option value="EXACT_ANSWER">Resposta exata</option>
                                                                         <option value="OPTION_SELECTED">Opção selecionada</option>
                                                                         <option value="MIN_SELECTED">Mínimo selecionado</option>
@@ -950,7 +991,11 @@ function CreateProtocolPage(props) {
                                                                                 return newProtocol;
                                                                             });
                                                                         }}
+                                                                        defaultValue={''}
                                                                     >
+                                                                        <option value="" disabled>
+                                                                            Selecione...
+                                                                        </option>
                                                                         {protocol.pages
                                                                             .filter((p, i) => i <= pageIndex)
                                                                             .map((p, i) =>
@@ -1153,7 +1198,11 @@ function CreateProtocolPage(props) {
                                                                                             return newProtocol;
                                                                                         });
                                                                                     }}
+                                                                                    defaultValue={''}
                                                                                 >
+                                                                                    <option value="" disabled>
+                                                                                        Selecione...
+                                                                                    </option>
                                                                                     {item.type === 'NUMBERBOX' && (
                                                                                         <option value="MIN">Mínimo</option>
                                                                                     )}
