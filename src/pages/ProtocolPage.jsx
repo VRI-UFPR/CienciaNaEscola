@@ -164,7 +164,14 @@ function ProtocolPage(props) {
                                                                         <SimpleTextInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -179,7 +186,11 @@ function ProtocolPage(props) {
                                                                         <CheckBoxInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -194,7 +205,11 @@ function ProtocolPage(props) {
                                                                         <RadioButtonInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -209,7 +224,11 @@ function ProtocolPage(props) {
                                                                         <SelectInput
                                                                             item={item}
                                                                             galleryRef={galleryModalRef}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -222,7 +241,14 @@ function ProtocolPage(props) {
                                                                     {
                                                                         <DateInput
                                                                             item={item}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -235,7 +261,14 @@ function ProtocolPage(props) {
                                                                     {
                                                                         <TimeInput
                                                                             item={item}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -248,7 +281,14 @@ function ProtocolPage(props) {
                                                                     {
                                                                         <LocationInput
                                                                             item={item}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
@@ -261,7 +301,14 @@ function ProtocolPage(props) {
                                                                     {
                                                                         <ImageInput
                                                                             item={item}
-                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text: '',
+                                                                                files:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.files || [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />
