@@ -1,4 +1,4 @@
-import { React, useContext } from 'react';
+import { React, useContext, useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RoundedButton from '../components/RoundedButton';
@@ -8,6 +8,10 @@ import { AuthContext } from '../contexts/AuthContext';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import adicionarFicheiro from '../assets/images/adicionar-ficheiro.png';
 import { AlertContext } from '../contexts/AlertContext';
+import { useNavigate, useParams } from 'react-router-dom';
+import baseUrl from '../contexts/RouteContext';
+import axios from 'axios';
+import ErrorPage from './ErrorPage';
 
 const profilePageStyles = `
     .font-barlow {
@@ -46,10 +50,50 @@ const profilePageStyles = `
 
 function ProfilePage(props) {
     const { user } = useContext(AuthContext);
-    const { showSidebar, allowEdit } = props;
+    const { userId } = useParams();
+    const [curUser, setCurUser] = useState();
+    const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const { showSidebar } = props;
     const { showAlert } = useContext(AlertContext);
+    const navigate = useNavigate();
 
-    if (user.status !== 'authenticated') {
+    useEffect(() => {
+        if (isLoading && user.status !== 'loading') {
+            const promises = [];
+            promises.push(
+                axios
+                    .get(`${baseUrl}api/user/getUser/${user.id}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        const d = response.data.data;
+                        setCurUser({
+                            name: d.name,
+                            username: d.username,
+                            role: d.role,
+                            hash: d.hash,
+                            classrooms: d.classrooms.map((c) => c.id),
+                            institution: d.institution,
+                        });
+                    })
+                    .catch((error) => {
+                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
+                    })
+            );
+            Promise.all(promises).then(() => {
+                setIsLoading(false);
+            });
+        }
+    }, [isLoading, user, userId]);
+
+    if (error) {
+        return <ErrorPage text={error.text} description={error.description} />;
+    }
+
+    if (isLoading) {
         return <SplashPage text="Carregando perfil..." />;
     }
 
@@ -93,7 +137,8 @@ function ProfilePage(props) {
                                     </div>
                                     <input
                                         type="name"
-                                        disabled={!allowEdit}
+                                        value={curUser.name || ''}
+                                        disabled
                                         className="col form-control rounded-4 shadow-sm fs-5"
                                         id="name-input"
                                     ></input>
@@ -106,7 +151,8 @@ function ProfilePage(props) {
                                     </div>
                                     <input
                                         type="username"
-                                        disabled={!allowEdit}
+                                        value={curUser.username || ''}
+                                        disabled
                                         className="col form-control rounded-4 shadow-sm fs-5"
                                         id="username-input"
                                     ></input>
@@ -122,12 +168,13 @@ function ProfilePage(props) {
                                     </div>
                                     <input
                                         type="institution"
-                                        disabled={!allowEdit}
+                                        value={curUser.institution?.name || 'Sem instituição'}
+                                        disabled
                                         className="col form-control rounded-4 shadow-sm fs-5"
                                         id="institution-input"
                                     ></input>
                                 </div>
-                                <div className="row align-items-center m-0">
+                                <div className="row align-items-center m-0 mb-2">
                                     <div className="row mb-1">
                                         <label htmlFor="role-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
                                             Papel:
@@ -135,7 +182,22 @@ function ProfilePage(props) {
                                     </div>
                                     <input
                                         type="role"
-                                        disabled={!allowEdit}
+                                        value={curUser.role || ''}
+                                        disabled
+                                        className="col form-control rounded-4 shadow-sm fs-5"
+                                        id="role-input"
+                                    ></input>
+                                </div>
+                                <div className="row align-items-center m-0">
+                                    <div className="row mb-1">
+                                        <label htmlFor="role-input" className="col-12 form-label profile-label fs-5 pb-0 pe-lg-5 mb-0">
+                                            Salas de aula:
+                                        </label>
+                                    </div>
+                                    <input
+                                        type="role"
+                                        value={curUser.classrooms.join(', ') || 'Sem salas de aula'}
+                                        disabled
                                         className="col form-control rounded-4 shadow-sm fs-5"
                                         id="role-input"
                                     ></input>
@@ -144,7 +206,12 @@ function ProfilePage(props) {
                         </div>
                         <div className="row flex-grow-1 justify-center justify-content-center mx-0">
                             <div className="col-6 col-lg-4 pt-4">
-                                <TextButton className={`px-5 ${allowEdit}`} hsl={[97, 43, 70]} text="Salvar" />
+                                <TextButton
+                                    className="px-5"
+                                    hsl={[97, 43, 70]}
+                                    text="Editar"
+                                    onClick={() => navigate(`/dash/profile/${user.institutionId}/${user.id}/manage`)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -157,7 +224,6 @@ function ProfilePage(props) {
 
 ProfilePage.defaultProps = {
     showSidebar: true,
-    allowEdit: true,
 };
 
 export default ProfilePage;
