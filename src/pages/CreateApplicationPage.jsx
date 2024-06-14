@@ -56,7 +56,7 @@ function CreateApplicationPage(props) {
                         .then((response) => {
                             const d = response.data.data;
                             reqProtocolId = d.protocol.id;
-                            if (d.applier.id !== user.id) {
+                            if (d.applier.id !== user.id && user.role !== 'ADMIN') {
                                 setError({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar esta aplicação',

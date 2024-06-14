@@ -293,7 +293,7 @@ function CreateProtocolPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            if (user.id !== d.creator.id) {
+                            if (user.id !== d.creator.id && user.role !== 'ADMIN') {
                                 setError({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar este protocolo',
