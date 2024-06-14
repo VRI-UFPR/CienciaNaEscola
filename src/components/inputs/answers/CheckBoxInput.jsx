@@ -21,7 +21,7 @@ function CheckBoxInput(props) {
 
     const updateAnswer = useCallback(
         (newAnswer) => {
-            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+            onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
         },
         [onAnswerChange, answer.group, item]
     );
@@ -49,7 +49,7 @@ function CheckBoxInput(props) {
                     const optname = option.text.toLowerCase().replace(/\s/g, '');
 
                     return (
-                        <div key={optname + 'input' + item.id} className="form-check m-0 mb-3 pe-0">
+                        <div key={optname + 'input' + item.id + 'option' + option.id} className="form-check m-0 mb-3 pe-0">
                             <input
                                 className={`form-check-input bg-grey`}
                                 type="checkbox"

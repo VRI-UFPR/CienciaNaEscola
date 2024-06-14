@@ -67,17 +67,131 @@ function ApplicationPage(props) {
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
 
-    const isNextPage = () => {
-        return currentPageIndex < application.protocol.pages.length - 1;
+    const findAnswer = (id) => {
+        for (const group in itemAnswerGroups) {
+            let res = undefined;
+            if (itemAnswerGroups[group].itemAnswers[id] !== undefined) {
+                res = itemAnswerGroups[group].itemAnswers[id];
+            }
+            if (itemAnswerGroups[group].optionAnswers[id] !== undefined) {
+                res = itemAnswerGroups[group].optionAnswers[id];
+            }
+            if (itemAnswerGroups[group].tableAnswers[id] !== undefined) {
+                res = itemAnswerGroups[group].tableAnswers[id];
+            }
+            if (res !== undefined) {
+                // Drop group and files from res
+                let { group, files, ...answer } = res;
+                return answer;
+            }
+        }
+        return undefined;
+    };
+
+    const findItem = (id) => {
+        for (const page of application.protocol.pages) {
+            for (const group of page.itemGroups) {
+                for (const item of group.items) {
+                    if (item.id === id) {
+                        return item;
+                    }
+                }
+            }
+        }
+        return undefined;
+    };
+
+    const isDependenciesAttended = (dependencies) => {
+        let dependencyAttended = true;
+        for (const dependency of dependencies) {
+            const item = findItem(dependency.itemId);
+            const answer = findAnswer(dependency.itemId);
+            switch (dependency.type) {
+                case 'EXACT_ANSWER':
+                    if (
+                        item.type === 'TEXTBOX' ||
+                        item.type === 'NUMBERBOX' ||
+                        item.type === 'DATEBOX' ||
+                        item.type === 'TIMEBOX' ||
+                        item.type === 'LOCATIONBOX'
+                    ) {
+                        if (!answer || answer.text !== dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    } else if (item.type === 'CHECKBOX' || item.type === 'RADIO' || item.type === 'SELECT') {
+                        if (
+                            !answer ||
+                            item.itemOptions
+                                .filter((o) => Object.keys(answer).includes(o.id.toString()))
+                                .map((o) => o.text)
+                                .includes(dependency.argument) === false
+                        ) {
+                            dependencyAttended = false;
+                        }
+                    }
+                    break;
+                case 'OPTION_SELECTED':
+                    if (item.type === 'CHECKBOX' || item.type === 'RADIO' || item.type === 'SELECT') {
+                        if (
+                            !answer ||
+                            item.itemOptions
+                                .filter((o) => Object.keys(answer).includes(o.id.toString()))
+                                .map((o) => o.text)
+                                .includes(dependency.argument) === false
+                        ) {
+                            dependencyAttended = false;
+                        }
+                    }
+                    break;
+                case 'MIN_SELECTED':
+                    if (item.type === 'CHECKBOX') {
+                        if (answer) {
+                        }
+                        if (!answer || Object.keys(answer).length < dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    }
+                    break;
+                case 'MAX_SELECTED':
+                    if (item.type === 'CHECKBOX') {
+                        if (!answer || Object.keys(answer).length > dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return dependencyAttended;
+    };
+
+    const getNextPage = () => {
+        const nextPageIndex = currentPageIndex + 1;
+        for (let i = nextPageIndex; i < application.protocol.pages.length; i++) {
+            if (application.protocol.pages[i].dependencies.length === 0) {
+                return i;
+            } else {
+                let dependencyAttended = isDependenciesAttended(application.protocol.pages[i].dependencies);
+                if (dependencyAttended === true) {
+                    return i;
+                }
+            }
+            return undefined;
+        }
     };
 
     const isPreviousPage = () => {
         return currentPageIndex > 0;
     };
 
+    const isNextPage = () => {
+        return getNextPage() !== undefined;
+    };
+
     const nextPage = () => {
         if (isNextPage()) {
-            const nextPageIndex = currentPageIndex + 1;
+            const nextPageIndex = getNextPage();
             setCurrentPageIndex(nextPageIndex);
         }
     };
@@ -296,168 +410,170 @@ function ApplicationPage(props) {
                                 <div className="row justify-content-center m-0">
                                     {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
                                 </div>
-                                {application.protocol.pages[currentPageIndex].itemGroups.map((itemGroup, itemGroupIndex) => {
-                                    return (
-                                        <div>
-                                            <p>Grupo de itens {itemGroupIndex + 1}</p>
-                                            {itemGroup.items.map((item) => {
-                                                switch (item.type) {
-                                                    case 'TEXTBOX':
-                                                    case 'NUMBERBOX':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <SimpleTextInput
-                                                                        item={item}
-                                                                        answer={{
-                                                                            text:
-                                                                                itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                    ?.text || '',
-                                                                            files: [],
-                                                                            group: itemGroup.id,
-                                                                        }}
-                                                                        galleryModalRef={galleryModalRef}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
+                                {application.protocol.pages[currentPageIndex].itemGroups
+                                    .filter((group) => isDependenciesAttended(group.dependencies))
+                                    .map((itemGroup, itemGroupIndex) => {
+                                        return (
+                                            <div>
+                                                <p>Grupo de itens {itemGroupIndex + 1}</p>
+                                                {itemGroup.items.map((item) => {
+                                                    switch (item.type) {
+                                                        case 'TEXTBOX':
+                                                        case 'NUMBERBOX':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <SimpleTextInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
 
-                                                    case 'CHECKBOX':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <CheckBoxInput
-                                                                        item={item}
-                                                                        galleryModalRef={galleryModalRef}
-                                                                        answer={{
-                                                                            group: itemGroup.id,
-                                                                            ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
+                                                        case 'CHECKBOX':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <CheckBoxInput
+                                                                            item={item}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
 
-                                                    case 'RADIO':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <RadioButtonInput
-                                                                        item={item}
-                                                                        galleryModalRef={galleryModalRef}
-                                                                        answer={{
-                                                                            group: itemGroup.id,
-                                                                            ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
+                                                        case 'RADIO':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <RadioButtonInput
+                                                                            item={item}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
 
-                                                    case 'SELECT':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <SelectInput
-                                                                        item={item}
-                                                                        galleryRef={galleryModalRef}
-                                                                        answer={{
-                                                                            group: itemGroup.id,
-                                                                            ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
-                                                    case 'DATEBOX':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <DateInput
-                                                                        item={item}
-                                                                        answer={{
-                                                                            text:
-                                                                                itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                    ?.text || '',
-                                                                            files: [],
-                                                                            group: itemGroup.id,
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
-                                                    case 'TIMEBOX':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <TimeInput
-                                                                        item={item}
-                                                                        answer={{
-                                                                            text:
-                                                                                itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                    ?.text || '',
-                                                                            files: [],
-                                                                            group: itemGroup.id,
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
-                                                    case 'LOCATIONBOX':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <LocationInput
-                                                                        item={item}
-                                                                        answer={{
-                                                                            text:
-                                                                                itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                    ?.text || '',
-                                                                            files: [],
-                                                                            group: itemGroup.id,
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
-                                                    case 'UPLOAD':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {
-                                                                    <ImageInput
-                                                                        item={item}
-                                                                        answer={{
-                                                                            text: '',
-                                                                            files:
-                                                                                itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                    ?.files || [],
-                                                                            group: itemGroup.id,
-                                                                        }}
-                                                                        onAnswerChange={handleAnswerChange}
-                                                                    />
-                                                                }
-                                                            </div>
-                                                        );
-                                                    case 'TEXT':
-                                                        return (
-                                                            <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                {<TextImageInput item={item} galleryModalRef={galleryModalRef} />}
-                                                            </div>
-                                                        );
-                                                    default:
-                                                        return <p>Input type not found</p>;
-                                                }
-                                            })}
-                                        </div>
-                                    );
-                                })}
+                                                        case 'SELECT':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <SelectInput
+                                                                            item={item}
+                                                                            galleryRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...itemAnswerGroups[itemGroup.id]?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
+                                                        case 'DATEBOX':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <DateInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
+                                                        case 'TIMEBOX':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <TimeInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
+                                                        case 'LOCATIONBOX':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <LocationInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
+                                                        case 'UPLOAD':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <ImageInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text: '',
+                                                                                files:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.files || [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
+                                                        case 'TEXT':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {<TextImageInput item={item} galleryModalRef={galleryModalRef} />}
+                                                                </div>
+                                                            );
+                                                        default:
+                                                            return <p>Input type not found</p>;
+                                                    }
+                                                })}
+                                            </div>
+                                        );
+                                    })}
                                 <div className="row justify-content-center m-0 pt-3">
                                     {
                                         <TextImageInput

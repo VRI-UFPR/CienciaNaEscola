@@ -21,7 +21,7 @@ function RadioButtonInput(props) {
 
     const updateAnswer = useCallback(
         (newAnswer) => {
-            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+            onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
         },
         [onAnswerChange, answer.group, item]
     );
