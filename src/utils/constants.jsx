@@ -8,7 +8,7 @@ export const defaultNewInput = (type) => {
         enabled: true,
         itemOptions: [],
         itemValidations:
-            type === 'SCALE'
+            type === 'RANGE'
                 ? [
                       { type: 'MIN', argument: 1 },
                       { type: 'MAX', argument: 1 },

@@ -28,7 +28,7 @@ const rangeStyles = `
 
 function CreateRangeInput(props) {
     const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput('SCALE'));
+    const [item, setItem] = useState(currentItem || defaultNewInput('RANGE'));
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);

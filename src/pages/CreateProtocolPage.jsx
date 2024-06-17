@@ -133,7 +133,7 @@ function CreateProtocolPage(props) {
     const insertItemGroup = useCallback(
         (page) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.push({ type: 'MULTIPLE_ITEMS', isRepeatable: false, items: [], dependencies: [] });
+            newProtocol.pages[page].itemGroups.push({ type: 'ONE_DIMENSIONAL', isRepeatable: false, items: [], dependencies: [] });
             setProtocol(newProtocol);
         },
         [protocol]
@@ -445,7 +445,7 @@ function CreateProtocolPage(props) {
                                     <button
                                         type="button"
                                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                        onClick={() => insertItem('SCALE', itemTarget.page, itemTarget.group)}
+                                        onClick={() => insertItem('RANGE', itemTarget.page, itemTarget.group)}
                                     >
                                         <IconPlus className="icon-plus" />
                                         <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Intervalo numérico</span>
@@ -457,11 +457,8 @@ function CreateProtocolPage(props) {
                                         name="item-target-page"
                                         id="item-target-page"
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
-                                        defaultValue={''}
                                     >
-                                        <option value={''} disabled>
-                                            Selecione...
-                                        </option>
+                                        <option value={''}>Selecione...</option>
                                         {protocol.pages.map((page, index) => (
                                             <option key={'page-' + index + '-option'} value={index}>
                                                 Página {index + 1}
@@ -475,11 +472,8 @@ function CreateProtocolPage(props) {
                                         name="item-target-group"
                                         id="item-target-group"
                                         onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
-                                        defaultValue={''}
                                     >
-                                        <option value={''} disabled>
-                                            Selecione...
-                                        </option>
+                                        <option value={''}>Selecione...</option>
                                         {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
                                             <option key={'page-' + itemTarget.page + '-group-' + index + '-option'} value={index}>
                                                 Grupo {index + 1}
@@ -521,11 +515,8 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, enabled: event.target.value === 'true' }))
                                             }
-                                            defaultValue={''}
                                         >
-                                            <option value="" disabled>
-                                                Selecione...
-                                            </option>
+                                            <option value="">Selecione...</option>
                                             <option value="true">Sim</option>
                                             <option value="false">Não</option>
                                         </select>
@@ -537,11 +528,8 @@ function CreateProtocolPage(props) {
                                             id="visibility"
                                             value={protocol.visibility || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
-                                            defaultValue={''}
                                         >
-                                            <option value="" disabled>
-                                                Selecione...
-                                            </option>
+                                            <option value="">Selecione...</option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -615,11 +603,8 @@ function CreateProtocolPage(props) {
                                             id="applicability"
                                             value={protocol.applicability || ''}
                                             onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
-                                            defaultValue={''}
                                         >
-                                            <option value="" disabled>
-                                                Selecione...
-                                            </option>
+                                            <option value="">Selecione...</option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -666,11 +651,8 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))
                                             }
-                                            defaultValue={''}
                                         >
-                                            <option value="" disabled>
-                                                Selecione...
-                                            </option>
+                                            <option value="">Selecione...</option>
                                             <option value="PUBLIC">Público</option>
                                             <option value="RESTRICT">Restrito</option>
                                         </select>
@@ -752,11 +734,8 @@ function CreateProtocolPage(props) {
                                             onChange={(event) =>
                                                 setProtocol((prev) => ({ ...prev, replicable: event.target.value === 'true' }))
                                             }
-                                            defaultValue={''}
                                         >
-                                            <option value="" disabled>
-                                                Selecione...
-                                            </option>
+                                            <option value="">Selecione...</option>
                                             <option value="true">Sim</option>
                                             <option value="false">Não</option>
                                         </select>
@@ -786,15 +765,13 @@ function CreateProtocolPage(props) {
                                                                     return newProtocol;
                                                                 });
                                                             }}
-                                                            defaultValue={''}
                                                         >
-                                                            <option value="" disabled>
-                                                                Selecione...
-                                                            </option>
+                                                            <option value="">Selecione...</option>
+                                                            <option value="IS_ANSWERED">Resposta obrigatória</option>
                                                             <option value="EXACT_ANSWER">Resposta exata</option>
                                                             <option value="OPTION_SELECTED">Opção selecionada</option>
-                                                            <option value="MIN_SELECTED">Mínimo selecionado</option>
-                                                            <option value="MAX_SELECTED">Mínimo selecionado</option>
+                                                            <option value="MIN">Mínimo (numérico, caracteres ou opções)</option>
+                                                            <option value="MAX">Máximo (numérico, caracteres ou opções)</option>
                                                         </select>
                                                         <label htmlFor="page-dependency-argument" className="form-label fs-5 fw-medium">
                                                             Argumento
@@ -803,9 +780,7 @@ function CreateProtocolPage(props) {
                                                             className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                                                             id="page-dependency-argument"
                                                             type={
-                                                                dependency.type === 'MIN_SELECTED' || dependency.type === 'MAX_SELECTED'
-                                                                    ? 'number'
-                                                                    : 'text'
+                                                                dependency.type === 'MIN' || dependency.type === 'MAX' ? 'number' : 'text'
                                                             }
                                                             value={dependency.argument || ''}
                                                             onChange={(event) => {
@@ -832,11 +807,8 @@ function CreateProtocolPage(props) {
                                                                     return newProtocol;
                                                                 });
                                                             }}
-                                                            defaultValue={''}
                                                         >
-                                                            <option value="" disabled>
-                                                                Selecione...
-                                                            </option>
+                                                            <option value="">Selecione...</option>
                                                             {protocol.pages
                                                                 .filter((p, i) => i < pageIndex)
                                                                 .map((p, i) =>
@@ -844,15 +816,21 @@ function CreateProtocolPage(props) {
                                                                         g.items
                                                                             .filter(
                                                                                 (it, k) =>
-                                                                                    ((dependency.type === 'MIN_SELECTED' ||
-                                                                                        dependency.type === 'MAX_SELECTED') &&
-                                                                                        it.type === 'CHECKBOX') ||
+                                                                                    ((dependency.type === 'MIN' ||
+                                                                                        dependency.type === 'MAX') &&
+                                                                                        (it.type === 'CHECKBOX' ||
+                                                                                            it.type === 'NUMBERBOX' ||
+                                                                                            it.type === 'TEXTBOX' ||
+                                                                                            it.type === 'RANGE')) ||
                                                                                     (dependency.type === 'OPTION_SELECTED' &&
                                                                                         (it.type === 'SELECT' ||
                                                                                             it.type === 'RADIO' ||
                                                                                             it.type === 'CHECKBOX')) ||
                                                                                     (dependency.type === 'EXACT_ANSWER' &&
-                                                                                        it.type !== 'CHECKBOX')
+                                                                                        (it.type === 'NUMBERBOX' ||
+                                                                                            it.type === 'TEXTBOX' ||
+                                                                                            it.type === 'RANGE')) ||
+                                                                                    dependency.type === 'IS_ANSWERED'
                                                                             )
                                                                             .map((it, k) => (
                                                                                 <option
@@ -940,14 +918,13 @@ function CreateProtocolPage(props) {
                                                                                 return newProtocol;
                                                                             });
                                                                         }}
-                                                                        defaultValue={''}
                                                                     >
-                                                                        <option value="" disabled>
-                                                                            Selecione...
-                                                                        </option>
+                                                                        <option value="">Selecione...</option>
+                                                                        <option value="IS_ANSWERED">Resposta obrigatória</option>
                                                                         <option value="EXACT_ANSWER">Resposta exata</option>
                                                                         <option value="OPTION_SELECTED">Opção selecionada</option>
-                                                                        <option value="MIN_SELECTED">Mínimo selecionado</option>
+                                                                        <option value="MIN">Mínimo (numérico, caracteres ou opções)</option>
+                                                                        <option value="MAX">Máximo (numérico, caracteres ou opções)</option>
                                                                     </select>
                                                                     <label
                                                                         htmlFor="dependency-argument"
@@ -991,11 +968,8 @@ function CreateProtocolPage(props) {
                                                                                 return newProtocol;
                                                                             });
                                                                         }}
-                                                                        defaultValue={''}
                                                                     >
-                                                                        <option value="" disabled>
-                                                                            Selecione...
-                                                                        </option>
+                                                                        <option value="">Selecione...</option>
                                                                         {protocol.pages
                                                                             .filter((p, i) => i <= pageIndex)
                                                                             .map((p, i) =>
@@ -1006,24 +980,44 @@ function CreateProtocolPage(props) {
                                                                                             (i === pageIndex && j < groupIndex)
                                                                                     )
                                                                                     .map((g, j) =>
-                                                                                        g.items.map((it, k) => (
-                                                                                            <option
-                                                                                                key={
-                                                                                                    'page-' +
-                                                                                                    i +
-                                                                                                    '-group-' +
-                                                                                                    j +
-                                                                                                    '-dependency-' +
-                                                                                                    dependencyIndex +
-                                                                                                    '-target-' +
-                                                                                                    k +
-                                                                                                    '-option'
-                                                                                                }
-                                                                                                value={it.tempId}
-                                                                                            >
-                                                                                                {it.text}
-                                                                                            </option>
-                                                                                        ))
+                                                                                        g.items
+                                                                                            .filter(
+                                                                                                (it, k) =>
+                                                                                                    ((dependency.type === 'MIN' ||
+                                                                                                        dependency.type === 'MAX') &&
+                                                                                                        (it.type === 'CHECKBOX' ||
+                                                                                                            it.type === 'NUMBERBOX' ||
+                                                                                                            it.type === 'TEXTBOX' ||
+                                                                                                            it.type === 'RANGE')) ||
+                                                                                                    (dependency.type ===
+                                                                                                        'OPTION_SELECTED' &&
+                                                                                                        (it.type === 'SELECT' ||
+                                                                                                            it.type === 'RADIO' ||
+                                                                                                            it.type === 'CHECKBOX')) ||
+                                                                                                    (dependency.type === 'EXACT_ANSWER' &&
+                                                                                                        (it.type === 'NUMBERBOX' ||
+                                                                                                            it.type === 'TEXTBOX' ||
+                                                                                                            it.type === 'RANGE')) ||
+                                                                                                    dependency.type === 'IS_ANSWERED'
+                                                                                            )
+                                                                                            .map((it, k) => (
+                                                                                                <option
+                                                                                                    key={
+                                                                                                        'page-' +
+                                                                                                        i +
+                                                                                                        '-group-' +
+                                                                                                        j +
+                                                                                                        '-dependency-' +
+                                                                                                        dependencyIndex +
+                                                                                                        '-target-' +
+                                                                                                        k +
+                                                                                                        '-option'
+                                                                                                    }
+                                                                                                    value={it.tempId}
+                                                                                                >
+                                                                                                    {it.text}
+                                                                                                </option>
+                                                                                            ))
                                                                                     )
                                                                             )}
                                                                     </select>
@@ -1102,7 +1096,7 @@ function CreateProtocolPage(props) {
                                                                                         isNumberBox={true}
                                                                                     />
                                                                                 );
-                                                                            case 'SCALE':
+                                                                            case 'RANGE':
                                                                                 return (
                                                                                     <CreateRangeInput
                                                                                         key={itemIndex}
@@ -1160,7 +1154,9 @@ function CreateProtocolPage(props) {
                                                                     {item.itemValidations
                                                                         ?.filter(
                                                                             (v) =>
-                                                                                (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX') &&
+                                                                                (item.type === 'NUMBERBOX' ||
+                                                                                    item.type === 'CHECKBOX' ||
+                                                                                    item.type === 'TEXTBOX') &&
                                                                                 v.type !== 'MANDATORY'
                                                                         )
                                                                         .map((validation, validationIndex) => (
@@ -1198,26 +1194,30 @@ function CreateProtocolPage(props) {
                                                                                             return newProtocol;
                                                                                         });
                                                                                     }}
-                                                                                    defaultValue={''}
                                                                                 >
-                                                                                    <option value="" disabled>
-                                                                                        Selecione...
-                                                                                    </option>
+                                                                                    <option value="">Selecione...</option>
                                                                                     {item.type === 'NUMBERBOX' && (
-                                                                                        <option value="MIN">Mínimo</option>
+                                                                                        <>
+                                                                                            <option value="MIN">Número mínimo</option>
+                                                                                            <option value="MAX">Número máximo</option>
+                                                                                        </>
                                                                                     )}
-                                                                                    {item.type === 'NUMBERBOX' && (
-                                                                                        <option value="MAX">Máximo</option>
+
+                                                                                    {item.type === 'TEXTBOX' && (
+                                                                                        <>
+                                                                                            <option value="MIN">
+                                                                                                Mínimo de caracteres
+                                                                                            </option>
+                                                                                            <option value="MAX">
+                                                                                                Máximo de caracteres
+                                                                                            </option>
+                                                                                        </>
                                                                                     )}
                                                                                     {item.type === 'CHECKBOX' && (
-                                                                                        <option value="MIN_SELECTED">
-                                                                                            Mínimo de opções
-                                                                                        </option>
-                                                                                    )}
-                                                                                    {item.type === 'CHECKBOX' && (
-                                                                                        <option value="MAX_SELECTED">
-                                                                                            Máximo de opções
-                                                                                        </option>
+                                                                                        <>
+                                                                                            <option value="MIN">Mínimo de escolhas</option>
+                                                                                            <option value="MAX">Máximo de escolhas</option>
+                                                                                        </>
                                                                                     )}
                                                                                 </select>
                                                                                 <label
@@ -1281,7 +1281,9 @@ function CreateProtocolPage(props) {
                                                                                 </button>
                                                                             </div>
                                                                         ))}
-                                                                    {(item.type === 'CHECKBOX' || item.type === 'NUMBERBOX') && (
+                                                                    {(item.type === 'CHECKBOX' ||
+                                                                        item.type === 'NUMBERBOX' ||
+                                                                        item.type === 'TEXTBOX') && (
                                                                         <button
                                                                             type="button"
                                                                             onClick={() =>

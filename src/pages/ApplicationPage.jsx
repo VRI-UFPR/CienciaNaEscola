@@ -143,18 +143,32 @@ function ApplicationPage(props) {
                         }
                     }
                     break;
-                case 'MIN_SELECTED':
+                case 'MIN':
                     if (item.type === 'CHECKBOX') {
-                        if (answer) {
-                        }
                         if (!answer || Object.keys(answer).length < dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    } else if (item.type === 'RANGE' || item.type === 'NUMBERBOX') {
+                        if (!answer || Number(answer.text) < dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    } else if (item.type === 'TEXTBOX') {
+                        if (!answer || answer.text.length < dependency.argument) {
                             dependencyAttended = false;
                         }
                     }
                     break;
-                case 'MAX_SELECTED':
+                case 'MAX':
                     if (item.type === 'CHECKBOX') {
                         if (!answer || Object.keys(answer).length > dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    } else if (item.type === 'RANGE' || item.type === 'NUMBERBOX') {
+                        if (!answer || Number(answer.text) > dependency.argument) {
+                            dependencyAttended = false;
+                        }
+                    } else if (item.type === 'TEXTBOX') {
+                        if (!answer || answer.text.length > dependency.argument) {
                             dependencyAttended = false;
                         }
                     }
