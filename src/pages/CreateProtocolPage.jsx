@@ -315,6 +315,7 @@ function CreateProtocolPage(props) {
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
                                         items: g.items.map((i) => ({
+                                            id: i.id,
                                             tempId: Date.now() + Math.random() * 1000,
                                             text: i.text,
                                             description: i.description,
@@ -367,7 +368,7 @@ function CreateProtocolPage(props) {
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id })));
+                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
                     })
                     .catch((error) => {
                         setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
@@ -591,7 +592,7 @@ function CreateProtocolPage(props) {
                                                             }
                                                         }}
                                                     />
-                                                    <label htmlFor={`viewer-classroom-${c.id}`}>{c.id}</label>
+                                                    <label htmlFor={`viewer-classroom-${c.id}`}>{c.name}</label>
                                                 </div>
                                             ))}
                                         </fieldset>
@@ -720,7 +721,7 @@ function CreateProtocolPage(props) {
                                                             }
                                                         }}
                                                     />
-                                                    <label htmlFor={`answer-viewer-classroom-${c.id}`}>{c.id}</label>
+                                                    <label htmlFor={`answer-viewer-classroom-${c.id}`}>{c.name}</label>
                                                 </div>
                                             ))}
                                         </fieldset>
