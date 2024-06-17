@@ -54,7 +54,7 @@ function CheckBoxInput(props) {
                                 className={`form-check-input bg-grey`}
                                 type="checkbox"
                                 name={'checkboxoptions' + item.id}
-                                value={answer[option.id] !== undefined}
+                                checked={answer[option.id] !== undefined}
                                 id={optname + 'input' + item.id}
                                 onChange={(e) => handleOptionsUpdate(option.id, e.target.checked)}
                                 disabled={disabled}

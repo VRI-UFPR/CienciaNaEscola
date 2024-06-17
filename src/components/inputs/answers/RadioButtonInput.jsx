@@ -50,7 +50,7 @@ function RadioButtonInput(props) {
                                 type="radio"
                                 name={'radiooptions' + item.id}
                                 id={optname + 'input' + item.id}
-                                value={answer[option.id] !== undefined}
+                                checked={answer[option.id] !== undefined}
                                 onChange={() => handleOptionsUpdate(option.id)}
                                 disabled={disabled}
                             ></input>

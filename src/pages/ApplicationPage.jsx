@@ -255,41 +255,59 @@ function ApplicationPage(props) {
             itemAnswerGroups: [],
         };
         for (const group in itemAnswerGroups) {
-            const itemAnswerGroup = {
-                itemAnswers: [],
-                optionAnswers: [],
-                tableAnswers: [],
-            };
-            for (const item in itemAnswerGroups[group].itemAnswers) {
-                itemAnswerGroup.itemAnswers.push({
-                    itemId: item,
-                    text: itemAnswerGroups[group].itemAnswers[item].text,
-                    files: itemAnswerGroups[group].itemAnswers[item].files,
-                });
-            }
-            for (const item in itemAnswerGroups[group].optionAnswers) {
-                for (const option in itemAnswerGroups[group].optionAnswers[item]) {
-                    if (option !== 'group') {
-                        itemAnswerGroup.optionAnswers.push({
-                            itemId: item,
-                            optionId: option,
-                            text: itemAnswerGroups[group].optionAnswers[item][option],
-                        });
+            if (
+                application.protocol.pages
+                    .flatMap((page) =>
+                        page.itemGroups.flatMap((group) => ({
+                            pageId: page.id,
+                            groupId: group.id,
+                            pageDependencies: page.dependencies,
+                            groupDependencies: group.dependencies,
+                        }))
+                    )
+                    .filter(
+                        (dependency) =>
+                            dependency.groupId === Number(group) &&
+                            !isDependenciesAttended(dependency.pageDependencies.concat(dependency.groupDependencies))
+                    ).length === 0
+            ) {
+                const itemAnswerGroup = {
+                    itemAnswers: [],
+                    optionAnswers: [],
+                    tableAnswers: [],
+                };
+
+                for (const item in itemAnswerGroups[group].itemAnswers) {
+                    itemAnswerGroup.itemAnswers.push({
+                        itemId: item,
+                        text: itemAnswerGroups[group].itemAnswers[item].text,
+                        files: itemAnswerGroups[group].itemAnswers[item].files,
+                    });
+                }
+                for (const item in itemAnswerGroups[group].optionAnswers) {
+                    for (const option in itemAnswerGroups[group].optionAnswers[item]) {
+                        if (option !== 'group') {
+                            itemAnswerGroup.optionAnswers.push({
+                                itemId: item,
+                                optionId: option,
+                                text: itemAnswerGroups[group].optionAnswers[item][option],
+                            });
+                        }
                     }
                 }
-            }
-            for (const item in itemAnswerGroups[group].tableAnswers) {
-                for (const column in itemAnswerGroups[group].tableAnswers[item]) {
-                    if (column !== 'group') {
-                        itemAnswerGroup.tableAnswers.push({
-                            itemId: item,
-                            columnId: column,
-                            text: itemAnswerGroups[group].tableAnswers[item][column],
-                        });
+                for (const item in itemAnswerGroups[group].tableAnswers) {
+                    for (const column in itemAnswerGroups[group].tableAnswers[item]) {
+                        if (column !== 'group') {
+                            itemAnswerGroup.tableAnswers.push({
+                                itemId: item,
+                                columnId: column,
+                                text: itemAnswerGroups[group].tableAnswers[item][column],
+                            });
+                        }
                     }
                 }
+                applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
             }
-            applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
         }
 
         const formData = serialize(applicationAnswer, { indices: true });
