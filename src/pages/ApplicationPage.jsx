@@ -255,20 +255,24 @@ function ApplicationPage(props) {
             }
             for (const item in itemAnswerGroups[group].optionAnswers) {
                 for (const option in itemAnswerGroups[group].optionAnswers[item]) {
-                    itemAnswerGroup.optionAnswers.push({
-                        itemId: item,
-                        optionId: option,
-                        text: itemAnswerGroups[group].optionAnswers[item][option],
-                    });
+                    if (option !== 'group') {
+                        itemAnswerGroup.optionAnswers.push({
+                            itemId: item,
+                            optionId: option,
+                            text: itemAnswerGroups[group].optionAnswers[item][option],
+                        });
+                    }
                 }
             }
             for (const item in itemAnswerGroups[group].tableAnswers) {
                 for (const column in itemAnswerGroups[group].tableAnswers[item]) {
-                    itemAnswerGroup.tableAnswers.push({
-                        itemId: item,
-                        columnId: column,
-                        text: itemAnswerGroups[group].tableAnswers[item][column],
-                    });
+                    if (column !== 'group') {
+                        itemAnswerGroup.tableAnswers.push({
+                            itemId: item,
+                            columnId: column,
+                            text: itemAnswerGroups[group].tableAnswers[item][column],
+                        });
+                    }
                 }
             }
             applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
