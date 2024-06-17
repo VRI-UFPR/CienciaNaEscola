@@ -16,7 +16,7 @@ const TextButtonStyles = (hue, sat, lig) => {
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
         }
 
-        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus, .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
             color: #fff !important;
             background-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%) !important;
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
