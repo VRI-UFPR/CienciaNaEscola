@@ -190,7 +190,24 @@ function AnswerPage(props) {
                         break;
 
                     case 'UPLOAD':
-                        userAnswers[j + 1] = baseUrl.concat(String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[0].path));
+                        for (let k = 0; k < items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files.length; k++) {
+                            if (
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.png') ||
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpg') ||
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpeg')
+                            ) {
+                                if (userAnswers[j + 1] !== undefined)
+                                    userAnswers[j + 1] =
+                                        userAnswers[j + 1] +
+                                        ' | ' +
+                                        baseUrl.concat('api/', String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path));
+                                else
+                                    userAnswers[j + 1] = baseUrl.concat(
+                                        'api/',
+                                        String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path)
+                                    );
+                            }
+                        }
                         break;
 
                     case 'NUMBERBOX':
