@@ -12,7 +12,6 @@ import CreateProtocolPage from './../pages/CreateProtocolPage';
 import AnswerPage from '../pages/AnswerPage';
 import { aboutPICCE, terms } from '../utils/constants';
 import InstallPage from '../pages/InstallPage';
-import PrototypeAnswersPage from '../pages/PrototypeAnswersPage';
 
 function AppRoutes(props) {
     return (
@@ -30,7 +29,6 @@ function AppRoutes(props) {
                     />
                 }
             />
-            <Route path="/prototypeanswer/:id" element={<PrototypeAnswersPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/dash/login" element={<LoginPage />} />
             <Route path="/home" element={<HomePage />} />
