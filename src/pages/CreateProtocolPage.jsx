@@ -300,6 +300,7 @@ function CreateProtocolPage(props) {
                                 });
                                 return;
                             }
+                            const tempIdMap = {};
                             setProtocol({
                                 id: d.id,
                                 title: d.title,
@@ -310,27 +311,34 @@ function CreateProtocolPage(props) {
                                 applicability: d.applicability,
                                 answersVisibility: d.answersVisibility,
                                 pages: d.pages.map((p) => ({
+                                    id: p.id,
                                     type: p.type,
                                     itemGroups: p.itemGroups.map((g) => ({
+                                        id: g.id,
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
-                                        items: g.items.map((i) => ({
-                                            id: i.id,
-                                            tempId: Date.now() + Math.random() * 1000,
-                                            text: i.text,
-                                            description: i.description,
-                                            type: i.type,
-                                            enabled: i.enabled,
-                                            itemOptions: i.itemOptions.map((o) => ({
-                                                text: o.text,
-                                                files: o.files.map((f) => ({ id: f.id, path: f.path })),
-                                            })),
-                                            files: i.files.map((f) => ({ id: f.id, path: f.path })),
-                                            itemValidations: i.itemValidations,
-                                        })),
-                                        dependencies: g.dependencies,
+                                        items: g.items.map((i) => {
+                                            const tempId = Date.now() + Math.random() * 1000;
+                                            tempIdMap[i.id] = tempId;
+                                            return {
+                                                id: i.id,
+                                                tempId: tempId,
+                                                text: i.text,
+                                                description: i.description,
+                                                type: i.type,
+                                                enabled: i.enabled,
+                                                itemOptions: i.itemOptions.map((o) => ({
+                                                    id: o.id,
+                                                    text: o.text,
+                                                    files: o.files.map((f) => ({ id: f.id, path: f.path })),
+                                                })),
+                                                files: i.files.map((f) => ({ id: f.id, path: f.path })),
+                                                itemValidations: i.itemValidations,
+                                            };
+                                        }),
+                                        dependencies: g.dependencies.map((dep) => ({ ...dep, itemTempId: tempIdMap[dep.itemId] })),
                                     })),
-                                    dependencies: p.dependencies,
+                                    dependencies: p.dependencies.map((dep) => ({ ...dep, itemTempId: tempIdMap[dep.itemId] })),
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),
                                 viewersClassroom: d.viewersClassroom.map((c) => c.id),
