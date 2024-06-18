@@ -5,7 +5,6 @@ import LoginPage from './../pages/LoginPage';
 import HomePage from './../pages/HomePage';
 import InfosPage from './../pages/InfosPage';
 import ProfilePage from './../pages/ProfilePage';
-import LogoutPage from './../pages/LogoutPage';
 import SignUpPage from './../pages/SignUpPage';
 import ProtocolPage from './../pages/ProtocolPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
@@ -40,7 +39,6 @@ function AppRoutes(props) {
             />
             <Route path="/profile" element={<ProfilePage allowEdit={false} />} />
             <Route path="/protocol/:id" element={<ProtocolPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/dash/home" element={<HomePage showNavTogglerMobile={true} showNavTogglerDesktop={false} />} />
             <Route path="/createprotocol" element={<CreateProtocolPage />} />
