@@ -37,7 +37,7 @@ const styles = `
 `;
 
 function HelpPage(props) {
-    const { showSidebar, showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { showSidebar = true, showNavTogglerMobile = true, showNavTogglerDesktop = false } = props;
     const modalRef = useRef(null);
 
     const questions = [
@@ -94,11 +94,5 @@ function HelpPage(props) {
         </div>
     );
 }
-
-HelpPage.defaultProps = {
-    showSidebar: true,
-    showNavTogglerMobile: true,
-    showNavTogglerDesktop: false,
-};
 
 export default HelpPage;

@@ -69,7 +69,7 @@ function ImageInput(props) {
                 <div className="row rounded p-0 pb-3 m-0">
                     <MarkdownText text={item.text} />
                     <div className="d-flex align-items-center p-0">
-                        <div class="btn-group dropend">
+                        <div className="btn-group dropend">
                             <RoundedButton
                                 hsl={[190, 46, 70]}
                                 icon={iconFile}
@@ -78,7 +78,7 @@ function ImageInput(props) {
                                 data-bs-toggle="dropdown"
                                 disabled={disabled}
                             />
-                            <ul class="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
+                            <ul className="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
                                 <li className="dropdown-item">
                                     <div className="row m-0 align-items-center justify-content-between">
                                         <div className="col-auto p-0 pe-3">

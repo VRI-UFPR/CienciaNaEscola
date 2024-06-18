@@ -18,7 +18,7 @@ const GalleryModalStyles = `
 `;
 
 const GalleryModal = forwardRef((props, ref) => {
-    const [modal, setModal] = useState(props);
+    const [modal, setModal] = useState({ id: 'Gallery', currentImage: 0, images: [] });
 
     const handleSlide = useCallback((event) => {
         const targetId = event.to;
@@ -107,11 +107,5 @@ const GalleryModal = forwardRef((props, ref) => {
         </div>
     );
 });
-
-GalleryModal.defaultProps = {
-    id: 'Gallery',
-    currentImage: 0,
-    images: [],
-};
 
 export default GalleryModal;

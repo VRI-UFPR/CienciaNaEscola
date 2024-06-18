@@ -65,7 +65,7 @@ const CreateProtocolStyles = `
 
 function CreateProtocolPage(props) {
     const { protocolId } = useParams();
-    const { isEditing } = props;
+    const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
 
     const [protocol, setProtocol] = useState({
@@ -749,9 +749,5 @@ function CreateProtocolPage(props) {
         </div>
     );
 }
-
-CreateProtocolPage.defaultProps = {
-    isEditing: false,
-};
 
 export default CreateProtocolPage;

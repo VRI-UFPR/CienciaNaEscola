@@ -46,7 +46,7 @@ const profilePageStyles = `
 
 function ProfilePage(props) {
     const { user } = useContext(AuthContext);
-    const { showSidebar, allowEdit } = props;
+    const { showSidebar = true, allowEdit = true } = props;
     const { showAlert } = useContext(AlertContext);
 
     if (user.status !== 'authenticated') {
@@ -154,10 +154,5 @@ function ProfilePage(props) {
         </>
     );
 }
-
-ProfilePage.defaultProps = {
-    showSidebar: true,
-    allowEdit: true,
-};
 
 export default ProfilePage;

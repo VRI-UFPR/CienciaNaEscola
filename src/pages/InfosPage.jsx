@@ -31,7 +31,7 @@ const infosPageStyles = `
 `;
 
 function InfosPage(props) {
-    const { content, showSidebar, showAccept, showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { content, showSidebar = true, showAccept = true, showNavTogglerMobile = true, showNavTogglerDesktop = true } = props;
     const navigate = useNavigate();
     const { user, logout, acceptTerms } = useContext(AuthContext);
     const { isDashboard } = useContext(LayoutContext);
@@ -117,12 +117,5 @@ function InfosPage(props) {
         </div>
     );
 }
-
-InfosPage.defaultProps = {
-    showSidebar: true,
-    showAccept: true,
-    showNavTogglerMobile: true,
-    showNavTogglerDesktop: true,
-};
 
 export default InfosPage;

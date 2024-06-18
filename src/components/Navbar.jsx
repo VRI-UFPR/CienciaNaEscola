@@ -22,7 +22,7 @@ const styles = `
 `;
 
 function NavBar(props) {
-    const { showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { showNavTogglerMobile = true, showNavTogglerDesktop = true } = props;
 
     return (
         <>
@@ -52,10 +52,5 @@ function NavBar(props) {
         </>
     );
 }
-
-NavBar.defaultProps = {
-    showNavTogglerDesktop: true,
-    showNavTogglerMobile: true,
-};
 
 export default NavBar;

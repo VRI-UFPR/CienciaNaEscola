@@ -32,13 +32,13 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
 
 function RoundedButton(props) {
     const {
-        hsl: [hue, sat, lig],
-        size,
-        icon,
-        alt,
-        className,
-        onClick,
-        role,
+        hsl: [hue, sat, lig] = [355, 78, 66],
+        size = 32,
+        icon = helpIcon,
+        alt = 'Ícone',
+        className = '',
+        onClick = () => undefined,
+        role = undefined,
         disabled,
         'data-bs-toggle': dataBsToggle,
     } = props;
@@ -58,15 +58,5 @@ function RoundedButton(props) {
         </button>
     );
 }
-
-RoundedButton.defaultProps = {
-    hsl: [355, 78, 66],
-    size: 32,
-    icon: helpIcon,
-    alt: 'Ícone',
-    className: '',
-    role: undefined,
-    onClick: () => undefined,
-};
 
 export default RoundedButton;

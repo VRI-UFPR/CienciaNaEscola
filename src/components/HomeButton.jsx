@@ -22,7 +22,7 @@ const styles = `
 `;
 
 function HomeButton(props) {
-    const { title, check } = props;
+    const { title, check = false } = props;
 
     return (
         <div className="custom-btn rounded-4 d-flex align-items-center justify-content-between font-barlow h-100 w-100 px-4">
@@ -40,9 +40,5 @@ function HomeButton(props) {
         </div>
     );
 }
-
-HomeButton.defaultProps = {
-    check: false,
-};
 
 export default HomeButton;

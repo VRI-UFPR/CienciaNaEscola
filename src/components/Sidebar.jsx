@@ -50,10 +50,10 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { showExitButton } = props;
+    const { showExitButton = true } = props;
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    const { isDashboard } = useContext(LayoutContext);
+    const { isDashboard = false } = useContext(LayoutContext);
     const { showAlert } = useContext(AlertContext);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
@@ -170,10 +170,5 @@ function Sidebar(props) {
         </div>
     );
 }
-
-Sidebar.defaultProps = {
-    showExitButton: true,
-    isDashboard: false,
-};
 
 export default Sidebar;
