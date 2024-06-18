@@ -5,6 +5,7 @@ WORKDIR /app/
 COPY public/ /app/public
 COPY src/ /app/src
 COPY package.json /app/
+COPY uploads /app/uploads
 
 # Define a variável de ambiente para a porta
 ENV PORT=3001
