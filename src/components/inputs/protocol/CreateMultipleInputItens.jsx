@@ -62,16 +62,42 @@ function CreateSingleSelectionInput(props) {
         updateItem(item, pageIndex, groupIndex, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
 
+    const updateOptionPlacement = (newPlacement, oldPlacement, optionIndex) => {
+        if (newPlacement < 1 || newPlacement > item.itemOptions.length) return;
+        const newItem = { ...item };
+        if (newPlacement > oldPlacement) {
+            for (const o of newItem.itemOptions) {
+                if (o.placement > oldPlacement && o.placement <= newPlacement) o.placement--;
+            }
+        } else {
+            for (const o of newItem.itemOptions) {
+                if (o.placement >= newPlacement && o.placement < oldPlacement) o.placement++;
+            }
+        }
+        newItem.itemOptions[optionIndex].placement = newPlacement;
+        newItem.itemOptions.sort((a, b) => a.placement - b.placement);
+        setItem(newItem);
+    };
+
     const addOption = () => {
-        setItem((prev) => ({ ...prev, itemOptions: [...prev.itemOptions, { text: '' }] }));
+        const newItem = { ...item };
+        const newPlacement = newItem.itemOptions.length + 1;
+        const tempId = Date.now() + Math.random() * 1000;
+        newItem.itemOptions.push({ text: '', placement: newPlacement, tempId: tempId });
+        setItem(newItem);
     };
 
     const removeOption = (index) => {
-        setItem((prev) => ({ ...prev, itemOptions: prev.itemOptions.filter((_, i) => i !== index) }));
+        const newItem = { ...item };
+        newItem.itemOptions = newItem.itemOptions.splice(index, 1);
+        for (const [i, option] of newItem.itemOptions.entries()) if (i >= index) option.placement--;
+        setItem(newItem);
     };
 
     const updateOption = (index, value) => {
-        setItem((prev) => ({ ...prev, itemOptions: prev.itemOptions.map((item, i) => (i === index ? { text: value } : item)) }));
+        const newItem = { ...item };
+        newItem.itemOptions[index].text = value;
+        setItem(newItem);
     };
 
     return (
@@ -148,15 +174,21 @@ function CreateSingleSelectionInput(props) {
                 </div>
                 {item.itemOptions.map((data, i) => {
                     return (
-                        <div key={i + 1} className="mb-3">
-                            <label htmlFor={i} className="form-label fw-medium fs-5">
+                        <div key={'item-option-' + data.tempId} className="mb-3">
+                            <label htmlFor={'item-option-text-' + data.tempId} className="form-label fw-medium fs-5">
                                 Opção {i}
                             </label>
+                            <button type="button" onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}>
+                                Mover ⬆
+                            </button>
+                            <button type="button" onClick={() => updateOptionPlacement(data.placement + 1, data.placement, i)}>
+                                Mover ⬇
+                            </button>
                             <div className="d-flex">
                                 <input
                                     type="text"
                                     className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                    id={i}
+                                    id={'item-option-text-' + data.tempId}
                                     value={data.text || ''}
                                     aria-describedby="questionHelp"
                                     onChange={(event) => updateOption(i, event.target.value)}

@@ -303,16 +303,6 @@ function CreateProtocolPage(props) {
             ...protocol,
             creatorId: user.id,
             owners: [],
-            pages: protocol.pages.map((page, index) => ({
-                ...page,
-                itemGroups: page.itemGroups.map((group, index) => ({
-                    ...group,
-                    items: group.items.map((item, index) => ({
-                        ...item,
-                        itemOptions: item.itemOptions?.map((option, index) => ({ ...option, placement: index + 1 })),
-                    })),
-                })),
-            })),
         };
 
         const formData = serialize(placedProtocol, { indices: true });
@@ -420,6 +410,8 @@ function CreateProtocolPage(props) {
                                                 placement: i.placement,
                                                 itemOptions: i.itemOptions.map((o) => ({
                                                     id: o.id,
+                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    placement: o.placement,
                                                     text: o.text,
                                                     files: o.files.map((f) => ({ id: f.id, path: f.path })),
                                                 })),
