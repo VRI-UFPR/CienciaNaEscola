@@ -46,6 +46,8 @@ function CreateUserPage(props) {
                                 role: d.role,
                                 hash: d.hash,
                                 classrooms: d.classrooms.map((c) => c.id),
+                                profileImageId: d.profileImage?.id,
+                                profileImage: d.profileImage,
                             });
                         })
                         .catch((error) => {
@@ -235,6 +237,35 @@ function CreateUserPage(props) {
                         </fieldset>
                     </div>
                 )}
+                <div>
+                    <label htmlFor="profile-pic">Foto de perfil</label>
+                    <input
+                        type="file"
+                        name="profile-pic"
+                        id="profile-pic"
+                        form="user-form"
+                        accept="image/*"
+                        onChange={(e) => setNewUser({ ...newUser, profileImage: e.target.files[0], profileImageId: undefined })}
+                    />
+                    {newUser.profileImage && (
+                        <div>
+                            <img
+                                src={
+                                    newUser.profileImageId ? baseUrl + newUser.profileImage.path : URL.createObjectURL(newUser.profileImage)
+                                }
+                                className="w-25"
+                                alt="Foto de perfil"
+                            />
+                            <br />
+                            <button
+                                type="button"
+                                onClick={() => setNewUser((prev) => ({ ...prev, profileImage: undefined, profileImageId: undefined }))}
+                            >
+                                Excluir foto
+                            </button>
+                        </div>
+                    )}
+                </div>
                 <div>
                     <button type="submit">Enviar</button>
                 </div>
