@@ -1,6 +1,4 @@
 import { React } from 'react';
-import { Link } from 'react-router-dom';
-
 import HomeButton from './HomeButton';
 
 const ProtocolListStyles = (hue, sat, lig) => {
@@ -45,6 +43,11 @@ function ProtocolList(props) {
     const {
         listItems,
         hsl: [hue, sat, lig],
+        viewFunction = () => {},
+        allowEdit = false,
+        editFunction = () => {},
+        allowDelete = false,
+        deleteFunction = () => {},
     } = props;
 
     return (
@@ -59,13 +62,19 @@ function ProtocolList(props) {
                 } d-flex flex-column align-items-center h-100 px-1 pe-3 overflow-y-scroll`}
             >
                 {listItems.map((li) => (
-                    <Link
-                        to={`${li.id}`}
+                    <div
                         key={'list-item-' + li.id}
                         className="button-container d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                     >
-                        <HomeButton title={li.title} />
-                    </Link>
+                        <HomeButton
+                            title={li.title}
+                            viewFunction={() => viewFunction(li.id)}
+                            allowEdit={allowEdit}
+                            editFunction={() => editFunction(li.id)}
+                            allowDelete={allowDelete}
+                            deleteFunction={() => deleteFunction(li.id)}
+                        />
+                    </div>
                 ))}
                 {listItems.length === 0 && (
                     <p className="font-barlow text-center color-grey fw-medium m-0">Nada para mostrar por enquanto</p>

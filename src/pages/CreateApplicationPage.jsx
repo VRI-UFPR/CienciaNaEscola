@@ -174,7 +174,7 @@ function CreateApplicationPage(props) {
                         onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
                     >
                         <option value="">Selecione uma opção:</option>
-                        {protocolVisibility === 'PUBLIC  ' && <option value="PUBLIC">Visível para todos</option>}
+                        {protocolVisibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
                         <option value="RESTRICT">Restringir visualizadores</option>
                     </select>
                 </div>
@@ -325,11 +325,13 @@ function CreateApplicationPage(props) {
             <div>
                 <p>{JSON.stringify(application, null, 2)}</p>
             </div>
-            <div>
-                <button type="button" onClick={deleteApplication}>
-                    Excluir
-                </button>
-            </div>
+            {isEditing && (
+                <div>
+                    <button type="button" onClick={deleteApplication}>
+                        Excluir
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
