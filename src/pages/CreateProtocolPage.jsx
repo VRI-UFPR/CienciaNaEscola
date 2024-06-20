@@ -93,9 +93,63 @@ function CreateProtocolPage(props) {
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
 
+    const updatePagePlacement = useCallback(
+        (newPlacement, oldPlacement, pageIndex) => {
+            if (newPlacement < 1 || newPlacement > protocol.pages.length) return;
+            const newProtocol = { ...protocol };
+            if (newPlacement > oldPlacement) {
+                for (const p of newProtocol.pages) if (p.placement > oldPlacement && p.placement <= newPlacement) p.placement--;
+            } else {
+                for (const p of newProtocol.pages) if (p.placement >= newPlacement && p.placement < oldPlacement) p.placement++;
+            }
+            newProtocol.pages[pageIndex].placement = newPlacement;
+            newProtocol.pages.sort((a, b) => a.placement - b.placement);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const updateGroupPlacement = useCallback(
+        (newPlacement, oldPlacement, pageIndex, groupIndex) => {
+            if (newPlacement < 1 || newPlacement > protocol.pages[pageIndex].itemGroups.length) return;
+            const newProtocol = { ...protocol };
+            if (newPlacement > oldPlacement) {
+                for (const g of newProtocol.pages[pageIndex].itemGroups)
+                    if (g.placement > oldPlacement && g.placement <= newPlacement) g.placement--;
+            } else {
+                for (const g of newProtocol.pages[pageIndex].itemGroups)
+                    if (g.placement >= newPlacement && g.placement < oldPlacement) g.placement++;
+            }
+            newProtocol.pages[pageIndex].itemGroups[groupIndex].placement = newPlacement;
+            newProtocol.pages[pageIndex].itemGroups.sort((a, b) => a.placement - b.placement);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const updateItemPlacement = useCallback(
+        (newPlacement, oldPlacement, pageIndex, groupIndex, itemIndex) => {
+            if (newPlacement < 1 || newPlacement > protocol.pages[pageIndex].itemGroups[groupIndex].items.length) return;
+            const newProtocol = { ...protocol };
+            if (newPlacement > oldPlacement) {
+                for (const i of newProtocol.pages[pageIndex].itemGroups[groupIndex].items)
+                    if (i.placement > oldPlacement && i.placement <= newPlacement) i.placement--;
+            } else {
+                for (const i of newProtocol.pages[pageIndex].itemGroups[groupIndex].items)
+                    if (i.placement >= newPlacement && i.placement < oldPlacement) i.placement++;
+            }
+            newProtocol.pages[pageIndex].itemGroups[groupIndex].items[itemIndex].placement = newPlacement;
+            newProtocol.pages[pageIndex].itemGroups[groupIndex].items.sort((a, b) => a.placement - b.placement);
+            const procolo = { ...newProtocol };
+            setProtocol(procolo);
+        },
+        [protocol]
+    );
+
     const insertItem = (type, page, group) => {
         const newProtocol = { ...protocol };
-        newProtocol.pages[page].itemGroups[group].items.push(defaultNewInput(type));
+        const newPlacement = newProtocol.pages[page].itemGroups[group].items.length + 1;
+        newProtocol.pages[page].itemGroups[group].items.push({ ...defaultNewInput(type), placement: newPlacement });
         setProtocol(newProtocol);
     };
 
@@ -111,13 +165,18 @@ function CreateProtocolPage(props) {
         setProtocol((prev) => {
             const newProtocol = { ...prev };
             newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
+            for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
+                if (i >= index) item.placement--;
+            }
             return newProtocol;
         });
     }, []);
 
     const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
-        newProtocol.pages.push({ type: 'ITEMS', itemGroups: [], dependencies: [] });
+        const newPlacement = newProtocol.pages.length + 1;
+        const tempId = Date.now() + Math.random() * 1000;
+        newProtocol.pages.push({ type: 'ITEMS', itemGroups: [], dependencies: [], placement: newPlacement, tempId: tempId });
         setProtocol(newProtocol);
     }, [protocol]);
 
@@ -125,6 +184,9 @@ function CreateProtocolPage(props) {
         (index) => {
             const newProtocol = { ...protocol };
             newProtocol.pages.splice(index, 1);
+            for (const [i, page] of newProtocol.pages.entries()) {
+                if (i >= index) page.placement--;
+            }
             setProtocol(newProtocol);
         },
         [protocol]
@@ -133,7 +195,16 @@ function CreateProtocolPage(props) {
     const insertItemGroup = useCallback(
         (page) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.push({ type: 'ONE_DIMENSIONAL', isRepeatable: false, items: [], dependencies: [] });
+            const newPlacement = newProtocol.pages[page].itemGroups.length + 1;
+            const tempId = Date.now() + Math.random() * 1000;
+            newProtocol.pages[page].itemGroups.push({
+                type: 'ONE_DIMENSIONAL',
+                isRepeatable: false,
+                items: [],
+                dependencies: [],
+                placement: newPlacement,
+                tempId: tempId,
+            });
             setProtocol(newProtocol);
         },
         [protocol]
@@ -143,6 +214,9 @@ function CreateProtocolPage(props) {
         (page, index) => {
             const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups.splice(index, 1);
+            for (const [i, group] of newProtocol.pages[page].itemGroups.entries()) {
+                if (i >= index) group.placement--;
+            }
             setProtocol(newProtocol);
         },
         [protocol]
@@ -151,11 +225,13 @@ function CreateProtocolPage(props) {
     const insertItemGroupDependency = useCallback(
         (page, group) => {
             const newProtocol = { ...protocol };
+            const tempId = Date.now() + Math.random() * 1000;
             newProtocol.pages[page].itemGroups[group].dependencies.push({
-                type: 'EXACT_ANSWER',
+                type: '',
                 argument: '',
                 itemTempId: '',
                 customMessage: '',
+                tempId: tempId,
             });
             setProtocol(newProtocol);
         },
@@ -174,7 +250,14 @@ function CreateProtocolPage(props) {
     const insertPageDependency = useCallback(
         (pageIndex) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[pageIndex].dependencies.push({ type: 'EXACT_ANSWER', argument: '', itemTempId: '', customMessage: '' });
+            const tempId = Date.now() + Math.random() * 1000;
+            newProtocol.pages[pageIndex].dependencies.push({
+                type: '',
+                argument: '',
+                itemTempId: '',
+                customMessage: '',
+                tempId: tempId,
+            });
             setProtocol(newProtocol);
         },
         [protocol]
@@ -192,7 +275,13 @@ function CreateProtocolPage(props) {
     const insertItemValidation = useCallback(
         (page, group, item) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push({ type: 'MIN', argument: '', customMessage: '' });
+            const tempId = Date.now() + Math.random() * 1000;
+            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push({
+                type: '',
+                argument: '',
+                customMessage: '',
+                tempId: tempId,
+            });
             setProtocol(newProtocol);
         },
         [protocol]
@@ -216,13 +305,10 @@ function CreateProtocolPage(props) {
             owners: [],
             pages: protocol.pages.map((page, index) => ({
                 ...page,
-                placement: index + 1,
                 itemGroups: page.itemGroups.map((group, index) => ({
                     ...group,
-                    placement: index + 1,
                     items: group.items.map((item, index) => ({
                         ...item,
-                        placement: index + 1,
                         itemOptions: item.itemOptions?.map((option, index) => ({ ...option, placement: index + 1 })),
                     })),
                 })),
@@ -312,11 +398,15 @@ function CreateProtocolPage(props) {
                                 answersVisibility: d.answersVisibility,
                                 pages: d.pages.map((p) => ({
                                     id: p.id,
+                                    tempId: Date.now() + Math.random() * 1000,
                                     type: p.type,
+                                    placement: p.placement,
                                     itemGroups: p.itemGroups.map((g) => ({
                                         id: g.id,
+                                        tempId: Date.now() + Math.random() * 1000,
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
+                                        placement: g.placement,
                                         items: g.items.map((i) => {
                                             const tempId = Date.now() + Math.random() * 1000;
                                             tempIdMap[i.id] = tempId;
@@ -327,18 +417,30 @@ function CreateProtocolPage(props) {
                                                 description: i.description,
                                                 type: i.type,
                                                 enabled: i.enabled,
+                                                placement: i.placement,
                                                 itemOptions: i.itemOptions.map((o) => ({
                                                     id: o.id,
                                                     text: o.text,
                                                     files: o.files.map((f) => ({ id: f.id, path: f.path })),
                                                 })),
                                                 files: i.files.map((f) => ({ id: f.id, path: f.path })),
-                                                itemValidations: i.itemValidations,
+                                                itemValidations: i.itemValidations.map((v) => ({
+                                                    ...v,
+                                                    tempId: Date.now() + Math.random() * 1000,
+                                                })),
                                             };
                                         }),
-                                        dependencies: g.dependencies.map((dep) => ({ ...dep, itemTempId: tempIdMap[dep.itemId] })),
+                                        dependencies: g.dependencies.map((dep) => ({
+                                            ...dep,
+                                            itemTempId: tempIdMap[dep.itemId],
+                                            tempId: Date.now() + Math.random() * 1000,
+                                        })),
                                     })),
-                                    dependencies: p.dependencies.map((dep) => ({ ...dep, itemTempId: tempIdMap[dep.itemId] })),
+                                    dependencies: p.dependencies.map((dep) => ({
+                                        ...dep,
+                                        itemTempId: tempIdMap[dep.itemId],
+                                        tempId: Date.now() + Math.random() * 1000,
+                                    })),
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),
                                 viewersClassroom: d.viewersClassroom.map((c) => c.id),
@@ -469,7 +571,7 @@ function CreateProtocolPage(props) {
                                     >
                                         <option value={''}>Selecione...</option>
                                         {protocol.pages.map((page, index) => (
-                                            <option key={'page-' + index + '-option'} value={index}>
+                                            <option key={'page-' + page.tempId + '-option'} value={index}>
                                                 Página {index + 1}
                                             </option>
                                         ))}
@@ -484,7 +586,7 @@ function CreateProtocolPage(props) {
                                     >
                                         <option value={''}>Selecione...</option>
                                         {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
-                                            <option key={'page-' + itemTarget.page + '-group-' + index + '-option'} value={index}>
+                                            <option key={'group-' + group.tempId + '-option'} value={index}>
                                                 Grupo {index + 1}
                                             </option>
                                         ))}
@@ -545,7 +647,7 @@ function CreateProtocolPage(props) {
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione os usuários visualizadores</span>
                                             {institutionUsers.map((u) => (
-                                                <div key={'viewer-user-' + u.id}>
+                                                <div key={'viewer-user-' + u.id + '-option'}>
                                                     <input
                                                         form="application-form"
                                                         type="checkbox"
@@ -576,7 +678,7 @@ function CreateProtocolPage(props) {
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione as salas de aula visualizadoras</span>
                                             {institutionClassrooms.map((c) => (
-                                                <div key={'viewer-classroom-' + c.id}>
+                                                <div key={'viewer-classroom-' + c.id + '-option'}>
                                                     <input
                                                         form="application-form"
                                                         type="checkbox"
@@ -622,7 +724,7 @@ function CreateProtocolPage(props) {
                                             {institutionUsers
                                                 .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
                                                 .map((u) => (
-                                                    <div key={'applier-' + u.id}>
+                                                    <div key={'applier-' + u.id + '-option'}>
                                                         <input
                                                             form="application-form"
                                                             type="checkbox"
@@ -668,7 +770,7 @@ function CreateProtocolPage(props) {
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione os usuários visualizadores de resposta</span>
                                             {institutionUsers.map((u) => (
-                                                <div key={'answer-viewer-user-' + u.id}>
+                                                <div key={'answer-viewer-user-' + u.id + '-option'}>
                                                     <input
                                                         form="application-form"
                                                         type="checkbox"
@@ -702,7 +804,7 @@ function CreateProtocolPage(props) {
                                         <fieldset>
                                             <span className="fs-5 fw-medium">Selecione as salas de aula visualizadoras de resposta</span>
                                             {institutionClassrooms.map((c) => (
-                                                <div key={'answer-viewer-classroom-' + c.id}>
+                                                <div key={'answer-viewer-classroom-' + c.id + '-option'}>
                                                     <input
                                                         form="application-form"
                                                         type="checkbox"
@@ -751,13 +853,29 @@ function CreateProtocolPage(props) {
                                     </div>
                                     {protocol.pages?.map((page, pageIndex) => {
                                         return (
-                                            <div key={'page-' + pageIndex}>
-                                                <p className="m-0 p-0">Página {pageIndex + 1}</p>
-                                                <button type="button" onClick={() => removePage(pageIndex)}>
-                                                    Remover página
+                                            <div className="bg-primary-subtle mb-2" key={'page-' + page.tempId}>
+                                                <span>Página {pageIndex + 1}</span>
+                                                <br />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => updatePagePlacement(page.placement - 1, page.placement, pageIndex)}
+                                                >
+                                                    Mover ⬆
                                                 </button>
+                                                <br />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => updatePagePlacement(page.placement + 1, page.placement, pageIndex)}
+                                                >
+                                                    Mover ⬇
+                                                </button>
+                                                <br />
+                                                <button type="button" onClick={() => removePage(pageIndex)}>
+                                                    X Página
+                                                </button>
+                                                <br />
                                                 {page.dependencies?.map((dependency, dependencyIndex) => (
-                                                    <div key={'page-' + pageIndex + '-dependency-' + dependencyIndex}>
+                                                    <div key={'page-dependency-' + dependency.tempId}>
                                                         <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
                                                         <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
                                                             Tipo de dependência
@@ -844,12 +962,10 @@ function CreateProtocolPage(props) {
                                                                             .map((it, k) => (
                                                                                 <option
                                                                                     key={
-                                                                                        'page-' +
-                                                                                        i +
-                                                                                        '-dependency-' +
-                                                                                        dependencyIndex +
+                                                                                        'dependency-' +
+                                                                                        dependency.tempId +
                                                                                         '-target-' +
-                                                                                        k +
+                                                                                        it.tempId +
                                                                                         '-option'
                                                                                     }
                                                                                     value={it.tempId}
@@ -885,31 +1001,52 @@ function CreateProtocolPage(props) {
                                                             type="button"
                                                             onClick={() => removePageDependency(pageIndex, dependencyIndex)}
                                                         >
-                                                            Remover dependência de página
+                                                            X Dependência de página
                                                         </button>
                                                     </div>
                                                 ))}
                                                 <button type="button" onClick={() => insertPageDependency(pageIndex)}>
-                                                    Adicionar dependência de página
+                                                    + Dependência de página
                                                 </button>
+                                                <br />
                                                 {page.itemGroups?.map((group, groupIndex) => {
                                                     return (
-                                                        <div key={'page-' + pageIndex + '-group-' + groupIndex}>
+                                                        <div className="bg-light mb-3" key={'group-' + groupIndex}>
                                                             <p className="m-0 p-0">Grupo {groupIndex + 1}</p>
-                                                            <button type="button" onClick={() => removeItemGroup(pageIndex, groupIndex)}>
-                                                                Remover grupo
+                                                            <button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    updateGroupPlacement(
+                                                                        group.placement - 1,
+                                                                        group.placement,
+                                                                        pageIndex,
+                                                                        groupIndex
+                                                                    )
+                                                                }
+                                                            >
+                                                                Mover ⬆
                                                             </button>
+                                                            <br />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    updateGroupPlacement(
+                                                                        group.placement + 1,
+                                                                        group.placement,
+                                                                        pageIndex,
+                                                                        groupIndex
+                                                                    )
+                                                                }
+                                                            >
+                                                                Mover ⬇
+                                                            </button>
+                                                            <br />
+                                                            <button type="button" onClick={() => removeItemGroup(pageIndex, groupIndex)}>
+                                                                X Grupo
+                                                            </button>
+                                                            <br />
                                                             {group.dependencies?.map((dependency, dependencyIndex) => (
-                                                                <div
-                                                                    key={
-                                                                        'page-' +
-                                                                        pageIndex +
-                                                                        '-group-' +
-                                                                        groupIndex +
-                                                                        '-dependency-' +
-                                                                        dependencyIndex
-                                                                    }
-                                                                >
+                                                                <div key={'group-dependency-' + dependency.tempId}>
                                                                     <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
                                                                     <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
                                                                         Tipo de dependência
@@ -1012,14 +1149,10 @@ function CreateProtocolPage(props) {
                                                                                             .map((it, k) => (
                                                                                                 <option
                                                                                                     key={
-                                                                                                        'page-' +
-                                                                                                        i +
-                                                                                                        '-group-' +
-                                                                                                        j +
-                                                                                                        '-dependency-' +
-                                                                                                        dependencyIndex +
+                                                                                                        'dependency-' +
+                                                                                                        dependency.tempId +
                                                                                                         '-target-' +
-                                                                                                        k +
+                                                                                                        it.tempId +
                                                                                                         '-option'
                                                                                                     }
                                                                                                     value={it.tempId}
@@ -1062,7 +1195,7 @@ function CreateProtocolPage(props) {
                                                                             )
                                                                         }
                                                                     >
-                                                                        Remover dependência de grupo
+                                                                        X Dependência de grupo
                                                                     </button>
                                                                 </div>
                                                             ))}
@@ -1070,20 +1203,45 @@ function CreateProtocolPage(props) {
                                                                 type="button"
                                                                 onClick={() => insertItemGroupDependency(pageIndex, groupIndex)}
                                                             >
-                                                                Adicionar dependência de grupo
+                                                                + Dependência de grupo
                                                             </button>
                                                             {group.items?.map((item, itemIndex) => (
-                                                                <div
-                                                                    key={
-                                                                        'page-' + pageIndex + '-group-' + groupIndex + '-item-' + itemIndex
-                                                                    }
-                                                                >
+                                                                <div key={'item-' + item.tempId}>
+                                                                    <p className="p-0 m-0">Item {itemIndex + 1}</p>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            updateItemPlacement(
+                                                                                item.placement - 1,
+                                                                                item.placement,
+                                                                                pageIndex,
+                                                                                groupIndex,
+                                                                                itemIndex
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Mover ⬆
+                                                                    </button>
+                                                                    <br />
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            updateItemPlacement(
+                                                                                item.placement + 1,
+                                                                                item.placement,
+                                                                                pageIndex,
+                                                                                groupIndex,
+                                                                                itemIndex
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Mover ⬇
+                                                                    </button>
                                                                     {(() => {
                                                                         switch (item.type) {
                                                                             case 'TEXTBOX':
                                                                                 return (
                                                                                     <CreateTextBoxInput
-                                                                                        key={itemIndex}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
                                                                                         groupIndex={groupIndex}
@@ -1095,7 +1253,6 @@ function CreateProtocolPage(props) {
                                                                             case 'NUMBERBOX':
                                                                                 return (
                                                                                     <CreateTextBoxInput
-                                                                                        key={itemIndex}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
                                                                                         groupIndex={groupIndex}
@@ -1108,7 +1265,6 @@ function CreateProtocolPage(props) {
                                                                             case 'RANGE':
                                                                                 return (
                                                                                     <CreateRangeInput
-                                                                                        key={itemIndex}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
                                                                                         groupIndex={groupIndex}
@@ -1120,7 +1276,6 @@ function CreateProtocolPage(props) {
                                                                             case 'SELECT':
                                                                                 return (
                                                                                     <CreateMultipleInputItens
-                                                                                        key={itemIndex}
                                                                                         type={item.type}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
@@ -1133,7 +1288,6 @@ function CreateProtocolPage(props) {
                                                                             case 'RADIO':
                                                                                 return (
                                                                                     <CreateMultipleInputItens
-                                                                                        key={itemIndex}
                                                                                         type={item.type}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
@@ -1146,7 +1300,6 @@ function CreateProtocolPage(props) {
                                                                             case 'CHECKBOX':
                                                                                 return (
                                                                                     <CreateMultipleInputItens
-                                                                                        key={itemIndex}
                                                                                         type={item.type}
                                                                                         currentItem={item}
                                                                                         pageIndex={pageIndex}
@@ -1169,18 +1322,7 @@ function CreateProtocolPage(props) {
                                                                                 v.type !== 'MANDATORY'
                                                                         )
                                                                         .map((validation, validationIndex) => (
-                                                                            <div
-                                                                                key={
-                                                                                    'page-' +
-                                                                                    pageIndex +
-                                                                                    '-group-' +
-                                                                                    groupIndex +
-                                                                                    '-item-' +
-                                                                                    itemIndex +
-                                                                                    '-validation-' +
-                                                                                    validationIndex
-                                                                                }
-                                                                            >
+                                                                            <div key={'validation-' + validation.tempId}>
                                                                                 <p className="m-0 p-0">Validação {validationIndex + 1}</p>
                                                                                 <label
                                                                                     htmlFor="validation-type"
@@ -1286,7 +1428,7 @@ function CreateProtocolPage(props) {
                                                                                         )
                                                                                     }
                                                                                 >
-                                                                                    Remover validação
+                                                                                    X Validação
                                                                                 </button>
                                                                             </div>
                                                                         ))}
@@ -1299,7 +1441,7 @@ function CreateProtocolPage(props) {
                                                                                 insertItemValidation(pageIndex, groupIndex, itemIndex)
                                                                             }
                                                                         >
-                                                                            Adicionar validação
+                                                                            + Validação
                                                                         </button>
                                                                     )}
                                                                 </div>
@@ -1308,13 +1450,13 @@ function CreateProtocolPage(props) {
                                                     );
                                                 })}
                                                 <button type="button" onClick={() => insertItemGroup(pageIndex)}>
-                                                    Adicionar grupo
+                                                    + Grupo
                                                 </button>
                                             </div>
                                         );
                                     })}
                                     <button type="button" onClick={insertPage}>
-                                        Adicionar página
+                                        + Página
                                     </button>
                                     <div className="row justify-content-center m-0">
                                         <div className="col-8 col-lg-4">
