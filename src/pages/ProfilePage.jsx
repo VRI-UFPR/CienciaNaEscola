@@ -1,13 +1,10 @@
 import { React, useContext, useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import RoundedButton from '../components/RoundedButton';
 import TextButton from '../components/TextButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
-import adicionarFicheiro from '../assets/images/adicionar-ficheiro.png';
-import { AlertContext } from '../contexts/AlertContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
@@ -51,7 +48,6 @@ function ProfilePage(props) {
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const { showSidebar } = props;
-    const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
     useEffect(() => {
