@@ -59,10 +59,10 @@ export const AuthProvider = ({ children }) => {
     }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
-    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId) => {
-        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated' });
+    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId, profileImage) => {
+        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated', profileImage });
 
-        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId }));
+        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId, profileImage }));
     }, []);
 
     // Clear user object and clean up traces (through clearDBAndStorage)
