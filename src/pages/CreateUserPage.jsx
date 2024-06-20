@@ -10,7 +10,7 @@ import ErrorPage from './ErrorPage';
 function CreateUserPage(props) {
     const { institutionId, userId } = useParams();
     const { isEditing } = props;
-    const { user } = useContext(AuthContext);
+    const { user, renewUser } = useContext(AuthContext);
 
     const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -91,6 +91,9 @@ function CreateUserPage(props) {
                 })
                 .then((response) => {
                     alert('Usuário atualizado com sucesso');
+                    if (response.data.data.id === user.id) {
+                        renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
+                    }
                     navigate(`/dash/institutions/${institutionId}`);
                 })
                 .catch((error) => {
