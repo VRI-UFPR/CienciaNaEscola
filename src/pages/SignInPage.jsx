@@ -60,6 +60,10 @@ const styles = `
         max-width: 200px;
     }
 
+    .mw-115{
+        max-width: 115px;
+    }
+
     .mw-150{
         max-width: 150px;
     }
@@ -195,12 +199,14 @@ function SignInPage(props) {
                     </div>
                 </form>
             </div>
-            <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
-                <div className="col-4 justify-content-start d-flex align-items-center">
-                    <img className="d-h-auto mw-150 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
-                </div>
-                <div className="col-6 justify-content-end d-flex align-items-center">
-                    <img className="h-auto mw-200 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+            <div className="d-flex flex-column justify-content-end h-25 w-100">
+                <div className="row align-items-center justify-content-between g-0 w-100 pb-3 px-3">
+                    <div className="col-3 justify-content-start d-flex align-items-center">
+                        <img className="h-auto mw-115 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
+                    </div>
+                    <div className="col-4 justify-content-end d-flex align-items-center">
+                        <img className="h-auto mw-150 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                    </div>
                 </div>
             </div>
 
