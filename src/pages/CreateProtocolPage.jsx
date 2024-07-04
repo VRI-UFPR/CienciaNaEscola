@@ -205,6 +205,22 @@ function CreateProtocolPage(props) {
         }
     };
 
+    const deleteProtocol = () => {
+        axios
+            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Protocolo excluído com sucesso');
+                navigate(`/dash/protocols/`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir protocolo. ' + error.response?.data.message || '');
+            });
+    };
+
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
@@ -736,6 +752,13 @@ function CreateProtocolPage(props) {
                                             <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
                                         </div>
                                     </div>
+                                    {isEditing && (
+                                        <div>
+                                            <button type="button" onClick={deleteProtocol}>
+                                                Excluir
+                                            </button>
+                                        </div>
+                                    )}
                                 </form>
                             </div>
                         </div>

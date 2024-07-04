@@ -5,8 +5,12 @@ import helpIcon from '../assets/images/helpIcon.svg';
 const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
         .rounded-button{
+            height: ${size}px;
+            width: ${size}px;
             max-height: ${size}px;
             max-width: ${size}px;
+            min-height: ${size}px;
+            min-width: ${size}px;
         }
 
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig} {
