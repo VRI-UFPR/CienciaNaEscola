@@ -47,8 +47,8 @@ function ProfilePage(props) {
     const [curUser, setCurUser] = useState();
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const { showSidebar } = props;
     const navigate = useNavigate();
+    const { showSidebar = true } = props;
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
@@ -225,9 +225,5 @@ function ProfilePage(props) {
         </>
     );
 }
-
-ProfilePage.defaultProps = {
-    showSidebar: true,
-};
 
 export default ProfilePage;
