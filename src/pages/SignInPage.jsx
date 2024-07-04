@@ -104,7 +104,8 @@ function SignInPage(props) {
                         response.data.data.token,
                         new Date(new Date().getTime() + response.data.data.expiresIn),
                         response.data.data.acceptedTerms,
-                        response.data.data.institutionId
+                        response.data.data.institutionId,
+                        response.data.data.profileImage?.path
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
                 } else {
