@@ -61,23 +61,23 @@ function ProtocolPage(props) {
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
-    const isNextPage = () => {
+    const hasNextPage = () => {
         return currentPageIndex < protocol.pages.length - 1;
     };
 
-    const isPreviousPage = () => {
+    const hasPreviousPage = () => {
         return currentPageIndex > 0;
     };
 
     const nextPage = () => {
-        if (isNextPage()) {
+        if (hasNextPage()) {
             const nextPageIndex = currentPageIndex + 1;
             setCurrentPageIndex(nextPageIndex);
         }
     };
 
     const previousPage = () => {
-        if (isPreviousPage()) {
+        if (hasPreviousPage()) {
             const previousPageIndex = currentPageIndex - 1;
             setCurrentPageIndex(previousPageIndex);
         }
@@ -343,12 +343,12 @@ function ProtocolPage(props) {
                                         />
                                     }
                                 </div>
-                                {isPreviousPage() && (
+                                {hasPreviousPage() && (
                                     <div className="col-4 align-self-center pt-4">
                                         <TextButton type="button" hsl={[97, 43, 70]} text="Página anterior" onClick={previousPage} />
                                     </div>
                                 )}
-                                {isNextPage() && (
+                                {hasNextPage() && (
                                     <div className="col-4 align-self-center pt-4">
                                         <TextButton type="button" hsl={[97, 43, 70]} text="Próxima página" onClick={nextPage} />
                                     </div>

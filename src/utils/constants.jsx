@@ -11,7 +11,7 @@ export const defaultNewInput = (type) => {
             type === 'RANGE'
                 ? [
                       { type: 'MIN', argument: 1 },
-                      { type: 'MAX', argument: 1 },
+                      { type: 'MAX', argument: 10 },
                       { type: 'STEP', argument: 1 },
                   ]
                 : [],
