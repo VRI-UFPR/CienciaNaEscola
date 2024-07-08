@@ -66,7 +66,7 @@ const CreateProtocolStyles = `
 
 function CreateProtocolPage(props) {
     const { protocolId } = useParams();
-    const { isEditing } = props;
+    const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
 
     const [protocol, setProtocol] = useState({
@@ -344,6 +344,22 @@ function CreateProtocolPage(props) {
                     showAlert({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '', dismissible: true });
                 });
         }
+    };
+
+    const deleteProtocol = () => {
+        axios
+            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Protocolo excluído com sucesso');
+                navigate(`/dash/protocols/`);
+            })
+            .catch((error) => {
+                alert('Erro ao excluir protocolo. ' + error.response?.data.message || '');
+            });
     };
 
     useEffect(() => {
@@ -1455,6 +1471,13 @@ function CreateProtocolPage(props) {
                                             <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
                                         </div>
                                     </div>
+                                    {isEditing && (
+                                        <div>
+                                            <button type="button" onClick={deleteProtocol}>
+                                                Excluir
+                                            </button>
+                                        </div>
+                                    )}
                                 </form>
                             </div>
                         </div>
@@ -1468,9 +1491,5 @@ function CreateProtocolPage(props) {
         </div>
     );
 }
-
-CreateProtocolPage.defaultProps = {
-    isEditing: false,
-};
 
 export default CreateProtocolPage;

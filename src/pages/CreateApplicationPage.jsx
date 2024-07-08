@@ -325,11 +325,13 @@ function CreateApplicationPage(props) {
             <div>
                 <p>{JSON.stringify(application, null, 2)}</p>
             </div>
-            <div>
-                <button type="button" onClick={deleteApplication}>
-                    Excluir
-                </button>
-            </div>
+            {isEditing && (
+                <div>
+                    <button type="button" onClick={deleteApplication}>
+                        Excluir
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

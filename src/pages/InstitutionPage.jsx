@@ -72,7 +72,7 @@ function InstitutionPage(props) {
                 )}
             </p>
             <p>Criada em: {institution.createdAt}</p>
-            <p>Atualizada em: {institution.updateAt}</p>
+            <p>Atualizada em: {institution.updatedAt}</p>
         </div>
     );
 }

@@ -74,6 +74,23 @@ function ApplicationsPage(props) {
         }
     }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);
 
+    const deleteApplication = (applicationId) => {
+        axios
+            .delete(`${baseUrl}api/application/deleteApplication/${applicationId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Aplicação excluída com sucesso');
+                const newVisibleApplications = [...visibleApplications];
+                setVisibleApplications(newVisibleApplications.filter((a) => a.id !== applicationId));
+            })
+            .catch((error) => {
+                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
+            });
+    };
+
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
     }
@@ -108,6 +125,11 @@ function ApplicationsPage(props) {
                                                 .filter((a) => a.applier.id === user.id)
                                                 .map((a) => ({ id: a.id, title: a.protocol.title }))}
                                             hsl={[36, 98, 83]}
+                                            allowEdit={true}
+                                            allowDelete={true}
+                                            viewFunction={(id) => navigate(`${id}`)}
+                                            editFunction={(id) => navigate(`${id}/manage`)}
+                                            deleteFunction={(id) => deleteApplication(id)}
                                         />
                                     </div>
                                 </div>
@@ -118,7 +140,8 @@ function ApplicationsPage(props) {
                                     <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                         <ProtocolList
                                             listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))}
-                                            hsl={[6, 84, 83]}
+                                            hsl={[16, 100, 88]}
+                                            viewFunction={(id) => navigate(`${id}`)}
                                         />
                                     </div>
                                 </div>

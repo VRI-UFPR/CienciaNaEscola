@@ -59,11 +59,32 @@ export const AuthProvider = ({ children }) => {
     }, [clearLocalApplications]);
 
     // Create a new user object and store it in localStorage
-    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId) => {
-        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated' });
+    const login = useCallback((id, username, role, token, expiresIn, acceptedTerms, institutionId, profileImage) => {
+        setUser({ id, username, role, token, expiresIn, acceptedTerms, institutionId, status: 'authenticated', profileImage });
 
-        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId }));
+        localStorage.setItem('user', JSON.stringify({ id, username, role, token, expiresIn, acceptedTerms, institutionId, profileImage }));
     }, []);
+
+    const renewUser = useCallback(
+        (username, role, profileImage) => {
+            setUser({ ...user, username, role, status: 'authenticated', profileImage });
+
+            localStorage.setItem(
+                'user',
+                JSON.stringify({
+                    id: user.id,
+                    username,
+                    role,
+                    token: user.token,
+                    expiresIn: user.expiresIn,
+                    acceptedTerms: user.acceptTerms,
+                    institutionId: user.institutionId,
+                    profileImage,
+                })
+            );
+        },
+        [user]
+    );
 
     // Clear user object and clean up traces (through clearDBAndStorage)
     const logout = useCallback(() => {
@@ -131,5 +152,5 @@ export const AuthProvider = ({ children }) => {
         if (user.status === 'authenticated') renewLogin();
     }, [user.status, renewLogin]);
 
-    return <AuthContext.Provider value={{ user, login, logout, acceptTerms }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, login, logout, acceptTerms, renewUser }}>{children}</AuthContext.Provider>;
 };

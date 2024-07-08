@@ -27,13 +27,13 @@ const TextButtonStyles = (hue, sat, lig) => {
 
 function TextButton(props) {
     const {
-        hsl: [hue, sat, lig],
-        text,
+        hsl: [hue, sat, lig] = [0, 0, 0],
+        text = 'Button',
         className,
-        type,
-        onClick,
-        role,
-        overWriteStyles,
+        type = 'button',
+        onClick = () => undefined,
+        role = undefined,
+        overWriteStyles = false,
     } = props;
     return (
         <button
@@ -51,14 +51,5 @@ function TextButton(props) {
         </button>
     );
 }
-
-TextButton.defaultProps = {
-    hsl: [0, 0, 0],
-    text: 'Button',
-    type: 'button',
-    role: undefined,
-    overWriteStyles: false,
-    onClick: () => undefined,
-};
 
 export default TextButton;

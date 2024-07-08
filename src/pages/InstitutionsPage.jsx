@@ -62,6 +62,23 @@ function InstitutionsPage(props) {
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);
 
+    const deleteInstitution = (institutionId) => {
+        axios
+            .delete(`${baseUrl}api/institution/deleteInstitution/${institutionId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Instituição excluída com sucesso');
+                const newVisibleInstitutions = [...visibleInstitutions];
+                setVisibleInstitutions(newVisibleInstitutions.filter((i) => i.id !== institutionId));
+            })
+            .catch((error) => {
+                alert('Erro ao excluir instituição. ' + error.response?.data.message || '');
+            });
+    };
+
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
     }
@@ -92,6 +109,11 @@ function InstitutionsPage(props) {
                                 <ProtocolList
                                     listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))}
                                     hsl={[36, 98, 83]}
+                                    allowEdit={user.role === 'ADMIN' || user.role === 'COORDINATOR'}
+                                    allowDelete={user.role === 'ADMIN'}
+                                    viewFunction={(id) => navigate(`${id}`)}
+                                    editFunction={(id) => navigate(`${id}/manage`)}
+                                    deleteFunction={(id) => deleteInstitution(id)}
                                 />
                             </div>
                         </div>

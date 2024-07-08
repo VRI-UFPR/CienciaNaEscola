@@ -47,7 +47,7 @@ const appRoutes = [
             { path: 'signin', element: <SignInPage /> },
             { path: 'about', element: <InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'terms', element: <InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} /> },
-            { path: 'profile', element: <ProfilePage allowEdit={false} /> },
+            { path: 'profile', element: <ProfilePage /> },
             {
                 path: 'acceptTerms',
                 element: <InfosPage content={terms} showNavTogglerDesktop={false} showNavTogglerMobile={false} showSidebar={false} />,
@@ -65,7 +65,8 @@ const appRoutes = [
             { path: 'signin', element: <SignInPage /> },
             { path: 'about', element: <InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'terms', element: <InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} /> },
-            { path: 'profile', element: <ProfilePage allowEdit={false} /> },
+            { path: 'profile', element: <ProfilePage /> },
+            { path: 'profile/:institutionId/:userId/manage', element: <CreateUserPage isEditing={true} /> },
             {
                 path: 'acceptTerms',
                 element: <InfosPage content={terms} showSidebar={false} showNavTogglerDesktop={false} showNavTogglerMobile={false} />,
