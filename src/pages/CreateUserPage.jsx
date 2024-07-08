@@ -234,7 +234,7 @@ function CreateUserPage(props) {
                                             }
                                         }}
                                     />
-                                    <label htmlFor={`classroom-${c.id}`}>{c.id}</label>
+                                    <label htmlFor={`classroom-${c.id}`}>{c.name}</label>
                                 </div>
                             ))}
                         </fieldset>

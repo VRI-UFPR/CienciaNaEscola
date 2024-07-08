@@ -107,7 +107,7 @@ function ProtocolsPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0">
+                <div className="col d-flex flex-column h-100 p-0 pb-4">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4">
@@ -149,7 +149,7 @@ function ProtocolsPage(props) {
                         </div>
                     </div>
                     {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
-                        <div className="row d-flex justify-content-center pb-4 m-0">
+                        <div className="row d-flex justify-content-center pt-4 m-0">
                             <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
                                 <TextButton
                                     text={'Criar novo protocolo'}

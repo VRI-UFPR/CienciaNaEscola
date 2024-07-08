@@ -91,7 +91,7 @@ function jsonToCsv(ans) {
                 case 'SELECT':
                     break;
 
-                case 'SCALE':
+                case 'RANGE':
                     break;
 
                 default:

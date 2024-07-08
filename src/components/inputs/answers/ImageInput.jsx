@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 
 import RoundedButton from '../../RoundedButton';
 
@@ -24,20 +24,22 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, item, group, disabled } = props;
+    const { onAnswerChange, item, answer, disabled } = props;
 
-    const [answer, setAnswers] = useState({ text: '...', files: [] });
     const [ImageVisibility, setImageVisibility] = useState(false);
     const galleryInputRef = useRef(null);
     const cameraInputRef = useRef(null);
 
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
+
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };
-
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', answer);
-    }, [answer, item.id, onAnswerChange, group]);
 
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
@@ -48,19 +50,15 @@ function ImageInput(props) {
     };
 
     const insertImage = (e) => {
-        setAnswers((prevAnswers) => {
-            const newAnswers = { ...prevAnswers };
-            newAnswers.files.push(e.target.files[0]);
-            return newAnswers;
-        });
+        const newAnswer = { ...answer };
+        newAnswer.files.push(e.target.files[0]);
+        updateAnswer(newAnswer);
     };
 
     const removeImage = (indexToRemove) => {
-        setAnswers((prevAnswers) => {
-            const newAnswers = { ...prevAnswers };
-            newAnswers.files = newAnswers.files.filter((_, index) => index !== indexToRemove);
-            return newAnswers;
-        });
+        const newAnswer = { ...answer };
+        newAnswer.files = newAnswer.files.filter((_, index) => index !== indexToRemove);
+        updateAnswer(newAnswer);
     };
 
     return (

@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useState } from 'react';
+import { React, useCallback, useEffect } from 'react';
 import iconLocation from '../../../assets/images/iconLocation.svg';
 import iconSearch from '../../../assets/images/iconSearch.svg';
 import RoundedButton from '../../RoundedButton';
@@ -43,25 +43,27 @@ const styles = `
 `;
 
 export function Location(props) {
-    const [location, setLocation] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group, disabled } = props;
+    const { onAnswerChange, item, answer, disabled } = props;
+
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     const defaultLocation = useCallback(() => {
-        if (navigator.geolocation) {
+        if (!answer.text && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const { latitude, longitude } = pos.coords;
-                setLocation((prev) => ({ ...prev, text: `${latitude}, ${longitude}` }));
+                updateAnswer({ ...answer, text: `${latitude}, ${longitude}` });
             });
         }
-    }, []);
+    }, [answer, updateAnswer]);
 
     useEffect(() => {
         defaultLocation();
     }, [defaultLocation]);
-
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', location);
-    }, [location, item.id, onAnswerChange, group]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -84,8 +86,8 @@ export function Location(props) {
                                 className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                                 id="locationinput"
                                 placeholder="Forneça sua localização"
-                                onChange={(e) => setLocation((prev) => ({ ...prev, text: e.target.value }))}
-                                defaultValue={location.text}
+                                onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
+                                value={answer.text}
                                 disabled={disabled}
                             ></input>
                         </div>

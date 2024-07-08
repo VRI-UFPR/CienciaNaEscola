@@ -46,7 +46,10 @@ function CreateClassroomPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setClassroom({ users: d.users.map((u) => u.id) });
+                            setClassroom({
+                                name: d.name,
+                                users: d.users.map((u) => u.id),
+                            });
                         })
                         .catch((error) => {
                             alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
@@ -137,6 +140,17 @@ function CreateClassroomPage(props) {
     return (
         <div>
             <form name="classroom-form" id="classroom-form" onSubmit={(e) => submitClassroom(e)}>
+                <div>
+                    <label label="name">Nome:</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={classroom.name || ''}
+                        form="classroom-form"
+                        id="name"
+                        onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
+                    />
+                </div>
                 <div>
                     <fieldset>
                         <span>Selecione os alunos da sala</span>

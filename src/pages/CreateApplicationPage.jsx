@@ -56,7 +56,7 @@ function CreateApplicationPage(props) {
                         .then((response) => {
                             const d = response.data.data;
                             reqProtocolId = d.protocol.id;
-                            if (d.applier.id !== user.id) {
+                            if (d.applier.id !== user.id && user.role !== 'ADMIN') {
                                 setError({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar esta aplicação',
@@ -87,9 +87,9 @@ function CreateApplicationPage(props) {
                     .then((response) => {
                         const d = response.data.data;
                         setViewersUser(d.viewersUser.map((u) => ({ id: u.id, username: u.username })));
-                        setViewersClassroom(d.viewersClassroom.map((c) => ({ id: c.id })));
+                        setViewersClassroom(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name })));
                         setAnswersViewersUser(d.answersViewersUser.map((u) => ({ id: u.id, username: u.username })));
-                        setAnswersViewersClassroom(d.answersViewersClassroom.map((c) => ({ id: c.id })));
+                        setAnswersViewersClassroom(d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name })));
                         setProtocolVisibility(d.visibility);
                         setProtocolAnswersVisibility(d.answersVisibility);
                         setIsLoading(false);
@@ -249,7 +249,7 @@ function CreateApplicationPage(props) {
                                         }
                                     }}
                                 />
-                                <label htmlFor={`viewer-classroom-${c.id}`}>{c.id}</label>
+                                <label htmlFor={`viewer-classroom-${c.id}`}>{c.name}</label>
                             </div>
                         ))}
                     </fieldset>
@@ -313,7 +313,7 @@ function CreateApplicationPage(props) {
                                         }
                                     }}
                                 />
-                                <label htmlFor={`answer-viewer-classroom-${c.id}`}>{c.id}</label>
+                                <label htmlFor={`answer-viewer-classroom-${c.id}`}>{c.name}</label>
                             </div>
                         ))}
                     </fieldset>

@@ -1,10 +1,20 @@
 export const defaultNewInput = (type) => {
     return {
+        // tempId must be an unique integer
+        tempId: Math.floor(Date.now() + Math.random() * 1000),
         text: '',
         description: '',
         type: type,
         enabled: true,
         itemOptions: [],
+        itemValidations:
+            type === 'RANGE'
+                ? [
+                      { type: 'MIN', argument: 1 },
+                      { type: 'MAX', argument: 10 },
+                      { type: 'STEP', argument: 1 },
+                  ]
+                : [],
     };
 };
 
