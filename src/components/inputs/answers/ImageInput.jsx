@@ -78,10 +78,10 @@ function ImageInput(props) {
                                 data-bs-toggle="dropdown"
                             />
                             <ul class="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
-                                <li className="dropdown-item">
+                                <li className="dropdown-item" onClick={handleGalleryButtonClick}>
                                     <div className="row m-0 align-items-center justify-content-between">
                                         <div className="col-auto p-0 pe-3">
-                                            <span className="fw-medium color-dark-gray" onClick={handleGalleryButtonClick}>
+                                            <span className="fw-medium color-dark-gray">
                                                 Selecionar da galeria
                                             </span>
                                         </div>
@@ -90,10 +90,10 @@ function ImageInput(props) {
                                         </div>
                                     </div>
                                 </li>
-                                <li className="dropdown-item">
+                                <li className="dropdown-item" onClick={handleCameraButtonClick}>
                                     <div className="row m-0 align-items-center justify-content-between">
                                         <div className="col-auto p-0 pe-3">
-                                            <span className="fw-medium color-dark-gray" onClick={handleCameraButtonClick}>
+                                            <span className="fw-medium color-dark-gray">
                                                 Tirar foto
                                             </span>
                                         </div>
@@ -107,28 +107,33 @@ function ImageInput(props) {
                         <div className="row row-cols-2 flex-row position-relative color-dark-gray font-barlow fw-medium fs-6 w-100 p-0 ms-2">
                             {answer.files.length > 0 ? (
                                 answer.files.slice(0, ImageVisibility ? answer.files.length : 2).map((image, i) => {
-                                    return (
-                                        <div
-                                            key={i}
-                                            className={`col-6 d-flex justify-content-center align-items-center g-0 pe-3 ${
-                                                i < 2 ? 'pt-0' : 'pt-3'
-                                            }`}
-                                        >
-                                            <div className="d-flex justify-content-center align-items-center position-relative border border-black border-opacity-50 rounded-4">
-                                                <img
-                                                    className="img-fluid rounded-4 object-fit-contain"
-                                                    src={URL.createObjectURL(answer.files[i])}
-                                                    alt="Imagem selecionada"
-                                                />
-                                                <RoundedButton
-                                                    className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
-                                                    hsl={[190, 46, 70]}
-                                                    icon={iconTrash}
-                                                    onClick={() => removeImage(i)}
-                                                />
+                                    if(answer.files[i] && answer.files[i] instanceof File)
+                                        return (
+                                            <div
+                                                key={i}
+                                                className={`col-6 d-flex justify-content-center align-items-center g-0 pe-3 ${
+                                                    i < 2 ? 'pt-0' : 'pt-3'
+                                                }`}
+                                            >
+                                                <div className="d-flex justify-content-center align-items-center position-relative border border-black border-opacity-50 rounded-4">
+                                                    <img
+                                                        className="img-fluid rounded-4 object-fit-contain"
+                                                        src={URL.createObjectURL(answer.files[i])}
+                                                        alt="Imagem selecionada"
+                                                    />
+                                                    <RoundedButton
+                                                        className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                        hsl={[190, 46, 70]}
+                                                        icon={iconTrash}
+                                                        onClick={() => removeImage(i)}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
+                                        );
+                                    else{
+                                        removeImage(i);
+                                        return null;
+                                    }
                                 })
                             ) : (
                                 <div className="col-12">
