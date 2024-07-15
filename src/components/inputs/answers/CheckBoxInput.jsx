@@ -10,6 +10,20 @@ const styles = `
     .bg-grey {
         background-color: #D9D9D9
     }
+
+    .form-check-input {
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check-input:focus {
+        border: 0;
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check input:checked {
+        border: 0;
+        background-color: #91CAD6;
+    }
 `;
 
 function CheckBoxInput(props) {
