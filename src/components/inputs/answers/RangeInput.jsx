@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import MarkdownText from '../../MarkdownText';
 
 const styles = `
@@ -30,11 +30,52 @@ const styles = `
 `;
 
 function RangeInput(props) {
-    const { item, min = 0, max = 10, step = 1 } = props;
-    const [value, setValue] = useState(Math.floor((min + max) / 2));
+    const { onAnswerChange, group, item, disabled } = props;
+    const [answer, setAnswer] = useState({ text: '', files: [] });
+    const [value, setValue] = useState(0);
+    const [min, setMin] = useState(0);
+    const [max, setMax] = useState(10);
+    const [step, setStep] = useState(2);
+    const [hasUpdated, setHasUpdated] = useState(false);
+
+    useEffect(() => {
+        onAnswerChange(group, item.id, 'ITEM', answer);
+    }, [answer, item.id, onAnswerChange, group]);
+
+    useEffect(() => {
+        if (!hasUpdated) {
+            if (item) {
+                for (let j = 0; j < item.itemValidations.length; j++) {
+                    let i = item.itemValidations[j];
+                    switch (i.type) {
+                        case 'MIN':
+                            setMin(parseInt(i.argument));
+                            break;
+                        case 'MAX':
+                            setMax(parseInt(i.argument));
+                            break;
+                        case 'STEP':
+                            setStep(parseInt(i.argument));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            setHasUpdated(true);
+        }
+    }, [hasUpdated, item]);
+
+    useEffect(() => {
+        if (hasUpdated) {
+            setValue(Math.floor((min + max) / 2));
+            setAnswer((prevText) => ({ ...prevText, text: String(Math.floor((min + max) / 2)) }));
+        }
+    }, [hasUpdated, min, max]);
 
     const handleInputChange = (e) => {
         setValue(e.target.value);
+        setAnswer((prevText) => ({ ...prevText, text: String(e.target.value) }));
     };
 
     const rangeStyle = {
@@ -42,12 +83,13 @@ function RangeInput(props) {
             ((value - min) / (max - min)) * 100
         }%)`,
         borderRadius: '5px',
+        cursor: disabled ? 'not-allowed' : 'pointer',
     };
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
             <div className="d-flex flex-column">
-                <label for="customRange" className="">
+                <label htmlFor="customRange" className="">
                     <MarkdownText text={item.text} />
                 </label>
                 <input
@@ -60,6 +102,7 @@ function RangeInput(props) {
                     onChange={handleInputChange}
                     style={rangeStyle}
                     value={value}
+                    disabled={disabled}
                 />
             </div>
             <div className="range-subtitle d-flex justify-content-between pt-2">

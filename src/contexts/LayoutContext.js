@@ -18,7 +18,7 @@ export const LayoutProvider = (props) => {
                 hideAlert();
             }
         }
-    }, [blocker, hideAlert]);
+    }, [isDismissable, blocker, hideAlert]);
 
     return (
         <LayoutContext.Provider value={{ isDashboard }}>

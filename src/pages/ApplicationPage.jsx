@@ -23,6 +23,7 @@ import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
+import RangeInput from '../components/inputs/answers/RangeInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -277,6 +278,18 @@ function ApplicationPage(props) {
                                     return page.itemGroups.map((itemGroup) => {
                                         return itemGroup.items.map((item) => {
                                             switch (item.type) {
+                                                case 'RANGE':
+                                                    return (
+                                                        <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                            {
+                                                                <RangeInput
+                                                                    item={item}
+                                                                    group={itemGroup.id}
+                                                                    onAnswerChange={handleAnswerChange}
+                                                                />
+                                                            }
+                                                        </div>
+                                                    );
                                                 case 'TEXTBOX':
                                                 case 'NUMBERBOX':
                                                     return (
@@ -403,7 +416,7 @@ function ApplicationPage(props) {
                                                     '<br>Identificador do protocolo: ' +
                                                     application.protocol.id +
                                                     '<br>Versão do protocolo: ' +
-                                                    application.protocol.updateAt.replace(/\D/g, ''),
+                                                    application.protocol.updatedAt.replace(/\D/g, ''),
                                                 files: [],
                                             }}
                                             galleryModalRef={galleryModalRef}
