@@ -74,6 +74,23 @@ function ProtocolsPage(props) {
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role, user.id]);
 
+    const deleteProtocol = (protocolId) => {
+        axios
+            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                alert('Protocolo excluído com sucesso');
+                const newVisibleProtocols = [...visibleProtocols];
+                setVisibleProtocols(newVisibleProtocols.filter((a) => a.id !== protocolId));
+            })
+            .catch((error) => {
+                alert('Erro ao excluir protocolo. ' + error.response?.data.message || '');
+            });
+    };
+
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
     }
@@ -90,7 +107,7 @@ function ProtocolsPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0">
+                <div className="col d-flex flex-column h-100 p-0 pb-4">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4">
@@ -98,26 +115,41 @@ function ProtocolsPage(props) {
                         </div>
                     </div>
                     <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
-                        <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
-                            <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Meus protocolos</h1>
-                            <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                <ProtocolList
-                                    listItems={visibleProtocols
-                                        .filter((p) => p.creator.id === user.id)
-                                        .map((p) => ({ id: p.id, title: p.title }))}
-                                    hsl={[36, 98, 83]}
-                                />
+                        {user.role !== 'USER' && user.role !== 'APPLIER' && (
+                            <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
+                                <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Meus protocolos</h1>
+                                <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
+                                    <ProtocolList
+                                        listItems={visibleProtocols
+                                            .filter((p) => p.creator.id === user.id)
+                                            .map((p) => ({ id: p.id, title: p.title }))}
+                                        hsl={[36, 98, 83]}
+                                        allowEdit={true}
+                                        allowDelete={true}
+                                        viewFunction={(id) => navigate(`${id}`)}
+                                        editFunction={(id) => navigate(`${id}/manage`)}
+                                        deleteFunction={(id) => deleteProtocol(id)}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 pb-0 pt-lg-0">
+                        )}
+                        <div
+                            className={`col-12 col-md-10 d-flex flex-column mh-100 h-lg-100 p-4 pb-0 pt-lg-0 ${
+                                user.role !== 'USER' && user.role !== 'APPLIER' ? 'col-lg-5' : ''
+                            }`}
+                        >
                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Protocolos disponíveis</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                <ProtocolList listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))} hsl={[6, 84, 83]} />
+                                <ProtocolList
+                                    listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}
+                                    hsl={[16, 100, 88]}
+                                    viewFunction={(id) => navigate(`${id}`)}
+                                />
                             </div>
                         </div>
                     </div>
                     {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
-                        <div className="row d-flex justify-content-center pb-4 m-0">
+                        <div className="row d-flex justify-content-center pt-4 m-0">
                             <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
                                 <TextButton
                                     text={'Criar novo protocolo'}

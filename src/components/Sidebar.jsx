@@ -7,6 +7,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
+import baseUrl from '../contexts/RouteContext';
 
 const styles = `
     .font-barlow {
@@ -29,7 +30,7 @@ const styles = `
     .profile-image {
         width: 110px;
         height: 110px;
-        border: 8px solid #AAD390;
+        border: 8px solid #4E9BB9;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
     }
 
@@ -50,10 +51,10 @@ const styles = `
 `;
 
 function Sidebar(props) {
-    const { showExitButton } = props;
+    const { showExitButton = true } = props;
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
-    const { isDashboard } = useContext(LayoutContext);
+    const { isDashboard = false } = useContext(LayoutContext);
     const { showAlert } = useContext(AlertContext);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
@@ -94,7 +95,11 @@ function Sidebar(props) {
                 )}
                 <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
                     <div className="rounded-circle">
-                        <img className="profile-image rounded-circle" src={PerfilImg} alt="Perfil" />
+                        <img
+                            className="profile-image rounded-circle"
+                            src={user.profileImage ? baseUrl + user.profileImage : PerfilImg}
+                            alt="Perfil"
+                        />
                     </div>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
@@ -170,10 +175,5 @@ function Sidebar(props) {
         </div>
     );
 }
-
-Sidebar.defaultProps = {
-    showExitButton: true,
-    isDashboard: false,
-};
 
 export default Sidebar;

@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useCallback, useEffect } from 'react';
 import iconTime from '../../../assets/images/iconTime.svg';
 
 const styles = `
@@ -32,19 +32,23 @@ const styles = `
 `;
 
 function TimeInput(props) {
-    const [time, setTime] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group, disabled } = props;
+    const { onAnswerChange, item, answer, disabled } = props;
+
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     useEffect(() => {
-        const date = new Date();
-        const hour = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        setTime((prev) => ({ ...prev, text: `${hour}:${minutes}` }));
-    }, []);
-
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', time);
-    }, [time, item.id, onAnswerChange, group]);
+        if (!answer.text) {
+            const date = new Date();
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            updateAnswer({ ...answer, text: `${hour}:${minutes}` });
+        }
+    }, [answer, updateAnswer]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
@@ -65,8 +69,8 @@ function TimeInput(props) {
                             type="time"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
-                            onChange={(e) => setTime((prev) => ({ ...prev, text: e.target.value }))}
-                            defaultValue={time.text}
+                            value={answer.text}
+                            onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
                             disabled={disabled}
                         ></input>
                     </div>

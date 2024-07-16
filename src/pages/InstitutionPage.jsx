@@ -58,7 +58,7 @@ function InstitutionPage(props) {
                 Salas de aula:{' '}
                 {institution.classrooms.map((c) =>
                     user.role !== 'USER' && user.role !== 'APPLIER' ? (
-                        <Link to={`classrooms/${c.id}/manage`}>{c.id} </Link>
+                        <Link to={`classrooms/${c.id}/manage`}>{c.name} </Link>
                     ) : (
                         <span>{c.id} </span>
                     )
@@ -72,7 +72,7 @@ function InstitutionPage(props) {
                 )}
             </p>
             <p>Criada em: {institution.createdAt}</p>
-            <p>Atualizada em: {institution.updateAt}</p>
+            <p>Atualizada em: {institution.updatedAt}</p>
         </div>
     );
 }

@@ -5,8 +5,12 @@ import helpIcon from '../assets/images/helpIcon.svg';
 const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
         .rounded-button{
+            height: ${size}px;
+            width: ${size}px;
             max-height: ${size}px;
             max-width: ${size}px;
+            min-height: ${size}px;
+            min-width: ${size}px;
         }
 
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig} {
@@ -32,13 +36,13 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
 
 function RoundedButton(props) {
     const {
-        hsl: [hue, sat, lig],
-        size,
-        icon,
-        alt,
-        className,
-        onClick,
-        role,
+        hsl: [hue, sat, lig] = [355, 78, 66],
+        size = 32,
+        icon = helpIcon,
+        alt = 'Ícone',
+        className = '',
+        onClick = () => undefined,
+        role = undefined,
         disabled,
         'data-bs-toggle': dataBsToggle,
     } = props;
@@ -58,15 +62,5 @@ function RoundedButton(props) {
         </button>
     );
 }
-
-RoundedButton.defaultProps = {
-    hsl: [355, 78, 66],
-    size: 32,
-    icon: helpIcon,
-    alt: 'Ícone',
-    className: '',
-    role: undefined,
-    onClick: () => undefined,
-};
 
 export default RoundedButton;
