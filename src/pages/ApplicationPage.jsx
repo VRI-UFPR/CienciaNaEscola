@@ -461,7 +461,13 @@ function ApplicationPage(props) {
                                                                     {
                                                                         <RangeInput
                                                                             item={item}
-                                                                            answer={{ text: '', files: [] }}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             group={itemGroup.id}
                                                                             onAnswerChange={handleAnswerChange}
                                                                         />

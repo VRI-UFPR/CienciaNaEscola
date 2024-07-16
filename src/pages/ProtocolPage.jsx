@@ -164,7 +164,14 @@ function ProtocolPage(props) {
                                                                         <RangeInput
                                                                             item={item}
                                                                             group={itemGroup.id}
-                                                                            answer={{ text: '', files: [] }}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
                                                                             onAnswerChange={() => {}}
                                                                             disabled={true}
                                                                         />

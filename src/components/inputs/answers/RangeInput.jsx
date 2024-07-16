@@ -30,17 +30,12 @@ const styles = `
 `;
 
 function RangeInput(props) {
-    const { onAnswerChange, group, item, disabled } = props;
-    const [answer, setAnswer] = useState({ text: '', files: [] });
+    const { onAnswerChange, answer, item, disabled } = props;
     const [value, setValue] = useState(0);
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(10);
     const [step, setStep] = useState(2);
     const [hasUpdated, setHasUpdated] = useState(false);
-
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', answer);
-    }, [answer, item.id, onAnswerChange, group]);
 
     useEffect(() => {
         if (!hasUpdated) {
@@ -69,13 +64,12 @@ function RangeInput(props) {
     useEffect(() => {
         if (hasUpdated) {
             setValue(Math.floor((min + max) / 2));
-            setAnswer((prevText) => ({ ...prevText, text: String(Math.floor((min + max) / 2)) }));
         }
     }, [hasUpdated, min, max]);
 
-    const handleInputChange = (e) => {
-        setValue(e.target.value);
-        setAnswer((prevText) => ({ ...prevText, text: String(e.target.value) }));
+    const updateAnswer = (newAnswer) => {
+        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        setValue(newAnswer.text);
     };
 
     const rangeStyle = {
@@ -99,7 +93,7 @@ function RangeInput(props) {
                     max={max}
                     step={step}
                     id="customRange"
-                    onChange={handleInputChange}
+                    onChange={(e) => updateAnswer({ ...answer, text: String(e.target.value) })}
                     style={rangeStyle}
                     value={value}
                     disabled={disabled}
