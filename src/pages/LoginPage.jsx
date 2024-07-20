@@ -15,7 +15,7 @@ import picceTitle from '../assets/images/picceTitle.svg';
 import axios from 'axios';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
@@ -71,6 +71,10 @@ const styles = `
         max-width: 200px;
     }
 
+    .mw-115{
+        max-width: 115px;
+    }
+
     .mw-150{
         max-width: 150px;
     }
@@ -84,7 +88,6 @@ function LoginPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useContext(AuthContext);
-    const location = useLocation();
     const navigate = useNavigate();
     const modalRef = useRef(null);
 
@@ -183,11 +186,6 @@ function LoginPage(props) {
                         >
                             Esqueci minha senha
                         </p>
-                        {location.pathname === '/dash/login' && (
-                            <Link classname="login-links text-decoration-underline fs-6 cursor-pointer" to="/signup">
-                                Não é cadastrado?
-                            </Link>
-                        )}
                     </div>
                     <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
                         <div className="col-12 col-lg-6 mb-3">
@@ -205,12 +203,14 @@ function LoginPage(props) {
                     </div>
                 </form>
             </div>
-            <div className="row align-items-end justify-content-between g-0 h-25 w-100 pb-4 ps-2">
-                <div className="col-4 justify-content-start d-flex align-items-center">
-                    <img className="d-h-auto mw-150 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
-                </div>
-                <div className="col-6 justify-content-end d-flex align-items-center">
-                    <img className="h-auto mw-200 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+            <div className="d-flex flex-column justify-content-end h-25 w-100">
+                <div className="row align-items-center justify-content-between g-0 w-100 pb-3 px-3">
+                    <div className="col-3 justify-content-start d-flex align-items-center">
+                        <img className="h-auto mw-115 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
+                    </div>
+                    <div className="col-4 justify-content-end d-flex align-items-center">
+                        <img className="h-auto mw-150 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                    </div>
                 </div>
             </div>
 
