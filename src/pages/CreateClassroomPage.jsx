@@ -23,6 +23,10 @@ const style = `
         color: #535353;
     }
 
+    .color-grey:focus {
+        color: #535353;
+    }
+
     @media (min-width: 992px) {
       .position-lg-sticky {
         position: sticky !important;
