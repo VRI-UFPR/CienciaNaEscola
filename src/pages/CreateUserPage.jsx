@@ -42,10 +42,6 @@ const style = `
         background-color: #b8d7e3;
     }
 
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
     .bg-light-pastel-blue:focus{
         background-color: #b8d7e3;
     }
@@ -239,15 +235,15 @@ function CreateUserPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0 overflow-x-hidden">
+                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow gx-0">
                         <div className="col-12 col-md-10 p-4 pb-0">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">{isEditing ? 'Editar' : 'Criar'} usuário</h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 g-0 overflow-scroll overflow-x-hidden scrollbar-none">
-                        <div className="col-12 col-lg-3 order-lg-2 bg-white d-flex align-items-center flex-column mh-100 h-lg-100 p-4">
+                    <div className="row justify-content-center flex-grow-1 scrollbar-none overflow-scroll overflow-x-hidden font-barlow g-0">
+                        <div className="col-12 col-lg-3 order-lg-2 d-flex flex-column align-items-center bg-white mh-100 h-lg-100 p-4">
                             <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75 mb-3">
                                 <img
                                     src={
@@ -264,7 +260,7 @@ function CreateUserPage(props) {
                             <div className="row justify-content-center gx-2 gy-3 w-100">
                                 <div className="col-5 col-lg-12">
                                     <TextButton
-                                        className="px-3 py-2 lh-1"
+                                        className="lh-1 px-3 py-2"
                                         hsl={[197, 43, 52]}
                                         text="Atualizar foto"
                                         onClick={() => {
@@ -274,7 +270,7 @@ function CreateUserPage(props) {
                                 </div>
                                 <div className="col-5 col-lg-12">
                                     <TextButton
-                                        className="px-3 py-2 lh-1 h-100 w-100"
+                                        className="lh-1 h-100 w-100 px-3 py-2"
                                         hsl={[355, 78, 66]}
                                         text="Remover"
                                         onClick={() =>
@@ -287,7 +283,7 @@ function CreateUserPage(props) {
                         <div className="col-12 col-lg-7 order-lg-1 d-flex flex-column mh-100 h-lg-100 p-4 py-0 pt-lg-4">
                             <form name="user-form" ref={formRef} id="user-form" onSubmit={(e) => submitNewUser(e)}>
                                 <div>
-                                    <label label="name" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome:
                                     </label>
                                     <input
@@ -301,7 +297,7 @@ function CreateUserPage(props) {
                                     />
                                 </div>
                                 <div>
-                                    <label label="username" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="username" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome de usuário:
                                     </label>
                                     <input
@@ -310,12 +306,12 @@ function CreateUserPage(props) {
                                         value={newUser.username || ''}
                                         form="user-form"
                                         id="username"
-                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
+                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                     />
                                 </div>
                                 <div>
-                                    <label label="hash" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="hash" className="form-label color-steel-blue fs-5 fw-medium">
                                         Senha:
                                     </label>
                                     <div className="row align-items-center gx-1 mb-3">
@@ -326,7 +322,7 @@ function CreateUserPage(props) {
                                                 value={newUser.hash || ''}
                                                 form="user-form"
                                                 id="hash"
-                                                className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 border-0"
+                                                className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
                                             />
                                         </div>
@@ -344,14 +340,14 @@ function CreateUserPage(props) {
                                 </div>
                                 {(user.role === 'ADMIN' || !isEditing) && (
                                     <div>
-                                        <label label="role" className="form-label fs-5 fw-medium color-steel-blue">
+                                        <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                             Selecione o papel do usuário
                                         </label>
                                         <select
                                             name="role"
                                             id="role"
                                             form="user-form"
-                                            className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
+                                            className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
                                             onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value || undefined }))}
                                             value={newUser.role || ''}
                                         >
@@ -372,7 +368,7 @@ function CreateUserPage(props) {
                                         <fieldset>
                                             <div className="row g-2 mb-2">
                                                 <div className="col-12 col-md-auto">
-                                                    <p className="form-label fs-5 fw-medium color-steel-blue m-0">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium m-0">
                                                         Selecione as salas de aula do usuário:
                                                     </p>
                                                 </div>
@@ -383,7 +379,7 @@ function CreateUserPage(props) {
                                                         value={classroomsSearch || ''}
                                                         id="classrooms-search"
                                                         placeholder="Buscar por nome de sala de aula"
-                                                        className="form-control form-control-sm rounded-4 fw-medium color-grey bg-light-grey border-0"
+                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setClassroomsSearch(e.target.value)}
                                                     />
                                                 </div>
@@ -420,7 +416,7 @@ function CreateUserPage(props) {
                                                             />
                                                             <label
                                                                 htmlFor={`classroom-${c.id}`}
-                                                                className="font-barlow text-break color-grey fw-medium ms-2 fs-6"
+                                                                className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
                                                             >
                                                                 {c.name}
                                                             </label>
