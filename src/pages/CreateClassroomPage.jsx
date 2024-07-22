@@ -38,10 +38,6 @@ const style = `
         background-color: #b8d7e3;
     }
 
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
     .bg-light-pastel-blue:focus{
         background-color: #b8d7e3;
     }
@@ -211,7 +207,7 @@ function CreateClassroomPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0 overflow-x-hidden">
+                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4 pb-0">
@@ -220,7 +216,7 @@ function CreateClassroomPage(props) {
                             </h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 gx-0 overflow-hidden">
+                    <div className="row justify-content-center flex-grow-1 overflow-hidden font-barlow gx-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4">
                             <form
                                 name="classroom-form"
@@ -230,7 +226,7 @@ function CreateClassroomPage(props) {
                                 onSubmit={(e) => submitClassroom(e)}
                             >
                                 <div>
-                                    <label label="name" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome da sala de aula:
                                     </label>
                                     <input
@@ -239,7 +235,7 @@ function CreateClassroomPage(props) {
                                         value={classroom.name || ''}
                                         form="classroom-form"
                                         id="name"
-                                        className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3 border-0"
+                                        className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
                                     />
                                 </div>
@@ -247,7 +243,7 @@ function CreateClassroomPage(props) {
                                     <fieldset>
                                         <div className="row gx-2 gy-3">
                                             <div className="col-12 col-md-auto">
-                                                <p className="form-label fs-5 fw-medium color-steel-blue mb-2">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
                                                     Selecione os alunos da sala de aula:
                                                 </p>
                                             </div>
@@ -258,7 +254,7 @@ function CreateClassroomPage(props) {
                                                     value={usersSearch || ''}
                                                     id="users-search"
                                                     placeholder="Buscar por nome de usuário"
-                                                    className="form-control form-control-sm rounded-4 fw-medium color-grey bg-light-grey mb-3 border-0"
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
                                                     onChange={(e) => setUsersSearch(e.target.value)}
                                                 />
                                             </div>
@@ -292,7 +288,7 @@ function CreateClassroomPage(props) {
                                                         />
                                                         <label
                                                             htmlFor={`user-${u.id}`}
-                                                            className="font-barlow text-break color-grey fw-medium ms-2 fs-6"
+                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
                                                         >
                                                             {u.username}
                                                         </label>
