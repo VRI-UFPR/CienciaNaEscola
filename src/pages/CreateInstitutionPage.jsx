@@ -42,38 +42,12 @@ const style = `
         background-color: #b8d7e3;
     }
 
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
     .bg-light-pastel-blue:focus{
         background-color: #b8d7e3;
     }
 
-    .bg-light-grey{
-        background-color: #D9D9D9;
-    }
-
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
-    }
-
     .color-steel-blue {
         color: #4E9BB9;
-    }
-
-    .form-check-input {
-        box-shadow: 0px 4px 4px 0px #00000040 inset;
-    }
-
-    .form-check-input:focus {
-        border: 0;
-        box-shadow: 0px 4px 4px 0px #00000040 inset;
-    }
-
-    .form-check input:checked {
-        border: 0;
-        background-color: #91CAD6;
     }
 `;
 
@@ -191,7 +165,7 @@ function CreateInstitutionPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0 overflow-x-hidden">
+                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4 pb-0">
@@ -200,7 +174,7 @@ function CreateInstitutionPage(props) {
                             </h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 gx-0 overflow-hidden">
+                    <div className="row justify-content-center flex-grow-1 overflow-hidden font-barlow gx-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4">
                             <form
                                 name="institution-form"
@@ -210,7 +184,7 @@ function CreateInstitutionPage(props) {
                                 onSubmit={(e) => submitInstitution(e)}
                             >
                                 <div>
-                                    <label label="name" className="form-label fs-5 fw-medium color-steel-blue" s>
+                                    <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome da instituição:
                                     </label>
                                     <input
@@ -219,19 +193,19 @@ function CreateInstitutionPage(props) {
                                         value={institution.name || ''}
                                         form="institution-form"
                                         id="name"
-                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
                                     />
                                 </div>
                                 <div>
-                                    <label label="type" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="type" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione o tipo da instituição
                                     </label>
                                     <select
                                         name="type"
                                         value={institution.type || ''}
                                         id="type"
-                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 mb-3 border-0"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         form="institution-form"
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
                                     >
@@ -253,7 +227,7 @@ function CreateInstitutionPage(props) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label label="address-id" className="form-label fs-5 fw-medium color-steel-blue">
+                                    <label label="address-id" className="form-label color-steel-blue fs-5 fw-medium">
                                         ID do endereço:
                                     </label>
                                     <input
@@ -262,7 +236,7 @@ function CreateInstitutionPage(props) {
                                         value={institution.addressId || ''}
                                         form="institution-form"
                                         id="address-id"
-                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, addressId: e.target.value })}
                                     />
                                 </div>
