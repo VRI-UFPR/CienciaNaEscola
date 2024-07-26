@@ -34,7 +34,7 @@ function RangeInput(props) {
     const [value, setValue] = useState(0);
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(10);
-    const [step, setStep] = useState(2);
+    const [step, setStep] = useState(1);
     const [hasUpdated, setHasUpdated] = useState(false);
 
     useEffect(() => {
@@ -44,10 +44,12 @@ function RangeInput(props) {
                     let i = item.itemValidations[j];
                     switch (i.type) {
                         case 'MIN':
-                            setMin(parseInt(i.argument));
+                            if (parseInt(i.argument) > 800000) setMin(800000);
+                            else setMin(parseInt(i.argument));
                             break;
                         case 'MAX':
-                            setMax(parseInt(i.argument));
+                            if (parseInt(i.argument) > 1000000) setMax(1000000);
+                            else setMax(parseInt(i.argument));
                             break;
                         case 'STEP':
                             setStep(parseInt(i.argument));
@@ -100,9 +102,17 @@ function RangeInput(props) {
                 />
             </div>
             <div className="range-subtitle d-flex justify-content-between pt-2">
-                <span className={`${parseFloat(value) === parseFloat(min) ? 'd-none' : ''} fw-normal fs-6`}>{min}</span>
-                <span className="text-decoration-underline text-center fw-medium fs-5">{value}</span>
-                <span className={`${parseFloat(value) === parseFloat(max) ? 'd-none' : ''} text-end fw-normal fs-6`}>{max}</span>
+                <span className={`${parseFloat(value) === parseFloat(min) ? 'fw-medium fs-5' : 'fw-normal fs-6'} w-25`}>{min}</span>
+                <span
+                    className={`${
+                        parseFloat(value) === parseFloat(min) || parseFloat(value) === parseFloat(max) ? 'd-none' : ''
+                    } text-center fw-medium fs-5 w-25`}
+                >
+                    {value}
+                </span>
+                <span className={`${parseFloat(value) === parseFloat(max) ? 'fw-medium fs-5' : 'fw-normal fs-6'} text-end w-25`}>
+                    {max}
+                </span>
             </div>
             <style>{styles}</style>
         </div>
