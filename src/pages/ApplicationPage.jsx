@@ -425,7 +425,7 @@ function ApplicationPage(props) {
                                 {isDashboard && (
                                     <div className="row m-0 justify-content-center">
                                         {(application.applier.id === user.id || user.role === 'ADMIN') && (
-                                            <div className="col-4 align-self-center pb-4">
+                                            <div className="col-6 col-md-4 align-self-center pb-4">
                                                 <TextButton
                                                     type="submit"
                                                     hsl={[97, 43, 70]}
@@ -434,7 +434,7 @@ function ApplicationPage(props) {
                                                 />
                                             </div>
                                         )}
-                                        <div className="col-4 align-self-center pb-4">
+                                        <div className="col-6 col-md-4 align-self-center pb-4">
                                             <TextButton
                                                 type="submit"
                                                 hsl={[97, 43, 70]}
