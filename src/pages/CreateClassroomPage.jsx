@@ -9,6 +9,7 @@ import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
+import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
     .font-barlow {
@@ -71,6 +72,7 @@ function CreateClassroomPage(props) {
     const { institutionId, classroomId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
@@ -151,11 +153,24 @@ function CreateClassroomPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Sala de aula atualizada com sucesso');
-                    navigate(`/dash/institutions/${institutionId}`);
+                    showAlert({
+                        title: 'Sala de aula atualizada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(`/dash/institutions/${institutionId}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar sala de aula. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao atualizar sala de aula.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -166,11 +181,24 @@ function CreateClassroomPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Sala de aula criada com sucesso');
-                    navigate(`/dash/institutions/${institutionId}`);
+                    showAlert({
+                        title: 'Sala de aula criada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(`/dash/institutions/${institutionId}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao criar sala de aula. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao criar sala de aula.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         }
     };
@@ -183,11 +211,24 @@ function CreateClassroomPage(props) {
                 },
             })
             .then((response) => {
-                alert('Sala de aula excluída com sucesso');
-                navigate(`/dash/institutions/${institutionId}`);
+                showAlert({
+                    title: 'Sala de aula excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                    onHide: () => {
+                        navigate(`/dash/institutions/${institutionId}`);
+                    },
+                });
             })
             .catch((error) => {
-                alert('Erro ao excluir sala de aula. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir sala de aula.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 
@@ -241,7 +282,7 @@ function CreateClassroomPage(props) {
                                 </div>
                                 <div>
                                     <fieldset>
-                                        <div className="row gx-2 gy-3">
+                                        <div className="row gx-2 gy-0">
                                             <div className="col-12 col-md-auto">
                                                 <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
                                                     Selecione os alunos da sala de aula:
@@ -305,16 +346,42 @@ function CreateClassroomPage(props) {
                             <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
                                 <div className="col-3 col-md-2">
                                     <TextButton
-                                        text={isEditing ? 'Editar' : 'Criar'}
+                                        text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
-                                            formRef.current.requestSubmit();
+                                            showAlert({
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                dismissHsl: [355, 78, 66],
+                                                dismissText: 'Não',
+                                                actionHsl: [97, 43, 70],
+                                                actionText: 'Sim',
+                                                dismissible: true,
+                                                actionOnClick: () => {
+                                                    formRef.current.requestSubmit();
+                                                },
+                                            });
                                         }}
                                     />
                                 </div>
                                 {isEditing && (
                                     <div className="col-3 col-md-2">
-                                        <TextButton text={'Excluir'} hsl={[355, 78, 66]} onClick={deleteClassroom} />
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    title: `Tem certeza que deseja excluir a sala de aula?`,
+                                                    dismissHsl: [355, 78, 66],
+                                                    dismissText: 'Não',
+                                                    actionHsl: [97, 43, 70],
+                                                    actionText: 'Sim',
+                                                    dismissible: true,
+                                                    actionOnClick: () => {
+                                                        deleteClassroom();
+                                                    },
+                                                });
+                                            }}
+                                        />
                                     </div>
                                 )}
                             </div>
