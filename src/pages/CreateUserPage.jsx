@@ -13,6 +13,7 @@ import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import RoundedButton from '../components/RoundedButton';
 import iconVisibility from '../assets/images/visibilityIcon.svg';
 import iconSearch from '../assets/images/iconSearch.svg';
+import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
     .font-barlow {
@@ -88,6 +89,7 @@ function CreateUserPage(props) {
     const { institutionId, userId } = useParams();
     const { isEditing } = props;
     const { user, renewUser } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
     const profilePicRef = useRef(null);
 
@@ -170,14 +172,27 @@ function CreateUserPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Usuário atualizado com sucesso');
-                    if (response.data.data.id === user.id) {
-                        renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                    }
-                    navigate(`/dash/institutions/${institutionId}`);
+                    showAlert({
+                        title: 'Usuário atualizado com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            if (response.data.data.id === user.id) {
+                                renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
+                            }
+                            navigate(`/dash/institutions/${institutionId}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar usuário. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao atualizar usuário.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -188,11 +203,24 @@ function CreateUserPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Usuário criado com sucesso');
-                    navigate(`/dash/institutions/${institutionId}`);
+                    showAlert({
+                        title: 'Usuário criado com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(`/dash/institutions/${institutionId}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao criar usuário. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao criar usuário.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         }
     };
@@ -205,11 +233,24 @@ function CreateUserPage(props) {
                 },
             })
             .then((response) => {
-                alert('Usuário excluído com sucesso');
-                navigate(`/dash/institutions/${institutionId}`);
+                showAlert({
+                    title: 'Usuário excluído com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                    onHide: () => {
+                        navigate(`/dash/institutions/${institutionId}`);
+                    },
+                });
             })
             .catch((error) => {
-                alert('Erro ao excluir usuário. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir usuário.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 
@@ -366,7 +407,7 @@ function CreateUserPage(props) {
                                 {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
                                     <div>
                                         <fieldset>
-                                            <div className="row g-2 mb-2">
+                                            <div className="row gx-2 gy-0">
                                                 <div className="col-12 col-md-auto">
                                                     <p className="form-label color-steel-blue fs-5 fw-medium m-0">
                                                         Selecione as salas de aula do usuário:
@@ -448,16 +489,42 @@ function CreateUserPage(props) {
                             <div className="row justify-content-center justify-content-lg-start gx-2 mt-0">
                                 <div className="col-3 col-md-2">
                                     <TextButton
-                                        text={isEditing ? 'Editar' : 'Criar'}
+                                        text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
-                                            formRef.current.requestSubmit();
+                                            showAlert({
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
+                                                dismissHsl: [355, 78, 66],
+                                                dismissText: 'Não',
+                                                actionHsl: [97, 43, 70],
+                                                actionText: 'Sim',
+                                                dismissible: true,
+                                                actionOnClick: () => {
+                                                    formRef.current.requestSubmit();
+                                                },
+                                            });
                                         }}
                                     />
                                 </div>
                                 {isEditing && (
                                     <div className="col-3 col-md-2">
-                                        <TextButton text={'Excluir'} hsl={[355, 78, 66]} onClick={deleteUser} />
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    title: `Tem certeza que deseja excluir o usuário?`,
+                                                    dismissHsl: [97, 43, 70],
+                                                    dismissText: 'Não',
+                                                    actionHsl: [355, 78, 66],
+                                                    actionText: 'Sim',
+                                                    dismissible: true,
+                                                    actionOnClick: () => {
+                                                        deleteUser();
+                                                    },
+                                                });
+                                            }}
+                                        />
                                     </div>
                                 )}
                             </div>
