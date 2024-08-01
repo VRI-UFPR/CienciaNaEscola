@@ -9,6 +9,7 @@ import ErrorPage from './ErrorPage';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
+import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
     .font-barlow {
@@ -55,6 +56,7 @@ function CreateInstitutionPage(props) {
     const { institutionId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
 
     const [institution, setInstitution] = useState({});
@@ -109,11 +111,24 @@ function CreateInstitutionPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Instituição atualizada com sucesso');
-                    navigate(`/dash/institutions/${response.data.data.id}`);
+                    showAlert({
+                        title: 'Instituição atualizada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(`/dash/institutions/${response.data.data.id}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar instituição. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao atualizar instituição.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -124,11 +139,24 @@ function CreateInstitutionPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Instituição criada com sucesso');
-                    navigate(`/dash/institutions/${response.data.data.id}`);
+                    showAlert({
+                        title: 'Instituição criada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                        onHide: () => {
+                            navigate(`/dash/institutions/${response.data.data.id}`);
+                        },
+                    });
                 })
                 .catch((error) => {
-                    alert('Erro ao criar instituição. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao criar instituição.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         }
     };
@@ -141,11 +169,24 @@ function CreateInstitutionPage(props) {
                 },
             })
             .then((response) => {
-                alert('Instituição excluída com sucesso');
-                navigate(`/dash/institutions/`);
+                showAlert({
+                    title: 'Instituição excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                    onHide: () => {
+                        navigate(`/dash/institutions`);
+                    },
+                });
             })
             .catch((error) => {
-                alert('Erro ao excluir instituição. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir instituição.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 
@@ -248,16 +289,42 @@ function CreateInstitutionPage(props) {
                             <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
                                 <div className="col-3 col-md-2">
                                     <TextButton
-                                        text={isEditing ? 'Editar' : 'Criar'}
+                                        text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
-                                            formRef.current.requestSubmit();
+                                            showAlert({
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a instituição?`,
+                                                dismissHsl: [355, 78, 66],
+                                                dismissText: 'Não',
+                                                actionHsl: [97, 43, 70],
+                                                actionText: 'Sim',
+                                                dismissible: true,
+                                                actionOnClick: () => {
+                                                    formRef.current.requestSubmit();
+                                                },
+                                            });
                                         }}
                                     />
                                 </div>
                                 {isEditing && (
                                     <div className="col-3 col-md-2">
-                                        <TextButton text={'Excluir'} hsl={[355, 78, 66]} onClick={deleteInstitution} />
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    title: `Tem certeza que deseja excluir a instituição?`,
+                                                    dismissHsl: [355, 78, 66],
+                                                    dismissText: 'Não',
+                                                    actionHsl: [97, 43, 70],
+                                                    actionText: 'Sim',
+                                                    dismissible: true,
+                                                    actionOnClick: () => {
+                                                        deleteInstitution();
+                                                    },
+                                                });
+                                            }}
+                                        />
                                     </div>
                                 )}
                             </div>
