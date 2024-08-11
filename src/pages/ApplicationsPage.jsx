@@ -48,7 +48,7 @@ function ApplicationsPage(props) {
     const { user, logout } = useContext(AuthContext);
 
     const [visibleApplications, setVisibleApplications] = useState([]);
-    const { localApplications, connected } = useContext(StorageContext);
+    const { localApplications, connected, clearLocalApplications } = useContext(StorageContext);
 
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
@@ -82,6 +82,7 @@ function ApplicationsPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 alert('Aplicação excluída com sucesso');
                 const newVisibleApplications = [...visibleApplications];
                 setVisibleApplications(newVisibleApplications.filter((a) => a.id !== applicationId));

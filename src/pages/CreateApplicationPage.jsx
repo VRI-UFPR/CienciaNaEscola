@@ -6,11 +6,13 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
 import SplashPage from './SplashPage';
+import { StorageContext } from '../contexts/StorageContext';
 
 function CreateApplicationPage(props) {
     const { applicationId, protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
+    const { clearLocalApplications } = useContext(StorageContext);
 
     const [application, setApplication] = useState({
         protocolId: protocolId,
@@ -113,6 +115,7 @@ function CreateApplicationPage(props) {
                     },
                 })
                 .then((response) => {
+                    clearLocalApplications();
                     alert('Aplicação atualizada com sucesso');
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
@@ -145,6 +148,7 @@ function CreateApplicationPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 alert('Aplicação excluída com sucesso');
                 navigate(`/dash/applications/`);
             })
