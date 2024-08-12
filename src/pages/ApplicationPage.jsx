@@ -23,6 +23,7 @@ import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
+import RangeInput from '../components/inputs/answers/RangeInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -424,7 +425,7 @@ function ApplicationPage(props) {
                                 {isDashboard && (
                                     <div className="row m-0 justify-content-center">
                                         {(application.applier.id === user.id || user.role === 'ADMIN') && (
-                                            <div className="col-4 align-self-center pb-4">
+                                            <div className="col-6 col-md-4 align-self-center pb-4">
                                                 <TextButton
                                                     type="submit"
                                                     hsl={[97, 43, 70]}
@@ -433,7 +434,7 @@ function ApplicationPage(props) {
                                                 />
                                             </div>
                                         )}
-                                        <div className="col-4 align-self-center pb-4">
+                                        <div className="col-6 col-md-4 align-self-center pb-4">
                                             <TextButton
                                                 type="submit"
                                                 hsl={[97, 43, 70]}
@@ -454,6 +455,25 @@ function ApplicationPage(props) {
                                                 <p>Grupo de itens {itemGroupIndex + 1}</p>
                                                 {itemGroup.items.map((item) => {
                                                     switch (item.type) {
+                                                        case 'RANGE':
+                                                            return (
+                                                                <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    {
+                                                                        <RangeInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                        ?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            group={itemGroup.id}
+                                                                            onAnswerChange={handleAnswerChange}
+                                                                        />
+                                                                    }
+                                                                </div>
+                                                            );
                                                         case 'TEXTBOX':
                                                         case 'NUMBERBOX':
                                                             return (
