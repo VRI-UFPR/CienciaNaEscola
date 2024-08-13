@@ -10,6 +10,8 @@ import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
+import RoundedButton from '../components/RoundedButton';
+import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -76,8 +78,9 @@ function CreateClassroomPage(props) {
     const formRef = useRef(null);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
-    const [institutionUsers, setInstitutionUsers] = useState([]);
-    const [usersSearch, setUsersSearch] = useState('');
+    // const [institutionUsers, setInstitutionUsers] = useState([]);
+    const [searchedUsers, setSearchedUsers] = useState([]);
+    const [userSearchTerm, setUserSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -114,27 +117,28 @@ function CreateClassroomPage(props) {
                                 name: d.name,
                                 users: d.users.map((u) => u.id),
                             });
+                            setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
                             alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
                         })
                 );
             }
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
-                    })
-                    .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
-                    })
-            );
+            // promises.push(
+            //     axios
+            //         .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+            //             headers: {
+            //                 Authorization: `Bearer ${user.token}`,
+            //             },
+            //         })
+            //         .then((response) => {
+            //             const d = response.data.data;
+            //             setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+            //         })
+            //         .catch((error) => {
+            //             alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+            //         })
+            // );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
@@ -232,6 +236,30 @@ function CreateClassroomPage(props) {
             });
     };
 
+    const searchUsers = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newUsers = [
+                    ...d
+                        .filter((u) => !classroom.users.includes(u.id))
+                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                    ...searchedUsers.filter((u) => classroom.users.includes(u.id)).sort((a, b) => a.username.localeCompare(b.username)),
+                ];
+                setSearchedUsers(newUsers);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+            });
+    };
+
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
     }
@@ -288,53 +316,61 @@ function CreateClassroomPage(props) {
                                                     Selecione os alunos da sala de aula:
                                                 </p>
                                             </div>
-                                            <div className="col-12 col-md">
+                                            <div className="col">
                                                 <input
                                                     type="text"
                                                     name="users-search"
-                                                    value={usersSearch || ''}
+                                                    value={userSearchTerm || ''}
                                                     id="users-search"
                                                     placeholder="Buscar por nome de usuário"
                                                     className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
-                                                    onChange={(e) => setUsersSearch(e.target.value)}
+                                                    onChange={(e) => setUserSearchTerm(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') searchUsers(userSearchTerm);
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="col-auto">
+                                                <RoundedButton
+                                                    hsl={[197, 43, 52]}
+                                                    onClick={() => searchUsers(userSearchTerm)}
+                                                    icon={iconSearch}
                                                 />
                                             </div>
                                         </div>
                                         <div className="row gy-2 mb-3">
-                                            {institutionUsers
-                                                .filter((u) => u.username.includes(usersSearch))
-                                                .map((u) => (
-                                                    <div key={u.id} className="col-6 col-md-4 col-lg-3">
-                                                        <input
-                                                            form="classroom-form"
-                                                            type="checkbox"
-                                                            name="users"
-                                                            id={`user-${u.id}`}
-                                                            className="form-check-input bg-grey"
-                                                            value={u.id}
-                                                            checked={classroom.users.includes(u.id)}
-                                                            onChange={(e) => {
-                                                                if (e.target.checked) {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: [...prev.users, parseInt(e.target.value)],
-                                                                    }));
-                                                                } else {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: prev.users.filter((id) => id !== parseInt(e.target.value)),
-                                                                    }));
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label
-                                                            htmlFor={`user-${u.id}`}
-                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                        >
-                                                            {u.username}
-                                                        </label>
-                                                    </div>
-                                                ))}
+                                            {searchedUsers.map((u) => (
+                                                <div key={u.id} className="col-6 col-md-4 col-lg-3">
+                                                    <input
+                                                        form="classroom-form"
+                                                        type="checkbox"
+                                                        name="users"
+                                                        id={`user-${u.id}`}
+                                                        className="form-check-input bg-grey"
+                                                        value={u.id}
+                                                        checked={classroom.users.includes(u.id)}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setClassroom((prev) => ({
+                                                                    ...prev,
+                                                                    users: [...prev.users, parseInt(e.target.value)],
+                                                                }));
+                                                            } else {
+                                                                setClassroom((prev) => ({
+                                                                    ...prev,
+                                                                    users: prev.users.filter((id) => id !== parseInt(e.target.value)),
+                                                                }));
+                                                            }
+                                                        }}
+                                                    />
+                                                    <label
+                                                        htmlFor={`user-${u.id}`}
+                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                    >
+                                                        {u.username}
+                                                    </label>
+                                                </div>
+                                            ))}
                                         </div>
                                     </fieldset>
                                 </div>

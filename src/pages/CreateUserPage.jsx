@@ -95,8 +95,9 @@ function CreateUserPage(props) {
 
     const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
-    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
-    const [classroomsSearch, setClassroomsSearch] = useState('');
+    //const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+    const [searchedClassrooms, setSearchedClassrooms] = useState([]);
+    const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -131,29 +132,30 @@ function CreateUserPage(props) {
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
                             });
+                            setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
                         })
                 );
             }
-            if (user.role !== 'USER') {
-                promises.push(
-                    axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
-                        })
-                        .then((response) => {
-                            const d = response.data.data;
-                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
-                        })
-                        .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
-                        })
-                );
-            }
+            // if (user.role !== 'USER') {
+            //     promises.push(
+            //         axios
+            //             .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+            //                 headers: {
+            //                     Authorization: `Bearer ${user.token}`,
+            //                 },
+            //             })
+            //             .then((response) => {
+            //                 const d = response.data.data;
+            //                 setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
+            //             })
+            //             .catch((error) => {
+            //                 setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
+            //             })
+            //     );
+            // }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
@@ -254,6 +256,28 @@ function CreateUserPage(props) {
             });
     };
 
+    const searchClassrooms = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newClassroomss = [
+                    ...d.filter((c) => !newUser.classrooms.includes(c.id)).map(({ id, name, users }) => ({ id, name, users })),
+                    ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
+                ];
+                setSearchedClassrooms(newClassroomss);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar salas de aula. ' + error.response?.data.message || '');
+            });
+    };
+
     const generateRandomHash = () => {
         //Random hash with special chars and exactly 12 characters
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
@@ -348,6 +372,7 @@ function CreateUserPage(props) {
                                         form="user-form"
                                         id="username"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
+                                        autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                     />
                                 </div>
@@ -364,6 +389,7 @@ function CreateUserPage(props) {
                                                 form="user-form"
                                                 id="hash"
                                                 className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                                autoComplete="new-password"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
                                             />
                                         </div>
@@ -409,60 +435,70 @@ function CreateUserPage(props) {
                                         <fieldset>
                                             <div className="row gx-2 gy-0">
                                                 <div className="col-12 col-md-auto">
-                                                    <p className="form-label color-steel-blue fs-5 fw-medium m-0">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
                                                         Selecione as salas de aula do usuário:
                                                     </p>
                                                 </div>
-                                                <div className="col-12 col-md">
+                                                <div className="col">
                                                     <input
                                                         type="text"
                                                         name="classrooms-search"
-                                                        value={classroomsSearch || ''}
+                                                        value={classroomSearchTerm || ''}
                                                         id="classrooms-search"
                                                         placeholder="Buscar por nome de sala de aula"
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                        onChange={(e) => setClassroomsSearch(e.target.value)}
+                                                        onChange={(e) => setClassroomSearchTerm(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchClassrooms(classroomSearchTerm);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchClassrooms(classroomSearchTerm)}
+                                                        icon={iconSearch}
                                                     />
                                                 </div>
                                             </div>
 
                                             <div className="row gy-2 mb-3">
-                                                {institutionClassrooms
-                                                    .filter((c) => c.name.includes(classroomsSearch))
-                                                    .map((c) => (
-                                                        <div key={c.id} className="col-6 col-md-4 col-lg-3">
-                                                            <input
-                                                                form="user-form"
-                                                                type="checkbox"
-                                                                name="classrooms"
-                                                                id={`classroom-${c.id}`}
-                                                                value={c.id}
-                                                                className="form-check-input bg-grey"
-                                                                checked={newUser.classrooms.includes(c.id)}
-                                                                onChange={(e) => {
-                                                                    if (e.target.checked) {
-                                                                        setNewUser((prev) => ({
-                                                                            ...prev,
-                                                                            classrooms: [...prev.classrooms, parseInt(e.target.value)],
-                                                                        }));
-                                                                    } else {
-                                                                        setNewUser((prev) => ({
-                                                                            ...prev,
-                                                                            classrooms: prev.classrooms.filter(
-                                                                                (id) => id !== parseInt(e.target.value)
-                                                                            ),
-                                                                        }));
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor={`classroom-${c.id}`}
-                                                                className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                            >
-                                                                {c.name}
-                                                            </label>
-                                                        </div>
-                                                    ))}
+                                                {searchedClassrooms.map((c) => (
+                                                    <div key={c.id} className="col-6 col-md-4 col-lg-3">
+                                                        <input
+                                                            form="user-form"
+                                                            type="checkbox"
+                                                            name="classrooms"
+                                                            id={`classroom-${c.id}`}
+                                                            value={c.id}
+                                                            className="form-check-input bg-grey"
+                                                            checked={newUser.classrooms.includes(c.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setNewUser((prev) => ({
+                                                                        ...prev,
+                                                                        classrooms: [...prev.classrooms, parseInt(e.target.value)],
+                                                                    }));
+                                                                } else {
+                                                                    setNewUser((prev) => ({
+                                                                        ...prev,
+                                                                        classrooms: prev.classrooms.filter(
+                                                                            (id) => id !== parseInt(e.target.value)
+                                                                        ),
+                                                                    }));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label
+                                                            htmlFor={`classroom-${c.id}`}
+                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                        >
+                                                            {c.name}
+                                                        </label>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </fieldset>
                                     </div>
