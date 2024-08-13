@@ -225,7 +225,7 @@ function CreateApplicationPage(props) {
                 </div>
                 <div>
                     <fieldset>
-                        <span>Selecione as salas de aula visualizadoras</span>
+                        <span>Selecione os grupos visualizadores</span>
                         {viewersClassroom.map((c) => (
                             <div key={'viewer-classroom-' + c.id}>
                                 <input
@@ -287,7 +287,7 @@ function CreateApplicationPage(props) {
                 </div>
                 <div>
                     <fieldset>
-                        <span>Selecione as salas de aula visualizadoras de resposta</span>
+                        <span>Selecione os grupos visualizadores de resposta</span>
                         {answersViewersClassroom.map((c) => (
                             <div key={'answer-viewer-classroom-' + c.id}>
                                 <input

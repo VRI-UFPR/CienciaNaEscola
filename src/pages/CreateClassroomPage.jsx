@@ -91,7 +91,7 @@ function CreateClassroomPage(props) {
             if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
                 setError({
                     text: 'Operação não permitida',
-                    description: 'Você não tem permissão para criar salas de aula nesta instituição',
+                    description: 'Você não tem permissão para criar grupos nesta instituição',
                 });
                 return;
             } else if (
@@ -99,7 +99,7 @@ function CreateClassroomPage(props) {
                 user.role !== 'ADMIN' &&
                 (user.role === 'USER' || user.role === 'APPLIER' || user.institutionId !== parseInt(institutionId))
             ) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta sala de aula' });
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este grupo' });
                 return;
             }
             const promises = [];
@@ -120,7 +120,7 @@ function CreateClassroomPage(props) {
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
+                            alert('Erro ao buscar grupo. ' + error.response?.data.message || '');
                         })
                 );
             }
@@ -158,7 +158,7 @@ function CreateClassroomPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Sala de aula atualizada com sucesso.',
+                        title: 'Grupo atualizado com sucesso.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -169,7 +169,7 @@ function CreateClassroomPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao atualizar sala de aula.',
+                        title: 'Erro ao atualizar grupo.',
                         description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
@@ -186,7 +186,7 @@ function CreateClassroomPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Sala de aula criada com sucesso.',
+                        title: 'Grupo criado com sucesso.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -197,7 +197,7 @@ function CreateClassroomPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao criar sala de aula.',
+                        title: 'Erro ao criar grupo.',
                         description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
@@ -216,7 +216,7 @@ function CreateClassroomPage(props) {
             })
             .then((response) => {
                 showAlert({
-                    title: 'Sala de aula excluída com sucesso.',
+                    title: 'Grupo excluído com sucesso.',
                     dismissHsl: [97, 43, 70],
                     dismissText: 'Ok',
                     dismissible: true,
@@ -227,7 +227,7 @@ function CreateClassroomPage(props) {
             })
             .catch((error) => {
                 showAlert({
-                    title: 'Erro ao excluir sala de aula.',
+                    title: 'Erro ao excluir grupo.',
                     description: error.response?.data.message,
                     dismissHsl: [97, 43, 70],
                     dismissText: 'Ok',
@@ -265,7 +265,7 @@ function CreateClassroomPage(props) {
     }
 
     if (isLoading) {
-        return <SplashPage text="Carregando criação de sala de aula..." />;
+        return <SplashPage text="Carregando criação de grupo..." />;
     }
 
     return (
@@ -281,7 +281,7 @@ function CreateClassroomPage(props) {
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4 pb-0">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
-                                {isEditing ? 'Editar' : 'Criar'} sala de aula
+                                {isEditing ? 'Editar' : 'Criar'} grupo de aula
                             </h1>
                         </div>
                     </div>
@@ -296,7 +296,7 @@ function CreateClassroomPage(props) {
                             >
                                 <div>
                                     <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
-                                        Nome da sala de aula:
+                                        Nome do grupo:
                                     </label>
                                     <input
                                         type="text"
@@ -313,7 +313,7 @@ function CreateClassroomPage(props) {
                                         <div className="row gx-2 gy-0">
                                             <div className="col-12 col-md-auto">
                                                 <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                    Selecione os alunos da sala de aula:
+                                                    Selecione os alunos do grupo:
                                                 </p>
                                             </div>
                                             <div className="col">
@@ -386,7 +386,7 @@ function CreateClassroomPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
                                                 dismissHsl: [355, 78, 66],
                                                 dismissText: 'Não',
                                                 actionHsl: [97, 43, 70],
@@ -406,7 +406,7 @@ function CreateClassroomPage(props) {
                                             hsl={[355, 78, 66]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja excluir a sala de aula?`,
+                                                    title: `Tem certeza que deseja excluir o grupo?`,
                                                     dismissHsl: [355, 78, 66],
                                                     dismissText: 'Não',
                                                     actionHsl: [97, 43, 70],

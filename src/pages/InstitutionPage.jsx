@@ -53,9 +53,9 @@ function InstitutionPage(props) {
             <p>
                 Endereço: {institution.address.id}, {institution.address.city}, {institution.address.state}, {institution.address.country}
             </p>
-            <Link to={'classrooms/create'}>Criar sala de aula</Link>
+            <Link to={'classrooms/create'}>Criar grupo</Link>
             <p>
-                Salas de aula:{' '}
+                Grupos:{' '}
                 {institution.classrooms.map((c) =>
                     user.role !== 'USER' && user.role !== 'APPLIER' ? (
                         <Link to={`classrooms/${c.id}/manage`}>{c.name} </Link>

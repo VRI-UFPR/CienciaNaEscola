@@ -274,7 +274,7 @@ function CreateUserPage(props) {
                 setSearchedClassrooms(newClassroomss);
             })
             .catch((error) => {
-                alert('Erro ao buscar salas de aula. ' + error.response?.data.message || '');
+                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
             });
     };
 
@@ -436,7 +436,7 @@ function CreateUserPage(props) {
                                             <div className="row gx-2 gy-0">
                                                 <div className="col-12 col-md-auto">
                                                     <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                        Selecione as salas de aula do usuário:
+                                                        Selecione os grupos do usuário:
                                                     </p>
                                                 </div>
                                                 <div className="col">
@@ -445,7 +445,7 @@ function CreateUserPage(props) {
                                                         name="classrooms-search"
                                                         value={classroomSearchTerm || ''}
                                                         id="classrooms-search"
-                                                        placeholder="Buscar por nome de sala de aula"
+                                                        placeholder="Buscar por nome de grupo"
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                         onKeyDown={(e) => {
