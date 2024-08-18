@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconFile from '../../../assets/images/iconFile.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 import { defaultNewInput } from '../../../utils/constants';
+import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
+import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
+import iconValidation from '../../../assets/images/iconValidation.svg';
+import iconUpload from '../../../assets/images/iconUpload.svg';
 
 const textBoxStyles = `
     .font-century-gothic {
@@ -27,7 +30,18 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, isNumberBox = false } = props;
+    const {
+        currentItem,
+        pageIndex,
+        groupIndex,
+        itemIndex,
+        updateItem,
+        removeItem,
+        updateItemPlacementUp,
+        updateItemPlacementDown,
+        insertItemValidation,
+        isNumberBox = false,
+    } = props;
     const [item, setItem] = useState(currentItem || defaultNewInput(isNumberBox ? 'NUMBERBOX' : 'TEXTBOX'));
 
     useEffect(() => {
@@ -35,26 +49,32 @@ function CreateTextBoxInput(props) {
     }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
 
     return (
-        <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between pb-2 m-0">
-                <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
-                        {item.type === 'NUMBERBOX' ? 'Caixa numérica' : 'Caixa de texto'}
+        <div className="pb-4">
+            <div className="row gx-2 pb-2">
+                <div className="col">
+                    <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
+                        Item {itemIndex + 1} - {item.type === 'NUMBERBOX' ? 'Caixa numérica' : 'Caixa de texto'}
                     </h1>
                 </div>
-                <div className="col d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton
-                        className="ms-2"
-                        hsl={[190, 46, 70]}
-                        icon={iconTrash}
-                        onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
-                    />
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowDown} onClick={updateItemPlacementDown} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(pageIndex, groupIndex, itemIndex)} />
                 </div>
             </div>
-            <div className="row form-check form-switch pb-3 m-0 ms-2">
+            <div className="form-check form-switch fs-5 mb-2">
                 <input
-                    className="form-check-input border-0 fs-5 p-0"
+                    className="form-check-input"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
@@ -73,7 +93,7 @@ function CreateTextBoxInput(props) {
                         })
                     }
                 />
-                <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fw-medium" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
             </div>

@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from 'react';
-import iconFile from '../../../assets/images/iconFile.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 import iconPlus from '../../../assets/images/iconPlus.svg';
 import { defaultNewInput } from '../../../utils/constants';
-
 import RoundedButton from '../../RoundedButton';
+import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
+import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
+import iconValidation from '../../../assets/images/iconValidation.svg';
+import iconUpload from '../../../assets/images/iconUpload.svg';
 
 const styles = `
     .font-century-gothic {
@@ -35,7 +37,18 @@ const styles = `
 
 function CreateSingleSelectionInput(props) {
     const [title, setTitle] = useState('');
-    const { currentItem, type, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
+    const {
+        currentItem,
+        type,
+        pageIndex,
+        groupIndex,
+        itemIndex,
+        updateItem,
+        removeItem,
+        updateItemPlacementUp,
+        updateItemPlacementDown,
+        insertItemValidation,
+    } = props;
     const [item, setItem] = useState(currentItem || defaultNewInput(type));
 
     useEffect(() => {
@@ -89,7 +102,7 @@ function CreateSingleSelectionInput(props) {
 
     const removeOption = (index) => {
         const newItem = { ...item };
-        newItem.itemOptions = newItem.itemOptions.splice(index, 1);
+        newItem.itemOptions = newItem.itemOptions.filter((_, i) => i !== index);
         for (const [i, option] of newItem.itemOptions.entries()) if (i >= index) option.placement--;
         setItem(newItem);
     };
@@ -101,24 +114,32 @@ function CreateSingleSelectionInput(props) {
     };
 
     return (
-        <div className="px-0 pb-4 pb-lg-5">
-            <div className="row justify-content-between pb-2 m-0">
-                <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">{title}</h1>
+        <div className="pb-4">
+            <div className="row gx-2 pb-2">
+                <div className="col">
+                    <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
+                        Item {itemIndex + 1} - {title}
+                    </h1>
                 </div>
-                <div className="col d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton
-                        className="ms-2"
-                        hsl={[190, 46, 70]}
-                        icon={iconTrash}
-                        onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
-                    />
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowDown} onClick={updateItemPlacementDown} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(pageIndex, groupIndex, itemIndex)} />
                 </div>
             </div>
-            <div className="row form-check form-switch pb-3 m-0 ms-2">
+            <div className="form-check form-switch fs-5 mb-2">
                 <input
-                    className="form-check-input border-0 fs-5 p-0"
+                    className="form-check-input"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
@@ -137,7 +158,7 @@ function CreateSingleSelectionInput(props) {
                         })
                     }
                 />
-                <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fw-medium" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
             </div>
@@ -176,24 +197,36 @@ function CreateSingleSelectionInput(props) {
                     return (
                         <div key={'item-option-' + data.tempId} className="mb-3">
                             <label htmlFor={'item-option-text-' + data.tempId} className="form-label fw-medium fs-5">
-                                Opção {i}
+                                Opção {i + 1}
                             </label>
-                            <button type="button" onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}>
-                                Mover ⬆
-                            </button>
-                            <button type="button" onClick={() => updateOptionPlacement(data.placement + 1, data.placement, i)}>
-                                Mover ⬇
-                            </button>
-                            <div className="d-flex">
-                                <input
-                                    type="text"
-                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                    id={'item-option-text-' + data.tempId}
-                                    value={data.text || ''}
-                                    aria-describedby="questionHelp"
-                                    onChange={(event) => updateOption(i, event.target.value)}
-                                />
-                                <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeOption(i)} />
+                            <div className="row gx-2 align-items-center">
+                                <div className="col">
+                                    <input
+                                        type="text"
+                                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                        id={'item-option-text-' + data.tempId}
+                                        value={data.text || ''}
+                                        aria-describedby="questionHelp"
+                                        onChange={(event) => updateOption(i, event.target.value)}
+                                    />
+                                </div>
+                                <div className="col-auto">
+                                    <RoundedButton
+                                        hsl={[190, 46, 70]}
+                                        icon={iconArrowDown}
+                                        onClick={() => updateOptionPlacement(data.placement + 1, data.placement, i)}
+                                    />
+                                </div>
+                                <div className="col-auto">
+                                    <RoundedButton
+                                        hsl={[190, 46, 70]}
+                                        icon={iconArrowUp}
+                                        onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}
+                                    />
+                                </div>
+                                <div className="col-auto">
+                                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeOption(i)} />
+                                </div>
                             </div>
                             {!item.itemOptions[i] && (
                                 <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
@@ -209,7 +242,7 @@ function CreateSingleSelectionInput(props) {
                     </div>
                 )}
                 <div className="d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} size={22} icon={iconPlus} onClick={() => addOption()} />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconPlus} onClick={() => addOption()} />
                 </div>
             </div>
             <style>{styles}</style>
