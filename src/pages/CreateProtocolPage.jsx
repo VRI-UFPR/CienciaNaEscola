@@ -280,6 +280,7 @@ function CreateProtocolPage(props) {
         const tempId = Date.now() + Math.random() * 1000;
         newProtocol.pages.push({ type: 'ITEMS', itemGroups: [], dependencies: [], placement: newPlacement, tempId: tempId });
         setProtocol(newProtocol);
+        setItemTarget({ page: newProtocol.pages.length - 1, group: '' });
     }, [protocol]);
 
     const removePage = useCallback(
@@ -290,8 +291,15 @@ function CreateProtocolPage(props) {
                 if (i >= index) page.placement--;
             }
             setProtocol(newProtocol);
+            if (itemTarget.page >= newProtocol.pages.length) {
+                if (newProtocol.pages.length > 0) {
+                    setItemTarget((prev) => ({ group: '', page: newProtocol.pages.length - 1 }));
+                } else {
+                    setItemTarget((prev) => ({ group: '', page: '' }));
+                }
+            }
         },
-        [protocol]
+        [protocol, itemTarget.page]
     );
 
     const insertItemGroup = useCallback(
@@ -308,6 +316,7 @@ function CreateProtocolPage(props) {
                 tempId: tempId,
             });
             setProtocol(newProtocol);
+            setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
         },
         [protocol]
     );
@@ -320,8 +329,15 @@ function CreateProtocolPage(props) {
                 if (i >= index) group.placement--;
             }
             setProtocol(newProtocol);
+            if (itemTarget.group >= newProtocol.pages[page].itemGroups.length) {
+                if (newProtocol.pages[page].itemGroups.length > 0) {
+                    setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
+                } else {
+                    setItemTarget((prev) => ({ ...prev, group: '' }));
+                }
+            }
         },
-        [protocol]
+        [protocol, itemTarget.group]
     );
 
     const insertItemGroupDependency = useCallback(
@@ -2231,8 +2247,9 @@ function CreateProtocolPage(props) {
                                                 <select
                                                     name="item-target-page"
                                                     id="item-target-page"
+                                                    value={itemTarget.page}
                                                     className="form-select rounded-4 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
-                                                    onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
+                                                    onChange={(e) => setItemTarget((prev) => ({ group: '', page: e.target.value }))}
                                                 >
                                                     <option value={''}>Página...</option>
                                                     {protocol.pages.map((page, index) => (
@@ -2246,6 +2263,7 @@ function CreateProtocolPage(props) {
                                                 <select
                                                     name="item-target-group"
                                                     id="item-target-group"
+                                                    value={itemTarget.group}
                                                     onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
                                                     className="form-select rounded-4 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
                                                 >
