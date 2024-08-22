@@ -102,7 +102,7 @@ function CreateSingleSelectionInput(props) {
 
     const removeOption = (index) => {
         const newItem = { ...item };
-        newItem.itemOptions = newItem.itemOptions.filter((_, i) => i !== index);
+        newItem.itemOptions.splice(index, 1);
         for (const [i, option] of newItem.itemOptions.entries()) if (i >= index) option.placement--;
         setItem(newItem);
     };

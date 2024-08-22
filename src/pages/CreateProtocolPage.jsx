@@ -251,14 +251,12 @@ function CreateProtocolPage(props) {
     }, []);
 
     const removeItem = useCallback((page, group, index) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
-            newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
-            for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
-                if (i >= index) item.placement--;
-            }
-            return newProtocol;
-        });
+        const newProtocol = { ...protocol };
+        newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
+        for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
+            if (i >= index) item.placement--;
+        }
+        setProtocol(newProtocol);
     }, []);
 
     const insertPage = useCallback(() => {
