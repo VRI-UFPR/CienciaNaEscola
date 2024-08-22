@@ -1,4 +1,4 @@
-import { React, useState, useContext, useCallback, useEffect } from 'react';
+import { React, useState, useContext, useCallback, useEffect, useRef } from 'react';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
@@ -21,6 +21,7 @@ import iconArrowUp from '../assets/images/iconArrowUp.svg';
 import iconArrowDown from '../assets/images/iconArrowDown.svg';
 import iconDependency from '../assets/images/iconDependency.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
+import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -174,10 +175,21 @@ function CreateProtocolPage(props) {
         pages: [],
     });
     const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
-    const [institutionUsers, setInstitutionUsers] = useState([]);
-    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const formRef = useRef();
+
+    const [searchedUsers, setSearchedUsers] = useState([]);
+    const [searchedClassrooms, setSearchedClassrooms] = useState([]);
+    const [searchedAnswerUsers, setSearchedAnswerUsers] = useState([]);
+    const [searchedAnswerClassrooms, setSearchedAnswerClassrooms] = useState([]);
+    const [searchedAppliers, setSearchedAppliers] = useState([]);
+
+    const [VCSearchInput, setVCSearchInput] = useState('');
+    const [VUSearchInput, setVUSearchInput] = useState('');
+    const [AVUSearchInput, setAVUSearchInput] = useState('');
+    const [AVCSearchInput, setAVCSearchInput] = useState('');
+    const [ASearchInput, setASearchInput] = useState('');
 
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
@@ -546,47 +558,234 @@ function CreateProtocolPage(props) {
                                 answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
                                 appliers: d.appliers.map((u) => u.id),
                             });
+                            setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                            setSearchedUsers(d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
+                            setSearchedAnswerClassrooms(d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                            setSearchedAnswerUsers(
+                                d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
+                            );
+                            setSearchedAppliers(d.appliers.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
                         })
                 );
             }
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, role: u.role })));
-                    })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
-                    })
-            );
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${user.institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
-                    })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
-                    })
-            );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
     }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status, user.role, user.id]);
+
+    const searchUsers = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newUsers = [
+                    ...d
+                        .filter((u) => !protocol.viewersUser.includes(u.id))
+                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                    ...searchedUsers
+                        .filter((u) => protocol.viewersUser.includes(u.id))
+                        .sort((a, b) => a.username.localeCompare(b.username)),
+                ];
+                setSearchedUsers(newUsers);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+            });
+    };
+
+    const searchAnswerUsers = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newUsers = [
+                    ...d
+                        .filter((u) => !protocol.answersViewersUser.includes(u.id))
+                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                    ...searchedAnswerUsers
+                        .filter((u) => protocol.answersViewersUser.includes(u.id))
+                        .sort((a, b) => a.username.localeCompare(b.username)),
+                ];
+                setSearchedAnswerUsers(newUsers);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+            });
+    };
+
+    const searchAppliers = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newUsers = [
+                    ...d
+                        .filter((u) => !protocol.appliers.includes(u.id))
+                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                    ...searchedAppliers
+                        .filter((u) => protocol.appliers.includes(u.id))
+                        .sort((a, b) => a.username.localeCompare(b.username)),
+                ];
+                setSearchedAppliers(newUsers);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+            });
+    };
+
+    const searchClassrooms = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newClassrooms = d
+                    .filter((c) => !protocol.viewersClassroom.includes(c.id))
+                    .map(({ id, name, users }) => ({ id, name, users }));
+                const concatenedClassrooms = [
+                    ...newClassrooms,
+                    ...searchedClassrooms
+                        .filter((c) => protocol.viewersClassroom.includes(c.id))
+                        .sort((a, b) => a.name.localeCompare(b.name)),
+                ];
+                setSearchedClassrooms(concatenedClassrooms);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
+            });
+    };
+
+    const searchAnswerClassrooms = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newClassrooms = d
+                    .filter((c) => !protocol.answersViewersClassroom.includes(c.id))
+                    .map(({ id, name, users }) => ({ id, name, users }));
+                const concatenedClassrooms = [
+                    ...newClassrooms,
+                    ...searchedAnswerClassrooms
+                        .filter((c) => protocol.answersViewersClassroom.includes(c.id))
+                        .sort((a, b) => a.name.localeCompare(b.name)),
+                ];
+                setSearchedAnswerClassrooms(concatenedClassrooms);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
+            });
+    };
+
+    const unselectUser = (id) => {
+        setProtocol((prev) => ({
+            ...prev,
+            viewersUser: prev.viewersUser.filter((u) => u !== id),
+            viewersClassroom: searchedClassrooms
+                .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.viewersClassroom.includes(c.id))
+                .map((c) => c.id),
+        }));
+    };
+
+    const selectClassroom = (id) => {
+        const c = searchedClassrooms.find((c) => c.id === id);
+        const newUsers = c.users
+            .filter((u) => !protocol.viewersUser.includes(u.id))
+            .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
+        setSearchedUsers((prev) =>
+            [
+                ...prev.map((u) => {
+                    if (newUsers.includes(u.id)) {
+                        return { ...u, classrooms: [...u.classrooms, c.id] };
+                    }
+                    return u;
+                }),
+                ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
+            ].sort((a, b) => a.username.localeCompare(b.username))
+        );
+        setProtocol((prev) => ({
+            ...prev,
+            viewersClassroom: [...prev.viewersClassroom, id],
+            viewersUser: [
+                ...prev.viewersUser,
+                ...searchedClassrooms
+                    .find((c) => c.id === id)
+                    .users.filter((u) => !prev.viewersUser.includes(u.id))
+                    .map((u) => u.id),
+            ],
+        }));
+    };
+
+    const unselectAnswerUser = (id) => {
+        setProtocol((prev) => ({
+            ...prev,
+            answersViewersUser: prev.answersViewersUser.filter((u) => u !== id),
+            answersViewersClassroom: searchedAnswerClassrooms
+                .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.answersViewersClassroom.includes(c.id))
+                .map((c) => c.id),
+        }));
+    };
+
+    const selectAnswerClassroom = (id) => {
+        const c = searchedAnswerClassrooms.find((c) => c.id === id);
+        const newUsers = c.users
+            .filter((u) => !protocol.answersViewersUser.includes(u.id))
+            .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
+        setSearchedAnswerUsers((prev) =>
+            [
+                ...prev.map((u) => {
+                    if (newUsers.includes(u.id)) {
+                        return { ...u, classrooms: [...u.classrooms, c.id] };
+                    }
+                    return u;
+                }),
+                ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
+            ].sort((a, b) => a.username.localeCompare(b.username))
+        );
+        setProtocol((prev) => ({
+            ...prev,
+            answersViewersClassroom: [...prev.answersViewersClassroom, id],
+            answersViewersUser: [
+                ...prev.answersViewersUser,
+                ...searchedAnswerClassrooms
+                    .find((c) => c.id === id)
+                    .users.filter((u) => !prev.answersViewersUser.includes(u.id))
+                    .map((u) => u.id),
+            ],
+        }));
+    };
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
@@ -612,14 +811,31 @@ function CreateProtocolPage(props) {
                                 <div className="d-flex flex-column h-100">
                                     <div className="row justify-content-center font-barlow g-0">
                                         <div className="col-12 col-md-10">
-                                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0 p-4">
-                                                {isEditing ? 'Editar' : 'Criar'} protocolo
-                                            </h1>
+                                            <div className="row justify-content-between align-items-center p-4">
+                                                <div className="col-auto">
+                                                    <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
+                                                        {isEditing ? 'Editar' : 'Criar'} protocolo
+                                                    </h1>
+                                                </div>
+                                                <div className="col-5 d-lg-none">
+                                                    <div data-bs-toggle="offcanvas" data-bs-target="#addbar" aria-controls="addbar">
+                                                        <TextButton type="button" hsl={[197, 43, 52]} text="Adicionar..." />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="row justify-content-center font-barlow flex-grow-1 overflow-hidden g-0">
                                         <div className="col col-md-10 h-100 overflow-y-scroll scrollbar-none">
-                                            <form className="d-flex flex-column flex-grow-1 p-4 pt-0" onSubmit={handleSubmit}>
+                                            <form
+                                                className="d-flex flex-column flex-grow-1 p-4 pt-0"
+                                                ref={formRef}
+                                                action="/submit"
+                                                onSubmit={(e) => handleSubmit(e)}
+                                                // onKeyDown={(e) => {
+                                                //     if (e.key === 'Enter') e.preventDefault();
+                                                // }}
+                                            >
                                                 <div className="flex-grow-1 mb-3">
                                                     <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium">
                                                         Título do protocolo:
@@ -675,138 +891,143 @@ function CreateProtocolPage(props) {
                                                         <option value="PUBLIC">Público</option>
                                                         <option value="RESTRICT">Restrito</option>
                                                     </select>
-                                                    <fieldset>
-                                                        <div className="row gx-2 gy-0">
-                                                            <div className="col-12 col-md-auto">
-                                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                    Selecione os usuários que poderão visualizar o protocolo:
-                                                                </p>
-                                                            </div>
-                                                            <div className="col">
-                                                                <input
-                                                                    type="text"
-                                                                    name="users-search"
-                                                                    value={''}
-                                                                    id="users-search"
-                                                                    placeholder="Buscar por nome de usuário"
-                                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                    onChange={(e) => {}}
-                                                                    onKeyDown={(e) => {}}
-                                                                />
-                                                            </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton hsl={[197, 43, 52]} onClick={() => {}} icon={iconSearch} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-2 mb-3">
-                                                            {institutionUsers.map((u) => (
-                                                                <div
-                                                                    key={'viewer-user-' + u.id + '-option'}
-                                                                    className="col-6 col-md-4 col-lg-3"
-                                                                >
+                                                    {protocol.visibility === 'RESTRICT' && (
+                                                        <fieldset>
+                                                            <div className="row gx-2 gy-0">
+                                                                <div className="col-12 col-xl-auto">
+                                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                                        Selecione os usuários que poderão visualizar o protocolo:
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col">
                                                                     <input
-                                                                        form="application-form"
-                                                                        type="checkbox"
-                                                                        name="viewers-user"
-                                                                        id={`viewer-user-${u.id}`}
-                                                                        value={u.id}
-                                                                        checked={protocol.viewersUser.includes(u.id)}
-                                                                        className="form-check-input bg-grey"
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    viewersUser: [
-                                                                                        ...prev.viewersUser,
-                                                                                        parseInt(e.target.value),
-                                                                                    ],
-                                                                                }));
-                                                                            } else {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    viewersUser: prev.viewersUser.filter(
-                                                                                        (id) => id !== parseInt(e.target.value)
-                                                                                    ),
-                                                                                }));
-                                                                            }
+                                                                        type="text"
+                                                                        name="users-search"
+                                                                        value={VUSearchInput}
+                                                                        id="users-search"
+                                                                        placeholder="Buscar por nome de usuário"
+                                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
+                                                                        onChange={(e) => setVUSearchInput(e.target.value)}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') searchUsers(VUSearchInput);
                                                                         }}
                                                                     />
-                                                                    <label
-                                                                        htmlFor={`viewer-user-${u.id}`}
-                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                    >
-                                                                        {u.username}
-                                                                    </label>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    </fieldset>
-                                                    <fieldset>
-                                                        <div className="row gx-2 gy-0">
-                                                            <div className="col-12 col-md-auto">
-                                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                    Selecione os grupos que poderão visualizar o protocolo:
-                                                                </p>
+                                                                <div className="col-auto">
+                                                                    <RoundedButton
+                                                                        hsl={[197, 43, 52]}
+                                                                        onClick={() => searchUsers(VUSearchInput)}
+                                                                        icon={iconSearch}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <div className="col">
-                                                                <input
-                                                                    type="text"
-                                                                    name="users-search"
-                                                                    value={''}
-                                                                    id="users-search"
-                                                                    placeholder="Buscar por nome de usuário"
-                                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                    onChange={(e) => {}}
-                                                                    onKeyDown={(e) => {}}
-                                                                />
+                                                            <div className="row gy-2 mb-3">
+                                                                {searchedUsers.map((u) => (
+                                                                    <div
+                                                                        key={'viewer-user-' + u.id + '-option'}
+                                                                        className="col-6 col-md-4 col-lg-3"
+                                                                    >
+                                                                        <input
+                                                                            form="application-form"
+                                                                            type="checkbox"
+                                                                            name="viewers-user"
+                                                                            id={`viewer-user-${u.id}`}
+                                                                            value={u.id}
+                                                                            checked={protocol.viewersUser.includes(u.id)}
+                                                                            className="form-check-input bg-grey"
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) {
+                                                                                    setProtocol((prev) => ({
+                                                                                        ...prev,
+                                                                                        viewersUser: [
+                                                                                            ...prev.viewersUser,
+                                                                                            parseInt(e.target.value),
+                                                                                        ],
+                                                                                    }));
+                                                                                } else {
+                                                                                    unselectUser(parseInt(e.target.value));
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <label
+                                                                            htmlFor={`viewer-user-${u.id}`}
+                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                        >
+                                                                            {u.username}
+                                                                        </label>
+                                                                    </div>
+                                                                ))}
                                                             </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton hsl={[197, 43, 52]} onClick={() => {}} icon={iconSearch} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-2 mb-3">
-                                                            {institutionClassrooms.map((c) => (
-                                                                <div
-                                                                    key={'viewer-classroom-' + c.id + '-option'}
-                                                                    className="col-6 col-md-4 col-lg-3"
-                                                                >
+                                                        </fieldset>
+                                                    )}
+                                                    {protocol.visibility === 'RESTRICT' && (
+                                                        <fieldset>
+                                                            <div className="row gx-2 gy-0">
+                                                                <div className="col-12 col-xl-auto">
+                                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                                        Selecione os grupos que poderão visualizar o protocolo:
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col">
                                                                     <input
-                                                                        form="application-form"
-                                                                        type="checkbox"
-                                                                        name="viewers-classroom"
-                                                                        id={`viewer-classroom-${c.id}`}
-                                                                        className="form-check-input bg-grey"
-                                                                        value={c.id}
-                                                                        checked={protocol.viewersClassroom.includes(c.id)}
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    viewersClassroom: [
-                                                                                        ...prev.viewersClassroom,
-                                                                                        parseInt(e.target.value),
-                                                                                    ],
-                                                                                }));
-                                                                            } else {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    viewersClassroom: prev.viewersClassroom.filter(
-                                                                                        (id) => id !== parseInt(e.target.value)
-                                                                                    ),
-                                                                                }));
-                                                                            }
+                                                                        type="text"
+                                                                        name="users-search"
+                                                                        value={VCSearchInput}
+                                                                        id="users-search"
+                                                                        placeholder="Buscar por nome do grupo"
+                                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
+                                                                        onChange={(e) => setVCSearchInput(e.target.value)}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') searchClassrooms(VCSearchInput);
                                                                         }}
                                                                     />
-                                                                    <label
-                                                                        htmlFor={`viewer-classroom-${c.id}`}
-                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                    >
-                                                                        {c.name}
-                                                                    </label>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    </fieldset>
+                                                                <div className="col-auto">
+                                                                    <RoundedButton
+                                                                        hsl={[197, 43, 52]}
+                                                                        onClick={() => searchClassrooms(VCSearchInput)}
+                                                                        icon={iconSearch}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="row gy-2 mb-3">
+                                                                {searchedClassrooms.map((c) => (
+                                                                    <div
+                                                                        key={'viewer-classroom-' + c.id + '-option'}
+                                                                        className="col-6 col-md-4 col-lg-3"
+                                                                    >
+                                                                        <input
+                                                                            form="application-form"
+                                                                            type="checkbox"
+                                                                            name="viewers-classroom"
+                                                                            id={`viewer-classroom-${c.id}`}
+                                                                            className="form-check-input bg-grey"
+                                                                            value={c.id}
+                                                                            checked={protocol.viewersClassroom.includes(c.id)}
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) {
+                                                                                    selectClassroom(parseInt(e.target.value));
+                                                                                } else {
+                                                                                    setProtocol((prev) => ({
+                                                                                        ...prev,
+                                                                                        viewersClassroom: prev.viewersClassroom.filter(
+                                                                                            (id) => id !== parseInt(e.target.value)
+                                                                                        ),
+                                                                                    }));
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <label
+                                                                            htmlFor={`viewer-classroom-${c.id}`}
+                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                        >
+                                                                            {c.name}
+                                                                        </label>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </fieldset>
+                                                    )}
                                                     <label htmlFor="applicability" className="form-label color-steel-blue fs-5 fw-medium">
                                                         Aplicabilidade:
                                                     </label>
@@ -822,74 +1043,82 @@ function CreateProtocolPage(props) {
                                                         <option value="PUBLIC">Público</option>
                                                         <option value="RESTRICT">Restrito</option>
                                                     </select>
-                                                    <fieldset>
-                                                        <div className="row gx-2 gy-0">
-                                                            <div className="col-12 col-md-auto">
-                                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                    Selecione os usuários que poderão aplicar o protocolo:
-                                                                </p>
+                                                    {protocol.applicability === 'RESTRICT' && (
+                                                        <fieldset>
+                                                            <div className="row gx-2 gy-0">
+                                                                <div className="col-12 col-xl-auto">
+                                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                                        Selecione os usuários que poderão aplicar o protocolo:
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col">
+                                                                    <input
+                                                                        type="text"
+                                                                        name="users-search"
+                                                                        value={ASearchInput}
+                                                                        id="users-search"
+                                                                        placeholder="Buscar por nome de usuário"
+                                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
+                                                                        onChange={(e) => setASearchInput(e.target.value)}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') searchAppliers(ASearchInput);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-auto">
+                                                                    <RoundedButton
+                                                                        hsl={[197, 43, 52]}
+                                                                        onClick={() => searchAppliers(ASearchInput)}
+                                                                        icon={iconSearch}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <div className="col">
-                                                                <input
-                                                                    type="text"
-                                                                    name="users-search"
-                                                                    value={''}
-                                                                    id="users-search"
-                                                                    placeholder="Buscar por nome de usuário"
-                                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                    onChange={(e) => {}}
-                                                                    onKeyDown={(e) => {}}
-                                                                />
-                                                            </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton hsl={[197, 43, 52]} onClick={() => {}} icon={iconSearch} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-2 mb-3">
-                                                            {institutionUsers
-                                                                .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
-                                                                .map((u) => (
-                                                                    <div
-                                                                        key={'applier-' + u.id + '-option'}
-                                                                        className="col-6 col-md-4 col-lg-3"
-                                                                    >
-                                                                        <input
-                                                                            form="application-form"
-                                                                            type="checkbox"
-                                                                            name="applier"
-                                                                            id={`applier-${u.id}`}
-                                                                            className="form-check-input bg-grey"
-                                                                            value={u.id}
-                                                                            checked={protocol.appliers.includes(u.id)}
-                                                                            onChange={(e) => {
-                                                                                if (e.target.checked) {
-                                                                                    setProtocol((prev) => ({
-                                                                                        ...prev,
-                                                                                        appliers: [
-                                                                                            ...prev.appliers,
-                                                                                            parseInt(e.target.value),
-                                                                                        ],
-                                                                                    }));
-                                                                                } else {
-                                                                                    setProtocol((prev) => ({
-                                                                                        ...prev,
-                                                                                        appliers: prev.appliers.filter(
-                                                                                            (id) => id !== parseInt(e.target.value)
-                                                                                        ),
-                                                                                    }));
-                                                                                }
-                                                                            }}
-                                                                        />
-                                                                        <label
-                                                                            htmlFor={`applier-${u.id}`}
-                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                            <div className="row gy-2 mb-3">
+                                                                {searchedAppliers
+                                                                    .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
+                                                                    .map((u) => (
+                                                                        <div
+                                                                            key={'applier-' + u.id + '-option'}
+                                                                            className="col-6 col-md-4 col-lg-3"
                                                                         >
-                                                                            {u.username}
-                                                                        </label>
-                                                                    </div>
-                                                                ))}
-                                                        </div>
-                                                    </fieldset>
+                                                                            <input
+                                                                                form="application-form"
+                                                                                type="checkbox"
+                                                                                name="applier"
+                                                                                id={`applier-${u.id}`}
+                                                                                className="form-check-input bg-grey"
+                                                                                value={u.id}
+                                                                                checked={protocol.appliers.includes(u.id)}
+                                                                                onChange={(e) => {
+                                                                                    if (e.target.checked) {
+                                                                                        setProtocol((prev) => ({
+                                                                                            ...prev,
+                                                                                            appliers: [
+                                                                                                ...prev.appliers,
+                                                                                                parseInt(e.target.value),
+                                                                                            ],
+                                                                                        }));
+                                                                                    } else {
+                                                                                        setProtocol((prev) => ({
+                                                                                            ...prev,
+                                                                                            appliers: prev.appliers.filter(
+                                                                                                (id) => id !== parseInt(e.target.value)
+                                                                                            ),
+                                                                                        }));
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={`applier-${u.id}`}
+                                                                                className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                            >
+                                                                                {u.username}
+                                                                            </label>
+                                                                        </div>
+                                                                    ))}
+                                                            </div>
+                                                        </fieldset>
+                                                    )}
                                                     <label
                                                         htmlFor="answer-visiblity"
                                                         className="form-label color-steel-blue fs-5 fw-medium"
@@ -908,139 +1137,146 @@ function CreateProtocolPage(props) {
                                                         <option value="PUBLIC">Público</option>
                                                         <option value="RESTRICT">Restrito</option>
                                                     </select>
-                                                    <fieldset>
-                                                        <div className="row gx-2 gy-0">
-                                                            <div className="col-12 col-md-auto">
-                                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                    Selecione os usuários que poderão visualizar as respostas do protocolo:
-                                                                </p>
-                                                            </div>
-                                                            <div className="col">
-                                                                <input
-                                                                    type="text"
-                                                                    name="users-search"
-                                                                    value={''}
-                                                                    id="users-search"
-                                                                    placeholder="Buscar por nome de usuário"
-                                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                    onChange={(e) => {}}
-                                                                    onKeyDown={(e) => {}}
-                                                                />
-                                                            </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton hsl={[197, 43, 52]} onClick={() => {}} icon={iconSearch} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-2 mb-3">
-                                                            {institutionUsers.map((u) => (
-                                                                <div
-                                                                    key={'answer-viewer-user-' + u.id + '-option'}
-                                                                    className="col-6 col-md-4 col-lg-3"
-                                                                >
+                                                    {protocol.answersVisibility === 'RESTRICT' && (
+                                                        <fieldset>
+                                                            <div className="row gx-2 gy-0">
+                                                                <div className="col-12 col-xl-auto">
+                                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                                        Selecione os usuários que poderão visualizar as respostas do
+                                                                        protocolo:
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col">
                                                                     <input
-                                                                        form="application-form"
-                                                                        type="checkbox"
-                                                                        name="answer-viewers-user"
-                                                                        id={`answer-viewer-user-${u.id}`}
-                                                                        className="form-check-input bg-grey"
-                                                                        value={u.id}
-                                                                        checked={protocol.answersViewersUser.includes(u.id)}
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    answersViewersUser: [
-                                                                                        ...prev.answersViewersUser,
-                                                                                        parseInt(e.target.value),
-                                                                                    ],
-                                                                                }));
-                                                                            } else {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    answersViewersUser: prev.answersViewersUser.filter(
-                                                                                        (id) => id !== parseInt(e.target.value)
-                                                                                    ),
-                                                                                }));
-                                                                            }
+                                                                        type="text"
+                                                                        name="users-search"
+                                                                        value={AVUSearchInput}
+                                                                        id="users-search"
+                                                                        placeholder="Buscar por nome de usuário"
+                                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
+                                                                        onChange={(e) => setAVUSearchInput(e.target.value)}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') searchAnswerUsers(AVUSearchInput);
                                                                         }}
                                                                     />
-                                                                    <label
-                                                                        htmlFor={`answer-viewer-user-${u.id}`}
-                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                    >
-                                                                        {u.username}
-                                                                    </label>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    </fieldset>
-                                                    <fieldset>
-                                                        <div className="row gx-2 gy-0">
-                                                            <div className="col-12 col-md-auto">
-                                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                    Selecione os grupos que poderão visualizar as respostas do protocolo:
-                                                                </p>
+                                                                <div className="col-auto">
+                                                                    <RoundedButton
+                                                                        hsl={[197, 43, 52]}
+                                                                        onClick={() => searchAnswerUsers(AVUSearchInput)}
+                                                                        icon={iconSearch}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <div className="col">
-                                                                <input
-                                                                    type="text"
-                                                                    name="users-search"
-                                                                    value={''}
-                                                                    id="users-search"
-                                                                    placeholder="Buscar por nome de usuário"
-                                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                    onChange={(e) => {}}
-                                                                    onKeyDown={(e) => {}}
-                                                                />
+                                                            <div className="row gy-2 mb-3">
+                                                                {searchedAnswerUsers.map((u) => (
+                                                                    <div
+                                                                        key={'answer-viewer-user-' + u.id + '-option'}
+                                                                        className="col-6 col-md-4 col-lg-3"
+                                                                    >
+                                                                        <input
+                                                                            form="application-form"
+                                                                            type="checkbox"
+                                                                            name="answer-viewers-user"
+                                                                            id={`answer-viewer-user-${u.id}`}
+                                                                            className="form-check-input bg-grey"
+                                                                            value={u.id}
+                                                                            checked={protocol.answersViewersUser.includes(u.id)}
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) {
+                                                                                    setProtocol((prev) => ({
+                                                                                        ...prev,
+                                                                                        answersViewersUser: [
+                                                                                            ...prev.answersViewersUser,
+                                                                                            parseInt(e.target.value),
+                                                                                        ],
+                                                                                    }));
+                                                                                } else {
+                                                                                    unselectAnswerUser(parseInt(e.target.value));
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <label
+                                                                            htmlFor={`answer-viewer-user-${u.id}`}
+                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                        >
+                                                                            {u.username}
+                                                                        </label>
+                                                                    </div>
+                                                                ))}
                                                             </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton hsl={[197, 43, 52]} onClick={() => {}} icon={iconSearch} />
-                                                            </div>
-                                                        </div>
-                                                        <div className="row gy-2 mb-3">
-                                                            {institutionClassrooms.map((c) => (
-                                                                <div
-                                                                    key={'answer-viewer-classroom-' + c.id + '-option'}
-                                                                    className="col-6 col-md-4 col-lg-3"
-                                                                >
+                                                        </fieldset>
+                                                    )}
+                                                    {protocol.answersVisibility === 'RESTRICT' && (
+                                                        <fieldset>
+                                                            <div className="row gx-2 gy-0">
+                                                                <div className="col-12 col-xl-auto">
+                                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                                        Selecione os grupos que poderão visualizar as respostas do
+                                                                        protocolo:
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col">
                                                                     <input
-                                                                        form="application-form"
-                                                                        type="checkbox"
-                                                                        name="answer-viewers-classroom"
-                                                                        id={`answer-viewer-classroom-${c.id}`}
-                                                                        className="form-check-input bg-grey"
-                                                                        value={c.id}
-                                                                        checked={protocol.answersViewersClassroom.includes(c.id)}
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    answersViewersClassroom: [
-                                                                                        ...prev.answersViewersClassroom,
-                                                                                        parseInt(e.target.value),
-                                                                                    ],
-                                                                                }));
-                                                                            } else {
-                                                                                setProtocol((prev) => ({
-                                                                                    ...prev,
-                                                                                    answersViewersClassroom:
-                                                                                        prev.answersViewersClassroom.filter(
-                                                                                            (id) => id !== parseInt(e.target.value)
-                                                                                        ),
-                                                                                }));
-                                                                            }
+                                                                        type="text"
+                                                                        name="users-search"
+                                                                        value={AVCSearchInput}
+                                                                        id="users-search"
+                                                                        placeholder="Buscar por nome do grupo"
+                                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
+                                                                        onChange={(e) => setAVCSearchInput(e.target.value)}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') searchAnswerClassrooms(AVCSearchInput);
                                                                         }}
                                                                     />
-                                                                    <label
-                                                                        htmlFor={`answer-viewer-classroom-${c.id}`}
-                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                    >
-                                                                        {c.name}
-                                                                    </label>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    </fieldset>
+                                                                <div className="col-auto">
+                                                                    <RoundedButton
+                                                                        hsl={[197, 43, 52]}
+                                                                        onClick={() => searchAnswerClassrooms(AVCSearchInput)}
+                                                                        icon={iconSearch}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="row gy-2 mb-3">
+                                                                {searchedAnswerClassrooms.map((c) => (
+                                                                    <div
+                                                                        key={'answer-viewer-classroom-' + c.id + '-option'}
+                                                                        className="col-6 col-md-4 col-lg-3"
+                                                                    >
+                                                                        <input
+                                                                            form="application-form"
+                                                                            type="checkbox"
+                                                                            name="answer-viewers-classroom"
+                                                                            id={`answer-viewer-classroom-${c.id}`}
+                                                                            className="form-check-input bg-grey"
+                                                                            value={c.id}
+                                                                            checked={protocol.answersViewersClassroom.includes(c.id)}
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) {
+                                                                                    selectAnswerClassroom(parseInt(e.target.value));
+                                                                                } else {
+                                                                                    setProtocol((prev) => ({
+                                                                                        ...prev,
+                                                                                        answersViewersClassroom:
+                                                                                            prev.answersViewersClassroom.filter(
+                                                                                                (id) => id !== parseInt(e.target.value)
+                                                                                            ),
+                                                                                    }));
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <label
+                                                                            htmlFor={`answer-viewer-classroom-${c.id}`}
+                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                        >
+                                                                            {c.name}
+                                                                        </label>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </fieldset>
+                                                    )}
                                                     <label htmlFor="replicable" className="form-label color-steel-blue fs-5 fw-medium">
                                                         Replicabilidade:
                                                     </label>
@@ -1857,7 +2093,26 @@ function CreateProtocolPage(props) {
 
                                                 <div className="row justify-content-center mb-4">
                                                     <div className="col-8 col-lg-4">
-                                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
+                                                        <TextButton
+                                                            type="button"
+                                                            hsl={[97, 43, 70]}
+                                                            text="Finalizar protocolo"
+                                                            onClick={() => {
+                                                                showAlert({
+                                                                    title: `Tem certeza que deseja ${
+                                                                        isEditing ? 'editar' : 'criar'
+                                                                    } o protocolo?`,
+                                                                    dismissHsl: [355, 78, 66],
+                                                                    dismissText: 'Não',
+                                                                    actionHsl: [97, 43, 70],
+                                                                    actionText: 'Sim',
+                                                                    dismissible: true,
+                                                                    actionOnClick: () => {
+                                                                        formRef.current.requestSubmit();
+                                                                    },
+                                                                });
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
                                                 {isEditing && (
@@ -1873,122 +2128,136 @@ function CreateProtocolPage(props) {
                                 </div>
                             </div>
                             <div className="col-auto position-lg-sticky h-100 mh-100">
-                                <div className="d-flex flex-column justify-content-center h-100">
-                                    <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 p-4">
-                                        <h1 className="font-century-gothic fs-3 fw-bold text-white mb-1">Adicionar</h1>
-                                        <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao protocolo</h1>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={insertPage}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Nova página</span>
-                                        </button>
-                                        <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItemGroup(itemTarget.page)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Novo grupo</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertPageDependency(itemTarget.page)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
-                                        </button>
-                                        <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('TEXTBOX', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('NUMBERBOX', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa numérica</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('SELECT', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('RADIO', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('CHECKBOX', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItem('RANGE', itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Intervalo numérico</span>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                            onClick={() => insertItemGroupDependency(itemTarget.page, itemTarget.group)}
-                                        >
-                                            <IconPlus className="icon-plus" />
-                                            <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
-                                        </button>
-                                    </div>
-                                    <div className="w-100 mt-2">
-                                        <select
-                                            name="item-target-page"
-                                            id="item-target-page"
-                                            className="form-select rounded-4 rounded-end-0 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
-                                            onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
-                                        >
-                                            <option value={''}>Selecione...</option>
-                                            {protocol.pages.map((page, index) => (
-                                                <option key={'page-' + page.tempId + '-option'} value={index}>
-                                                    Página {index + 1}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="w-100 mt-2">
-                                        <select
-                                            name="item-target-group"
-                                            id="item-target-group"
-                                            onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
-                                            className="form-select rounded-4 rounded-end-0 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
-                                        >
-                                            <option value={''}>Selecione...</option>
-                                            {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
-                                                <option key={'group-' + group.tempId + '-option'} value={index}>
-                                                    Grupo {index + 1}
-                                                </option>
-                                            ))}
-                                        </select>
+                                <div className="offcanvas-lg bg-pastel-blue offcanvas-end h-100 w-auto" tabIndex="-1" id="addbar">
+                                    <div className="sidebar-wrapper bg-transparent d-flex flex-column h-100">
+                                        <div className="d-flex justify-content-end">
+                                            <button
+                                                type="button"
+                                                className="btn btn-transparent rounded-circle border-0 d-lg-none"
+                                                data-bs-dismiss="offcanvas"
+                                                data-bs-target="#addbar"
+                                            >
+                                                <img className="exit-image" src={ExitIcon} alt="Exit Addbar Icon" />
+                                            </button>
+                                        </div>
+                                        <div className="d-flex bg-transparent flex-column justify-content-center h-100">
+                                            <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 p-4">
+                                                <h1 className="font-century-gothic fs-3 fw-bold text-white mb-1">Adicionar</h1>
+                                                <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao protocolo</h1>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={insertPage}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Nova página</span>
+                                                </button>
+                                                <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItemGroup(itemTarget.page)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Novo grupo</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertPageDependency(itemTarget.page)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
+                                                </button>
+                                                <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('TEXTBOX', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('NUMBERBOX', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Caixa numérica</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('SELECT', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('RADIO', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('CHECKBOX', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItem('RANGE', itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Intervalo numérico</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
+                                                    onClick={() => insertItemGroupDependency(itemTarget.page, itemTarget.group)}
+                                                >
+                                                    <IconPlus className="icon-plus" />
+                                                    <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
+                                                </button>
+                                            </div>
+                                            <div className="w-100 mt-2 px-3">
+                                                <select
+                                                    name="item-target-page"
+                                                    id="item-target-page"
+                                                    className="form-select rounded-4 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
+                                                    onChange={(e) => setItemTarget((prev) => ({ ...prev, page: e.target.value }))}
+                                                >
+                                                    <option value={''}>Página...</option>
+                                                    {protocol.pages.map((page, index) => (
+                                                        <option key={'page-' + page.tempId + '-option'} value={index}>
+                                                            Página {index + 1}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="w-100 mt-2 px-3">
+                                                <select
+                                                    name="item-target-group"
+                                                    id="item-target-group"
+                                                    onChange={(e) => setItemTarget((prev) => ({ ...prev, group: e.target.value }))}
+                                                    className="form-select rounded-4 text-center text-white bg-steel-blue fs-5 fw-medium border-0"
+                                                >
+                                                    <option value={''}>Grupo...</option>
+                                                    {protocol.pages[itemTarget.page]?.itemGroups.map((group, index) => (
+                                                        <option key={'group-' + group.tempId + '-option'} value={index}>
+                                                            Grupo {index + 1}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
