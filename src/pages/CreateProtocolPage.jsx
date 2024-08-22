@@ -173,7 +173,7 @@ function CreateProtocolPage(props) {
         appliers: [],
         pages: [],
     });
-    const [itemTarget, setItemTarget] = useState({ page: 0, group: 0 });
+    const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -250,14 +250,17 @@ function CreateProtocolPage(props) {
         });
     }, []);
 
-    const removeItem = useCallback((page, group, index) => {
-        const newProtocol = { ...protocol };
-        newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
-        for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
-            if (i >= index) item.placement--;
-        }
-        setProtocol(newProtocol);
-    }, []);
+    const removeItem = useCallback(
+        (page, group, index) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
+            for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
+                if (i >= index) item.placement--;
+            }
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
 
     const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
@@ -1054,58 +1057,58 @@ function CreateProtocolPage(props) {
                                                         <option value="false">Não</option>
                                                     </select>
                                                 </div>
-                                                {protocol.pages?.map((page, pageIndex) => {
-                                                    return (
-                                                        <div className="mb-2" key={'page-' + page.tempId}>
-                                                            <div className="row gx-2 align-items-center">
-                                                                <div className="col-auto">
-                                                                    <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">
-                                                                        Página {pageIndex + 1}
-                                                                    </p>
-                                                                </div>
-                                                                <div className="col"></div>
-                                                                <div className="col-auto">
-                                                                    <RoundedButton
-                                                                        hsl={[197, 43, 52]}
-                                                                        onClick={() =>
-                                                                            updatePagePlacement(
-                                                                                page.placement + 1,
-                                                                                page.placement,
-                                                                                pageIndex
-                                                                            )
-                                                                        }
-                                                                        icon={iconArrowDown}
-                                                                    />
-                                                                </div>
-                                                                <div className="col-auto">
-                                                                    <RoundedButton
-                                                                        hsl={[197, 43, 52]}
-                                                                        onClick={() =>
-                                                                            updatePagePlacement(
-                                                                                page.placement - 1,
-                                                                                page.placement,
-                                                                                pageIndex
-                                                                            )
-                                                                        }
-                                                                        icon={iconArrowUp}
-                                                                    />
-                                                                </div>
-                                                                <div className="col-auto">
-                                                                    <RoundedButton
-                                                                        hsl={[197, 43, 52]}
-                                                                        onClick={() => insertPageDependency(pageIndex)}
-                                                                        icon={iconDependency}
-                                                                    />
-                                                                </div>
-                                                                <div className="col-auto">
-                                                                    <RoundedButton
-                                                                        hsl={[197, 43, 52]}
-                                                                        onClick={() => removePage(pageIndex)}
-                                                                        icon={iconTrash}
-                                                                    />
-                                                                </div>
+                                                {protocol.pages[itemTarget.page] && (
+                                                    <div className="mb-2" key={'page-' + protocol.pages[itemTarget.page].tempId}>
+                                                        <div className="row gx-2 align-items-center">
+                                                            <div className="col-auto">
+                                                                <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">
+                                                                    Página {Number(itemTarget.page) + 1}
+                                                                </p>
                                                             </div>
-                                                            {page.dependencies?.map((dependency, dependencyIndex) => (
+                                                            <div className="col"></div>
+                                                            <div className="col-auto">
+                                                                <RoundedButton
+                                                                    hsl={[197, 43, 52]}
+                                                                    onClick={() =>
+                                                                        updatePagePlacement(
+                                                                            protocol.pages[itemTarget.page].placement + 1,
+                                                                            protocol.pages[itemTarget.page].placement,
+                                                                            itemTarget.page
+                                                                        )
+                                                                    }
+                                                                    icon={iconArrowDown}
+                                                                />
+                                                            </div>
+                                                            <div className="col-auto">
+                                                                <RoundedButton
+                                                                    hsl={[197, 43, 52]}
+                                                                    onClick={() =>
+                                                                        updatePagePlacement(
+                                                                            protocol.pages[itemTarget.page].placement - 1,
+                                                                            protocol.pages[itemTarget.page].placement,
+                                                                            itemTarget.page
+                                                                        )
+                                                                    }
+                                                                    icon={iconArrowUp}
+                                                                />
+                                                            </div>
+                                                            <div className="col-auto">
+                                                                <RoundedButton
+                                                                    hsl={[197, 43, 52]}
+                                                                    onClick={() => insertPageDependency(itemTarget.page)}
+                                                                    icon={iconDependency}
+                                                                />
+                                                            </div>
+                                                            <div className="col-auto">
+                                                                <RoundedButton
+                                                                    hsl={[197, 43, 52]}
+                                                                    onClick={() => removePage(itemTarget.page)}
+                                                                    icon={iconTrash}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        {protocol.pages[itemTarget.page].dependencies?.map(
+                                                            (dependency, dependencyIndex) => (
                                                                 <div key={'page-dependency-' + dependency.tempId}>
                                                                     <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
                                                                     <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
@@ -1118,7 +1121,7 @@ function CreateProtocolPage(props) {
                                                                         onChange={(event) => {
                                                                             setProtocol((prev) => {
                                                                                 const newProtocol = { ...prev };
-                                                                                newProtocol.pages[pageIndex].dependencies[
+                                                                                newProtocol.pages[itemTarget.page].dependencies[
                                                                                     dependencyIndex
                                                                                 ].type = event.target.value;
                                                                                 return newProtocol;
@@ -1150,7 +1153,7 @@ function CreateProtocolPage(props) {
                                                                         onChange={(event) => {
                                                                             setProtocol((prev) => {
                                                                                 const newProtocol = { ...prev };
-                                                                                newProtocol.pages[pageIndex].dependencies[
+                                                                                newProtocol.pages[itemTarget.page].dependencies[
                                                                                     dependencyIndex
                                                                                 ].argument = event.target.value;
                                                                                 return newProtocol;
@@ -1170,7 +1173,7 @@ function CreateProtocolPage(props) {
                                                                         onChange={(event) => {
                                                                             setProtocol((prev) => {
                                                                                 const newProtocol = { ...prev };
-                                                                                newProtocol.pages[pageIndex].dependencies[
+                                                                                newProtocol.pages[itemTarget.page].dependencies[
                                                                                     dependencyIndex
                                                                                 ].itemTempId = event.target.value;
                                                                                 return newProtocol;
@@ -1179,7 +1182,7 @@ function CreateProtocolPage(props) {
                                                                     >
                                                                         <option value="">Selecione...</option>
                                                                         {protocol.pages
-                                                                            .filter((p, i) => i < pageIndex)
+                                                                            .filter((p, i) => i < itemTarget.page)
                                                                             .map((p, i) =>
                                                                                 p.itemGroups.map((g, j) =>
                                                                                     g.items
@@ -1232,7 +1235,7 @@ function CreateProtocolPage(props) {
                                                                         onChange={(event) => {
                                                                             setProtocol((prev) => {
                                                                                 const newProtocol = { ...prev };
-                                                                                newProtocol.pages[pageIndex].dependencies[
+                                                                                newProtocol.pages[itemTarget.page].dependencies[
                                                                                     dependencyIndex
                                                                                 ].customMessage = event.target.value;
                                                                                 return newProtocol;
@@ -1241,618 +1244,617 @@ function CreateProtocolPage(props) {
                                                                     />
                                                                     <button
                                                                         type="button"
-                                                                        onClick={() => removePageDependency(pageIndex, dependencyIndex)}
+                                                                        onClick={() =>
+                                                                            removePageDependency(itemTarget.page, dependencyIndex)
+                                                                        }
                                                                     >
                                                                         X Dependência de página
                                                                     </button>
                                                                 </div>
-                                                            ))}
-                                                            {page.itemGroups?.map((group, groupIndex) => {
-                                                                return (
-                                                                    <div className="mb-3" key={'group-' + groupIndex}>
-                                                                        <div className="row gx-2 align-items-center mb-4">
-                                                                            <div className="col-auto">
-                                                                                <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
-                                                                                    Grupo {groupIndex + 1}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div className="col"></div>
-                                                                            <div className="col-auto">
-                                                                                <RoundedButton
-                                                                                    hsl={[197, 43, 52]}
-                                                                                    onClick={() =>
-                                                                                        updateGroupPlacement(
-                                                                                            group.placement + 1,
-                                                                                            group.placement,
-                                                                                            pageIndex,
-                                                                                            groupIndex
+                                                            )
+                                                        )}
+                                                        {protocol.pages[itemTarget.page].itemGroups[itemTarget.group] && (
+                                                            <div className="mb-3" key={'group-' + itemTarget.group}>
+                                                                <div className="row gx-2 align-items-center mb-4">
+                                                                    <div className="col-auto">
+                                                                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
+                                                                            Grupo {Number(itemTarget.group) + 1}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="col"></div>
+                                                                    <div className="col-auto">
+                                                                        <RoundedButton
+                                                                            hsl={[197, 43, 52]}
+                                                                            onClick={() =>
+                                                                                updateGroupPlacement(
+                                                                                    protocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].placement + 1,
+                                                                                    protocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].placement,
+                                                                                    itemTarget.page,
+                                                                                    itemTarget.group
+                                                                                )
+                                                                            }
+                                                                            icon={iconArrowDown}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-auto">
+                                                                        <RoundedButton
+                                                                            hsl={[197, 43, 52]}
+                                                                            onClick={() =>
+                                                                                updateGroupPlacement(
+                                                                                    protocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].placement - 1,
+                                                                                    protocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].placement,
+                                                                                    itemTarget.page,
+                                                                                    itemTarget.group
+                                                                                )
+                                                                            }
+                                                                            icon={iconArrowUp}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-auto">
+                                                                        <RoundedButton
+                                                                            hsl={[197, 43, 52]}
+                                                                            onClick={() =>
+                                                                                insertItemGroupDependency(itemTarget.page, itemTarget.group)
+                                                                            }
+                                                                            icon={iconDependency}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-auto">
+                                                                        <RoundedButton
+                                                                            hsl={[197, 43, 52]}
+                                                                            onClick={() =>
+                                                                                removeItemGroup(itemTarget.page, itemTarget.group)
+                                                                            }
+                                                                            icon={iconTrash}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                {protocol.pages[itemTarget.page].itemGroups[
+                                                                    itemTarget.group
+                                                                ].dependencies?.map((dependency, dependencyIndex) => (
+                                                                    <div key={'group-dependency-' + dependency.tempId}>
+                                                                        <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
+                                                                        <label
+                                                                            htmlFor="dependency-type"
+                                                                            className="form-label fs-5 fw-medium"
+                                                                        >
+                                                                            Tipo de dependência
+                                                                        </label>
+                                                                        <select
+                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                            id="dependency-type"
+                                                                            value={dependency.type || ''}
+                                                                            onChange={(event) => {
+                                                                                setProtocol((prev) => {
+                                                                                    const newProtocol = { ...prev };
+                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].dependencies[dependencyIndex].type =
+                                                                                        event.target.value;
+                                                                                    return newProtocol;
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            <option value="">Selecione...</option>
+                                                                            <option value="IS_ANSWERED">Resposta obrigatória</option>
+                                                                            <option value="EXACT_ANSWER">Resposta exata</option>
+                                                                            <option value="OPTION_SELECTED">Opção selecionada</option>
+                                                                            <option value="MIN">
+                                                                                Mínimo (numérico, caracteres ou opções)
+                                                                            </option>
+                                                                            <option value="MAX">
+                                                                                Máximo (numérico, caracteres ou opções)
+                                                                            </option>
+                                                                        </select>
+                                                                        <label
+                                                                            htmlFor="dependency-argument"
+                                                                            className="form-label fs-5 fw-medium"
+                                                                        >
+                                                                            Argumento
+                                                                        </label>
+                                                                        <input
+                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                            id="dependency-argument"
+                                                                            type="text"
+                                                                            value={dependency.argument || ''}
+                                                                            onChange={(event) => {
+                                                                                setProtocol((prev) => {
+                                                                                    const newProtocol = { ...prev };
+                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].dependencies[dependencyIndex].argument =
+                                                                                        event.target.value;
+                                                                                    return newProtocol;
+                                                                                });
+                                                                            }}
+                                                                        />
+                                                                        <label
+                                                                            htmlFor="dependency-target"
+                                                                            className="form-label fs-5 fw-medium"
+                                                                        >
+                                                                            Alvo da dependência
+                                                                        </label>
+                                                                        <select
+                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                            id="dependency-target"
+                                                                            value={dependency.itemTempId || ''}
+                                                                            onChange={(event) => {
+                                                                                setProtocol((prev) => {
+                                                                                    const newProtocol = { ...prev };
+                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].dependencies[dependencyIndex].itemTempId =
+                                                                                        event.target.value;
+                                                                                    return newProtocol;
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            <option value="">Selecione...</option>
+                                                                            {protocol.pages
+                                                                                .filter((p, i) => i <= itemTarget.page)
+                                                                                .map((p, i) =>
+                                                                                    p.itemGroups
+                                                                                        .filter(
+                                                                                            (g, j) =>
+                                                                                                i < itemTarget.page ||
+                                                                                                (i === itemTarget.page &&
+                                                                                                    j < itemTarget.group)
                                                                                         )
-                                                                                    }
-                                                                                    icon={iconArrowDown}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="col-auto">
-                                                                                <RoundedButton
-                                                                                    hsl={[197, 43, 52]}
-                                                                                    onClick={() =>
-                                                                                        updateGroupPlacement(
-                                                                                            group.placement - 1,
-                                                                                            group.placement,
-                                                                                            pageIndex,
-                                                                                            groupIndex
-                                                                                        )
-                                                                                    }
-                                                                                    icon={iconArrowUp}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="col-auto">
-                                                                                <RoundedButton
-                                                                                    hsl={[197, 43, 52]}
-                                                                                    onClick={() =>
-                                                                                        insertItemGroupDependency(pageIndex, groupIndex)
-                                                                                    }
-                                                                                    icon={iconDependency}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="col-auto">
-                                                                                <RoundedButton
-                                                                                    hsl={[197, 43, 52]}
-                                                                                    onClick={() => removeItemGroup(pageIndex, groupIndex)}
-                                                                                    icon={iconTrash}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                        {group.dependencies?.map((dependency, dependencyIndex) => (
-                                                                            <div key={'group-dependency-' + dependency.tempId}>
-                                                                                <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
-                                                                                <label
-                                                                                    htmlFor="dependency-type"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Tipo de dependência
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                    id="dependency-type"
-                                                                                    value={dependency.type || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[pageIndex].itemGroups[
-                                                                                                groupIndex
-                                                                                            ].dependencies[dependencyIndex].type =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                >
-                                                                                    <option value="">Selecione...</option>
-                                                                                    <option value="IS_ANSWERED">
-                                                                                        Resposta obrigatória
-                                                                                    </option>
-                                                                                    <option value="EXACT_ANSWER">Resposta exata</option>
-                                                                                    <option value="OPTION_SELECTED">
-                                                                                        Opção selecionada
-                                                                                    </option>
-                                                                                    <option value="MIN">
-                                                                                        Mínimo (numérico, caracteres ou opções)
-                                                                                    </option>
-                                                                                    <option value="MAX">
-                                                                                        Máximo (numérico, caracteres ou opções)
-                                                                                    </option>
-                                                                                </select>
-                                                                                <label
-                                                                                    htmlFor="dependency-argument"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Argumento
-                                                                                </label>
-                                                                                <input
-                                                                                    className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                    id="dependency-argument"
-                                                                                    type="text"
-                                                                                    value={dependency.argument || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[pageIndex].itemGroups[
-                                                                                                groupIndex
-                                                                                            ].dependencies[dependencyIndex].argument =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                />
-                                                                                <label
-                                                                                    htmlFor="dependency-target"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Alvo da dependência
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                    id="dependency-target"
-                                                                                    value={dependency.itemTempId || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[pageIndex].itemGroups[
-                                                                                                groupIndex
-                                                                                            ].dependencies[dependencyIndex].itemTempId =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                >
-                                                                                    <option value="">Selecione...</option>
-                                                                                    {protocol.pages
-                                                                                        .filter((p, i) => i <= pageIndex)
-                                                                                        .map((p, i) =>
-                                                                                            p.itemGroups
+                                                                                        .map((g, j) =>
+                                                                                            g.items
                                                                                                 .filter(
-                                                                                                    (g, j) =>
-                                                                                                        i < pageIndex ||
-                                                                                                        (i === pageIndex && j < groupIndex)
+                                                                                                    (it, k) =>
+                                                                                                        ((dependency.type === 'MIN' ||
+                                                                                                            dependency.type === 'MAX') &&
+                                                                                                            (it.type === 'CHECKBOX' ||
+                                                                                                                it.type === 'NUMBERBOX' ||
+                                                                                                                it.type === 'TEXTBOX' ||
+                                                                                                                it.type === 'RANGE')) ||
+                                                                                                        (dependency.type ===
+                                                                                                            'OPTION_SELECTED' &&
+                                                                                                            (it.type === 'SELECT' ||
+                                                                                                                it.type === 'RADIO' ||
+                                                                                                                it.type === 'CHECKBOX')) ||
+                                                                                                        (dependency.type ===
+                                                                                                            'EXACT_ANSWER' &&
+                                                                                                            (it.type === 'NUMBERBOX' ||
+                                                                                                                it.type === 'TEXTBOX' ||
+                                                                                                                it.type === 'RANGE')) ||
+                                                                                                        dependency.type === 'IS_ANSWERED'
                                                                                                 )
-                                                                                                .map((g, j) =>
-                                                                                                    g.items
-                                                                                                        .filter(
-                                                                                                            (it, k) =>
-                                                                                                                ((dependency.type ===
-                                                                                                                    'MIN' ||
-                                                                                                                    dependency.type ===
-                                                                                                                        'MAX') &&
-                                                                                                                    (it.type ===
-                                                                                                                        'CHECKBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'NUMBERBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'TEXTBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RANGE')) ||
-                                                                                                                (dependency.type ===
-                                                                                                                    'OPTION_SELECTED' &&
-                                                                                                                    (it.type === 'SELECT' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RADIO' ||
-                                                                                                                        it.type ===
-                                                                                                                            'CHECKBOX')) ||
-                                                                                                                (dependency.type ===
-                                                                                                                    'EXACT_ANSWER' &&
-                                                                                                                    (it.type ===
-                                                                                                                        'NUMBERBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'TEXTBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RANGE')) ||
-                                                                                                                dependency.type ===
-                                                                                                                    'IS_ANSWERED'
-                                                                                                        )
-                                                                                                        .map((it, k) => (
-                                                                                                            <option
-                                                                                                                key={
-                                                                                                                    'dependency-' +
-                                                                                                                    dependency.tempId +
-                                                                                                                    '-target-' +
-                                                                                                                    it.tempId +
-                                                                                                                    '-option'
-                                                                                                                }
-                                                                                                                value={it.tempId}
-                                                                                                            >
-                                                                                                                {it.text}
-                                                                                                            </option>
-                                                                                                        ))
-                                                                                                )
-                                                                                        )}
-                                                                                </select>
-                                                                                <label
-                                                                                    htmlFor="dependency-custom-message"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Mensagem personalizada
-                                                                                </label>
-                                                                                <input
-                                                                                    className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                    id="dependency-custom-message"
-                                                                                    type="text"
-                                                                                    value={dependency.customMessage || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[pageIndex].itemGroups[
-                                                                                                groupIndex
-                                                                                            ].dependencies[dependencyIndex].customMessage =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                />
-                                                                                <button
-                                                                                    type="button"
-                                                                                    onClick={() =>
-                                                                                        removeItemGroupDependency(
-                                                                                            pageIndex,
-                                                                                            groupIndex,
-                                                                                            dependencyIndex
+                                                                                                .map((it, k) => (
+                                                                                                    <option
+                                                                                                        key={
+                                                                                                            'dependency-' +
+                                                                                                            dependency.tempId +
+                                                                                                            '-target-' +
+                                                                                                            it.tempId +
+                                                                                                            '-option'
+                                                                                                        }
+                                                                                                        value={it.tempId}
+                                                                                                    >
+                                                                                                        {it.text}
+                                                                                                    </option>
+                                                                                                ))
                                                                                         )
-                                                                                    }
-                                                                                >
-                                                                                    X Dependência de grupo
-                                                                                </button>
-                                                                            </div>
-                                                                        ))}
-                                                                        {group.items?.map((item, itemIndex) => (
-                                                                            <div key={'item-' + item.tempId}>
-                                                                                {(() => {
-                                                                                    switch (item.type) {
-                                                                                        case 'TEXTBOX':
-                                                                                            return (
-                                                                                                <CreateTextBoxInput
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        case 'NUMBERBOX':
-                                                                                            return (
-                                                                                                <CreateTextBoxInput
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    isNumberBox={true}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        case 'RANGE':
-                                                                                            return (
-                                                                                                <CreateRangeInput
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        case 'SELECT':
-                                                                                            return (
-                                                                                                <CreateMultipleInputItens
-                                                                                                    type={item.type}
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        case 'RADIO':
-                                                                                            return (
-                                                                                                <CreateMultipleInputItens
-                                                                                                    type={item.type}
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        case 'CHECKBOX':
-                                                                                            return (
-                                                                                                <CreateMultipleInputItens
-                                                                                                    type={item.type}
-                                                                                                    currentItem={item}
-                                                                                                    pageIndex={pageIndex}
-                                                                                                    groupIndex={groupIndex}
-                                                                                                    itemIndex={itemIndex}
-                                                                                                    updateItem={updateItem}
-                                                                                                    removeItem={removeItem}
-                                                                                                    updateItemPlacementUp={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement - 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    updateItemPlacementDown={() =>
-                                                                                                        updateItemPlacement(
-                                                                                                            item.placement + 1,
-                                                                                                            item.placement,
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                    insertItemValidation={() =>
-                                                                                                        insertItemValidation(
-                                                                                                            pageIndex,
-                                                                                                            groupIndex,
-                                                                                                            itemIndex
-                                                                                                        )
-                                                                                                    }
-                                                                                                />
-                                                                                            );
-                                                                                        default:
-                                                                                            return null;
-                                                                                    }
-                                                                                })()}
-                                                                                {item.itemValidations
-                                                                                    ?.filter(
-                                                                                        (v) =>
-                                                                                            (item.type === 'NUMBERBOX' ||
-                                                                                                item.type === 'CHECKBOX' ||
-                                                                                                item.type === 'TEXTBOX') &&
-                                                                                            v.type !== 'MANDATORY'
-                                                                                    )
-                                                                                    .map((validation, validationIndex) => (
-                                                                                        <div key={'validation-' + validation.tempId}>
-                                                                                            <p className="m-0 p-0">
-                                                                                                Validação {validationIndex + 1}
-                                                                                            </p>
-                                                                                            <label
-                                                                                                htmlFor="validation-type"
-                                                                                                className="form-label fs-5 fw-medium"
-                                                                                            >
-                                                                                                Tipo de validação
-                                                                                            </label>
-                                                                                            <select
-                                                                                                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                                id="validation-type"
-                                                                                                value={validation.type || ''}
-                                                                                                onChange={(event) => {
-                                                                                                    setProtocol((prev) => {
-                                                                                                        const newProtocol = { ...prev };
-                                                                                                        newProtocol.pages[
-                                                                                                            pageIndex
-                                                                                                        ].itemGroups[groupIndex].items[
-                                                                                                            itemIndex
-                                                                                                        ].itemValidations[
-                                                                                                            validationIndex
-                                                                                                        ].type = event.target.value;
-                                                                                                        return newProtocol;
-                                                                                                    });
-                                                                                                }}
-                                                                                            >
-                                                                                                <option value="">Selecione...</option>
-                                                                                                {item.type === 'NUMBERBOX' && (
-                                                                                                    <>
-                                                                                                        <option value="MIN">
-                                                                                                            Número mínimo
-                                                                                                        </option>
-                                                                                                        <option value="MAX">
-                                                                                                            Número máximo
-                                                                                                        </option>
-                                                                                                    </>
-                                                                                                )}
-
-                                                                                                {item.type === 'TEXTBOX' && (
-                                                                                                    <>
-                                                                                                        <option value="MIN">
-                                                                                                            Mínimo de caracteres
-                                                                                                        </option>
-                                                                                                        <option value="MAX">
-                                                                                                            Máximo de caracteres
-                                                                                                        </option>
-                                                                                                    </>
-                                                                                                )}
-                                                                                                {item.type === 'CHECKBOX' && (
-                                                                                                    <>
-                                                                                                        <option value="MIN">
-                                                                                                            Mínimo de escolhas
-                                                                                                        </option>
-                                                                                                        <option value="MAX">
-                                                                                                            Máximo de escolhas
-                                                                                                        </option>
-                                                                                                    </>
-                                                                                                )}
-                                                                                            </select>
-                                                                                            <label
-                                                                                                htmlFor="validation-argument"
-                                                                                                className="form-label fs-5 fw-medium"
-                                                                                            >
-                                                                                                Argumento
-                                                                                            </label>
-                                                                                            <input
-                                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                                id="validation-argument"
-                                                                                                type="number"
-                                                                                                value={validation.argument || ''}
-                                                                                                onChange={(event) => {
-                                                                                                    setProtocol((prev) => {
-                                                                                                        const newProtocol = { ...prev };
-                                                                                                        newProtocol.pages[
-                                                                                                            pageIndex
-                                                                                                        ].itemGroups[groupIndex].items[
-                                                                                                            itemIndex
-                                                                                                        ].itemValidations[
-                                                                                                            validationIndex
-                                                                                                        ].argument = event.target.value;
-                                                                                                        return newProtocol;
-                                                                                                    });
-                                                                                                }}
-                                                                                            />
-                                                                                            <label
-                                                                                                htmlFor="validation-custom-message"
-                                                                                                className="form-label fs-5 fw-medium"
-                                                                                            >
-                                                                                                Mensagem personalizada
-                                                                                            </label>
-                                                                                            <input
-                                                                                                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                                id="validation-custom-message"
-                                                                                                type="text"
-                                                                                                value={validation.customMessage || ''}
-                                                                                                onChange={(event) => {
-                                                                                                    setProtocol((prev) => {
-                                                                                                        const newProtocol = { ...prev };
-                                                                                                        newProtocol.pages[
-                                                                                                            pageIndex
-                                                                                                        ].itemGroups[groupIndex].items[
-                                                                                                            itemIndex
-                                                                                                        ].itemValidations[
-                                                                                                            validationIndex
-                                                                                                        ].customMessage =
-                                                                                                            event.target.value;
-                                                                                                        return newProtocol;
-                                                                                                    });
-                                                                                                }}
-                                                                                            />
-                                                                                            <button
-                                                                                                type="button"
-                                                                                                onClick={() =>
-                                                                                                    removeItemValidation(
-                                                                                                        pageIndex,
-                                                                                                        groupIndex,
-                                                                                                        itemIndex,
-                                                                                                        validationIndex
+                                                                                )}
+                                                                        </select>
+                                                                        <label
+                                                                            htmlFor="dependency-custom-message"
+                                                                            className="form-label fs-5 fw-medium"
+                                                                        >
+                                                                            Mensagem personalizada
+                                                                        </label>
+                                                                        <input
+                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                            id="dependency-custom-message"
+                                                                            type="text"
+                                                                            value={dependency.customMessage || ''}
+                                                                            onChange={(event) => {
+                                                                                setProtocol((prev) => {
+                                                                                    const newProtocol = { ...prev };
+                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                        itemTarget.group
+                                                                                    ].dependencies[dependencyIndex].customMessage =
+                                                                                        event.target.value;
+                                                                                    return newProtocol;
+                                                                                });
+                                                                            }}
+                                                                        />
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() =>
+                                                                                removeItemGroupDependency(
+                                                                                    itemTarget.page,
+                                                                                    itemTarget.group,
+                                                                                    dependencyIndex
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            X Dependência de grupo
+                                                                        </button>
+                                                                    </div>
+                                                                ))}
+                                                                {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].items?.map(
+                                                                    (item, itemIndex) => (
+                                                                        <div key={'item-' + item.tempId}>
+                                                                            {(() => {
+                                                                                switch (item.type) {
+                                                                                    case 'TEXTBOX':
+                                                                                        return (
+                                                                                            <CreateTextBoxInput
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
                                                                                                     )
                                                                                                 }
-                                                                                            >
-                                                                                                X Validação
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    ))}
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    );
-                                                })}
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    case 'NUMBERBOX':
+                                                                                        return (
+                                                                                            <CreateTextBoxInput
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                isNumberBox={true}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    case 'RANGE':
+                                                                                        return (
+                                                                                            <CreateRangeInput
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    case 'SELECT':
+                                                                                        return (
+                                                                                            <CreateMultipleInputItens
+                                                                                                type={item.type}
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    case 'RADIO':
+                                                                                        return (
+                                                                                            <CreateMultipleInputItens
+                                                                                                type={item.type}
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    case 'CHECKBOX':
+                                                                                        return (
+                                                                                            <CreateMultipleInputItens
+                                                                                                type={item.type}
+                                                                                                currentItem={item}
+                                                                                                pageIndex={itemTarget.page}
+                                                                                                groupIndex={itemTarget.group}
+                                                                                                itemIndex={itemIndex}
+                                                                                                updateItem={updateItem}
+                                                                                                removeItem={removeItem}
+                                                                                                updateItemPlacementUp={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement - 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                updateItemPlacementDown={() =>
+                                                                                                    updateItemPlacement(
+                                                                                                        item.placement + 1,
+                                                                                                        item.placement,
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                                insertItemValidation={() =>
+                                                                                                    insertItemValidation(
+                                                                                                        itemTarget.page,
+                                                                                                        itemTarget.group,
+                                                                                                        itemIndex
+                                                                                                    )
+                                                                                                }
+                                                                                            />
+                                                                                        );
+                                                                                    default:
+                                                                                        return null;
+                                                                                }
+                                                                            })()}
+                                                                            {item.itemValidations
+                                                                                ?.filter(
+                                                                                    (v) =>
+                                                                                        (item.type === 'NUMBERBOX' ||
+                                                                                            item.type === 'CHECKBOX' ||
+                                                                                            item.type === 'TEXTBOX') &&
+                                                                                        v.type !== 'MANDATORY'
+                                                                                )
+                                                                                .map((validation, validationIndex) => (
+                                                                                    <div key={'validation-' + validation.tempId}>
+                                                                                        <p className="m-0 p-0">
+                                                                                            Validação {validationIndex + 1}
+                                                                                        </p>
+                                                                                        <label
+                                                                                            htmlFor="validation-type"
+                                                                                            className="form-label fs-5 fw-medium"
+                                                                                        >
+                                                                                            Tipo de validação
+                                                                                        </label>
+                                                                                        <select
+                                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                            id="validation-type"
+                                                                                            value={validation.type || ''}
+                                                                                            onChange={(event) => {
+                                                                                                setProtocol((prev) => {
+                                                                                                    const newProtocol = { ...prev };
+                                                                                                    newProtocol.pages[
+                                                                                                        itemTarget.page
+                                                                                                    ].itemGroups[itemTarget.group].items[
+                                                                                                        itemIndex
+                                                                                                    ].itemValidations[
+                                                                                                        validationIndex
+                                                                                                    ].type = event.target.value;
+                                                                                                    return newProtocol;
+                                                                                                });
+                                                                                            }}
+                                                                                        >
+                                                                                            <option value="">Selecione...</option>
+                                                                                            {item.type === 'NUMBERBOX' && (
+                                                                                                <>
+                                                                                                    <option value="MIN">
+                                                                                                        Número mínimo
+                                                                                                    </option>
+                                                                                                    <option value="MAX">
+                                                                                                        Número máximo
+                                                                                                    </option>
+                                                                                                </>
+                                                                                            )}
+
+                                                                                            {item.type === 'TEXTBOX' && (
+                                                                                                <>
+                                                                                                    <option value="MIN">
+                                                                                                        Mínimo de caracteres
+                                                                                                    </option>
+                                                                                                    <option value="MAX">
+                                                                                                        Máximo de caracteres
+                                                                                                    </option>
+                                                                                                </>
+                                                                                            )}
+                                                                                            {item.type === 'CHECKBOX' && (
+                                                                                                <>
+                                                                                                    <option value="MIN">
+                                                                                                        Mínimo de escolhas
+                                                                                                    </option>
+                                                                                                    <option value="MAX">
+                                                                                                        Máximo de escolhas
+                                                                                                    </option>
+                                                                                                </>
+                                                                                            )}
+                                                                                        </select>
+                                                                                        <label
+                                                                                            htmlFor="validation-argument"
+                                                                                            className="form-label fs-5 fw-medium"
+                                                                                        >
+                                                                                            Argumento
+                                                                                        </label>
+                                                                                        <input
+                                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                            id="validation-argument"
+                                                                                            type="number"
+                                                                                            value={validation.argument || ''}
+                                                                                            onChange={(event) => {
+                                                                                                setProtocol((prev) => {
+                                                                                                    const newProtocol = { ...prev };
+                                                                                                    newProtocol.pages[
+                                                                                                        itemTarget.page
+                                                                                                    ].itemGroups[itemTarget.group].items[
+                                                                                                        itemIndex
+                                                                                                    ].itemValidations[
+                                                                                                        validationIndex
+                                                                                                    ].argument = event.target.value;
+                                                                                                    return newProtocol;
+                                                                                                });
+                                                                                            }}
+                                                                                        />
+                                                                                        <label
+                                                                                            htmlFor="validation-custom-message"
+                                                                                            className="form-label fs-5 fw-medium"
+                                                                                        >
+                                                                                            Mensagem personalizada
+                                                                                        </label>
+                                                                                        <input
+                                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                                                                                            id="validation-custom-message"
+                                                                                            type="text"
+                                                                                            value={validation.customMessage || ''}
+                                                                                            onChange={(event) => {
+                                                                                                setProtocol((prev) => {
+                                                                                                    const newProtocol = { ...prev };
+                                                                                                    newProtocol.pages[
+                                                                                                        itemTarget.page
+                                                                                                    ].itemGroups[itemTarget.group].items[
+                                                                                                        itemIndex
+                                                                                                    ].itemValidations[
+                                                                                                        validationIndex
+                                                                                                    ].customMessage = event.target.value;
+                                                                                                    return newProtocol;
+                                                                                                });
+                                                                                            }}
+                                                                                        />
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() =>
+                                                                                                removeItemValidation(
+                                                                                                    itemTarget.page,
+                                                                                                    itemTarget.group,
+                                                                                                    itemIndex,
+                                                                                                    validationIndex
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            X Validação
+                                                                                        </button>
+                                                                                    </div>
+                                                                                ))}
+                                                                        </div>
+                                                                    )
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
                                                 <div className="row justify-content-center mb-4">
                                                     <div className="col-8 col-lg-4">
                                                         <TextButton type="submit" hsl={[97, 43, 70]} text="Finalizar protocolo" />
