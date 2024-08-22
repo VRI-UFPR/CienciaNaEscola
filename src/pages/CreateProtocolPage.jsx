@@ -152,6 +152,25 @@ const CreateProtocolStyles = `
         border: 0;
         background-color: #91CAD6;
     }
+        .font-century-gothic {
+        font-family: 'Century Gothic', sans-serif;
+    }
+
+    .bg-light-grey{
+        background-color: #D9D9D9;
+    }
+
+    .text-steel-blue {
+        color: #4E9BB9;
+    }
+
+    .border-steel-blue{
+        border-color: #4E9BB9 !important;
+    }
+
+    .form-check-input {
+        background-color: #D9D9D9;
+    }
 `;
 
 function CreateProtocolPage(props) {
@@ -1311,7 +1330,7 @@ function CreateProtocolPage(props) {
                                                 </div>
                                                 {protocol.pages[itemTarget.page] && (
                                                     <div className="mb-2" key={'page-' + protocol.pages[itemTarget.page].tempId}>
-                                                        <div className="row gx-2 align-items-center">
+                                                        <div className="row gx-2 align-items-center mb-3">
                                                             <div className="col-auto">
                                                                 <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">
                                                                     Página {Number(itemTarget.page) + 1}
@@ -1361,153 +1380,180 @@ function CreateProtocolPage(props) {
                                                         </div>
                                                         {protocol.pages[itemTarget.page].dependencies?.map(
                                                             (dependency, dependencyIndex) => (
-                                                                <div key={'page-dependency-' + dependency.tempId}>
-                                                                    <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
-                                                                    <label htmlFor="dependency-type" className="form-label fs-5 fw-medium">
-                                                                        Tipo de dependência
-                                                                    </label>
-                                                                    <select
-                                                                        className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                        id="page-dependency-type"
-                                                                        value={dependency.type || ''}
-                                                                        onChange={(event) => {
-                                                                            setProtocol((prev) => {
-                                                                                const newProtocol = { ...prev };
-                                                                                newProtocol.pages[itemTarget.page].dependencies[
-                                                                                    dependencyIndex
-                                                                                ].type = event.target.value;
-                                                                                return newProtocol;
-                                                                            });
-                                                                        }}
-                                                                    >
-                                                                        <option value="">Selecione...</option>
-                                                                        <option value="IS_ANSWERED">Resposta obrigatória</option>
-                                                                        <option value="EXACT_ANSWER">Resposta exata</option>
-                                                                        <option value="OPTION_SELECTED">Opção selecionada</option>
-                                                                        <option value="MIN">Mínimo (numérico, caracteres ou opções)</option>
-                                                                        <option value="MAX">Máximo (numérico, caracteres ou opções)</option>
-                                                                    </select>
-                                                                    <label
-                                                                        htmlFor="page-dependency-argument"
-                                                                        className="form-label fs-5 fw-medium"
-                                                                    >
-                                                                        Argumento
-                                                                    </label>
-                                                                    <input
-                                                                        className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                        id="page-dependency-argument"
-                                                                        type={
-                                                                            dependency.type === 'MIN' || dependency.type === 'MAX'
-                                                                                ? 'number'
-                                                                                : 'text'
-                                                                        }
-                                                                        value={dependency.argument || ''}
-                                                                        onChange={(event) => {
-                                                                            setProtocol((prev) => {
-                                                                                const newProtocol = { ...prev };
-                                                                                newProtocol.pages[itemTarget.page].dependencies[
-                                                                                    dependencyIndex
-                                                                                ].argument = event.target.value;
-                                                                                return newProtocol;
-                                                                            });
-                                                                        }}
-                                                                    />
-                                                                    <label
-                                                                        htmlFor="page-dependency-target"
-                                                                        className="form-label fs-5 fw-medium"
-                                                                    >
-                                                                        Alvo da dependência
-                                                                    </label>
-                                                                    <select
-                                                                        className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                        id="page-dependency-target"
-                                                                        value={dependency.itemTempId || ''}
-                                                                        onChange={(event) => {
-                                                                            setProtocol((prev) => {
-                                                                                const newProtocol = { ...prev };
-                                                                                newProtocol.pages[itemTarget.page].dependencies[
-                                                                                    dependencyIndex
-                                                                                ].itemTempId = event.target.value;
-                                                                                return newProtocol;
-                                                                            });
-                                                                        }}
-                                                                    >
-                                                                        <option value="">Selecione...</option>
-                                                                        {protocol.pages
-                                                                            .filter((p, i) => i < itemTarget.page)
-                                                                            .map((p, i) =>
-                                                                                p.itemGroups.map((g, j) =>
-                                                                                    g.items
-                                                                                        .filter(
-                                                                                            (it, k) =>
-                                                                                                ((dependency.type === 'MIN' ||
-                                                                                                    dependency.type === 'MAX') &&
-                                                                                                    (it.type === 'CHECKBOX' ||
-                                                                                                        it.type === 'NUMBERBOX' ||
-                                                                                                        it.type === 'TEXTBOX' ||
-                                                                                                        it.type === 'RANGE')) ||
-                                                                                                (dependency.type === 'OPTION_SELECTED' &&
-                                                                                                    (it.type === 'SELECT' ||
-                                                                                                        it.type === 'RADIO' ||
-                                                                                                        it.type === 'CHECKBOX')) ||
-                                                                                                (dependency.type === 'EXACT_ANSWER' &&
-                                                                                                    (it.type === 'NUMBERBOX' ||
-                                                                                                        it.type === 'TEXTBOX' ||
-                                                                                                        it.type === 'RANGE')) ||
-                                                                                                dependency.type === 'IS_ANSWERED'
+                                                                <div className="mb-4" key={'page-dependency-' + dependency.tempId}>
+                                                                    <div className="row gx-2 pb-2">
+                                                                        <div className="col">
+                                                                            <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
+                                                                                Dependência {Number(dependencyIndex) + 1} (Página{' '}
+                                                                                {Number(itemTarget.page) + 1})
+                                                                            </h1>
+                                                                        </div>
+                                                                        <div className="col-auto">
+                                                                            <RoundedButton
+                                                                                hsl={[190, 46, 70]}
+                                                                                icon={iconTrash}
+                                                                                onClick={() =>
+                                                                                    removePageDependency(itemTarget.page, dependencyIndex)
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
+                                                                        <div className="mb-3">
+                                                                            <label
+                                                                                htmlFor="page-dependency-type"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Tipo de dependência
+                                                                            </label>
+                                                                            <select
+                                                                                className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                                                                                id="page-dependency-type"
+                                                                                value={dependency.type || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[itemTarget.page].dependencies[
+                                                                                            dependencyIndex
+                                                                                        ].type = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                <option value="">Selecione...</option>
+                                                                                <option value="IS_ANSWERED">Resposta obrigatória</option>
+                                                                                <option value="EXACT_ANSWER">Resposta exata</option>
+                                                                                <option value="OPTION_SELECTED">Opção selecionada</option>
+                                                                                <option value="MIN">
+                                                                                    Mínimo (numérico, caracteres ou opções)
+                                                                                </option>
+                                                                                <option value="MAX">
+                                                                                    Máximo (numérico, caracteres ou opções)
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div className="mb-3">
+                                                                            <label
+                                                                                htmlFor="page-dependency-argument"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Argumento
+                                                                            </label>
+                                                                            <input
+                                                                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                id="page-dependency-argument"
+                                                                                type={
+                                                                                    dependency.type === 'MIN' || dependency.type === 'MAX'
+                                                                                        ? 'number'
+                                                                                        : 'text'
+                                                                                }
+                                                                                value={dependency.argument || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[itemTarget.page].dependencies[
+                                                                                            dependencyIndex
+                                                                                        ].argument = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                        <div className="mb-3">
+                                                                            <label
+                                                                                htmlFor="page-dependency-target"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Alvo da dependência
+                                                                            </label>
+                                                                            <select
+                                                                                className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                                                                                id="page-dependency-target"
+                                                                                value={dependency.itemTempId || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[itemTarget.page].dependencies[
+                                                                                            dependencyIndex
+                                                                                        ].itemTempId = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                <option value="">Selecione...</option>
+                                                                                {protocol.pages
+                                                                                    .filter((p, i) => i < itemTarget.page)
+                                                                                    .map((p, i) =>
+                                                                                        p.itemGroups.map((g, j) =>
+                                                                                            g.items
+                                                                                                .filter(
+                                                                                                    (it, k) =>
+                                                                                                        ((dependency.type === 'MIN' ||
+                                                                                                            dependency.type === 'MAX') &&
+                                                                                                            (it.type === 'CHECKBOX' ||
+                                                                                                                it.type === 'NUMBERBOX' ||
+                                                                                                                it.type === 'TEXTBOX' ||
+                                                                                                                it.type === 'RANGE')) ||
+                                                                                                        (dependency.type ===
+                                                                                                            'OPTION_SELECTED' &&
+                                                                                                            (it.type === 'SELECT' ||
+                                                                                                                it.type === 'RADIO' ||
+                                                                                                                it.type === 'CHECKBOX')) ||
+                                                                                                        (dependency.type ===
+                                                                                                            'EXACT_ANSWER' &&
+                                                                                                            (it.type === 'NUMBERBOX' ||
+                                                                                                                it.type === 'TEXTBOX' ||
+                                                                                                                it.type === 'RANGE')) ||
+                                                                                                        dependency.type === 'IS_ANSWERED'
+                                                                                                )
+                                                                                                .map((it, k) => (
+                                                                                                    <option
+                                                                                                        key={
+                                                                                                            'dependency-' +
+                                                                                                            dependency.tempId +
+                                                                                                            '-target-' +
+                                                                                                            it.tempId +
+                                                                                                            '-option'
+                                                                                                        }
+                                                                                                        value={it.tempId}
+                                                                                                    >
+                                                                                                        {it.text}
+                                                                                                    </option>
+                                                                                                ))
                                                                                         )
-                                                                                        .map((it, k) => (
-                                                                                            <option
-                                                                                                key={
-                                                                                                    'dependency-' +
-                                                                                                    dependency.tempId +
-                                                                                                    '-target-' +
-                                                                                                    it.tempId +
-                                                                                                    '-option'
-                                                                                                }
-                                                                                                value={it.tempId}
-                                                                                            >
-                                                                                                {it.text}
-                                                                                            </option>
-                                                                                        ))
-                                                                                )
-                                                                            )}
-                                                                    </select>
-                                                                    <label
-                                                                        htmlFor="page-dependency-custom-message"
-                                                                        className="form-label fs-5 fw-medium"
-                                                                    >
-                                                                        Mensagem personalizada
-                                                                    </label>
-                                                                    <input
-                                                                        className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                        id="page-dependency-custom-message"
-                                                                        type="text"
-                                                                        value={dependency.customMessage || ''}
-                                                                        onChange={(event) => {
-                                                                            setProtocol((prev) => {
-                                                                                const newProtocol = { ...prev };
-                                                                                newProtocol.pages[itemTarget.page].dependencies[
-                                                                                    dependencyIndex
-                                                                                ].customMessage = event.target.value;
-                                                                                return newProtocol;
-                                                                            });
-                                                                        }}
-                                                                    />
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            removePageDependency(itemTarget.page, dependencyIndex)
-                                                                        }
-                                                                    >
-                                                                        X Dependência de página
-                                                                    </button>
+                                                                                    )}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div>
+                                                                            <label
+                                                                                htmlFor="page-dependency-custom-message"
+                                                                                className="form-label fs-5 fw-medium"
+                                                                            >
+                                                                                Mensagem personalizada
+                                                                            </label>
+                                                                            <input
+                                                                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                id="page-dependency-custom-message"
+                                                                                type="text"
+                                                                                value={dependency.customMessage || ''}
+                                                                                onChange={(event) => {
+                                                                                    setProtocol((prev) => {
+                                                                                        const newProtocol = { ...prev };
+                                                                                        newProtocol.pages[itemTarget.page].dependencies[
+                                                                                            dependencyIndex
+                                                                                        ].customMessage = event.target.value;
+                                                                                        return newProtocol;
+                                                                                    });
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             )
                                                         )}
                                                         {protocol.pages[itemTarget.page].itemGroups[itemTarget.group] && (
                                                             <div className="mb-3" key={'group-' + itemTarget.group}>
-                                                                <div className="row gx-2 align-items-center mb-4">
+                                                                <div className="row gx-2 align-items-center mb-3">
                                                                     <div className="col-auto">
                                                                         <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
                                                                             Grupo {Number(itemTarget.group) + 1}
@@ -1572,167 +1618,205 @@ function CreateProtocolPage(props) {
                                                                 {protocol.pages[itemTarget.page].itemGroups[
                                                                     itemTarget.group
                                                                 ].dependencies?.map((dependency, dependencyIndex) => (
-                                                                    <div key={'group-dependency-' + dependency.tempId}>
-                                                                        <p className="m-0 p-0">Dependência {dependencyIndex + 1}</p>
-                                                                        <label
-                                                                            htmlFor="dependency-type"
-                                                                            className="form-label fs-5 fw-medium"
-                                                                        >
-                                                                            Tipo de dependência
-                                                                        </label>
-                                                                        <select
-                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                            id="dependency-type"
-                                                                            value={dependency.type || ''}
-                                                                            onChange={(event) => {
-                                                                                setProtocol((prev) => {
-                                                                                    const newProtocol = { ...prev };
-                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].dependencies[dependencyIndex].type =
-                                                                                        event.target.value;
-                                                                                    return newProtocol;
-                                                                                });
-                                                                            }}
-                                                                        >
-                                                                            <option value="">Selecione...</option>
-                                                                            <option value="IS_ANSWERED">Resposta obrigatória</option>
-                                                                            <option value="EXACT_ANSWER">Resposta exata</option>
-                                                                            <option value="OPTION_SELECTED">Opção selecionada</option>
-                                                                            <option value="MIN">
-                                                                                Mínimo (numérico, caracteres ou opções)
-                                                                            </option>
-                                                                            <option value="MAX">
-                                                                                Máximo (numérico, caracteres ou opções)
-                                                                            </option>
-                                                                        </select>
-                                                                        <label
-                                                                            htmlFor="dependency-argument"
-                                                                            className="form-label fs-5 fw-medium"
-                                                                        >
-                                                                            Argumento
-                                                                        </label>
-                                                                        <input
-                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                            id="dependency-argument"
-                                                                            type="text"
-                                                                            value={dependency.argument || ''}
-                                                                            onChange={(event) => {
-                                                                                setProtocol((prev) => {
-                                                                                    const newProtocol = { ...prev };
-                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].dependencies[dependencyIndex].argument =
-                                                                                        event.target.value;
-                                                                                    return newProtocol;
-                                                                                });
-                                                                            }}
-                                                                        />
-                                                                        <label
-                                                                            htmlFor="dependency-target"
-                                                                            className="form-label fs-5 fw-medium"
-                                                                        >
-                                                                            Alvo da dependência
-                                                                        </label>
-                                                                        <select
-                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                            id="dependency-target"
-                                                                            value={dependency.itemTempId || ''}
-                                                                            onChange={(event) => {
-                                                                                setProtocol((prev) => {
-                                                                                    const newProtocol = { ...prev };
-                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].dependencies[dependencyIndex].itemTempId =
-                                                                                        event.target.value;
-                                                                                    return newProtocol;
-                                                                                });
-                                                                            }}
-                                                                        >
-                                                                            <option value="">Selecione...</option>
-                                                                            {protocol.pages
-                                                                                .filter((p, i) => i <= itemTarget.page)
-                                                                                .map((p, i) =>
-                                                                                    p.itemGroups
-                                                                                        .filter(
-                                                                                            (g, j) =>
-                                                                                                i < itemTarget.page ||
-                                                                                                (i === itemTarget.page &&
-                                                                                                    j < itemTarget.group)
+                                                                    <div className="mb-4" key={'group-dependency-' + dependency.tempId}>
+                                                                        <div className="row gx-2 pb-2">
+                                                                            <div className="col">
+                                                                                <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
+                                                                                    Dependência {Number(dependencyIndex) + 1} (Grupo{' '}
+                                                                                    {Number(itemTarget.group) + 1})
+                                                                                </h1>
+                                                                            </div>
+                                                                            <div className="col-auto">
+                                                                                <RoundedButton
+                                                                                    hsl={[190, 46, 70]}
+                                                                                    icon={iconTrash}
+                                                                                    onClick={() =>
+                                                                                        removeItemGroupDependency(
+                                                                                            itemTarget.group,
+                                                                                            dependencyIndex
                                                                                         )
-                                                                                        .map((g, j) =>
-                                                                                            g.items
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
+                                                                            <div className="mb-3">
+                                                                                <label
+                                                                                    htmlFor="group-dependency-type"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Tipo de dependência
+                                                                                </label>
+                                                                                <select
+                                                                                    className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                                                                                    id="group-dependency-type"
+                                                                                    value={dependency.type || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                                itemTarget.group
+                                                                                            ].dependencies[dependencyIndex].type =
+                                                                                                event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                >
+                                                                                    <option value="">Selecione...</option>
+                                                                                    <option value="IS_ANSWERED">
+                                                                                        Resposta obrigatória
+                                                                                    </option>
+                                                                                    <option value="EXACT_ANSWER">Resposta exata</option>
+                                                                                    <option value="OPTION_SELECTED">
+                                                                                        Opção selecionada
+                                                                                    </option>
+                                                                                    <option value="MIN">
+                                                                                        Mínimo (numérico, caracteres ou opções)
+                                                                                    </option>
+                                                                                    <option value="MAX">
+                                                                                        Máximo (numérico, caracteres ou opções)
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div className="mb-3">
+                                                                                <label
+                                                                                    htmlFor="page-dependency-argument"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Argumento
+                                                                                </label>
+                                                                                <input
+                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                    id="page-dependency-argument"
+                                                                                    type={
+                                                                                        dependency.type === 'MIN' ||
+                                                                                        dependency.type === 'MAX'
+                                                                                            ? 'number'
+                                                                                            : 'text'
+                                                                                    }
+                                                                                    value={dependency.argument || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                                itemTarget.group
+                                                                                            ].dependencies[dependencyIndex].argument =
+                                                                                                event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                            <div className="mb-3">
+                                                                                <label
+                                                                                    htmlFor="page-dependency-target"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Alvo da dependência
+                                                                                </label>
+                                                                                <select
+                                                                                    className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                                                                                    id="page-dependency-target"
+                                                                                    value={dependency.itemTempId || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                                itemTarget.group
+                                                                                            ].dependencies[dependencyIndex].itemTempId =
+                                                                                                event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                >
+                                                                                    <option value="">Selecione...</option>
+                                                                                    {protocol.pages
+                                                                                        .filter((p, i) => i <= itemTarget.page)
+                                                                                        .map((p, i) =>
+                                                                                            p.itemGroups
                                                                                                 .filter(
-                                                                                                    (it, k) =>
-                                                                                                        ((dependency.type === 'MIN' ||
-                                                                                                            dependency.type === 'MAX') &&
-                                                                                                            (it.type === 'CHECKBOX' ||
-                                                                                                                it.type === 'NUMBERBOX' ||
-                                                                                                                it.type === 'TEXTBOX' ||
-                                                                                                                it.type === 'RANGE')) ||
-                                                                                                        (dependency.type ===
-                                                                                                            'OPTION_SELECTED' &&
-                                                                                                            (it.type === 'SELECT' ||
-                                                                                                                it.type === 'RADIO' ||
-                                                                                                                it.type === 'CHECKBOX')) ||
-                                                                                                        (dependency.type ===
-                                                                                                            'EXACT_ANSWER' &&
-                                                                                                            (it.type === 'NUMBERBOX' ||
-                                                                                                                it.type === 'TEXTBOX' ||
-                                                                                                                it.type === 'RANGE')) ||
-                                                                                                        dependency.type === 'IS_ANSWERED'
+                                                                                                    (g, j) =>
+                                                                                                        i < itemTarget.page ||
+                                                                                                        (i === itemTarget.page &&
+                                                                                                            j < itemTarget.group)
                                                                                                 )
-                                                                                                .map((it, k) => (
-                                                                                                    <option
-                                                                                                        key={
-                                                                                                            'dependency-' +
-                                                                                                            dependency.tempId +
-                                                                                                            '-target-' +
-                                                                                                            it.tempId +
-                                                                                                            '-option'
-                                                                                                        }
-                                                                                                        value={it.tempId}
-                                                                                                    >
-                                                                                                        {it.text}
-                                                                                                    </option>
-                                                                                                ))
-                                                                                        )
-                                                                                )}
-                                                                        </select>
-                                                                        <label
-                                                                            htmlFor="dependency-custom-message"
-                                                                            className="form-label fs-5 fw-medium"
-                                                                        >
-                                                                            Mensagem personalizada
-                                                                        </label>
-                                                                        <input
-                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                            id="dependency-custom-message"
-                                                                            type="text"
-                                                                            value={dependency.customMessage || ''}
-                                                                            onChange={(event) => {
-                                                                                setProtocol((prev) => {
-                                                                                    const newProtocol = { ...prev };
-                                                                                    newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].dependencies[dependencyIndex].customMessage =
-                                                                                        event.target.value;
-                                                                                    return newProtocol;
-                                                                                });
-                                                                            }}
-                                                                        />
-                                                                        <button
-                                                                            type="button"
-                                                                            onClick={() =>
-                                                                                removeItemGroupDependency(
-                                                                                    itemTarget.page,
-                                                                                    itemTarget.group,
-                                                                                    dependencyIndex
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            X Dependência de grupo
-                                                                        </button>
+                                                                                                .map((g, j) =>
+                                                                                                    g.items
+                                                                                                        .filter(
+                                                                                                            (it, k) =>
+                                                                                                                ((dependency.type ===
+                                                                                                                    'MIN' ||
+                                                                                                                    dependency.type ===
+                                                                                                                        'MAX') &&
+                                                                                                                    (it.type ===
+                                                                                                                        'CHECKBOX' ||
+                                                                                                                        it.type ===
+                                                                                                                            'NUMBERBOX' ||
+                                                                                                                        it.type ===
+                                                                                                                            'TEXTBOX' ||
+                                                                                                                        it.type ===
+                                                                                                                            'RANGE')) ||
+                                                                                                                (dependency.type ===
+                                                                                                                    'OPTION_SELECTED' &&
+                                                                                                                    (it.type === 'SELECT' ||
+                                                                                                                        it.type ===
+                                                                                                                            'RADIO' ||
+                                                                                                                        it.type ===
+                                                                                                                            'CHECKBOX')) ||
+                                                                                                                (dependency.type ===
+                                                                                                                    'EXACT_ANSWER' &&
+                                                                                                                    (it.type ===
+                                                                                                                        'NUMBERBOX' ||
+                                                                                                                        it.type ===
+                                                                                                                            'TEXTBOX' ||
+                                                                                                                        it.type ===
+                                                                                                                            'RANGE')) ||
+                                                                                                                dependency.type ===
+                                                                                                                    'IS_ANSWERED'
+                                                                                                        )
+                                                                                                        .map((it, k) => (
+                                                                                                            <option
+                                                                                                                key={
+                                                                                                                    'dependency-' +
+                                                                                                                    dependency.tempId +
+                                                                                                                    '-target-' +
+                                                                                                                    it.tempId +
+                                                                                                                    '-option'
+                                                                                                                }
+                                                                                                                value={it.tempId}
+                                                                                                            >
+                                                                                                                {it.text}
+                                                                                                            </option>
+                                                                                                        ))
+                                                                                                )
+                                                                                        )}
+                                                                                </select>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label
+                                                                                    htmlFor="page-dependency-custom-message"
+                                                                                    className="form-label fs-5 fw-medium"
+                                                                                >
+                                                                                    Mensagem personalizada
+                                                                                </label>
+                                                                                <input
+                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                    id="page-dependency-custom-message"
+                                                                                    type="text"
+                                                                                    value={dependency.customMessage || ''}
+                                                                                    onChange={(event) => {
+                                                                                        setProtocol((prev) => {
+                                                                                            const newProtocol = { ...prev };
+                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
+                                                                                                itemTarget.group
+                                                                                            ].dependencies[dependencyIndex].customMessage =
+                                                                                                event.target.value;
+                                                                                            return newProtocol;
+                                                                                        });
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 ))}
                                                                 {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].items?.map(
@@ -1973,130 +2057,154 @@ function CreateProtocolPage(props) {
                                                                                         v.type !== 'MANDATORY'
                                                                                 )
                                                                                 .map((validation, validationIndex) => (
-                                                                                    <div key={'validation-' + validation.tempId}>
-                                                                                        <p className="m-0 p-0">
-                                                                                            Validação {validationIndex + 1}
-                                                                                        </p>
-                                                                                        <label
-                                                                                            htmlFor="validation-type"
-                                                                                            className="form-label fs-5 fw-medium"
-                                                                                        >
-                                                                                            Tipo de validação
-                                                                                        </label>
-                                                                                        <select
-                                                                                            className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                            id="validation-type"
-                                                                                            value={validation.type || ''}
-                                                                                            onChange={(event) => {
-                                                                                                setProtocol((prev) => {
-                                                                                                    const newProtocol = { ...prev };
-                                                                                                    newProtocol.pages[
-                                                                                                        itemTarget.page
-                                                                                                    ].itemGroups[itemTarget.group].items[
-                                                                                                        itemIndex
-                                                                                                    ].itemValidations[
-                                                                                                        validationIndex
-                                                                                                    ].type = event.target.value;
-                                                                                                    return newProtocol;
-                                                                                                });
-                                                                                            }}
-                                                                                        >
-                                                                                            <option value="">Selecione...</option>
-                                                                                            {item.type === 'NUMBERBOX' && (
-                                                                                                <>
-                                                                                                    <option value="MIN">
-                                                                                                        Número mínimo
-                                                                                                    </option>
-                                                                                                    <option value="MAX">
-                                                                                                        Número máximo
-                                                                                                    </option>
-                                                                                                </>
-                                                                                            )}
+                                                                                    <div
+                                                                                        className="mb-3"
+                                                                                        key={'validation-' + validation.tempId}
+                                                                                    >
+                                                                                        <div className="row gx-2 pb-2">
+                                                                                            <div className="col">
+                                                                                                <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
+                                                                                                    Validação {Number(validationIndex) + 1}{' '}
+                                                                                                    (Item {Number(itemIndex) + 1})
+                                                                                                </h1>
+                                                                                            </div>
+                                                                                            <div className="col-auto">
+                                                                                                <RoundedButton
+                                                                                                    hsl={[190, 46, 70]}
+                                                                                                    icon={iconTrash}
+                                                                                                    onClick={() =>
+                                                                                                        removeItemValidation(
+                                                                                                            itemTarget.page,
+                                                                                                            itemTarget.group,
+                                                                                                            itemIndex,
+                                                                                                            validationIndex
+                                                                                                        )
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
+                                                                                            <div className="mb-3">
+                                                                                                <label
+                                                                                                    htmlFor="validation-type"
+                                                                                                    className="form-label fs-5 fw-medium"
+                                                                                                >
+                                                                                                    Tipo de validação
+                                                                                                </label>
+                                                                                                <select
+                                                                                                    className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                                                                                                    id="validation-type"
+                                                                                                    value={validation.type || ''}
+                                                                                                    onChange={(event) => {
+                                                                                                        setProtocol((prev) => {
+                                                                                                            const newProtocol = { ...prev };
+                                                                                                            newProtocol.pages[
+                                                                                                                itemTarget.page
+                                                                                                            ].itemGroups[
+                                                                                                                itemTarget.group
+                                                                                                            ].items[
+                                                                                                                itemIndex
+                                                                                                            ].itemValidations[
+                                                                                                                validationIndex
+                                                                                                            ].type = event.target.value;
+                                                                                                            return newProtocol;
+                                                                                                        });
+                                                                                                    }}
+                                                                                                >
+                                                                                                    <option value="">Selecione...</option>
+                                                                                                    {item.type === 'NUMBERBOX' && (
+                                                                                                        <>
+                                                                                                            <option value="MIN">
+                                                                                                                Número mínimo
+                                                                                                            </option>
+                                                                                                            <option value="MAX">
+                                                                                                                Número máximo
+                                                                                                            </option>
+                                                                                                        </>
+                                                                                                    )}
 
-                                                                                            {item.type === 'TEXTBOX' && (
-                                                                                                <>
-                                                                                                    <option value="MIN">
-                                                                                                        Mínimo de caracteres
-                                                                                                    </option>
-                                                                                                    <option value="MAX">
-                                                                                                        Máximo de caracteres
-                                                                                                    </option>
-                                                                                                </>
-                                                                                            )}
-                                                                                            {item.type === 'CHECKBOX' && (
-                                                                                                <>
-                                                                                                    <option value="MIN">
-                                                                                                        Mínimo de escolhas
-                                                                                                    </option>
-                                                                                                    <option value="MAX">
-                                                                                                        Máximo de escolhas
-                                                                                                    </option>
-                                                                                                </>
-                                                                                            )}
-                                                                                        </select>
-                                                                                        <label
-                                                                                            htmlFor="validation-argument"
-                                                                                            className="form-label fs-5 fw-medium"
-                                                                                        >
-                                                                                            Argumento
-                                                                                        </label>
-                                                                                        <input
-                                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                            id="validation-argument"
-                                                                                            type="number"
-                                                                                            value={validation.argument || ''}
-                                                                                            onChange={(event) => {
-                                                                                                setProtocol((prev) => {
-                                                                                                    const newProtocol = { ...prev };
-                                                                                                    newProtocol.pages[
-                                                                                                        itemTarget.page
-                                                                                                    ].itemGroups[itemTarget.group].items[
-                                                                                                        itemIndex
-                                                                                                    ].itemValidations[
-                                                                                                        validationIndex
-                                                                                                    ].argument = event.target.value;
-                                                                                                    return newProtocol;
-                                                                                                });
-                                                                                            }}
-                                                                                        />
-                                                                                        <label
-                                                                                            htmlFor="validation-custom-message"
-                                                                                            className="form-label fs-5 fw-medium"
-                                                                                        >
-                                                                                            Mensagem personalizada
-                                                                                        </label>
-                                                                                        <input
-                                                                                            className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                                                                                            id="validation-custom-message"
-                                                                                            type="text"
-                                                                                            value={validation.customMessage || ''}
-                                                                                            onChange={(event) => {
-                                                                                                setProtocol((prev) => {
-                                                                                                    const newProtocol = { ...prev };
-                                                                                                    newProtocol.pages[
-                                                                                                        itemTarget.page
-                                                                                                    ].itemGroups[itemTarget.group].items[
-                                                                                                        itemIndex
-                                                                                                    ].itemValidations[
-                                                                                                        validationIndex
-                                                                                                    ].customMessage = event.target.value;
-                                                                                                    return newProtocol;
-                                                                                                });
-                                                                                            }}
-                                                                                        />
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            onClick={() =>
-                                                                                                removeItemValidation(
-                                                                                                    itemTarget.page,
-                                                                                                    itemTarget.group,
-                                                                                                    itemIndex,
-                                                                                                    validationIndex
-                                                                                                )
-                                                                                            }
-                                                                                        >
-                                                                                            X Validação
-                                                                                        </button>
+                                                                                                    {item.type === 'TEXTBOX' && (
+                                                                                                        <>
+                                                                                                            <option value="MIN">
+                                                                                                                Mínimo de caracteres
+                                                                                                            </option>
+                                                                                                            <option value="MAX">
+                                                                                                                Máximo de caracteres
+                                                                                                            </option>
+                                                                                                        </>
+                                                                                                    )}
+                                                                                                    {item.type === 'CHECKBOX' && (
+                                                                                                        <>
+                                                                                                            <option value="MIN">
+                                                                                                                Mínimo de escolhas
+                                                                                                            </option>
+                                                                                                            <option value="MAX">
+                                                                                                                Máximo de escolhas
+                                                                                                            </option>
+                                                                                                        </>
+                                                                                                    )}
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div className="mb-3">
+                                                                                                <label
+                                                                                                    htmlFor="validation-argument"
+                                                                                                    className="form-label fs-5 fw-medium"
+                                                                                                >
+                                                                                                    Argumento
+                                                                                                </label>
+                                                                                                <input
+                                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                                    id="validation-argument"
+                                                                                                    type="number"
+                                                                                                    value={validation.argument || ''}
+                                                                                                    onChange={(event) => {
+                                                                                                        setProtocol((prev) => {
+                                                                                                            const newProtocol = { ...prev };
+                                                                                                            newProtocol.pages[
+                                                                                                                itemTarget.page
+                                                                                                            ].itemGroups[
+                                                                                                                itemTarget.group
+                                                                                                            ].items[
+                                                                                                                itemIndex
+                                                                                                            ].itemValidations[
+                                                                                                                validationIndex
+                                                                                                            ].argument = event.target.value;
+                                                                                                            return newProtocol;
+                                                                                                        });
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="mb-3">
+                                                                                                <label
+                                                                                                    htmlFor="validation-custom-message"
+                                                                                                    className="form-label fs-5 fw-medium"
+                                                                                                >
+                                                                                                    Mensagem personalizada
+                                                                                                </label>
+                                                                                                <input
+                                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                                                                                    id="validation-custom-message"
+                                                                                                    type="text"
+                                                                                                    value={validation.customMessage || ''}
+                                                                                                    onChange={(event) => {
+                                                                                                        setProtocol((prev) => {
+                                                                                                            const newProtocol = { ...prev };
+                                                                                                            newProtocol.pages[
+                                                                                                                itemTarget.page
+                                                                                                            ].itemGroups[
+                                                                                                                itemTarget.group
+                                                                                                            ].items[
+                                                                                                                itemIndex
+                                                                                                            ].itemValidations[
+                                                                                                                validationIndex
+                                                                                                            ].customMessage =
+                                                                                                                event.target.value;
+                                                                                                            return newProtocol;
+                                                                                                        });
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
                                                                                 ))}
                                                                         </div>
@@ -2107,7 +2215,7 @@ function CreateProtocolPage(props) {
                                                     </div>
                                                 )}
 
-                                                <div className="row justify-content-center mb-4">
+                                                <div className="row justify-content-center">
                                                     <div className="col-8 col-lg-4">
                                                         <TextButton
                                                             type="button"
