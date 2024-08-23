@@ -24,43 +24,6 @@ import iconTrash from '../assets/images/iconTrash.svg';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 
 const CreateProtocolStyles = `
-    .font-barlow {
-        font-family: 'Barlow', sans-serif;
-    }
-
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
-    }
-
-    .color-grey{
-        color: #535353;
-    }
-
-    .bg-light-grey{
-        background-color: #D9D9D9;
-    }
-
-    .bg-light-grey:focus{
-        background-color: #D9D9D9 !important;
-    }
-
-    .bg-light-pastel-blue{
-        background-color: #d8ecec;
-    }
-
-    .bg-pastel-blue {
-        background-color: #91CAD6;
-    }
-
-    .bg-light-pastel-blue:focus{
-        background-color: #d8ecec;
-    }
-
-    .icon-plus {
-        min-width: 15px;
-        width: 20px;
-    }
-
     @media (max-width: 767px) {
         .botao-form {
             margin-bottom: 10px;
@@ -71,39 +34,39 @@ const CreateProtocolStyles = `
         }
     }
 
-    .font-barlow {
-        font-family: 'Barlow', sans-serif;
-    }
-
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
-    }
-
-    .color-grey {
-        color: #535353;
-    }
-
-    .scrollbar-none::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-    }
-
     @media (min-width: 992px) {
-      .position-lg-sticky {
-        position: sticky !important;
-        top: 0;
-      }
+        .h-lg-100 {
+            height: 100% !important;
+        }
 
-      .h-lg-100 {
-        height: 100% !important;
-      }
-    }
-      .font-barlow {
-        font-family: 'Barlow', sans-serif;
+        .position-lg-sticky {
+            position: sticky !important;
+            top: 0;
+        }
     }
 
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
+    .bg-light-grey {
+        background-color: #D9D9D9;
+    }
+
+    .bg-light-grey:focus {
+        background-color: #D9D9D9 !important;
+    }
+
+    .bg-light-pastel-blue {
+        background-color: #b8d7e3;
+    }
+
+    .bg-light-pastel-blue:focus {
+        background-color: #b8d7e3;
+    }
+
+    .bg-pastel-blue {
+        background-color: #91CAD6;
+    }
+
+    .border-steel-blue {
+        border-color: #4E9BB9 !important;
     }
 
     .color-grey {
@@ -114,62 +77,42 @@ const CreateProtocolStyles = `
         color: #535353;
     }
 
-    @media (min-width: 992px) {
-      .position-lg-sticky {
-        position: sticky !important;
-        top: 0;
-      }
-    }
-
-    .bg-light-pastel-blue{
-        background-color: #b8d7e3;
-    }
-
-    .bg-light-pastel-blue:focus{
-        background-color: #b8d7e3;
-    }
-
-    .bg-light-grey{
-        background-color: #D9D9D9;
-    }
-
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
-    }
-
-    .color-steel-blue {
-        color: #4E9BB9;
-    }
-
-    .form-check-input {
-        box-shadow: 0px 4px 4px 0px #00000040 inset;
-    }
-    .form-check-input:focus {
-        border: 0;
-        box-shadow: 0px 4px 4px 0px #00000040 inset;
-    }
-    .form-check input:checked {
-        border: 0;
-        background-color: #91CAD6;
-    }
-        .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
-    }
-
-    .bg-light-grey{
-        background-color: #D9D9D9;
-    }
-
+    .color-steel-blue,
     .text-steel-blue {
         color: #4E9BB9;
     }
 
-    .border-steel-blue{
-        border-color: #4E9BB9 !important;
+    .font-barlow {
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .font-century-gothic {
+        font-family: 'Century Gothic', sans-serif;
     }
 
     .form-check-input {
         background-color: #D9D9D9;
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check-input:focus {
+        border: 0;
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check input:checked {
+        border: 0;
+        background-color: #91CAD6;
+    }
+
+    .icon-plus {
+        min-width: 15px;
+        width: 20px;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
     }
 `;
 
@@ -193,7 +136,7 @@ function CreateProtocolPage(props) {
         appliers: [],
         pages: [],
     });
-    const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
+    const [itemTarget, setItemTarget] = useState({ page: 0, group: 0 });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const formRef = useRef();
@@ -1329,7 +1272,7 @@ function CreateProtocolPage(props) {
                                                     </select>
                                                 </div>
                                                 {protocol.pages[itemTarget.page] && (
-                                                    <div className="mb-2" key={'page-' + protocol.pages[itemTarget.page].tempId}>
+                                                    <div className="" key={'page-' + protocol.pages[itemTarget.page].tempId}>
                                                         <div className="row gx-2 align-items-center mb-3">
                                                             <div className="col-auto">
                                                                 <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">
@@ -2216,11 +2159,11 @@ function CreateProtocolPage(props) {
                                                 )}
 
                                                 <div className="row justify-content-center">
-                                                    <div className="col-8 col-lg-4">
+                                                    <div className="col-4 col-md-2">
                                                         <TextButton
                                                             type="button"
                                                             hsl={[97, 43, 70]}
-                                                            text="Finalizar protocolo"
+                                                            text={isEditing ? 'Editar' : 'Concluir'}
                                                             onClick={() => {
                                                                 showAlert({
                                                                     title: `Tem certeza que deseja ${
@@ -2238,14 +2181,28 @@ function CreateProtocolPage(props) {
                                                             }}
                                                         />
                                                     </div>
+                                                    {isEditing && (
+                                                        <div className="col-4 col-md-2">
+                                                            <TextButton
+                                                                text={'Excluir'}
+                                                                hsl={[355, 78, 66]}
+                                                                onClick={() => {
+                                                                    showAlert({
+                                                                        title: `Tem certeza que deseja excluir o protocolo?`,
+                                                                        dismissHsl: [97, 43, 70],
+                                                                        dismissText: 'Não',
+                                                                        actionHsl: [355, 78, 66],
+                                                                        actionText: 'Sim',
+                                                                        dismissible: true,
+                                                                        actionOnClick: () => {
+                                                                            deleteProtocol();
+                                                                        },
+                                                                    });
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                {isEditing && (
-                                                    <div>
-                                                        <button type="button" onClick={deleteProtocol}>
-                                                            Excluir
-                                                        </button>
-                                                    </div>
-                                                )}
                                             </form>
                                         </div>
                                     </div>
@@ -2253,7 +2210,7 @@ function CreateProtocolPage(props) {
                             </div>
                             <div className="col-auto position-lg-sticky h-100 mh-100">
                                 <div className="offcanvas-lg bg-pastel-blue offcanvas-end h-100 w-auto" tabIndex="-1" id="addbar">
-                                    <div className="sidebar-wrapper bg-transparent d-flex flex-column h-100">
+                                    <div className="bg-transparent d-flex flex-column h-100">
                                         <div className="d-flex justify-content-end">
                                             <button
                                                 type="button"
