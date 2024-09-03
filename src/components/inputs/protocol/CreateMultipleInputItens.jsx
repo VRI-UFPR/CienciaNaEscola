@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 import iconPlus from '../../../assets/images/iconPlus.svg';
-import { defaultNewInput } from '../../../utils/constants';
 import RoundedButton from '../../RoundedButton';
 import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
 import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
@@ -35,24 +34,13 @@ const styles = `
 
     `;
 
-function CreateSingleSelectionInput(props) {
+function CreateMultipleInputItens(props) {
     const [title, setTitle] = useState('');
-    const {
-        currentItem,
-        type,
-        pageIndex,
-        groupIndex,
-        itemIndex,
-        updateItem,
-        removeItem,
-        updateItemPlacementUp,
-        updateItemPlacementDown,
-        insertItemValidation,
-    } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput(type));
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement, insertItemValidation } = props;
+    const [item, setItem] = useState(currentItem);
 
     useEffect(() => {
-        switch (type) {
+        switch (item.type) {
             case 'SELECT': {
                 setTitle('Lista Suspensa');
                 break;
@@ -69,7 +57,7 @@ function CreateSingleSelectionInput(props) {
                 break;
             }
         }
-    }, [type]);
+    }, [item.type]);
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);
@@ -122,14 +110,26 @@ function CreateSingleSelectionInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowDown} onClick={updateItemPlacementDown} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowDown}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowUp}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 {item.type === 'CHECKBOX' && (
                     <div className="col-auto">
-                        <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon={iconValidation}
+                            onClick={() => insertItemValidation(pageIndex, groupIndex, itemIndex)}
+                        />
                     </div>
                 )}
                 <div className="col-auto">
@@ -252,4 +252,4 @@ function CreateSingleSelectionInput(props) {
     );
 }
 
-export default CreateSingleSelectionInput;
+export default CreateMultipleInputItens;

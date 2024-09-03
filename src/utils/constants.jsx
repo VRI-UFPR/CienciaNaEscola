@@ -10,13 +10,45 @@ export const defaultNewInput = (type) => {
         itemValidations:
             type === 'RANGE'
                 ? [
-                      { type: 'MIN', argument: 1 },
-                      { type: 'MAX', argument: 10 },
-                      { type: 'STEP', argument: 1 },
+                      { type: 'MIN', argument: '' },
+                      { type: 'MAX', argument: '' },
+                      { type: 'STEP', argument: '' },
                   ]
                 : [],
     };
 };
+
+export const defaultNewValidation = () => ({
+    type: '',
+    argument: '',
+    customMessage: '',
+    tempId: Date.now() + Math.random() * 1000,
+});
+
+export const defaultNewDependency = () => ({
+    type: '',
+    argument: '',
+    itemTempId: '',
+    customMessage: '',
+    tempId: Date.now() + Math.random() * 1000,
+});
+
+export const defaultNewItemGroup = (newPlacement) => ({
+    type: 'ONE_DIMENSIONAL',
+    isRepeatable: false,
+    items: [],
+    dependencies: [],
+    placement: newPlacement,
+    tempId: Date.now() + Math.random() * 1000,
+});
+
+export const defaultNewPage = (newPlacement) => ({
+    type: 'ITEMS',
+    itemGroups: [],
+    dependencies: [],
+    placement: newPlacement,
+    tempId: Date.now() + Math.random() * 1000,
+});
 
 export const version = '2.0.159 (2bc6ade)';
 

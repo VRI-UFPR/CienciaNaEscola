@@ -10,7 +10,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
-import { defaultNewInput } from '../utils/constants';
+import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewPage, defaultNewValidation } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
@@ -240,9 +240,7 @@ function CreateProtocolPage(props) {
 
     const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
-        const newPlacement = newProtocol.pages.length + 1;
-        const tempId = Date.now() + Math.random() * 1000;
-        newProtocol.pages.push({ type: 'ITEMS', itemGroups: [], dependencies: [], placement: newPlacement, tempId: tempId });
+        newProtocol.pages.push(defaultNewPage(newProtocol.pages.length + 1));
         setProtocol(newProtocol);
         setItemTarget({ page: newProtocol.pages.length - 1, group: '' });
     }, [protocol]);
@@ -269,16 +267,7 @@ function CreateProtocolPage(props) {
     const insertItemGroup = useCallback(
         (page) => {
             const newProtocol = { ...protocol };
-            const newPlacement = newProtocol.pages[page].itemGroups.length + 1;
-            const tempId = Date.now() + Math.random() * 1000;
-            newProtocol.pages[page].itemGroups.push({
-                type: 'ONE_DIMENSIONAL',
-                isRepeatable: false,
-                items: [],
-                dependencies: [],
-                placement: newPlacement,
-                tempId: tempId,
-            });
+            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(newProtocol.pages[page].itemGroups.length + 1));
             setProtocol(newProtocol);
             setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
         },
@@ -307,23 +296,8 @@ function CreateProtocolPage(props) {
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
             const newProtocol = { ...protocol };
-            const tempId = Date.now() + Math.random() * 1000;
-            if (groupIndex === undefined)
-                newProtocol.pages[pageIndex].dependencies.push({
-                    type: '',
-                    argument: '',
-                    itemTempId: '',
-                    customMessage: '',
-                    tempId: tempId,
-                });
-            else
-                newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.push({
-                    type: '',
-                    argument: '',
-                    itemTempId: '',
-                    customMessage: '',
-                    tempId: tempId,
-                });
+            if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies.push(defaultNewDependency());
+            else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.push(defaultNewDependency());
             setProtocol(newProtocol);
         },
         [protocol]
@@ -351,13 +325,7 @@ function CreateProtocolPage(props) {
     const insertItemValidation = useCallback(
         (page, group, item) => {
             const newProtocol = { ...protocol };
-            const tempId = Date.now() + Math.random() * 1000;
-            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push({
-                type: '',
-                argument: '',
-                customMessage: '',
-                tempId: tempId,
-            });
+            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push(defaultNewValidation());
             setProtocol(newProtocol);
         },
         [protocol]
@@ -1430,31 +1398,8 @@ function CreateProtocolPage(props) {
                                                                                                 itemIndex={itemIndex}
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
+                                                                                                insertItemValidation={insertItemValidation}
                                                                                             />
                                                                                         );
                                                                                     case 'NUMBERBOX':
@@ -1467,31 +1412,8 @@ function CreateProtocolPage(props) {
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
                                                                                                 isNumberBox={true}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
+                                                                                                insertItemValidation={insertItemValidation}
                                                                                             />
                                                                                         );
                                                                                     case 'RANGE':
@@ -1503,142 +1425,46 @@ function CreateProtocolPage(props) {
                                                                                                 itemIndex={itemIndex}
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
                                                                                             />
                                                                                         );
                                                                                     case 'SELECT':
                                                                                         return (
                                                                                             <CreateMultipleInputItens
-                                                                                                type={item.type}
                                                                                                 currentItem={item}
                                                                                                 pageIndex={itemTarget.page}
                                                                                                 groupIndex={itemTarget.group}
                                                                                                 itemIndex={itemIndex}
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
+                                                                                                insertItemValidation={insertItemValidation}
                                                                                             />
                                                                                         );
                                                                                     case 'RADIO':
                                                                                         return (
                                                                                             <CreateMultipleInputItens
-                                                                                                type={item.type}
                                                                                                 currentItem={item}
                                                                                                 pageIndex={itemTarget.page}
                                                                                                 groupIndex={itemTarget.group}
                                                                                                 itemIndex={itemIndex}
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
+                                                                                                insertItemValidation={insertItemValidation}
                                                                                             />
                                                                                         );
                                                                                     case 'CHECKBOX':
                                                                                         return (
                                                                                             <CreateMultipleInputItens
-                                                                                                type={item.type}
                                                                                                 currentItem={item}
                                                                                                 pageIndex={itemTarget.page}
                                                                                                 groupIndex={itemTarget.group}
                                                                                                 itemIndex={itemIndex}
                                                                                                 updateItem={updateItem}
                                                                                                 removeItem={removeItem}
-                                                                                                updateItemPlacementUp={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement - 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                updateItemPlacementDown={() =>
-                                                                                                    updateItemPlacement(
-                                                                                                        item.placement + 1,
-                                                                                                        item.placement,
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
-                                                                                                insertItemValidation={() =>
-                                                                                                    insertItemValidation(
-                                                                                                        itemTarget.page,
-                                                                                                        itemTarget.group,
-                                                                                                        itemIndex
-                                                                                                    )
-                                                                                                }
+                                                                                                updateItemPlacement={updateItemPlacement}
+                                                                                                insertItemValidation={insertItemValidation}
                                                                                             />
                                                                                         );
                                                                                     default:

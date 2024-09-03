@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconTrash from '../../../assets/images/iconTrash.svg';
-import { defaultNewInput } from '../../../utils/constants';
 import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
 import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
 import iconValidation from '../../../assets/images/iconValidation.svg';
@@ -30,19 +29,8 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const {
-        currentItem,
-        pageIndex,
-        groupIndex,
-        itemIndex,
-        updateItem,
-        removeItem,
-        updateItemPlacementUp,
-        updateItemPlacementDown,
-        insertItemValidation,
-        isNumberBox = false,
-    } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput(isNumberBox ? 'NUMBERBOX' : 'TEXTBOX'));
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement, insertItemValidation } = props;
+    const [item, setItem] = useState(currentItem);
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);
@@ -57,13 +45,25 @@ function CreateTextBoxInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowDown} onClick={updateItemPlacementDown} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowDown}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowUp}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconValidation}
+                        onClick={() => insertItemValidation(pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />

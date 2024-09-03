@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconTrash from '../../../assets/images/iconTrash.svg';
-import { defaultNewInput } from '../../../utils/constants';
 import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
 import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
 import iconUpload from '../../../assets/images/iconUpload.svg';
@@ -29,8 +28,8 @@ const rangeStyles = `
 `;
 
 function CreateRangeInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacementUp, updateItemPlacementDown } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput('RANGE'));
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement } = props;
+    const [item, setItem] = useState(currentItem);
 
     useEffect(() => {
         updateItem(item, pageIndex, groupIndex, itemIndex);
@@ -43,10 +42,18 @@ function CreateRangeInput(props) {
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">Item {itemIndex + 1} - Intervalo numérico</h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowDown} onClick={updateItemPlacementDown} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowDown}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowUp}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                    />
                 </div>
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
