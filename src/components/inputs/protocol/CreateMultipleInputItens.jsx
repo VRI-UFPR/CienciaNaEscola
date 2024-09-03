@@ -127,9 +127,11 @@ function CreateSingleSelectionInput(props) {
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconArrowUp} onClick={updateItemPlacementUp} />
                 </div>
-                <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
-                </div>
+                {item.type === 'CHECKBOX' && (
+                    <div className="col-auto">
+                        <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={insertItemValidation} />
+                    </div>
+                )}
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
                 </div>

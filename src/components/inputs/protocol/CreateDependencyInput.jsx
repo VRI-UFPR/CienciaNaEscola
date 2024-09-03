@@ -2,28 +2,6 @@ import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 
-const dependencyStyles = `
-    .font-century-gothic {
-        font-family: 'Century Gothic', sans-serif;
-    }
-
-    .bg-light-grey{
-        background-color: #D9D9D9;
-    }
-
-    .text-steel-blue {
-        color: #4E9BB9;
-    }
-
-    .border-steel-blue{
-        border-color: #4E9BB9 !important;
-    }
-
-    .form-check-input {
-        background-color: #D9D9D9;
-    }
-`;
-
 function CreateDependencyInput(props) {
     const { currentDependency, pageIndex, groupIndex, dependencyIndex, updateDependency, removeDependency, protocol } = props;
     const [dependency, setDependency] = useState(currentDependency);
