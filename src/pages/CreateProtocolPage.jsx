@@ -22,6 +22,7 @@ import iconArrowDown from '../assets/images/iconArrowDown.svg';
 import iconDependency from '../assets/images/iconDependency.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
 import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
+import CreateDependencyInput from '../components/inputs/protocol/CreateDependencyInput';
 
 const CreateProtocolStyles = `
     @media (max-width: 767px) {
@@ -302,51 +303,45 @@ function CreateProtocolPage(props) {
         [protocol, itemTarget.group]
     );
 
-    const insertItemGroupDependency = useCallback(
-        (page, group) => {
+    const insertDependency = useCallback(
+        (pageIndex, groupIndex) => {
             const newProtocol = { ...protocol };
             const tempId = Date.now() + Math.random() * 1000;
-            newProtocol.pages[page].itemGroups[group].dependencies.push({
-                type: '',
-                argument: '',
-                itemTempId: '',
-                customMessage: '',
-                tempId: tempId,
-            });
+            if (groupIndex === undefined)
+                newProtocol.pages[pageIndex].dependencies.push({
+                    type: '',
+                    argument: '',
+                    itemTempId: '',
+                    customMessage: '',
+                    tempId: tempId,
+                });
+            else
+                newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.push({
+                    type: '',
+                    argument: '',
+                    itemTempId: '',
+                    customMessage: '',
+                    tempId: tempId,
+                });
             setProtocol(newProtocol);
         },
         [protocol]
     );
 
-    const removeItemGroupDependency = useCallback(
-        (page, group, index) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].dependencies.splice(index, 1);
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
+    const updateDependency = useCallback((dependency, pageIndex, groupIndex, dependencyIndex) => {
+        setProtocol((prev) => {
+            const newProtocol = { ...prev };
+            if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies[dependencyIndex] = dependency;
+            else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies[dependencyIndex] = dependency;
+            return newProtocol;
+        });
+    }, []);
 
-    const insertPageDependency = useCallback(
-        (pageIndex) => {
+    const removeDependency = useCallback(
+        (pageIndex, groupIndex, dependencyIndex) => {
             const newProtocol = { ...protocol };
-            const tempId = Date.now() + Math.random() * 1000;
-            newProtocol.pages[pageIndex].dependencies.push({
-                type: '',
-                argument: '',
-                itemTempId: '',
-                customMessage: '',
-                tempId: tempId,
-            });
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
-
-    const removePageDependency = useCallback(
-        (page, index) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].dependencies.splice(index, 1);
+            if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies.splice(dependencyIndex, 1);
+            else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.splice(dependencyIndex, 1);
             setProtocol(newProtocol);
         },
         [protocol]
@@ -1306,13 +1301,13 @@ function CreateProtocolPage(props) {
                                                                     icon={iconArrowUp}
                                                                 />
                                                             </div>
-                                                            <div className="col-auto">
+                                                            {/* <div className="col-auto">
                                                                 <RoundedButton
                                                                     hsl={[197, 43, 52]}
-                                                                    onClick={() => insertPageDependency(itemTarget.page)}
+                                                                    onClick={() => insertDependency(itemTarget.page)}
                                                                     icon={iconDependency}
                                                                 />
-                                                            </div>
+                                                            </div> */}
                                                             <div className="col-auto">
                                                                 <RoundedButton
                                                                     hsl={[197, 43, 52]}
@@ -1323,175 +1318,15 @@ function CreateProtocolPage(props) {
                                                         </div>
                                                         {protocol.pages[itemTarget.page].dependencies?.map(
                                                             (dependency, dependencyIndex) => (
-                                                                <div className="mb-4" key={'page-dependency-' + dependency.tempId}>
-                                                                    <div className="row gx-2 pb-2">
-                                                                        <div className="col">
-                                                                            <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
-                                                                                Dependência {Number(dependencyIndex) + 1} (Página{' '}
-                                                                                {Number(itemTarget.page) + 1})
-                                                                            </h1>
-                                                                        </div>
-                                                                        <div className="col-auto">
-                                                                            <RoundedButton
-                                                                                hsl={[190, 46, 70]}
-                                                                                icon={iconTrash}
-                                                                                onClick={() =>
-                                                                                    removePageDependency(itemTarget.page, dependencyIndex)
-                                                                                }
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
-                                                                        <div className="mb-3">
-                                                                            <label
-                                                                                htmlFor="page-dependency-type"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Tipo de dependência
-                                                                            </label>
-                                                                            <select
-                                                                                className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
-                                                                                id="page-dependency-type"
-                                                                                value={dependency.type || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[itemTarget.page].dependencies[
-                                                                                            dependencyIndex
-                                                                                        ].type = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            >
-                                                                                <option value="">Selecione...</option>
-                                                                                <option value="IS_ANSWERED">Resposta obrigatória</option>
-                                                                                <option value="EXACT_ANSWER">Resposta exata</option>
-                                                                                <option value="OPTION_SELECTED">Opção selecionada</option>
-                                                                                <option value="MIN">
-                                                                                    Mínimo (numérico, caracteres ou opções)
-                                                                                </option>
-                                                                                <option value="MAX">
-                                                                                    Máximo (numérico, caracteres ou opções)
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label
-                                                                                htmlFor="page-dependency-argument"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Argumento
-                                                                            </label>
-                                                                            <input
-                                                                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                                                                id="page-dependency-argument"
-                                                                                type={
-                                                                                    dependency.type === 'MIN' || dependency.type === 'MAX'
-                                                                                        ? 'number'
-                                                                                        : 'text'
-                                                                                }
-                                                                                value={dependency.argument || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[itemTarget.page].dependencies[
-                                                                                            dependencyIndex
-                                                                                        ].argument = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label
-                                                                                htmlFor="page-dependency-target"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Alvo da dependência
-                                                                            </label>
-                                                                            <select
-                                                                                className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
-                                                                                id="page-dependency-target"
-                                                                                value={dependency.itemTempId || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[itemTarget.page].dependencies[
-                                                                                            dependencyIndex
-                                                                                        ].itemTempId = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            >
-                                                                                <option value="">Selecione...</option>
-                                                                                {protocol.pages
-                                                                                    .filter((p, i) => i < itemTarget.page)
-                                                                                    .map((p, i) =>
-                                                                                        p.itemGroups.map((g, j) =>
-                                                                                            g.items
-                                                                                                .filter(
-                                                                                                    (it, k) =>
-                                                                                                        ((dependency.type === 'MIN' ||
-                                                                                                            dependency.type === 'MAX') &&
-                                                                                                            (it.type === 'CHECKBOX' ||
-                                                                                                                it.type === 'NUMBERBOX' ||
-                                                                                                                it.type === 'TEXTBOX' ||
-                                                                                                                it.type === 'RANGE')) ||
-                                                                                                        (dependency.type ===
-                                                                                                            'OPTION_SELECTED' &&
-                                                                                                            (it.type === 'SELECT' ||
-                                                                                                                it.type === 'RADIO' ||
-                                                                                                                it.type === 'CHECKBOX')) ||
-                                                                                                        (dependency.type ===
-                                                                                                            'EXACT_ANSWER' &&
-                                                                                                            (it.type === 'NUMBERBOX' ||
-                                                                                                                it.type === 'TEXTBOX' ||
-                                                                                                                it.type === 'RANGE')) ||
-                                                                                                        dependency.type === 'IS_ANSWERED'
-                                                                                                )
-                                                                                                .map((it, k) => (
-                                                                                                    <option
-                                                                                                        key={
-                                                                                                            'dependency-' +
-                                                                                                            dependency.tempId +
-                                                                                                            '-target-' +
-                                                                                                            it.tempId +
-                                                                                                            '-option'
-                                                                                                        }
-                                                                                                        value={it.tempId}
-                                                                                                    >
-                                                                                                        {it.text}
-                                                                                                    </option>
-                                                                                                ))
-                                                                                        )
-                                                                                    )}
-                                                                            </select>
-                                                                        </div>
-                                                                        <div>
-                                                                            <label
-                                                                                htmlFor="page-dependency-custom-message"
-                                                                                className="form-label fs-5 fw-medium"
-                                                                            >
-                                                                                Mensagem personalizada
-                                                                            </label>
-                                                                            <input
-                                                                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                                                                id="page-dependency-custom-message"
-                                                                                type="text"
-                                                                                value={dependency.customMessage || ''}
-                                                                                onChange={(event) => {
-                                                                                    setProtocol((prev) => {
-                                                                                        const newProtocol = { ...prev };
-                                                                                        newProtocol.pages[itemTarget.page].dependencies[
-                                                                                            dependencyIndex
-                                                                                        ].customMessage = event.target.value;
-                                                                                        return newProtocol;
-                                                                                    });
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                <CreateDependencyInput
+                                                                    currentDependency={dependency}
+                                                                    dependencyIndex={dependencyIndex}
+                                                                    pageIndex={itemTarget.page}
+                                                                    key={'page-dependency-' + dependency.tempId}
+                                                                    updateDependency={updateDependency}
+                                                                    removeDependency={removeDependency}
+                                                                    protocol={protocol}
+                                                                />
                                                             )
                                                         )}
                                                         {protocol.pages[itemTarget.page].itemGroups[itemTarget.group] && (
@@ -1539,15 +1374,15 @@ function CreateProtocolPage(props) {
                                                                             icon={iconArrowUp}
                                                                         />
                                                                     </div>
-                                                                    <div className="col-auto">
+                                                                    {/* <div className="col-auto">
                                                                         <RoundedButton
                                                                             hsl={[197, 43, 52]}
                                                                             onClick={() =>
-                                                                                insertItemGroupDependency(itemTarget.page, itemTarget.group)
+                                                                                insertDependency(itemTarget.page, itemTarget.group)
                                                                             }
                                                                             icon={iconDependency}
                                                                         />
-                                                                    </div>
+                                                                    </div> */}
                                                                     <div className="col-auto">
                                                                         <RoundedButton
                                                                             hsl={[197, 43, 52]}
@@ -1561,206 +1396,16 @@ function CreateProtocolPage(props) {
                                                                 {protocol.pages[itemTarget.page].itemGroups[
                                                                     itemTarget.group
                                                                 ].dependencies?.map((dependency, dependencyIndex) => (
-                                                                    <div className="mb-4" key={'group-dependency-' + dependency.tempId}>
-                                                                        <div className="row gx-2 pb-2">
-                                                                            <div className="col">
-                                                                                <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
-                                                                                    Dependência {Number(dependencyIndex) + 1} (Grupo{' '}
-                                                                                    {Number(itemTarget.group) + 1})
-                                                                                </h1>
-                                                                            </div>
-                                                                            <div className="col-auto">
-                                                                                <RoundedButton
-                                                                                    hsl={[190, 46, 70]}
-                                                                                    icon={iconTrash}
-                                                                                    onClick={() =>
-                                                                                        removeItemGroupDependency(
-                                                                                            itemTarget.group,
-                                                                                            dependencyIndex
-                                                                                        )
-                                                                                    }
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
-                                                                            <div className="mb-3">
-                                                                                <label
-                                                                                    htmlFor="group-dependency-type"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Tipo de dependência
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
-                                                                                    id="group-dependency-type"
-                                                                                    value={dependency.type || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                                itemTarget.group
-                                                                                            ].dependencies[dependencyIndex].type =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                >
-                                                                                    <option value="">Selecione...</option>
-                                                                                    <option value="IS_ANSWERED">
-                                                                                        Resposta obrigatória
-                                                                                    </option>
-                                                                                    <option value="EXACT_ANSWER">Resposta exata</option>
-                                                                                    <option value="OPTION_SELECTED">
-                                                                                        Opção selecionada
-                                                                                    </option>
-                                                                                    <option value="MIN">
-                                                                                        Mínimo (numérico, caracteres ou opções)
-                                                                                    </option>
-                                                                                    <option value="MAX">
-                                                                                        Máximo (numérico, caracteres ou opções)
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <div className="mb-3">
-                                                                                <label
-                                                                                    htmlFor="page-dependency-argument"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Argumento
-                                                                                </label>
-                                                                                <input
-                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                                                                    id="page-dependency-argument"
-                                                                                    type={
-                                                                                        dependency.type === 'MIN' ||
-                                                                                        dependency.type === 'MAX'
-                                                                                            ? 'number'
-                                                                                            : 'text'
-                                                                                    }
-                                                                                    value={dependency.argument || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                                itemTarget.group
-                                                                                            ].dependencies[dependencyIndex].argument =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="mb-3">
-                                                                                <label
-                                                                                    htmlFor="page-dependency-target"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Alvo da dependência
-                                                                                </label>
-                                                                                <select
-                                                                                    className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
-                                                                                    id="page-dependency-target"
-                                                                                    value={dependency.itemTempId || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                                itemTarget.group
-                                                                                            ].dependencies[dependencyIndex].itemTempId =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                >
-                                                                                    <option value="">Selecione...</option>
-                                                                                    {protocol.pages
-                                                                                        .filter((p, i) => i <= itemTarget.page)
-                                                                                        .map((p, i) =>
-                                                                                            p.itemGroups
-                                                                                                .filter(
-                                                                                                    (g, j) =>
-                                                                                                        i < itemTarget.page ||
-                                                                                                        (i === itemTarget.page &&
-                                                                                                            j < itemTarget.group)
-                                                                                                )
-                                                                                                .map((g, j) =>
-                                                                                                    g.items
-                                                                                                        .filter(
-                                                                                                            (it, k) =>
-                                                                                                                ((dependency.type ===
-                                                                                                                    'MIN' ||
-                                                                                                                    dependency.type ===
-                                                                                                                        'MAX') &&
-                                                                                                                    (it.type ===
-                                                                                                                        'CHECKBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'NUMBERBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'TEXTBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RANGE')) ||
-                                                                                                                (dependency.type ===
-                                                                                                                    'OPTION_SELECTED' &&
-                                                                                                                    (it.type === 'SELECT' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RADIO' ||
-                                                                                                                        it.type ===
-                                                                                                                            'CHECKBOX')) ||
-                                                                                                                (dependency.type ===
-                                                                                                                    'EXACT_ANSWER' &&
-                                                                                                                    (it.type ===
-                                                                                                                        'NUMBERBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'TEXTBOX' ||
-                                                                                                                        it.type ===
-                                                                                                                            'RANGE')) ||
-                                                                                                                dependency.type ===
-                                                                                                                    'IS_ANSWERED'
-                                                                                                        )
-                                                                                                        .map((it, k) => (
-                                                                                                            <option
-                                                                                                                key={
-                                                                                                                    'dependency-' +
-                                                                                                                    dependency.tempId +
-                                                                                                                    '-target-' +
-                                                                                                                    it.tempId +
-                                                                                                                    '-option'
-                                                                                                                }
-                                                                                                                value={it.tempId}
-                                                                                                            >
-                                                                                                                {it.text}
-                                                                                                            </option>
-                                                                                                        ))
-                                                                                                )
-                                                                                        )}
-                                                                                </select>
-                                                                            </div>
-                                                                            <div>
-                                                                                <label
-                                                                                    htmlFor="page-dependency-custom-message"
-                                                                                    className="form-label fs-5 fw-medium"
-                                                                                >
-                                                                                    Mensagem personalizada
-                                                                                </label>
-                                                                                <input
-                                                                                    className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                                                                                    id="page-dependency-custom-message"
-                                                                                    type="text"
-                                                                                    value={dependency.customMessage || ''}
-                                                                                    onChange={(event) => {
-                                                                                        setProtocol((prev) => {
-                                                                                            const newProtocol = { ...prev };
-                                                                                            newProtocol.pages[itemTarget.page].itemGroups[
-                                                                                                itemTarget.group
-                                                                                            ].dependencies[dependencyIndex].customMessage =
-                                                                                                event.target.value;
-                                                                                            return newProtocol;
-                                                                                        });
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                    <CreateDependencyInput
+                                                                        currentDependency={dependency}
+                                                                        dependencyIndex={dependencyIndex}
+                                                                        pageIndex={itemTarget.page}
+                                                                        groupIndex={itemTarget.group}
+                                                                        key={'page-dependency-' + dependency.tempId}
+                                                                        updateDependency={updateDependency}
+                                                                        removeDependency={removeDependency}
+                                                                        protocol={protocol}
+                                                                    />
                                                                 ))}
                                                                 {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].items?.map(
                                                                     (item, itemIndex) => (
@@ -2245,7 +1890,7 @@ function CreateProtocolPage(props) {
                                                 <button
                                                     type="button"
                                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                                    onClick={() => insertPageDependency(itemTarget.page)}
+                                                    onClick={() => insertDependency(itemTarget.page)}
                                                 >
                                                     <IconPlus className="icon-plus" />
                                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
@@ -2302,7 +1947,7 @@ function CreateProtocolPage(props) {
                                                 <button
                                                     type="button"
                                                     className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                                    onClick={() => insertItemGroupDependency(itemTarget.page, itemTarget.group)}
+                                                    onClick={() => insertDependency(itemTarget.page, itemTarget.group)}
                                                 >
                                                     <IconPlus className="icon-plus" />
                                                     <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
