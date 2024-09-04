@@ -87,6 +87,7 @@ function CreateProtocolPage(props) {
     const [itemTarget, setItemTarget] = useState({ page: 0, group: 0 });
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+    const [newTableColumnText, setNewTableColumnText] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -202,6 +203,7 @@ function CreateProtocolPage(props) {
                 isRepeatable: false,
                 items: [],
                 dependencies: [],
+                tableColumns: [],
                 placement: newPlacement,
                 tempId: tempId,
             });
@@ -291,6 +293,37 @@ function CreateProtocolPage(props) {
         (page, group, item, index) => {
             const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups[group].items[item].itemValidations.splice(index, 1);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const insertTableColumn = useCallback(
+        (page, group, text) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].tableColumns.push({
+                text: text,
+                placement: newProtocol.pages[page].itemGroups[group].tableColumns.length,
+            });
+            setProtocol(newProtocol);
+            setNewTableColumnText('');
+        },
+        [protocol, newTableColumnText]
+    );
+
+    const removeTableColumn = useCallback(
+        (page, group, index) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].tableColumns.splice(index, 1);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const updateTableColumn = useCallback(
+        (page, group, index, newText) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].tableColumns[index].text = newText;
             setProtocol(newProtocol);
         },
         [protocol]
@@ -506,6 +539,7 @@ function CreateProtocolPage(props) {
         return <SplashPage text="Carregando criação de protocolo..." />;
     }
 
+    console.log('🚀 ~ CreateProtocolPage ~ protocol:', protocol);
     return (
         <div className="d-flex flex-column min-vh-100">
             <NavBar />
@@ -1212,6 +1246,73 @@ function CreateProtocolPage(props) {
                                                                 onClick={() => insertItemGroupDependency(pageIndex, groupIndex)}
                                                             >
                                                                 + Dependência de grupo
+                                                            </button>
+                                                            <br />
+                                                            <label htmlFor="itemGroupType" className="form-label fs-5 fw-medium">
+                                                                Selecione o tipo de tabela que será criado:
+                                                            </label>
+                                                            <select
+                                                                className="form-select rounded-2 border border-2 border-black fs-5 mb-3"
+                                                                id="itemGroupType"
+                                                                value={group.type || ''}
+                                                                onChange={(event) =>
+                                                                    setProtocol((prev) => {
+                                                                        const newProtocol = { ...prev };
+                                                                        newProtocol.pages[pageIndex].itemGroups[groupIndex].type =
+                                                                            event.target.value;
+                                                                        return newProtocol;
+                                                                    })
+                                                                }
+                                                            >
+                                                                <option value="">Selecione...</option>
+                                                                <option value="ONE_DIMENSIONAL">Não tabela</option>
+                                                                <option value="TEXTBOX_TABLE">Caixa de texto</option>
+                                                                <option value="RADIO_TABLE">Escolha simples</option>
+                                                                <option value="CHECKBOX_TABLE">Múltipla escolha</option>
+                                                            </select>
+                                                            {group.tableColumns?.map((column, columnIndex) => (
+                                                                <div
+                                                                    key={'column' + columnIndex}
+                                                                    className="border border-1 border-black mb-1"
+                                                                >
+                                                                    <p className="p-0 m-0 fw-semibold"> Column {columnIndex + 1}</p>
+                                                                    <span className="p-0 m-0"> Texto: </span>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={column.text}
+                                                                        onChange={(e) =>
+                                                                            updateTableColumn(
+                                                                                pageIndex,
+                                                                                groupIndex,
+                                                                                columnIndex,
+                                                                                e.target.value
+                                                                            )
+                                                                        }
+                                                                        className="border-0 p-0 m-0 w-75"
+                                                                    ></input>
+                                                                    <br />
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            removeTableColumn(pageIndex, groupIndex, columnIndex)
+                                                                        }
+                                                                    >
+                                                                        X Coluna
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                            <input
+                                                                className="w-75"
+                                                                type="text"
+                                                                value={newTableColumnText}
+                                                                onChange={(e) => setNewTableColumnText(e.target.value)}
+                                                                placeholder="Entre com o texto da coluna que será criada"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => insertTableColumn(pageIndex, groupIndex, newTableColumnText)}
+                                                            >
+                                                                + Coluna
                                                             </button>
                                                             {group.items?.map((item, itemIndex) => (
                                                                 <div key={'item-' + item.tempId}>
