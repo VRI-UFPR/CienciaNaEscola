@@ -9,7 +9,14 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
-import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewPage, defaultNewValidation } from '../utils/constants';
+import {
+    defaultNewDependency,
+    defaultNewInput,
+    defaultNewItemGroup,
+    defaultNewPage,
+    defaultNewProtocol,
+    defaultNewValidation,
+} from '../utils/constants';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
@@ -122,37 +129,27 @@ function CreateProtocolPage(props) {
     const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
 
-    const [protocol, setProtocol] = useState({
-        title: '',
-        description: '',
-        enabled: true,
-        visibility: 'PUBLIC',
-        applicability: 'PUBLIC',
-        answersVisibility: 'PUBLIC',
-        replicable: true,
-        viewersUser: [],
-        viewersClassroom: [],
-        answersViewersUser: [],
-        answersViewersClassroom: [],
-        appliers: [],
-        pages: [],
-    });
+    const [protocol, setProtocol] = useState(defaultNewProtocol);
     const [itemTarget, setItemTarget] = useState({ page: 0, group: 0 });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const formRef = useRef();
 
-    const [searchedUsers, setSearchedUsers] = useState([]);
-    const [searchedClassrooms, setSearchedClassrooms] = useState([]);
-    const [searchedAnswerUsers, setSearchedAnswerUsers] = useState([]);
-    const [searchedAnswerClassrooms, setSearchedAnswerClassrooms] = useState([]);
-    const [searchedAppliers, setSearchedAppliers] = useState([]);
+    const [searchedOptions, setSearchedOptions] = useState({
+        viewersUser: [],
+        viewersClassroom: [],
+        answersViewersUser: [],
+        answersViewersClassroom: [],
+        appliers: [],
+    });
 
-    const [VCSearchInput, setVCSearchInput] = useState('');
-    const [VUSearchInput, setVUSearchInput] = useState('');
-    const [AVUSearchInput, setAVUSearchInput] = useState('');
-    const [AVCSearchInput, setAVCSearchInput] = useState('');
-    const [ASearchInput, setASearchInput] = useState('');
+    const [searchInputs, setSearchInputs] = useState({
+        viewersUser: '',
+        viewersClassroom: '',
+        answersViewersUser: '',
+        answersViewersClassroom: '',
+        appliers: '',
+    });
 
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
@@ -507,13 +504,17 @@ function CreateProtocolPage(props) {
                                 answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
                                 appliers: d.appliers.map((u) => u.id),
                             });
-                            setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                            setSearchedUsers(d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
-                            setSearchedAnswerClassrooms(d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                            setSearchedAnswerUsers(
-                                d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
-                            );
-                            setSearchedAppliers(d.appliers.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
+                            setSearchedOptions({
+                                viewersUser: d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })),
+                                viewersClassroom: d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })),
+                                answersViewersUser: d.answersViewersUser.map((u) => ({
+                                    id: u.id,
+                                    username: u.username,
+                                    classrooms: u.classrooms,
+                                })),
+                                answersViewersClassroom: d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })),
+                                appliers: d.appliers.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })),
+                            });
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
@@ -526,7 +527,7 @@ function CreateProtocolPage(props) {
         }
     }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status, user.role, user.id]);
 
-    const searchUsers = (term) => {
+    const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
             .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
@@ -536,75 +537,47 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
-                const d = response.data.data;
-                const newUsers = [
-                    ...d
-                        .filter((u) => !protocol.viewersUser.includes(u.id))
-                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
-                    ...searchedUsers
-                        .filter((u) => protocol.viewersUser.includes(u.id))
-                        .sort((a, b) => a.username.localeCompare(b.username)),
-                ];
-                setSearchedUsers(newUsers);
+                if (target === 'viewersUser') {
+                    const d = response.data.data;
+                    const newUsers = [
+                        ...d
+                            .filter((u) => !protocol.viewersUser.includes(u.id))
+                            .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                        ...searchedOptions.viewersUser
+                            .filter((u) => protocol.viewersUser.includes(u.id))
+                            .sort((a, b) => a.username.localeCompare(b.username)),
+                    ];
+                    setSearchedOptions((prev) => ({ ...prev, viewersUser: newUsers }));
+                } else if (target === 'answersViewersUser') {
+                    const d = response.data.data;
+                    const newUsers = [
+                        ...d
+                            .filter((u) => !protocol.answersViewersUser.includes(u.id))
+                            .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                        ...searchedOptions.answersViewersUser
+                            .filter((u) => protocol.answersViewersUser.includes(u.id))
+                            .sort((a, b) => a.username.localeCompare(b.username)),
+                    ];
+                    setSearchedOptions((prev) => ({ ...prev, answersViewersUser: newUsers }));
+                } else if (target === 'appliers') {
+                    const d = response.data.data;
+                    const newUsers = [
+                        ...d
+                            .filter((u) => !protocol.appliers.includes(u.id))
+                            .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                        ...searchedOptions.appliers
+                            .filter((u) => protocol.appliers.includes(u.id))
+                            .sort((a, b) => a.username.localeCompare(b.username)),
+                    ];
+                    setSearchedOptions((prev) => ({ ...prev, appliers: newUsers }));
+                }
             })
             .catch((error) => {
                 alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
             });
     };
 
-    const searchAnswerUsers = (term) => {
-        const formData = serialize({ term }, { indices: true });
-        axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                const d = response.data.data;
-                const newUsers = [
-                    ...d
-                        .filter((u) => !protocol.answersViewersUser.includes(u.id))
-                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
-                    ...searchedAnswerUsers
-                        .filter((u) => protocol.answersViewersUser.includes(u.id))
-                        .sort((a, b) => a.username.localeCompare(b.username)),
-                ];
-                setSearchedAnswerUsers(newUsers);
-            })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
-    };
-
-    const searchAppliers = (term) => {
-        const formData = serialize({ term }, { indices: true });
-        axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                const d = response.data.data;
-                const newUsers = [
-                    ...d
-                        .filter((u) => !protocol.appliers.includes(u.id))
-                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
-                    ...searchedAppliers
-                        .filter((u) => protocol.appliers.includes(u.id))
-                        .sort((a, b) => a.username.localeCompare(b.username)),
-                ];
-                setSearchedAppliers(newUsers);
-            })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
-    };
-
-    const searchClassrooms = (term) => {
+    const searchClassrooms = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
             .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
@@ -615,125 +588,114 @@ function CreateProtocolPage(props) {
             })
             .then((response) => {
                 const d = response.data.data;
-                const newClassrooms = d
-                    .filter((c) => !protocol.viewersClassroom.includes(c.id))
-                    .map(({ id, name, users }) => ({ id, name, users }));
-                const concatenedClassrooms = [
-                    ...newClassrooms,
-                    ...searchedClassrooms
-                        .filter((c) => protocol.viewersClassroom.includes(c.id))
-                        .sort((a, b) => a.name.localeCompare(b.name)),
-                ];
-                setSearchedClassrooms(concatenedClassrooms);
+                if (target === 'viewersClassroom') {
+                    const newClassrooms = d
+                        .filter((c) => !protocol.viewersClassroom.includes(c.id))
+                        .map(({ id, name, users }) => ({ id, name, users }));
+                    const concatenedClassrooms = [
+                        ...newClassrooms,
+                        ...searchedOptions.viewersClassroom
+                            .filter((c) => protocol.viewersClassroom.includes(c.id))
+                            .sort((a, b) => a.name.localeCompare(b.name)),
+                    ];
+                    setSearchedOptions((prev) => ({ ...prev, viewersClassroom: concatenedClassrooms }));
+                } else if (target === 'answersViewersClassroom') {
+                    const d = response.data.data;
+                    const newClassrooms = d
+                        .filter((c) => !protocol.answersViewersClassroom.includes(c.id))
+                        .map(({ id, name, users }) => ({ id, name, users }));
+                    const concatenedClassrooms = [
+                        ...newClassrooms,
+                        ...searchedOptions.answersViewersClassroom
+                            .filter((c) => protocol.answersViewersClassroom.includes(c.id))
+                            .sort((a, b) => a.name.localeCompare(b.name)),
+                    ];
+                    setSearchedOptions((prev) => ({ ...prev, answersViewersClassroom: concatenedClassrooms }));
+                }
             })
             .catch((error) => {
                 alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
             });
     };
 
-    const searchAnswerClassrooms = (term) => {
-        const formData = serialize({ term }, { indices: true });
-        axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                const d = response.data.data;
-                const newClassrooms = d
-                    .filter((c) => !protocol.answersViewersClassroom.includes(c.id))
-                    .map(({ id, name, users }) => ({ id, name, users }));
-                const concatenedClassrooms = [
-                    ...newClassrooms,
-                    ...searchedAnswerClassrooms
-                        .filter((c) => protocol.answersViewersClassroom.includes(c.id))
-                        .sort((a, b) => a.name.localeCompare(b.name)),
-                ];
-                setSearchedAnswerClassrooms(concatenedClassrooms);
-            })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+    const unselectUser = (id, target) => {
+        if (target === 'viewersUser') {
+            setProtocol((prev) => ({
+                ...prev,
+                viewersUser: prev.viewersUser.filter((u) => u !== id),
+                viewersClassroom: searchedOptions.viewersClassroom
+                    .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.viewersClassroom.includes(c.id))
+                    .map((c) => c.id),
+            }));
+        } else if ('answersViewersUser') {
+            setProtocol((prev) => ({
+                ...prev,
+                answersViewersUser: prev.answersViewersUser.filter((u) => u !== id),
+                answersViewersClassroom: searchedOptions.answersViewersClassroom
+                    .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.answersViewersClassroom.includes(c.id))
+                    .map((c) => c.id),
+            }));
+        }
     };
 
-    const unselectUser = (id) => {
-        setProtocol((prev) => ({
-            ...prev,
-            viewersUser: prev.viewersUser.filter((u) => u !== id),
-            viewersClassroom: searchedClassrooms
-                .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.viewersClassroom.includes(c.id))
-                .map((c) => c.id),
-        }));
-    };
-
-    const selectClassroom = (id) => {
-        const c = searchedClassrooms.find((c) => c.id === id);
-        const newUsers = c.users
-            .filter((u) => !protocol.viewersUser.includes(u.id))
-            .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
-        setSearchedUsers((prev) =>
-            [
-                ...prev.map((u) => {
-                    if (newUsers.includes(u.id)) {
-                        return { ...u, classrooms: [...u.classrooms, c.id] };
-                    }
-                    return u;
-                }),
-                ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
-            ].sort((a, b) => a.username.localeCompare(b.username))
-        );
-        setProtocol((prev) => ({
-            ...prev,
-            viewersClassroom: [...prev.viewersClassroom, id],
-            viewersUser: [
-                ...prev.viewersUser,
-                ...searchedClassrooms
-                    .find((c) => c.id === id)
-                    .users.filter((u) => !prev.viewersUser.includes(u.id))
-                    .map((u) => u.id),
-            ],
-        }));
-    };
-
-    const unselectAnswerUser = (id) => {
-        setProtocol((prev) => ({
-            ...prev,
-            answersViewersUser: prev.answersViewersUser.filter((u) => u !== id),
-            answersViewersClassroom: searchedAnswerClassrooms
-                .filter((c) => !c.users.map((u) => u.id).includes(id) && prev.answersViewersClassroom.includes(c.id))
-                .map((c) => c.id),
-        }));
-    };
-
-    const selectAnswerClassroom = (id) => {
-        const c = searchedAnswerClassrooms.find((c) => c.id === id);
-        const newUsers = c.users
-            .filter((u) => !protocol.answersViewersUser.includes(u.id))
-            .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
-        setSearchedAnswerUsers((prev) =>
-            [
-                ...prev.map((u) => {
-                    if (newUsers.includes(u.id)) {
-                        return { ...u, classrooms: [...u.classrooms, c.id] };
-                    }
-                    return u;
-                }),
-                ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
-            ].sort((a, b) => a.username.localeCompare(b.username))
-        );
-        setProtocol((prev) => ({
-            ...prev,
-            answersViewersClassroom: [...prev.answersViewersClassroom, id],
-            answersViewersUser: [
-                ...prev.answersViewersUser,
-                ...searchedAnswerClassrooms
-                    .find((c) => c.id === id)
-                    .users.filter((u) => !prev.answersViewersUser.includes(u.id))
-                    .map((u) => u.id),
-            ],
-        }));
+    const selectClassroom = (id, target) => {
+        if (target === 'viewersClassroom') {
+            const c = searchedOptions.viewersClassroom.find((c) => c.id === id);
+            const newUsers = c.users
+                .filter((u) => !protocol.viewersUser.includes(u.id))
+                .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
+            setSearchedOptions((prev) => ({
+                ...prev,
+                viewersUser: [
+                    ...prev.viewersUser.map((u) => {
+                        if (newUsers.map((u) => u.id).includes(u.id)) {
+                            return { ...u, classrooms: [...u.classrooms, c.id] };
+                        }
+                        return u;
+                    }),
+                    ...newUsers.filter((u) => !prev.viewersUser.map((u) => u.id).includes(u.id)),
+                ],
+            }));
+            setProtocol((prev) => ({
+                ...prev,
+                viewersClassroom: [...prev.viewersClassroom, id],
+                viewersUser: [
+                    ...prev.viewersUser,
+                    ...searchedOptions.viewersClassroom
+                        .find((c) => c.id === id)
+                        .users.filter((u) => !prev.viewersUser.includes(u.id))
+                        .map((u) => u.id),
+                ],
+            }));
+        } else if (target === 'answersViewersClassroom') {
+            const c = searchedOptions.answersViewersClassroom.find((c) => c.id === id);
+            const newUsers = c.users
+                .filter((u) => !protocol.answersViewersUser.includes(u.id))
+                .map((u) => ({ id: u.id, username: u.username, classrooms: [c.id] }));
+            setSearchedOptions((prev) => ({
+                ...prev,
+                answersViewersUser: [
+                    ...prev.answersViewersUser.map((u) => {
+                        if (newUsers.map((u) => u.id).includes(u.id)) {
+                            return { ...u, classrooms: [...u.classrooms, c.id] };
+                        }
+                        return u;
+                    }),
+                    ...newUsers.filter((u) => !prev.answersViewersUser.map((u) => u.id).includes(u.id)),
+                ],
+            }));
+            setProtocol((prev) => ({
+                ...prev,
+                answersViewersClassroom: [...prev.answersViewersClassroom, id],
+                answersViewersUser: [
+                    ...prev.answersViewersUser,
+                    ...searchedOptions.answersViewersClassroom
+                        .find((c) => c.id === id)
+                        .users.filter((u) => !prev.answersViewersUser.includes(u.id))
+                        .map((u) => u.id),
+                ],
+            }));
+        }
     };
 
     if (error) {
@@ -852,26 +814,32 @@ function CreateProtocolPage(props) {
                                                                     <input
                                                                         type="text"
                                                                         name="users-search"
-                                                                        value={VUSearchInput}
+                                                                        value={searchInputs.viewersUser}
                                                                         id="users-search"
                                                                         placeholder="Buscar por nome de usuário"
                                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                        onChange={(e) => setVUSearchInput(e.target.value)}
+                                                                        onChange={(e) =>
+                                                                            setSearchInputs((prev) => ({
+                                                                                ...prev,
+                                                                                viewersUser: e.target.value,
+                                                                            }))
+                                                                        }
                                                                         onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') searchUsers(VUSearchInput);
+                                                                            if (e.key === 'Enter')
+                                                                                searchUsers(searchInputs.viewersUser, 'viewersUser');
                                                                         }}
                                                                     />
                                                                 </div>
                                                                 <div className="col-auto">
                                                                     <RoundedButton
                                                                         hsl={[197, 43, 52]}
-                                                                        onClick={() => searchUsers(VUSearchInput)}
+                                                                        onClick={() => searchUsers(searchInputs.viewersUser, 'viewersUser')}
                                                                         icon={iconSearch}
                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="row gy-2 mb-3">
-                                                                {searchedUsers.map((u) => (
+                                                                {searchedOptions.viewersUser.map((u) => (
                                                                     <div
                                                                         key={'viewer-user-' + u.id + '-option'}
                                                                         className="col-6 col-md-4 col-lg-3"
@@ -894,7 +862,7 @@ function CreateProtocolPage(props) {
                                                                                         ],
                                                                                     }));
                                                                                 } else {
-                                                                                    unselectUser(parseInt(e.target.value));
+                                                                                    unselectUser(parseInt(e.target.value), 'viewersUser');
                                                                                 }
                                                                             }}
                                                                         />
@@ -921,26 +889,40 @@ function CreateProtocolPage(props) {
                                                                     <input
                                                                         type="text"
                                                                         name="users-search"
-                                                                        value={VCSearchInput}
+                                                                        value={searchInputs.viewersClassroom}
                                                                         id="users-search"
                                                                         placeholder="Buscar por nome do grupo"
                                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                        onChange={(e) => setVCSearchInput(e.target.value)}
+                                                                        onChange={(e) =>
+                                                                            setSearchInputs({
+                                                                                ...searchInputs,
+                                                                                viewersClassroom: e.target.value,
+                                                                            })
+                                                                        }
                                                                         onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') searchClassrooms(VCSearchInput);
+                                                                            if (e.key === 'Enter')
+                                                                                searchClassrooms(
+                                                                                    searchInputs.viewersClassroom,
+                                                                                    'viewersClassroom'
+                                                                                );
                                                                         }}
                                                                     />
                                                                 </div>
                                                                 <div className="col-auto">
                                                                     <RoundedButton
                                                                         hsl={[197, 43, 52]}
-                                                                        onClick={() => searchClassrooms(VCSearchInput)}
+                                                                        onClick={() =>
+                                                                            searchClassrooms(
+                                                                                searchInputs.viewersClassroom,
+                                                                                'viewersClassroom'
+                                                                            )
+                                                                        }
                                                                         icon={iconSearch}
                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="row gy-2 mb-3">
-                                                                {searchedClassrooms.map((c) => (
+                                                                {searchedOptions.viewersClassroom.map((c) => (
                                                                     <div
                                                                         key={'viewer-classroom-' + c.id + '-option'}
                                                                         className="col-6 col-md-4 col-lg-3"
@@ -955,7 +937,10 @@ function CreateProtocolPage(props) {
                                                                             checked={protocol.viewersClassroom.includes(c.id)}
                                                                             onChange={(e) => {
                                                                                 if (e.target.checked) {
-                                                                                    selectClassroom(parseInt(e.target.value));
+                                                                                    selectClassroom(
+                                                                                        parseInt(e.target.value),
+                                                                                        'viewersClassroom'
+                                                                                    );
                                                                                 } else {
                                                                                     setProtocol((prev) => ({
                                                                                         ...prev,
@@ -1004,26 +989,29 @@ function CreateProtocolPage(props) {
                                                                     <input
                                                                         type="text"
                                                                         name="users-search"
-                                                                        value={ASearchInput}
+                                                                        value={searchInputs.appliers}
                                                                         id="users-search"
                                                                         placeholder="Buscar por nome de usuário"
                                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                        onChange={(e) => setASearchInput(e.target.value)}
+                                                                        onChange={(e) =>
+                                                                            setSearchInputs({ ...searchInputs, appliers: e.target.value })
+                                                                        }
                                                                         onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') searchAppliers(ASearchInput);
+                                                                            if (e.key === 'Enter')
+                                                                                searchUsers(searchInputs.appliers, 'appliers');
                                                                         }}
                                                                     />
                                                                 </div>
                                                                 <div className="col-auto">
                                                                     <RoundedButton
                                                                         hsl={[197, 43, 52]}
-                                                                        onClick={() => searchAppliers(ASearchInput)}
+                                                                        onClick={() => searchUsers(searchInputs.appliers, 'appliers')}
                                                                         icon={iconSearch}
                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="row gy-2 mb-3">
-                                                                {searchedAppliers
+                                                                {searchedOptions.appliers
                                                                     .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
                                                                     .map((u) => (
                                                                         <div
@@ -1099,26 +1087,40 @@ function CreateProtocolPage(props) {
                                                                     <input
                                                                         type="text"
                                                                         name="users-search"
-                                                                        value={AVUSearchInput}
+                                                                        value={searchInputs.answersViewersUser}
                                                                         id="users-search"
                                                                         placeholder="Buscar por nome de usuário"
                                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                        onChange={(e) => setAVUSearchInput(e.target.value)}
+                                                                        onChange={(e) =>
+                                                                            setSearchInputs((prev) => ({
+                                                                                ...prev,
+                                                                                answersViewersUser: e.target.value,
+                                                                            }))
+                                                                        }
                                                                         onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') searchAnswerUsers(AVUSearchInput);
+                                                                            if (e.key === 'Enter')
+                                                                                searchUsers(
+                                                                                    searchInputs.answersViewersUser,
+                                                                                    'answersViewersUser'
+                                                                                );
                                                                         }}
                                                                     />
                                                                 </div>
                                                                 <div className="col-auto">
                                                                     <RoundedButton
                                                                         hsl={[197, 43, 52]}
-                                                                        onClick={() => searchAnswerUsers(AVUSearchInput)}
+                                                                        onClick={() =>
+                                                                            searchUsers(
+                                                                                searchInputs.answersViewersUser,
+                                                                                'answersViewersUser'
+                                                                            )
+                                                                        }
                                                                         icon={iconSearch}
                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="row gy-2 mb-3">
-                                                                {searchedAnswerUsers.map((u) => (
+                                                                {searchedOptions.answersViewersUser.map((u) => (
                                                                     <div
                                                                         key={'answer-viewer-user-' + u.id + '-option'}
                                                                         className="col-6 col-md-4 col-lg-3"
@@ -1141,7 +1143,10 @@ function CreateProtocolPage(props) {
                                                                                         ],
                                                                                     }));
                                                                                 } else {
-                                                                                    unselectAnswerUser(parseInt(e.target.value));
+                                                                                    unselectUser(
+                                                                                        parseInt(e.target.value),
+                                                                                        'answersViewersUser'
+                                                                                    );
                                                                                 }
                                                                             }}
                                                                         />
@@ -1169,26 +1174,37 @@ function CreateProtocolPage(props) {
                                                                     <input
                                                                         type="text"
                                                                         name="users-search"
-                                                                        value={AVCSearchInput}
+                                                                        value={searchInputs.answersViewersClassroom}
                                                                         id="users-search"
                                                                         placeholder="Buscar por nome do grupo"
                                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0 mb-3"
-                                                                        onChange={(e) => setAVCSearchInput(e.target.value)}
+                                                                        onChange={(e) =>
+                                                                            setSearchInputs({ answersViewersClassroom: e.target.value })
+                                                                        }
                                                                         onKeyDown={(e) => {
-                                                                            if (e.key === 'Enter') searchAnswerClassrooms(AVCSearchInput);
+                                                                            if (e.key === 'Enter')
+                                                                                searchClassrooms(
+                                                                                    searchInputs.answersViewersClassroom,
+                                                                                    'answersViewersClassroom'
+                                                                                );
                                                                         }}
                                                                     />
                                                                 </div>
                                                                 <div className="col-auto">
                                                                     <RoundedButton
                                                                         hsl={[197, 43, 52]}
-                                                                        onClick={() => searchAnswerClassrooms(AVCSearchInput)}
+                                                                        onClick={() =>
+                                                                            searchClassrooms(
+                                                                                searchInputs.answersViewersClassroom,
+                                                                                'answersViewersClassroom'
+                                                                            )
+                                                                        }
                                                                         icon={iconSearch}
                                                                     />
                                                                 </div>
                                                             </div>
                                                             <div className="row gy-2 mb-3">
-                                                                {searchedAnswerClassrooms.map((c) => (
+                                                                {searchedOptions.answersViewersClassroom.map((c) => (
                                                                     <div
                                                                         key={'answer-viewer-classroom-' + c.id + '-option'}
                                                                         className="col-6 col-md-4 col-lg-3"
@@ -1203,7 +1219,10 @@ function CreateProtocolPage(props) {
                                                                             checked={protocol.answersViewersClassroom.includes(c.id)}
                                                                             onChange={(e) => {
                                                                                 if (e.target.checked) {
-                                                                                    selectAnswerClassroom(parseInt(e.target.value));
+                                                                                    selectClassroom(
+                                                                                        parseInt(e.target.value),
+                                                                                        'answersViewersClassroom'
+                                                                                    );
                                                                                 } else {
                                                                                     setProtocol((prev) => ({
                                                                                         ...prev,
