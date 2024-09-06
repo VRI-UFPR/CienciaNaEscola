@@ -19,11 +19,7 @@ function CreateValidationInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon={iconTrash}
-                        onClick={() => removeValidation(groupIndex, itemIndex, validationIndex)}
-                    />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeValidation(itemIndex, validationIndex)} />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">

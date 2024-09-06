@@ -166,8 +166,6 @@ function CreateProtocolPage(props) {
             ),
         };
         newProtocol.pages[page].itemGroups[group].items.push(newInput);
-        console.log(newInput);
-        console.log(newProtocol);
         setProtocol(newProtocol);
     };
 

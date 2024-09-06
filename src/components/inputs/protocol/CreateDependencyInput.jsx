@@ -33,7 +33,6 @@ function CreateDependencyInput(props) {
                             )
                         )
                     ) || [];
-            console.log(res);
             return res;
         } else {
             const res =
@@ -58,7 +57,6 @@ function CreateDependencyInput(props) {
                                 )
                             )
                     ) || [];
-            console.log(res);
             return res;
         }
     };
@@ -73,15 +71,7 @@ function CreateDependencyInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon={iconTrash}
-                        onClick={
-                            isPageDependency
-                                ? () => removeDependency(undefined, dependencyIndex)
-                                : () => removeDependency(groupIndex, dependencyIndex)
-                        }
-                    />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={removeDependency(dependencyIndex)} />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
