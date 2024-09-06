@@ -116,10 +116,11 @@ function CreateProtocolPage(props) {
     const { user } = useContext(AuthContext);
 
     const [protocol, setProtocol] = useState(defaultNewProtocol);
-    const [itemTarget, setItemTarget] = useState({ page: 0, group: 0 });
+    const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const formRef = useRef();
+    const currentPage = protocol.pages[itemTarget.page];
 
     const [searchedOptions, setSearchedOptions] = useState({
         viewersUser: [],
@@ -192,15 +193,8 @@ function CreateProtocolPage(props) {
                 if (i >= index) page.placement--;
             }
             setProtocol(newProtocol);
-            if (itemTarget.page >= newProtocol.pages.length) {
-                if (newProtocol.pages.length > 0) {
-                    setItemTarget((prev) => ({ group: '', page: newProtocol.pages.length - 1 }));
-                } else {
-                    setItemTarget((prev) => ({ group: '', page: '' }));
-                }
-            }
         },
-        [protocol, itemTarget.page]
+        [protocol]
     );
 
     const insertItemGroup = useCallback(
@@ -222,6 +216,16 @@ function CreateProtocolPage(props) {
         },
         [protocol]
     );
+
+    useEffect(() => {
+        if (itemTarget.page >= protocol.pages.length && itemTarget.page !== '') {
+            if (protocol.pages.length > 0) setItemTarget((prev) => ({ group: '', page: protocol.pages.length - 1 }));
+            else setItemTarget((prev) => ({ group: '', page: '' }));
+        } else if (itemTarget.group >= currentPage?.itemGroups.length && itemTarget.group !== '') {
+            if (currentPage.itemGroups.length > 0) setItemTarget((prev) => ({ ...prev, group: currentPage.itemGroups.length - 1 }));
+            else setItemTarget((prev) => ({ ...prev, group: '' }));
+        }
+    }, [itemTarget, protocol.pages, protocol.pages.length, currentPage?.itemGroups.length]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -1140,10 +1144,10 @@ function CreateProtocolPage(props) {
                                                         <option value="false">Não</option>
                                                     </select>
                                                 </div>
-                                                {protocol.pages[itemTarget.page] && (
+                                                {currentPage && (
                                                     <CreatePage
-                                                        key={protocol.pages[itemTarget.page].tempId}
-                                                        currentPage={protocol.pages[itemTarget.page]}
+                                                        key={currentPage.tempId}
+                                                        currentPage={currentPage}
                                                         itemTarget={itemTarget}
                                                         updatePagePlacement={updatePagePlacement}
                                                         removePage={removePage}

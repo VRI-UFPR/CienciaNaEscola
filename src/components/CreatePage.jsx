@@ -10,6 +10,7 @@ function CreatePage(props) {
     const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage } = props;
 
     const [page, setPage] = useState(currentPage);
+    const currentGroup = page.itemGroups[itemTarget.group];
 
     useEffect(() => {
         if (page !== currentPage) updatePage(page, itemTarget.page);
@@ -47,13 +48,6 @@ function CreatePage(props) {
                 if (i >= index) group.placement--;
             }
             setPage(newPage);
-            // if (itemTarget.group >= newProtocol.pages[page].itemGroups.length) {
-            //     if (newProtocol.pages[page].itemGroups.length > 0) {
-            //         setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
-            //     } else {
-            //         setItemTarget((prev) => ({ ...prev, group: '' }));
-            //     }
-            // }
         },
         [page]
     );
@@ -96,13 +90,6 @@ function CreatePage(props) {
                         icon={iconArrowUp}
                     />
                 </div>
-                {/* <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[197, 43, 52]}
-                                                                    onClick={() => insertDependency(itemTarget.page)}
-                                                                    icon={iconDependency}
-                                                                />
-                                                            </div> */}
                 <div className="col-auto">
                     <RoundedButton hsl={[197, 43, 52]} onClick={() => removePage(itemTarget.page)} icon={iconTrash} />
                 </div>
@@ -118,10 +105,10 @@ function CreatePage(props) {
                     protocol={protocol}
                 />
             ))}
-            {page.itemGroups[itemTarget.group] && (
+            {currentGroup && (
                 <CreateItemGroup
-                    key={'item-group-' + page.itemGroups[itemTarget.group].tempId}
-                    currentGroup={page.itemGroups[itemTarget.group]}
+                    key={'item-group-' + currentGroup.tempId}
+                    currentGroup={currentGroup}
                     updateGroup={updateItemGroup}
                     itemTarget={itemTarget}
                     updateGroupPlacement={updateGroupPlacement}

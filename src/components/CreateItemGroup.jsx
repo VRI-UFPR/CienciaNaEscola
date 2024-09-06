@@ -108,45 +108,22 @@ function CreateItemGroup(props) {
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
-                        onClick={() =>
-                            updateGroupPlacement(
-                                protocol.pages[itemTarget.page].itemGroups[itemTarget.group].placement + 1,
-                                protocol.pages[itemTarget.page].itemGroups[itemTarget.group].placement,
-                                itemTarget.page,
-                                itemTarget.group
-                            )
-                        }
+                        onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
                         icon={iconArrowDown}
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
-                        onClick={() =>
-                            updateGroupPlacement(
-                                protocol.pages[itemTarget.page].itemGroups[itemTarget.group].placement - 1,
-                                protocol.pages[itemTarget.page].itemGroups[itemTarget.group].placement,
-                                itemTarget.page,
-                                itemTarget.group
-                            )
-                        }
+                        onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
                         icon={iconArrowUp}
                     />
                 </div>
-                {/* <div className="col-auto">
-                                                                        <RoundedButton
-                                                                            hsl={[197, 43, 52]}
-                                                                            onClick={() =>
-                                                                                insertDependency(itemTarget.page, itemTarget.group)
-                                                                            }
-                                                                            icon={iconDependency}
-                                                                        />
-                                                                    </div> */}
                 <div className="col-auto">
                     <RoundedButton hsl={[197, 43, 52]} onClick={() => removeItemGroup(itemTarget.group)} icon={iconTrash} />
                 </div>
             </div>
-            {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].dependencies?.map((dependency, dependencyIndex) => (
+            {group.dependencies?.map((dependency, dependencyIndex) => (
                 <CreateDependencyInput
                     currentDependency={dependency}
                     dependencyIndex={dependencyIndex}
@@ -158,7 +135,7 @@ function CreateItemGroup(props) {
                     protocol={protocol}
                 />
             ))}
-            {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].items?.map((item, itemIndex) => (
+            {group.items?.map((item, itemIndex) => (
                 <div key={'item-' + item.tempId}>
                     {(() => {
                         switch (item.type) {
