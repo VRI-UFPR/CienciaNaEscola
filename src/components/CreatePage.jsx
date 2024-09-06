@@ -116,6 +116,13 @@ function CreatePage(props) {
                     protocol={protocol}
                 />
             )}
+            {!currentGroup && (
+                <div className="bg-light-grey rounded-4 p-4">
+                    <p className="font-barlow fw-medium text-center fs-5 m-0">
+                        Nenhum grupo selecionado. Selecione ou crie um por meio da aba Adicionar.
+                    </p>
+                </div>
+            )}
         </div>
     );
 }

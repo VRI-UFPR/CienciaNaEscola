@@ -135,6 +135,11 @@ function CreateItemGroup(props) {
                     protocol={protocol}
                 />
             ))}
+            {group.items?.length === 0 && (
+                <div className="bg-light-grey rounded-4 p-4">
+                    <p className="font-barlow fw-medium text-center fs-5 m-0">Nenhum item criado. Crie um por meio da aba Adicionar.</p>
+                </div>
+            )}
             {group.items?.map((item, itemIndex) => (
                 <div key={'item-' + item.tempId}>
                     {(() => {
