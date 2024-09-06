@@ -7,8 +7,8 @@ function CreateValidationInput(props) {
     const [validation, setValidation] = useState(currentValidation);
 
     useEffect(() => {
-        updateValidation(validation, pageIndex, groupIndex, validationIndex);
-    }, [validation, pageIndex, groupIndex, validationIndex, updateValidation]);
+        if (validation !== currentValidation) updateValidation(validation, pageIndex, groupIndex, validationIndex);
+    }, [validation, pageIndex, groupIndex, validationIndex, updateValidation, currentValidation]);
 
     return (
         <div className="mb-3" key={'validation-' + validation.tempId}>
@@ -22,7 +22,7 @@ function CreateValidationInput(props) {
                     <RoundedButton
                         hsl={[190, 46, 70]}
                         icon={iconTrash}
-                        onClick={() => removeValidation(pageIndex, groupIndex, itemIndex, validationIndex)}
+                        onClick={() => removeValidation(groupIndex, itemIndex, validationIndex)}
                     />
                 </div>
             </div>

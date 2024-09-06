@@ -8,8 +8,8 @@ function CreateDependencyInput(props) {
     const isPageDependency = groupIndex === undefined;
 
     useEffect(() => {
-        updateDependency(dependency, pageIndex, groupIndex, dependencyIndex);
-    }, [dependency, pageIndex, groupIndex, dependencyIndex, updateDependency]);
+        if (dependency !== currentDependency) updateDependency(dependency, pageIndex, groupIndex, dependencyIndex);
+    }, [dependency, pageIndex, groupIndex, dependencyIndex, updateDependency, currentDependency]);
 
     const getItemTargetOptions = () => {
         if (isPageDependency) {
@@ -78,8 +78,8 @@ function CreateDependencyInput(props) {
                         icon={iconTrash}
                         onClick={
                             isPageDependency
-                                ? () => removeDependency(pageIndex, undefined, dependencyIndex)
-                                : () => removeDependency(pageIndex, groupIndex, dependencyIndex)
+                                ? () => removeDependency(undefined, dependencyIndex)
+                                : () => removeDependency(groupIndex, dependencyIndex)
                         }
                     />
                 </div>

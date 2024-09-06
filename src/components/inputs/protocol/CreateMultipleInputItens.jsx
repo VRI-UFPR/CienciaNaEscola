@@ -60,8 +60,8 @@ function CreateMultipleInputItens(props) {
     }, [item.type]);
 
     useEffect(() => {
-        updateItem(item, pageIndex, groupIndex, itemIndex);
-    }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
+        if (item !== currentItem) updateItem(item, pageIndex, groupIndex, itemIndex);
+    }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
 
     const updateOptionPlacement = (newPlacement, oldPlacement, optionIndex) => {
         if (newPlacement < 1 || newPlacement > item.itemOptions.length) return;
@@ -113,14 +113,14 @@ function CreateMultipleInputItens(props) {
                     <RoundedButton
                         hsl={[190, 46, 70]}
                         icon={iconArrowDown}
-                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, groupIndex, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
                         icon={iconArrowUp}
-                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, groupIndex, itemIndex)}
                     />
                 </div>
                 {item.type === 'CHECKBOX' && (
@@ -128,7 +128,7 @@ function CreateMultipleInputItens(props) {
                         <RoundedButton
                             hsl={[190, 46, 70]}
                             icon={iconValidation}
-                            onClick={() => insertItemValidation(pageIndex, groupIndex, itemIndex)}
+                            onClick={() => insertItemValidation(groupIndex, itemIndex)}
                         />
                     </div>
                 )}
@@ -136,7 +136,7 @@ function CreateMultipleInputItens(props) {
                     <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(pageIndex, groupIndex, itemIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(groupIndex, itemIndex)} />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">

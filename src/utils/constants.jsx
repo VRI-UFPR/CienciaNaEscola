@@ -1,7 +1,7 @@
-export const defaultNewInput = (type) => {
+export const defaultNewInput = (type, tempId, placement) => {
     return {
-        // tempId must be an unique integer
-        tempId: Math.floor(Date.now() + Math.random() * 1000),
+        tempId: tempId,
+        placement: placement,
         text: '',
         description: '',
         type: type,

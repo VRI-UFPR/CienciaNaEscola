@@ -2,34 +2,20 @@ import { React, useState, useContext, useCallback, useEffect, useRef } from 'rea
 import axios from 'axios';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
-import CreateMultipleInputItens from '../components/inputs/protocol/CreateMultipleInputItens';
-import CreateTextBoxInput from '../components/inputs/protocol/CreateTextBoxInput';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
-import {
-    defaultNewDependency,
-    defaultNewInput,
-    defaultNewItemGroup,
-    defaultNewPage,
-    defaultNewProtocol,
-    defaultNewValidation,
-} from '../utils/constants';
+import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewPage, defaultNewProtocol } from '../utils/constants';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
-import CreateRangeInput from '../components/inputs/protocol/CreateRangeInput';
 import RoundedButton from '../components/RoundedButton';
 import iconSearch from '../assets/images/iconSearch.svg';
-import iconArrowUp from '../assets/images/iconArrowUp.svg';
-import iconArrowDown from '../assets/images/iconArrowDown.svg';
 // import iconDependency from '../assets/images/iconDependency.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
-import CreateDependencyInput from '../components/inputs/protocol/CreateDependencyInput';
-import CreateValidationInput from '../components/inputs/protocol/CreateValidationInput';
 import AddBar from '../components/Addbar';
+import CreatePage from '../components/CreatePage';
 
 const CreateProtocolStyles = `
     @media (max-width: 767px) {
@@ -170,69 +156,20 @@ function CreateProtocolPage(props) {
         [protocol]
     );
 
-    const updateGroupPlacement = useCallback(
-        (newPlacement, oldPlacement, pageIndex, groupIndex) => {
-            if (newPlacement < 1 || newPlacement > protocol.pages[pageIndex].itemGroups.length) return;
-            const newProtocol = { ...protocol };
-            if (newPlacement > oldPlacement) {
-                for (const g of newProtocol.pages[pageIndex].itemGroups)
-                    if (g.placement > oldPlacement && g.placement <= newPlacement) g.placement--;
-            } else {
-                for (const g of newProtocol.pages[pageIndex].itemGroups)
-                    if (g.placement >= newPlacement && g.placement < oldPlacement) g.placement++;
-            }
-            newProtocol.pages[pageIndex].itemGroups[groupIndex].placement = newPlacement;
-            newProtocol.pages[pageIndex].itemGroups.sort((a, b) => a.placement - b.placement);
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
-
-    const updateItemPlacement = useCallback(
-        (newPlacement, oldPlacement, pageIndex, groupIndex, itemIndex) => {
-            if (newPlacement < 1 || newPlacement > protocol.pages[pageIndex].itemGroups[groupIndex].items.length) return;
-            const newProtocol = { ...protocol };
-            if (newPlacement > oldPlacement) {
-                for (const i of newProtocol.pages[pageIndex].itemGroups[groupIndex].items)
-                    if (i.placement > oldPlacement && i.placement <= newPlacement) i.placement--;
-            } else {
-                for (const i of newProtocol.pages[pageIndex].itemGroups[groupIndex].items)
-                    if (i.placement >= newPlacement && i.placement < oldPlacement) i.placement++;
-            }
-            newProtocol.pages[pageIndex].itemGroups[groupIndex].items[itemIndex].placement = newPlacement;
-            newProtocol.pages[pageIndex].itemGroups[groupIndex].items.sort((a, b) => a.placement - b.placement);
-            const procolo = { ...newProtocol };
-            setProtocol(procolo);
-        },
-        [protocol]
-    );
-
     const insertItem = (type, page, group) => {
         const newProtocol = { ...protocol };
-        const newPlacement = newProtocol.pages[page].itemGroups[group].items.length + 1;
-        newProtocol.pages[page].itemGroups[group].items.push({ ...defaultNewInput(type), placement: newPlacement });
+        const newInput = {
+            ...defaultNewInput(
+                type,
+                Math.floor(Date.now() + Math.random() * 1000),
+                newProtocol.pages[page].itemGroups[group].items.length + 1
+            ),
+        };
+        newProtocol.pages[page].itemGroups[group].items.push(newInput);
+        console.log(newInput);
+        console.log(newProtocol);
         setProtocol(newProtocol);
     };
-
-    const updateItem = useCallback((item, page, group, index) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
-            newProtocol.pages[page].itemGroups[group].items[index] = item;
-            return newProtocol;
-        });
-    }, []);
-
-    const removeItem = useCallback(
-        (page, group, index) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].items.splice(index, 1);
-            for (const [i, item] of newProtocol.pages[page].itemGroups[group].items.entries()) {
-                if (i >= index) item.placement--;
-            }
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
 
     const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
@@ -240,6 +177,14 @@ function CreateProtocolPage(props) {
         setProtocol(newProtocol);
         setItemTarget({ page: newProtocol.pages.length - 1, group: '' });
     }, [protocol]);
+
+    const updatePage = useCallback((page, pageIndex) => {
+        setProtocol((prev) => {
+            const newProtocol = { ...prev };
+            newProtocol.pages[pageIndex] = page;
+            return newProtocol;
+        });
+    }, []);
 
     const removePage = useCallback(
         (index) => {
@@ -270,75 +215,11 @@ function CreateProtocolPage(props) {
         [protocol]
     );
 
-    const removeItemGroup = useCallback(
-        (page, index) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.splice(index, 1);
-            for (const [i, group] of newProtocol.pages[page].itemGroups.entries()) {
-                if (i >= index) group.placement--;
-            }
-            setProtocol(newProtocol);
-            if (itemTarget.group >= newProtocol.pages[page].itemGroups.length) {
-                if (newProtocol.pages[page].itemGroups.length > 0) {
-                    setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
-                } else {
-                    setItemTarget((prev) => ({ ...prev, group: '' }));
-                }
-            }
-        },
-        [protocol, itemTarget.group]
-    );
-
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
             const newProtocol = { ...protocol };
             if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies.push(defaultNewDependency());
             else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.push(defaultNewDependency());
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
-
-    const updateDependency = useCallback((dependency, pageIndex, groupIndex, dependencyIndex) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
-            if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies[dependencyIndex] = dependency;
-            else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies[dependencyIndex] = dependency;
-            return newProtocol;
-        });
-    }, []);
-
-    const removeDependency = useCallback(
-        (pageIndex, groupIndex, dependencyIndex) => {
-            const newProtocol = { ...protocol };
-            if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies.splice(dependencyIndex, 1);
-            else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.splice(dependencyIndex, 1);
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
-
-    const insertItemValidation = useCallback(
-        (page, group, item) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.push(defaultNewValidation());
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
-
-    const updateItemValidation = useCallback((validation, page, group, item, index) => {
-        setProtocol((prev) => {
-            const newProtocol = { ...prev };
-            newProtocol.pages[page].itemGroups[group].items[item].itemValidations[index] = validation;
-            return newProtocol;
-        });
-    }, []);
-
-    const removeItemValidation = useCallback(
-        (page, group, item, index) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].items[item].itemValidations.splice(index, 1);
             setProtocol(newProtocol);
         },
         [protocol]
@@ -1262,260 +1143,15 @@ function CreateProtocolPage(props) {
                                                     </select>
                                                 </div>
                                                 {protocol.pages[itemTarget.page] && (
-                                                    <div className="" key={'page-' + protocol.pages[itemTarget.page].tempId}>
-                                                        <div className="row gx-2 align-items-center mb-3">
-                                                            <div className="col-auto">
-                                                                <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">
-                                                                    Página {Number(itemTarget.page) + 1}
-                                                                </p>
-                                                            </div>
-                                                            <div className="col"></div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[197, 43, 52]}
-                                                                    onClick={() =>
-                                                                        updatePagePlacement(
-                                                                            protocol.pages[itemTarget.page].placement + 1,
-                                                                            protocol.pages[itemTarget.page].placement,
-                                                                            itemTarget.page
-                                                                        )
-                                                                    }
-                                                                    icon={iconArrowDown}
-                                                                />
-                                                            </div>
-                                                            <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[197, 43, 52]}
-                                                                    onClick={() =>
-                                                                        updatePagePlacement(
-                                                                            protocol.pages[itemTarget.page].placement - 1,
-                                                                            protocol.pages[itemTarget.page].placement,
-                                                                            itemTarget.page
-                                                                        )
-                                                                    }
-                                                                    icon={iconArrowUp}
-                                                                />
-                                                            </div>
-                                                            {/* <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[197, 43, 52]}
-                                                                    onClick={() => insertDependency(itemTarget.page)}
-                                                                    icon={iconDependency}
-                                                                />
-                                                            </div> */}
-                                                            <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[197, 43, 52]}
-                                                                    onClick={() => removePage(itemTarget.page)}
-                                                                    icon={iconTrash}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        {protocol.pages[itemTarget.page].dependencies?.map(
-                                                            (dependency, dependencyIndex) => (
-                                                                <CreateDependencyInput
-                                                                    currentDependency={dependency}
-                                                                    dependencyIndex={dependencyIndex}
-                                                                    pageIndex={itemTarget.page}
-                                                                    key={'page-dependency-' + dependency.tempId}
-                                                                    updateDependency={updateDependency}
-                                                                    removeDependency={removeDependency}
-                                                                    protocol={protocol}
-                                                                />
-                                                            )
-                                                        )}
-                                                        {protocol.pages[itemTarget.page].itemGroups[itemTarget.group] && (
-                                                            <div className="mb-3" key={'group-' + itemTarget.group}>
-                                                                <div className="row gx-2 align-items-center mb-3">
-                                                                    <div className="col-auto">
-                                                                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
-                                                                            Grupo {Number(itemTarget.group) + 1}
-                                                                        </p>
-                                                                    </div>
-                                                                    <div className="col"></div>
-                                                                    <div className="col-auto">
-                                                                        <RoundedButton
-                                                                            hsl={[197, 43, 52]}
-                                                                            onClick={() =>
-                                                                                updateGroupPlacement(
-                                                                                    protocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].placement + 1,
-                                                                                    protocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].placement,
-                                                                                    itemTarget.page,
-                                                                                    itemTarget.group
-                                                                                )
-                                                                            }
-                                                                            icon={iconArrowDown}
-                                                                        />
-                                                                    </div>
-                                                                    <div className="col-auto">
-                                                                        <RoundedButton
-                                                                            hsl={[197, 43, 52]}
-                                                                            onClick={() =>
-                                                                                updateGroupPlacement(
-                                                                                    protocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].placement - 1,
-                                                                                    protocol.pages[itemTarget.page].itemGroups[
-                                                                                        itemTarget.group
-                                                                                    ].placement,
-                                                                                    itemTarget.page,
-                                                                                    itemTarget.group
-                                                                                )
-                                                                            }
-                                                                            icon={iconArrowUp}
-                                                                        />
-                                                                    </div>
-                                                                    {/* <div className="col-auto">
-                                                                        <RoundedButton
-                                                                            hsl={[197, 43, 52]}
-                                                                            onClick={() =>
-                                                                                insertDependency(itemTarget.page, itemTarget.group)
-                                                                            }
-                                                                            icon={iconDependency}
-                                                                        />
-                                                                    </div> */}
-                                                                    <div className="col-auto">
-                                                                        <RoundedButton
-                                                                            hsl={[197, 43, 52]}
-                                                                            onClick={() =>
-                                                                                removeItemGroup(itemTarget.page, itemTarget.group)
-                                                                            }
-                                                                            icon={iconTrash}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                                {protocol.pages[itemTarget.page].itemGroups[
-                                                                    itemTarget.group
-                                                                ].dependencies?.map((dependency, dependencyIndex) => (
-                                                                    <CreateDependencyInput
-                                                                        currentDependency={dependency}
-                                                                        dependencyIndex={dependencyIndex}
-                                                                        pageIndex={itemTarget.page}
-                                                                        groupIndex={itemTarget.group}
-                                                                        key={'page-dependency-' + dependency.tempId}
-                                                                        updateDependency={updateDependency}
-                                                                        removeDependency={removeDependency}
-                                                                        protocol={protocol}
-                                                                    />
-                                                                ))}
-                                                                {protocol.pages[itemTarget.page].itemGroups[itemTarget.group].items?.map(
-                                                                    (item, itemIndex) => (
-                                                                        <div key={'item-' + item.tempId}>
-                                                                            {(() => {
-                                                                                switch (item.type) {
-                                                                                    case 'TEXTBOX':
-                                                                                        return (
-                                                                                            <CreateTextBoxInput
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                                insertItemValidation={insertItemValidation}
-                                                                                            />
-                                                                                        );
-                                                                                    case 'NUMBERBOX':
-                                                                                        return (
-                                                                                            <CreateTextBoxInput
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                isNumberBox={true}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                                insertItemValidation={insertItemValidation}
-                                                                                            />
-                                                                                        );
-                                                                                    case 'RANGE':
-                                                                                        return (
-                                                                                            <CreateRangeInput
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                            />
-                                                                                        );
-                                                                                    case 'SELECT':
-                                                                                        return (
-                                                                                            <CreateMultipleInputItens
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                                insertItemValidation={insertItemValidation}
-                                                                                            />
-                                                                                        );
-                                                                                    case 'RADIO':
-                                                                                        return (
-                                                                                            <CreateMultipleInputItens
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                                insertItemValidation={insertItemValidation}
-                                                                                            />
-                                                                                        );
-                                                                                    case 'CHECKBOX':
-                                                                                        return (
-                                                                                            <CreateMultipleInputItens
-                                                                                                currentItem={item}
-                                                                                                pageIndex={itemTarget.page}
-                                                                                                groupIndex={itemTarget.group}
-                                                                                                itemIndex={itemIndex}
-                                                                                                updateItem={updateItem}
-                                                                                                removeItem={removeItem}
-                                                                                                updateItemPlacement={updateItemPlacement}
-                                                                                                insertItemValidation={insertItemValidation}
-                                                                                            />
-                                                                                        );
-                                                                                    default:
-                                                                                        return null;
-                                                                                }
-                                                                            })()}
-                                                                            {item.itemValidations
-                                                                                ?.filter(
-                                                                                    (v) =>
-                                                                                        (item.type === 'NUMBERBOX' ||
-                                                                                            item.type === 'CHECKBOX' ||
-                                                                                            item.type === 'TEXTBOX') &&
-                                                                                        v.type !== 'MANDATORY'
-                                                                                )
-                                                                                .map((validation, validationIndex) => (
-                                                                                    <CreateValidationInput
-                                                                                        currentValidation={validation}
-                                                                                        validationIndex={validationIndex}
-                                                                                        pageIndex={itemTarget.page}
-                                                                                        groupIndex={itemTarget.group}
-                                                                                        itemIndex={itemIndex}
-                                                                                        key={'item-validation-' + validation.tempId}
-                                                                                        updateValidation={updateItemValidation}
-                                                                                        removeValidation={removeItemValidation}
-                                                                                        item={item}
-                                                                                    />
-                                                                                ))}
-                                                                        </div>
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                    <CreatePage
+                                                        key={protocol.pages[itemTarget.page].tempId}
+                                                        currentPage={protocol.pages[itemTarget.page]}
+                                                        itemTarget={itemTarget}
+                                                        updatePagePlacement={updatePagePlacement}
+                                                        removePage={removePage}
+                                                        protocol={protocol}
+                                                        updatePage={updatePage}
+                                                    />
                                                 )}
 
                                                 <div className="row justify-content-center">

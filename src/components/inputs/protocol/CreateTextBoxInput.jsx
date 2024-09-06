@@ -33,8 +33,8 @@ function CreateTextBoxInput(props) {
     const [item, setItem] = useState(currentItem);
 
     useEffect(() => {
-        updateItem(item, pageIndex, groupIndex, itemIndex);
-    }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
+        if (item !== currentItem) updateItem(item, pageIndex, groupIndex, itemIndex);
+    }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
 
     return (
         <div className="pb-4">
@@ -48,28 +48,24 @@ function CreateTextBoxInput(props) {
                     <RoundedButton
                         hsl={[190, 46, 70]}
                         icon={iconArrowDown}
-                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, groupIndex, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
                         icon={iconArrowUp}
-                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, pageIndex, groupIndex, itemIndex)}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, groupIndex, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon={iconValidation}
-                        onClick={() => insertItemValidation(pageIndex, groupIndex, itemIndex)}
-                    />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={() => insertItemValidation(groupIndex, itemIndex)} />
                 </div>
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(pageIndex, groupIndex, itemIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(groupIndex, itemIndex)} />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">
