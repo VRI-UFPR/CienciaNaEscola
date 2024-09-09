@@ -60,7 +60,7 @@ function ProtocolCarousel(props) {
                                 key={'slide-item-' + si.id}
                                 className="carousel-link d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
                             >
-                                <HomeButton title={si.title} check={false}/>
+                                <HomeButton title={si.title} />
                             </Link>
                         ))}
                     </div>
