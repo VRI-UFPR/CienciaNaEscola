@@ -7,7 +7,7 @@ function CreateValidationInput(props) {
     const [validation, setValidation] = useState(currentValidation);
 
     useEffect(() => {
-        if (validation !== currentValidation) updateValidation(validation, pageIndex, groupIndex, validationIndex);
+        if (validation !== currentValidation) updateValidation(validation, validationIndex);
     }, [validation, pageIndex, groupIndex, validationIndex, updateValidation, currentValidation]);
 
     return (

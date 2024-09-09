@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
@@ -9,6 +9,10 @@ import iconUpload from '../../../assets/images/iconUpload.svg';
 const textBoxStyles = `
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
+    }
+
+    .img-gallery{
+        max-height: 200px;
     }
 
     .bg-light-grey{
@@ -31,10 +35,27 @@ const textBoxStyles = `
 function CreateTextBoxInput(props) {
     const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement, insertItemValidation } = props;
     const [item, setItem] = useState(currentItem);
+    const galleryInputRef = useRef(null);
 
     useEffect(() => {
-        if (item !== currentItem) updateItem(item, pageIndex, groupIndex, itemIndex);
+        if (item !== currentItem) updateItem(item, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
+
+    const handleGalleryButtonClick = () => {
+        galleryInputRef.current.click();
+    };
+
+    const insertImage = (e) => {
+        const newItem = { ...item };
+        newItem.files.push(e.target.files[0]);
+        setItem(newItem);
+    };
+
+    const removeImage = (indexToRemove) => {
+        const newItem = { ...item };
+        newItem.files.splice(indexToRemove, 1);
+        setItem(newItem);
+    };
 
     return (
         <div className="pb-4">
@@ -62,7 +83,7 @@ function CreateTextBoxInput(props) {
                     <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={() => insertItemValidation(itemIndex)} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} />
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} onClick={handleGalleryButtonClick} />
                 </div>
                 <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(itemIndex)} />
@@ -124,6 +145,46 @@ function CreateTextBoxInput(props) {
                         onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
                     />
                 </div>
+                <div className="row m-0 mt-4">
+                    {item.files?.length > 0 &&
+                        item.files.map((file, i) => {
+                            return (
+                                <div
+                                    key={'item-' + item.tempId + '-image-' + file.name}
+                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
+                                        i > 2 && 'mt-2'
+                                    }`}
+                                >
+                                    <div
+                                        className={`${
+                                            item.files.length > 1 && 'ratio ratio-1x1'
+                                        } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                    >
+                                        <img
+                                            src={URL.createObjectURL(file)}
+                                            className="img-fluid object-fit-contain w-100 rounded-4"
+                                            alt="Imagem selecionada"
+                                        />
+                                        <RoundedButton
+                                            className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                            hsl={[190, 46, 70]}
+                                            icon={iconTrash}
+                                            onClick={() => removeImage(i)}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                </div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    name="imageinput"
+                    id="imageinput"
+                    style={{ display: 'none' }}
+                    onChange={insertImage}
+                    ref={galleryInputRef}
+                />
             </div>
             <style>{textBoxStyles}</style>
         </div>

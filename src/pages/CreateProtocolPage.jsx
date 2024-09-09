@@ -11,7 +11,6 @@ import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewP
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
-// import iconDependency from '../assets/images/iconDependency.svg';
 import AddBar from '../components/Addbar';
 import CreatePage from '../components/CreatePage';
 import CreateProtocolProperties from '../components/CreateProcotolProperties';
@@ -114,7 +113,7 @@ function CreateProtocolPage(props) {
     const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
 
-    const [protocol, setProtocol] = useState(defaultNewProtocol);
+    const [protocol, setProtocol] = useState(defaultNewProtocol());
     const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
     const [isLoading, setIsLoading] = useState(true);
     const [creationMode, setCreationMode] = useState('properties');

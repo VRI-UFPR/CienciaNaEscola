@@ -7,6 +7,7 @@ export const defaultNewInput = (type, tempId, placement) => {
         type: type,
         enabled: true,
         itemOptions: [],
+        files: [],
         itemValidations:
             type === 'RANGE'
                 ? [
@@ -50,7 +51,7 @@ export const defaultNewPage = (newPlacement) => ({
     tempId: Date.now() + Math.random() * 1000,
 });
 
-export const defaultNewProtocol = {
+export const defaultNewProtocol = () => ({
     title: '',
     description: '',
     enabled: true,
@@ -64,7 +65,7 @@ export const defaultNewProtocol = {
     answersViewersClassroom: [],
     appliers: [],
     pages: [],
-};
+});
 
 export const version = '2.0.159 (2bc6ade)';
 

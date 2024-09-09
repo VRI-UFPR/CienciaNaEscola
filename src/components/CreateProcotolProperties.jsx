@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from './RoundedButton';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
@@ -9,8 +8,6 @@ import iconSearch from '../assets/images/iconSearch.svg';
 
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
-
-    const { showAlert } = useContext(AlertContext);
     const { user } = useContext(AuthContext);
 
     const searchUsers = (term, target) => {

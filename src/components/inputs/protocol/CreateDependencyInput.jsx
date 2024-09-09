@@ -8,7 +8,7 @@ function CreateDependencyInput(props) {
     const isPageDependency = groupIndex === undefined;
 
     useEffect(() => {
-        if (dependency !== currentDependency) updateDependency(dependency, pageIndex, groupIndex, dependencyIndex);
+        if (dependency !== currentDependency) updateDependency(dependency, dependencyIndex);
     }, [dependency, pageIndex, groupIndex, dependencyIndex, updateDependency, currentDependency]);
 
     const getItemTargetOptions = () => {
