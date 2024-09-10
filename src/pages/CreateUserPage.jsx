@@ -309,16 +309,18 @@ function CreateUserPage(props) {
                                         }}
                                     />
                                 </div>
-                                <div className="col-5 col-lg-12">
-                                    <TextButton
-                                        className="lh-1 h-100 w-100 px-3 py-2"
-                                        hsl={[355, 78, 66]}
-                                        text="Remover"
-                                        onClick={() =>
-                                            setNewUser((prev) => ({ ...prev, profileImage: undefined, profileImageId: undefined }))
-                                        }
-                                    />
-                                </div>
+                                {newUser.profileImage && (
+                                    <div className="col-5 col-lg-12">
+                                        <TextButton
+                                            className="lh-1 h-100 w-100 px-3 py-2"
+                                            hsl={[355, 78, 66]}
+                                            text="Remover"
+                                            onClick={() =>
+                                                setNewUser((prev) => ({ ...prev, profileImage: undefined, profileImageId: undefined }))
+                                            }
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="col-12 col-lg-7 order-lg-1 d-flex flex-column mh-100 h-lg-100 p-4 py-0 pt-lg-4">
