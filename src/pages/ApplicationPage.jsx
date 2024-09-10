@@ -452,7 +452,6 @@ function ApplicationPage(props) {
                                     .map((itemGroup, itemGroupIndex) => {
                                         return (
                                             <div>
-                                                <p>Grupo de itens {itemGroupIndex + 1}</p>
                                                 {itemGroup.items.map((item) => {
                                                     switch (item.type) {
                                                         case 'RANGE':

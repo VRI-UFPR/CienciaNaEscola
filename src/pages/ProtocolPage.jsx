@@ -153,7 +153,6 @@ function ProtocolPage(props) {
                                 {protocol.pages[currentPageIndex].itemGroups.map((itemGroup, itemGroupIndex) => {
                                     return (
                                         <div>
-                                            <p className="m-0">Grupo de itens {itemGroupIndex + 1}</p>
                                             {(() =>
                                                 itemGroup.items.map((item) => {
                                                     switch (item.type) {
