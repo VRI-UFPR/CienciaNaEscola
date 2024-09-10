@@ -50,6 +50,23 @@ function ProfilePage(props) {
     const navigate = useNavigate();
     const { showSidebar = true } = props;
 
+    const localizeUserRole = (role) => {
+        switch (role) {
+            case 'ADMIN':
+                return 'Administrador';
+            case 'USER':
+                return 'Usuário';
+            case 'PUBLISHER':
+                return 'Publicador';
+            case 'APPLIER':
+                return 'Aplicador';
+            case 'COORDINATOR':
+                return 'Coordenador';
+            default:
+                return role;
+        }
+    };
+
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
@@ -183,7 +200,7 @@ function ProfilePage(props) {
                                     <div className="col">
                                         <input
                                             type="text"
-                                            value={curUser.role || ''}
+                                            value={localizeUserRole(curUser.role) || ''}
                                             disabled
                                             className="col form-control rounded-4 shadow-sm fs-5"
                                             id="role-input"
