@@ -16,7 +16,7 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate } from 'react-router-dom';
 import TextButton from '../components/TextButton';
-import logoFA from '../assets/images/logoFA.svg';
+import logoFA from '../assets/images/logoFA.png';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 import HomeQRCode from '../assets/images/HomeQRCode.png';
 import SafariShareIcon from '../assets/images/SafariShareIcon.png';
