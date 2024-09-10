@@ -96,18 +96,18 @@ function SignUpPage(props) {
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {
-            showAlert({ title: 'Falha no cadastro: preencha todos os campos', dismissible: true });
+            showAlert({ title: 'Falha no cadastro: preencha todos os campos.', dismissible: true });
         } else if (!validateEmail()) {
-            showAlert({ title: 'Falha no cadastro: email inválido', dismissible: true });
+            showAlert({ title: 'Falha no cadastro: email inválido.', dismissible: true });
         } else if (!validateName()) {
-            showAlert({ title: 'Falha no cadastro: nome inválido', dismissible: true });
+            showAlert({ title: 'Falha no cadastro: nome inválido.', dismissible: true });
         } else if (!validatePassword()) {
             showAlert({
-                title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula',
+                title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula.',
                 dismissible: true,
             });
         } else if (!validatePasswordMatch()) {
-            showAlert({ title: 'Falha no cadastro: as senhas não coincidem', dismissible: true });
+            showAlert({ title: 'Falha no cadastro: as senhas não coincidem.', dismissible: true });
             /*  } else if (!validateUsername()) {
             showAlert({ title: 'Falha no cadastro: nome de usuário inválido', dismissible: true });
         } else if (!validateInstitution()) {
@@ -123,9 +123,9 @@ function SignUpPage(props) {
                 })
                 .then((response) => {
                     if (response.data.message === 'User registered with sucess.') {
-                        showAlert({ title: 'Cadastrado com sucesso', onHide: () => navigate('/signin'), dismissible: true });
+                        showAlert({ title: 'Cadastrado com sucesso.', onHide: () => navigate('/signin'), dismissible: true });
                     } else {
-                        showAlert({ title: 'Falha no cadastro: erro no servidor', dismissible: true });
+                        showAlert({ title: 'Falha no cadastro: erro no servidor.', dismissible: true });
                     }
                 })
                 .catch((error) => {

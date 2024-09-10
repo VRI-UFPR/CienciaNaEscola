@@ -91,13 +91,19 @@ function CreateInstitutionPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar instituição. ' + error.response?.data.message || '');
+                        showAlert({
+                            title: 'Erro ao buscar instituição.',
+                            description: error.response?.data.message,
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                        });
                     });
             } else {
                 setIsLoading(false);
             }
         }
-    }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId]);
+    }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert]);
 
     const submitInstitution = (e) => {
         e.preventDefault();

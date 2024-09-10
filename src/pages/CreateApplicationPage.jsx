@@ -6,11 +6,13 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
 import SplashPage from './SplashPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 function CreateApplicationPage(props) {
     const { applicationId, protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
 
     const [application, setApplication] = useState({
         protocolId: protocolId,
@@ -73,7 +75,13 @@ function CreateApplicationPage(props) {
                             });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar aplicação. ' + error.response?.data.message || '');
+                            showAlert({
+                                title: 'Erro ao buscar aplicação.',
+                                description: error.response?.data.message,
+                                dismissHsl: [97, 43, 70],
+                                dismissText: 'Ok',
+                                dismissible: true,
+                            });
                         })
                 );
             }
@@ -95,11 +103,17 @@ function CreateApplicationPage(props) {
                         setIsLoading(false);
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar visualizadores do protocolo. ' + error.response?.data.message || '');
+                        showAlert({
+                            title: 'Erro ao buscar visualizadores do protocolo.',
+                            description: error.response?.data.message,
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                        });
                     });
             });
         }
-    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id]);
+    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id, showAlert]);
 
     const submitApplication = (e) => {
         e.preventDefault();
@@ -113,11 +127,22 @@ function CreateApplicationPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Aplicação atualizada com sucesso');
+                    showAlert({
+                        title: 'Aplicação atualizada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar aplicação. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao atualizar aplicação.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -128,11 +153,22 @@ function CreateApplicationPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Aplicação criada com sucesso');
+                    showAlert({
+                        title: 'Aplicação criada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar aplicação. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao criar aplicação.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         }
     };
@@ -145,11 +181,22 @@ function CreateApplicationPage(props) {
                 },
             })
             .then((response) => {
-                alert('Aplicação excluída com sucesso');
+                showAlert({
+                    title: 'Aplicação excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 navigate(`/dash/applications/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir aplicação.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

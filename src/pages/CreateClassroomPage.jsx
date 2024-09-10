@@ -116,7 +116,13 @@ function CreateClassroomPage(props) {
                             });
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
+                            showAlert({
+                                title: 'Erro ao buscar sala de aula.',
+                                description: error.response?.data.message,
+                                dismissHsl: [97, 43, 70],
+                                dismissText: 'Ok',
+                                dismissible: true,
+                            });
                         })
                 );
             }
@@ -132,14 +138,20 @@ function CreateClassroomPage(props) {
                         setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                     })
                     .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+                        showAlert({
+                            title: 'Erro ao buscar usuários da instituição.',
+                            description: error.response?.data.message,
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                        });
                     })
             );
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
-    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId]);
+    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId, showAlert]);
 
     const submitClassroom = (e) => {
         e.preventDefault();

@@ -319,11 +319,22 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
-                alert('Protocolo excluído com sucesso');
+                showAlert({
+                    title: 'Protocolo excluído com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 navigate(`/dash/protocols/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir protocolo. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir protocolo.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

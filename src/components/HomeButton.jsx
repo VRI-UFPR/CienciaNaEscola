@@ -1,8 +1,9 @@
-import { React } from 'react';
+import { React, useContext } from 'react';
 import CheckIcon from '../assets/images/CheckIcon.svg';
 import iconTrash from '../assets/images/iconTrash.svg';
 import iconEdit from '../assets/images/iconEdit.svg';
 import RoundedButton from './RoundedButton';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .font-barlow {
@@ -40,6 +41,7 @@ function HomeButton(props) {
         deleteFunction = () => {},
         check = false,
     } = props;
+    const { showAlert } = useContext(AlertContext);
 
     return (
         <div className="custom-btn rounded-4 row g-0 align-items-center font-barlow h-100 w-100 py-2 px-4" onClick={viewFunction}>
@@ -67,7 +69,17 @@ function HomeButton(props) {
                         size={35}
                         onClick={(e) => {
                             e.stopPropagation();
-                            deleteFunction();
+                            showAlert({
+                                title: 'Tem certeza que deseja excluir?',
+                                dismissHsl: [355, 78, 66],
+                                dismissText: 'Não',
+                                actionHsl: [97, 43, 70],
+                                actionText: 'Sim',
+                                dismissible: true,
+                                actionOnClick: () => {
+                                    deleteFunction();
+                                },
+                            });
                         }}
                         icon={iconTrash}
                     />

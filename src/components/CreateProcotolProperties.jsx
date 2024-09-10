@@ -5,10 +5,12 @@ import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import iconSearch from '../assets/images/iconSearch.svg';
+import { AlertContext } from '../contexts/AlertContext';
 
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
     const { user } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
 
     const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
@@ -56,7 +58,13 @@ function CreateProtocolProperties(props) {
                 }
             })
             .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao buscar usuários.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 
@@ -97,7 +105,13 @@ function CreateProtocolProperties(props) {
                 }
             })
             .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao buscar grupos.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 
