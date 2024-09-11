@@ -1,13 +1,8 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 import RoundedButton from '../../RoundedButton';
-
-import iconFile from '../../../assets/images/iconFile.svg';
-import iconGallery from '../../../assets/images/iconGallery.svg';
-import iconCamera from '../../../assets/images/iconCamera.svg';
-import eyeIcon from '../../../assets/images/eyeIcon.svg';
-import iconTrash from '../../../assets/images/iconTrash.svg';
 import MarkdownText from '../../MarkdownText';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .color-dark-gray {
@@ -70,7 +65,7 @@ function ImageInput(props) {
                         <div className="btn-group dropend">
                             <RoundedButton
                                 hsl={[190, 46, 70]}
-                                icon={iconFile}
+                                icon="upload_file"
                                 size={41}
                                 alt={'Selecionar imagem'}
                                 data-bs-toggle="dropdown"
@@ -85,7 +80,7 @@ function ImageInput(props) {
                                             </span>
                                         </div>
                                         <div className="col-2 p-0 ps-2">
-                                            <img src={iconGallery} alt="Galeria" className="ratio ratio-1x1 w-100"></img>
+                                            <MaterialSymbol icon="photo_library" size={32} fill color="#535353" />
                                         </div>
                                     </div>
                                 </li>
@@ -97,7 +92,7 @@ function ImageInput(props) {
                                             </span>
                                         </div>
                                         <div className="col-2 p-0 ps-2">
-                                            <img src={iconCamera} alt="Camera" className="ratio ratio-1x1 w-100"></img>
+                                            <MaterialSymbol icon="photo_camera" size={32} fill color="#535353" />
                                         </div>
                                     </div>
                                 </li>
@@ -122,7 +117,7 @@ function ImageInput(props) {
                                                 <RoundedButton
                                                     className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                                     hsl={[190, 46, 70]}
-                                                    icon={iconTrash}
+                                                    icon="delete"
                                                     onClick={() => removeImage(i)}
                                                 />
                                             </div>
@@ -161,7 +156,7 @@ function ImageInput(props) {
                 <div
                     className={`${answer.files.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 p-1 p-lg-2`}
                 >
-                    <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon={eyeIcon} onClick={toggleImageVisibility} />
+                    <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon="visibility" onClick={toggleImageVisibility} />
                 </div>
             </form>
             <style>{styles}</style>

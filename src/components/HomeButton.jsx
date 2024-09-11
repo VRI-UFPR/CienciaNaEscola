@@ -1,7 +1,5 @@
 import { React, useContext } from 'react';
 import CheckIcon from '../assets/images/CheckIcon.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
-import iconEdit from '../assets/images/iconEdit.svg';
 import RoundedButton from './RoundedButton';
 import { AlertContext } from '../contexts/AlertContext';
 
@@ -57,14 +55,13 @@ function HomeButton(props) {
                             e.stopPropagation();
                             editFunction();
                         }}
-                        icon={iconEdit}
+                        icon="edit"
                     />
                 </div>
             )}
             {allowDelete && (
                 <div className="col-auto ms-2">
                     <RoundedButton
-                        className="text-primary"
                         hsl={[355, 78, 66]}
                         size={35}
                         onClick={(e) => {
@@ -81,7 +78,7 @@ function HomeButton(props) {
                                 },
                             });
                         }}
-                        icon={iconTrash}
+                        icon="delete"
                     />
                 </div>
             )}

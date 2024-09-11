@@ -1,11 +1,5 @@
 import { React, useState, useEffect, useRef } from 'react';
-import iconTrash from '../../../assets/images/iconTrash.svg';
-import iconPlus from '../../../assets/images/iconPlus.svg';
 import RoundedButton from '../../RoundedButton';
-import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
-import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
-import iconValidation from '../../../assets/images/iconValidation.svg';
-import iconUpload from '../../../assets/images/iconUpload.svg';
 
 const styles = `
     .font-century-gothic {
@@ -132,27 +126,27 @@ function CreateMultipleInputItens(props) {
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
-                        icon={iconArrowDown}
+                        icon="keyboard_arrow_down"
                         onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
-                        icon={iconArrowUp}
+                        icon="keyboard_arrow_up"
                         onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
                     />
                 </div>
                 {item.type === 'CHECKBOX' && (
                     <div className="col-auto">
-                        <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={() => insertItemValidation(itemIndex)} />
+                        <RoundedButton hsl={[190, 46, 70]} icon="checklist" onClick={() => insertItemValidation(itemIndex)} />
                     </div>
                 )}
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} onClick={handleGalleryButtonClick} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="upload_file" onClick={handleGalleryButtonClick} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(itemIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeItem(itemIndex)} />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">
@@ -231,19 +225,19 @@ function CreateMultipleInputItens(props) {
                                 <div className="col-auto">
                                     <RoundedButton
                                         hsl={[190, 46, 70]}
-                                        icon={iconArrowDown}
+                                        icon="keyboard_arrow_down"
                                         onClick={() => updateOptionPlacement(data.placement + 1, data.placement, i)}
                                     />
                                 </div>
                                 <div className="col-auto">
                                     <RoundedButton
                                         hsl={[190, 46, 70]}
-                                        icon={iconArrowUp}
+                                        icon="keyboard_arrow_up"
                                         onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}
                                     />
                                 </div>
                                 <div className="col-auto">
-                                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeOption(i)} />
+                                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeOption(i)} />
                                 </div>
                             </div>
                             {!item.itemOptions[i] && (
@@ -260,7 +254,7 @@ function CreateMultipleInputItens(props) {
                     </div>
                 )}
                 <div className="d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconPlus} onClick={() => addOption()} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="add" onClick={() => addOption()} />
                 </div>
                 <div className="row m-0 mt-4">
                     {item.files?.length > 0 &&
@@ -285,7 +279,7 @@ function CreateMultipleInputItens(props) {
                                         <RoundedButton
                                             className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                             hsl={[190, 46, 70]}
-                                            icon={iconTrash}
+                                            icon="delete"
                                             onClick={() => removeImage(i)}
                                         />
                                     </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
 import PerfilImg from '../assets/images/blankProfile.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
@@ -8,6 +7,7 @@ import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
 import baseUrl from '../contexts/RouteContext';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .font-barlow {
@@ -85,11 +85,11 @@ function Sidebar(props) {
                     <div className="container d-flex justify-content-end p-0 erro">
                         <button
                             type="button"
-                            className="btn btn-transparent rounded-circle border-0"
+                            className="btn btn-transparent rounded-circle p-2 pb-0 m-2 border-0"
                             data-bs-dismiss="offcanvas"
                             data-bs-target="#sidebar"
                         >
-                            <img className="exit-image" src={ExitIcon} alt="Exit Sidebar Icon" />
+                            <MaterialSymbol icon="close" size={24} weight={700} fill color="#FFFFFF" />
                         </button>
                     </div>
                 )}

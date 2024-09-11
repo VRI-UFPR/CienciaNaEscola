@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconTrash from '../../../assets/images/iconTrash.svg';
 
 function CreateValidationInput(props) {
     const { currentValidation, pageIndex, groupIndex, validationIndex, updateValidation, itemIndex, removeValidation, item } = props;
@@ -19,7 +18,7 @@ function CreateValidationInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeValidation(itemIndex, validationIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeValidation(itemIndex, validationIndex)} />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">

@@ -4,7 +4,6 @@ import { serialize } from 'object-to-formdata';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
-import iconSearch from '../assets/images/iconSearch.svg';
 import { AlertContext } from '../contexts/AlertContext';
 
 function CreateProtocolProperties(props) {
@@ -274,7 +273,7 @@ function CreateProtocolProperties(props) {
                             <RoundedButton
                                 hsl={[197, 43, 52]}
                                 onClick={() => searchUsers(searchInputs.viewersUser, 'viewersUser')}
-                                icon={iconSearch}
+                                icon="search"
                             />
                         </div>
                     </div>
@@ -339,7 +338,7 @@ function CreateProtocolProperties(props) {
                             <RoundedButton
                                 hsl={[197, 43, 52]}
                                 onClick={() => searchClassrooms(searchInputs.viewersClassroom, 'viewersClassroom')}
-                                icon={iconSearch}
+                                icon="search"
                             />
                         </div>
                     </div>
@@ -415,7 +414,7 @@ function CreateProtocolProperties(props) {
                             <RoundedButton
                                 hsl={[197, 43, 52]}
                                 onClick={() => searchUsers(searchInputs.appliers, 'appliers')}
-                                icon={iconSearch}
+                                icon="search"
                             />
                         </div>
                     </div>
@@ -498,7 +497,7 @@ function CreateProtocolProperties(props) {
                             <RoundedButton
                                 hsl={[197, 43, 52]}
                                 onClick={() => searchUsers(searchInputs.answersViewersUser, 'answersViewersUser')}
-                                icon={iconSearch}
+                                icon="search"
                             />
                         </div>
                     </div>
@@ -562,7 +561,7 @@ function CreateProtocolProperties(props) {
                             <RoundedButton
                                 hsl={[197, 43, 52]}
                                 onClick={() => searchClassrooms(searchInputs.answersViewersClassroom, 'answersViewersClassroom')}
-                                icon={iconSearch}
+                                icon="search"
                             />
                         </div>
                     </div>

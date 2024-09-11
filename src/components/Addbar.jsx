@@ -1,6 +1,5 @@
 import React from 'react';
-import ExitIcon from '../assets/images/ExitSidebarIcon.svg';
-import { ReactComponent as IconPlus } from '../assets/images/iconPlus.svg';
+import { MaterialSymbol } from 'react-material-symbols';
 
 function AddBar(props) {
     const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, setItemTarget, protocol } = props;
@@ -10,11 +9,11 @@ function AddBar(props) {
             <div className="d-flex justify-content-end">
                 <button
                     type="button"
-                    className="btn btn-transparent rounded-circle border-0 d-lg-none"
+                    className="btn btn-transparent rounded-circle border-0 m-3 p-0 d-lg-none"
                     data-bs-dismiss="offcanvas"
                     data-bs-target="#addbar"
                 >
-                    <img className="exit-image" src={ExitIcon} alt="Exit Addbar Icon" />
+                    <MaterialSymbol icon="close" size={24} weight={700} fill color="#FFFFFF" />
                 </button>
             </div>
             <div className="d-flex bg-transparent flex-column justify-content-center h-100">
@@ -26,8 +25,8 @@ function AddBar(props) {
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={insertPage}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Nova página</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Nova página</span>
                     </button>
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
                     <button
@@ -35,16 +34,16 @@ function AddBar(props) {
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItemGroup(pageIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Novo grupo</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Novo grupo</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertDependency(pageIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
                     </button>
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
                     <button
@@ -52,56 +51,56 @@ function AddBar(props) {
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Caixa de texto</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Caixa de texto</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('NUMBERBOX', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Caixa numérica</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Caixa numérica</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('SELECT', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Lista suspensa</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Lista suspensa</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('RADIO', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Seleção única</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Seleção única</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Múltipla escolha</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Múltipla escolha</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('RANGE', pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Intervalo numérico</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Intervalo numérico</span>
                     </button>
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0"
                         onClick={() => insertDependency(pageIndex, groupIndex)}
                     >
-                        <IconPlus className="icon-plus" />
-                        <span className="fs-6 fw-medium lh-1 ps-3 text-nowrap">Dependência</span>
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
                     </button>
                 </div>
                 <div className="w-100 mt-2 px-3">

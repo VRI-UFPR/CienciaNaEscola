@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import RoundedButton from './RoundedButton';
-import iconArrowDown from '../assets/images/iconArrowDown.svg';
-import iconArrowUp from '../assets/images/iconArrowUp.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
 import CreateDependencyInput from './inputs/protocol/CreateDependencyInput';
 import CreateTextBoxInput from './inputs/protocol/CreateTextBoxInput';
 import CreateRangeInput from './inputs/protocol/CreateRangeInput';
@@ -109,18 +106,18 @@ function CreateItemGroup(props) {
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
-                        icon={iconArrowDown}
+                        icon="keyboard_arrow_down"
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
-                        icon={iconArrowUp}
+                        icon="keyboard_arrow_up"
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removeItemGroup(itemTarget.group)} icon={iconTrash} />
+                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removeItemGroup(itemTarget.group)} icon="delete" />
                 </div>
             </div>
             {group.dependencies?.map((dependency, dependencyIndex) => (

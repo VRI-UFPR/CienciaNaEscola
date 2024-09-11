@@ -1,7 +1,5 @@
 import React from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconFile from '../../../assets/images/iconFile.svg';
-import iconTrash from '../../../assets/images/iconTrash.svg';
 
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
@@ -57,8 +55,8 @@ function SubForm(props) {
                     <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Subformulário</h1>
                 </div>
                 <div className="col d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
-                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={onInputRemove} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="upload_file" />
+                    <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon="delete" onClick={onInputRemove} />
                 </div>
             </div>
             <div className="row form-check form-switch pb-3 m-0 ms-2">

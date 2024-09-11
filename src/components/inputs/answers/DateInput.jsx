@@ -1,5 +1,5 @@
-import { React, useCallback, useEffect } from 'react';
-import iconDate from '../../../assets/images/iconDate.svg';
+import { React, useCallback, useEffect, useRef, useState } from 'react';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .font-barlow {
@@ -33,6 +33,20 @@ const styles = `
 
 function DateInput(props) {
     const { onAnswerChange, item, answer, disabled } = props;
+    const iconContainerRef = useRef(null);
+    const [iconSize, setIconSize] = useState(0);
+
+    const updateIconSize = useCallback(() => {
+        setIconSize(iconContainerRef.current.offsetWidth);
+    }, []);
+
+    useEffect(() => {
+        updateIconSize();
+        window.addEventListener('resize', updateIconSize);
+        return () => {
+            window.removeEventListener('resize', updateIconSize);
+        };
+    }, [updateIconSize]);
 
     const updateAnswer = useCallback(
         (newAnswer) => {
@@ -55,8 +69,8 @@ function DateInput(props) {
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div className="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
-                        <img src={iconDate} alt="Ícone de calendário" />
+                    <div className="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto" ref={iconContainerRef}>
+                        <MaterialSymbol icon="calendar_month" size={iconSize} fill color="#FFFFFF" />
                     </div>
                 </div>
                 <div className="col p-3">
