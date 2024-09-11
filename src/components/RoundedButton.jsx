@@ -57,7 +57,7 @@ function RoundedButton(props) {
             onClick={onClick}
             disabled={disabled}
         >
-            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill color={color} grade={-25} weight={600} />
+            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill color={color} grade={200} weight={400} />
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
         </button>
     );
