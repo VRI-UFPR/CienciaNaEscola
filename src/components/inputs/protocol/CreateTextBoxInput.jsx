@@ -78,9 +78,6 @@ function CreateTextBoxInput(props) {
                     <RoundedButton hsl={[190, 46, 70]} icon="checklist" onClick={() => insertItemValidation(itemIndex)} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="upload_file" onClick={handleGalleryButtonClick} />
-                </div>
-                <div className="col-auto">
                     <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeItem(itemIndex)} />
                 </div>
             </div>
@@ -114,41 +111,35 @@ function CreateTextBoxInput(props) {
                     <label htmlFor="question" className="form-label fs-5 fw-medium">
                         Pergunta
                     </label>
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="question"
-                        value={item.text || ''}
-                        aria-describedby="questionHelp"
-                        onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
-                    />
+                    <div className="row gx-2 align-items-end">
+                        <div className="col">
+                            <input
+                                type="text"
+                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                id="question"
+                                value={item.text || ''}
+                                aria-describedby="questionHelp"
+                                onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                            />
+                        </div>
+                        <div className="col-auto">
+                            <RoundedButton hsl={[190, 46, 70]} size={32} icon="add_photo_alternate" onClick={handleGalleryButtonClick} />
+                        </div>
+                    </div>
+
                     {!item.text && (
                         <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                             *Este campo é obrigatório.
                         </div>
                     )}
                 </div>
-                <div>
-                    <label htmlFor="description" className="form-label fs-5 fw-medium">
-                        Descrição
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="description"
-                        value={item.description || ''}
-                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
-                    />
-                </div>
-                <div className="row m-0 mt-4">
-                    {item.files?.length > 0 &&
-                        item.files.map((file, i) => {
+                {item.files?.length > 0 && (
+                    <div className="row mb-3 mt-4">
+                        {item.files.map((file, i) => {
                             return (
                                 <div
                                     key={'item-' + item.tempId + '-image-' + file.name}
-                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
-                                        i > 2 && 'mt-2'
-                                    }`}
+                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                 >
                                     <div
                                         className={`${
@@ -163,6 +154,7 @@ function CreateTextBoxInput(props) {
                                         <RoundedButton
                                             className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                             hsl={[190, 46, 70]}
+                                            size={32}
                                             icon="delete"
                                             onClick={() => removeImage(i)}
                                         />
@@ -170,6 +162,19 @@ function CreateTextBoxInput(props) {
                                 </div>
                             );
                         })}
+                    </div>
+                )}
+                <div>
+                    <label htmlFor="description" className="form-label fs-5 fw-medium">
+                        Descrição
+                    </label>
+                    <input
+                        type="text"
+                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        id="description"
+                        value={item.description || ''}
+                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
+                    />
                 </div>
                 <input
                     type="file"
