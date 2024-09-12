@@ -2,6 +2,12 @@ import { Tooltip } from 'bootstrap';
 import React, { useEffect } from 'react';
 import { MaterialSymbol } from 'react-material-symbols';
 
+const style = `
+    .btn-addbar:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+`;
+
 function AddBar(props) {
     const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, setItemTarget, protocol } = props;
 
@@ -28,7 +34,7 @@ function AddBar(props) {
             <div className="d-flex justify-content-end">
                 <button
                     type="button"
-                    className="btn btn-transparent rounded-circle border-0 m-3 p-0 d-lg-none"
+                    className="btn btn-addbar btn-transparent rounded-circle border-0 m-3 p-0 d-lg-none"
                     data-bs-dismiss="offcanvas"
                     data-bs-target="#addbar"
                 >
@@ -36,12 +42,12 @@ function AddBar(props) {
                 </button>
             </div>
             <div className="d-flex bg-transparent flex-column justify-content-center h-100">
-                <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 px-4 py-3">
+                <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 p-0 py-3">
                     <h1 className="font-century-gothic fs-3 fw-bold text-white mb-1">Adicionar</h1>
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao protocolo</h1>
                     <button
                         type="button"
-                        className="btn add-page-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-page-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={insertPage}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-page-tooltip"
@@ -53,7 +59,7 @@ function AddBar(props) {
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
                     <button
                         type="button"
-                        className="btn add-group-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-group-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItemGroup(pageIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-group-tooltip"
@@ -64,7 +70,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-page-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-page-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertDependency(pageIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-page-dependency-tooltip"
@@ -76,7 +82,7 @@ function AddBar(props) {
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
                     <button
                         type="button"
-                        className="btn add-textbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-textbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-textbox-tooltip"
@@ -87,7 +93,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-numberbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-numberbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('NUMBERBOX', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-numberbox-tooltip"
@@ -98,7 +104,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-select-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-select-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('SELECT', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-select-tooltip"
@@ -109,7 +115,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-radio-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-radio-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('RADIO', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-radio-tooltip"
@@ -120,7 +126,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-checkbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-checkbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-checkbox-tooltip"
@@ -131,7 +137,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-range-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn btn-addbar rounded-0 add-range-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('RANGE', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-range-tooltip"
@@ -142,7 +148,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0"
+                        className="btn btn-addbar rounded-0 add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0 px-4"
                         onClick={() => insertDependency(pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-group-dependency-tooltip"
@@ -185,6 +191,7 @@ function AddBar(props) {
                     </select>
                 </div>
             </div>
+            <style>{style}</style>
         </div>
     );
 }
