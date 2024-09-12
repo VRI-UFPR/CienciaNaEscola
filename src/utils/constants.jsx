@@ -23,7 +23,7 @@ export const defaultNewValidation = () => ({
     type: '',
     argument: '',
     customMessage: '',
-    tempId: Date.now() + Math.random() * 1000,
+    tempId: Math.floor(Date.now() + Math.random() * 1000),
 });
 
 export const defaultNewDependency = () => ({
@@ -31,7 +31,7 @@ export const defaultNewDependency = () => ({
     argument: '',
     itemTempId: '',
     customMessage: '',
-    tempId: Date.now() + Math.random() * 1000,
+    tempId: Math.floor(Date.now() + Math.random() * 1000),
 });
 
 export const defaultNewItemGroup = (newPlacement) => ({
@@ -40,7 +40,7 @@ export const defaultNewItemGroup = (newPlacement) => ({
     items: [],
     dependencies: [],
     placement: newPlacement,
-    tempId: Date.now() + Math.random() * 1000,
+    tempId: Math.floor(Date.now() + Math.random() * 1000),
 });
 
 export const defaultNewPage = (newPlacement) => ({
@@ -48,7 +48,7 @@ export const defaultNewPage = (newPlacement) => ({
     itemGroups: [],
     dependencies: [],
     placement: newPlacement,
-    tempId: Date.now() + Math.random() * 1000,
+    tempId: Math.floor(Date.now() + Math.random() * 1000),
 });
 
 export const defaultNewProtocol = () => ({

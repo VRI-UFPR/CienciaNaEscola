@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import CreateDependencyInput from '../components/inputs/protocol/CreateDependencyInput';
 import RoundedButton from './RoundedButton';
 import CreateItemGroup from './CreateItemGroup';
+import { Tooltip } from 'bootstrap';
 
 function CreatePage(props) {
     const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage } = props;
@@ -12,6 +13,19 @@ function CreatePage(props) {
     useEffect(() => {
         if (page !== currentPage) updatePage(page, itemTarget.page);
     }, [page, itemTarget.page, updatePage, currentPage]);
+
+    useEffect(() => {
+        const tooltipList = [];
+        if (page.tempId) {
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-down-tooltip`));
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-up-tooltip`));
+            tooltipList.push(new Tooltip(`.delete-page-${page.tempId}-tooltip`));
+        }
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, [page.tempId]);
 
     const updateGroupPlacement = useCallback(
         (newPlacement, oldPlacement, groupIndex) => {
@@ -78,6 +92,10 @@ function CreatePage(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement + 1, page.placement, itemTarget.page)}
                         icon="keyboard_arrow_down"
+                        className={`move-page-${page.tempId}-down-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`move-page-${page.tempId}-down-tooltip`}
+                        data-bs-title="Mover a página uma posição abaixo na ordem das páginas do protocolo."
                     />
                 </div>
                 <div className="col-auto">
@@ -85,10 +103,22 @@ function CreatePage(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement - 1, page.placement, itemTarget.page)}
                         icon="keyboard_arrow_up"
+                        className={`move-page-${page.tempId}-up-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`move-page-${page.tempId}-up-tooltip`}
+                        data-bs-title="Mover a página uma posição acima na ordem das páginas do protocolo."
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removePage(itemTarget.page)} icon="delete" />
+                    <RoundedButton
+                        hsl={[197, 43, 52]}
+                        onClick={() => removePage(itemTarget.page)}
+                        icon="delete"
+                        className={`delete-page-${page.tempId}-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`delete-page-${page.tempId}-tooltip`}
+                        data-bs-title="Remover a página do protocolo."
+                    />
                 </div>
             </div>
             {page.dependencies?.map((dependency, dependencyIndex) => (
@@ -116,7 +146,8 @@ function CreatePage(props) {
             {!currentGroup && (
                 <div className="bg-light-grey rounded-4 p-4">
                     <p className="font-barlow fw-medium text-center fs-5 m-0">
-                        Nenhum grupo selecionado. Selecione ou crie um por meio da aba Adicionar.
+                        Nenhum grupo selecionado. Através da aba Adicionar, crie um novo grupo com o botão "Novo grupo" ou utilize os
+                        seletores na parte inferior para selecionar um grupo existente.
                     </p>
                 </div>
             )}

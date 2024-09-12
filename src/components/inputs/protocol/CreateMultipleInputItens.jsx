@@ -1,5 +1,7 @@
 import { React, useState, useEffect, useRef } from 'react';
 import RoundedButton from '../../RoundedButton';
+import { MaterialSymbol } from 'react-material-symbols';
+import { Tooltip } from 'bootstrap';
 
 const styles = `
     .font-century-gothic {
@@ -60,6 +62,25 @@ function CreateMultipleInputItens(props) {
     useEffect(() => {
         if (item !== currentItem) updateItem(item, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
+
+    useEffect(() => {
+        const tooltipList = [];
+        if (item.tempId) {
+            tooltipList.push(new Tooltip('.move-item-' + item.tempId + '-down-tooltip'));
+            tooltipList.push(new Tooltip('.move-item-' + item.tempId + '-up-tooltip'));
+            if (item.type === 'CHECKBOX') tooltipList.push(new Tooltip('.add-validation-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.delete-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.question-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.description-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.mandatory-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.upload-image-' + item.tempId + '-tooltip'));
+            tooltipList.push(new Tooltip('.add-option-' + item.tempId + '-tooltip'));
+        }
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, [item.tempId, item.type]);
 
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
@@ -128,6 +149,10 @@ function CreateMultipleInputItens(props) {
                         hsl={[190, 46, 70]}
                         icon="keyboard_arrow_down"
                         onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
+                        data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
+                        className={'move-item-' + item.tempId + '-down-tooltip'}
                     />
                 </div>
                 <div className="col-auto">
@@ -135,15 +160,35 @@ function CreateMultipleInputItens(props) {
                         hsl={[190, 46, 70]}
                         icon="keyboard_arrow_up"
                         onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
+                        data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
+                        className={'move-item-' + item.tempId + '-up-tooltip'}
                     />
                 </div>
                 {item.type === 'CHECKBOX' && (
                     <div className="col-auto">
-                        <RoundedButton hsl={[190, 46, 70]} icon="checklist" onClick={() => insertItemValidation(itemIndex)} />
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon="checklist"
+                            onClick={() => insertItemValidation(itemIndex)}
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
+                            data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
+                            className={'add-validation-' + item.tempId + '-tooltip'}
+                        />
                     </div>
                 )}
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeItem(itemIndex)} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon="delete"
+                        onClick={() => removeItem(itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
+                        data-bs-title="Remover o item do grupo."
+                        className={'delete-' + item.tempId + '-tooltip'}
+                    />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">
@@ -167,15 +212,37 @@ function CreateMultipleInputItens(props) {
                         })
                     }
                 />
-                <label className="form-check-label font-barlow fw-medium" htmlFor="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
+                    data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
+                    className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                />
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
-                    <label htmlFor="question" className="form-label fs-5 fw-medium">
+                    <label htmlFor="question" className="form-label fs-5 fw-medium me-2">
                         Pergunta
                     </label>
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'question-' + item.tempId + '-tooltip'}
+                        data-bs-title="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
+                        className={'bg-steel-blue question-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                    />
                     <div className="row gx-2 align-items-end">
                         <div className="col">
                             <input
@@ -188,7 +255,16 @@ function CreateMultipleInputItens(props) {
                             />
                         </div>
                         <div className="col-auto">
-                            <RoundedButton hsl={[190, 46, 70]} size={32} icon="add_photo_alternate" onClick={handleGalleryButtonClick} />
+                            <RoundedButton
+                                hsl={[190, 46, 70]}
+                                size={32}
+                                icon="add_photo_alternate"
+                                onClick={handleGalleryButtonClick}
+                                data-bs-toggle="tooltip"
+                                data-bs-custom-class={'upload-image-' + item.tempId + '-tooltip'}
+                                data-bs-title="Adicione imagens ao enunciado da pergunta."
+                                className={'upload-image-' + item.tempId + '-tooltip'}
+                            />
                         </div>
                     </div>
                     {!item.text && (
@@ -229,9 +305,20 @@ function CreateMultipleInputItens(props) {
                     </div>
                 )}
                 <div className="mb-3">
-                    <label htmlFor="description" className="form-label fs-5 fw-medium">
+                    <label htmlFor="description" className="form-label fs-5 fw-medium me-2">
                         Descrição
                     </label>
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'description-' + item.tempId + '-tooltip'}
+                        data-bs-title="Texto que descreva outros detalhes da pergunta. Suporta Markdown com até 3000 caracteres."
+                        className={'bg-steel-blue description-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                    />
                     <input
                         type="text"
                         className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
@@ -291,7 +378,16 @@ function CreateMultipleInputItens(props) {
                     </div>
                 )}
                 <div className="d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} size={32} icon="forms_add_on" onClick={() => addOption()} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        size={32}
+                        icon="forms_add_on"
+                        onClick={() => addOption()}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'add-option-' + item.tempId + '-tooltip'}
+                        data-bs-title="Adicionar uma nova opção ao item."
+                        className={'bg-steel-blue add-option-' + item.tempId + '-tooltip'}
+                    />
                 </div>
                 <input
                     type="file"

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
+import { MaterialSymbol } from 'react-material-symbols';
+import { Tooltip } from 'bootstrap';
 
 function CreateDependencyInput(props) {
     const { currentDependency, pageIndex, groupIndex, dependencyIndex, updateDependency, removeDependency, protocol } = props;
@@ -10,7 +12,7 @@ function CreateDependencyInput(props) {
         if (dependency !== currentDependency) updateDependency(dependency, dependencyIndex);
     }, [dependency, pageIndex, groupIndex, dependencyIndex, updateDependency, currentDependency]);
 
-    const getItemTargetOptions = () => {
+    const getItemTargetOptions = useCallback(() => {
         if (isPageDependency) {
             const res =
                 protocol.pages
@@ -58,7 +60,23 @@ function CreateDependencyInput(props) {
                     ) || [];
             return res;
         }
-    };
+    }, [protocol, pageIndex, groupIndex, dependency.type, isPageDependency]);
+
+    useEffect(() => {
+        const tooltipList = [];
+        if (dependency.tempId) {
+            tooltipList.push(new Tooltip(`.delete-${dependency.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.dependency-type-${dependency.tempId}-tooltip`));
+            if (getItemTargetOptions().length > 0) {
+                tooltipList.push(new Tooltip(`.dependency-argument-${dependency.tempId}-tooltip`));
+                tooltipList.push(new Tooltip(`.dependency-target-${dependency.tempId}-tooltip`));
+            }
+        }
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, [dependency.tempId, getItemTargetOptions]);
 
     return (
         <div className="mb-4" key={isPageDependency ? 'page-dependency-' + dependency.tempId : 'group-dependency-' + dependency.tempId}>
@@ -70,17 +88,36 @@ function CreateDependencyInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeDependency(dependencyIndex)} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon="delete"
+                        onClick={() => removeDependency(dependencyIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'delete-' + dependency.tempId + '-tooltip'}
+                        data-bs-title={'Remover a dependência ' + (isPageDependency ? 'da página.' : 'do grupo.')}
+                        className={'delete-' + dependency.tempId + '-tooltip'}
+                    />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
                     <label
-                        className="form-label fs-5 fw-medium"
+                        className="form-label fs-5 fw-medium me-2"
                         htmlFor={(isPageDependency ? 'page-dependency-type-' : 'group-dependency-type') + dependency.tempId}
                     >
                         Tipo de dependência
                     </label>
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'dependency-type-' + dependency.tempId + '-tooltip'}
+                        data-bs-title="Qual tipo de condição deve ser atendida para que a dependência seja válida."
+                        className={'bg-steel-blue dependency-type-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
+                    />
                     <select
                         className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
                         id="group-dependency-type"
@@ -110,11 +147,22 @@ function CreateDependencyInput(props) {
                 {getItemTargetOptions().length > 0 && (
                     <div className="mb-3">
                         <label
-                            className="form-label fs-5 fw-medium"
+                            className="form-label fs-5 fw-medium me-2"
                             htmlFor={(isPageDependency ? 'page-dependency-argument-' : 'group-dependency-argument') + dependency.tempId}
                         >
                             Argumento
                         </label>
+                        <MaterialSymbol
+                            icon="question_mark"
+                            size={13}
+                            weight={700}
+                            fill
+                            color="#FFFFFF"
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'dependency-argument-' + dependency.tempId + '-tooltip'}
+                            data-bs-title="Dado o tipo de dependência, qual é o valor, qualidade ou quantidade que deve ser atendido."
+                            className={'bg-steel-blue dependency-argument-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
+                        />
                         <input
                             className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                             id="page-dependency-argument"
@@ -133,11 +181,22 @@ function CreateDependencyInput(props) {
                 {getItemTargetOptions().length > 0 && (
                     <div className="mb-3">
                         <label
-                            className="form-label fs-5 fw-medium"
+                            className="form-label fs-5 fw-medium me-2"
                             htmlFor={(isPageDependency ? 'page-dependency-target-' : 'group-dependency-target') + dependency.tempId}
                         >
                             Alvo da dependência
                         </label>
+                        <MaterialSymbol
+                            icon="question_mark"
+                            size={13}
+                            weight={700}
+                            fill
+                            color="#FFFFFF"
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'dependency-target-' + dependency.tempId + '-tooltip'}
+                            data-bs-title="Qual item deverá atender a condição da dependência."
+                            className={'bg-steel-blue dependency-target-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
+                        />
                         <select
                             className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
                             id="page-dependency-target"

@@ -1,8 +1,27 @@
-import React from 'react';
+import { Tooltip } from 'bootstrap';
+import React, { useEffect } from 'react';
 import { MaterialSymbol } from 'react-material-symbols';
 
 function AddBar(props) {
     const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, setItemTarget, protocol } = props;
+
+    useEffect(() => {
+        const tooltipList = [];
+        tooltipList.push(new Tooltip('.add-page-tooltip'));
+        tooltipList.push(new Tooltip('.add-group-tooltip'));
+        tooltipList.push(new Tooltip('.add-page-dependency-tooltip'));
+        tooltipList.push(new Tooltip('.add-textbox-tooltip'));
+        tooltipList.push(new Tooltip('.add-numberbox-tooltip'));
+        tooltipList.push(new Tooltip('.add-select-tooltip'));
+        tooltipList.push(new Tooltip('.add-radio-tooltip'));
+        tooltipList.push(new Tooltip('.add-checkbox-tooltip'));
+        tooltipList.push(new Tooltip('.add-range-tooltip'));
+        tooltipList.push(new Tooltip('.add-group-dependency-tooltip'));
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, []);
 
     return (
         <div className="bg-transparent d-flex flex-column h-100">
@@ -22,8 +41,11 @@ function AddBar(props) {
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao protocolo</h1>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-page-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={insertPage}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-page-tooltip"
+                        data-bs-title="Uma página organiza grupos de itens e define a paginação que o usuário respondendo o protocolo verá. O respondente poderá navegar entre as páginas do protocolo sequencialmente. A submissão sempre ocorrerá na última página."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Nova página</span>
@@ -31,16 +53,22 @@ function AddBar(props) {
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-group-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItemGroup(pageIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-group-tooltip"
+                        data-bs-title="Um grupo organiza itens dentro de uma página. O usuário respondendo o protocolo não verá os grupos diretamente, mas este é útil para definir condicionais e repetições dentro de uma mesma página."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Novo grupo</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-page-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertDependency(pageIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-page-dependency-tooltip"
+                        data-bs-title="Uma dependência define condições para que a página seja mostrada para o usuário que está respondendo: uma resposta anterior específica, uma opção específica selecionada, dentre outras."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
@@ -48,56 +76,77 @@ function AddBar(props) {
                     <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-textbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-textbox-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma caixa de texto para ser preenchida manualmente com texto escrito."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Caixa de texto</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-numberbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('NUMBERBOX', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-numberbox-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma caixa de texto para ser preenchida manualmente com um número."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Caixa numérica</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-select-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('SELECT', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-select-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma lista dropdown de opções para que seja selecionada uma única."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Lista suspensa</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-radio-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('RADIO', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-radio-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma lista de botões de opção para que seja selecionado um único."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Seleção única</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-checkbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-checkbox-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma lista de caixas de seleção para que sejam selecionadas uma ou mais."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Múltipla escolha</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        className="btn add-range-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
                         onClick={() => insertItem('RANGE', pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-range-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como uma barra horizontal deslizante para que seja selecionado um valor numérico dentro de um intervalo."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Intervalo numérico</span>
                     </button>
                     <button
                         type="button"
-                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0"
+                        className="btn add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0"
                         onClick={() => insertDependency(pageIndex, groupIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class="add-group-dependency-tooltip"
+                        data-bs-title="Uma dependência define condições para que o grupo seja mostrado para o usuário que está respondendo: uma resposta anterior específica, uma opção específica selecionada, dentre outras."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
