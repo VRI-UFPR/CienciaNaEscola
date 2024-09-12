@@ -20,7 +20,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
 import Alert from '../components/Alert';
-import logoFA from '../assets/images/logoFA.svg';
+import logoFA from '../assets/images/logoFA.png';
 import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 
