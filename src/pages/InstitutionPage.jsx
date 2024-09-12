@@ -64,35 +64,38 @@ function InstitutionPage(props) {
     const { institutionId } = useParams();
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
-
     const [searchedUsers, setSearchedUsers] = useState([]);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
-
     const [VCSearchInput, setVCSearchInput] = useState('');
     const [VUSearchInput, setVUSearchInput] = useState('');
 
     useEffect(() => {
         if (user.status !== 'loading') {
-            if (user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+            if (user.role !== 'ADMIN' && (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar esta instituição' });
                 return;
             }
-            axios
-                .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    setInstitution(response.data.data);
-                    setSearchedUsers(response.data.data.users);
-                    setSearchedClassrooms(response.data.data.classrooms);
-                    setIsLoading(false);
-                })
-                .catch((error) => {
-                    setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' });
-                });
+            console.log(institutionId, user.institutionId);
+            if (institutionId || user.institutionId) {
+                axios
+                    .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        setInstitution(response.data.data);
+                        setSearchedUsers(response.data.data.users);
+                        setSearchedClassrooms(response.data.data.classrooms);
+                        setIsLoading(false);
+                    })
+                    .catch((error) => {
+                        setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' });
+                    });
+            } else {
+                setIsLoading(false);
+            }
         }
     }, [institutionId, user.token, user.status, user.role, user.institutionId]);
 
@@ -120,8 +123,8 @@ function InstitutionPage(props) {
                         </div>
                     </div>
                     <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
-                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                            <div>
+                        {institution && (
+                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
                                 <p className="color-steel-blue fs-5 fw-medium mb-0">Nome: {institution.name}</p>
                                 <p className="color-steel-blue fs-5 fw-medium mb-0">Tipo: {institution.type}</p>
                                 <p className="color-steel-blue fs-5 fw-medium mb-3">
@@ -212,12 +215,37 @@ function InstitutionPage(props) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+                        {!institution && (
+                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
+                                <p className="color-steel-blue fs-5 fw-medium mb-3">Você não está vinculado a nenhuma instituição</p>
+                                <div className="row d-flex justify-content-center justify-content-md-start gy-3">
+                                    <div className="col-12 col-md-6 col-xl-5">
+                                        <TextButton
+                                            text={'Criar usuário sem vínculo'}
+                                            hsl={[97, 43, 70]}
+                                            onClick={() => {
+                                                navigate('users/create');
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6 col-xl-5">
+                                        <TextButton
+                                            text={'Criar grupo sem vínculo'}
+                                            hsl={[97, 43, 70]}
+                                            onClick={() => {
+                                                navigate('classrooms/create');
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="row justify-content-center font-barlow gx-0">
                         <div className="col col-md-10 d-flex flex-column h-100 px-4">
                             <div className="row d-flex justify-content-center justify-content-md-start">
-                                {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
                                     <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton
                                             text={'Gerenciar'}

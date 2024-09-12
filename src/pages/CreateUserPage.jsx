@@ -104,7 +104,11 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+            if (
+                !isEditing &&
+                user.role !== 'ADMIN' &&
+                (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))
+            ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
             } else if (isEditing && user.role !== 'ADMIN' && user.id !== parseInt(userId)) {
@@ -137,10 +141,10 @@ function CreateUserPage(props) {
                         })
                 );
             }
-            if (user.role !== 'USER') {
+            if (user.role !== 'USER' && (institutionId || user.institutionId)) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },

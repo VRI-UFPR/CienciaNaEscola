@@ -85,7 +85,11 @@ function CreateClassroomPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+            if (
+                !isEditing &&
+                user.role !== 'ADMIN' &&
+                (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))
+            ) {
                 setError({
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para criar salas de aula nesta instituição',
@@ -94,7 +98,7 @@ function CreateClassroomPage(props) {
             } else if (
                 isEditing &&
                 user.role !== 'ADMIN' &&
-                (user.role === 'USER' || user.role === 'APPLIER' || user.institutionId !== parseInt(institutionId))
+                (user.role === 'USER' || user.role === 'APPLIER' || (institutionId && user.institutionId !== parseInt(institutionId)))
             ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta sala de aula' });
                 return;
@@ -120,21 +124,23 @@ function CreateClassroomPage(props) {
                         })
                 );
             }
-            promises.push(
-                axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
-                    })
-                    .catch((error) => {
-                        alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
-                    })
-            );
+            if (institutionId || user.institutionId) {
+                promises.push(
+                    axios
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                        })
+                        .catch((error) => {
+                            alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+                        })
+                );
+            }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
