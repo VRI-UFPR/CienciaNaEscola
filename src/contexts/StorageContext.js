@@ -150,15 +150,18 @@ export const StorageProvider = ({ children }) => {
     const storeLocalApplication = useCallback(
         (application) => {
             setLocalApplications((prev) => {
-                if (prev.find((app) => app.id === application.id)) {
-                    return prev;
-                } else {
-                    return [...prev, application];
-                }
+                return prev.map((app) => {
+                    if (app.id === application.id) {
+                        return application;
+                    } else {
+                        return app;
+                    }
+                });
             });
+            clearDBObject('applications');
             storeDBObject('applications', application);
         },
-        [storeDBObject]
+        [storeDBObject, clearDBObject]
     );
 
     const storePendingRequest = useCallback(
