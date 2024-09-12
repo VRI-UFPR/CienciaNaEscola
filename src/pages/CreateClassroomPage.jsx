@@ -10,6 +10,8 @@ import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
+import iconSearch from '../assets/images/iconSearch.svg';
+import RoundedButton from '../components/RoundedButton';
 
 const style = `
     .font-barlow {
@@ -76,7 +78,8 @@ function CreateClassroomPage(props) {
     const formRef = useRef(null);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
-    const [institutionUsers, setInstitutionUsers] = useState([]);
+    // const [institutionUsers, setInstitutionUsers] = useState([]);
+    const [searchedUsers, setSearchedUsers] = useState([]);
     const [usersSearch, setUsersSearch] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -103,6 +106,7 @@ function CreateClassroomPage(props) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta sala de aula' });
                 return;
             }
+            setClassroom((prev) => ({ ...prev, institutionId: institutionId || user.institutionId }));
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -118,34 +122,57 @@ function CreateClassroomPage(props) {
                                 name: d.name,
                                 users: d.users.map((u) => u.id),
                             });
+                            setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                         })
                         .catch((error) => {
                             alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
                         })
                 );
             }
-            if (institutionId || user.institutionId) {
-                promises.push(
-                    axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
-                        })
-                        .then((response) => {
-                            const d = response.data.data;
-                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
-                        })
-                        .catch((error) => {
-                            alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
-                        })
-                );
-            }
+            // if (institutionId || user.institutionId) {
+            //     promises.push(
+            //         axios
+            //             .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+            //                 headers: {
+            //                     Authorization: `Bearer ${user.token}`,
+            //                 },
+            //             })
+            //             .then((response) => {
+            //                 const d = response.data.data;
+            //                 setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+            //             })
+            //             .catch((error) => {
+            //                 alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+            //             })
+            //     );
+            // }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
         }
     }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId]);
+
+    const searchUsers = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newUsers = [
+                    ...d.filter((u) => !classroom.users.includes(u.id)).map(({ id, username }) => ({ id, username })),
+                    ...searchedUsers.filter((u) => classroom.users.includes(u.id)).sort((a, b) => a.username.localeCompare(b.username)),
+                ];
+                setSearchedUsers(newUsers);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
+            });
+    };
 
     const submitClassroom = (e) => {
         e.preventDefault();
@@ -165,7 +192,7 @@ function CreateClassroomPage(props) {
                         dismissText: 'Ok',
                         dismissible: true,
                         onHide: () => {
-                            navigate(`/dash/institutions/${institutionId}`);
+                            navigate(`/dash/institutions/my`);
                         },
                     });
                 })
@@ -193,7 +220,7 @@ function CreateClassroomPage(props) {
                         dismissText: 'Ok',
                         dismissible: true,
                         onHide: () => {
-                            navigate(`/dash/institutions/${institutionId}`);
+                            navigate(`/dash/institutions/my`);
                         },
                     });
                 })
@@ -223,7 +250,7 @@ function CreateClassroomPage(props) {
                     dismissText: 'Ok',
                     dismissible: true,
                     onHide: () => {
-                        navigate(`/dash/institutions/${institutionId}`);
+                        navigate(`/dash/institutions/my`);
                     },
                 });
             })
@@ -294,7 +321,7 @@ function CreateClassroomPage(props) {
                                                     Selecione os alunos da sala de aula:
                                                 </p>
                                             </div>
-                                            <div className="col-12 col-md">
+                                            <div className="col">
                                                 <input
                                                     type="text"
                                                     name="users-search"
@@ -303,44 +330,54 @@ function CreateClassroomPage(props) {
                                                     placeholder="Buscar por nome de usuário"
                                                     className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
                                                     onChange={(e) => setUsersSearch(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') {
+                                                            searchUsers(usersSearch);
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="col-auto">
+                                                <RoundedButton
+                                                    hsl={[197, 43, 52]}
+                                                    onClick={() => searchUsers(usersSearch)}
+                                                    icon={iconSearch}
                                                 />
                                             </div>
                                         </div>
                                         <div className="row gy-2 mb-3">
-                                            {institutionUsers
-                                                .filter((u) => u.username.includes(usersSearch))
-                                                .map((u) => (
-                                                    <div key={u.id} className="col-6 col-md-4 col-lg-3">
-                                                        <input
-                                                            form="classroom-form"
-                                                            type="checkbox"
-                                                            name="users"
-                                                            id={`user-${u.id}`}
-                                                            className="form-check-input bg-grey"
-                                                            value={u.id}
-                                                            checked={classroom.users.includes(u.id)}
-                                                            onChange={(e) => {
-                                                                if (e.target.checked) {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: [...prev.users, parseInt(e.target.value)],
-                                                                    }));
-                                                                } else {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: prev.users.filter((id) => id !== parseInt(e.target.value)),
-                                                                    }));
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label
-                                                            htmlFor={`user-${u.id}`}
-                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                        >
-                                                            {u.username}
-                                                        </label>
-                                                    </div>
-                                                ))}
+                                            {searchedUsers.map((u) => (
+                                                <div key={u.id} className="col-6 col-md-4 col-lg-3">
+                                                    <input
+                                                        form="classroom-form"
+                                                        type="checkbox"
+                                                        name="users"
+                                                        id={`user-${u.id}`}
+                                                        className="form-check-input bg-grey"
+                                                        value={u.id}
+                                                        checked={classroom.users.includes(u.id)}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setClassroom((prev) => ({
+                                                                    ...prev,
+                                                                    users: [...prev.users, parseInt(e.target.value)],
+                                                                }));
+                                                            } else {
+                                                                setClassroom((prev) => ({
+                                                                    ...prev,
+                                                                    users: prev.users.filter((id) => id !== parseInt(e.target.value)),
+                                                                }));
+                                                            }
+                                                        }}
+                                                    />
+                                                    <label
+                                                        htmlFor={`user-${u.id}`}
+                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                    >
+                                                        {u.username}
+                                                    </label>
+                                                </div>
+                                            ))}
                                         </div>
                                     </fieldset>
                                 </div>

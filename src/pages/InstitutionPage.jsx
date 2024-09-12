@@ -75,7 +75,6 @@ function InstitutionPage(props) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar esta instituição' });
                 return;
             }
-            console.log(institutionId, user.institutionId);
             if (institutionId || user.institutionId) {
                 axios
                     .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {

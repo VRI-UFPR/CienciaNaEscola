@@ -90,7 +90,9 @@ const appRoutes = [
             { path: 'institutions/:institutionId/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
             { path: 'institutions/my', element: <InstitutionPage /> },
             { path: 'institutions/my/users/create', element: <CreateUserPage /> },
+            { path: 'institutions/my/users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
             { path: 'institutions/my/classrooms/create', element: <CreateClassroomPage /> },
+            { path: 'institutions/my/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
         ],
     },
 ];
