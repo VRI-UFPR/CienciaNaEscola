@@ -112,7 +112,7 @@ function CreateUserPage(props) {
             ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
-            } else if (isEditing && user.role !== 'ADMIN' && user.id !== parseInt(userId)) {
+            } else if (isEditing && user.role !== 'ADMIN' && userId && user.id !== parseInt(userId)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
                 return;
             }
@@ -121,7 +121,7 @@ function CreateUserPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/user/getUser/${userId}`, {
+                        .get(`${baseUrl}api/user/getUser/${userId || user.id}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -195,7 +195,7 @@ function CreateUserPage(props) {
         const formData = serialize(newUser, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/user/updateUser/${userId}`, formData, {
+                .put(`${baseUrl}api/user/updateUser/${userId || user.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -257,7 +257,7 @@ function CreateUserPage(props) {
 
     const deleteUser = () => {
         axios
-            .delete(`${baseUrl}api/user/deleteUser/${userId}`, {
+            .delete(`${baseUrl}api/user/deleteUser/${userId || user.id}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

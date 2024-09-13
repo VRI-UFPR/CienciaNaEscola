@@ -66,7 +66,7 @@ const appRoutes = [
             { path: 'about', element: <InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'terms', element: <InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'profile', element: <ProfilePage /> },
-            { path: 'profile/:institutionId/:userId/manage', element: <CreateUserPage isEditing={true} /> },
+            { path: 'profile/manage', element: <CreateUserPage isEditing={true} /> },
             {
                 path: 'acceptTerms',
                 element: <InfosPage content={terms} showSidebar={false} showNavTogglerDesktop={false} showNavTogglerMobile={false} />,
