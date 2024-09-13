@@ -136,7 +136,7 @@ function CreateUserPage(props) {
                                 classrooms: d.classrooms.map((c) => c.id),
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
-                                institutionId: d.institution.id,
+                                institutionId: d.institution?.id,
                             });
                             setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
                         })

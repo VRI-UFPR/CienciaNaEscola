@@ -121,7 +121,7 @@ function CreateClassroomPage(props) {
                             setClassroom({
                                 name: d.name,
                                 users: d.users.map((u) => u.id),
-                                institutionId: d.institution.id,
+                                institutionId: d.institution?.id,
                             });
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                         })
