@@ -78,7 +78,7 @@ function CreateClassroomPage(props) {
     const formRef = useRef(null);
 
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
-    // const [institutionUsers, setInstitutionUsers] = useState([]);
+    const [institutionUsers, setInstitutionUsers] = useState([]);
     const [searchedUsers, setSearchedUsers] = useState([]);
     const [usersSearch, setUsersSearch] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -129,23 +129,23 @@ function CreateClassroomPage(props) {
                         })
                 );
             }
-            // if (institutionId || user.institutionId) {
-            //     promises.push(
-            //         axios
-            //             .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-            //                 headers: {
-            //                     Authorization: `Bearer ${user.token}`,
-            //                 },
-            //             })
-            //             .then((response) => {
-            //                 const d = response.data.data;
-            //                 setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
-            //             })
-            //             .catch((error) => {
-            //                 alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
-            //             })
-            //     );
-            // }
+            if (institutionId || user.institutionId) {
+                promises.push(
+                    axios
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                        })
+                        .catch((error) => {
+                            alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+                        })
+                );
+            }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
@@ -172,6 +172,16 @@ function CreateClassroomPage(props) {
             .catch((error) => {
                 alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
             });
+    };
+
+    const showInstitutionUsers = () => {
+        const newUsers = institutionUsers.filter((c) => !classroom.users.includes(c.id));
+        const concatenedUsers = [
+            ...newUsers,
+            ...searchedUsers.filter((c) => classroom.users.includes(c.id)).sort((a, b) => a.username.localeCompare(b.username)),
+        ];
+        setSearchedUsers(concatenedUsers);
+        setUsersSearch('');
     };
 
     const submitClassroom = (e) => {
@@ -315,9 +325,9 @@ function CreateClassroomPage(props) {
                                 </div>
                                 <div>
                                     <fieldset>
-                                        <div className="row gx-2 gy-0">
+                                        <div className="row gx-2 gy-0 mb-2">
                                             <div className="col-12 col-md-auto">
-                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium m-0">
                                                     Selecione os alunos da sala de aula:
                                                 </p>
                                             </div>
@@ -328,7 +338,7 @@ function CreateClassroomPage(props) {
                                                     value={usersSearch || ''}
                                                     id="users-search"
                                                     placeholder="Buscar por nome de usuário"
-                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4"
                                                     onChange={(e) => setUsersSearch(e.target.value)}
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter') {
@@ -379,6 +389,16 @@ function CreateClassroomPage(props) {
                                                 </div>
                                             ))}
                                         </div>
+                                        {(institutionId || user.institutionId) && (
+                                            <div className="mb-3">
+                                                <TextButton
+                                                    className="fs-6 w-auto p-2 py-0"
+                                                    hsl={[190, 46, 70]}
+                                                    text={`Ver usuários da instituição`}
+                                                    onClick={showInstitutionUsers}
+                                                />
+                                            </div>
+                                        )}
                                     </fieldset>
                                 </div>
                             </form>

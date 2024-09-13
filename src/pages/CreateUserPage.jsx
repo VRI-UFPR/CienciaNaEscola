@@ -95,7 +95,7 @@ function CreateUserPage(props) {
 
     const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
-    // const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
     const [classroomsSearch, setClassroomsSearch] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -144,23 +144,23 @@ function CreateUserPage(props) {
                         })
                 );
             }
-            // if (user.role !== 'USER' && (institutionId || user.institutionId)) {
-            //     promises.push(
-            //         axios
-            //             .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-            //                 headers: {
-            //                     Authorization: `Bearer ${user.token}`,
-            //                 },
-            //             })
-            //             .then((response) => {
-            //                 const d = response.data.data;
-            //                 setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
-            //             })
-            //             .catch((error) => {
-            //                 setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
-            //             })
-            //     );
-            // }
+            if (user.role !== 'USER' && (institutionId || user.institutionId)) {
+                promises.push(
+                    axios
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
+                        })
+                        .catch((error) => {
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
+                        })
+                );
+            }
             Promise.all(promises).then(() => {
                 setIsLoading(false);
             });
@@ -188,6 +188,16 @@ function CreateUserPage(props) {
             .catch((error) => {
                 alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
             });
+    };
+
+    const showInstitutionClassrooms = () => {
+        const newClassrooms = institutionClassrooms.filter((c) => !newUser.classrooms.includes(c.id));
+        const concatenedClassrooms = [
+            ...newClassrooms,
+            ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
+        ];
+        setSearchedClassrooms(concatenedClassrooms);
+        setClassroomsSearch('');
     };
 
     const submitNewUser = (e) => {
@@ -437,7 +447,7 @@ function CreateUserPage(props) {
                                 {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
                                     <div>
                                         <fieldset>
-                                            <div className="row gx-2 gy-0">
+                                            <div className="row gx-2 gy-0 mb-2">
                                                 <div className="col-12 col-md-auto">
                                                     <p className="form-label color-steel-blue fs-5 fw-medium m-0">
                                                         Selecione as salas de aula do usuário:
@@ -467,7 +477,6 @@ function CreateUserPage(props) {
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="row gy-2 mb-3">
                                                 {searchedClassrooms.map((c) => (
                                                     <div key={c.id} className="col-6 col-md-4 col-lg-3">
@@ -504,6 +513,16 @@ function CreateUserPage(props) {
                                                     </div>
                                                 ))}
                                             </div>
+                                            {(institutionId || user.institutionId) && (
+                                                <div className="mb-3">
+                                                    <TextButton
+                                                        className="fs-6 w-auto p-2 py-0"
+                                                        hsl={[190, 46, 70]}
+                                                        text={`Ver grupos da instituição`}
+                                                        onClick={showInstitutionClassrooms}
+                                                    />
+                                                </div>
+                                            )}
                                         </fieldset>
                                     </div>
                                 )}
