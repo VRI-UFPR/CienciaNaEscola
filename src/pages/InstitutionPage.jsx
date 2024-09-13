@@ -130,7 +130,7 @@ function InstitutionPage(props) {
                                     Localização: {institution.address.city}, {institution.address.state}, {institution.address.country}
                                 </p>
                                 <div className="mb-3">
-                                    <div className="row gx-2 gy-0">
+                                    <div className="row gx-2 gy-0 mb-2">
                                         <div className="col-12 col-md-auto">
                                             <p className="form-label color-steel-blue fs-5 fw-medium mb-2">Usuários na instituição:</p>
                                         </div>
@@ -172,8 +172,8 @@ function InstitutionPage(props) {
                                             ))}
                                     </div>
                                 </div>
-                                <div>
-                                    <div className="row gx-2 gy-0">
+                                <div className="mb-3">
+                                    <div className="row gx-2 gy-0 mb-2">
                                         <div className="col-12 col-md-auto">
                                             <p className="form-label color-steel-blue fs-5 fw-medium mb-2">Grupos na instituição:</p>
                                         </div>

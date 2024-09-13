@@ -136,6 +136,7 @@ function CreateUserPage(props) {
                                 classrooms: d.classrooms.map((c) => c.id),
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
+                                institutionId: d.institution.id,
                             });
                             setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
                         })
@@ -442,6 +443,26 @@ function CreateUserPage(props) {
                                             )}
                                             {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                         </select>
+                                    </div>
+                                )}
+                                {(institutionId || user.institutionId) && !isEditing && (
+                                    <div className="form-check form-switch fs-5 mb-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={newUser.institutionId === (institutionId || user.institutionId)}
+                                            onChange={(event) =>
+                                                setNewUser((prev) => ({
+                                                    ...prev,
+                                                    institutionId: event.target.checked ? institutionId || user.institutionId : undefined,
+                                                }))
+                                            }
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Pertencente à minha instituição
+                                        </label>
                                     </div>
                                 )}
                                 {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (

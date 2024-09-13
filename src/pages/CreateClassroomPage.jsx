@@ -121,6 +121,7 @@ function CreateClassroomPage(props) {
                             setClassroom({
                                 name: d.name,
                                 users: d.users.map((u) => u.id),
+                                institutionId: d.institution.id,
                             });
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
                         })
@@ -323,6 +324,26 @@ function CreateClassroomPage(props) {
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
                                     />
                                 </div>
+                                {(institutionId || user.institutionId) && (
+                                    <div className="form-check form-switch fs-5 mb-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={classroom.institutionId === (institutionId || user.institutionId)}
+                                            onChange={(event) =>
+                                                setClassroom((prev) => ({
+                                                    ...prev,
+                                                    institutionId: event.target.checked ? institutionId || user.institutionId : undefined,
+                                                }))
+                                            }
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Pertencente à minha instituição
+                                        </label>
+                                    </div>
+                                )}
                                 <div>
                                     <fieldset>
                                         <div className="row gx-2 gy-0 mb-2">
