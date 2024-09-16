@@ -313,7 +313,7 @@ function CreateProtocolPage(props) {
             const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups[group].tableColumns.push({
                 text: '',
-                placement: newProtocol.pages[page].itemGroups[group].tableColumns.length,
+                placement: newProtocol.pages[page].itemGroups[group].tableColumns.length + 1,
             });
             setProtocol(newProtocol);
         },
@@ -324,6 +324,14 @@ function CreateProtocolPage(props) {
         (page, group, index) => {
             const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups[group].tableColumns.splice(index, 1);
+
+            newProtocol.pages[page].itemGroups[group].tableColumns = newProtocol.pages[page].itemGroups[group].tableColumns.map(
+                (column, newIndex) => ({
+                    ...column,
+                    placement: newIndex + 1, // Adjust placement to reflect the new index
+                })
+            );
+
             setProtocol(newProtocol);
         },
         [protocol]
@@ -622,15 +630,15 @@ function CreateProtocolPage(props) {
                                     <button
                                         type="button"
                                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                        onClick={() => {}}
+                                        onClick={() => insertTable('RADIO_TABLE', itemTarget.page)}
                                     >
                                         <IconPlus className="icon-plus" />
-                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de escola simples</span>
+                                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de escolha simples</span>
                                     </button>
                                     <button
                                         type="button"
                                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-3 p-0"
-                                        onClick={() => {}}
+                                        onClick={() => insertTable('CHECKBOX_TABLE', itemTarget.page)}
                                     >
                                         <IconPlus className="icon-plus" />
                                         <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de múltipla escolha</span>
@@ -1565,8 +1573,44 @@ function CreateProtocolPage(props) {
                                                                     pageIndex={pageIndex}
                                                                     insertItem={insertItem}
                                                                     updateItem={updateItem}
+                                                                    removeItem={removeItem}
                                                                     insertTableColumn={insertTableColumn}
                                                                     updateTableColumn={updateTableColumn}
+                                                                    removeTableColumn={removeTableColumn}
+                                                                />
+                                                            );
+
+                                                        case 'RADIO_TABLE':
+                                                            return (
+                                                                <CreateTableInput
+                                                                    key={'group-' + groupIndex}
+                                                                    group={group}
+                                                                    page={page}
+                                                                    groupIndex={groupIndex}
+                                                                    pageIndex={pageIndex}
+                                                                    insertItem={insertItem}
+                                                                    updateItem={updateItem}
+                                                                    removeItem={removeItem}
+                                                                    insertTableColumn={insertTableColumn}
+                                                                    updateTableColumn={updateTableColumn}
+                                                                    removeTableColumn={removeTableColumn}
+                                                                />
+                                                            );
+
+                                                        case 'CHECKBOX_TABLE':
+                                                            return (
+                                                                <CreateTableInput
+                                                                    key={'group-' + groupIndex}
+                                                                    group={group}
+                                                                    page={page}
+                                                                    groupIndex={groupIndex}
+                                                                    pageIndex={pageIndex}
+                                                                    insertItem={insertItem}
+                                                                    updateItem={updateItem}
+                                                                    removeItem={removeItem}
+                                                                    insertTableColumn={insertTableColumn}
+                                                                    updateTableColumn={updateTableColumn}
+                                                                    removeTableColumn={removeTableColumn}
                                                                 />
                                                             );
 
