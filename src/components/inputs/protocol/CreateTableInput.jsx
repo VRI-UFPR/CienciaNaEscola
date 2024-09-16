@@ -91,9 +91,21 @@ function CreateTableInput(props) {
                                 <button type="button" onClick={() => insertTableColumn(pageIndex, groupIndex)}>
                                     + Coluna
                                 </button>
-                                <button type="button" onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}>
-                                    + Linha
-                                </button>
+                                {group.type === 'TEXTBOX_TABLE' && (
+                                    <button type="button" onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}>
+                                        + Linha
+                                    </button>
+                                )}
+                                {group.type === 'RADIO_TABLE' && (
+                                    <button type="button" onClick={() => insertItem('RADIO', pageIndex, groupIndex)}>
+                                        + Linha
+                                    </button>
+                                )}
+                                {group.type === 'CHECKBOX_TABLE' && (
+                                    <button type="button" onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}>
+                                        + Linha
+                                    </button>
+                                )}
                             </th>
                             {group.tableColumns?.map((column, columnIndex) => {
                                 return (
