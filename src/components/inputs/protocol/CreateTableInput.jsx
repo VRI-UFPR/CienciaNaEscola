@@ -1,4 +1,4 @@
-import React from 'react';
+import { React } from 'react';
 import RoundedButton from '../../RoundedButton';
 import iconTrash from '../../../assets/images/iconTrash.svg';
 
@@ -37,8 +37,18 @@ const createTableStyles = `
 `;
 
 function CreateTableInput(props) {
-    const { group, groupIndex, pageIndex, insertItem, updateItem, removeItem, insertTableColumn, updateTableColumn, removeTableColumn } =
-        props;
+    const {
+        group,
+        groupIndex,
+        pageIndex,
+        insertItem,
+        updateItem,
+        removeItem,
+        insertTableColumn,
+        updateTableColumn,
+        removeTableColumn,
+        removeItemGroup,
+    } = props;
 
     const changeItem = (event, itemIndex) => {
         const updatedText = event.target.value;
@@ -55,12 +65,10 @@ function CreateTableInput(props) {
         updateItem(updatedItems[itemIndex], pageIndex, groupIndex, itemIndex);
     };
 
-    console.log('🚀 ~ CreateTablePage ~ group:', group);
-
     return (
         <div className="p-4 p-lg-5">
-            <div className="table-grid overflow-auto bg-light-grey rounded-4 lh-1 w-100 p-4">
-                <div className="row justify-content-between pb-2 m-0">
+            <div className=" bg-light-grey rounded-4 lh-1 w-100 p-4">
+                <div className="row justify-content-between pb-3 m-0">
                     <div className="col d-flex justify-content-start p-0">
                         <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
                             {(() => {
@@ -80,86 +88,109 @@ function CreateTableInput(props) {
                             })()}
                         </h1>
                     </div>
-                    <div className="col d-flex justify-content-end p-0">
-                        <RoundedButton className="ms-2" hsl={[190, 46, 70]} icon={iconTrash} onClick={() => {}} />
+                    <div className="col d-flex justify-content-end align-items-center p-0">
+                        <RoundedButton
+                            className="ms-2"
+                            hsl={[190, 46, 70]}
+                            icon={iconTrash}
+                            onClick={() => {
+                                removeItemGroup(pageIndex, groupIndex);
+                            }}
+                        />
                     </div>
                 </div>
-                <table className="table table-bordered border-black">
-                    <thead>
-                        <tr>
-                            <th>
-                                <button type="button" onClick={() => insertTableColumn(pageIndex, groupIndex)}>
-                                    + Coluna
-                                </button>
-                                {group.type === 'TEXTBOX_TABLE' && (
-                                    <button type="button" onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}>
-                                        + Linha
+                <div className=" table-grid overflow-auto">
+                    <table className="table table-bordered border-black">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <button type="button" onClick={() => insertTableColumn(pageIndex, groupIndex)}>
+                                        + Coluna
                                     </button>
-                                )}
-                                {group.type === 'RADIO_TABLE' && (
-                                    <button type="button" onClick={() => insertItem('RADIO', pageIndex, groupIndex)}>
-                                        + Linha
-                                    </button>
-                                )}
-                                {group.type === 'CHECKBOX_TABLE' && (
-                                    <button type="button" onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}>
-                                        + Linha
-                                    </button>
-                                )}
-                            </th>
-                            {group.tableColumns?.map((column, columnIndex) => {
+                                    {group.type === 'TEXTBOX_TABLE' && (
+                                        <button type="button" onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}>
+                                            + Linha
+                                        </button>
+                                    )}
+                                    {group.type === 'RADIO_TABLE' && (
+                                        <button type="button" onClick={() => insertItem('RADIO', pageIndex, groupIndex)}>
+                                            + Linha
+                                        </button>
+                                    )}
+                                    {group.type === 'CHECKBOX_TABLE' && (
+                                        <button type="button" onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}>
+                                            + Linha
+                                        </button>
+                                    )}
+                                </th>
+                                {group.tableColumns?.map((column, columnIndex) => {
+                                    return (
+                                        <td key={'column-' + columnIndex}>
+                                            <div className="d-flex justify-content-between w-100">
+                                                <input
+                                                    type="text"
+                                                    className="column-input border border-0 fs-5 lh-1 w-100 p-0"
+                                                    id="question"
+                                                    value={column.text || ''}
+                                                    placeholder="Insira algum texto..."
+                                                    aria-describedby="questionHelp"
+                                                    onChange={(e) => updateTableColumn(pageIndex, groupIndex, columnIndex, e.target.value)}
+                                                />
+                                                <RoundedButton
+                                                    className="ms-2"
+                                                    hsl={[190, 46, 70]}
+                                                    icon={iconTrash}
+                                                    onClick={() => removeTableColumn(pageIndex, groupIndex, columnIndex)}
+                                                />
+                                            </div>
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {group.items?.map((item, itemIndex) => {
                                 return (
-                                    <td key={'column-' + columnIndex}>
-                                        <div className="d-flex justify-content-between w-100">
-                                            <input
-                                                type="text"
-                                                className="column-input border border-0 fs-5 lh-1 w-100 p-0"
-                                                id="question"
-                                                value={column.text || ''}
-                                                placeholder="Insira algum texto..."
-                                                aria-describedby="questionHelp"
-                                                onChange={(e) => updateTableColumn(pageIndex, groupIndex, columnIndex, e.target.value)}
-                                            />
-                                            <RoundedButton
-                                                className="ms-2"
-                                                hsl={[190, 46, 70]}
-                                                icon={iconTrash}
-                                                onClick={() => removeTableColumn(pageIndex, groupIndex, columnIndex)}
-                                            />
-                                        </div>
-                                    </td>
+                                    <tr key={'item-line-' + itemIndex}>
+                                        <td>
+                                            <div className="d-flex justify-content-between w-100">
+                                                <input
+                                                    type="text"
+                                                    className="line-input border border-0 fs-5 lh-1 w-100 p-0"
+                                                    id="question"
+                                                    value={item.text || ''}
+                                                    placeholder="Insira algum texto..."
+                                                    aria-describedby="questionHelp"
+                                                    onChange={(event) => changeItem(event, itemIndex)}
+                                                />
+                                                <RoundedButton
+                                                    className="ms-2"
+                                                    hsl={[190, 46, 70]}
+                                                    icon={iconTrash}
+                                                    onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
+                                                />
+                                            </div>
+                                        </td>
+                                        {item.itemOptions?.map((option, optionIndex) => {
+                                            return (
+                                                <td key={'option-column-' + optionIndex}>
+                                                    <div className="d-flex justify-content-center w-100">
+                                                        <input
+                                                            className={`form-check-input bg-grey`}
+                                                            type="checkbox"
+                                                            id={'option-column-' + optionIndex}
+                                                            disabled
+                                                        ></input>
+                                                    </div>
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
                                 );
                             })}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {group.items?.map((item, itemIndex) => {
-                            return (
-                                <tr key={'item-line-' + itemIndex}>
-                                    <td>
-                                        <div className="d-flex justify-content-between w-100">
-                                            <input
-                                                type="text"
-                                                className="line-input border border-0 fs-5 lh-1 w-100 p-0"
-                                                id="question"
-                                                value={item.text || ''}
-                                                placeholder="Insira algum texto..."
-                                                aria-describedby="questionHelp"
-                                                onChange={(event) => changeItem(event, itemIndex)}
-                                            />
-                                            <RoundedButton
-                                                className="ms-2"
-                                                hsl={[190, 46, 70]}
-                                                icon={iconTrash}
-                                                onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <style>{createTableStyles}</style>
         </div>

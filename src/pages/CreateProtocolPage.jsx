@@ -149,8 +149,27 @@ function CreateProtocolPage(props) {
 
     const insertItem = (type, page, group) => {
         const newProtocol = { ...protocol };
-        const newPlacement = newProtocol.pages[page].itemGroups[group].items.length + 1;
-        newProtocol.pages[page].itemGroups[group].items.push({ ...defaultNewInput(type), placement: newPlacement });
+        const groupData = newProtocol.pages[page].itemGroups[group];
+        const newPlacement = groupData.items.length + 1;
+
+        const newItem = { ...defaultNewInput(type), placement: newPlacement };
+
+        // Verificar se o grupo é do tipo TEXTBOX_TABLE, CHECKBOX_TABLE ou RADIO_TABLE
+        if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
+            const numColumns = groupData.tableColumns.length;
+
+            // Se houver colunas, adicionar n opções ao item
+            if (numColumns > 0) {
+                newItem.itemOptions = Array.from({ length: numColumns }, (_, index) => ({
+                    text: '',
+                    placement: index + 1,
+                    tempId: Date.now() + Math.random() * 1000,
+                }));
+            }
+        }
+
+        // Adicionar o item ao grupo de itens
+        groupData.items.push(newItem);
         setProtocol(newProtocol);
     };
 
@@ -300,7 +319,6 @@ function CreateProtocolPage(props) {
 
     const insertTable = useCallback(
         (type, page) => {
-            console.log('Ok');
             const newProtocol = { ...protocol };
             insertItemGroup(type, page);
             setProtocol(newProtocol);
@@ -311,30 +329,73 @@ function CreateProtocolPage(props) {
     const insertTableColumn = useCallback(
         (page, group) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].tableColumns.push({
+            const groupData = newProtocol.pages[page].itemGroups[group];
+            groupData.tableColumns.push({
                 text: '',
-                placement: newProtocol.pages[page].itemGroups[group].tableColumns.length + 1,
+                placement: groupData.tableColumns.length + 1,
             });
+            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
+                groupData.items?.map((item, itemIndex) => {
+                    const newPlacement = item.itemOptions.length + 1;
+                    const tempId = Date.now() + Math.random() * 1000;
+
+                    // Atualiza o item adicionando uma nova opção
+                    const updatedItem = {
+                        ...item,
+                        itemOptions: [...item.itemOptions, { text: '', placement: newPlacement, tempId: tempId }],
+                    };
+
+                    updateItem(updatedItem, page, group, itemIndex);
+
+                    return updatedItem;
+                });
+            }
+
             setProtocol(newProtocol);
         },
-        [protocol]
+        [protocol, updateItem]
     );
 
     const removeTableColumn = useCallback(
         (page, group, index) => {
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].tableColumns.splice(index, 1);
+            const groupData = newProtocol.pages[page].itemGroups[group];
+            groupData.tableColumns.splice(index, 1);
 
-            newProtocol.pages[page].itemGroups[group].tableColumns = newProtocol.pages[page].itemGroups[group].tableColumns.map(
-                (column, newIndex) => ({
-                    ...column,
-                    placement: newIndex + 1, // Adjust placement to reflect the new index
-                })
-            );
+            groupData.tableColumns = groupData.tableColumns.map((column, newIndex) => ({
+                ...column,
+                placement: newIndex + 1, // Adjust placement to reflect the new index
+            }));
+
+            // Verifica se o grupo é "CHECKBOX_TABLE" ou "RADIO_TABLE"
+            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
+                groupData.items?.map((item, itemIndex) => {
+                    if (item.itemOptions.length > index) {
+                        // Remove a opção do item correspondente ao índice da coluna removida
+                        const updatedItemOptions = item.itemOptions.filter((_, optionIndex) => optionIndex !== index);
+
+                        // Reajusta os placements das opções restantes
+                        const adjustedItemOptions = updatedItemOptions.map((option, newOptionIndex) => ({
+                            ...option,
+                            placement: newOptionIndex + 1,
+                        }));
+
+                        const updatedItem = {
+                            ...item,
+                            itemOptions: adjustedItemOptions,
+                        };
+
+                        updateItem(updatedItem, page, group, itemIndex);
+
+                        return updatedItem;
+                    }
+                    return item;
+                });
+            }
 
             setProtocol(newProtocol);
         },
-        [protocol]
+        [protocol, updateItem]
     );
 
     const updateTableColumn = useCallback(
@@ -1577,6 +1638,7 @@ function CreateProtocolPage(props) {
                                                                     insertTableColumn={insertTableColumn}
                                                                     updateTableColumn={updateTableColumn}
                                                                     removeTableColumn={removeTableColumn}
+                                                                    removeItemGroup={removeItemGroup}
                                                                 />
                                                             );
 
@@ -1594,6 +1656,7 @@ function CreateProtocolPage(props) {
                                                                     insertTableColumn={insertTableColumn}
                                                                     updateTableColumn={updateTableColumn}
                                                                     removeTableColumn={removeTableColumn}
+                                                                    removeItemGroup={removeItemGroup}
                                                                 />
                                                             );
 
@@ -1611,6 +1674,7 @@ function CreateProtocolPage(props) {
                                                                     insertTableColumn={insertTableColumn}
                                                                     updateTableColumn={updateTableColumn}
                                                                     removeTableColumn={removeTableColumn}
+                                                                    removeItemGroup={removeItemGroup}
                                                                 />
                                                             );
 
