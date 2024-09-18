@@ -74,6 +74,7 @@ function InstallPage(props) {
     const isAndroid = /android/i.test(navigator.userAgent || navigator.vendor || window.opera);
     const isIos = /iphone|ipod|ipad/i.test(navigator.userAgent || navigator.vendor || window.opera);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const [isIOSInstructions, setIsIOSInstructions] = useState(false);
 
     const [installPrompt, setInstallPrompt] = useState(null);
 
@@ -111,7 +112,7 @@ function InstallPage(props) {
                 </div>
                 <div className="d-flex flex-grow-1 flex-column align-items-center w-100">
                     <span className="text-center fw-medium lh-sm fs-5 w-50 my-4">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
-                    {isAndroid && installPrompt && (
+                    {isAndroid && installPrompt && !isIOSInstructions && (
                         <div className="d-flex flex-column align-items-center w-100">
                             <p className="text-center fw-medium lh-sm fs-6 mx-4 mb-4">
                                 As funcionalidades do app só estão disponíveis após a instalação. Clique no botão abaixo para instalar.
@@ -130,7 +131,7 @@ function InstallPage(props) {
                             </div>
                         </div>
                     )}
-                    {isAndroid && !installPrompt && (
+                    {isAndroid && !installPrompt && !isIOSInstructions && (
                         <div className="d-flex flex-column align-items-center w-100 mx-4">
                             <p className="text-center fw-medium lh-sm fs-6 mb-4">
                                 As funcionalidades do app só estão disponíveis após a instalação. Aguarde para instalar.
@@ -138,9 +139,22 @@ function InstallPage(props) {
                             <div className="spinner-border text-secondary spinner-splash mb-4" role="status">
                                 <span className="sr-only"></span>
                             </div>
+                            <div className="row justify-content-center w-75 g-0 mb-4">
+                                <div className="col-12 col-lg-6">
+                                    <TextButton
+                                        hsl={[97, 43, 70]}
+                                        text="Instruções para IOS"
+                                        className="rounded-pill"
+                                        type="button"
+                                        onClick={() => {
+                                            setIsIOSInstructions(true);
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     )}
-                    {isIos && (
+                    {(isIos || isIOSInstructions) && (
                         <div className="d-flex flex-column align-items-center w-100 mx-4">
                             <p className="text-center fw-medium lh-sm fs-6">
                                 As funcionalidades do app só estão disponíveis após a instalação. Instale conforme as instruções abaixo.
