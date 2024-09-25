@@ -10,8 +10,8 @@ import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
-import iconSearch from '../assets/images/iconSearch.svg';
 import RoundedButton from '../components/RoundedButton';
+import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -80,7 +80,7 @@ function CreateClassroomPage(props) {
     const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [searchedUsers, setSearchedUsers] = useState([]);
-    const [usersSearch, setUsersSearch] = useState('');
+    const [userSearchTerm, setUserSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -95,7 +95,7 @@ function CreateClassroomPage(props) {
             ) {
                 setError({
                     text: 'Operação não permitida',
-                    description: 'Você não tem permissão para criar salas de aula nesta instituição',
+                    description: 'Você não tem permissão para criar grupos nesta instituição',
                 });
                 return;
             } else if (
@@ -103,7 +103,7 @@ function CreateClassroomPage(props) {
                 user.role !== 'ADMIN' &&
                 (user.role === 'USER' || user.role === 'APPLIER' || (institutionId && user.institutionId !== parseInt(institutionId)))
             ) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta sala de aula' });
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este grupo' });
                 return;
             }
             setClassroom((prev) => ({ ...prev, institutionId: institutionId || user.institutionId }));
@@ -123,10 +123,10 @@ function CreateClassroomPage(props) {
                                 users: d.users.map((u) => u.id),
                                 institutionId: d.institution?.id,
                             });
-                            setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                            setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar sala de aula. ' + error.response?.data.message || '');
+                            alert('Erro ao buscar grupo. ' + error.response?.data.message || '');
                         })
                 );
             }
@@ -140,7 +140,7 @@ function CreateClassroomPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username })));
+                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
                             alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
@@ -165,7 +165,9 @@ function CreateClassroomPage(props) {
             .then((response) => {
                 const d = response.data.data;
                 const newUsers = [
-                    ...d.filter((u) => !classroom.users.includes(u.id)).map(({ id, username }) => ({ id, username })),
+                    ...d
+                        .filter((u) => !classroom.users.includes(u.id))
+                        .map(({ id, username, classrooms }) => ({ id, username, classrooms })),
                     ...searchedUsers.filter((u) => classroom.users.includes(u.id)).sort((a, b) => a.username.localeCompare(b.username)),
                 ];
                 setSearchedUsers(newUsers);
@@ -182,7 +184,7 @@ function CreateClassroomPage(props) {
             ...searchedUsers.filter((c) => classroom.users.includes(c.id)).sort((a, b) => a.username.localeCompare(b.username)),
         ];
         setSearchedUsers(concatenedUsers);
-        setUsersSearch('');
+        setUserSearchTerm('');
     };
 
     const submitClassroom = (e) => {
@@ -198,7 +200,7 @@ function CreateClassroomPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Sala de aula atualizada com sucesso.',
+                        title: 'Grupo atualizado com sucesso.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -209,7 +211,7 @@ function CreateClassroomPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao atualizar sala de aula.',
+                        title: 'Erro ao atualizar grupo.',
                         description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
@@ -226,7 +228,7 @@ function CreateClassroomPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Sala de aula criada com sucesso.',
+                        title: 'Grupo criado com sucesso.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -237,7 +239,7 @@ function CreateClassroomPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao criar sala de aula.',
+                        title: 'Erro ao criar grupo.',
                         description: error.response?.data.message,
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
@@ -256,7 +258,7 @@ function CreateClassroomPage(props) {
             })
             .then((response) => {
                 showAlert({
-                    title: 'Sala de aula excluída com sucesso.',
+                    title: 'Grupo excluído com sucesso.',
                     dismissHsl: [97, 43, 70],
                     dismissText: 'Ok',
                     dismissible: true,
@@ -267,7 +269,7 @@ function CreateClassroomPage(props) {
             })
             .catch((error) => {
                 showAlert({
-                    title: 'Erro ao excluir sala de aula.',
+                    title: 'Erro ao excluir grupo.',
                     description: error.response?.data.message,
                     dismissHsl: [97, 43, 70],
                     dismissText: 'Ok',
@@ -281,7 +283,7 @@ function CreateClassroomPage(props) {
     }
 
     if (isLoading) {
-        return <SplashPage text="Carregando criação de sala de aula..." />;
+        return <SplashPage text="Carregando criação de grupo..." />;
     }
 
     return (
@@ -297,7 +299,7 @@ function CreateClassroomPage(props) {
                     <div className="row align-items-center justify-content-center font-barlow m-0">
                         <div className="col-12 col-md-10 p-4 pb-0">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
-                                {isEditing ? 'Editar' : 'Criar'} sala de aula
+                                {isEditing ? 'Editar' : 'Criar'} grupo de aula
                             </h1>
                         </div>
                     </div>
@@ -312,7 +314,7 @@ function CreateClassroomPage(props) {
                             >
                                 <div>
                                     <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
-                                        Nome da sala de aula:
+                                        Nome do grupo:
                                     </label>
                                     <input
                                         type="text"
@@ -348,30 +350,28 @@ function CreateClassroomPage(props) {
                                     <fieldset>
                                         <div className="row gx-2 gy-0 mb-2">
                                             <div className="col-12 col-md-auto">
-                                                <p className="form-label color-steel-blue fs-5 fw-medium m-0">
-                                                    Selecione os alunos da sala de aula:
+                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                    Selecione os alunos do grupo:
                                                 </p>
                                             </div>
                                             <div className="col">
                                                 <input
                                                     type="text"
                                                     name="users-search"
-                                                    value={usersSearch || ''}
+                                                    value={userSearchTerm || ''}
                                                     id="users-search"
                                                     placeholder="Buscar por nome de usuário"
-                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4"
-                                                    onChange={(e) => setUsersSearch(e.target.value)}
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
+                                                    onChange={(e) => setUserSearchTerm(e.target.value)}
                                                     onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') {
-                                                            searchUsers(usersSearch);
-                                                        }
+                                                        if (e.key === 'Enter') searchUsers(userSearchTerm);
                                                     }}
                                                 />
                                             </div>
                                             <div className="col-auto">
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
-                                                    onClick={() => searchUsers(usersSearch)}
+                                                    onClick={() => searchUsers(userSearchTerm)}
                                                     icon={iconSearch}
                                                 />
                                             </div>
@@ -434,7 +434,7 @@ function CreateClassroomPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
                                                 dismissHsl: [355, 78, 66],
                                                 dismissText: 'Não',
                                                 actionHsl: [97, 43, 70],
@@ -454,7 +454,7 @@ function CreateClassroomPage(props) {
                                             hsl={[355, 78, 66]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja excluir a sala de aula?`,
+                                                    title: `Tem certeza que deseja excluir o grupo?`,
                                                     dismissHsl: [355, 78, 66],
                                                     dismissText: 'Não',
                                                     actionHsl: [97, 43, 70],

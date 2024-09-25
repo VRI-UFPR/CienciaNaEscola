@@ -97,7 +97,7 @@ function CreateUserPage(props) {
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
-    const [classroomsSearch, setClassroomsSearch] = useState('');
+    const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -138,7 +138,7 @@ function CreateUserPage(props) {
                                 profileImage: d.profileImage,
                                 institutionId: d.institution?.id,
                             });
-                            setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
+                            setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
@@ -155,7 +155,7 @@ function CreateUserPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
+                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
@@ -179,12 +179,11 @@ function CreateUserPage(props) {
             })
             .then((response) => {
                 const d = response.data.data;
-                const newClassrooms = d.filter((c) => !newUser.classrooms.includes(c.id)).map(({ id, name }) => ({ id, name }));
-                const concatenedClassrooms = [
-                    ...newClassrooms,
+                const newClassroomss = [
+                    ...d.filter((c) => !newUser.classrooms.includes(c.id)).map(({ id, name, users }) => ({ id, name, users })),
                     ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
                 ];
-                setSearchedClassrooms(concatenedClassrooms);
+                setSearchedClassrooms(newClassroomss);
             })
             .catch((error) => {
                 alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
@@ -198,7 +197,7 @@ function CreateUserPage(props) {
             ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
         ];
         setSearchedClassrooms(concatenedClassrooms);
-        setClassroomsSearch('');
+        setClassroomSearchTerm('');
     };
 
     const submitNewUser = (e) => {
@@ -389,6 +388,7 @@ function CreateUserPage(props) {
                                         form="user-form"
                                         id="username"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
+                                        autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                     />
                                 </div>
@@ -405,6 +405,7 @@ function CreateUserPage(props) {
                                                 form="user-form"
                                                 id="hash"
                                                 className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                                autoComplete="new-password"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
                                             />
                                         </div>
@@ -470,22 +471,22 @@ function CreateUserPage(props) {
                                         <fieldset>
                                             <div className="row gx-2 gy-0 mb-2">
                                                 <div className="col-12 col-md-auto">
-                                                    <p className="form-label color-steel-blue fs-5 fw-medium m-0">
-                                                        Selecione as salas de aula do usuário:
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                        Selecione os grupos do usuário:
                                                     </p>
                                                 </div>
-                                                <div className="col-12 col-md">
+                                                <div className="col">
                                                     <input
                                                         type="text"
                                                         name="classrooms-search"
-                                                        value={classroomsSearch || ''}
+                                                        value={classroomSearchTerm || ''}
                                                         id="classrooms-search"
-                                                        placeholder="Buscar por nome de sala de aula"
+                                                        placeholder="Buscar por nome de grupo"
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                        onChange={(e) => setClassroomsSearch(e.target.value)}
+                                                        onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter') {
-                                                                searchClassrooms(classroomsSearch);
+                                                                searchClassrooms(classroomSearchTerm);
                                                             }
                                                         }}
                                                     />
@@ -493,7 +494,7 @@ function CreateUserPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
-                                                        onClick={() => searchClassrooms(classroomsSearch)}
+                                                        onClick={() => searchClassrooms(classroomSearchTerm)}
                                                         icon={iconSearch}
                                                     />
                                                 </div>
