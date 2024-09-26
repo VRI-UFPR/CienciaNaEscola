@@ -193,13 +193,13 @@ function ProfilePage(props) {
                                 <div className="row align-items-center g-0 m-0 p-0">
                                     <div className="col-12 col-lg-3">
                                         <label htmlFor="role-input" className="form-label fw-medium fs-5">
-                                            Salas de aula:
+                                            Grupos:
                                         </label>
                                     </div>
                                     <div className="col">
                                         <input
                                             type="text"
-                                            value={curUser.classrooms.join(', ') || 'Sem salas de aula'}
+                                            value={curUser.classrooms.join(', ') || 'Sem grupos'}
                                             disabled
                                             className="col form-control rounded-4 shadow-sm fs-5"
                                             id="classrooms-input"
@@ -210,12 +210,7 @@ function ProfilePage(props) {
                         </div>
                         <div className="row flex-grow-1 justify-center justify-content-center mx-0">
                             <div className="col-6 col-lg-4 pt-4">
-                                <TextButton
-                                    className="px-5"
-                                    hsl={[97, 43, 70]}
-                                    text="Editar"
-                                    onClick={() => navigate(`/dash/profile/${user.institutionId}/${user.id}/manage`)}
-                                />
+                                <TextButton className="px-5" hsl={[97, 43, 70]} text="Editar" onClick={() => navigate(`manage`)} />
                             </div>
                         </div>
                     </div>

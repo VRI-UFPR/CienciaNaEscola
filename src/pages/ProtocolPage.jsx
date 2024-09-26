@@ -20,6 +20,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import baseUrl from '../contexts/RouteContext';
 import ErrorPage from './ErrorPage';
 import TableInput from '../components/inputs/answers/TableInput';
+import RangeInput from '../components/inputs/answers/RangeInput';
 
 const styles = `
     .bg-yellow-orange {
@@ -162,6 +163,27 @@ function ProtocolPage(props) {
                                                 {(() =>
                                                     itemGroup.items.map((item) => {
                                                         switch (item.type) {
+                                                            case 'RANGE':
+                                                                return (
+                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                        {
+                                                                            <RangeInput
+                                                                                item={item}
+                                                                                group={itemGroup.id}
+                                                                                answer={{
+                                                                                    text:
+                                                                                        protocol.pages[currentPageIndex].itemGroups[
+                                                                                            itemGroup.id
+                                                                                        ]?.itemAnswers[item.id]?.text || '',
+                                                                                    files: [],
+                                                                                    group: itemGroup.id,
+                                                                                }}
+                                                                                onAnswerChange={() => {}}
+                                                                                disabled={true}
+                                                                            />
+                                                                        }
+                                                                    </div>
+                                                                );
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (
@@ -184,7 +206,6 @@ function ProtocolPage(props) {
                                                                         }
                                                                     </div>
                                                                 );
-
                                                             case 'CHECKBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">

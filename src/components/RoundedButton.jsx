@@ -25,11 +25,11 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
         }
 
-        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus, .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
             color: #fff !important;
             background-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%) !important;
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
-            box-shadow: 0 0 0 0.25rem hsla(${hue}, ${sat}%, ${+lig * 0.7}%, 0.5);
+            box-shadow: inset 0px 4px 4px 0px #00000040;
         }
     `;
 };
