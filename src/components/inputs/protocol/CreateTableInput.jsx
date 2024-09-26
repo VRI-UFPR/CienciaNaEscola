@@ -66,10 +66,10 @@ function CreateTableInput(props) {
     };
 
     return (
-        <div className="p-4 p-lg-5">
-            <div className=" bg-light-grey rounded-4 lh-1 w-100 p-4">
-                <div className="row justify-content-between pb-3 m-0">
-                    <div className="col d-flex justify-content-start p-0">
+        <div className="pb-4 pb-lg-5">
+            <div className="row justify-content-between pb-2 g-0">
+                <div className="col">
+                    <div className="d-flex justify-content-start">
                         <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
                             {(() => {
                                 switch (group.type) {
@@ -88,7 +88,9 @@ function CreateTableInput(props) {
                             })()}
                         </h1>
                     </div>
-                    <div className="col d-flex justify-content-end align-items-center p-0">
+                </div>
+                <div className="col">
+                    <div className="d-flex justify-content-end">
                         <RoundedButton
                             className="ms-2"
                             hsl={[190, 46, 70]}
@@ -99,6 +101,8 @@ function CreateTableInput(props) {
                         />
                     </div>
                 </div>
+            </div>
+            <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className=" table-grid overflow-auto">
                     <table className="table table-bordered border-black">
                         <thead>
@@ -107,21 +111,10 @@ function CreateTableInput(props) {
                                     <button type="button" onClick={() => insertTableColumn(pageIndex, groupIndex)}>
                                         + Coluna
                                     </button>
-                                    {group.type === 'TEXTBOX_TABLE' && (
-                                        <button type="button" onClick={() => insertItem('TEXTBOX', pageIndex, groupIndex)}>
-                                            + Linha
-                                        </button>
-                                    )}
-                                    {group.type === 'RADIO_TABLE' && (
-                                        <button type="button" onClick={() => insertItem('RADIO', pageIndex, groupIndex)}>
-                                            + Linha
-                                        </button>
-                                    )}
-                                    {group.type === 'CHECKBOX_TABLE' && (
-                                        <button type="button" onClick={() => insertItem('CHECKBOX', pageIndex, groupIndex)}>
-                                            + Linha
-                                        </button>
-                                    )}
+
+                                    <button type="button" onClick={() => insertItem('TABLEROW', pageIndex, groupIndex)}>
+                                        + Linha
+                                    </button>
                                 </th>
                                 {group.tableColumns?.map((column, columnIndex) => {
                                     return (
@@ -171,20 +164,6 @@ function CreateTableInput(props) {
                                                 />
                                             </div>
                                         </td>
-                                        {item.itemOptions?.map((option, optionIndex) => {
-                                            return (
-                                                <td key={'option-column-' + optionIndex}>
-                                                    <div className="d-flex justify-content-center w-100">
-                                                        <input
-                                                            className={`form-check-input bg-grey`}
-                                                            type="checkbox"
-                                                            id={'option-column-' + optionIndex}
-                                                            disabled
-                                                        ></input>
-                                                    </div>
-                                                </td>
-                                            );
-                                        })}
                                     </tr>
                                 );
                             })}

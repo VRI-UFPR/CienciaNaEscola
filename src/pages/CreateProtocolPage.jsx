@@ -334,26 +334,10 @@ function CreateProtocolPage(props) {
                 text: '',
                 placement: groupData.tableColumns.length + 1,
             });
-            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
-                groupData.items?.map((item, itemIndex) => {
-                    const newPlacement = item.itemOptions.length + 1;
-                    const tempId = Date.now() + Math.random() * 1000;
-
-                    // Atualiza o item adicionando uma nova opção
-                    const updatedItem = {
-                        ...item,
-                        itemOptions: [...item.itemOptions, { text: '', placement: newPlacement, tempId: tempId }],
-                    };
-
-                    updateItem(updatedItem, page, group, itemIndex);
-
-                    return updatedItem;
-                });
-            }
 
             setProtocol(newProtocol);
         },
-        [protocol, updateItem]
+        [protocol]
     );
 
     const removeTableColumn = useCallback(
@@ -1626,56 +1610,59 @@ function CreateProtocolPage(props) {
                                                             );
                                                         case 'TEXTBOX_TABLE':
                                                             return (
-                                                                <CreateTableInput
-                                                                    key={'group-' + groupIndex}
-                                                                    group={group}
-                                                                    page={page}
-                                                                    groupIndex={groupIndex}
-                                                                    pageIndex={pageIndex}
-                                                                    insertItem={insertItem}
-                                                                    updateItem={updateItem}
-                                                                    removeItem={removeItem}
-                                                                    insertTableColumn={insertTableColumn}
-                                                                    updateTableColumn={updateTableColumn}
-                                                                    removeTableColumn={removeTableColumn}
-                                                                    removeItemGroup={removeItemGroup}
-                                                                />
+                                                                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                                                                    <CreateTableInput
+                                                                        group={group}
+                                                                        page={page}
+                                                                        groupIndex={groupIndex}
+                                                                        pageIndex={pageIndex}
+                                                                        insertItem={insertItem}
+                                                                        updateItem={updateItem}
+                                                                        removeItem={removeItem}
+                                                                        insertTableColumn={insertTableColumn}
+                                                                        updateTableColumn={updateTableColumn}
+                                                                        removeTableColumn={removeTableColumn}
+                                                                        removeItemGroup={removeItemGroup}
+                                                                    />
+                                                                </div>
                                                             );
 
                                                         case 'RADIO_TABLE':
                                                             return (
-                                                                <CreateTableInput
-                                                                    key={'group-' + groupIndex}
-                                                                    group={group}
-                                                                    page={page}
-                                                                    groupIndex={groupIndex}
-                                                                    pageIndex={pageIndex}
-                                                                    insertItem={insertItem}
-                                                                    updateItem={updateItem}
-                                                                    removeItem={removeItem}
-                                                                    insertTableColumn={insertTableColumn}
-                                                                    updateTableColumn={updateTableColumn}
-                                                                    removeTableColumn={removeTableColumn}
-                                                                    removeItemGroup={removeItemGroup}
-                                                                />
+                                                                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                                                                    <CreateTableInput
+                                                                        group={group}
+                                                                        page={page}
+                                                                        groupIndex={groupIndex}
+                                                                        pageIndex={pageIndex}
+                                                                        insertItem={insertItem}
+                                                                        updateItem={updateItem}
+                                                                        removeItem={removeItem}
+                                                                        insertTableColumn={insertTableColumn}
+                                                                        updateTableColumn={updateTableColumn}
+                                                                        removeTableColumn={removeTableColumn}
+                                                                        removeItemGroup={removeItemGroup}
+                                                                    />
+                                                                </div>
                                                             );
 
                                                         case 'CHECKBOX_TABLE':
                                                             return (
-                                                                <CreateTableInput
-                                                                    key={'group-' + groupIndex}
-                                                                    group={group}
-                                                                    page={page}
-                                                                    groupIndex={groupIndex}
-                                                                    pageIndex={pageIndex}
-                                                                    insertItem={insertItem}
-                                                                    updateItem={updateItem}
-                                                                    removeItem={removeItem}
-                                                                    insertTableColumn={insertTableColumn}
-                                                                    updateTableColumn={updateTableColumn}
-                                                                    removeTableColumn={removeTableColumn}
-                                                                    removeItemGroup={removeItemGroup}
-                                                                />
+                                                                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                                                                    <CreateTableInput
+                                                                        group={group}
+                                                                        page={page}
+                                                                        groupIndex={groupIndex}
+                                                                        pageIndex={pageIndex}
+                                                                        insertItem={insertItem}
+                                                                        updateItem={updateItem}
+                                                                        removeItem={removeItem}
+                                                                        insertTableColumn={insertTableColumn}
+                                                                        updateTableColumn={updateTableColumn}
+                                                                        removeTableColumn={removeTableColumn}
+                                                                        removeItemGroup={removeItemGroup}
+                                                                    />
+                                                                </div>
                                                             );
 
                                                         default:
