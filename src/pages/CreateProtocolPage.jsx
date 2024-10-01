@@ -688,7 +688,7 @@ function CreateProtocolPage(props) {
                                             ))}
                                         </fieldset>
                                         <fieldset>
-                                            <span className="fs-5 fw-medium">Selecione as salas de aula visualizadoras</span>
+                                            <span className="fs-5 fw-medium">Selecione os grupos visualizadores</span>
                                             {institutionClassrooms.map((c) => (
                                                 <div key={'viewer-classroom-' + c.id + '-option'}>
                                                     <input
@@ -814,7 +814,7 @@ function CreateProtocolPage(props) {
                                             ))}
                                         </fieldset>
                                         <fieldset>
-                                            <span className="fs-5 fw-medium">Selecione as salas de aula visualizadoras de resposta</span>
+                                            <span className="fs-5 fw-medium">Selecione os grupos visualizadores de resposta</span>
                                             {institutionClassrooms.map((c) => (
                                                 <div key={'answer-viewer-classroom-' + c.id + '-option'}>
                                                     <input
