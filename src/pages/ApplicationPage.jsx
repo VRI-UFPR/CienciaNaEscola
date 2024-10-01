@@ -367,7 +367,7 @@ function ApplicationPage(props) {
         //Search if the application is in localApplications
         if (localApplications !== undefined && application === undefined) {
             const localApplication = localApplications.find((app) => app.id === parseInt(applicationId));
-            if (localApplication !== undefined) {
+            if (localApplication !== undefined && connected === false) {
                 setApplication(localApplication);
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
@@ -387,7 +387,7 @@ function ApplicationPage(props) {
                     });
             }
         }
-    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard]);
+    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard, connected]);
 
     useEffect(() => {
         if (connected === false && application?.id) {

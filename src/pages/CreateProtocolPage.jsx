@@ -15,6 +15,7 @@ import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
 import CreateRangeInput from '../components/inputs/protocol/CreateRangeInput';
+import { StorageContext } from '../contexts/StorageContext';
 
 const CreateProtocolStyles = `
     .font-barlow {
@@ -68,6 +69,7 @@ function CreateProtocolPage(props) {
     const { protocolId } = useParams();
     const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
+    const { clearLocalApplications } = useContext(StorageContext);
 
     const [protocol, setProtocol] = useState({
         title: '',
@@ -316,6 +318,7 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
+                    clearLocalApplications();
                     showAlert({
                         title: 'Formulário atualizado com sucesso.',
                         onHide: () => navigate('/dash/protocols'),
@@ -354,6 +357,7 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 alert('Protocolo excluído com sucesso');
                 navigate(`/dash/protocols/`);
             })
