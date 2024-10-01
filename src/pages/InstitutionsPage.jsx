@@ -44,7 +44,7 @@ function InstitutionsPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (user.role === 'USER') {
+            if (user.role !== 'ADMIN') {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar instituições' });
                 return;
             }
