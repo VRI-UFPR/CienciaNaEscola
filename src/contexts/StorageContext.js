@@ -167,13 +167,12 @@ export const StorageProvider = ({ children }) => {
     const storeLocalApplication = useCallback(
         (application) => {
             setLocalApplications((prev) => {
-                return prev.map((app) => {
-                    if (app.id === application.id) {
-                        return application;
-                    } else {
-                        return app;
-                    }
-                });
+                const appExists = prev.some((app) => app.id === application.id);
+                if (appExists) {
+                    return prev.map((app) => (app.id === application.id ? application : app));
+                } else {
+                    return [...prev, application];
+                }
             });
             removeDBObject('applications', application.id);
             storeDBObject('applications', application);
