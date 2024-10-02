@@ -99,6 +99,23 @@ export const StorageProvider = ({ children }) => {
         });
     }, []);
 
+    const removeDBObject = useCallback((storeName, id) => {
+        return new Promise((resolve, reject) => {
+            const dbRequest = indexedDB.open('picceDB', 1);
+            dbRequest.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction([storeName], 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.delete(id);
+                resolve();
+            };
+            dbRequest.onerror = (event) => {
+                console.error('Error opening indexedDB: ', event.target.error);
+                reject();
+            };
+        });
+    }, []);
+
     const clearLocalApplications = useCallback(() => {
         setLocalApplications([]);
         clearDBObject('applications');
@@ -150,15 +167,17 @@ export const StorageProvider = ({ children }) => {
     const storeLocalApplication = useCallback(
         (application) => {
             setLocalApplications((prev) => {
-                if (prev.find((app) => app.id === application.id)) {
-                    return prev;
+                const appExists = prev.some((app) => app.id === application.id);
+                if (appExists) {
+                    return prev.map((app) => (app.id === application.id ? application : app));
                 } else {
                     return [...prev, application];
                 }
             });
+            removeDBObject('applications', application.id);
             storeDBObject('applications', application);
         },
-        [storeDBObject]
+        [storeDBObject, removeDBObject]
     );
 
     const storePendingRequest = useCallback(

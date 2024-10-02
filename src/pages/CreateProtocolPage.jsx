@@ -14,6 +14,7 @@ import { AlertContext } from '../contexts/AlertContext';
 import AddBar from '../components/Addbar';
 import CreatePage from '../components/CreatePage';
 import CreateProtocolProperties from '../components/CreateProcotolProperties';
+import { StorageContext } from '../contexts/StorageContext';
 
 const CreateProtocolStyles = `
     @media (max-width: 767px) {
@@ -112,6 +113,7 @@ function CreateProtocolPage(props) {
     const { protocolId } = useParams();
     const { isEditing = false } = props;
     const { user } = useContext(AuthContext);
+    const { clearLocalApplications } = useContext(StorageContext);
 
     const [protocol, setProtocol] = useState(defaultNewProtocol());
     const [itemTarget, setItemTarget] = useState({ page: '', group: '' });
@@ -281,6 +283,7 @@ function CreateProtocolPage(props) {
                     },
                 })
                 .then((response) => {
+                    clearLocalApplications();
                     showAlert({
                         title: 'Formulário atualizado com sucesso.',
                         onHide: () => navigate('/dash/protocols'),
@@ -319,6 +322,7 @@ function CreateProtocolPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 showAlert({
                     title: 'Protocolo excluído com sucesso.',
                     dismissHsl: [97, 43, 70],

@@ -11,6 +11,7 @@ import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
+import { StorageContext } from '../contexts/StorageContext';
 
 const style = `
     .font-barlow {
@@ -48,6 +49,7 @@ function ProtocolsPage(props) {
     const { user, logout } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
 
+    const { clearLocalApplications } = useContext(StorageContext);
     const [visibleProtocols, setVisibleProtocols] = useState([]);
 
     const navigate = useNavigate();
@@ -84,6 +86,7 @@ function ProtocolsPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 showAlert({
                     title: 'Protocolo excluído com sucesso.',
                     dismissHsl: [97, 43, 70],
