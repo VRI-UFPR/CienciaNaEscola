@@ -190,7 +190,7 @@ function SignInPage(props) {
                             <div className="col-12 col-lg-6">
                                 <TextButton
                                     hsl={[190, 46, 70]}
-                                    text="Entrar sem senha"
+                                    text="Entrar sem registro"
                                     className="rounded-pill"
                                     type="button"
                                     onClick={passwordlessLoginHandler}

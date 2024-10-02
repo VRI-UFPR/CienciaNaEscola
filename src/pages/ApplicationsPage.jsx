@@ -49,7 +49,7 @@ function ApplicationsPage(props) {
     const { user, logout } = useContext(AuthContext);
 
     const [visibleApplications, setVisibleApplications] = useState([]);
-    const { localApplications, connected } = useContext(StorageContext);
+    const { localApplications, connected, clearLocalApplications } = useContext(StorageContext);
 
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
@@ -84,6 +84,7 @@ function ApplicationsPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 showAlert({
                     title: 'Aplicação excluída com sucesso.',
                     dismissHsl: [97, 43, 70],
