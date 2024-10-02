@@ -66,7 +66,7 @@ const appRoutes = [
             { path: 'about', element: <InfosPage content={aboutPICCE} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'terms', element: <InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'profile', element: <ProfilePage /> },
-            { path: 'profile/:institutionId/:userId/manage', element: <CreateUserPage isEditing={true} /> },
+            { path: 'profile/manage', element: <CreateUserPage isEditing={true} /> },
             {
                 path: 'acceptTerms',
                 element: <InfosPage content={terms} showSidebar={false} showNavTogglerDesktop={false} showNavTogglerMobile={false} />,
@@ -88,6 +88,11 @@ const appRoutes = [
             { path: 'institutions/:institutionId/users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
             { path: 'institutions/:institutionId/classrooms/create', element: <CreateClassroomPage /> },
             { path: 'institutions/:institutionId/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
+            { path: 'institutions/my', element: <InstitutionPage /> },
+            { path: 'institutions/my/users/create', element: <CreateUserPage /> },
+            { path: 'institutions/my/users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
+            { path: 'institutions/my/classrooms/create', element: <CreateClassroomPage /> },
+            { path: 'institutions/my/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
         ],
     },
 ];
