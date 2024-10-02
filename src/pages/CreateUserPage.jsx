@@ -96,7 +96,8 @@ function CreateUserPage(props) {
     const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
-    const [classroomsSearch, setClassroomsSearch] = useState('');
+    const [searchedClassrooms, setSearchedClassrooms] = useState([]);
+    const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -104,18 +105,23 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role !== 'ADMIN' && (user.role === 'USER' || user.institutionId !== parseInt(institutionId))) {
+            if (
+                !isEditing &&
+                user.role !== 'ADMIN' &&
+                (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))
+            ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
-            } else if (isEditing && user.role !== 'ADMIN' && user.id !== parseInt(userId)) {
+            } else if (isEditing && user.role !== 'ADMIN' && userId && user.id !== parseInt(userId)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
                 return;
             }
+            setNewUser((prev) => ({ ...prev, institutionId: institutionId || user.institutionId }));
             const promises = [];
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/user/getUser/${userId}`, {
+                        .get(`${baseUrl}api/user/getUser/${userId || user.id}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -130,24 +136,26 @@ function CreateUserPage(props) {
                                 classrooms: d.classrooms.map((c) => c.id),
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
+                                institutionId: d.institution?.id,
                             });
+                            setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
                         })
                 );
             }
-            if (user.role !== 'USER') {
+            if (user.role !== 'USER' && (institutionId || user.institutionId)) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name })));
+                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) => {
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
@@ -160,12 +168,44 @@ function CreateUserPage(props) {
         }
     }, [userId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.id, user.institutionId]);
 
+    const searchClassrooms = (term) => {
+        const formData = serialize({ term }, { indices: true });
+        axios
+            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                const d = response.data.data;
+                const newClassroomss = [
+                    ...d.filter((c) => !newUser.classrooms.includes(c.id)).map(({ id, name, users }) => ({ id, name, users })),
+                    ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
+                ];
+                setSearchedClassrooms(newClassroomss);
+            })
+            .catch((error) => {
+                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
+            });
+    };
+
+    const showInstitutionClassrooms = () => {
+        const newClassrooms = institutionClassrooms.filter((c) => !newUser.classrooms.includes(c.id));
+        const concatenedClassrooms = [
+            ...newClassrooms,
+            ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
+        ];
+        setSearchedClassrooms(concatenedClassrooms);
+        setClassroomSearchTerm('');
+    };
+
     const submitNewUser = (e) => {
         e.preventDefault();
         const formData = serialize(newUser, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/user/updateUser/${userId}`, formData, {
+                .put(`${baseUrl}api/user/updateUser/${userId || user.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -181,7 +221,7 @@ function CreateUserPage(props) {
                             if (response.data.data.id === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
                             }
-                            navigate(`/dash/institutions/${institutionId}`);
+                            navigate(`/dash/institutions/my`);
                         },
                     });
                 })
@@ -209,7 +249,7 @@ function CreateUserPage(props) {
                         dismissText: 'Ok',
                         dismissible: true,
                         onHide: () => {
-                            navigate(`/dash/institutions/${institutionId}`);
+                            navigate(`/dash/institutions/my`);
                         },
                     });
                 })
@@ -227,7 +267,7 @@ function CreateUserPage(props) {
 
     const deleteUser = () => {
         axios
-            .delete(`${baseUrl}api/user/deleteUser/${userId}`, {
+            .delete(`${baseUrl}api/user/deleteUser/${userId || user.id}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -239,7 +279,7 @@ function CreateUserPage(props) {
                     dismissText: 'Ok',
                     dismissible: true,
                     onHide: () => {
-                        navigate(`/dash/institutions/${institutionId}`);
+                        navigate(`/dash/institutions/my`);
                     },
                 });
             })
@@ -348,6 +388,7 @@ function CreateUserPage(props) {
                                         form="user-form"
                                         id="username"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
+                                        autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                     />
                                 </div>
@@ -364,6 +405,7 @@ function CreateUserPage(props) {
                                                 form="user-form"
                                                 id="hash"
                                                 className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                                autoComplete="new-password"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
                                             />
                                         </div>
@@ -404,66 +446,105 @@ function CreateUserPage(props) {
                                         </select>
                                     </div>
                                 )}
+                                {(institutionId || user.institutionId) && !isEditing && (
+                                    <div className="form-check form-switch fs-5 mb-3">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={newUser.institutionId === (institutionId || user.institutionId)}
+                                            onChange={(event) =>
+                                                setNewUser((prev) => ({
+                                                    ...prev,
+                                                    institutionId: event.target.checked ? institutionId || user.institutionId : undefined,
+                                                }))
+                                            }
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Pertencente à minha instituição
+                                        </label>
+                                    </div>
+                                )}
                                 {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
                                     <div>
                                         <fieldset>
-                                            <div className="row gx-2 gy-0">
+                                            <div className="row gx-2 gy-0 mb-2">
                                                 <div className="col-12 col-md-auto">
-                                                    <p className="form-label color-steel-blue fs-5 fw-medium m-0">
-                                                        Selecione as salas de aula do usuário:
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                                        Selecione os grupos do usuário:
                                                     </p>
                                                 </div>
-                                                <div className="col-12 col-md">
+                                                <div className="col">
                                                     <input
                                                         type="text"
                                                         name="classrooms-search"
-                                                        value={classroomsSearch || ''}
+                                                        value={classroomSearchTerm || ''}
                                                         id="classrooms-search"
-                                                        placeholder="Buscar por nome de sala de aula"
+                                                        placeholder="Buscar por nome de grupo"
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                        onChange={(e) => setClassroomsSearch(e.target.value)}
+                                                        onChange={(e) => setClassroomSearchTerm(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchClassrooms(classroomSearchTerm);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchClassrooms(classroomSearchTerm)}
+                                                        icon={iconSearch}
                                                     />
                                                 </div>
                                             </div>
-
                                             <div className="row gy-2 mb-3">
-                                                {institutionClassrooms
-                                                    .filter((c) => c.name.includes(classroomsSearch))
-                                                    .map((c) => (
-                                                        <div key={c.id} className="col-6 col-md-4 col-lg-3">
-                                                            <input
-                                                                form="user-form"
-                                                                type="checkbox"
-                                                                name="classrooms"
-                                                                id={`classroom-${c.id}`}
-                                                                value={c.id}
-                                                                className="form-check-input bg-grey"
-                                                                checked={newUser.classrooms.includes(c.id)}
-                                                                onChange={(e) => {
-                                                                    if (e.target.checked) {
-                                                                        setNewUser((prev) => ({
-                                                                            ...prev,
-                                                                            classrooms: [...prev.classrooms, parseInt(e.target.value)],
-                                                                        }));
-                                                                    } else {
-                                                                        setNewUser((prev) => ({
-                                                                            ...prev,
-                                                                            classrooms: prev.classrooms.filter(
-                                                                                (id) => id !== parseInt(e.target.value)
-                                                                            ),
-                                                                        }));
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <label
-                                                                htmlFor={`classroom-${c.id}`}
-                                                                className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                            >
-                                                                {c.name}
-                                                            </label>
-                                                        </div>
-                                                    ))}
+                                                {searchedClassrooms.map((c) => (
+                                                    <div key={c.id} className="col-6 col-md-4 col-lg-3">
+                                                        <input
+                                                            form="user-form"
+                                                            type="checkbox"
+                                                            name="classrooms"
+                                                            id={`classroom-${c.id}`}
+                                                            value={c.id}
+                                                            className="form-check-input bg-grey"
+                                                            checked={newUser.classrooms.includes(c.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setNewUser((prev) => ({
+                                                                        ...prev,
+                                                                        classrooms: [...prev.classrooms, parseInt(e.target.value)],
+                                                                    }));
+                                                                } else {
+                                                                    setNewUser((prev) => ({
+                                                                        ...prev,
+                                                                        classrooms: prev.classrooms.filter(
+                                                                            (id) => id !== parseInt(e.target.value)
+                                                                        ),
+                                                                    }));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label
+                                                            htmlFor={`classroom-${c.id}`}
+                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                        >
+                                                            {c.name}
+                                                        </label>
+                                                    </div>
+                                                ))}
                                             </div>
+                                            {(institutionId || user.institutionId) && (
+                                                <div className="mb-3">
+                                                    <TextButton
+                                                        className="fs-6 w-auto p-2 py-0"
+                                                        hsl={[190, 46, 70]}
+                                                        text={`Ver grupos da instituição`}
+                                                        onClick={showInstitutionClassrooms}
+                                                    />
+                                                </div>
+                                            )}
                                         </fieldset>
                                     </div>
                                 )}

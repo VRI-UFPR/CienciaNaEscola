@@ -10,6 +10,7 @@ import TextButton from '../components/TextButton';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
+import { StorageContext } from '../contexts/StorageContext';
 
 const style = `
     .font-barlow {
@@ -45,7 +46,7 @@ function ProtocolsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
-
+    const { clearLocalApplications } = useContext(StorageContext);
     const [visibleProtocols, setVisibleProtocols] = useState([]);
 
     const navigate = useNavigate();
@@ -82,6 +83,7 @@ function ProtocolsPage(props) {
                 },
             })
             .then((response) => {
+                clearLocalApplications();
                 alert('Protocolo excluído com sucesso');
                 const newVisibleProtocols = [...visibleProtocols];
                 setVisibleProtocols(newVisibleProtocols.filter((a) => a.id !== protocolId));
