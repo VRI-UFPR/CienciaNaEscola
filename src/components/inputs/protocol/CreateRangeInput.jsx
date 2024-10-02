@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconFile from '../../../assets/images/iconFile.svg';
 import iconTrash from '../../../assets/images/iconTrash.svg';
-import { defaultNewInput } from '../../../utils/constants';
+import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
+import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
+import iconUpload from '../../../assets/images/iconUpload.svg';
 
 const rangeStyles = `
     .font-century-gothic {
@@ -24,35 +25,67 @@ const rangeStyles = `
     .form-check-input {
         background-color: #D9D9D9;
     }
+
+    .img-gallery{
+        max-height: 200px;
+    }
 `;
 
 function CreateRangeInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem } = props;
-    const [item, setItem] = useState(currentItem || defaultNewInput('RANGE'));
+    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement } = props;
+    const [item, setItem] = useState(currentItem);
+    const galleryInputRef = useRef(null);
 
     useEffect(() => {
-        updateItem(item, pageIndex, groupIndex, itemIndex);
-    }, [item, pageIndex, groupIndex, itemIndex, updateItem]);
+        if (item !== currentItem) updateItem(item, itemIndex);
+    }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
+
+    const handleGalleryButtonClick = () => {
+        galleryInputRef.current.click();
+    };
+
+    const insertImage = (e) => {
+        const newItem = { ...item };
+        newItem.files.push(e.target.files[0]);
+        setItem(newItem);
+    };
+
+    const removeImage = (indexToRemove) => {
+        const newItem = { ...item };
+        newItem.files.splice(indexToRemove, 1);
+        setItem(newItem);
+    };
 
     return (
         <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between pb-2 m-0">
-                <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">Intervalo numérico</h1>
+            <div className="row gx-2 pb-2">
+                <div className="col">
+                    <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">Item {itemIndex + 1} - Intervalo numérico</h1>
                 </div>
-                <div className="col d-flex justify-content-end p-0">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconFile} />
+                <div className="col-auto">
                     <RoundedButton
-                        className="ms-2"
                         hsl={[190, 46, 70]}
-                        icon={iconTrash}
-                        onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
+                        icon={iconArrowDown}
+                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
                     />
                 </div>
+                <div className="col-auto">
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon={iconArrowUp}
+                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
+                    />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} onClick={handleGalleryButtonClick} />
+                </div>
+                <div className="col-auto">
+                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(itemIndex)} />
+                </div>
             </div>
-            <div className="row form-check form-switch pb-3 m-0 ms-2">
+            <div className="form-check form-switch fs-5 mb-2">
                 <input
-                    className="form-check-input border-0 fs-5 p-0"
+                    className="form-check-input"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
@@ -71,7 +104,7 @@ function CreateRangeInput(props) {
                         })
                     }
                 />
-                <label className="form-check-label font-barlow fw-medium fs-5 p-0" htmlFor="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fw-medium" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
             </div>
@@ -193,6 +226,47 @@ function CreateRangeInput(props) {
                         </div>
                     )}
                 </div>
+
+                <div className="row m-0 mt-4">
+                    {item.files?.length > 0 &&
+                        item.files.map((file, i) => {
+                            return (
+                                <div
+                                    key={'item-' + item.tempId + '-image-' + file.name}
+                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
+                                        i > 2 && 'mt-2'
+                                    }`}
+                                >
+                                    <div
+                                        className={`${
+                                            item.files.length > 1 && 'ratio ratio-1x1'
+                                        } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                    >
+                                        <img
+                                            src={URL.createObjectURL(file)}
+                                            className="img-fluid object-fit-contain w-100 rounded-4"
+                                            alt="Imagem selecionada"
+                                        />
+                                        <RoundedButton
+                                            className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                            hsl={[190, 46, 70]}
+                                            icon={iconTrash}
+                                            onClick={() => removeImage(i)}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                </div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    name="imageinput"
+                    id="imageinput"
+                    style={{ display: 'none' }}
+                    onChange={insertImage}
+                    ref={galleryInputRef}
+                />
             </div>
             <style>{rangeStyles}</style>
         </div>
