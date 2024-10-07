@@ -417,7 +417,7 @@ function CreateUserPage(props) {
                                             />
                                         </div>
                                         <div className="col-auto">
-                                            <RoundedButton hsl={[197, 43, 52]} icon="suffle" onClick={generateRandomHash} />
+                                            <RoundedButton hsl={[197, 43, 52]} icon="shuffle" onClick={generateRandomHash} />
                                         </div>
                                     </div>
                                 </div>
@@ -495,7 +495,7 @@ function CreateUserPage(props) {
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
                                                         onClick={() => searchClassrooms(classroomSearchTerm)}
-                                                        icon={iconSearch}
+                                                        icon="search"
                                                     />
                                                 </div>
                                             </div>

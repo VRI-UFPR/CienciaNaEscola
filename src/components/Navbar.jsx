@@ -47,9 +47,9 @@ function NavBar(props) {
                             data-bs-target="#sidebar"
                             aria-controls="sidebar"
                         >
-                            <div className="toggler-div bg-white"></div>
-                            <div className="toggler-div bg-white mt-1"></div>
-                            <div className="toggler-div bg-white mt-1"></div>
+                            <div className="toggler-div rounded bg-white"></div>
+                            <div className="toggler-div rounded bg-white mt-1"></div>
+                            <div className="toggler-div rounded bg-white mt-1"></div>
                         </button>
                     </div>
                     <div className="col-7 d-flex justify-content-center p-0">
