@@ -10,6 +10,7 @@ import { LayoutContext } from '../contexts/LayoutContext';
 import TextButton from '../components/TextButton';
 import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
     .font-barlow {
@@ -36,6 +37,7 @@ function InstitutionsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
 
     const [visibleInstitutions, setVisibleInstitutions] = useState([]);
 
@@ -70,12 +72,23 @@ function InstitutionsPage(props) {
                 },
             })
             .then((response) => {
-                alert('Instituição excluída com sucesso');
+                showAlert({
+                    title: 'Instituição excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 const newVisibleInstitutions = [...visibleInstitutions];
                 setVisibleInstitutions(newVisibleInstitutions.filter((i) => i.id !== institutionId));
             })
             .catch((error) => {
-                alert('Erro ao excluir instituição. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir instituição.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

@@ -50,6 +50,23 @@ function ProfilePage(props) {
     const navigate = useNavigate();
     const { showSidebar = true } = props;
 
+    const localizeUserRole = (role) => {
+        switch (role) {
+            case 'ADMIN':
+                return 'Administrador';
+            case 'USER':
+                return 'Usuário';
+            case 'PUBLISHER':
+                return 'Publicador';
+            case 'APPLIER':
+                return 'Aplicador';
+            case 'COORDINATOR':
+                return 'Coordenador';
+            default:
+                return role;
+        }
+    };
+
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
@@ -106,23 +123,13 @@ function ProfilePage(props) {
                             <h5 className="fw-medium m-0">Edite e adicione informações sobre você</h5>
                         </div>
                         <div className="row bg-pastel-blue align-items-center rounded p-4 p-lg-5 m-0">
-                            <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0 pb-4 pb-lg-0">
-                                <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75 mb-3">
+                            <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0">
+                                <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75">
                                     <img
                                         src={curUser.profileImage ? baseUrl + curUser.profileImage.path : BlankProfilePic}
                                         className="rounded-circle h-100 w-100"
                                         alt="Foto de perfil"
                                     />
-                                </div>
-                                <div className="row justify-content-center m-0">
-                                    <div className="col-9">
-                                        <TextButton
-                                            className="px-3 py-2 lh-1"
-                                            hsl={[197, 43, 52]}
-                                            text="Atualizar foto de perfil"
-                                            onClick={() => navigate(`/dash/profile/${user.institutionId}/${user.id}/manage`)}
-                                        />
-                                    </div>
                                 </div>
                             </div>
                             <div className="col-12 col-lg-9 d-flex flex-column justify-content-center">
@@ -183,7 +190,7 @@ function ProfilePage(props) {
                                     <div className="col">
                                         <input
                                             type="text"
-                                            value={curUser.role || ''}
+                                            value={localizeUserRole(curUser.role) || ''}
                                             disabled
                                             className="col form-control rounded-4 shadow-sm fs-5"
                                             id="role-input"

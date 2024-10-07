@@ -6,11 +6,11 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
 import SplashPage from './SplashPage';
+import { AlertContext } from '../contexts/AlertContext';
 import { StorageContext } from '../contexts/StorageContext';
 import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
-import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from '../components/RoundedButton';
 import iconSearch from '../assets/images/iconSearch.svg';
 
@@ -80,8 +80,8 @@ function CreateApplicationPage(props) {
     const { applicationId, protocolId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
-    const { clearLocalApplications } = useContext(StorageContext);
     const { showAlert } = useContext(AlertContext);
+    const { clearLocalApplications } = useContext(StorageContext);
     const formRef = useRef(null);
 
     const [application, setApplication] = useState({
@@ -140,11 +140,10 @@ function CreateApplicationPage(props) {
                             const d = response.data.data;
                             reqProtocolId = d.protocol.id;
                             if (d.applier.id !== user.id && user.role !== 'ADMIN') {
-                                setError({
+                                return Promise.reject({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar esta aplicação',
                                 });
-                                return;
                             }
                             setApplication({
                                 visibility: d.visibility,
@@ -162,59 +161,72 @@ function CreateApplicationPage(props) {
                             );
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar aplicação. ' + error.response?.data.message || '');
+                            return Promise.reject({
+                                text: 'Erro ao buscar aplicação.',
+                                description: error.response?.data.message,
+                            });
                         })
                 );
             }
-            Promise.all(promises).then(() => {
-                axios
-                    .get(`${baseUrl}api/protocol/getProtocol/${reqProtocolId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    })
-                    .then((response) => {
-                        const d = response.data.data;
-                        setProtocol({
-                            viewersUser: d.viewersUser.map((u) => ({ id: u.id, username: u.username })),
-                            viewersClassroom: d.viewersClassroom.map((c) => ({ id: c.id, name: c.name })),
-                            answersViewersUser: d.answersViewersUser.map((u) => ({ id: u.id, username: u.username })),
-                            answersViewersClassroom: d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name })),
-                            visibility: d.visibility,
-                            answersVisibility: d.answersVisibility,
+            Promise.all(promises)
+                .then(() => {
+                    axios
+                        .get(`${baseUrl}api/protocol/getProtocol/${reqProtocolId}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        })
+                        .then((response) => {
+                            const d = response.data.data;
+                            setProtocol({
+                                viewersUser: d.viewersUser.map((u) => ({ id: u.id, username: u.username })),
+                                viewersClassroom: d.viewersClassroom.map((c) => ({ id: c.id, name: c.name })),
+                                answersViewersUser: d.answersViewersUser.map((u) => ({ id: u.id, username: u.username })),
+                                answersViewersClassroom: d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name })),
+                                visibility: d.visibility,
+                                answersVisibility: d.answersVisibility,
+                            });
+                            if (!isEditing) {
+                                if (d.visibility === 'RESTRICT') {
+                                    setApplication((prev) => ({
+                                        ...prev,
+                                        viewersUser: d.viewersUser.map((u) => u.id),
+                                        viewersClassroom: d.viewersClassroom.map((c) => c.id),
+                                    }));
+                                    setSearchedUsers(
+                                        d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
+                                    );
+                                    setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                                }
+                                if (d.answersVisibility === 'RESTRICT') {
+                                    setApplication((prev) => ({
+                                        ...prev,
+                                        answersViewersUser: d.answersViewersUser.map((u) => u.id),
+                                        answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
+                                    }));
+                                    setSearchedAnswerUsers(
+                                        d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
+                                    );
+                                    setSearchedAnswerClassrooms(
+                                        d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users }))
+                                    );
+                                }
+                            }
+                            setIsLoading(false);
+                        })
+                        .catch((error) => {
+                            showAlert({
+                                title: 'Erro ao buscar visualizadores do protocolo.',
+                                description: error.response?.data.message,
+                                dismissHsl: [97, 43, 70],
+                                dismissText: 'Ok',
+                                dismissible: true,
+                            });
                         });
-                        if (!isEditing) {
-                            if (d.visibility === 'RESTRICT') {
-                                setApplication((prev) => ({
-                                    ...prev,
-                                    viewersUser: d.viewersUser.map((u) => u.id),
-                                    viewersClassroom: d.viewersClassroom.map((c) => c.id),
-                                }));
-                                setSearchedUsers(d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
-                                setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                            }
-                            if (d.answersVisibility === 'RESTRICT') {
-                                setApplication((prev) => ({
-                                    ...prev,
-                                    answersViewersUser: d.answersViewersUser.map((u) => u.id),
-                                    answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
-                                }));
-                                setSearchedAnswerUsers(
-                                    d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
-                                );
-                                setSearchedAnswerClassrooms(
-                                    d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users }))
-                                );
-                            }
-                        }
-                        setIsLoading(false);
-                    })
-                    .catch((error) => {
-                        alert('Erro ao buscar visualizadores do protocolo. ' + error.response?.data.message || '');
-                    });
-            });
+                })
+                .catch((error) => setError(error));
         }
-    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id]);
+    }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id, showAlert]);
 
     const submitApplication = (e) => {
         e.preventDefault();
@@ -229,11 +241,22 @@ function CreateApplicationPage(props) {
                 })
                 .then((response) => {
                     clearLocalApplications();
-                    alert('Aplicação atualizada com sucesso');
+                    showAlert({
+                        title: 'Aplicação atualizada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao atualizar aplicação. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao atualizar aplicação.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         } else {
             axios
@@ -244,11 +267,22 @@ function CreateApplicationPage(props) {
                     },
                 })
                 .then((response) => {
-                    alert('Aplicação criada com sucesso');
+                    showAlert({
+                        title: 'Aplicação criada com sucesso.',
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                     navigate(`/dash/applications/${response.data.data.id}`);
                 })
                 .catch((error) => {
-                    alert('Erro ao criar aplicação. ' + error.response?.data.message || '');
+                    showAlert({
+                        title: 'Erro ao criar aplicação.',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
                 });
         }
     };
@@ -262,11 +296,22 @@ function CreateApplicationPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                alert('Aplicação excluída com sucesso');
+                showAlert({
+                    title: 'Aplicação excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 navigate(`/dash/applications/`);
             })
             .catch((error) => {
-                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir aplicação.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

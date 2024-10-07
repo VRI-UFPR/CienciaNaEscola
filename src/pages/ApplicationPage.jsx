@@ -245,7 +245,7 @@ function ApplicationPage(props) {
 
     const handleProtocolSubmit = () => {
         showAlert({
-            title: 'Aguarde o processamento da resposta',
+            title: 'Aguarde o processamento da resposta.',
             dismissible: false,
         });
 
@@ -323,7 +323,7 @@ function ApplicationPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Muito obrigado por sua participação no projeto!',
+                        title: 'Muito obrigado por sua participação no projeto.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -452,7 +452,6 @@ function ApplicationPage(props) {
                                     .map((itemGroup, itemGroupIndex) => {
                                         return (
                                             <div>
-                                                <p>Grupo de itens {itemGroupIndex + 1}</p>
                                                 {itemGroup.items.map((item) => {
                                                     switch (item.type) {
                                                         case 'RANGE':
