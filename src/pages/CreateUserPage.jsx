@@ -11,8 +11,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import RoundedButton from '../components/RoundedButton';
-import iconVisibility from '../assets/images/visibilityIcon.svg';
-import iconSearch from '../assets/images/iconSearch.svg';
 import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
@@ -414,12 +412,12 @@ function CreateUserPage(props) {
                                         <div className="col-auto">
                                             <RoundedButton
                                                 hsl={[197, 43, 52]}
-                                                icon={iconVisibility}
+                                                icon="visibility"
                                                 onClick={() => setPasswordVisibility((prev) => !prev)}
                                             />
                                         </div>
                                         <div className="col-auto">
-                                            <RoundedButton hsl={[197, 43, 52]} icon={iconSearch} onClick={generateRandomHash} />
+                                            <RoundedButton hsl={[197, 43, 52]} icon="shuffle" onClick={generateRandomHash} />
                                         </div>
                                     </div>
                                 </div>
@@ -497,7 +495,7 @@ function CreateUserPage(props) {
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
                                                         onClick={() => searchClassrooms(classroomSearchTerm)}
-                                                        icon={iconSearch}
+                                                        icon="search"
                                                     />
                                                 </div>
                                             </div>

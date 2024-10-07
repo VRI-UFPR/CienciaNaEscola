@@ -122,7 +122,7 @@ function ProfilePage(props) {
                             <h1 className="font-century-gothic fw-bold fs-3 pb-1 m-0">Seu perfil</h1>
                             <h5 className="fw-medium m-0">Edite e adicione informações sobre você</h5>
                         </div>
-                        <div className="row bg-pastel-blue align-items-center rounded p-4 p-lg-5 m-0">
+                        <div className="row bg-pastel-blue align-items-center rounded-4 p-4 p-lg-5 m-0">
                             <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0">
                                 <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75">
                                     <img

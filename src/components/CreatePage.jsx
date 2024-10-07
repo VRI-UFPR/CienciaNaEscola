@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import iconArrowUp from '../assets/images/iconArrowUp.svg';
-import iconArrowDown from '../assets/images/iconArrowDown.svg';
-import iconTrash from '../assets/images/iconTrash.svg';
 import CreateDependencyInput from '../components/inputs/protocol/CreateDependencyInput';
 import RoundedButton from './RoundedButton';
 import CreateItemGroup from './CreateItemGroup';
@@ -80,18 +77,18 @@ function CreatePage(props) {
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement + 1, page.placement, itemTarget.page)}
-                        icon={iconArrowDown}
+                        icon="keyboard_arrow_down"
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement - 1, page.placement, itemTarget.page)}
-                        icon={iconArrowUp}
+                        icon="keyboard_arrow_up"
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removePage(itemTarget.page)} icon={iconTrash} />
+                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removePage(itemTarget.page)} icon="delete" />
                 </div>
             </div>
             {page.dependencies?.map((dependency, dependencyIndex) => (

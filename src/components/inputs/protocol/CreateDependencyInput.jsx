@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconTrash from '../../../assets/images/iconTrash.svg';
 
 function CreateDependencyInput(props) {
     const { currentDependency, pageIndex, groupIndex, dependencyIndex, updateDependency, removeDependency, protocol } = props;
@@ -71,7 +70,7 @@ function CreateDependencyInput(props) {
                     </h1>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeDependency(dependencyIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeDependency(dependencyIndex)} />
                 </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">

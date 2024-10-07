@@ -1,7 +1,6 @@
 import React, { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { Modal, Carousel } from 'bootstrap';
 import RoundedButton from './RoundedButton';
-import iconExit from '../assets/images/ExitSidebarIcon.svg';
 
 const GalleryModalStyles = `
     .font-century-gothic {
@@ -65,7 +64,7 @@ const GalleryModal = forwardRef((props, ref) => {
                         <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
                             Figura {modal.currentImage + 1}
                         </h5>
-                        <RoundedButton hsl={[355, 78, 66]} icon={iconExit} onClick={hideModal} />
+                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} />
                     </div>
                     <div className="modal-body">
                         <div id={modal.id + '-carousel'} className="carousel carousel-dark slide d-flex h-100 w-100">

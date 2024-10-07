@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { StorageProvider } from './contexts/StorageContext';
 import appRoutes from './routes/AppRoutes';
 import { AlertProvider } from './contexts/AlertContext';
+import 'react-material-symbols/rounded';
 
 const styles = ``;
 

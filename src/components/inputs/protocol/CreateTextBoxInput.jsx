@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconTrash from '../../../assets/images/iconTrash.svg';
-import iconArrowUp from '../../../assets/images/iconArrowUp.svg';
-import iconArrowDown from '../../../assets/images/iconArrowDown.svg';
-import iconValidation from '../../../assets/images/iconValidation.svg';
-import iconUpload from '../../../assets/images/iconUpload.svg';
 
 const textBoxStyles = `
     .font-century-gothic {
@@ -68,25 +63,25 @@ function CreateTextBoxInput(props) {
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
-                        icon={iconArrowDown}
+                        icon="keyboard_arrow_down"
                         onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
-                        icon={iconArrowUp}
+                        icon="keyboard_arrow_up"
                         onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconValidation} onClick={() => insertItemValidation(itemIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="checklist" onClick={() => insertItemValidation(itemIndex)} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconUpload} onClick={handleGalleryButtonClick} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="upload_file" onClick={handleGalleryButtonClick} />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon={iconTrash} onClick={() => removeItem(itemIndex)} />
+                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeItem(itemIndex)} />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">
@@ -168,7 +163,7 @@ function CreateTextBoxInput(props) {
                                         <RoundedButton
                                             className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                             hsl={[190, 46, 70]}
-                                            icon={iconTrash}
+                                            icon="delete"
                                             onClick={() => removeImage(i)}
                                         />
                                     </div>
