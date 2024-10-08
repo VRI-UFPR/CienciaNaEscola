@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
+import { MaterialSymbol } from 'react-material-symbols';
+import { Tooltip } from 'bootstrap';
 
 const textBoxStyles = `
     .font-century-gothic {
@@ -36,6 +38,24 @@ function CreateTextBoxInput(props) {
         if (item !== currentItem) updateItem(item, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
 
+    useEffect(() => {
+        const tooltipList = [];
+        if (item.tempId) {
+            tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`, { trigger: 'hover' }));
+        }
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, [item.tempId]);
+
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
     };
@@ -65,6 +85,10 @@ function CreateTextBoxInput(props) {
                         hsl={[190, 46, 70]}
                         icon="keyboard_arrow_down"
                         onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
+                        data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
+                        className={'move-item-' + item.tempId + '-down-tooltip'}
                     />
                 </div>
                 <div className="col-auto">
@@ -72,16 +96,33 @@ function CreateTextBoxInput(props) {
                         hsl={[190, 46, 70]}
                         icon="keyboard_arrow_up"
                         onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
+                        data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
+                        className={'move-item-' + item.tempId + '-up-tooltip'}
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="checklist" onClick={() => insertItemValidation(itemIndex)} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon="checklist"
+                        onClick={() => insertItemValidation(itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
+                        data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
+                        className={'add-validation-' + item.tempId + '-tooltip'}
+                    />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="upload_file" onClick={handleGalleryButtonClick} />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton hsl={[190, 46, 70]} icon="delete" onClick={() => removeItem(itemIndex)} />
+                    <RoundedButton
+                        hsl={[190, 46, 70]}
+                        icon="delete"
+                        onClick={() => removeItem(itemIndex)}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
+                        data-bs-title="Remover o item do grupo."
+                        className={'delete-' + item.tempId + '-tooltip'}
+                    />
                 </div>
             </div>
             <div className="form-check form-switch fs-5 mb-2">
@@ -105,50 +146,75 @@ function CreateTextBoxInput(props) {
                         })
                     }
                 />
-                <label className="form-check-label font-barlow fw-medium" htmlFor="flexSwitchCheckDefault">
+                <label className="form-check-label font-barlow fs-5 fw-medium me-2" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
                 </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
+                    data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
+                    className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                />
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
-                    <label htmlFor="question" className="form-label fs-5 fw-medium">
+                    <label htmlFor="question" className="form-label fs-5 fw-medium me-2">
                         Pergunta
                     </label>
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="question"
-                        value={item.text || ''}
-                        aria-describedby="questionHelp"
-                        onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'question-' + item.tempId + '-tooltip'}
+                        data-bs-title="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
+                        className={'bg-steel-blue question-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
+                    <div className="row gx-2 align-items-end">
+                        <div className="col">
+                            <input
+                                type="text"
+                                className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                                id="question"
+                                value={item.text || ''}
+                                aria-describedby="questionHelp"
+                                onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                            />
+                        </div>
+                        <div className="col-auto">
+                            <RoundedButton
+                                hsl={[190, 46, 70]}
+                                size={32}
+                                icon="add_photo_alternate"
+                                onClick={handleGalleryButtonClick}
+                                data-bs-toggle="tooltip"
+                                data-bs-custom-class={'upload-image-' + item.tempId}
+                                data-bs-title="Adicione imagens ao enunciado da pergunta."
+                                className={'upload-image-' + item.tempId + '-tooltip'}
+                            />
+                        </div>
+                    </div>
+
                     {!item.text && (
                         <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">
                             *Este campo é obrigatório.
                         </div>
                     )}
                 </div>
-                <div>
-                    <label htmlFor="description" className="form-label fs-5 fw-medium">
-                        Descrição
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="description"
-                        value={item.description || ''}
-                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
-                    />
-                </div>
-                <div className="row m-0 mt-4">
-                    {item.files?.length > 0 &&
-                        item.files.map((file, i) => {
+                {item.files?.length > 0 && (
+                    <div className="row mb-3 mt-4">
+                        {item.files.map((file, i) => {
                             return (
                                 <div
                                     key={'item-' + item.tempId + '-image-' + file.name}
-                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length} m-0 px-1 px-lg-2 ${
-                                        i > 2 && 'mt-2'
-                                    }`}
+                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                 >
                                     <div
                                         className={`${
@@ -163,6 +229,7 @@ function CreateTextBoxInput(props) {
                                         <RoundedButton
                                             className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
                                             hsl={[190, 46, 70]}
+                                            size={32}
                                             icon="delete"
                                             onClick={() => removeImage(i)}
                                         />
@@ -170,6 +237,30 @@ function CreateTextBoxInput(props) {
                                 </div>
                             );
                         })}
+                    </div>
+                )}
+                <div>
+                    <label htmlFor="description" className="form-label fs-5 fw-medium me-2">
+                        Descrição
+                    </label>
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'description-' + item.tempId + '-tooltip'}
+                        data-bs-title="Texto que descreva outros detalhes da pergunta. Suporta Markdown com até 3000 caracteres."
+                        className={'bg-steel-blue description-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                    />
+                    <input
+                        type="text"
+                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        id="description"
+                        value={item.description || ''}
+                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
+                    />
                 </div>
                 <input
                     type="file"
