@@ -14,10 +14,10 @@ function CreateValidationInput(props) {
     useEffect(() => {
         const tooltipList = [];
         if (validation.tempId) {
-            tooltipList.push(new Tooltip(`.delete-${validation.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.validation-type-${validation.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.validation-argument-${validation.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.validation-message-${validation.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.delete-${validation.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.validation-type-${validation.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.validation-argument-${validation.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.validation-message-${validation.tempId}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {

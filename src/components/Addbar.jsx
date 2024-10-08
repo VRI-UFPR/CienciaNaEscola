@@ -13,16 +13,16 @@ function AddBar(props) {
 
     useEffect(() => {
         const tooltipList = [];
-        tooltipList.push(new Tooltip('.add-page-tooltip'));
-        tooltipList.push(new Tooltip('.add-group-tooltip'));
-        tooltipList.push(new Tooltip('.add-page-dependency-tooltip'));
-        tooltipList.push(new Tooltip('.add-textbox-tooltip'));
-        tooltipList.push(new Tooltip('.add-numberbox-tooltip'));
-        tooltipList.push(new Tooltip('.add-select-tooltip'));
-        tooltipList.push(new Tooltip('.add-radio-tooltip'));
-        tooltipList.push(new Tooltip('.add-checkbox-tooltip'));
-        tooltipList.push(new Tooltip('.add-range-tooltip'));
-        tooltipList.push(new Tooltip('.add-group-dependency-tooltip'));
+        tooltipList.push(new Tooltip('.add-page-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-group-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-page-dependency-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-textbox-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-numberbox-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-select-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-radio-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-checkbox-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-range-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-group-dependency-tooltip', { trigger: 'hover' }));
 
         return () => {
             tooltipList.forEach((tooltip) => tooltip.dispose());

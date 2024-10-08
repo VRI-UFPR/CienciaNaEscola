@@ -14,13 +14,13 @@ function CreateProtocolProperties(props) {
     const { showAlert } = useContext(AlertContext);
 
     useEffect(() => {
-        new Tooltip('.title-tooltip');
-        new Tooltip('.description-tooltip');
-        new Tooltip('.enabled-tooltip');
-        new Tooltip('.replicable-tooltip');
-        new Tooltip('.visibility-tooltip');
-        new Tooltip('.applicability-tooltip');
-        new Tooltip('.answer-visiblity-tooltip');
+        new Tooltip('.title-tooltip', { trigger: 'hover' });
+        new Tooltip('.description-tooltip', { trigger: 'hover' });
+        new Tooltip('.enabled-tooltip', { trigger: 'hover' });
+        new Tooltip('.replicable-tooltip', { trigger: 'hover' });
+        new Tooltip('.visibility-tooltip', { trigger: 'hover' });
+        new Tooltip('.applicability-tooltip', { trigger: 'hover' });
+        new Tooltip('.answer-visiblity-tooltip', { trigger: 'hover' });
     }, []);
 
     const searchUsers = (term, target) => {

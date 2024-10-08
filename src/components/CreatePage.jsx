@@ -17,9 +17,9 @@ function CreatePage(props) {
     useEffect(() => {
         const tooltipList = [];
         if (page.tempId) {
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-down-tooltip`));
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-up-tooltip`));
-            tooltipList.push(new Tooltip(`.delete-page-${page.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-page-${page.tempId}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {

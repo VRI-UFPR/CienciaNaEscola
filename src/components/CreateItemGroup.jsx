@@ -20,9 +20,9 @@ function CreateItemGroup(props) {
     useEffect(() => {
         const tooltipList = [];
         if (group.tempId) {
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-down-tooltip`));
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-up-tooltip`));
-            tooltipList.push(new Tooltip(`.delete-group-${group.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-group-${group.tempId}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {

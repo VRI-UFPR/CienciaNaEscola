@@ -65,11 +65,11 @@ function CreateDependencyInput(props) {
     useEffect(() => {
         const tooltipList = [];
         if (dependency.tempId) {
-            tooltipList.push(new Tooltip(`.delete-${dependency.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.dependency-type-${dependency.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.delete-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.dependency-type-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
             if (getItemTargetOptions().length > 0) {
-                tooltipList.push(new Tooltip(`.dependency-argument-${dependency.tempId}-tooltip`));
-                tooltipList.push(new Tooltip(`.dependency-target-${dependency.tempId}-tooltip`));
+                tooltipList.push(new Tooltip(`.dependency-argument-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
+                tooltipList.push(new Tooltip(`.dependency-target-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
             }
         }
 

@@ -41,14 +41,14 @@ function CreateTextBoxInput(props) {
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
-            tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`));
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`));
-            tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`));
-            tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`));
+            tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {
