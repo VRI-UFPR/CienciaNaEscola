@@ -555,7 +555,7 @@ function CreateProtocolProperties(props) {
                 color="#FFFFFF"
                 data-bs-toggle="tooltip"
                 data-bs-custom-class="answer-visiblity-tooltip"
-                data-bs-title="Quem poderá visualizar as respostas o protocolo. Um protocolo público permite que todos os usuários vejam suas respostas, enquanto o protocolo restrito só permite que os usuários e grupos que você selecionar vejam as respostas. Respostas de aplicações definidas como mais restritas que o protocolo não serão visíveis por todos os usuários definidos aqui."
+                data-bs-title="Quem poderá visualizar as respostas do protocolo. Um protocolo público permite que todos os usuários vejam suas respostas, enquanto o protocolo restrito só permite que os usuários e grupos que você selecionar vejam as respostas. Respostas de aplicações definidas como mais restritas que o protocolo não serão visíveis por todos os usuários definidos aqui."
                 className="bg-steel-blue answer-visiblity-tooltip p-1 rounded-circle"
             />
             <select
