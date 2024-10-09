@@ -1,6 +1,5 @@
 import { React } from 'react';
 import RoundedButton from '../../RoundedButton';
-import iconTrash from '../../../assets/images/iconTrash.svg';
 
 const createTableStyles = `
     .font-century-gothic {
@@ -94,7 +93,7 @@ function CreateTableInput(props) {
                         <RoundedButton
                             className="ms-2"
                             hsl={[190, 46, 70]}
-                            icon={iconTrash}
+                            icon="delete"
                             onClick={() => {
                                 removeItemGroup(pageIndex, groupIndex);
                             }}
@@ -108,7 +107,7 @@ function CreateTableInput(props) {
                         <thead>
                             <tr>
                                 <th>
-                                    <button type="button" onClick={() => insertTableColumn(pageIndex, groupIndex)}>
+                                    <button type="button" onClick={() => insertTableColumn()}>
                                         + Coluna
                                     </button>
 
@@ -127,13 +126,13 @@ function CreateTableInput(props) {
                                                     value={column.text || ''}
                                                     placeholder="Insira algum texto..."
                                                     aria-describedby="questionHelp"
-                                                    onChange={(e) => updateTableColumn(pageIndex, groupIndex, columnIndex, e.target.value)}
+                                                    onChange={(e) => updateTableColumn(columnIndex, e.target.value)}
                                                 />
                                                 <RoundedButton
                                                     className="ms-2"
                                                     hsl={[190, 46, 70]}
-                                                    icon={iconTrash}
-                                                    onClick={() => removeTableColumn(pageIndex, groupIndex, columnIndex)}
+                                                    icon="delete"
+                                                    onClick={() => removeTableColumn(columnIndex)}
                                                 />
                                             </div>
                                         </td>
@@ -159,7 +158,7 @@ function CreateTableInput(props) {
                                                 <RoundedButton
                                                     className="ms-2"
                                                     hsl={[190, 46, 70]}
-                                                    icon={iconTrash}
+                                                    icon="delete"
                                                     onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
                                                 />
                                             </div>

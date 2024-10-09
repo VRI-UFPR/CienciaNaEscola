@@ -39,6 +39,7 @@ export const defaultNewItemGroup = (type, newPlacement) => ({
     isRepeatable: false,
     items: [],
     dependencies: [],
+    tableColumns: [],
     placement: newPlacement,
     tempId: Math.floor(Date.now() + Math.random() * 1000),
 });

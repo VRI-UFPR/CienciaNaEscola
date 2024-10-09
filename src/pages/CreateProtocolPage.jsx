@@ -222,7 +222,7 @@ function CreateProtocolPage(props) {
                 return;
             }
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.push(type, defaultNewItemGroup(newProtocol.pages[page].itemGroups.length + 1));
+            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(type, newProtocol.pages[page].itemGroups.length + 1));
             setProtocol(newProtocol);
             setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
         },
@@ -536,6 +536,7 @@ function CreateProtocolPage(props) {
                                                             removePage={removePage}
                                                             protocol={protocol}
                                                             updatePage={updatePage}
+                                                            insertItem={insertItem}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (

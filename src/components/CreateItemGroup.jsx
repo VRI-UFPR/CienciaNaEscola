@@ -110,34 +110,29 @@ function CreateItemGroup(props) {
         [group]
     );
 
-    const insertTableColumn = useCallback(
-        (page, group) => {
-            const newProtocol = { ...protocol };
-            const groupData = newProtocol.pages[page].itemGroups[group];
-            groupData.tableColumns.push({
-                text: '',
-                placement: groupData.tableColumns.length + 1,
-            });
+    const insertTableColumn = useCallback(() => {
+        const newGroup = { ...group };
+        newGroup.tableColumns.push({
+            text: '',
+            placement: newGroup.tableColumns.length + 1,
+        });
 
-            setProtocol(newProtocol);
-        },
-        [protocol]
-    );
+        setGroup(newGroup);
+    }, [group]);
 
     const removeTableColumn = useCallback(
-        (page, group, index) => {
-            const newProtocol = { ...protocol };
-            const groupData = newProtocol.pages[page].itemGroups[group];
-            groupData.tableColumns.splice(index, 1);
+        (index) => {
+            const newGroup = { ...group };
+            newGroup.tableColumns.splice(index, 1);
 
-            groupData.tableColumns = groupData.tableColumns.map((column, newIndex) => ({
+            newGroup.tableColumns = newGroup.tableColumns.map((column, newIndex) => ({
                 ...column,
                 placement: newIndex + 1, // Adjust placement to reflect the new index
             }));
 
             // Verifica se o grupo é "CHECKBOX_TABLE" ou "RADIO_TABLE"
-            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
-                groupData.items?.map((item, itemIndex) => {
+            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(newGroup.type)) {
+                newGroup.items?.map((item, itemIndex) => {
                     if (item.itemOptions.length > index) {
                         // Remove a opção do item correspondente ao índice da coluna removida
                         const updatedItemOptions = item.itemOptions.filter((_, optionIndex) => optionIndex !== index);
@@ -153,7 +148,7 @@ function CreateItemGroup(props) {
                             itemOptions: adjustedItemOptions,
                         };
 
-                        updateItem(updatedItem, page, group, itemIndex);
+                        updateItem(updatedItem, itemTarget.page, group, itemIndex);
 
                         return updatedItem;
                     }
@@ -161,18 +156,18 @@ function CreateItemGroup(props) {
                 });
             }
 
-            setProtocol(newProtocol);
+            setGroup(newGroup);
         },
-        [protocol, updateItem]
+        [group, itemTarget, updateItem]
     );
 
     const updateTableColumn = useCallback(
-        (page, group, index, newText) => {
-            const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups[group].tableColumns[index].text = newText;
-            setProtocol(newProtocol);
+        (index, newText) => {
+            const newGroup = { ...group };
+            newGroup.tableColumns[index].text = newText;
+            setGroup(newGroup);
         },
-        [protocol]
+        [group]
     );
 
     return (
@@ -342,7 +337,7 @@ function CreateItemGroup(props) {
                     </div>
                 ))}
             {group.type === 'TEXTBOX_TABLE' && (
-                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                <div className="bg-light mb-3">
                     <CreateTableInput
                         group={group}
                         page={page}
@@ -359,7 +354,7 @@ function CreateItemGroup(props) {
                 </div>
             )}
             {group.type === 'RADIO_TABLE' && (
-                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                <div className="bg-light mb-3">
                     <CreateTableInput
                         group={group}
                         page={page}
@@ -376,7 +371,7 @@ function CreateItemGroup(props) {
                 </div>
             )}
             {group.type === 'CHECKBOX_TABLE' && (
-                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                <div className="bg-light mb-3">
                     <CreateTableInput
                         group={group}
                         page={page}

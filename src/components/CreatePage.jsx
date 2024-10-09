@@ -5,7 +5,7 @@ import CreateItemGroup from './CreateItemGroup';
 import { Tooltip } from 'bootstrap';
 
 function CreatePage(props) {
-    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage } = props;
+    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
 
     const [page, setPage] = useState(currentPage);
     const currentGroup = page.itemGroups[itemTarget.group];
