@@ -1,7 +1,6 @@
-import { React, useCallback, useEffect } from 'react';
-import iconLocation from '../../../assets/images/iconLocation.svg';
-import iconSearch from '../../../assets/images/iconSearch.svg';
+import { React, useCallback, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .font-barlow {
@@ -44,6 +43,20 @@ const styles = `
 
 export function Location(props) {
     const { onAnswerChange, item, answer, disabled } = props;
+    const iconContainerRef = useRef(null);
+    const [iconSize, setIconSize] = useState(0);
+
+    const updateIconSize = useCallback(() => {
+        setIconSize(iconContainerRef.current.offsetWidth);
+    }, []);
+
+    useEffect(() => {
+        updateIconSize();
+        window.addEventListener('resize', updateIconSize);
+        return () => {
+            window.removeEventListener('resize', updateIconSize);
+        };
+    }, [updateIconSize]);
 
     const updateAnswer = useCallback(
         (newAnswer) => {
@@ -69,8 +82,8 @@ export function Location(props) {
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div className="location-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
-                        <img src={iconLocation} alt="Ícone de localização" />
+                    <div className="location-icon ratio ratio-1x1 align-self-center w-50 mx-auto" ref={iconContainerRef}>
+                        <MaterialSymbol icon="location_on" size={iconSize} fill color="#FFFFFF" />
                     </div>
                 </div>
                 <div className="col p-3">
@@ -97,7 +110,7 @@ export function Location(props) {
                                 onClick={() => {
                                     defaultLocation();
                                 }}
-                                icon={iconSearch}
+                                icon="add_location"
                             />
                         </div>
                     </div>

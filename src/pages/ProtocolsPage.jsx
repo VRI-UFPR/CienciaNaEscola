@@ -10,6 +10,8 @@ import TextButton from '../components/TextButton';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
+import { StorageContext } from '../contexts/StorageContext';
 
 const style = `
     .font-barlow {
@@ -45,7 +47,9 @@ function ProtocolsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
 
+    const { clearLocalApplications } = useContext(StorageContext);
     const [visibleProtocols, setVisibleProtocols] = useState([]);
 
     const navigate = useNavigate();
@@ -82,12 +86,24 @@ function ProtocolsPage(props) {
                 },
             })
             .then((response) => {
-                alert('Protocolo excluído com sucesso');
+                clearLocalApplications();
+                showAlert({
+                    title: 'Protocolo excluído com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 const newVisibleProtocols = [...visibleProtocols];
                 setVisibleProtocols(newVisibleProtocols.filter((a) => a.id !== protocolId));
             })
             .catch((error) => {
-                alert('Erro ao excluir protocolo. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir protocolo.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

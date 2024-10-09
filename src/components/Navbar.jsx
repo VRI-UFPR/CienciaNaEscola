@@ -1,6 +1,7 @@
 import { React } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
 import ColoredBorder from './ColoredBorder';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .ce-navbar {
@@ -15,17 +16,8 @@ const styles = `
         max-width: 300px;
     }
 
-    .icon-toggler{
-        max-width: 50px;
-    }
-
-    .icon-toggler:hover .toggler-div{
-        box-shadow: inset 0px 1px 4px 0px #00000040;
-    }
-
-    .toggler-div{
-        height: 4px;
-        width: 32px;
+    .icon-toggler:hover{
+        color: #e8e8e8 !important;
     }
 `;
 
@@ -39,17 +31,15 @@ function NavBar(props) {
                 <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
                     <div className="col-2 d-flex justify-content-start p-0">
                         <button
-                            className={`navbar-toggler icon-toggler btn border-0 h-auto shadow-none p-1 ${
-                                showNavTogglerMobile ? 'd-flex' : 'd-none'
-                            } ${showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'} flex-column`}
+                            className={`navbar-toggler btn border-0 h-auto shadow-none ${showNavTogglerMobile ? 'd-flex' : 'd-none'} ${
+                                showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'
+                            } flex-column`}
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#sidebar"
                             aria-controls="sidebar"
                         >
-                            <div className="toggler-div rounded bg-white"></div>
-                            <div className="toggler-div rounded bg-white mt-1"></div>
-                            <div className="toggler-div rounded bg-white mt-1"></div>
+                            <MaterialSymbol className="icon-toggler" icon="menu" size={40} weight={700} fill color="#FFFFFF" />
                         </button>
                     </div>
                     <div className="col-7 d-flex justify-content-center p-0">

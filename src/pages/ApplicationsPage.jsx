@@ -11,6 +11,7 @@ import { StorageContext } from '../contexts/StorageContext';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
+import { AlertContext } from '../contexts/AlertContext';
 
 const style = `
     .font-barlow {
@@ -48,10 +49,11 @@ function ApplicationsPage(props) {
     const { user, logout } = useContext(AuthContext);
 
     const [visibleApplications, setVisibleApplications] = useState([]);
-    const { localApplications, connected } = useContext(StorageContext);
+    const { localApplications, connected, clearLocalApplications } = useContext(StorageContext);
 
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
+    const { showAlert } = useContext(AlertContext);
 
     useEffect(() => {
         if (!connected) {
@@ -82,12 +84,24 @@ function ApplicationsPage(props) {
                 },
             })
             .then((response) => {
-                alert('Aplicação excluída com sucesso');
+                clearLocalApplications();
+                showAlert({
+                    title: 'Aplicação excluída com sucesso.',
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
                 const newVisibleApplications = [...visibleApplications];
                 setVisibleApplications(newVisibleApplications.filter((a) => a.id !== applicationId));
             })
             .catch((error) => {
-                alert('Erro ao excluir aplicação. ' + error.response?.data.message || '');
+                showAlert({
+                    title: 'Erro ao excluir aplicação.',
+                    description: error.response?.data.message,
+                    dismissHsl: [97, 43, 70],
+                    dismissText: 'Ok',
+                    dismissible: true,
+                });
             });
     };
 

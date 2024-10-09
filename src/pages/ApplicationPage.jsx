@@ -246,7 +246,7 @@ function ApplicationPage(props) {
 
     const handleProtocolSubmit = () => {
         showAlert({
-            title: 'Aguarde o processamento da resposta',
+            title: 'Aguarde o processamento da resposta.',
             dismissible: false,
         });
 
@@ -324,7 +324,7 @@ function ApplicationPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Muito obrigado por sua participação no projeto!',
+                        title: 'Muito obrigado por sua participação no projeto.',
                         dismissHsl: [97, 43, 70],
                         dismissText: 'Ok',
                         dismissible: true,
@@ -368,7 +368,7 @@ function ApplicationPage(props) {
         //Search if the application is in localApplications
         if (localApplications !== undefined && application === undefined) {
             const localApplication = localApplications.find((app) => app.id === parseInt(applicationId));
-            if (localApplication !== undefined) {
+            if (localApplication !== undefined && connected === false) {
                 setApplication(localApplication);
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
@@ -388,7 +388,7 @@ function ApplicationPage(props) {
                     });
             }
         }
-    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard]);
+    }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard, connected]);
 
     useEffect(() => {
         if (connected === false && application?.id) {
@@ -461,6 +461,25 @@ function ApplicationPage(props) {
                                                     <p>Grupo de itens {itemGroupIndex + 1}</p>
                                                     {itemGroup.items.map((item) => {
                                                         switch (item.type) {
+                                                            case 'RANGE':
+                                                                return (
+                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                        {
+                                                                            <RangeInput
+                                                                                item={item}
+                                                                                answer={{
+                                                                                    text:
+                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
+                                                                                            ?.text || '',
+                                                                                    files: [],
+                                                                                    group: itemGroup.id,
+                                                                                }}
+                                                                                group={itemGroup.id}
+                                                                                onAnswerChange={handleAnswerChange}
+                                                                            />
+                                                                        }
+                                                                    </div>
+                                                                );
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (

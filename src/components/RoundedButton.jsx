@@ -1,10 +1,10 @@
 import React from 'react';
 
-import helpIcon from '../assets/images/helpIcon.svg';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
-        .rounded-button{
+        .rounded-button-${size}{
             height: ${size}px;
             width: ${size}px;
             max-height: ${size}px;
@@ -36,13 +36,13 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
 
 function RoundedButton(props) {
     const {
+        icon = 'question_mark',
+        size = 36,
+        color = '#FFFFFF',
         hsl: [hue, sat, lig] = [355, 78, 66],
-        size = 32,
-        icon = helpIcon,
-        alt = 'Ícone',
-        className = '',
         onClick = () => undefined,
         role = undefined,
+        className = '',
         disabled,
         'data-bs-toggle': dataBsToggle,
     } = props;
@@ -53,11 +53,11 @@ function RoundedButton(props) {
             role={role}
             className={`btn btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig
-            } rounded-button d-flex rounded-circle align-items-center justify-content-center w-100 h-100 p-1 ${className} `}
+            } rounded-button-${size} d-flex rounded-circle align-items-center justify-content-center p-0 ${className} `}
             onClick={onClick}
             disabled={disabled}
         >
-            <img src={icon} alt={alt} className="ratio ratio-1x1 w-100"></img>
+            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill color={color} grade={200} weight={400} />
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
         </button>
     );

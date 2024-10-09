@@ -126,7 +126,13 @@ function CreateClassroomPage(props) {
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar grupo. ' + error.response?.data.message || '');
+                            showAlert({
+                                title: 'Erro ao buscar sala de aula.',
+                                description: error.response?.data.message,
+                                dismissHsl: [97, 43, 70],
+                                dismissText: 'Ok',
+                                dismissible: true,
+                            });
                         })
                 );
             }
@@ -143,7 +149,13 @@ function CreateClassroomPage(props) {
                             setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) => {
-                            alert('Erro ao buscar usuários da instituição. ' + error.response?.data.message || '');
+                            showAlert({
+                                title: 'Erro ao buscar usuários da instituição.',
+                                description: error.response?.data.message,
+                                dismissHsl: [97, 43, 70],
+                                dismissText: 'Ok',
+                                dismissible: true,
+                            });
                         })
                 );
             }
@@ -151,7 +163,7 @@ function CreateClassroomPage(props) {
                 setIsLoading(false);
             });
         }
-    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId]);
+    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId, showAlert]);
 
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
