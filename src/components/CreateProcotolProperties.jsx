@@ -1,15 +1,27 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import RoundedButton from './RoundedButton';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
+import { MaterialSymbol } from 'react-material-symbols';
+import { Tooltip } from 'bootstrap';
 
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
     const { user } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
+
+    useEffect(() => {
+        new Tooltip('.title-tooltip', { trigger: 'hover' });
+        new Tooltip('.description-tooltip', { trigger: 'hover' });
+        new Tooltip('.enabled-tooltip', { trigger: 'hover' });
+        new Tooltip('.replicable-tooltip', { trigger: 'hover' });
+        new Tooltip('.visibility-tooltip', { trigger: 'hover' });
+        new Tooltip('.applicability-tooltip', { trigger: 'hover' });
+        new Tooltip('.answer-visiblity-tooltip', { trigger: 'hover' });
+    }, []);
 
     const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
@@ -196,9 +208,20 @@ function CreateProtocolProperties(props) {
 
     return (
         <div className="flex-grow-1 mb-3">
-            <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium">
-                Título do protocolo:
+            <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium me-1">
+                Título do protocolo
             </label>
+            <MaterialSymbol
+                icon="question_mark"
+                size={13}
+                weight={700}
+                fill
+                color="#FFFFFF"
+                data-bs-toggle="tooltip"
+                data-bs-custom-class="custom-tooltip"
+                data-bs-title="Texto curto que identifique o protocolo com no máximo 255 caracteres."
+                className="bg-steel-blue title-tooltip p-1 rounded-circle"
+            />
             <input
                 className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                 id="title"
@@ -206,32 +229,89 @@ function CreateProtocolProperties(props) {
                 value={protocol.title || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, title: event.target.value }))}
             ></input>
-            <label htmlFor="description" className="form-label color-steel-blue fs-5 fw-medium">
-                Descrição do protocolo:
+            <label htmlFor="description" className="form-label color-steel-blue fs-5 fw-medium me-1">
+                Descrição do protocolo
             </label>
+            <MaterialSymbol
+                icon="question_mark"
+                size={13}
+                weight={700}
+                fill
+                color="#FFFFFF"
+                data-bs-toggle="tooltip"
+                data-bs-custom-class="description-tooltip"
+                data-bs-title="Texto que descreva a finalidade do protocolo e/ou instruções para sua execução. Suporta Markdown com até 3000 caracteres."
+                className="bg-steel-blue description-tooltip p-1 rounded-circle"
+            />
             <textarea
                 className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
                 id="description"
-                rows="6"
+                rows="4"
                 value={protocol.description || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, description: event.target.value }))}
             ></textarea>
-            <label htmlFor="enabled" className="form-label color-steel-blue fs-5 fw-medium">
-                Habilitado:
+            <div className="form-check form-switch fs-5 mb-2">
+                <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="enabled"
+                    checked={protocol.enabled}
+                    onChange={(event) => setProtocol((prev) => ({ ...prev, enabled: !prev.enabled }))}
+                />
+                <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                    Habilitado
+                </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class="enabled-tooltip"
+                    data-bs-title="Se o protocolo aceitará respostas e aplicações."
+                    className="bg-steel-blue enabled-tooltip p-1 rounded-circle"
+                />
+            </div>
+            <div className="form-check form-switch fs-5 mb-2">
+                <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="replicable"
+                    checked={protocol.replicable}
+                    onChange={(event) => setProtocol((prev) => ({ ...prev, replicable: !prev.replicable }))}
+                />
+                <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                    Replicável
+                </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class="replicable-tooltip"
+                    data-bs-title="Se os aplicadores poderão criar réplicas do protocolo. Uma réplica possui os mesmos itens e estrutura do protocolo original, mas com regras (acesso, replicabilidade, etc) definidas pelo usuário que replicou, sem controle do criador original. A réplica não acompanhará futuras alterações deste protocolo."
+                    className="bg-steel-blue replicable-tooltip p-1 rounded-circle"
+                />
+            </div>
+            <label htmlFor="visibility" className="form-label color-steel-blue fs-5 fw-medium me-2">
+                Visibilidade
             </label>
-            <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                id="enabled"
-                value={protocol.enabled ? 'true' : 'false'}
-                onChange={(event) => setProtocol((prev) => ({ ...prev, enabled: event.target.value === 'true' }))}
-            >
-                <option value="">Selecione...</option>
-                <option value="true">Sim</option>
-                <option value="false">Não</option>
-            </select>
-            <label htmlFor="visibility" className="form-label color-steel-blue fs-5 fw-medium">
-                Visibilidade:
-            </label>
+            <MaterialSymbol
+                icon="question_mark"
+                size={13}
+                weight={700}
+                fill
+                color="#FFFFFF"
+                data-bs-toggle="tooltip"
+                data-bs-custom-class="visibility-tooltip"
+                data-bs-title="Quem poderá visualizar o protocolo. Um protocolo público é acessível para todos os usuários, enquanto o protocolo restrito só é acessível para os usuários e grupos que você selecionar. Aplicações definidas como mais restritas podem não ser acessíveis para todos os usuários definidos aqui."
+                className="bg-steel-blue visibility-tooltip p-1 rounded-circle"
+            />
             <select
                 className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                 id="visibility"
@@ -375,9 +455,20 @@ function CreateProtocolProperties(props) {
                     </div>
                 </fieldset>
             )}
-            <label htmlFor="applicability" className="form-label color-steel-blue fs-5 fw-medium">
-                Aplicabilidade:
+            <label htmlFor="applicability" className="form-label color-steel-blue fs-5 fw-medium me-2">
+                Aplicabilidade
             </label>
+            <MaterialSymbol
+                icon="question_mark"
+                size={13}
+                weight={700}
+                fill
+                color="#FFFFFF"
+                data-bs-toggle="tooltip"
+                data-bs-custom-class="applicability-tooltip"
+                data-bs-title="Quem poderá aplicar o protocolo. Um protocolo público é aplicável por todos os usuários, enquanto o protocolo restrito só é aplicável pelos usuários e grupos que você selecionar. A aplicação herda as restrições de visibilidade do protocolo, mas pode ser definida para ser ainda mais restrita. O criador do protocolo terá acesso às respostas de todas as aplicações."
+                className="bg-steel-blue applicability-tooltip p-1 rounded-circle"
+            />
             <select
                 className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                 id="applicability"
@@ -453,9 +544,20 @@ function CreateProtocolProperties(props) {
                     </div>
                 </fieldset>
             )}
-            <label htmlFor="answer-visiblity" className="form-label color-steel-blue fs-5 fw-medium">
-                Visibilidade das respostas:
+            <label htmlFor="answer-visiblity" className="form-label color-steel-blue fs-5 fw-medium me-2">
+                Visibilidade das respostas
             </label>
+            <MaterialSymbol
+                icon="question_mark"
+                size={13}
+                weight={700}
+                fill
+                color="#FFFFFF"
+                data-bs-toggle="tooltip"
+                data-bs-custom-class="answer-visiblity-tooltip"
+                data-bs-title="Quem poderá visualizar as respostas do protocolo. Um protocolo público permite que todos os usuários vejam suas respostas, enquanto o protocolo restrito só permite que os usuários e grupos que você selecionar vejam as respostas. Respostas de aplicações definidas como mais restritas que o protocolo não serão visíveis por todos os usuários definidos aqui."
+                className="bg-steel-blue answer-visiblity-tooltip p-1 rounded-circle"
+            />
             <select
                 className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
                 id="answer-visiblity"
@@ -600,19 +702,6 @@ function CreateProtocolProperties(props) {
                     </div>
                 </fieldset>
             )}
-            <label htmlFor="replicable" className="form-label color-steel-blue fs-5 fw-medium">
-                Replicabilidade:
-            </label>
-            <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
-                id="replicable"
-                value={protocol.replicable ? 'true' : 'false'}
-                onChange={(event) => setProtocol((prev) => ({ ...prev, replicable: event.target.value === 'true' }))}
-            >
-                <option value="">Selecione...</option>
-                <option value="true">Sim</option>
-                <option value="false">Não</option>
-            </select>
         </div>
     );
 }

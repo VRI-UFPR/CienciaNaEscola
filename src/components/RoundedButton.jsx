@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MaterialSymbol } from 'react-material-symbols';
 
 const roundedButtonStyles = (hue, sat, lig, size) => {
@@ -45,11 +43,16 @@ function RoundedButton(props) {
         className = '',
         disabled,
         'data-bs-toggle': dataBsToggle,
+        'data-bs-custom-class': dataBsCustomClass,
+        'data-bs-title': dataBsTitle,
     } = props;
+
     return (
         <button
             type="button"
             data-bs-toggle={dataBsToggle}
+            data-bs-title={dataBsTitle}
+            data-bs-custom-class={dataBsCustomClass}
             role={role}
             className={`btn btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig

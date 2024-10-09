@@ -7,6 +7,7 @@ import CreateMultipleInputItens from './inputs/protocol/CreateMultipleInputItens
 import { defaultNewValidation } from '../utils/constants';
 import CreateValidationInput from './inputs/protocol/CreateValidationInput';
 import CreateTableInput from './inputs/protocol/CreateTableInput';
+import { Tooltip } from 'bootstrap';
 
 function CreateItemGroup(props) {
     const { currentGroup, updateGroup, itemTarget, updateGroupPlacement, removeItemGroup, protocol, page, insertItem } = props;
@@ -16,6 +17,19 @@ function CreateItemGroup(props) {
     useEffect(() => {
         if (group !== currentGroup) updateGroup(group, itemTarget.group);
     }, [group, itemTarget.group, updateGroup, currentGroup]);
+
+    useEffect(() => {
+        const tooltipList = [];
+        if (group.tempId) {
+            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-group-${group.tempId}-tooltip`, { trigger: 'hover' }));
+        }
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
+    }, [group.tempId]);
 
     const updateItemValidation = useCallback((validation, item, index) => {
         setGroup((prev) => {
@@ -173,6 +187,10 @@ function CreateItemGroup(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
                         icon="keyboard_arrow_down"
+                        className={`move-group-${group.tempId}-down-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`move-group-${group.tempId}-down-tooltip`}
+                        data-bs-title="Mover o grupo uma posição abaixo na ordem dos grupos da página."
                     />
                 </div>
                 <div className="col-auto">
@@ -180,10 +198,22 @@ function CreateItemGroup(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
                         icon="keyboard_arrow_up"
+                        className={`move-group-${group.tempId}-up-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`move-group-${group.tempId}-up-tooltip`}
+                        data-bs-title="Mover o grupo uma posição acima na ordem dos grupos da página."
                     />
                 </div>
                 <div className="col-auto">
-                    <RoundedButton hsl={[197, 43, 52]} onClick={() => removeItemGroup(itemTarget.group)} icon="delete" />
+                    <RoundedButton
+                        hsl={[197, 43, 52]}
+                        onClick={() => removeItemGroup(itemTarget.group)}
+                        icon="delete"
+                        className={`delete-group-${group.tempId}-tooltip`}
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={`delete-group-${group.tempId}-tooltip`}
+                        data-bs-title="Remover o grupo da página."
+                    />
                 </div>
             </div>
             {group.dependencies?.map((dependency, dependencyIndex) => (
