@@ -213,7 +213,7 @@ function CreateProtocolPage(props) {
     );
 
     const insertItemGroup = useCallback(
-        (page) => {
+        (type, page) => {
             if (page === '') {
                 showAlert({
                     title: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.',
@@ -222,7 +222,7 @@ function CreateProtocolPage(props) {
                 return;
             }
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(newProtocol.pages[page].itemGroups.length + 1));
+            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(type, newProtocol.pages[page].itemGroups.length + 1));
             setProtocol(newProtocol);
             setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
         },
@@ -251,6 +251,15 @@ function CreateProtocolPage(props) {
             setProtocol(newProtocol);
         },
         [protocol, showAlert]
+    );
+
+    const insertTable = useCallback(
+        (type, page) => {
+            const newProtocol = { ...protocol };
+            insertItemGroup(type, page);
+            setProtocol(newProtocol);
+        },
+        [protocol, insertItemGroup]
     );
 
     useEffect(() => {
@@ -527,6 +536,7 @@ function CreateProtocolPage(props) {
                                                             removePage={removePage}
                                                             protocol={protocol}
                                                             updatePage={updatePage}
+                                                            insertItem={insertItem}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (
@@ -624,6 +634,7 @@ function CreateProtocolPage(props) {
                                             insertPage={insertPage}
                                             insertItemGroup={insertItemGroup}
                                             insertItem={insertItem}
+                                            insertTable={insertTable}
                                             setItemTarget={setItemTarget}
                                             insertDependency={insertDependency}
                                             protocol={protocol}
