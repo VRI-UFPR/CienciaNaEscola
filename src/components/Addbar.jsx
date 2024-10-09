@@ -32,7 +32,7 @@ function AddBar(props) {
                     <button
                         type="button"
                         className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
-                        onClick={() => insertItemGroup(pageIndex)}
+                        onClick={() => insertItemGroup('ONE_DIMENSIONAL', pageIndex)}
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Novo grupo</span>
@@ -93,6 +93,30 @@ function AddBar(props) {
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Intervalo numérico</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        onClick={() => insertTable('TEXTBOX_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de texto</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        onClick={() => insertTable('RADIO_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de escolha simples</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0"
+                        onClick={() => insertTable('CHECKBOX_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-5 fw-medium lh-1 ps-3 text-nowrap">Tabela de múltipla escolha</span>
                     </button>
                     <button
                         type="button"

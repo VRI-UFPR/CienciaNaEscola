@@ -34,8 +34,8 @@ export const defaultNewDependency = () => ({
     tempId: Date.now() + Math.random() * 1000,
 });
 
-export const defaultNewItemGroup = (newPlacement) => ({
-    type: 'ONE_DIMENSIONAL',
+export const defaultNewItemGroup = (type, newPlacement) => ({
+    type: type,
     isRepeatable: false,
     items: [],
     dependencies: [],

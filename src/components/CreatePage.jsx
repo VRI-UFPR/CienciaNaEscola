@@ -111,6 +111,8 @@ function CreatePage(props) {
                     updateGroupPlacement={updateGroupPlacement}
                     removeItemGroup={removeItemGroup}
                     protocol={protocol}
+                    page={page}
+                    insertItem={insertItem}
                 />
             )}
             {!currentGroup && (

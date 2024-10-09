@@ -11,15 +11,10 @@ import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewP
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
-<<<<<<< HEAD
-import CreateRangeInput from '../components/inputs/protocol/CreateRangeInput';
-import CreateTableInput from '../components/inputs/protocol/CreateTableInput';
-=======
 import AddBar from '../components/Addbar';
 import CreatePage from '../components/CreatePage';
 import CreateProtocolProperties from '../components/CreateProcotolProperties';
 import { StorageContext } from '../contexts/StorageContext';
->>>>>>> development
 
 const CreateProtocolStyles = `
     @media (max-width: 767px) {

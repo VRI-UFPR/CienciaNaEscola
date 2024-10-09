@@ -6,9 +6,10 @@ import CreateRangeInput from './inputs/protocol/CreateRangeInput';
 import CreateMultipleInputItens from './inputs/protocol/CreateMultipleInputItens';
 import { defaultNewValidation } from '../utils/constants';
 import CreateValidationInput from './inputs/protocol/CreateValidationInput';
+import CreateTableInput from './inputs/protocol/CreateTableInput';
 
 function CreateItemGroup(props) {
-    const { currentGroup, updateGroup, itemTarget, updateGroupPlacement, removeItemGroup, protocol } = props;
+    const { currentGroup, updateGroup, itemTarget, updateGroupPlacement, removeItemGroup, protocol, page, insertItem } = props;
 
     const [group, setGroup] = useState(currentGroup);
 
@@ -95,6 +96,71 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    const insertTableColumn = useCallback(
+        (page, group) => {
+            const newProtocol = { ...protocol };
+            const groupData = newProtocol.pages[page].itemGroups[group];
+            groupData.tableColumns.push({
+                text: '',
+                placement: groupData.tableColumns.length + 1,
+            });
+
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const removeTableColumn = useCallback(
+        (page, group, index) => {
+            const newProtocol = { ...protocol };
+            const groupData = newProtocol.pages[page].itemGroups[group];
+            groupData.tableColumns.splice(index, 1);
+
+            groupData.tableColumns = groupData.tableColumns.map((column, newIndex) => ({
+                ...column,
+                placement: newIndex + 1, // Adjust placement to reflect the new index
+            }));
+
+            // Verifica se o grupo é "CHECKBOX_TABLE" ou "RADIO_TABLE"
+            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(groupData.type)) {
+                groupData.items?.map((item, itemIndex) => {
+                    if (item.itemOptions.length > index) {
+                        // Remove a opção do item correspondente ao índice da coluna removida
+                        const updatedItemOptions = item.itemOptions.filter((_, optionIndex) => optionIndex !== index);
+
+                        // Reajusta os placements das opções restantes
+                        const adjustedItemOptions = updatedItemOptions.map((option, newOptionIndex) => ({
+                            ...option,
+                            placement: newOptionIndex + 1,
+                        }));
+
+                        const updatedItem = {
+                            ...item,
+                            itemOptions: adjustedItemOptions,
+                        };
+
+                        updateItem(updatedItem, page, group, itemIndex);
+
+                        return updatedItem;
+                    }
+                    return item;
+                });
+            }
+
+            setProtocol(newProtocol);
+        },
+        [protocol, updateItem]
+    );
+
+    const updateTableColumn = useCallback(
+        (page, group, index, newText) => {
+            const newProtocol = { ...protocol };
+            newProtocol.pages[page].itemGroups[group].tableColumns[index].text = newText;
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
     return (
         <div className="mb-3" key={'group-' + itemTarget.group}>
             <div className="row gx-2 align-items-center mb-3">
@@ -137,112 +203,165 @@ function CreateItemGroup(props) {
                     <p className="font-barlow fw-medium text-center fs-5 m-0">Nenhum item criado. Crie um por meio da aba Adicionar.</p>
                 </div>
             )}
-            {group.items?.map((item, itemIndex) => (
-                <div key={'item-' + item.tempId}>
-                    {(() => {
-                        switch (item.type) {
-                            case 'TEXTBOX':
-                                return (
-                                    <CreateTextBoxInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'NUMBERBOX':
-                                return (
-                                    <CreateTextBoxInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        isNumberBox={true}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'RANGE':
-                                return (
-                                    <CreateRangeInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                    />
-                                );
-                            case 'SELECT':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'RADIO':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'CHECKBOX':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            default:
-                                return null;
-                        }
-                    })()}
-                    {item.itemValidations
-                        ?.filter(
-                            (v) =>
-                                (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX' || item.type === 'TEXTBOX') && v.type !== 'MANDATORY'
-                        )
-                        .map((validation, validationIndex) => (
-                            <CreateValidationInput
-                                currentValidation={validation}
-                                validationIndex={validationIndex}
-                                pageIndex={itemTarget.page}
-                                groupIndex={itemTarget.group}
-                                itemIndex={itemIndex}
-                                key={'item-validation-' + validation.tempId}
-                                updateValidation={updateItemValidation}
-                                removeValidation={removeItemValidation}
-                                item={item}
-                            />
-                        ))}
+            {group.type === 'ONE_DIMENSIONAL' &&
+                group.items?.map((item, itemIndex) => (
+                    <div key={'item-' + item.tempId}>
+                        {(() => {
+                            switch (item.type) {
+                                case 'TEXTBOX':
+                                    return (
+                                        <CreateTextBoxInput
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                        />
+                                    );
+                                case 'NUMBERBOX':
+                                    return (
+                                        <CreateTextBoxInput
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            isNumberBox={true}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                        />
+                                    );
+                                case 'RANGE':
+                                    return (
+                                        <CreateRangeInput
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                        />
+                                    );
+                                case 'SELECT':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                        />
+                                    );
+                                case 'RADIO':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                        />
+                                    );
+                                case 'CHECKBOX':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                        />
+                                    );
+                                default:
+                                    return null;
+                            }
+                        })()}
+                        {item.itemValidations
+                            ?.filter(
+                                (v) =>
+                                    (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX' || item.type === 'TEXTBOX') &&
+                                    v.type !== 'MANDATORY'
+                            )
+                            .map((validation, validationIndex) => (
+                                <CreateValidationInput
+                                    currentValidation={validation}
+                                    validationIndex={validationIndex}
+                                    pageIndex={itemTarget.page}
+                                    groupIndex={itemTarget.group}
+                                    itemIndex={itemIndex}
+                                    key={'item-validation-' + validation.tempId}
+                                    updateValidation={updateItemValidation}
+                                    removeValidation={removeItemValidation}
+                                    item={item}
+                                />
+                            ))}
+                    </div>
+                ))}
+            {group.type === 'TEXTBOX_TABLE' && (
+                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                    <CreateTableInput
+                        group={group}
+                        page={page}
+                        groupIndex={itemTarget.group}
+                        pageIndex={itemTarget.page}
+                        insertItem={insertItem}
+                        updateItem={updateItem}
+                        removeItem={removeItem}
+                        insertTableColumn={insertTableColumn}
+                        updateTableColumn={updateTableColumn}
+                        removeTableColumn={removeTableColumn}
+                        removeItemGroup={removeItemGroup}
+                    />
                 </div>
-            ))}
+            )}
+            {group.type === 'RADIO_TABLE' && (
+                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                    <CreateTableInput
+                        group={group}
+                        page={page}
+                        groupIndex={itemTarget.group}
+                        pageIndex={itemTarget.page}
+                        insertItem={insertItem}
+                        updateItem={updateItem}
+                        removeItem={removeItem}
+                        insertTableColumn={insertTableColumn}
+                        updateTableColumn={updateTableColumn}
+                        removeTableColumn={removeTableColumn}
+                        removeItemGroup={removeItemGroup}
+                    />
+                </div>
+            )}
+            {group.type === 'CHECKBOX_TABLE' && (
+                <div className="bg-light mb-3" key={'group-' + groupIndex}>
+                    <CreateTableInput
+                        group={group}
+                        page={page}
+                        groupIndex={itemTarget.group}
+                        pageIndex={itemTarget.page}
+                        insertItem={insertItem}
+                        updateItem={updateItem}
+                        removeItem={removeItem}
+                        insertTableColumn={insertTableColumn}
+                        updateTableColumn={updateTableColumn}
+                        removeTableColumn={removeTableColumn}
+                        removeItemGroup={removeItemGroup}
+                    />
+                </div>
+            )}
         </div>
     );
 }
