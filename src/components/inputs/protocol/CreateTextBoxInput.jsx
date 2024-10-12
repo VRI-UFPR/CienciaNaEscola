@@ -1,3 +1,15 @@
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
+
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
 import React, { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
@@ -211,31 +223,36 @@ function CreateTextBoxInput(props) {
                 {item.files?.length > 0 && (
                     <div className="row mb-3 mt-4">
                         {item.files.map((file, i) => {
-                            return (
-                                <div
-                                    key={'item-' + item.tempId + '-image-' + file.name}
-                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
-                                >
+                            if (file && file instanceof File)
+                                return (
                                     <div
-                                        className={`${
-                                            item.files.length > 1 && 'ratio ratio-1x1'
-                                        } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                        key={'item-' + item.tempId + '-image-' + file.name}
+                                        className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
-                                        <img
-                                            src={URL.createObjectURL(file)}
-                                            className="img-fluid object-fit-contain w-100 rounded-4"
-                                            alt="Imagem selecionada"
-                                        />
-                                        <RoundedButton
-                                            className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
-                                            hsl={[190, 46, 70]}
-                                            size={32}
-                                            icon="delete"
-                                            onClick={() => removeImage(i)}
-                                        />
+                                        <div
+                                            className={`${
+                                                item.files.length > 1 && 'ratio ratio-1x1'
+                                            } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                        >
+                                            <img
+                                                src={URL.createObjectURL(file)}
+                                                className="img-fluid object-fit-contain w-100 rounded-4"
+                                                alt="Imagem selecionada"
+                                            />
+                                            <RoundedButton
+                                                className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                hsl={[190, 46, 70]}
+                                                size={32}
+                                                icon="delete"
+                                                onClick={() => removeImage(i)}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            );
+                                );
+                            else {
+                                removeImage(i);
+                                return null;
+                            }
                         })}
                     </div>
                 )}

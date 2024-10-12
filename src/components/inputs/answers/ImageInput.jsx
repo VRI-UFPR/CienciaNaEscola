@@ -1,5 +1,16 @@
-import React, { useState, useRef, useCallback } from 'react';
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
 
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
+import React, { useState, useRef, useCallback } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
 import { MaterialSymbol } from 'react-material-symbols';
@@ -96,24 +107,20 @@ function ImageInput(props) {
                             disabled={disabled || disableUpload}
                         />
                         <ul className="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
-                            <li className="dropdown-item">
+                            <li className="dropdown-item" onClick={handleGalleryButtonClick}>
                                 <div className="row m-0 align-items-center justify-content-between">
                                     <div className="col-auto p-0 pe-3">
-                                        <span className="fw-medium color-dark-gray" onClick={handleGalleryButtonClick}>
-                                            Selecionar da galeria
-                                        </span>
+                                        <span className="fw-medium color-dark-gray">Selecionar da galeria</span>
                                     </div>
                                     <div className="col-2 p-0 ps-2">
                                         <MaterialSymbol icon="photo_library" size={32} fill color="#535353" />
                                     </div>
                                 </div>
                             </li>
-                            <li className="dropdown-item">
+                            <li className="dropdown-item" onClick={handleCameraButtonClick}>
                                 <div className="row m-0 align-items-center justify-content-between">
                                     <div className="col-auto p-0 pe-3">
-                                        <span className="fw-medium color-dark-gray" onClick={handleCameraButtonClick}>
-                                            Tirar foto
-                                        </span>
+                                        <span className="fw-medium color-dark-gray">Tirar foto</span>
                                     </div>
                                     <div className="col-2 p-0 ps-2">
                                         <MaterialSymbol icon="photo_camera" size={32} fill color="#535353" />
@@ -139,24 +146,29 @@ function ImageInput(props) {
                         )}
                         {answer.files.length > 0 || disableUpload ? (
                             answer.files.slice(0, ImageVisibility ? answer.files.length : 2 - (disableUpload ? 1 : 0)).map((image, i) => {
-                                return (
-                                    <div key={i} className="col-6 pt-3 position-relative">
-                                        <div className="ratio ratio-1x1 w-100 position-relative border border-light-subtle rounded-4 overflow-hidden">
-                                            <img
-                                                className="img-fluid object-fit-contain w-100"
-                                                src={URL.createObjectURL(answer.files[i])}
-                                                alt="Imagem selecionada"
+                                if (answer.files[i] && answer.files[i] instanceof File)
+                                    return (
+                                        <div key={i} className="col-6 pt-3 position-relative">
+                                            <div className="ratio ratio-1x1 w-100 position-relative border border-light-subtle rounded-4 overflow-hidden">
+                                                <img
+                                                    className="img-fluid object-fit-contain w-100"
+                                                    src={URL.createObjectURL(answer.files[i])}
+                                                    alt="Imagem selecionada"
+                                                />
+                                            </div>
+                                            <RoundedButton
+                                                className="position-absolute d-inline-block top-0 end-0"
+                                                hsl={[190, 46, 70]}
+                                                icon="delete"
+                                                onClick={() => removeImage(i)}
+                                                disabled={disabled || disableUpload}
                                             />
                                         </div>
-                                        <RoundedButton
-                                            className="position-absolute d-inline-block top-0 end-0"
-                                            hsl={[190, 46, 70]}
-                                            icon="delete"
-                                            onClick={() => removeImage(i)}
-                                            disabled={disabled || disableUpload}
-                                        />
-                                    </div>
-                                );
+                                    );
+                                else {
+                                    removeImage(i);
+                                    return null;
+                                }
                             })
                         ) : (
                             <div className="col-12">

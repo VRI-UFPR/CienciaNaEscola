@@ -1,3 +1,15 @@
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
+
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
 import { React, useState, useEffect, useContext, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +22,8 @@ import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
 import ErrorPage from './ErrorPage';
+import TextButton from '../components/TextButton';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -61,10 +75,20 @@ function AnswerPage(props) {
     const galleryModalRef = useRef(null);
     const { applicationId } = useParams();
     const { user } = useContext(AuthContext);
+    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
         setSelectedItem(question);
+    };
+
+    const sumOptionAnswers = (itemOptions) => {
+        let sum = 0;
+        for (const option of itemOptions) {
+            sum += Object.keys(option.optionAnswers).length;
+        }
+        return sum;
     };
 
     useEffect(() => {
@@ -93,6 +117,141 @@ function AnswerPage(props) {
         return <SplashPage text="Carregando respostas de aplicação..." />;
     }
 
+    // Função de exportar csv
+
+    const createFile = (modalRef) => {
+        let obj, csv;
+
+        obj = answer;
+
+        if (Object.keys(obj.answers).length > 0) {
+            csv = jsonToCsv(obj);
+
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(blob, 'data.csv');
+            } else {
+                var link = document.createElement('a');
+                if (link.download !== undefined) {
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'data.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        } else {
+            showAlert({ title: 'O seguinte protocolo não possui respostas: ' + obj.protocol.title, dismissible: true });
+        }
+    };
+
+    function jsonToCsv(ans) {
+        let header = [],
+            answers = [],
+            userAnswers = [];
+        let headerString;
+        let items = ans.protocol.pages[0].itemGroups[0].items;
+        let ansIds = Object.keys(ans.answers);
+
+        // Armazena todas as perguntas no vetor 'header'
+        header.push('username');
+        for (let i = 0; i < items.length; i++) {
+            // Substitui '\n' por um espaço para evitar quebra de linha no CSV
+            let cleanText = String(items[i].text).replace(/\n/g, ' ');
+            header.push(cleanText);
+        }
+        // Tratamentos para exportar corretamente
+        // items.length já contém o +1 do "username"
+        header[0] = '"' + header[0];
+        header[items.length] = header[items.length] + '"';
+
+        // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
+        headerString = header.join('","');
+
+        // Armazena as respostas
+        for (let i = 0; i < ansIds.length; i++) {
+            userAnswers[0] = String(ans.answers[ansIds[i]].user.username);
+
+            // Respostas em si
+            for (let j = 0; j < items.length; j++) {
+                switch (items[j].type) {
+                    case 'TIMEBOX':
+                    case 'DATEBOX':
+                    case 'LOCATIONBOX':
+                    case 'TEXTBOX':
+                        userAnswers[j + 1] = String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].text).replace(/\n/g, ' ');
+                        break;
+
+                    case 'TEXT':
+                        userAnswers[j + 1] = 'Enunciado*';
+                        break;
+
+                    case 'RADIO':
+                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
+                        for (let k = 0; k < items[j].itemOptions.length; k++) {
+                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
+                                userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
+                        }
+                        break;
+
+                    case 'CHECKBOX':
+                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
+                        for (let k = 0; k < items[j].itemOptions.length; k++) {
+                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
+                                if (userAnswers[j + 1] !== undefined)
+                                    userAnswers[j + 1] =
+                                        userAnswers[j + 1] + ' | ' + String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
+                                else userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
+                        }
+                        break;
+
+                    case 'UPLOAD':
+                        for (let k = 0; k < items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files.length; k++) {
+                            if (
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.png') ||
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpg') ||
+                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpeg')
+                            ) {
+                                if (userAnswers[j + 1] !== undefined)
+                                    userAnswers[j + 1] =
+                                        userAnswers[j + 1] +
+                                        ' | ' +
+                                        baseUrl.concat('api/', String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path));
+                                else
+                                    userAnswers[j + 1] = baseUrl.concat(
+                                        'api/',
+                                        String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path)
+                                    );
+                            }
+                        }
+                        break;
+
+                    case 'NUMBERBOX':
+                        break;
+
+                    case 'SELECT':
+                        break;
+
+                    case 'SCALE':
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            userAnswers[0] = '"' + userAnswers[0];
+            userAnswers[items.length] = userAnswers[items.length] + '"';
+
+            answers[i] = userAnswers.join('","');
+        }
+
+        const csv = [headerString, ...answers].join('\r\n');
+
+        return csv;
+    }
+
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
             <div className="row flex-grow-1 m-0">
@@ -105,12 +264,17 @@ function AnswerPage(props) {
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row d-flex align-items-center justify-content-center font-barlow h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
-                            <h1 className="color-dark-gray font-century-gothic fw-bold fs-2 pb-4 m-0">
-                                <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
-                                    {answer.protocol.title}
-                                </Link>{' '}
-                                - Respostas
-                            </h1>
+                            <div className="row p-0 m-0">
+                                <h1 className="col col-12 col-md-9 order-2 order-md-1 color-dark-gray font-century-gothic fw-bold fs-2 py-4 pt-md-0 m-0">
+                                    <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
+                                        {answer.protocol.title}
+                                    </Link>{' '}
+                                    - Respostas
+                                </h1>
+                                <div className="col col-12 col-md-3 order-1 order-md-2 d-flex align-items-center">
+                                    <TextButton text={'Exportar'} hsl={[197, 43, 61]} onClick={() => createFile(modalRef)} />
+                                </div>
+                            </div>
 
                             <div className="bg-light-gray rounded-4 mb-3 p-3">
                                 <h2 className="color-dark-gray fw-medium fs-5 m-0">
@@ -182,7 +346,7 @@ function AnswerPage(props) {
                                                                                         className="mb-3"
                                                                                         item={{
                                                                                             files: groupAnswer.files.map((file) => ({
-                                                                                                path: baseUrl + file.path,
+                                                                                                path: baseUrl + 'api/' + file.path,
                                                                                             })),
                                                                                         }}
                                                                                         galleryModalRef={galleryModalRef}
@@ -254,76 +418,78 @@ function AnswerPage(props) {
                                                                 </div>
                                                             );
                                                         })}
-                                                        {item.itemOptions.length > 0 && selectedAnswer === undefined && (
-                                                            <div className="rounded-4 overflow-hidden mb-3">
-                                                                <Chart
-                                                                    chartType="PieChart"
-                                                                    data={[['Resposta', 'Quantidade']].concat(
-                                                                        item.itemOptions.map((io) => {
-                                                                            return [io.text, Object.keys(io.optionAnswers).length];
-                                                                        })
-                                                                    )}
-                                                                    options={{
-                                                                        chartArea: { top: 8, height: '90%', width: '90%' },
-                                                                        legend: { position: 'bottom' },
-                                                                        colors: [
-                                                                            '#F59489',
-                                                                            '#91CAD6',
-                                                                            '#FECF86',
-                                                                            '#4E9BB9',
-                                                                            '#EC6571',
-                                                                            '#AAD390',
-                                                                            '#8C6A80',
-                                                                            '#70A6A6',
-                                                                            '#FACD63',
-                                                                            '#578AA2',
-                                                                            '#E64E5E',
-                                                                            '#91BD7E',
-                                                                            '#F9A98F',
-                                                                            '#76C4D1',
-                                                                            '#FEDB8A',
-                                                                            '#5C97B2',
-                                                                            '#D85A6A',
-                                                                            '#89A86B',
-                                                                            '#F7BC92',
-                                                                            '#6FACB5',
-                                                                            '#E14953',
-                                                                            '#A1C588',
-                                                                            '#F5D39A',
-                                                                            '#568BA5',
-                                                                            '#C44D59',
-                                                                            '#7FA569',
-                                                                            '#E6A17C',
-                                                                            '#619BB0',
-                                                                            '#F39C9F',
-                                                                            '#ADC192',
-                                                                            '#FFD07D',
-                                                                            '#5499AE',
-                                                                            '#E6606F',
-                                                                            '#97BD83',
-                                                                            '#F6C2A3',
-                                                                            '#6BA3B8',
-                                                                            '#E15661',
-                                                                            '#90B67A',
-                                                                            '#F7AE9C',
-                                                                            '#75BFCB',
-                                                                            '#E6737D',
-                                                                            '#A2CA93',
-                                                                            '#FAD4AC',
-                                                                            '#639FB7',
-                                                                            '#D45B66',
-                                                                            '#83AB77',
-                                                                            '#F9B69B',
-                                                                            '#71B4C6',
-                                                                            '#E75762',
-                                                                            '#A8C599',
-                                                                        ],
-                                                                        is3D: true,
-                                                                    }}
-                                                                    height={'400px'}
-                                                                />
-                                                            </div>
-                                                        )}
+                                                        {item.itemOptions.length > 0 &&
+                                                            selectedAnswer === undefined &&
+                                                            sumOptionAnswers(item.itemOptions) > 0 && (
+                                                                <div className="rounded-4 overflow-hidden mb-3">
+                                                                    <Chart
+                                                                        chartType="PieChart"
+                                                                        data={[['Resposta', 'Quantidade']].concat(
+                                                                            item.itemOptions.map((io) => {
+                                                                                return [io.text, Object.keys(io.optionAnswers).length];
+                                                                            })
+                                                                        )}
+                                                                        options={{
+                                                                            chartArea: { top: 8, height: '90%', width: '90%' },
+                                                                            legend: { position: 'bottom' },
+                                                                            colors: [
+                                                                                '#F59489',
+                                                                                '#91CAD6',
+                                                                                '#FECF86',
+                                                                                '#4E9BB9',
+                                                                                '#EC6571',
+                                                                                '#AAD390',
+                                                                                '#8C6A80',
+                                                                                '#70A6A6',
+                                                                                '#FACD63',
+                                                                                '#578AA2',
+                                                                                '#E64E5E',
+                                                                                '#91BD7E',
+                                                                                '#F9A98F',
+                                                                                '#76C4D1',
+                                                                                '#FEDB8A',
+                                                                                '#5C97B2',
+                                                                                '#D85A6A',
+                                                                                '#89A86B',
+                                                                                '#F7BC92',
+                                                                                '#6FACB5',
+                                                                                '#E14953',
+                                                                                '#A1C588',
+                                                                                '#F5D39A',
+                                                                                '#568BA5',
+                                                                                '#C44D59',
+                                                                                '#7FA569',
+                                                                                '#E6A17C',
+                                                                                '#619BB0',
+                                                                                '#F39C9F',
+                                                                                '#ADC192',
+                                                                                '#FFD07D',
+                                                                                '#5499AE',
+                                                                                '#E6606F',
+                                                                                '#97BD83',
+                                                                                '#F6C2A3',
+                                                                                '#6BA3B8',
+                                                                                '#E15661',
+                                                                                '#90B67A',
+                                                                                '#F7AE9C',
+                                                                                '#75BFCB',
+                                                                                '#E6737D',
+                                                                                '#A2CA93',
+                                                                                '#FAD4AC',
+                                                                                '#639FB7',
+                                                                                '#D45B66',
+                                                                                '#83AB77',
+                                                                                '#F9B69B',
+                                                                                '#71B4C6',
+                                                                                '#E75762',
+                                                                                '#A8C599',
+                                                                            ],
+                                                                            is3D: true,
+                                                                        }}
+                                                                        height={'400px'}
+                                                                    />
+                                                                </div>
+                                                            )}
                                                     </div>
                                                 )
                                             );
