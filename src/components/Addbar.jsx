@@ -11,7 +11,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 */
 
 import { Tooltip } from 'bootstrap';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { MaterialSymbol } from 'react-material-symbols';
 
 const style = `

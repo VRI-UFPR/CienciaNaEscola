@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import React, { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
+import { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { Modal, Carousel } from 'bootstrap';
 import RoundedButton from './RoundedButton';
 

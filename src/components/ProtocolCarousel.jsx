@@ -10,7 +10,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'bootstrap';
 import { useEffect, useState, useRef } from 'react';

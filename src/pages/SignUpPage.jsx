@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import axios from 'axios';

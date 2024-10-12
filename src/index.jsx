@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -39,14 +39,14 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const port = process.env.PORT || 3001;
 console.log(`Server running on port ${port}`);
 root.render(
-    <React.StrictMode>
+    <StrictMode>
         <App />
         <style
             dangerouslySetInnerHTML={{
                 __html: styles,
             }}
         />
-    </React.StrictMode>
+    </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
