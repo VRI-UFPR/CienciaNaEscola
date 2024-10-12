@@ -1,6 +1,18 @@
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
+
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';

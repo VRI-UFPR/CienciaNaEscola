@@ -1,4 +1,16 @@
-import { React, useState, useEffect, useRef, useContext } from 'react';
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
+
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SplashPage from './SplashPage';
@@ -85,7 +97,6 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
-        //Search if the application is in localApplications
         if (isLoading && user.status !== 'loading') {
             if (user.role === 'USER') {
                 setError({
