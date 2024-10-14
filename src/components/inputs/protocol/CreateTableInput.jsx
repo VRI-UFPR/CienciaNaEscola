@@ -46,7 +46,6 @@ function CreateTableInput(props) {
         insertTableColumn,
         updateTableColumn,
         removeTableColumn,
-        removeItemGroup,
     } = props;
 
     const changeItem = (event, itemIndex) => {
@@ -66,41 +65,6 @@ function CreateTableInput(props) {
 
     return (
         <div className="pb-4 pb-lg-5">
-            <div className="row justify-content-between pb-2 g-0">
-                <div className="col">
-                    <div className="d-flex justify-content-start">
-                        <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
-                            {(() => {
-                                switch (group.type) {
-                                    case 'TEXTBOX_TABLE':
-                                        return 'Tabela de texto';
-
-                                    case 'RADIO_TABLE':
-                                        return 'Tabela de escolha simples';
-
-                                    case 'CHECKBOX_TABLE':
-                                        return 'Tabela de múltipla escolha';
-
-                                    default:
-                                        return;
-                                }
-                            })()}
-                        </h1>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="d-flex justify-content-end">
-                        <RoundedButton
-                            className="ms-2"
-                            hsl={[190, 46, 70]}
-                            icon="delete"
-                            onClick={() => {
-                                removeItemGroup(pageIndex, groupIndex);
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className=" table-grid overflow-auto">
                     <table className="table table-bordered border-black">

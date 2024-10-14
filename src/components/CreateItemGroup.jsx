@@ -173,9 +173,34 @@ function CreateItemGroup(props) {
     return (
         <div className="mb-3" key={'group-' + itemTarget.group}>
             <div className="row gx-2 align-items-center mb-3">
-                <div className="col-auto">
-                    <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">Grupo {Number(itemTarget.group) + 1}</p>
-                </div>
+                {group.type === 'ONE_DIMENSIONAL' && (
+                    <div className="col-auto">
+                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
+                            Grupo {Number(itemTarget.group) + 1}
+                        </p>
+                    </div>
+                )}
+                {group.type !== 'ONE_DIMENSIONAL' && (
+                    <div className="col-auto">
+                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
+                            {(() => {
+                                switch (group.type) {
+                                    case 'TEXTBOX_TABLE':
+                                        return 'Tabela de texto';
+
+                                    case 'RADIO_TABLE':
+                                        return 'Tabela de escolha simples';
+
+                                    case 'CHECKBOX_TABLE':
+                                        return 'Tabela de múltipla escolha';
+
+                                    default:
+                                        return;
+                                }
+                            })()}
+                        </p>
+                    </div>
+                )}
                 <div className="col"></div>
                 <div className="col-auto">
                     <RoundedButton
@@ -223,7 +248,7 @@ function CreateItemGroup(props) {
                     protocol={protocol}
                 />
             ))}
-            {group.items?.length === 0 && (
+            {group.type === 'ONE_DIMENSIONAL' && group.items?.length === 0 && (
                 <div className="bg-light-grey rounded-4 p-4">
                     <p className="font-barlow fw-medium text-center fs-5 m-0">Nenhum item criado. Crie um por meio da aba Adicionar.</p>
                 </div>
@@ -349,7 +374,6 @@ function CreateItemGroup(props) {
                         insertTableColumn={insertTableColumn}
                         updateTableColumn={updateTableColumn}
                         removeTableColumn={removeTableColumn}
-                        removeItemGroup={removeItemGroup}
                     />
                 </div>
             )}
@@ -366,7 +390,6 @@ function CreateItemGroup(props) {
                         insertTableColumn={insertTableColumn}
                         updateTableColumn={updateTableColumn}
                         removeTableColumn={removeTableColumn}
-                        removeItemGroup={removeItemGroup}
                     />
                 </div>
             )}
@@ -383,7 +406,6 @@ function CreateItemGroup(props) {
                         insertTableColumn={insertTableColumn}
                         updateTableColumn={updateTableColumn}
                         removeTableColumn={removeTableColumn}
-                        removeItemGroup={removeItemGroup}
                     />
                 </div>
             )}
