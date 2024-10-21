@@ -36,17 +36,8 @@ const createTableStyles = `
 `;
 
 function CreateTableInput(props) {
-    const {
-        group,
-        groupIndex,
-        pageIndex,
-        insertItem,
-        updateItem,
-        removeItem,
-        insertTableColumn,
-        updateTableColumn,
-        removeTableColumn,
-    } = props;
+    const { group, groupIndex, pageIndex, insertItem, updateItem, removeItem, insertTableColumn, updateTableColumn, removeTableColumn } =
+        props;
 
     const changeItem = (event, itemIndex) => {
         const updatedText = event.target.value;
@@ -60,7 +51,7 @@ function CreateTableInput(props) {
         });
 
         // Use the updateItem function to propagate changes to the parent component
-        updateItem(updatedItems[itemIndex], pageIndex, groupIndex, itemIndex);
+        updateItem(updatedItems[itemIndex], itemIndex);
     };
 
     return (
@@ -123,7 +114,7 @@ function CreateTableInput(props) {
                                                     className="ms-2"
                                                     hsl={[190, 46, 70]}
                                                     icon="delete"
-                                                    onClick={() => removeItem(pageIndex, groupIndex, itemIndex)}
+                                                    onClick={() => removeItem(itemIndex)}
                                                 />
                                             </div>
                                         </td>
