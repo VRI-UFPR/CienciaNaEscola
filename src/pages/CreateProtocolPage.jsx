@@ -427,6 +427,13 @@ function CreateProtocolPage(props) {
                                                 })),
                                             };
                                         }),
+                                        tableColumns: g.tableColumns.map((c) => {
+                                            return {
+                                                id: c.id,
+                                                text: c.text,
+                                                placement: c.placement,
+                                            };
+                                        }),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
