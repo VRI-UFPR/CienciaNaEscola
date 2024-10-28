@@ -21,7 +21,7 @@ const TableInputStyles = `
 `;
 
 function TableInput(props) {
-    const { onAnswerChange, group, answers, disabled } = props;
+    const { onAnswerChange, tableIndex, group, answers, answersPage, disabled } = props;
 
     const updateAnswer = useCallback(
         (newAnswer, itemId) => {
@@ -81,12 +81,13 @@ function TableInput(props) {
                     </thead>
                     <tbody>
                         {group.items?.map((item, itemIndex) => {
+                            const specificAnswers = Object.values(item.tableAnswers || {});
                             return (
                                 <tr key={'item-line-' + itemIndex}>
                                     <th scope="row" className="miw-150 mw-150 mh-90">
                                         <div className="overflow-auto text-break mh-90">{item.text}</div>
                                     </th>
-                                    {group.tableColumns?.map((column, columnIndex) => {
+                                    {!answersPage && group.tableColumns?.map((column, columnIndex) => {
                                         return (
                                             <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
                                                 {group.type === 'TEXTBOX_TABLE' && (
@@ -120,6 +121,50 @@ function TableInput(props) {
                                                 )}
                                             </td>
                                         );
+                                    })}
+                                    {answersPage && specificAnswers.map((answer, answerIndex) => {
+                                        if (answerIndex !== tableIndex) return null
+                                        const nestedAnswer = Object.values(answer)
+                                        return group.tableColumns?.map((column, columnIndex) => {
+                                            const isChecked = nestedAnswer[0] && nestedAnswer[0][column.id] !== undefined;
+                                            const nestedValue = nestedAnswer?.[0][columnIndex + 1];
+                                            return (
+                                                <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
+                                                    {group.type === 'TEXTBOX_TABLE' && (
+                                                        <textarea
+                                                            type="text"
+                                                            className="column-input border border-0 w-100"
+                                                            id="columntext"
+                                                            value={nestedValue}
+                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.value, true)}
+                                                            disabled={disabled}
+                                                        ></textarea>
+                                                    )}
+                                                    {group.type === 'RADIO_TABLE' && (
+                                                        <input
+                                                            className={`column-input w-100`}
+                                                            type="radio"
+                                                            name={'column-option-for-item-' + itemIndex}
+                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
+                                                            checked={isChecked}
+                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.checked)}
+                                                            disabled={disabled}
+                                                        ></input>
+                                                    )}
+                                                    {group.type === 'CHECKBOX_TABLE' && (
+                                                        <input
+                                                            className={`column-input w-100`}
+                                                            type="checkbox"
+                                                            name={'column-option-for-item-' + itemIndex}
+                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
+                                                            checked={isChecked}
+                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.checked)}
+                                                            disabled={disabled}
+                                                        ></input>
+                                                    )}
+                                                </td>
+                                            );  
+                                        })
                                     })}
                                 </tr>
                             );
