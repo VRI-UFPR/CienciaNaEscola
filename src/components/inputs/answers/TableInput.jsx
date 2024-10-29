@@ -21,7 +21,7 @@ const TableInputStyles = `
 `;
 
 function TableInput(props) {
-    const { onAnswerChange, tableIndex, group, answers, answersPage, disabled } = props;
+    const { onAnswerChange, applicationAnswerId, group, answers, answersPage, disabled } = props;
 
     const updateAnswer = useCallback(
         (newAnswer, itemId) => {
@@ -81,7 +81,6 @@ function TableInput(props) {
                     </thead>
                     <tbody>
                         {group.items?.map((item, itemIndex) => {
-                            const specificAnswers = Object.values(item.tableAnswers || {});
                             return (
                                 <tr key={'item-line-' + itemIndex}>
                                     <th scope="row" className="miw-150 mw-150 mh-90">
@@ -122,50 +121,55 @@ function TableInput(props) {
                                             </td>
                                         );
                                     })}
-                                    {answersPage && specificAnswers.map((answer, answerIndex) => {
-                                        if (answerIndex !== tableIndex) return null
-                                        const nestedAnswer = Object.values(answer)
-                                        return group.tableColumns?.map((column, columnIndex) => {
-                                            const isChecked = nestedAnswer[0] && nestedAnswer[0][column.id] !== undefined;
-                                            const nestedValue = nestedAnswer?.[0][columnIndex + 1];
-                                            return (
-                                                <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
-                                                    {group.type === 'TEXTBOX_TABLE' && (
-                                                        <textarea
-                                                            type="text"
-                                                            className="column-input border border-0 w-100"
-                                                            id="columntext"
-                                                            value={nestedValue}
-                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.value, true)}
-                                                            disabled={disabled}
-                                                        ></textarea>
-                                                    )}
-                                                    {group.type === 'RADIO_TABLE' && (
-                                                        <input
-                                                            className={`column-input w-100`}
-                                                            type="radio"
-                                                            name={'column-option-for-item-' + itemIndex}
-                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
-                                                            checked={isChecked}
-                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.checked)}
-                                                            disabled={disabled}
-                                                        ></input>
-                                                    )}
-                                                    {group.type === 'CHECKBOX_TABLE' && (
-                                                        <input
-                                                            className={`column-input w-100`}
-                                                            type="checkbox"
-                                                            name={'column-option-for-item-' + itemIndex}
-                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
-                                                            checked={isChecked}
-                                                            onChange={(e) => handleTableUpdate(item.id, column.id, e.target.checked)}
-                                                            disabled={disabled}
-                                                        ></input>
-                                                    )}
-                                                </td>
-                                            );  
-                                        })
-                                    })}
+                                    {answersPage && Object.entries(item.tableAnswers).map(
+                                        ([applicationAnsId, answerGroup]) => {
+                                            return (applicationAnsId === applicationAnswerId) && (
+                                                Object.entries(answerGroup).map(
+                                                    ([answerGroupId, groupAnswers]) => {
+                                                        return group.tableColumns?.map((column, columnIndex) => {
+                                                            const answerEntry = Object.entries(groupAnswers).find(([key]) =>
+                                                                 String(key) === String(column.id)
+                                                            )
+                                                            const value = answerEntry ? answerEntry[1] : null;
+                                                            return (
+                                                                <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
+                                                                    {group.type === 'TEXTBOX_TABLE' && (
+                                                                        <textarea
+                                                                            type="text"
+                                                                            className="column-input border border-0 w-100"
+                                                                            id="columntext"
+                                                                            value={value ? value : ""}
+                                                                            disabled={disabled}
+                                                                        ></textarea>
+                                                                    )}
+                                                                    {group.type === 'RADIO_TABLE' && (
+                                                                        <input
+                                                                            className={`column-input w-100`}
+                                                                            type="radio"
+                                                                            name={`column-option-for-item-${itemIndex}-column-${column.id}-application-${applicationAnsId}`}
+                                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
+                                                                            checked={value === null ? false : true}
+                                                                            disabled={disabled}
+                                                                        ></input>
+                                                                    )}
+                                                                    {group.type === 'CHECKBOX_TABLE' && (
+                                                                        <input
+                                                                            className={`column-input w-100`}
+                                                                            type="checkbox"
+                                                                            name={'column-option-for-item-' + itemIndex}
+                                                                            id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
+                                                                            checked={value === null ? false : true}
+                                                                            disabled={disabled}
+                                                                        ></input>
+                                                                    )}
+                                                                </td>
+                                                            )
+                                                        }) 
+                                                    }
+                                                )
+                                            )
+                                        }
+                                    )}
                                 </tr>
                             );
                         })}

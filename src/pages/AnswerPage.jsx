@@ -361,16 +361,16 @@ function AnswerPage(props) {
                                                 case 'RADIO_TABLE':
                                                 case 'CHECKBOX_TABLE':
                                                     return Object.entries(answer.answers).map(([key, value], index) => {
-                                                                return (
-                                                                    <div key={`group-${itemGroupIndex}-${index}`} className="row justify-content-center m-0 pt-3">
-                                                                        <TableInput
-                                                                            tableIndex={index}
-                                                                            group={itemGroup}
-                                                                            answersPage={true}
-                                                                            disabled={true}
-                                                                        />
-                                                                    </div>
-                                                                );
+                                                        return (selectedAnswer === undefined || selectedAnswer === key) && (
+                                                            <div key={`group-${itemGroupIndex}-${index}`} className="row justify-content-center m-0 pt-3">
+                                                                <TableInput
+                                                                    applicationAnswerId={key}
+                                                                    group={itemGroup}
+                                                                    answersPage={true}
+                                                                    disabled={true}
+                                                                />
+                                                            </div>
+                                                        );
                                                     }); 
                                                 default:
                                                     return null;

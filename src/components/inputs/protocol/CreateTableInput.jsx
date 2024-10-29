@@ -62,13 +62,20 @@ function CreateTableInput(props) {
                         <thead>
                             <tr>
                                 <th>
-                                    <button type="button" onClick={() => insertTableColumn()}>
-                                        + Coluna
-                                    </button>
-
-                                    <button type="button" onClick={() => insertItem('TABLEROW', pageIndex, groupIndex)}>
-                                        + Linha
-                                    </button>
+                                    <div className='row justify-content-center'>
+                                        <RoundedButton
+                                            className="ms-2"
+                                            hsl={[190, 46, 70]}
+                                            icon="table_rows"
+                                            onClick={() => insertItem('TABLEROW', pageIndex, groupIndex)}
+                                        />
+                                        <RoundedButton
+                                            className="ms-2"
+                                            hsl={[190, 46, 70]}
+                                            icon="view_column"
+                                            onClick={() => insertTableColumn()}
+                                        />
+                                    </div>
                                 </th>
                                 {group.tableColumns?.map((column, columnIndex) => {
                                     return (
@@ -86,6 +93,7 @@ function CreateTableInput(props) {
                                                 <RoundedButton
                                                     className="ms-2"
                                                     hsl={[190, 46, 70]}
+                                                    size={32}
                                                     icon="delete"
                                                     onClick={() => removeTableColumn(columnIndex)}
                                                 />
@@ -113,6 +121,7 @@ function CreateTableInput(props) {
                                                 <RoundedButton
                                                     className="ms-2"
                                                     hsl={[190, 46, 70]}
+                                                    size={32}
                                                     icon="delete"
                                                     onClick={() => removeItem(itemIndex)}
                                                 />
