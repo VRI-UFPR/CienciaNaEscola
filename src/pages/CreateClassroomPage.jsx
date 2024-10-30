@@ -23,7 +23,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from '../components/RoundedButton';
-import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -396,7 +395,7 @@ function CreateClassroomPage(props) {
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
                                                     onClick={() => searchUsers(userSearchTerm)}
-                                                    icon={iconSearch}
+                                                    icon="person_search"
                                                 />
                                             </div>
                                         </div>
