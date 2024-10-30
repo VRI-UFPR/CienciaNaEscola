@@ -313,9 +313,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerUsers = (term) => {
@@ -343,9 +341,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedAnswerUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term) => {
@@ -390,9 +386,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedClassrooms(concatenedClassrooms);
             })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerClassrooms = (term) => {
@@ -437,9 +431,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedAnswerClassrooms(concatenedClassrooms);
             })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id) => {

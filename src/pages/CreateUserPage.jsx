@@ -195,9 +195,7 @@ function CreateUserPage(props) {
                 ];
                 setSearchedClassrooms(newClassroomss);
             })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const showInstitutionClassrooms = () => {

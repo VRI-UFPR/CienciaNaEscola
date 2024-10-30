@@ -182,9 +182,7 @@ function CreateClassroomPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const showInstitutionUsers = () => {
