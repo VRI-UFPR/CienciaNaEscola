@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
@@ -22,6 +22,7 @@ import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
+import { brazilianStates } from '../utils/constants';
 
 const style = `
     .font-barlow {
@@ -74,8 +75,39 @@ function CreateInstitutionPage(props) {
     const [institution, setInstitution] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [state, setState] = useState('');
+    const [searchedCities, setSearchedCities] = useState([]);
 
     const navigate = useNavigate();
+
+    const setLocation = useCallback(
+        (addressId, state) => {
+            const searchParams = { state, country: 'Brasil' };
+            const formData = serialize(searchParams);
+            axios
+                .post(`${baseUrl}api/address/getAddressesByState`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+                .then((response) => {
+                    setSearchedCities(response.data.data);
+                    setState(state);
+                    setInstitution((prev) => ({ ...prev, addressId: addressId }));
+                })
+                .catch((error) => {
+                    showAlert({
+                        title: 'Erro ao atualizar localizações disponíveis',
+                        description: error.response?.data.message,
+                        dismissHsl: [97, 43, 70],
+                        dismissText: 'Ok',
+                        dismissible: true,
+                    });
+                });
+        },
+        [showAlert, user.token]
+    );
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
@@ -100,6 +132,7 @@ function CreateInstitutionPage(props) {
                     .then((response) => {
                         const d = response.data.data;
                         setInstitution({ name: d.name, type: d.type, addressId: d.address.id });
+                        setLocation(d.address.id, d.address.state);
                         setIsLoading(false);
                     })
                     .catch((error) => {
@@ -115,7 +148,7 @@ function CreateInstitutionPage(props) {
                 setIsLoading(false);
             }
         }
-    }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert]);
+    }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, setLocation]);
 
     const submitInstitution = (e) => {
         e.preventDefault();
@@ -286,18 +319,49 @@ function CreateInstitutionPage(props) {
                                     </select>
                                 </div>
                                 <div>
-                                    <label label="address-id" className="form-label color-steel-blue fs-5 fw-medium">
-                                        ID do endereço:
+                                    <label label="type" className="form-label color-steel-blue fs-5 fw-medium">
+                                        Selecione o estado da instituição
                                     </label>
-                                    <input
-                                        type="number"
+                                    <select
+                                        name="state"
+                                        value={state || ''}
+                                        id="state"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
+                                        form="institution-form"
+                                        onChange={(e) => setLocation('', e.target.value)}
+                                    >
+                                        <option value="" className="color-grey fw-medium fs-5">
+                                            Selecione uma opção:
+                                        </option>
+                                        {brazilianStates.map((state, i) => (
+                                            <option key={'state-' + i} value={state} className="color-grey fw-medium fs-5">
+                                                {state}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label label="type" className="form-label color-steel-blue fs-5 fw-medium">
+                                        Selecione a cidade da instituição
+                                    </label>
+                                    <select
                                         name="address-id"
                                         value={institution.addressId || ''}
-                                        form="institution-form"
                                         id="address-id"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
-                                        onChange={(e) => setInstitution({ ...institution, addressId: e.target.value })}
-                                    />
+                                        form="institution-form"
+                                        disabled={!state}
+                                        onChange={(e) => setInstitution((prev) => ({ ...prev, addressId: e.target.value || undefined }))}
+                                    >
+                                        <option value="" className="color-grey fw-medium fs-5">
+                                            Selecione uma opção:
+                                        </option>
+                                        {searchedCities.map((city) => (
+                                            <option key={'city-' + city.id} value={city.id} className="color-grey fw-medium fs-5">
+                                                {city.city}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </form>
                         </div>
