@@ -223,27 +223,17 @@ function CreateUserPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Usuário atualizado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            if (response.data.data.id === user.id) {
+                        headerText: 'Usuário atualizado com sucesso.',
+                        primaryBtnHsl: [97, 43, 70],
+                        primaryBtnLabel: 'Ok',
+                        onPrimaryBtnClick: () => {
+                            if (response.data.data.id === user.id)
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                            }
                             navigate(`/dash/institutions/my`);
                         },
                     });
                 })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar usuário.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário.', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${baseUrl}api/user/createUser`, formData, {
@@ -252,26 +242,10 @@ function CreateUserPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
-                    showAlert({
-                        title: 'Usuário criado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/my`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao criar usuário.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .then((response) =>
+                    showAlert({ headerText: 'Usuário criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao criar usuário.', bodyText: error.response?.data.message }));
         }
     };
 
@@ -282,26 +256,10 @@ function CreateUserPage(props) {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) => {
-                showAlert({
-                    title: 'Usuário excluído com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                    onHide: () => {
-                        navigate(`/dash/institutions/my`);
-                    },
-                });
-            })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir usuário.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .then((response) =>
+                showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+            )
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
     };
 
     const generateRandomHash = () => {
@@ -586,15 +544,12 @@ function CreateUserPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
-                                                dismissHsl: [355, 78, 66],
-                                                dismissText: 'Não',
-                                                actionHsl: [97, 43, 70],
-                                                actionText: 'Sim',
-                                                dismissible: true,
-                                                actionOnClick: () => {
-                                                    formRef.current.requestSubmit();
-                                                },
+                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
+                                                primaryBtnHsl: [355, 78, 66],
+                                                primaryBtnLabel: 'Não',
+                                                secondaryBtnHsl: [97, 43, 70],
+                                                secondaryBtnLabel: 'Sim',
+                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
                                             });
                                         }}
                                     />
@@ -606,15 +561,12 @@ function CreateUserPage(props) {
                                             hsl={[355, 78, 66]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja excluir o usuário?`,
-                                                    dismissHsl: [97, 43, 70],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [355, 78, 66],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        deleteUser();
-                                                    },
+                                                    headerText: `Tem certeza que deseja excluir o usuário?`,
+                                                    primaryBtnHsl: [97, 43, 70],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [355, 78, 66],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => deleteUser(),
                                                 });
                                             }}
                                         />
