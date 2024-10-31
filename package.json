@@ -12,6 +12,7 @@
         "bcryptjs": "^2.4.3",
         "bootstrap": "^5.3.0-alpha3",
         "browser-image-compression": "^2.0.2",
+        "buffer": "^6.0.3",
         "crypto-browserify": "^3.12.1",
         "markdown-to-jsx": "^7.4.1",
         "multer": "^1.4.5-lts.1",
@@ -23,6 +24,8 @@
         "react-router-dom": "^6.17.0",
         "react-scripts": "5.0.1",
         "save": "^2.9.0",
+        "stream-browserify": "^3.0.0",
+        "vm-browserify": "^1.1.2",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
