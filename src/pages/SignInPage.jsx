@@ -24,6 +24,7 @@ import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
+import { hashSync } from 'bcryptjs';
 
 const styles = `
 
@@ -101,16 +102,9 @@ function SignInPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        const formData = serialize({
-            username,
-            hash: password,
-        });
+        const formData = serialize({ username, hash: hashSync(password, 10) });
         axios
-            .post(baseUrl + 'api/auth/signIn', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -135,11 +129,7 @@ function SignInPage(props) {
 
     const passwordlessLoginHandler = () => {
         axios
-            .get(baseUrl + 'api/auth/passwordlessSignIn', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
