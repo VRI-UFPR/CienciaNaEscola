@@ -23,7 +23,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from '../components/RoundedButton';
-import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -214,62 +213,71 @@ function CreateClassroomPage(props) {
     const submitClassroom = (e) => {
         e.preventDefault();
         const formData = serialize(classroom, { indices: true });
-        if (isEditing) {
-            axios
-                .put(`${baseUrl}api/classroom/updateClassroom/${classroomId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    showAlert({
-                        title: 'Grupo atualizado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/my`);
+        if (classroom.users.length >= 2) {
+            if (isEditing) {
+                axios
+                    .put(`${baseUrl}api/classroom/updateClassroom/${classroomId}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
                         },
+                    })
+                    .then((response) => {
+                        showAlert({
+                            title: 'Grupo atualizado com sucesso.',
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                            onHide: () => {
+                                navigate(`/dash/institutions/my`);
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        showAlert({
+                            title: 'Erro ao atualizar grupo.',
+                            description: error.response?.data.message,
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                        });
                     });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar grupo.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+            } else {
+                axios
+                    .post(`${baseUrl}api/classroom/createClassroom`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        showAlert({
+                            title: 'Grupo criado com sucesso.',
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                            onHide: () => {
+                                navigate(`/dash/institutions/my`);
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        showAlert({
+                            title: 'Erro ao criar grupo.',
+                            description: error.response?.data.message,
+                            dismissHsl: [97, 43, 70],
+                            dismissText: 'Ok',
+                            dismissible: true,
+                        });
                     });
-                });
+            }
         } else {
-            axios
-                .post(`${baseUrl}api/classroom/createClassroom`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) => {
-                    showAlert({
-                        title: 'Grupo criado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/my`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao criar grupo.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+            showAlert({
+                title: 'Adicione pelo menos dois usuários no grupo!',
+                dismissHsl: [97, 43, 70],
+                dismissText: 'Ok',
+                dismissible: true,
+            });
         }
     };
 
@@ -348,6 +356,7 @@ function CreateClassroomPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
+                                        required
                                     />
                                 </div>
                                 {(institutionId || user.institutionId) && (
@@ -395,8 +404,17 @@ function CreateClassroomPage(props) {
                                             <div className="col-auto">
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
-                                                    onClick={() => searchUsers(userSearchTerm)}
-                                                    icon={iconSearch}
+                                                    onClick={() => {
+                                                        String(userSearchTerm).length >= 3
+                                                            ? searchUsers(userSearchTerm)
+                                                            : showAlert({
+                                                                  title: 'Insira pelo menos 3 caracteres',
+                                                                  dismissHsl: [97, 43, 70],
+                                                                  dismissText: 'Ok',
+                                                                  dismissible: true,
+                                                              });
+                                                    }}
+                                                    icon="search"
                                                 />
                                             </div>
                                         </div>

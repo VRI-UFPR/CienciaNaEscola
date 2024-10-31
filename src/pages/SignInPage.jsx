@@ -179,6 +179,7 @@ function SignInPage(props) {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            required
                         />
                         <input
                             className="login-input rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
@@ -186,6 +187,7 @@ function SignInPage(props) {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                         <p
                             className="login-links text-decoration-underline fs-6 cursor-pointer"

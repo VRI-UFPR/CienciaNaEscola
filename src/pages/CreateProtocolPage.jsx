@@ -556,7 +556,37 @@ function CreateProtocolPage(props) {
                                                                     hsl={[97, 43, 70]}
                                                                     text={'Adicionar itens'}
                                                                     onClick={() => {
-                                                                        setCreationMode('children');
+                                                                        if (String(protocol.title).length < 3) {
+                                                                            showAlert({
+                                                                                title: 'Insira pelo menos 3 caracteres no título',
+                                                                                dismissHsl: [97, 43, 70],
+                                                                                dismissText: 'Ok',
+                                                                                dismissible: true,
+                                                                            });
+                                                                        } else if (protocol.visibility === '') {
+                                                                            showAlert({
+                                                                                title: 'Selecione uma opção válida em Visibilidade',
+                                                                                dismissHsl: [97, 43, 70],
+                                                                                dismissText: 'Ok',
+                                                                                dismissible: true,
+                                                                            });
+                                                                        } else if (protocol.applicability === '') {
+                                                                            showAlert({
+                                                                                title: 'Selecione uma opção válida em Aplicabilidade',
+                                                                                dismissHsl: [97, 43, 70],
+                                                                                dismissText: 'Ok',
+                                                                                dismissible: true,
+                                                                            });
+                                                                        } else if (protocol.answersVisibility === '') {
+                                                                            showAlert({
+                                                                                title: 'Selecione uma opção válida em Visibilidade das respostas',
+                                                                                dismissHsl: [97, 43, 70],
+                                                                                dismissText: 'Ok',
+                                                                                dismissible: true,
+                                                                            });
+                                                                        } else {
+                                                                            setCreationMode('children');
+                                                                        }
                                                                     }}
                                                                 />
                                                             </div>

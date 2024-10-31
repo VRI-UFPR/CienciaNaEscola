@@ -387,6 +387,7 @@ function CreateUserPage(props) {
                                         id="name"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
                                         onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                                        required
                                     />
                                 </div>
                                 <div>
@@ -402,6 +403,7 @@ function CreateUserPage(props) {
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
                                         autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+                                        required
                                     />
                                 </div>
                                 <div>
@@ -419,6 +421,7 @@ function CreateUserPage(props) {
                                                 className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                 autoComplete="new-password"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
+                                                required
                                             />
                                         </div>
                                         <div className="col-auto">
@@ -440,11 +443,12 @@ function CreateUserPage(props) {
                                         </label>
                                         <select
                                             name="role"
+                                            value={newUser.role || ''}
                                             id="role"
                                             form="user-form"
                                             className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
                                             onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value || undefined }))}
-                                            value={newUser.role || ''}
+                                            required
                                         >
                                             <option value="">Selecione uma opção:</option>
                                             <option value="USER">Usuário</option>
@@ -455,6 +459,7 @@ function CreateUserPage(props) {
                                                 <option value="PUBLISHER">Publicador</option>
                                             )}
                                             {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
+                                            {user.role === 'ADMIN' && <option value="ADMIN">Admin</option>}
                                         </select>
                                     </div>
                                 )}
@@ -506,7 +511,16 @@ function CreateUserPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
-                                                        onClick={() => searchClassrooms(classroomSearchTerm)}
+                                                        onClick={() => {
+                                                            String(classroomSearchTerm).length >= 3
+                                                                ? searchClassrooms(classroomSearchTerm)
+                                                                : showAlert({
+                                                                      title: 'Insira pelo menos 3 caracteres',
+                                                                      dismissHsl: [97, 43, 70],
+                                                                      dismissText: 'Ok',
+                                                                      dismissible: true,
+                                                                  });
+                                                        }}
                                                         icon="search"
                                                     />
                                                 </div>

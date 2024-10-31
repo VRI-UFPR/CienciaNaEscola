@@ -20,7 +20,6 @@ import ErrorPage from './ErrorPage';
 import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
-import iconPlus from '../assets/images/iconPlus.svg';
 import RoundedButton from '../components/RoundedButton';
 
 const style = `
@@ -159,7 +158,7 @@ function InstitutionPage(props) {
                                         </div>
                                         <div className="col-auto">
                                             <Link to={'users/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                <RoundedButton hsl={[197, 43, 52]} icon="add" />
                                             </Link>
                                         </div>
                                     </div>
@@ -202,7 +201,7 @@ function InstitutionPage(props) {
                                         </div>
                                         <div className="col-auto">
                                             <Link to={'classrooms/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                <RoundedButton hsl={[197, 43, 52]} icon="add" />
                                             </Link>
                                         </div>
                                     </div>

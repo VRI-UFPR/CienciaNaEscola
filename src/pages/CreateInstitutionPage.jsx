@@ -254,6 +254,7 @@ function CreateInstitutionPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
+                                        required
                                     />
                                 </div>
                                 <div>
@@ -267,6 +268,7 @@ function CreateInstitutionPage(props) {
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         form="institution-form"
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -281,7 +283,7 @@ function CreateInstitutionPage(props) {
                                             Ensino Médio
                                         </option>
                                         <option value="TERTIARY" className="color-grey fw-medium fs-5">
-                                            Ensino superior
+                                            Ensino Superior
                                         </option>
                                     </select>
                                 </div>
@@ -297,6 +299,7 @@ function CreateInstitutionPage(props) {
                                         id="address-id"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, addressId: e.target.value })}
+                                        required
                                     />
                                 </div>
                             </form>
