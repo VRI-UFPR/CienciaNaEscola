@@ -102,7 +102,8 @@ function SignInPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        const formData = serialize({ username, hash: hashSync(password, 10) });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ username, hash: hashSync(password, salt) });
         axios
             .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {

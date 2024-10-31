@@ -24,6 +24,7 @@ import TextButton from '../components/TextButton';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import RoundedButton from '../components/RoundedButton';
 import { AlertContext } from '../contexts/AlertContext';
+import { hashSync } from 'bcryptjs';
 
 const style = `
     .font-barlow {
@@ -142,7 +143,6 @@ function CreateUserPage(props) {
                                 name: d.name,
                                 username: d.username,
                                 role: d.role,
-                                hash: d.hash,
                                 classrooms: d.classrooms.map((c) => c.id),
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
@@ -212,7 +212,8 @@ function CreateUserPage(props) {
 
     const submitNewUser = (e) => {
         e.preventDefault();
-        const formData = serialize(newUser, { indices: true });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ ...newUser, hash: hashSync(newUser.hash, salt) });
         if (isEditing) {
             axios
                 .put(`${baseUrl}api/user/updateUser/${userId || user.id}`, formData, {
