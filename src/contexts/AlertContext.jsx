@@ -43,7 +43,7 @@ export const AlertProvider = ({ children }) => {
                 if (prev?.onSecondaryBtnClick) {
                     element.removeEventListener('hidden.bs.modal', prev?.onSecondaryBtnClick);
                 }
-                
+
                 return {
                     headerText: data.headerText || 'Alerta',
                     bodyText: data.bodyText,
@@ -73,7 +73,7 @@ export const AlertProvider = ({ children }) => {
     }, []);
 
     return (
-        <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isDismissable: alert?.isClosable }}>
+        <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isClosable: alert?.isClosable }}>
             {children}
             <div className="modal fade" id="alert-modal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
                 <div className="modal-dialog modal-dialog-centered p-5">
