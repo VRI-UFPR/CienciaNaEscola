@@ -84,7 +84,7 @@ function HomeButton(props) {
                                 headerText: 'Tem certeza que deseja excluir?',
                                 primaryBtnHsl: [355, 78, 66],
                                 primaryBtnLabel: 'Não',
-                                secondayBtnHsl: [97, 43, 70],
+                                secondaryBtnHsl: [97, 43, 70],
                                 secondaryBtnLabel: 'Sim',
                                 onSecondaryBtnClick: () => deleteFunction(),
                             });
