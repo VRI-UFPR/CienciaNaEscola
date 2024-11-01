@@ -21,12 +21,12 @@ import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 400px;
-        max-height: 75%;
+        min-width: 200px;
+        max-width: 350px;
     }
 
     .logo-picce-textual{
-        max-width: 200px;
+        max-width: 175px;
     }
 
     .font-barlow {
@@ -47,16 +47,15 @@ function ErrorPage(props) {
     return (
         <div className="d-flex flex-column align-items-center vh-100">
             <ColoredBorder />
-            <div className="d-flex flex-grow-1 align-items-end justify-content-center w-75 m-0">
-                <div className="ratio ratio-1x1 logo-picce-circular h-75">
-                    <img src={logoPicceCircular} className="w-100" alt="Logo gráfico Picce"></img>
-                </div>
+            <div className="d-flex align-items-end justify-content-center h-50 w-100 pt-5">
+                <img src={logoPicceCircular} className="logo-picce-circular w-75 p-4" alt="Logo gráfico Picce"></img>
             </div>
-            <div className="d-flex flex-column align-items-center justify-content-center h-25 px-4 m-0">
-                <span className="font-barlow color-grey text-center fw-medium fs-3 mb-2">{text || ''}</span>
-                <span className="font-barlow color-grey text-center fw-medium fs-5 mb-4">{description || ''}</span>
+            <div className="d-flex flex-column flex-grow-1 align-items-center justify-content-center px-4 pb-5 m-0">
+                <span className="font-barlow color-grey text-center text-break fw-medium fs-3 mb-2">{text || ''}</span>
+                <span className="font-barlow color-grey text-center text-break fw-medium fs-5 mb-4">{description || ''}</span>
                 <TextButton
                     text="Voltar ao início"
+                    className="w-auto px-4"
                     onClick={() => {
                         logout();
                         navigate(isDashboard ? '/dash/' : '/');
@@ -64,7 +63,7 @@ function ErrorPage(props) {
                     hsl={[355, 78, 66]}
                 ></TextButton>
             </div>
-            <div className="d-flex flex-column align-items-center justify-content-center h-25 w-75 px-2 m-0">
+            <div className="d-flex flex-column align-items-center justify-content-center h-25 w-75 px-2 pb-5 m-0">
                 <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
             </div>
             <ColoredBorder />
