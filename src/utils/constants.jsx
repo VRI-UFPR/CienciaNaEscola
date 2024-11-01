@@ -85,3 +85,33 @@ export const aboutPICCE = `## Sobre o PICCE\n### Missão\nA missão do PICCE é 
 
 export const terms =
     '### Disposições Gerais:\nIdentificação das partes envolvidas: Universidade Federal do Paraná e o usuário do aplicativo. Estes termos de uso regem o uso do aplicativo em tela. O usuário concorda em cumprir os termos ao utilizar o aplicativo.\n\n### Responsabilidade Limitada:\nOs autores do aplicativo não são responsáveis por danos diretos, indiretos, incidentais, consequenciais, especiais ou punitivos decorrentes do uso ou impossibilidade de uso do aplicativo. Os autores não são responsáveis por qualquer conteúdo gerado pelo usuário ou por terceiros. Os autores não garantem a precisão, integridade, atualidade ou utilidade de qualquer conteúdo fornecido pelo aplicativo.\n\n### Isenção de Garantias:\nO aplicativo é fornecido "no estado em que se encontra", sem garantias de qualquer tipo, expressas ou implícitas. Os autores não garantem que o aplicativo seja livre de erros ou que funcionará sem interrupções.\n\n### Disposições Adicionais:\nDisputas eventuais serão resolvidas exclusivamente no forum de Curitiba - PR.\n\n### Atualizações e Revisões:\nOs termos de uso podem ser atualizados periodicamente. O usuário concorda em ficar vinculado às versões mais recentes.';
+
+export const brazilianStates = [
+    'Acre',
+    'Alagoas',
+    'Amapá',
+    'Amazonas',
+    'Bahia',
+    'Ceará',
+    'Distrito Federal',
+    'Espírito Santo',
+    'Goiás',
+    'Maranhão',
+    'Mato Grosso',
+    'Mato Grosso do Sul',
+    'Minas Gerais',
+    'Pará',
+    'Paraíba',
+    'Paraná',
+    'Pernambuco',
+    'Piauí',
+    'Rio de Janeiro',
+    'Rio Grande do Norte',
+    'Rio Grande do Sul',
+    'Rondônia',
+    'Roraima',
+    'Santa Catarina',
+    'São Paulo',
+    'Sergipe',
+    'Tocantins',
+];

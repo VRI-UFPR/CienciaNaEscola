@@ -71,6 +71,7 @@ function ApplicationPage(props) {
     const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
+    const [addressId, setAddressId] = useState(undefined);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { applicationId } = useParams();
@@ -263,7 +264,7 @@ function ApplicationPage(props) {
 
         const applicationAnswer = {
             applicationId: application.id,
-            addressId: 1,
+            addressId: addressId,
             date: new Date(),
             itemAnswerGroups: [],
         };
@@ -597,15 +598,8 @@ function ApplicationPage(props) {
                                                                 <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                     {
                                                                         <LocationInput
-                                                                            item={item}
-                                                                            answer={{
-                                                                                text:
-                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                        ?.text || '',
-                                                                                files: [],
-                                                                                group: itemGroup.id,
-                                                                            }}
-                                                                            onAnswerChange={handleAnswerChange}
+                                                                            addressId={addressId}
+                                                                            onAnswerChange={(addressId) => setAddressId(addressId)}
                                                                         />
                                                                     }
                                                                 </div>
