@@ -184,7 +184,7 @@ function SignInPage(props) {
                                         <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
                                     </div>
                                 </div>
-                                {isDashboard && (
+                                {!isDashboard && (
                                     <div className="row justify-content-center g-0">
                                         <div className="col-12 col-lg-8">
                                             <TextButton
