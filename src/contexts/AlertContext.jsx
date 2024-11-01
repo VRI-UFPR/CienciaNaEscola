@@ -43,7 +43,7 @@ export const AlertProvider = ({ children }) => {
                 if (prev?.onSecondaryBtnClick) {
                     element.removeEventListener('hidden.bs.modal', prev?.onSecondaryBtnClick);
                 }
-                console.log(data);
+                
                 return {
                     headerText: data.headerText || 'Alerta',
                     bodyText: data.bodyText,
