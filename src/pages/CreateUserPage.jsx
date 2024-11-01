@@ -387,6 +387,7 @@ function CreateUserPage(props) {
                                         id="name"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
                                         onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                                        minLength="3"
                                         required
                                     />
                                 </div>
@@ -403,6 +404,7 @@ function CreateUserPage(props) {
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
                                         autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+                                        minLength="3"
                                         required
                                     />
                                 </div>
@@ -421,7 +423,6 @@ function CreateUserPage(props) {
                                                 className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                 autoComplete="new-password"
                                                 onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
-                                                required
                                             />
                                         </div>
                                         <div className="col-auto">

@@ -356,6 +356,7 @@ function CreateClassroomPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
+                                        minLength="3"
                                         required
                                     />
                                 </div>

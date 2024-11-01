@@ -240,6 +240,8 @@ function CreateProtocolProperties(props) {
                 type="text"
                 value={protocol.title || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, title: event.target.value }))}
+                minLength="3"
+                required
             ></input>
             <label htmlFor="description" className="form-label color-steel-blue fs-5 fw-medium me-1">
                 Descrição do protocolo
@@ -329,6 +331,7 @@ function CreateProtocolProperties(props) {
                 id="visibility"
                 value={protocol.visibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>
@@ -486,6 +489,7 @@ function CreateProtocolProperties(props) {
                 id="applicability"
                 value={protocol.applicability || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>
@@ -575,6 +579,7 @@ function CreateProtocolProperties(props) {
                 id="answer-visiblity"
                 value={protocol.answersVisibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>

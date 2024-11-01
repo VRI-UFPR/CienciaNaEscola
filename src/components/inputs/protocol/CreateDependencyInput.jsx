@@ -129,6 +129,7 @@ function CreateDependencyInput(props) {
                                 return newDependency;
                             });
                         }}
+                        required
                     >
                         <option value="">Selecione...</option>
                         <option value="IS_ANSWERED">Resposta obrigatória</option>
@@ -175,6 +176,7 @@ function CreateDependencyInput(props) {
                                     return newDependency;
                                 });
                             }}
+                            required
                         />
                     </div>
                 )}
@@ -208,6 +210,7 @@ function CreateDependencyInput(props) {
                                     return newDependency;
                                 });
                             }}
+                            required
                         >
                             <option value="">Selecione...</option>
                             {getItemTargetOptions().map((it, k) => (
