@@ -126,10 +126,10 @@ function InstitutionPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0 pb-4">
+                <div className="col d-flex flex-column h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4">
+                        <div className="col-12 col-md-10 p-4 pb-3">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Instituição</h1>
                         </div>
                     </div>
@@ -167,7 +167,7 @@ function InstitutionPage(props) {
                                         {searchedUsers
                                             .filter((u) => u.username.startsWith(VUSearchInput))
                                             .map((u) => (
-                                                <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-lg-3">
+                                                <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                     {user.role === 'ADMIN' ? (
                                                         <Link
                                                             to={`users/${u.id}/manage`}
@@ -210,7 +210,7 @@ function InstitutionPage(props) {
                                         {searchedClassrooms
                                             .filter((c) => c.name.startsWith(VCSearchInput))
                                             .map((c) => (
-                                                <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-lg-3">
+                                                <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                     {user.role !== 'USER' && user.role !== 'APPLIER' ? (
                                                         <Link
                                                             to={`classrooms/${c.id}/manage`}
@@ -224,6 +224,19 @@ function InstitutionPage(props) {
                                                 </div>
                                             ))}
                                     </div>
+                                </div>
+                                <div className="row d-flex justify-content-center justify-content-md-start pb-4">
+                                    {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                        <div className="col-5 col-sm-3 col-xl-2">
+                                            <TextButton
+                                                text={'Gerenciar'}
+                                                hsl={[97, 43, 70]}
+                                                onClick={() => {
+                                                    navigate('manage');
+                                                }}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -252,23 +265,6 @@ function InstitutionPage(props) {
                                 </div>
                             </div>
                         )}
-                    </div>
-                    <div className="row justify-content-center font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                            <div className="row d-flex justify-content-center justify-content-md-start">
-                                {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                    <div className="col-5 col-sm-3 col-xl-2">
-                                        <TextButton
-                                            text={'Gerenciar'}
-                                            hsl={[97, 43, 70]}
-                                            onClick={() => {
-                                                navigate('manage');
-                                            }}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

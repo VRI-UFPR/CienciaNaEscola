@@ -578,13 +578,13 @@ function CreateApplicationPage(props) {
                 <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4 pb-0">
+                        <div className="col-12 col-md-10 p-4 pb-3">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">{isEditing ? 'Editar' : 'Criar'} aplicação</h1>
                         </div>
                     </div>
                     <div className="d-flex flex-column flex-grow-1 overflow-x-scroll scrollbar-none">
                         <div className="row justify-content-center flex-grow-1 font-barlow gx-0">
-                            <div className="col col-md-10 d-flex flex-column h-100 p-4">
+                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
                                 <div>
                                     <form
                                         name="application-form"
@@ -647,35 +647,37 @@ function CreateApplicationPage(props) {
                                                     </div>
                                                     <div className="row gy-2 mb-3">
                                                         {searchedUsers.map((u) => (
-                                                            <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-lg-3">
-                                                                <input
-                                                                    form="application-form"
-                                                                    type="checkbox"
-                                                                    name="viewers-user"
-                                                                    id={`viewer-user-${u.id}`}
-                                                                    value={u.id}
-                                                                    className="form-check-input bg-grey"
-                                                                    checked={application.viewersUser.includes(u.id)}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.checked) {
-                                                                            setApplication((prev) => ({
-                                                                                ...prev,
-                                                                                viewersUser: [
-                                                                                    ...prev.viewersUser,
-                                                                                    parseInt(e.target.value),
-                                                                                ],
-                                                                            }));
-                                                                        } else {
-                                                                            unselectUser(parseInt(e.target.value));
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <label
-                                                                    htmlFor={`viewer-user-${u.id}`}
-                                                                    className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                >
-                                                                    {u.username}
-                                                                </label>
+                                                            <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        form="application-form"
+                                                                        type="checkbox"
+                                                                        name="viewers-user"
+                                                                        id={`viewer-user-${u.id}`}
+                                                                        value={u.id}
+                                                                        className="form-check-input bg-grey"
+                                                                        checked={application.viewersUser.includes(u.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                setApplication((prev) => ({
+                                                                                    ...prev,
+                                                                                    viewersUser: [
+                                                                                        ...prev.viewersUser,
+                                                                                        parseInt(e.target.value),
+                                                                                    ],
+                                                                                }));
+                                                                            } else {
+                                                                                unselectUser(parseInt(e.target.value));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`viewer-user-${u.id}`}
+                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                    >
+                                                                        {u.username}
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -717,34 +719,36 @@ function CreateApplicationPage(props) {
                                                     </div>
                                                     <div className="row gy-2 mb-3">
                                                         {searchedClassrooms.map((c) => (
-                                                            <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-lg-3">
-                                                                <input
-                                                                    form="application-form"
-                                                                    type="checkbox"
-                                                                    name="viewers-classroom"
-                                                                    id={`viewer-classroom-${c.id}`}
-                                                                    value={c.id}
-                                                                    className="form-check-input bg-grey"
-                                                                    checked={application.viewersClassroom.includes(c.id)}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.checked) {
-                                                                            selectClassroom(parseInt(e.target.value));
-                                                                        } else {
-                                                                            setApplication((prev) => ({
-                                                                                ...prev,
-                                                                                viewersClassroom: prev.viewersClassroom.filter(
-                                                                                    (id) => id !== parseInt(e.target.value)
-                                                                                ),
-                                                                            }));
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <label
-                                                                    htmlFor={`viewer-classroom-${c.id}`}
-                                                                    className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                >
-                                                                    {c.name}
-                                                                </label>
+                                                            <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        form="application-form"
+                                                                        type="checkbox"
+                                                                        name="viewers-classroom"
+                                                                        id={`viewer-classroom-${c.id}`}
+                                                                        value={c.id}
+                                                                        className="form-check-input bg-grey"
+                                                                        checked={application.viewersClassroom.includes(c.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                selectClassroom(parseInt(e.target.value));
+                                                                            } else {
+                                                                                setApplication((prev) => ({
+                                                                                    ...prev,
+                                                                                    viewersClassroom: prev.viewersClassroom.filter(
+                                                                                        (id) => id !== parseInt(e.target.value)
+                                                                                    ),
+                                                                                }));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`viewer-classroom-${c.id}`}
+                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                    >
+                                                                        {c.name}
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -808,35 +812,37 @@ function CreateApplicationPage(props) {
                                                     </div>
                                                     <div className="row gy-2 mb-3">
                                                         {searchedAnswerUsers.map((u) => (
-                                                            <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-lg-3">
-                                                                <input
-                                                                    form="application-form"
-                                                                    type="checkbox"
-                                                                    name="answer-viewers-user"
-                                                                    id={`answer-viewer-user-${u.id}`}
-                                                                    value={u.id}
-                                                                    className="form-check-input bg-grey"
-                                                                    checked={application.answersViewersUser.includes(u.id)}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.checked) {
-                                                                            setApplication((prev) => ({
-                                                                                ...prev,
-                                                                                answersViewersUser: [
-                                                                                    ...prev.answersViewersUser,
-                                                                                    parseInt(e.target.value),
-                                                                                ],
-                                                                            }));
-                                                                        } else {
-                                                                            unselectAnswerUser(parseInt(e.target.value));
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <label
-                                                                    htmlFor={`answer-viewer-user-${u.id}`}
-                                                                    className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                >
-                                                                    {u.username}
-                                                                </label>
+                                                            <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        form="application-form"
+                                                                        type="checkbox"
+                                                                        name="answer-viewers-user"
+                                                                        id={`answer-viewer-user-${u.id}`}
+                                                                        value={u.id}
+                                                                        className="form-check-input bg-grey"
+                                                                        checked={application.answersViewersUser.includes(u.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                setApplication((prev) => ({
+                                                                                    ...prev,
+                                                                                    answersViewersUser: [
+                                                                                        ...prev.answersViewersUser,
+                                                                                        parseInt(e.target.value),
+                                                                                    ],
+                                                                                }));
+                                                                            } else {
+                                                                                unselectAnswerUser(parseInt(e.target.value));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`answer-viewer-user-${u.id}`}
+                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                    >
+                                                                        {u.username}
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -880,36 +886,38 @@ function CreateApplicationPage(props) {
                                                         {searchedAnswerClassrooms.map((c) => (
                                                             <div
                                                                 key={'answer-viewer-classroom-' + c.id}
-                                                                className="col-6 col-md-4 col-lg-3"
+                                                                className="col-6 col-md-4 col-xl-3"
                                                             >
-                                                                <input
-                                                                    form="application-form"
-                                                                    type="checkbox"
-                                                                    name="answer-viewers-classroom"
-                                                                    id={`answer-viewer-classroom-${c.id}`}
-                                                                    value={c.id}
-                                                                    className="form-check-input bg-grey"
-                                                                    checked={application.answersViewersClassroom.includes(c.id)}
-                                                                    onChange={(e) => {
-                                                                        if (e.target.checked) {
-                                                                            selectAnswerClassroom(parseInt(e.target.value));
-                                                                        } else {
-                                                                            setApplication((prev) => ({
-                                                                                ...prev,
-                                                                                answersViewersClassroom:
-                                                                                    prev.answersViewersClassroom.filter(
-                                                                                        (id) => id !== parseInt(e.target.value)
-                                                                                    ),
-                                                                            }));
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <label
-                                                                    htmlFor={`answer-viewer-classroom-${c.id}`}
-                                                                    className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                >
-                                                                    {c.name}
-                                                                </label>
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        form="application-form"
+                                                                        type="checkbox"
+                                                                        name="answer-viewers-classroom"
+                                                                        id={`answer-viewer-classroom-${c.id}`}
+                                                                        value={c.id}
+                                                                        className="form-check-input bg-grey"
+                                                                        checked={application.answersViewersClassroom.includes(c.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                selectAnswerClassroom(parseInt(e.target.value));
+                                                                            } else {
+                                                                                setApplication((prev) => ({
+                                                                                    ...prev,
+                                                                                    answersViewersClassroom:
+                                                                                        prev.answersViewersClassroom.filter(
+                                                                                            (id) => id !== parseInt(e.target.value)
+                                                                                        ),
+                                                                                }));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`answer-viewer-classroom-${c.id}`}
+                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                    >
+                                                                        {c.name}
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -920,9 +928,9 @@ function CreateApplicationPage(props) {
                                 </div>
                             </div>
                         </div>
-                        <div className="row justify-content-center font-barlow gx-0">
-                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                                <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
+                        <div className="row justify-content-center font-barlow gx-0 p-4">
+                            <div className="col col-md-10 d-flex flex-column h-100">
+                                <div className="row justify-content-center justify-content-md-start gx-2 gy-4">
                                     <div className="col-3 col-md-2">
                                         <TextButton
                                             text={isEditing ? 'Concluir' : 'Criar'}

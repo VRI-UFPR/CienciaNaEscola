@@ -318,7 +318,7 @@ function CreateClassroomPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column overflow-x-hidden overflow-y-scroll h-100 p-0">
+                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow gx-0">
                         <div className="col-12 col-md-10">
@@ -327,7 +327,7 @@ function CreateClassroomPage(props) {
                             </h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center flex-grow-1 font-barlow gx-0">
+                    <div className="row justify-content-center flex-grow-1 overflow-x-hidden overflow-y-scroll font-barlow gx-0">
                         <div className="col col-md-10 d-flex flex-column h-100 px-4">
                             <form
                                 name="classroom-form"
@@ -449,51 +449,51 @@ function CreateClassroomPage(props) {
                                     </fieldset>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center font-barlow gx-0 mt-4">
-                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                            <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
-                                <div className="col-3 col-md-2">
-                                    <TextButton
-                                        text={isEditing ? 'Concluir' : 'Criar'}
-                                        hsl={[97, 43, 70]}
-                                        onClick={() => {
-                                            showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
-                                                dismissHsl: [355, 78, 66],
-                                                dismissText: 'Não',
-                                                actionHsl: [97, 43, 70],
-                                                actionText: 'Sim',
-                                                dismissible: true,
-                                                actionOnClick: () => {
-                                                    formRef.current.requestSubmit();
-                                                },
-                                            });
-                                        }}
-                                    />
-                                </div>
-                                {isEditing && (
-                                    <div className="col-3 col-md-2">
-                                        <TextButton
-                                            text={'Excluir'}
-                                            hsl={[355, 78, 66]}
-                                            onClick={() => {
-                                                showAlert({
-                                                    title: `Tem certeza que deseja excluir o grupo?`,
-                                                    dismissHsl: [355, 78, 66],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [97, 43, 70],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        deleteClassroom();
-                                                    },
-                                                });
-                                            }}
-                                        />
+                            <div className="row justify-content-center font-barlow gx-0 mt-4">
+                                <div className="col col-md-10 d-flex flex-column h-100 px-4">
+                                    <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
+                                        <div className="col-3 col-md-2">
+                                            <TextButton
+                                                text={isEditing ? 'Concluir' : 'Criar'}
+                                                hsl={[97, 43, 70]}
+                                                onClick={() => {
+                                                    showAlert({
+                                                        title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
+                                                        dismissHsl: [355, 78, 66],
+                                                        dismissText: 'Não',
+                                                        actionHsl: [97, 43, 70],
+                                                        actionText: 'Sim',
+                                                        dismissible: true,
+                                                        actionOnClick: () => {
+                                                            formRef.current.requestSubmit();
+                                                        },
+                                                    });
+                                                }}
+                                            />
+                                        </div>
+                                        {isEditing && (
+                                            <div className="col-3 col-md-2">
+                                                <TextButton
+                                                    text={'Excluir'}
+                                                    hsl={[355, 78, 66]}
+                                                    onClick={() => {
+                                                        showAlert({
+                                                            title: `Tem certeza que deseja excluir o grupo?`,
+                                                            dismissHsl: [355, 78, 66],
+                                                            dismissText: 'Não',
+                                                            actionHsl: [97, 43, 70],
+                                                            actionText: 'Sim',
+                                                            dismissible: true,
+                                                            actionOnClick: () => {
+                                                                deleteClassroom();
+                                                            },
+                                                        });
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                </div>
                             </div>
                         </div>
                     </div>

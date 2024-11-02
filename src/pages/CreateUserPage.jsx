@@ -329,12 +329,12 @@ function CreateUserPage(props) {
                 <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow gx-0">
-                        <div className="col-12 col-md-10 p-4 pb-0">
+                        <div className="col-12 col-md-10 p-4 pb-3">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">{isEditing ? 'Editar' : 'Criar'} usuário</h1>
                         </div>
                     </div>
                     <div className="row justify-content-center flex-grow-1 scrollbar-none overflow-scroll overflow-x-hidden font-barlow g-0">
-                        <div className="col-12 col-lg-3 order-lg-2 d-flex flex-column align-items-center bg-white mh-100 h-lg-100 p-4">
+                        <div className="col-12 col-lg-3 order-lg-2 d-flex flex-column align-items-center bg-white mh-100 h-lg-100 px-4">
                             <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75 mb-3">
                                 <img
                                     src={
@@ -513,42 +513,44 @@ function CreateUserPage(props) {
                                             </div>
                                             <div className="row gy-2 mb-3">
                                                 {searchedClassrooms.map((c) => (
-                                                    <div key={c.id} className="col-6 col-md-4 col-lg-3">
-                                                        <input
-                                                            form="user-form"
-                                                            type="checkbox"
-                                                            name="classrooms"
-                                                            id={`classroom-${c.id}`}
-                                                            value={c.id}
-                                                            className="form-check-input bg-grey"
-                                                            checked={newUser.classrooms.includes(c.id)}
-                                                            onChange={(e) => {
-                                                                if (e.target.checked) {
-                                                                    setNewUser((prev) => ({
-                                                                        ...prev,
-                                                                        classrooms: [...prev.classrooms, parseInt(e.target.value)],
-                                                                    }));
-                                                                } else {
-                                                                    setNewUser((prev) => ({
-                                                                        ...prev,
-                                                                        classrooms: prev.classrooms.filter(
-                                                                            (id) => id !== parseInt(e.target.value)
-                                                                        ),
-                                                                    }));
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label
-                                                            htmlFor={`classroom-${c.id}`}
-                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                        >
-                                                            {c.name}
-                                                        </label>
+                                                    <div key={c.id} className="col-6 col-md-4 col-xl-3">
+                                                        <div className="form-check">
+                                                            <input
+                                                                form="user-form"
+                                                                type="checkbox"
+                                                                name="classrooms"
+                                                                id={`classroom-${c.id}`}
+                                                                value={c.id}
+                                                                className="form-check-input bg-grey"
+                                                                checked={newUser.classrooms.includes(c.id)}
+                                                                onChange={(e) => {
+                                                                    if (e.target.checked) {
+                                                                        setNewUser((prev) => ({
+                                                                            ...prev,
+                                                                            classrooms: [...prev.classrooms, parseInt(e.target.value)],
+                                                                        }));
+                                                                    } else {
+                                                                        setNewUser((prev) => ({
+                                                                            ...prev,
+                                                                            classrooms: prev.classrooms.filter(
+                                                                                (id) => id !== parseInt(e.target.value)
+                                                                            ),
+                                                                        }));
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <label
+                                                                htmlFor={`classroom-${c.id}`}
+                                                                className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                            >
+                                                                {c.name}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 ))}
                                             </div>
                                             {(institutionId || user.institutionId) && (
-                                                <div className="mb-3">
+                                                <div>
                                                     <TextButton
                                                         className="fs-6 w-auto p-2 py-0"
                                                         hsl={[190, 46, 70]}
@@ -575,51 +577,51 @@ function CreateUserPage(props) {
                                     />
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 p-4">
-                            <div className="row justify-content-center justify-content-lg-start gx-2 mt-0">
-                                <div className="col-3 col-md-2">
-                                    <TextButton
-                                        text={isEditing ? 'Concluir' : 'Criar'}
-                                        hsl={[97, 43, 70]}
-                                        onClick={() => {
-                                            showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
-                                                dismissHsl: [355, 78, 66],
-                                                dismissText: 'Não',
-                                                actionHsl: [97, 43, 70],
-                                                actionText: 'Sim',
-                                                dismissible: true,
-                                                actionOnClick: () => {
-                                                    formRef.current.requestSubmit();
-                                                },
-                                            });
-                                        }}
-                                    />
-                                </div>
-                                {isEditing && (
-                                    <div className="col-3 col-md-2">
-                                        <TextButton
-                                            text={'Excluir'}
-                                            hsl={[355, 78, 66]}
-                                            onClick={() => {
-                                                showAlert({
-                                                    title: `Tem certeza que deseja excluir o usuário?`,
-                                                    dismissHsl: [97, 43, 70],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [355, 78, 66],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        deleteUser();
-                                                    },
-                                                });
-                                            }}
-                                        />
+                            <div className="row justify-content-center font-barlow gx-0">
+                                <div className="col col-md-10 d-flex flex-column h-100 p-4">
+                                    <div className="row justify-content-center justify-content-lg-start gx-2 mt-0">
+                                        <div className="col-3 col-md-2">
+                                            <TextButton
+                                                text={isEditing ? 'Concluir' : 'Criar'}
+                                                hsl={[97, 43, 70]}
+                                                onClick={() => {
+                                                    showAlert({
+                                                        title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
+                                                        dismissHsl: [355, 78, 66],
+                                                        dismissText: 'Não',
+                                                        actionHsl: [97, 43, 70],
+                                                        actionText: 'Sim',
+                                                        dismissible: true,
+                                                        actionOnClick: () => {
+                                                            formRef.current.requestSubmit();
+                                                        },
+                                                    });
+                                                }}
+                                            />
+                                        </div>
+                                        {isEditing && (
+                                            <div className="col-3 col-md-2">
+                                                <TextButton
+                                                    text={'Excluir'}
+                                                    hsl={[355, 78, 66]}
+                                                    onClick={() => {
+                                                        showAlert({
+                                                            title: `Tem certeza que deseja excluir o usuário?`,
+                                                            dismissHsl: [97, 43, 70],
+                                                            dismissText: 'Não',
+                                                            actionHsl: [355, 78, 66],
+                                                            actionText: 'Sim',
+                                                            dismissible: true,
+                                                            actionOnClick: () => {
+                                                                deleteUser();
+                                                            },
+                                                        });
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                </div>
                             </div>
                         </div>
                     </div>
