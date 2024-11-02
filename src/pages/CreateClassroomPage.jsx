@@ -318,17 +318,17 @@ function CreateClassroomPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
+                <div className="col d-flex flex-column overflow-x-hidden overflow-y-scroll h-100 p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4 pb-0">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
-                                {isEditing ? 'Editar' : 'Criar'} grupo de aula
+                    <div className="row align-items-center justify-content-center font-barlow gx-0">
+                        <div className="col-12 col-md-10">
+                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0 p-4 pb-3">
+                                {isEditing ? 'Editar' : 'Criar'} grupo
                             </h1>
                         </div>
                     </div>
-                    <div className="row justify-content-center flex-grow-1 overflow-hidden font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 p-4">
+                    <div className="row justify-content-center flex-grow-1 font-barlow gx-0">
+                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
                             <form
                                 name="classroom-form"
                                 id="classroom-form"
@@ -400,42 +400,44 @@ function CreateClassroomPage(props) {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="row gy-2 mb-3">
+                                        <div className="row gy-2 gx-1 mb-3">
                                             {searchedUsers.map((u) => (
-                                                <div key={u.id} className="col-6 col-md-4 col-lg-3">
-                                                    <input
-                                                        form="classroom-form"
-                                                        type="checkbox"
-                                                        name="users"
-                                                        id={`user-${u.id}`}
-                                                        className="form-check-input bg-grey"
-                                                        value={u.id}
-                                                        checked={classroom.users.includes(u.id)}
-                                                        onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setClassroom((prev) => ({
-                                                                    ...prev,
-                                                                    users: [...prev.users, parseInt(e.target.value)],
-                                                                }));
-                                                            } else {
-                                                                setClassroom((prev) => ({
-                                                                    ...prev,
-                                                                    users: prev.users.filter((id) => id !== parseInt(e.target.value)),
-                                                                }));
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label
-                                                        htmlFor={`user-${u.id}`}
-                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                    >
-                                                        {u.username}
-                                                    </label>
+                                                <div key={u.id} className="col-6 col-md-4 col-xl-3">
+                                                    <div className="form-check">
+                                                        <input
+                                                            form="classroom-form"
+                                                            type="checkbox"
+                                                            name="users"
+                                                            id={`user-${u.id}`}
+                                                            className="form-check-input bg-grey"
+                                                            value={u.id}
+                                                            checked={classroom.users.includes(u.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setClassroom((prev) => ({
+                                                                        ...prev,
+                                                                        users: [...prev.users, parseInt(e.target.value)],
+                                                                    }));
+                                                                } else {
+                                                                    setClassroom((prev) => ({
+                                                                        ...prev,
+                                                                        users: prev.users.filter((id) => id !== parseInt(e.target.value)),
+                                                                    }));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label
+                                                            htmlFor={`user-${u.id}`}
+                                                            className="font-barlow color-grey text-break fw-medium fs-6"
+                                                        >
+                                                            {u.username}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
                                         {(institutionId || user.institutionId) && (
-                                            <div className="mb-3">
+                                            <div>
                                                 <TextButton
                                                     className="fs-6 w-auto p-2 py-0"
                                                     hsl={[190, 46, 70]}
@@ -449,7 +451,7 @@ function CreateClassroomPage(props) {
                             </form>
                         </div>
                     </div>
-                    <div className="row justify-content-center font-barlow gx-0">
+                    <div className="row justify-content-center font-barlow gx-0 mt-4">
                         <div className="col col-md-10 d-flex flex-column h-100 px-4">
                             <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
                                 <div className="col-3 col-md-2">
