@@ -56,12 +56,22 @@ const style = `
         color: #535353;
     }
 
-    .bg-light-grey{
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .bg-light-grey:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
     }
 
     .color-steel-blue {

@@ -18,6 +18,23 @@ const style = `
     .btn-addbar:hover {
         background-color: rgba(255, 255, 255, 0.5);
     }
+
+    .bg-steel-blue {
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+    }
+
+    .bg-steel-blue:focus {
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+        box-shadow: none;
+    }
+
+    .bg-steel-blue:active{
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
 `;
 
 function AddBar(props) {
