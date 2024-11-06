@@ -24,7 +24,6 @@ import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
-import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -594,7 +593,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchUsers(VUSearchInput)}
-                                                                icon={iconSearch}
+                                                                icon="person_search"
                                                             />
                                                         </div>
                                                     </div>
@@ -664,7 +663,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchClassrooms(VCSearchInput)}
-                                                                icon={iconSearch}
+                                                                icon="search"
                                                             />
                                                         </div>
                                                     </div>
@@ -755,7 +754,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchAnswerUsers(AVUSearchInput)}
-                                                                icon={iconSearch}
+                                                                icon="person_search"
                                                             />
                                                         </div>
                                                     </div>
@@ -825,7 +824,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchAnswerClassrooms(AVCSearchInput)}
-                                                                icon={iconSearch}
+                                                                icon="search"
                                                             />
                                                         </div>
                                                     </div>
