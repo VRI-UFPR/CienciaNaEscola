@@ -128,9 +128,7 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     const passwordlessLoginHandler = () => {
@@ -156,9 +154,7 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     return (
@@ -189,7 +185,7 @@ function SignInPage(props) {
                         />
                         <p
                             className="login-links text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => showAlert({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
+                            onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>

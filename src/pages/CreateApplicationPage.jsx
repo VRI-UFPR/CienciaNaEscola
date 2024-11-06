@@ -228,11 +228,8 @@ function CreateApplicationPage(props) {
                         })
                         .catch((error) => {
                             showAlert({
-                                title: 'Erro ao buscar visualizadores do protocolo.',
-                                description: error.response?.data.message,
-                                dismissHsl: [97, 43, 70],
-                                dismissText: 'Ok',
-                                dismissible: true,
+                                headerText: 'Erro ao buscar visualizadores do protocolo.',
+                                bodyText: error.response?.data.message,
                             });
                         });
                 })
@@ -254,22 +251,11 @@ function CreateApplicationPage(props) {
                 .then((response) => {
                     clearLocalApplications();
                     showAlert({
-                        title: 'Aplicação atualizada com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Aplicação atualizada com sucesso.',
+                        onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
-                    navigate(`/dash/applications/${response.data.data.id}`);
                 })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar aplicação.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação.', description: error.response?.data.message }));
         } else {
             axios
                 .post(`${baseUrl}api/application/createApplication`, formData, {
@@ -280,22 +266,11 @@ function CreateApplicationPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Aplicação criada com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Aplicação criada com sucesso.',
+                        onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
-                    navigate(`/dash/applications/${response.data.data.id}`);
                 })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao criar aplicação.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .catch((error) => showAlert({ headerText: 'Erro ao criar aplicação.', bodyText: error.response?.data.message }));
         }
     };
 
@@ -308,23 +283,9 @@ function CreateApplicationPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({
-                    title: 'Aplicação excluída com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-                navigate(`/dash/applications/`);
+                showAlert({ headerText: 'Aplicação excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/applications/`) });
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir aplicação.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação.', bodyText: error.response?.data.message }));
     };
 
     const searchUsers = (term) => {
@@ -352,9 +313,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerUsers = (term) => {
@@ -382,9 +341,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedAnswerUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term) => {
@@ -429,9 +386,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedClassrooms(concatenedClassrooms);
             })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerClassrooms = (term) => {
@@ -476,9 +431,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedAnswerClassrooms(concatenedClassrooms);
             })
-            .catch((error) => {
-                alert('Erro ao buscar grupos. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id) => {
@@ -929,15 +882,12 @@ function CreateApplicationPage(props) {
                                             hsl={[97, 43, 70]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
-                                                    dismissHsl: [355, 78, 66],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [97, 43, 70],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        formRef.current.requestSubmit();
-                                                    },
+                                                    headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                    primaryBtnHsl: [355, 78, 66],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [97, 43, 70],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => formRef.current.requestSubmit(),
                                                 });
                                             }}
                                         />
@@ -949,15 +899,12 @@ function CreateApplicationPage(props) {
                                                 hsl={[355, 78, 66]}
                                                 onClick={() => {
                                                     showAlert({
-                                                        title: `Tem certeza que deseja excluir a sala de aula?`,
-                                                        dismissHsl: [355, 78, 66],
-                                                        dismissText: 'Não',
-                                                        actionHsl: [97, 43, 70],
-                                                        actionText: 'Sim',
-                                                        dismissible: true,
-                                                        actionOnClick: () => {
-                                                            deleteApplication();
-                                                        },
+                                                        headerText: `Tem certeza que deseja excluir a aplicação?`,
+                                                        primaryBtnHsl: [355, 78, 66],
+                                                        primaryBtnLabel: 'Não',
+                                                        secondaryBtnHsl: [97, 43, 70],
+                                                        secondaryBtnLabel: 'Sim',
+                                                        onSecondaryBtnClick: () => deleteApplication(),
                                                     });
                                                 }}
                                             />

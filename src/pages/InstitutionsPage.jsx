@@ -84,24 +84,11 @@ function InstitutionsPage(props) {
                 },
             })
             .then((response) => {
-                showAlert({
-                    title: 'Instituição excluída com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Instituição excluída com sucesso.' });
                 const newVisibleInstitutions = [...visibleInstitutions];
                 setVisibleInstitutions(newVisibleInstitutions.filter((i) => i.id !== institutionId));
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir instituição.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição.', bodyText: error.response?.data.message }));
     };
 
     if (error) {
