@@ -331,8 +331,8 @@ function CreateUserPage(props) {
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
                         <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} usuário</h1>
-                        <div className="d-flex flex-column flex-grow-1 overflow-y-scroll scrollbar-none">
-                            <div className="row flex-grow-1 scrollbar-none font-barlow gy-3 gx-4 mb-4">
+                        <div className="d-flex flex-column flex-grow-1">
+                            <div className="row flex-grow-1 font-barlow gy-3 gx-4 mb-4">
                                 <div className="col-12 col-lg-4 order-lg-2 d-flex flex-column align-items-center bg-white mh-100 h-lg-100">
                                     <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75 mb-3">
                                         <img

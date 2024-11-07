@@ -24,6 +24,7 @@ import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from '../components/RoundedButton';
 import iconSearch from '../assets/images/iconSearch.svg';
+import CustomContainer from '../components/CustomContainer';
 
 const style = `
     .font-barlow {
@@ -79,6 +80,11 @@ const style = `
     .form-check input:checked {
         border: 0;
         background-color: #91CAD6;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
     }
 `;
 
@@ -311,32 +317,27 @@ function CreateClassroomPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column vh-100">
-            <div className="row h-100 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow gx-0">
-                        <div className="col-12 col-md-10">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0 p-4 pb-3">
-                                {isEditing ? 'Editar' : 'Criar'} grupo
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center flex-grow-1 overflow-x-hidden overflow-y-scroll font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
+                    <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
+                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} grupo</h1>
+                        <div className="d-flex flex-column flex-grow-1">
                             <form
                                 name="classroom-form"
                                 id="classroom-form"
+                                className="flex-grow-1 mb-4"
                                 ref={formRef}
                                 action="/submit"
                                 onSubmit={(e) => submitClassroom(e)}
                             >
-                                <div>
+                                <div className="mb-3">
                                     <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome do grupo:
                                     </label>
@@ -346,28 +347,32 @@ function CreateClassroomPage(props) {
                                         value={classroom.name || ''}
                                         form="classroom-form"
                                         id="name"
-                                        className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4 mb-3"
+                                        className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4"
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
                                     />
                                 </div>
                                 {(institutionId || user.institutionId) && (
-                                    <div className="form-check form-switch fs-5 mb-3">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            role="switch"
-                                            id="enabled"
-                                            checked={classroom.institutionId === (institutionId || user.institutionId)}
-                                            onChange={(event) =>
-                                                setClassroom((prev) => ({
-                                                    ...prev,
-                                                    institutionId: event.target.checked ? institutionId || user.institutionId : undefined,
-                                                }))
-                                            }
-                                        />
-                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
-                                            Pertencente à minha instituição
-                                        </label>
+                                    <div className="mb-3">
+                                        <div className="form-check form-switch fs-5">
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                role="switch"
+                                                id="enabled"
+                                                checked={classroom.institutionId === (institutionId || user.institutionId)}
+                                                onChange={(event) =>
+                                                    setClassroom((prev) => ({
+                                                        ...prev,
+                                                        institutionId: event.target.checked
+                                                            ? institutionId || user.institutionId
+                                                            : undefined,
+                                                    }))
+                                                }
+                                            />
+                                            <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                                Pertencente à minha instituição
+                                            </label>
+                                        </div>
                                     </div>
                                 )}
                                 <div>
@@ -385,7 +390,7 @@ function CreateClassroomPage(props) {
                                                     value={userSearchTerm || ''}
                                                     id="users-search"
                                                     placeholder="Buscar por nome de usuário"
-                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4 mb-3"
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium border-0 rounded-4"
                                                     onChange={(e) => setUserSearchTerm(e.target.value)}
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter') searchUsers(userSearchTerm);
@@ -400,42 +405,46 @@ function CreateClassroomPage(props) {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="row gy-2 gx-1 mb-3">
-                                            {searchedUsers.map((u) => (
-                                                <div key={u.id} className="col-6 col-md-4 col-xl-3">
-                                                    <div className="form-check">
-                                                        <input
-                                                            form="classroom-form"
-                                                            type="checkbox"
-                                                            name="users"
-                                                            id={`user-${u.id}`}
-                                                            className="form-check-input bg-grey"
-                                                            value={u.id}
-                                                            checked={classroom.users.includes(u.id)}
-                                                            onChange={(e) => {
-                                                                if (e.target.checked) {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: [...prev.users, parseInt(e.target.value)],
-                                                                    }));
-                                                                } else {
-                                                                    setClassroom((prev) => ({
-                                                                        ...prev,
-                                                                        users: prev.users.filter((id) => id !== parseInt(e.target.value)),
-                                                                    }));
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label
-                                                            htmlFor={`user-${u.id}`}
-                                                            className="font-barlow color-grey text-break fw-medium fs-6"
-                                                        >
-                                                            {u.username}
-                                                        </label>
+                                        {searchedUsers.length > 0 && (
+                                            <div className="row gy-2 mb-2">
+                                                {searchedUsers.map((u) => (
+                                                    <div key={u.id} className="col-6 col-md-4 col-xl-3">
+                                                        <div className="form-check">
+                                                            <input
+                                                                form="classroom-form"
+                                                                type="checkbox"
+                                                                name="users"
+                                                                id={`user-${u.id}`}
+                                                                className="form-check-input bg-grey"
+                                                                value={u.id}
+                                                                checked={classroom.users.includes(u.id)}
+                                                                onChange={(e) => {
+                                                                    if (e.target.checked) {
+                                                                        setClassroom((prev) => ({
+                                                                            ...prev,
+                                                                            users: [...prev.users, parseInt(e.target.value)],
+                                                                        }));
+                                                                    } else {
+                                                                        setClassroom((prev) => ({
+                                                                            ...prev,
+                                                                            users: prev.users.filter(
+                                                                                (id) => id !== parseInt(e.target.value)
+                                                                            ),
+                                                                        }));
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <label
+                                                                htmlFor={`user-${u.id}`}
+                                                                className="font-barlow color-grey text-break fw-medium fs-6"
+                                                            >
+                                                                {u.username}
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                                                ))}
+                                            </div>
+                                        )}
                                         {(institutionId || user.institutionId) && (
                                             <div>
                                                 <TextButton
@@ -449,54 +458,50 @@ function CreateClassroomPage(props) {
                                     </fieldset>
                                 </div>
                             </form>
-                            <div className="row justify-content-center font-barlow gx-0 mt-4">
-                                <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                                    <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
-                                        <div className="col-3 col-md-2">
-                                            <TextButton
-                                                text={isEditing ? 'Concluir' : 'Criar'}
-                                                hsl={[97, 43, 70]}
-                                                onClick={() => {
-                                                    showAlert({
-                                                        title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
-                                                        dismissHsl: [355, 78, 66],
-                                                        dismissText: 'Não',
-                                                        actionHsl: [97, 43, 70],
-                                                        actionText: 'Sim',
-                                                        dismissible: true,
-                                                        actionOnClick: () => {
-                                                            formRef.current.requestSubmit();
-                                                        },
-                                                    });
-                                                }}
-                                            />
-                                        </div>
-                                        {isEditing && (
-                                            <div className="col-3 col-md-2">
-                                                <TextButton
-                                                    text={'Excluir'}
-                                                    hsl={[355, 78, 66]}
-                                                    onClick={() => {
-                                                        showAlert({
-                                                            title: `Tem certeza que deseja excluir o grupo?`,
-                                                            dismissHsl: [355, 78, 66],
-                                                            dismissText: 'Não',
-                                                            actionHsl: [97, 43, 70],
-                                                            actionText: 'Sim',
-                                                            dismissible: true,
-                                                            actionOnClick: () => {
-                                                                deleteClassroom();
-                                                            },
-                                                        });
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
+                            <div className="row justify-content-center justify-content-lg-start gx-2">
+                                <div className="col-5 col-sm-3 col-xl-2">
+                                    <TextButton
+                                        text={isEditing ? 'Concluir' : 'Criar'}
+                                        hsl={[97, 43, 70]}
+                                        onClick={() => {
+                                            showAlert({
+                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
+                                                dismissHsl: [355, 78, 66],
+                                                dismissText: 'Não',
+                                                actionHsl: [97, 43, 70],
+                                                actionText: 'Sim',
+                                                dismissible: true,
+                                                actionOnClick: () => {
+                                                    formRef.current.requestSubmit();
+                                                },
+                                            });
+                                        }}
+                                    />
                                 </div>
+                                {isEditing && (
+                                    <div className="col-5 col-sm-3 col-xl-2">
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    title: `Tem certeza que deseja excluir o grupo?`,
+                                                    dismissHsl: [355, 78, 66],
+                                                    dismissText: 'Não',
+                                                    actionHsl: [97, 43, 70],
+                                                    actionText: 'Sim',
+                                                    dismissible: true,
+                                                    actionOnClick: () => {
+                                                        deleteClassroom();
+                                                    },
+                                                });
+                                            }}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    </div>
+                    </CustomContainer>
                 </div>
             </div>
             <style>{style}</style>
