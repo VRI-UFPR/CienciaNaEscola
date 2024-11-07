@@ -227,7 +227,7 @@ function InstitutionPage(props) {
                                                 ))}
                                         </div>
                                     </div>
-                                    <div className="row d-flex justify-content-center justify-content-md-start">
+                                    <div className="row d-flex justify-content-center justify-content-lg-start">
                                         {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
                                             <div className="col-5 col-sm-3 col-xl-2">
                                                 <TextButton
@@ -245,7 +245,7 @@ function InstitutionPage(props) {
                             {!institution && (
                                 <div>
                                     <p className="color-steel-blue fs-5 fw-medium mb-3">Você não está vinculado a nenhuma instituição</p>
-                                    <div className="row d-flex justify-content-center justify-content-md-start gy-3">
+                                    <div className="row d-flex justify-content-center-lg-start gy-3">
                                         <div className="col-12 col-md-6 col-xl-5">
                                             <TextButton
                                                 text={'Criar usuário sem vínculo'}
