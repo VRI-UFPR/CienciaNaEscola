@@ -108,24 +108,24 @@ function SignUpPage(props) {
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {
-            showAlert({ title: 'Falha no cadastro: preencha todos os campos.', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: preencha todos os campos.' });
         } else if (!validateEmail()) {
-            showAlert({ title: 'Falha no cadastro: email inválido.', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: email inválido.' });
         } else if (!validateName()) {
-            showAlert({ title: 'Falha no cadastro: nome inválido.', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: nome inválido.' });
         } else if (!validatePassword()) {
             showAlert({
-                title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula.',
-                dismissible: true,
+                headerText:
+                    'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula.',
             });
         } else if (!validatePasswordMatch()) {
-            showAlert({ title: 'Falha no cadastro: as senhas não coincidem.', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: as senhas não coincidem.' });
             /*  } else if (!validateUsername()) {
-            showAlert({ title: 'Falha no cadastro: nome de usuário inválido', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: nome de usuário inválido' });
         } else if (!validateInstitution()) {
-            showAlert({ title: 'Falha no cadastro: insituição inválida', dismissible: true });
+            showAlert({ headerText: 'Falha no cadastro: insituição inválida' });
         } else if (!validateRole()) {
-            showAlert({ title: 'Falha no cadastro: função inválida', dismissible: true }); */
+            showAlert({ headerText: 'Falha no cadastro: função inválida' }); */
         } else {
             axios
                 .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
@@ -135,9 +135,9 @@ function SignUpPage(props) {
                 })
                 .then((response) => {
                     if (response.data.message === 'User registered with sucess.') {
-                        showAlert({ title: 'Cadastrado com sucesso.', onHide: () => navigate('/signin'), dismissible: true });
+                        showAlert({ headerText: 'Cadastrado com sucesso.', onPrimaryBtnClick: () => navigate('/signin') });
                     } else {
-                        showAlert({ title: 'Falha no cadastro: erro no servidor.', dismissible: true });
+                        showAlert({ headerText: 'Falha no cadastro: erro no servidor.' });
                     }
                 })
                 .catch((error) => {

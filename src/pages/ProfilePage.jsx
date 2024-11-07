@@ -95,7 +95,6 @@ function ProfilePage(props) {
                             name: d.name,
                             username: d.username,
                             role: d.role,
-                            hash: d.hash,
                             classrooms: d.classrooms.map((c) => c.id),
                             institution: d.institution,
                             profileImage: d.profileImage,

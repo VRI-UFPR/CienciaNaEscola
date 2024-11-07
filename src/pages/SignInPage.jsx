@@ -24,6 +24,7 @@ import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
+import { hashSync } from 'bcryptjs';
 
 const styles = `
 
@@ -107,16 +108,10 @@ function SignInPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        const formData = serialize({
-            username,
-            hash: password,
-        });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ username, hash: hashSync(password, salt) });
         axios
-            .post(baseUrl + 'api/auth/signIn', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -134,18 +129,12 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     const passwordlessLoginHandler = () => {
         axios
-            .get(baseUrl + 'api/auth/passwordlessSignIn', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -162,9 +151,7 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     return (
@@ -195,7 +182,7 @@ function SignInPage(props) {
                         />
                         <p
                             className="login-links text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => showAlert({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
+                            onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
                         >
                             Esqueci minha senha
                         </p>

@@ -171,13 +171,12 @@ function Sidebar(props) {
                         type="button"
                         onClick={() => {
                             showAlert({
-                                title: 'Tem certeza que deseja fazer logout?',
-                                dismissHsl: [355, 78, 66],
-                                dismissText: 'Não',
-                                actionHsl: [97, 43, 70],
-                                actionText: 'Sim',
-                                dismissible: true,
-                                actionOnClick: () => {
+                                headerText: 'Tem certeza que deseja fazer logout?',
+                                primaryBtnHsl: [355, 78, 66],
+                                primaryBtnLabel: 'Não',
+                                secondaryBtnHsl: [97, 43, 70],
+                                secondaryBtnLabel: 'Sim',
+                                onSecondaryBtnClick: () => {
                                     closeSidebar();
                                     logout();
                                     navigate(isDashboard ? '/dash/signin' : '/signin');

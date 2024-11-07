@@ -80,15 +80,7 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, appliers: newUsers }));
                 }
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao buscar usuários.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term, target) => {
@@ -127,15 +119,7 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, answersViewersClassroom: concatenedClassrooms }));
                 }
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao buscar grupos.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id, target) => {
