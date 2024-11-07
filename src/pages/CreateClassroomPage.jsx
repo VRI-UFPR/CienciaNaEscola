@@ -377,9 +377,9 @@ function CreateClassroomPage(props) {
                                 )}
                                 <div>
                                     <fieldset>
-                                        <div className="row gx-2 gy-0 mb-2">
-                                            <div className="col-12 col-md-auto">
-                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
+                                        <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                            <div className="col-12 col-sm-auto">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-0">
                                                     Selecione os alunos do grupo:
                                                 </p>
                                             </div>
@@ -406,7 +406,7 @@ function CreateClassroomPage(props) {
                                             </div>
                                         </div>
                                         {searchedUsers.length > 0 && (
-                                            <div className="row gy-2 mb-2">
+                                            <div className="row gy-2 mb-3">
                                                 {searchedUsers.map((u) => (
                                                     <div key={u.id} className="col-6 col-md-4 col-xl-3">
                                                         <div className="form-check">

@@ -140,9 +140,9 @@ function InstitutionPage(props) {
                                         Localização: {institution.address.city}, {institution.address.state}, {institution.address.country}
                                     </p>
                                     <div className="mb-3">
-                                        <div className="row gx-2 gy-0 mb-2">
-                                            <div className="col-12 col-md-auto">
-                                                <p className="form-label color-steel-blue fs-5 fw-medium">Usuários na instituição:</p>
+                                        <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                            <div className="col-12 col-sm-auto">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Usuários na instituição:</p>
                                             </div>
                                             <div className="col">
                                                 <input
@@ -185,9 +185,9 @@ function InstitutionPage(props) {
                                         )}
                                     </div>
                                     <div className="mb-4">
-                                        <div className="row gx-2 gy-0 mb-2">
-                                            <div className="col-12 col-md-auto">
-                                                <p className="form-label color-steel-blue fs-5 fw-medium">Grupos na instituição:</p>
+                                        <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                            <div className="col-12 col-sm-auto">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Grupos na instituição:</p>
                                             </div>
                                             <div className="col">
                                                 <input

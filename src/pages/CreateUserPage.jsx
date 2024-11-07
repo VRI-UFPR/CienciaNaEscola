@@ -489,7 +489,7 @@ function CreateUserPage(props) {
                                             <div>
                                                 <fieldset>
                                                     <div className="row gx-2 gy-2 mb-2">
-                                                        <div className="col-12 col-md-auto">
+                                                        <div className="col-12 col-xl-auto">
                                                             <p className="form-label color-steel-blue fs-5 fw-medium">
                                                                 Selecione os grupos do usuário:
                                                             </p>
@@ -519,7 +519,7 @@ function CreateUserPage(props) {
                                                         </div>
                                                     </div>
                                                     {searchedClassrooms.length > 0 && (
-                                                        <div className="row gy-2 mb-2">
+                                                        <div className="row gy-2 mb-3">
                                                             {searchedClassrooms.map((c) => (
                                                                 <div key={c.id} className="col-6 col-md-4 col-xl-3">
                                                                     <div className="form-check">
