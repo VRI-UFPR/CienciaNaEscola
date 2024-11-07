@@ -20,7 +20,6 @@ import ErrorPage from './ErrorPage';
 import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
-import iconPlus from '../assets/images/iconPlus.svg';
 import RoundedButton from '../components/RoundedButton';
 import CustomContainer from '../components/CustomContainer';
 
@@ -156,8 +155,8 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'users/create'}>
-                                                    <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                <Link to={'users/create'} className="text-decoration-none">
+                                                    <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
                                                 </Link>
                                             </div>
                                         </div>
@@ -201,8 +200,8 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'classrooms/create'}>
-                                                    <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                <Link to={'classrooms/create'} className="text-decoration-none">
+                                                    <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
                                                 </Link>
                                             </div>
                                         </div>

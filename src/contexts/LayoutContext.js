@@ -18,19 +18,19 @@ export const LayoutContext = createContext();
 
 export const LayoutProvider = (props) => {
     const { isDashboard } = props;
-    const { hideAlert, isAlertVisible, isDismissable } = useContext(AlertContext);
+    const { hideAlert, isAlertVisible, isClosable } = useContext(AlertContext);
     const blocker = useBlocker(({ currentLocation, nextLocation }) => isAlertVisible && currentLocation.pathname !== nextLocation.pathname);
 
     useEffect(() => {
         if (blocker.state === 'blocked') {
-            if (!isDismissable) {
+            if (!isClosable) {
                 alert('Você não pode sair da página agora. Aguarde finalizar a ação.');
             } else {
                 blocker.reset?.();
                 hideAlert();
             }
         }
-    }, [blocker, hideAlert, isDismissable]);
+    }, [blocker, hideAlert, isClosable]);
 
     return (
         <LayoutContext.Provider value={{ isDashboard }}>

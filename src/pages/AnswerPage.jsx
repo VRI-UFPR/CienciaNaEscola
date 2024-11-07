@@ -142,9 +142,7 @@ function AnswerPage(props) {
                     document.body.removeChild(link);
                 }
             }
-        } else {
-            showAlert({ title: 'O seguinte protocolo não possui respostas: ' + obj.protocol.title, dismissible: true });
-        }
+        } else showAlert({ headerText: 'O seguinte protocolo não possui respostas: ' + obj.protocol.title });
     };
 
     function jsonToCsv(ans) {
