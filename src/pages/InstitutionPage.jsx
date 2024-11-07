@@ -22,6 +22,7 @@ import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import iconPlus from '../assets/images/iconPlus.svg';
 import RoundedButton from '../components/RoundedButton';
+import CustomContainer from '../components/CustomContainer';
 
 const style = `
     .font-barlow {
@@ -119,153 +120,155 @@ function InstitutionPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column vh-100">
-            <div className="row h-100 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4 pb-3">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Instituição</h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
-                        {institution && (
-                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                                <p className="color-steel-blue fs-5 fw-medium mb-0">Nome: {institution.name}</p>
-                                <p className="color-steel-blue fs-5 fw-medium mb-0">Tipo: {institution.type}</p>
-                                <p className="color-steel-blue fs-5 fw-medium mb-3">
-                                    Localização: {institution.address.city}, {institution.address.state}, {institution.address.country}
-                                </p>
-                                <div className="mb-3">
-                                    <div className="row gx-2 gy-0 mb-2">
-                                        <div className="col-12 col-md-auto">
-                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">Usuários na instituição:</p>
+                    <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
+                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Instituição</h1>
+                        <div className="d-flex flex-column flex-grow-1">
+                            {institution && (
+                                <div>
+                                    <p className="color-steel-blue fs-5 fw-medium mb-0">Nome: {institution.name}</p>
+                                    <p className="color-steel-blue fs-5 fw-medium mb-0">Tipo: {institution.type}</p>
+                                    <p className="color-steel-blue fs-5 fw-medium mb-3">
+                                        Localização: {institution.address.city}, {institution.address.state}, {institution.address.country}
+                                    </p>
+                                    <div className="mb-3">
+                                        <div className="row gx-2 gy-0 mb-2">
+                                            <div className="col-12 col-md-auto">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium">Usuários na instituição:</p>
+                                            </div>
+                                            <div className="col">
+                                                <input
+                                                    type="text"
+                                                    name="users-search"
+                                                    value={VUSearchInput || ''}
+                                                    id="users-search"
+                                                    placeholder="Buscar por nome de usuário"
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                    onChange={(e) => setVUSearchInput(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-auto">
+                                                <Link to={'users/create'}>
+                                                    <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                </Link>
+                                            </div>
                                         </div>
-                                        <div className="col">
-                                            <input
-                                                type="text"
-                                                name="users-search"
-                                                value={VUSearchInput || ''}
-                                                id="users-search"
-                                                placeholder="Buscar por nome de usuário"
-                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                onChange={(e) => setVUSearchInput(e.target.value)}
-                                            />
+                                        {searchedUsers.length > 0 && (
+                                            <div className="row gy-2">
+                                                {searchedUsers
+                                                    .filter((u) => u.username.startsWith(VUSearchInput))
+                                                    .map((u) => (
+                                                        <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                            {user.role === 'ADMIN' ? (
+                                                                <Link
+                                                                    to={`users/${u.id}/manage`}
+                                                                    className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
+                                                                >
+                                                                    {u.username}
+                                                                </Link>
+                                                            ) : (
+                                                                <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">
+                                                                    {u.username}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="mb-4">
+                                        <div className="row gx-2 gy-0 mb-2">
+                                            <div className="col-12 col-md-auto">
+                                                <p className="form-label color-steel-blue fs-5 fw-medium">Grupos na instituição:</p>
+                                            </div>
+                                            <div className="col">
+                                                <input
+                                                    type="text"
+                                                    name="classrooms-search"
+                                                    value={VCSearchInput || ''}
+                                                    id="classrooms-search"
+                                                    placeholder="Buscar por nome do grupo"
+                                                    className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                    onChange={(e) => setVCSearchInput(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="col-auto">
+                                                <Link to={'classrooms/create'}>
+                                                    <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
+                                                </Link>
+                                            </div>
                                         </div>
-                                        <div className="col-auto">
-                                            <Link to={'users/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
-                                            </Link>
+                                        <div className="row gy-2">
+                                            {searchedClassrooms
+                                                .filter((c) => c.name.startsWith(VCSearchInput))
+                                                .map((c) => (
+                                                    <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
+                                                        {user.role !== 'USER' && user.role !== 'APPLIER' ? (
+                                                            <Link
+                                                                to={`classrooms/${c.id}/manage`}
+                                                                className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
+                                                            >
+                                                                {c.name}
+                                                            </Link>
+                                                        ) : (
+                                                            <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">
+                                                                {c.name}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ))}
                                         </div>
                                     </div>
-                                    <div className="row gy-2 mb-3">
-                                        {searchedUsers
-                                            .filter((u) => u.username.startsWith(VUSearchInput))
-                                            .map((u) => (
-                                                <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                    {user.role === 'ADMIN' ? (
-                                                        <Link
-                                                            to={`users/${u.id}/manage`}
-                                                            className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
-                                                        >
-                                                            {u.username}
-                                                        </Link>
-                                                    ) : (
-                                                        <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">
-                                                            {u.username}
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            ))}
+                                    <div className="row d-flex justify-content-center justify-content-md-start">
+                                        {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                            <div className="col-5 col-sm-3 col-xl-2">
+                                                <TextButton
+                                                    text={'Gerenciar'}
+                                                    hsl={[97, 43, 70]}
+                                                    onClick={() => {
+                                                        navigate('manage');
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="mb-3">
-                                    <div className="row gx-2 gy-0 mb-2">
-                                        <div className="col-12 col-md-auto">
-                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">Grupos na instituição:</p>
-                                        </div>
-                                        <div className="col">
-                                            <input
-                                                type="text"
-                                                name="classrooms-search"
-                                                value={VCSearchInput || ''}
-                                                id="classrooms-search"
-                                                placeholder="Buscar por nome do grupo"
-                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                onChange={(e) => setVCSearchInput(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="col-auto">
-                                            <Link to={'classrooms/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon={iconPlus} />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                    <div className="row gy-2 mb-3">
-                                        {searchedClassrooms
-                                            .filter((c) => c.name.startsWith(VCSearchInput))
-                                            .map((c) => (
-                                                <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
-                                                    {user.role !== 'USER' && user.role !== 'APPLIER' ? (
-                                                        <Link
-                                                            to={`classrooms/${c.id}/manage`}
-                                                            className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
-                                                        >
-                                                            {c.name}
-                                                        </Link>
-                                                    ) : (
-                                                        <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">{c.name}</p>
-                                                    )}
-                                                </div>
-                                            ))}
-                                    </div>
-                                </div>
-                                <div className="row d-flex justify-content-center justify-content-md-start pb-4">
-                                    {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                        <div className="col-5 col-sm-3 col-xl-2">
+                            )}
+                            {!institution && (
+                                <div>
+                                    <p className="color-steel-blue fs-5 fw-medium mb-3">Você não está vinculado a nenhuma instituição</p>
+                                    <div className="row d-flex justify-content-center justify-content-md-start gy-3">
+                                        <div className="col-12 col-md-6 col-xl-5">
                                             <TextButton
-                                                text={'Gerenciar'}
+                                                text={'Criar usuário sem vínculo'}
                                                 hsl={[97, 43, 70]}
                                                 onClick={() => {
-                                                    navigate('manage');
+                                                    navigate('users/create');
                                                 }}
                                             />
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                        {!institution && (
-                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                                <p className="color-steel-blue fs-5 fw-medium mb-3">Você não está vinculado a nenhuma instituição</p>
-                                <div className="row d-flex justify-content-center justify-content-md-start gy-3">
-                                    <div className="col-12 col-md-6 col-xl-5">
-                                        <TextButton
-                                            text={'Criar usuário sem vínculo'}
-                                            hsl={[97, 43, 70]}
-                                            onClick={() => {
-                                                navigate('users/create');
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-md-6 col-xl-5">
-                                        <TextButton
-                                            text={'Criar grupo sem vínculo'}
-                                            hsl={[97, 43, 70]}
-                                            onClick={() => {
-                                                navigate('classrooms/create');
-                                            }}
-                                        />
+                                        <div className="col-12 col-md-6 col-xl-5">
+                                            <TextButton
+                                                text={'Criar grupo sem vínculo'}
+                                                hsl={[97, 43, 70]}
+                                                onClick={() => {
+                                                    navigate('classrooms/create');
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    </CustomContainer>
                 </div>
             </div>
             <style>{style}</style>
