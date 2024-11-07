@@ -369,17 +369,17 @@ function CreateProtocolPage(props) {
                                 answersVisibility: d.answersVisibility,
                                 pages: d.pages.map((p) => ({
                                     id: p.id,
-                                    tempId: Date.now() + Math.random() * 1000,
+                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     type: p.type,
                                     placement: p.placement,
                                     itemGroups: p.itemGroups.map((g) => ({
                                         id: g.id,
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
                                         placement: g.placement,
                                         items: g.items.map((i) => {
-                                            const tempId = Date.now() + Math.random() * 1000;
+                                            const tempId = Math.floor(Date.now() + Math.random() * 1000);
                                             tempIdMap[i.id] = tempId;
                                             return {
                                                 id: i.id,
@@ -391,7 +391,7 @@ function CreateProtocolPage(props) {
                                                 placement: i.placement,
                                                 itemOptions: i.itemOptions.map((o) => ({
                                                     id: o.id,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                     placement: o.placement,
                                                     text: o.text,
                                                     files: o.files.map((f) => ({ id: f.id, path: f.path })),
@@ -399,20 +399,20 @@ function CreateProtocolPage(props) {
                                                 files: i.files.map((f) => ({ id: f.id, path: f.path })),
                                                 itemValidations: i.itemValidations.map((v) => ({
                                                     ...v,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                 })),
                                             };
                                         }),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
-                                            tempId: Date.now() + Math.random() * 1000,
+                                            tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         })),
                                     })),
                                     dependencies: p.dependencies.map((dep) => ({
                                         ...dep,
                                         itemTempId: tempIdMap[dep.itemId],
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     })),
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),
