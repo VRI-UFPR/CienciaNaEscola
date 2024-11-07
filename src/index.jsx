@@ -1,4 +1,16 @@
-import React from 'react';
+/*
+Copyright (C) 2024 Laboratorio Visao Robotica e Imagem
+
+Departamento de Informatica - Universidade Federal do Parana - VRI/UFPR
+
+This file is part of CienciaNaEscola. CienciaNaEscola is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
+of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
+*/
+
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -27,14 +39,14 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const port = process.env.PORT || 3001;
 console.log(`Server running on port ${port}`);
 root.render(
-    <React.StrictMode>
+    <StrictMode>
         <App />
         <style
             dangerouslySetInnerHTML={{
                 __html: styles,
             }}
         />
-    </React.StrictMode>
+    </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
