@@ -50,20 +50,32 @@ const CreateProtocolStyles = `
         }
     }
 
-    .bg-light-grey {
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus {
-        background-color: #D9D9D9 !important;
+    .bg-light-grey:focus,
+    .bg-light-grey:active,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-pastel-blue {
+    .bg-light-grey:disabled,
+    .bg-light-pastel-blue:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
+    }
+
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
-    }
-
-    .bg-light-pastel-blue:focus {
-        background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
     .bg-pastel-blue {
@@ -357,17 +369,17 @@ function CreateProtocolPage(props) {
                                 answersVisibility: d.answersVisibility,
                                 pages: d.pages.map((p) => ({
                                     id: p.id,
-                                    tempId: Date.now() + Math.random() * 1000,
+                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     type: p.type,
                                     placement: p.placement,
                                     itemGroups: p.itemGroups.map((g) => ({
                                         id: g.id,
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
                                         placement: g.placement,
                                         items: g.items.map((i) => {
-                                            const tempId = Date.now() + Math.random() * 1000;
+                                            const tempId = Math.floor(Date.now() + Math.random() * 1000);
                                             tempIdMap[i.id] = tempId;
                                             return {
                                                 id: i.id,
@@ -379,7 +391,7 @@ function CreateProtocolPage(props) {
                                                 placement: i.placement,
                                                 itemOptions: i.itemOptions.map((o) => ({
                                                     id: o.id,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                     placement: o.placement,
                                                     text: o.text,
                                                     files: o.files.map((f) => ({ id: f.id, path: f.path })),
@@ -387,20 +399,20 @@ function CreateProtocolPage(props) {
                                                 files: i.files.map((f) => ({ id: f.id, path: f.path })),
                                                 itemValidations: i.itemValidations.map((v) => ({
                                                     ...v,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                 })),
                                             };
                                         }),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
-                                            tempId: Date.now() + Math.random() * 1000,
+                                            tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         })),
                                     })),
                                     dependencies: p.dependencies.map((dep) => ({
                                         ...dep,
                                         itemTempId: tempIdMap[dep.itemId],
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     })),
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),

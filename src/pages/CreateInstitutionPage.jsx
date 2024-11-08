@@ -53,12 +53,22 @@ const style = `
       }
     }
 
-    .bg-light-pastel-blue{
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
-    .bg-light-pastel-blue:focus{
-        background-color: #b8d7e3;
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .bg-light-pastel-blue:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
     }
 
     .color-steel-blue {

@@ -24,6 +24,7 @@ import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
+import { hashSync } from 'bcryptjs';
 
 const styles = `
 
@@ -31,11 +32,17 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .login-input {
-        background-color: #4E9BB9;
-        color: #FFFFFF;
-        font-size: 90%;
-        border: 0px;
+    .login-input,
+    .login-input:focus,
+    .login-input:active {
+        color: #FFFFFF !important;
+        background-color: #4E9BB9 !important;
+        border: 1px solid #4E9BB9 !important;
+    }
+
+    .login-input:focus,
+    .login-input:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040 !important;
     }
 
     ::placeholder {
@@ -101,16 +108,10 @@ function SignInPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        const formData = serialize({
-            username,
-            hash: password,
-        });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ username, hash: hashSync(password, salt) });
         axios
-            .post(baseUrl + 'api/auth/signIn', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -133,11 +134,7 @@ function SignInPage(props) {
 
     const passwordlessLoginHandler = () => {
         axios
-            .get(baseUrl + 'api/auth/passwordlessSignIn', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -170,14 +167,14 @@ function SignInPage(props) {
                 <form className="row justify-content-center g-0 h-50 w-75 pt-5" onSubmit={loginHandler}>
                     <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
                         <input
-                            className="login-input align-items-center rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
+                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
                             placeholder="Username"
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                         <input
-                            className="login-input rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
+                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
                             placeholder="Senha"
                             type="password"
                             value={password}

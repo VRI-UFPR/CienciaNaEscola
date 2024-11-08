@@ -25,6 +25,7 @@ import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import RoundedButton from '../components/RoundedButton';
 import { AlertContext } from '../contexts/AlertContext';
 import CustomContainer from '../components/CustomContainer';
+import { hashSync } from 'bcryptjs';
 
 const style = `
     .font-barlow {
@@ -50,20 +51,32 @@ const style = `
       }
     }
 
-    .bg-light-pastel-blue{
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
-    .bg-light-pastel-blue:focus{
-        background-color: #b8d7e3;
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-grey{
+    .bg-light-pastel-blue:disabled,
+    .bg-light-grey:disabled {
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
+    }
+
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
-    }
-
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
     .color-steel-blue {
@@ -143,7 +156,6 @@ function CreateUserPage(props) {
                                 name: d.name,
                                 username: d.username,
                                 role: d.role,
-                                hash: d.hash,
                                 classrooms: d.classrooms.map((c) => c.id),
                                 profileImageId: d.profileImage?.id,
                                 profileImage: d.profileImage,
@@ -211,7 +223,8 @@ function CreateUserPage(props) {
 
     const submitNewUser = (e) => {
         e.preventDefault();
-        const formData = serialize(newUser, { indices: true });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ ...newUser, hash: hashSync(newUser.hash, salt) });
         if (isEditing) {
             axios
                 .put(`${baseUrl}api/user/updateUser/${userId || user.id}`, formData, {
