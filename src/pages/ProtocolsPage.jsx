@@ -125,7 +125,7 @@ function ProtocolsPage(props) {
                 <div className="col d-flex flex-column h-100 p-0 pb-4">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4">
+                        <div className="col-12 col-lg-10 p-4">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Protocolos</h1>
                         </div>
                     </div>
