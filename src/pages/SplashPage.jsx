@@ -13,15 +13,16 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import logoPicceTextual from '../assets/images/logoPicceTextual.svg';
 import ColoredBorder from '../components/ColoredBorder';
+import CustomContainer from '../components/CustomContainer';
 
 const styles = `
     .logo-picce-circular{
-        max-width: 400px;
-        max-height: 75%;
+        min-width: 200px;
+        max-width: 350px;
     }
 
     .logo-picce-textual{
-        max-width: 200px;
+        max-width: 175px;
     }
 
     .spinner-splash{
@@ -44,22 +45,19 @@ function SplashPage(props) {
     return (
         <div className="d-flex flex-column align-items-center vh-100">
             <ColoredBorder />
-            <div className="d-flex flex-grow-1 align-items-end justify-content-center w-75 m-0">
-                <div className="ratio ratio-1x1 logo-picce-circular h-75">
-                    <img src={logoPicceCircular} className="w-100" alt="Logo gráfico Picce"></img>
+            <CustomContainer className="font-barlow flex-grow-1 w-100 p-4" df="12" md="10">
+                <div className="d-flex flex-column flex-grow-1 align-items-center justify-content-center w-100 pt-5 pb-5">
+                    <img src={logoPicceCircular} className="logo-picce-circular w-75 px-3 mb-5" alt="Logo gráfico Picce"></img>
+                    <span className="font-barlow color-grey text-center text-break fw-medium fs-3 mb-4">{text || ''}</span>
+                    <div className="spinner-border text-secondary spinner-splash" role="status">
+                        <span className="sr-only"></span>
+                    </div>
                 </div>
-            </div>
-            <div className="d-flex flex-column align-items-center justify-content-center h-25 m-0">
-                <div className="spinner-border text-secondary spinner-splash" role="status">
-                    <span className="sr-only"></span>
+                <div className="d-flex flex-column align-items-center w-100 pb-5">
+                    <img src={logoPicceTextual} className="logo-picce-textual w-50 px-3" alt="Logo textual Picce"></img>
                 </div>
-            </div>
-            <div className="d-flex flex-column align-items-center justify-content-center">
-                <span className="font-barlow color-grey fw-medium fs-3">{text || ''}</span>
-            </div>
-            <div className="d-flex flex-column align-items-center justify-content-center h-25 w-75 px-2 m-0">
-                <img src={logoPicceTextual} className="logo-picce-textual w-50 p-0" alt="Logo textual Picce"></img>
-            </div>
+            </CustomContainer>
+
             <ColoredBorder />
             <style>{styles}</style>
         </div>
