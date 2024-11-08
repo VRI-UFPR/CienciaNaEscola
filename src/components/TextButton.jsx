@@ -32,6 +32,19 @@ const TextButtonStyles = (hue, sat, lig) => {
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
             box-shadow: inset 0px 4px 4px 0px #00000040;
         }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus {
+            color: #fff !important;
+            background-color: hsl(${hue}, ${sat}%, ${lig}%);
+            border-color: hsl(${hue}, ${sat}%, ${lig}%);
+            box-shadow: none;
+        }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:disabled {
+            background-color: hsl(0,0%,85%) !important;
+            border-color: hsl(0,0%,60%);
+            box-shadow: none;
+        }
     `;
 };
 

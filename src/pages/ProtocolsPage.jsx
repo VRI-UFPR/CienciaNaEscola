@@ -99,24 +99,11 @@ function ProtocolsPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({
-                    title: 'Protocolo excluído com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Protocolo excluído com sucesso.' });
                 const newVisibleProtocols = [...visibleProtocols];
                 setVisibleProtocols(newVisibleProtocols.filter((a) => a.id !== protocolId));
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir protocolo.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo.', bodyText: error.response?.data.message }));
     };
 
     if (error) {

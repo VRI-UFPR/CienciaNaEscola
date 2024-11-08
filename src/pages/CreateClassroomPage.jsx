@@ -23,7 +23,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import RoundedButton from '../components/RoundedButton';
-import iconSearch from '../assets/images/iconSearch.svg';
 
 const style = `
     .font-barlow {
@@ -49,20 +48,38 @@ const style = `
       }
     }
 
-    .bg-light-pastel-blue{
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
-    .bg-light-pastel-blue:focus{
-        background-color: #b8d7e3;
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-grey{
+    .bg-light-pastel-blue:disabled,
+    .bg-light-grey:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
+    }
+
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
+    .bg-light-grey:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
     }
 
     .color-steel-blue {
@@ -137,15 +154,7 @@ function CreateClassroomPage(props) {
                             });
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
-                        .catch((error) => {
-                            showAlert({
-                                title: 'Erro ao buscar sala de aula.',
-                                description: error.response?.data.message,
-                                dismissHsl: [97, 43, 70],
-                                dismissText: 'Ok',
-                                dismissible: true,
-                            });
-                        })
+                        .catch((error) => showAlert({ headerText: 'Erro ao buscar sala de aula.', bodyText: error.response?.data.message }))
                 );
             }
             if (institutionId || user.institutionId) {
@@ -160,15 +169,9 @@ function CreateClassroomPage(props) {
                             const d = response.data.data;
                             setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
-                        .catch((error) => {
-                            showAlert({
-                                title: 'Erro ao buscar usuários da instituição.',
-                                description: error.response?.data.message,
-                                dismissHsl: [97, 43, 70],
-                                dismissText: 'Ok',
-                                dismissible: true,
-                            });
-                        })
+                        .catch((error) =>
+                            showAlert({ headerText: 'Erro ao buscar usuários da instituição.', bodyText: error.response?.data.message })
+                        )
                 );
             }
             Promise.all(promises).then(() => {
@@ -196,9 +199,7 @@ function CreateClassroomPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => {
-                alert('Erro ao buscar usuários. ' + error.response?.data.message || '');
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const showInstitutionUsers = () => {
@@ -222,26 +223,10 @@ function CreateClassroomPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
-                    showAlert({
-                        title: 'Grupo atualizado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/my`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar grupo.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .then((response) =>
+                    showAlert({ headerText: 'Grupo atualizado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar grupo.', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${baseUrl}api/classroom/createClassroom`, formData, {
@@ -250,26 +235,10 @@ function CreateClassroomPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
-                    showAlert({
-                        title: 'Grupo criado com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/my`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao criar grupo.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                .then((response) =>
+                    showAlert({ headerText: 'Grupo criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao criar grupo.', bodyText: error.response?.data.message }));
         }
     };
 
@@ -280,26 +249,10 @@ function CreateClassroomPage(props) {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) => {
-                showAlert({
-                    title: 'Grupo excluído com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                    onHide: () => {
-                        navigate(`/dash/institutions/my`);
-                    },
-                });
-            })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir grupo.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .then((response) =>
+                showAlert({ headerText: 'Grupo excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+            )
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir grupo.', bodyText: error.response?.data.message }));
     };
 
     if (error) {
@@ -396,7 +349,7 @@ function CreateClassroomPage(props) {
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
                                                     onClick={() => searchUsers(userSearchTerm)}
-                                                    icon={iconSearch}
+                                                    icon="person_search"
                                                 />
                                             </div>
                                         </div>
@@ -458,15 +411,12 @@ function CreateClassroomPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
-                                                dismissHsl: [355, 78, 66],
-                                                dismissText: 'Não',
-                                                actionHsl: [97, 43, 70],
-                                                actionText: 'Sim',
-                                                dismissible: true,
-                                                actionOnClick: () => {
-                                                    formRef.current.requestSubmit();
-                                                },
+                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o grupo?`,
+                                                primaryBtnHsl: [355, 78, 66],
+                                                primaryBtnLabel: 'Não',
+                                                secondaryBtnHsl: [97, 43, 70],
+                                                secondaryBtnLabel: 'Sim',
+                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
                                             });
                                         }}
                                     />
@@ -478,15 +428,12 @@ function CreateClassroomPage(props) {
                                             hsl={[355, 78, 66]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja excluir o grupo?`,
-                                                    dismissHsl: [355, 78, 66],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [97, 43, 70],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        deleteClassroom();
-                                                    },
+                                                    headerText: `Tem certeza que deseja excluir o grupo?`,
+                                                    primaryBtnHsl: [355, 78, 66],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [97, 43, 70],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => deleteClassroom(),
                                                 });
                                             }}
                                         />

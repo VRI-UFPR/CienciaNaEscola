@@ -71,6 +71,7 @@ function ApplicationPage(props) {
     const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
+    const [addressId, setAddressId] = useState(undefined);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { applicationId } = useParams();
@@ -256,14 +257,11 @@ function ApplicationPage(props) {
     }, []);
 
     const handleProtocolSubmit = () => {
-        showAlert({
-            title: 'Aguarde o processamento da resposta.',
-            dismissible: false,
-        });
+        showAlert({ headerText: 'Aguarde o processamento da resposta.', isClosable: false });
 
         const applicationAnswer = {
             applicationId: application.id,
-            addressId: 1,
+            addressId: addressId,
             date: new Date(),
             itemAnswerGroups: [],
         };
@@ -335,22 +333,14 @@ function ApplicationPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        title: 'Muito obrigado por sua participação no projeto.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(isDashboard ? '/dash/applications' : '/applications');
-                        },
+                        headerText: 'Muito obrigado por sua participação no projeto.',
+                        onPrimaryBtnClick: () => navigate(isDashboard ? '/dash/applications' : '/applications'),
                     });
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
+                        bodyText: error.response?.data.message,
                     });
                 });
         } else {
@@ -366,12 +356,7 @@ function ApplicationPage(props) {
                     },
                 },
             });
-            showAlert({
-                title: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.',
-                dismissHsl: [97, 43, 70],
-                dismissText: 'Ok',
-                dismissible: true,
-            });
+            showAlert({ headerText: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.' });
         }
     };
 
@@ -404,10 +389,7 @@ function ApplicationPage(props) {
     useEffect(() => {
         if (connected === false && application?.id) {
             showAlert({
-                title: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
-                dismissHsl: [97, 43, 70],
-                dismissText: 'Ok',
-                dismissible: true,
+                headerText: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
             });
         }
     }, [connected, application, applicationId, showAlert]);
@@ -597,15 +579,8 @@ function ApplicationPage(props) {
                                                                 <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                     {
                                                                         <LocationInput
-                                                                            item={item}
-                                                                            answer={{
-                                                                                text:
-                                                                                    itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                        ?.text || '',
-                                                                                files: [],
-                                                                                group: itemGroup.id,
-                                                                            }}
-                                                                            onAnswerChange={handleAnswerChange}
+                                                                            addressId={addressId}
+                                                                            onAnswerChange={(addressId) => setAddressId(addressId)}
                                                                         />
                                                                     }
                                                                 </div>
@@ -666,15 +641,12 @@ function ApplicationPage(props) {
                                             text="Enviar"
                                             onClick={() => {
                                                 showAlert({
-                                                    title: 'Tem certeza que deseja enviar o protocolo?',
-                                                    dismissHsl: [355, 78, 66],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [97, 43, 70],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        handleProtocolSubmit();
-                                                    },
+                                                    headerText: 'Tem certeza que deseja enviar o protocolo?',
+                                                    primaryBtnHsl: [355, 78, 66],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [97, 43, 70],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => handleProtocolSubmit(),
                                                 });
                                             }}
                                         />

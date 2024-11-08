@@ -24,6 +24,7 @@ import logoUFPR from '../assets/images/logoUFPR.svg';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
+import { hashSync } from 'bcryptjs';
 
 const styles = `
 
@@ -31,11 +32,17 @@ const styles = `
         font-family: 'Century Gothic', sans-serif;
     }
 
-    .login-input {
-        background-color: #4E9BB9;
-        color: #FFFFFF;
-        font-size: 90%;
-        border: 0px;
+    .login-input,
+    .login-input:focus,
+    .login-input:active {
+        color: #FFFFFF !important;
+        background-color: #4E9BB9 !important;
+        border: 1px solid #4E9BB9 !important;
+    }
+
+    .login-input:focus,
+    .login-input:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040 !important;
     }
 
     ::placeholder {
@@ -89,16 +96,10 @@ function SignInPage(props) {
 
     const loginHandler = (event) => {
         event.preventDefault();
-        const formData = serialize({
-            username,
-            hash: password,
-        });
+        const salt = process.env.REACT_APP_SALT;
+        const formData = serialize({ username, hash: hashSync(password, salt) });
         axios
-            .post(baseUrl + 'api/auth/signIn', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -116,18 +117,12 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     const passwordlessLoginHandler = () => {
         axios
-            .get(baseUrl + 'api/auth/passwordlessSignIn', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -144,9 +139,7 @@ function SignInPage(props) {
                     throw new Error('Authentication failed!');
                 }
             })
-            .catch((error) => {
-                showAlert({ title: 'Falha de autenticação. Certifique-se que login e senha estão corretos.', dismissible: true });
-            });
+            .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
     return (
@@ -159,14 +152,14 @@ function SignInPage(props) {
                             <span className="text-center fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
                             <form onSubmit={loginHandler}>
                                 <input
-                                    className="login-input rounded-pill text-start fs-5 w-100 px-3 py-2 mb-2 mb-sm-3"
+                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
                                     placeholder="Username"
                                     type="text"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <input
-                                    className="login-input rounded-pill text-start fs-5 w-100 px-3 py-2 mb-2 mb-sm-3"
+                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
                                     placeholder="Senha"
                                     type="password"
                                     value={password}
@@ -175,7 +168,7 @@ function SignInPage(props) {
                                 <button
                                     className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"
                                     type="button"
-                                    onClick={() => showAlert({ title: 'Fale com seu coordenador para recuperar sua senha.' })}
+                                    onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
                                 >
                                     Esqueci minha senha
                                 </button>
