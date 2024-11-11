@@ -405,6 +405,7 @@ function CreateUserPage(props) {
                                         autoComplete="off"
                                         onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
                                         minLength="3"
+                                        maxLength="20"
                                         required
                                     />
                                 </div>
