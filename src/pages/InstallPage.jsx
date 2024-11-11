@@ -80,7 +80,7 @@ function InstallPage(props) {
 
     useEffect(() => {
         if ((isAndroid || isIos) && isStandalone) {
-            navigate('/signin');
+            navigate('/login');
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {

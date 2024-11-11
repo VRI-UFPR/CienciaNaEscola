@@ -240,7 +240,7 @@ function ProtocolPage(props) {
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
             <NavBar />
             <div className="d-flex flex-column flex-grow-1 bg-yellow-orange p-4">
-                <div className="row justify-content-center m-0">
+                {/* <div className="row justify-content-center m-0">
                     <div className="align-self-center p-0 pb-4">
                         <TextButton
                             type="submit"
@@ -251,7 +251,7 @@ function ProtocolPage(props) {
                             }}
                         />
                     </div>
-                </div>
+                </div> */}
                 <div className="row justify-content-center m-0">
                     {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
                 </div>
