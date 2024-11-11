@@ -63,7 +63,7 @@ function AddBar(props) {
     }, []);
 
     return (
-        <div className="bg-transparent d-flex flex-column h-100">
+        <div className="bg-transparent d-flex flex-column h-100 overflow-auto">
             <div className="d-flex justify-content-end">
                 <button
                     type="button"

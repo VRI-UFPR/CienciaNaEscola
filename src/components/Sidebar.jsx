@@ -91,7 +91,7 @@ function Sidebar(props) {
     }, []);
 
     return (
-        <div className="d-flex flex-column h-100 bg-coral-red">
+        <div className="d-flex flex-column h-100 bg-coral-red overflow-auto">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1">
                 {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
                     <div className="container d-flex justify-content-end p-0 erro">
