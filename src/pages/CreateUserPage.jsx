@@ -388,6 +388,7 @@ function CreateUserPage(props) {
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium  fs-5 mb-3 border-0"
                                         onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
                                         minLength="3"
+                                        maxLength="255"
                                         required
                                     />
                                 </div>
