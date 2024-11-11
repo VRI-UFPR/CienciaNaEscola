@@ -43,11 +43,14 @@ const styles = `
 
 function RangeInput(props) {
     const { onAnswerChange, answer, item, disabled } = props;
-    const [value, setValue] = useState(0);
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(10);
     const [step, setStep] = useState(1);
     const [hasUpdated, setHasUpdated] = useState(false);
+
+    const updateAnswer = (newAnswer) => {
+        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+    };
 
     useEffect(() => {
         if (!hasUpdated) {
@@ -73,23 +76,10 @@ function RangeInput(props) {
             }
             setHasUpdated(true);
         }
-    }, [hasUpdated, item]);
-
-    useEffect(() => {
-        if (hasUpdated) {
-            setValue(Math.floor((min + max) / 2));
-        }
-    }, [hasUpdated, min, max]);
-
-    const updateAnswer = (newAnswer) => {
-        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
-        setValue(newAnswer.text);
-    };
+    }, [hasUpdated, item, answer, min, max]);
 
     const rangeStyle = {
-        background: `linear-gradient(to right, #AAD390 ${((value - min) / (max - min)) * 100}%, #ccc ${
-            ((value - min) / (max - min)) * 100
-        }%)`,
+        background: '#AAD390',
         borderRadius: '5px',
         cursor: disabled ? 'not-allowed' : 'pointer',
     };
@@ -109,20 +99,20 @@ function RangeInput(props) {
                     id="customRange"
                     onChange={(e) => updateAnswer({ ...answer, text: String(e.target.value) })}
                     style={rangeStyle}
-                    value={value}
+                    value={parseFloat(answer.text)}
                     disabled={disabled}
                 />
             </div>
             <div className="range-subtitle d-flex justify-content-between pt-2">
-                <span className={`${parseFloat(value) === parseFloat(min) ? 'fw-medium fs-5' : 'fw-normal fs-6'} w-25`}>{min}</span>
+                <span className={`${parseFloat(answer.text) === parseFloat(min) ? 'fw-medium fs-5' : 'fw-normal fs-6'} w-25`}>{min}</span>
                 <span
                     className={`${
-                        parseFloat(value) === parseFloat(min) || parseFloat(value) === parseFloat(max) ? 'd-none' : ''
+                        parseFloat(answer.text) === parseFloat(min) || parseFloat(answer.text) === parseFloat(max) ? 'd-none' : ''
                     } text-center fw-medium fs-5 w-25`}
                 >
-                    {value}
+                    {answer.text}
                 </span>
-                <span className={`${parseFloat(value) === parseFloat(max) ? 'fw-medium fs-5' : 'fw-normal fs-6'} text-end w-25`}>
+                <span className={`${parseFloat(answer.text) === parseFloat(max) ? 'fw-medium fs-5' : 'fw-normal fs-6'} text-end w-25`}>
                     {max}
                 </span>
             </div>

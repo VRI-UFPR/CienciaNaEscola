@@ -46,11 +46,12 @@ export const defaultNewDependency = () => ({
     tempId: Math.floor(Date.now() + Math.random() * 1000),
 });
 
-export const defaultNewItemGroup = (newPlacement) => ({
-    type: 'ONE_DIMENSIONAL',
+export const defaultNewItemGroup = (type, newPlacement) => ({
+    type: type,
     isRepeatable: false,
     items: [],
     dependencies: [],
+    tableColumns: [],
     placement: newPlacement,
     tempId: Math.floor(Date.now() + Math.random() * 1000),
 });

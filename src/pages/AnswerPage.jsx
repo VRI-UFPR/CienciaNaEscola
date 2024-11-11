@@ -22,6 +22,7 @@ import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
 import ErrorPage from './ErrorPage';
+import TableInput from '../components/inputs/answers/TableInput';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 
@@ -67,28 +68,20 @@ const styles = `
 `;
 
 function AnswerPage(props) {
-    const [isLoading, setIsLoading] = useState(true);
+    const { applicationId } = useParams();
     const [error, setError] = useState(undefined);
     const [answer, setAnswer] = useState();
     const [selectedAnswer, setSelectedAnswer] = useState(undefined);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState(undefined);
-    const galleryModalRef = useRef(null);
-    const { applicationId } = useParams();
     const { user } = useContext(AuthContext);
-    const modalRef = useRef(null);
     const { showAlert } = useContext(AlertContext);
+    const modalRef = useRef(null);
+    const galleryModalRef = useRef(null);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
         setSelectedItem(question);
-    };
-
-    const sumOptionAnswers = (itemOptions) => {
-        let sum = 0;
-        for (const option of itemOptions) {
-            sum += Object.keys(option.optionAnswers).length;
-        }
-        return sum;
     };
 
     useEffect(() => {
@@ -118,7 +111,6 @@ function AnswerPage(props) {
     }
 
     // Função de exportar csv
-
     const createFile = (modalRef) => {
         let obj, csv;
 
@@ -145,110 +137,169 @@ function AnswerPage(props) {
         } else showAlert({ headerText: 'O seguinte protocolo não possui respostas: ' + obj.protocol.title });
     };
 
-    function jsonToCsv(ans) {
-        let header = [],
+    const jsonToCsv = (ans) => {
+        let header = ['username'],
             answers = [],
             userAnswers = [];
         let headerString;
-        let items = ans.protocol.pages[0].itemGroups[0].items;
-        let ansIds = Object.keys(ans.answers);
+        const ansIds = Object.keys(ans.answers);
+        const protocol = ans.protocol;
+        let totalItems = 0;
+        let countTables = 0;
 
         // Armazena todas as perguntas no vetor 'header'
-        header.push('username');
-        for (let i = 0; i < items.length; i++) {
-            // Substitui '\n' por um espaço para evitar quebra de linha no CSV
-            let cleanText = String(items[i].text).replace(/\n/g, ' ');
-            header.push(cleanText);
-        }
-        // Tratamentos para exportar corretamente
-        // items.length já contém o +1 do "username"
-        header[0] = '"' + header[0];
-        header[items.length] = header[items.length] + '"';
+        protocol.pages.forEach((page) => {
+            page.itemGroups.forEach((itemGroup) => {
+                const items = itemGroup.items;
+                switch (itemGroup.type) {
+                    case 'ONE_DIMENSIONAL':
+                        items.forEach((item) => {
+                            header.push(String(item.text).replace(/\n/g, ' '));
+                            totalItems++;
+                        });
+                        break;
+                    case 'TEXTBOX_TABLE':
+                    case 'RADIO_TABLE':
+                    case 'CHECKBOX_TABLE':
+                        const tableColumns = itemGroup.tableColumns;
+                        items.forEach((item) => {
+                            tableColumns.forEach((column) => {
+                                let cleanText = `Table${countTables}_${String(item.text).replace(/\n/g, ' ').replace(/\s+/g, '')}_${String(
+                                    column.text
+                                )
+                                    .replace(/\n/g, ' ')
+                                    .replace(/\s+/g, '')}`;
+                                header.push(cleanText);
+                                totalItems++;
+                            });
+                        });
+                        countTables++;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
 
+        // Tratamentos para exportar corretamente
+        header[0] = `"${header[0]}`;
+        header[totalItems] = `${header[totalItems]}"`;
         // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
         headerString = header.join('","');
 
         // Armazena as respostas
-        for (let i = 0; i < ansIds.length; i++) {
-            userAnswers[0] = String(ans.answers[ansIds[i]].user.username);
+        ansIds.forEach((ansId, index) => {
+            userAnswers = [];
+            userAnswers[0] = `"${String(ans.answers[ansId].user.username)}`;
+            totalItems = 0;
+            countTables = 0;
 
-            // Respostas em si
-            for (let j = 0; j < items.length; j++) {
-                switch (items[j].type) {
-                    case 'TIMEBOX':
-                    case 'DATEBOX':
-                    case 'LOCATIONBOX':
-                    case 'TEXTBOX':
-                        userAnswers[j + 1] = String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].text).replace(/\n/g, ' ');
-                        break;
+            protocol.pages.forEach((page) => {
+                page.itemGroups.forEach((itemGroup) => {
+                    const items = itemGroup.items;
+                    items.forEach((item) => {
+                        let cleanText = ' ';
+                        switch (itemGroup.type) {
+                            case 'ONE_DIMENSIONAL':
+                                switch (item.type) {
+                                    case 'TIMEBOX':
+                                    case 'DATEBOX':
+                                    case 'LOCATIONBOX':
+                                    case 'NUMBERBOX':
+                                    case 'TEXTBOX':
+                                    case 'RANGE':
+                                        cleanText = ' ';
+                                        Object.entries(item.itemAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                            if (applicationAnswerId === ansId) {
+                                                Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                    groupAnswers.forEach((groupAnswer) => {
+                                                        cleanText = String(groupAnswer.text || '').replace(/\n/g, ' ');
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        userAnswers[totalItems + 1] = cleanText;
+                                        break;
+                                    case 'TEXT':
+                                        userAnswers[totalItems + 1] = 'Enunciado*';
+                                        break;
+                                    case 'CHECKBOX':
+                                    case 'SELECT':
+                                    case 'RADIO':
+                                        const currentTotalItems = totalItems;
+                                        userAnswers[currentTotalItems + 1] = '';
+                                        item.itemOptions.forEach((option, optionIndex) => {
+                                            Object.entries(option.optionAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                                if (applicationAnswerId === ansId) {
+                                                    Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                        groupAnswers.forEach((groupAnswer) => {
+                                                            if (groupAnswer.text !== undefined) {
+                                                                userAnswers[currentTotalItems + 1] +=
+                                                                    userAnswers[currentTotalItems + 1] !== ''
+                                                                        ? ` | ${String(option.text).replace(/\n/g, ' ')}`
+                                                                        : String(option.text).replace(/\n/g, ' ');
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                            });
+                                        });
+                                        break;
+                                    case 'UPLOAD':
+                                        // const uploadFiles = item.itemAnswers?.[ansId]?.[ansId]?.[0]?.files || [];
+                                        // const imageFiles = uploadFiles.filter((file) => {
+                                        //     const filePath = file?.path || '';
+                                        //     return filePath.includes('.png') || filePath.includes('.jpg') || filePath.includes('.jpeg');
+                                        // });
 
-                    case 'TEXT':
-                        userAnswers[j + 1] = 'Enunciado*';
-                        break;
-
-                    case 'RADIO':
-                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
-                        for (let k = 0; k < items[j].itemOptions.length; k++) {
-                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
-                                userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
+                                        // userAnswers[totalItems + 1] =
+                                        //     imageFiles.map((file) => `baseUrl.concat('api/', String(file.path || ''))`).join(' | ') || ' ';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                totalItems++;
+                                break;
+                            case 'RADIO_TABLE':
+                            case 'CHECKBOX_TABLE':
+                            case 'TEXTBOX_TABLE':
+                                const tableColumns = itemGroup.tableColumns;
+                                if (item.tableAnswers[ansId]) {
+                                    Object.values(item.tableAnswers[ansId] || {}).forEach((rowAnswers) => {
+                                        tableColumns.forEach((column) => {
+                                            // Verifica se a tabela é do tipo RADIO_TABLE ou CHECKBOX_TABLE
+                                            if (itemGroup.type === 'RADIO_TABLE' || itemGroup.type === 'CHECKBOX_TABLE') {
+                                                // Se a resposta for uma string vazia, marca como "Selected"
+                                                cleanText = rowAnswers[column.id] === '' ? 'Selected' : '';
+                                            } else {
+                                                cleanText = rowAnswers[column.id] || '';
+                                            }
+                                            userAnswers[totalItems + 1] = cleanText;
+                                            totalItems++;
+                                        });
+                                    });
+                                } else {
+                                    tableColumns.forEach((column) => {
+                                        userAnswers[totalItems + 1] = '';
+                                        totalItems++;
+                                    });
+                                }
+                                countTables++;
+                                break;
+                            default:
+                                break;
                         }
-                        break;
+                    });
+                });
+            });
 
-                    case 'CHECKBOX':
-                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
-                        for (let k = 0; k < items[j].itemOptions.length; k++) {
-                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
-                                if (userAnswers[j + 1] !== undefined)
-                                    userAnswers[j + 1] =
-                                        userAnswers[j + 1] + ' | ' + String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
-                                else userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
-                        }
-                        break;
-
-                    case 'UPLOAD':
-                        for (let k = 0; k < items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files.length; k++) {
-                            if (
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.png') ||
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpg') ||
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpeg')
-                            ) {
-                                if (userAnswers[j + 1] !== undefined)
-                                    userAnswers[j + 1] =
-                                        userAnswers[j + 1] +
-                                        ' | ' +
-                                        baseUrl.concat('api/', String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path));
-                                else
-                                    userAnswers[j + 1] = baseUrl.concat(
-                                        'api/',
-                                        String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path)
-                                    );
-                            }
-                        }
-                        break;
-
-                    case 'NUMBERBOX':
-                        break;
-
-                    case 'SELECT':
-                        break;
-
-                    case 'SCALE':
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            userAnswers[0] = '"' + userAnswers[0];
-            userAnswers[items.length] = userAnswers[items.length] + '"';
-
-            answers[i] = userAnswers.join('","');
-        }
+            userAnswers[totalItems] = `${userAnswers[totalItems] || ''}"`;
+            answers[index] = userAnswers.join('","');
+        });
 
         const csv = [headerString, ...answers].join('\r\n');
-
         return csv;
-    }
+    };
 
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
@@ -310,188 +361,238 @@ function AnswerPage(props) {
                             <div id="answerTab" className=" mb-lg-4">
                                 {answer.protocol.pages.map((page, pageIndex) => {
                                     return page.itemGroups.map((itemGroup, itemGroupIndex) => {
-                                        return itemGroup.items.map((item, itemIndex) => {
-                                            return (
-                                                (selectedItem === undefined || selectedItem === item.id) &&
-                                                item.type !== 'TEXT' && (
-                                                    <div key={'input-' + item.id} className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
-                                                        <a
-                                                            href="#answerTab"
-                                                            onClick={() => setVisualization(undefined, item.id)}
-                                                            className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3"
-                                                        >
-                                                            {item.text}
-                                                        </a>
-                                                        {Object.entries(item.itemAnswers).map(([applicationAnswerId, answerGroupId]) => {
-                                                            return Object.entries(answerGroupId).map(([answerGroupId, groupAnswers]) => {
-                                                                return groupAnswers.map((groupAnswer) => {
-                                                                    return (
-                                                                        (selectedAnswer === undefined ||
-                                                                            selectedAnswer === applicationAnswerId) && (
-                                                                            <div
-                                                                                key={'answer-' + applicationAnswerId}
-                                                                                className="bg-white rounded-4 mb-3 p-2 px-3"
-                                                                            >
-                                                                                <p className="fw-medium fs-6 m-0 mb-1">
-                                                                                    {answer.answers[applicationAnswerId].user.username +
-                                                                                        ' - ' +
-                                                                                        new Date(
-                                                                                            answer.answers[applicationAnswerId].date
-                                                                                        ).toLocaleDateString()}
-                                                                                </p>
-                                                                                {item.type === 'UPLOAD' ? (
-                                                                                    <Gallery
-                                                                                        className="mb-3"
-                                                                                        item={{
-                                                                                            files: groupAnswer.files.map((file) => ({
-                                                                                                path: baseUrl + 'api/' + file.path,
-                                                                                            })),
-                                                                                        }}
-                                                                                        galleryModalRef={galleryModalRef}
-                                                                                    />
-                                                                                ) : (
-                                                                                    <p className="fw-medium fs-6 color-dark-gray m-0">
-                                                                                        {groupAnswer.text}
-                                                                                    </p>
-                                                                                )}
-                                                                            </div>
-                                                                        )
-                                                                    );
-                                                                });
-                                                            });
-                                                        })}
-                                                        {Object.entries(item.itemAnswers).length === 0 && item.itemOptions.length === 0 && (
-                                                            <div className="bg-white rounded-4 mb-3 p-2 px-3">
-                                                                <p className="fw-medium fs-6 color-dark-gray m-0">0 respostas</p>
-                                                            </div>
-                                                        )}
-                                                        {item.itemOptions.map((option, index) => {
-                                                            return (
+                                        return (() => {
+                                            switch (itemGroup.type) {
+                                                case 'ONE_DIMENSIONAL':
+                                                    return itemGroup.items.map((item, itemIndex) => {
+                                                        return (
+                                                            (selectedItem === undefined || selectedItem === item.id) &&
+                                                            item.type !== 'TEXT' && (
                                                                 <div
-                                                                    key={'answer-' + option.id}
-                                                                    className="bg-white rounded-4 mb-3 p-2 px-3"
+                                                                    key={'input-' + item.id}
+                                                                    className="bg-light-gray rounded-4 mb-3 p-3 pb-1"
                                                                 >
-                                                                    <p className="fw-medium fs-6 m-0 mb-1">
-                                                                        {option.text +
-                                                                            ' - ' +
-                                                                            (selectedAnswer === undefined
-                                                                                ? Object.keys(option.optionAnswers).length
-                                                                                : option.optionAnswers[selectedAnswer] === undefined
-                                                                                ? '0'
-                                                                                : '1') +
-                                                                            ' respostas'}
-                                                                    </p>
-                                                                    {Object.entries(option.optionAnswers).map(
+                                                                    <a
+                                                                        href="#answerTab"
+                                                                        onClick={() => setVisualization(undefined, item.id)}
+                                                                        className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3"
+                                                                    >
+                                                                        {item.text}
+                                                                    </a>
+                                                                    {Object.entries(item.itemAnswers).map(
                                                                         ([applicationAnswerId, answerGroupId]) => {
                                                                             return Object.entries(answerGroupId).map(
                                                                                 ([answerGroupId, groupAnswers]) => {
-                                                                                    return (
-                                                                                        (selectedAnswer === undefined ||
-                                                                                            selectedAnswer === applicationAnswerId) && (
-                                                                                            <p
-                                                                                                className="fw-medium fs-6 color-dark-gray m-0"
-                                                                                                key={
-                                                                                                    'answer-' +
-                                                                                                    applicationAnswerId +
-                                                                                                    '-' +
-                                                                                                    answerGroupId
-                                                                                                }
-                                                                                            >
-                                                                                                {answer.answers[applicationAnswerId].user
-                                                                                                    .username +
-                                                                                                    ' (' +
-                                                                                                    new Date(
-                                                                                                        answer.answers[
-                                                                                                            applicationAnswerId
-                                                                                                        ].date
-                                                                                                    ).toLocaleDateString() +
-                                                                                                    '); '}
-                                                                                            </p>
-                                                                                        )
-                                                                                    );
+                                                                                    return groupAnswers.map((groupAnswer) => {
+                                                                                        return (
+                                                                                            (selectedAnswer === undefined ||
+                                                                                                selectedAnswer === applicationAnswerId) && (
+                                                                                                <div
+                                                                                                    key={'answer-' + applicationAnswerId}
+                                                                                                    className="bg-white rounded-4 mb-3 p-2 px-3"
+                                                                                                >
+                                                                                                    <p className="fw-medium fs-6 m-0 mb-1">
+                                                                                                        {answer.answers[applicationAnswerId]
+                                                                                                            .user.username +
+                                                                                                            ' - ' +
+                                                                                                            new Date(
+                                                                                                                answer.answers[
+                                                                                                                    applicationAnswerId
+                                                                                                                ].date
+                                                                                                            ).toLocaleDateString()}
+                                                                                                    </p>
+                                                                                                    {item.type === 'UPLOAD' ? (
+                                                                                                        <Gallery
+                                                                                                            className="mb-3"
+                                                                                                            item={{
+                                                                                                                files: groupAnswer.files.map(
+                                                                                                                    (file) => ({
+                                                                                                                        path:
+                                                                                                                            baseUrl +
+                                                                                                                            file.path,
+                                                                                                                    })
+                                                                                                                ),
+                                                                                                            }}
+                                                                                                            galleryModalRef={
+                                                                                                                galleryModalRef
+                                                                                                            }
+                                                                                                        />
+                                                                                                    ) : (
+                                                                                                        <p className="fw-medium fs-6 color-dark-gray m-0">
+                                                                                                            {groupAnswer.text}
+                                                                                                        </p>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            )
+                                                                                        );
+                                                                                    });
                                                                                 }
                                                                             );
                                                                         }
                                                                     )}
-                                                                </div>
-                                                            );
-                                                        })}
-                                                        {item.itemOptions.length > 0 &&
-                                                            selectedAnswer === undefined &&
-                                                            sumOptionAnswers(item.itemOptions) > 0 && (
-                                                                <div className="rounded-4 overflow-hidden mb-3">
-                                                                    <Chart
-                                                                        chartType="PieChart"
-                                                                        data={[['Resposta', 'Quantidade']].concat(
-                                                                            item.itemOptions.map((io) => {
-                                                                                return [io.text, Object.keys(io.optionAnswers).length];
-                                                                            })
+                                                                    {Object.entries(item.itemAnswers).length === 0 &&
+                                                                        item.itemOptions.length === 0 && (
+                                                                            <div className="bg-white rounded-4 mb-3 p-2 px-3">
+                                                                                <p className="fw-medium fs-6 color-dark-gray m-0">
+                                                                                    0 respostas
+                                                                                </p>
+                                                                            </div>
                                                                         )}
-                                                                        options={{
-                                                                            chartArea: { top: 8, height: '90%', width: '90%' },
-                                                                            legend: { position: 'bottom' },
-                                                                            colors: [
-                                                                                '#F59489',
-                                                                                '#91CAD6',
-                                                                                '#FECF86',
-                                                                                '#4E9BB9',
-                                                                                '#EC6571',
-                                                                                '#AAD390',
-                                                                                '#8C6A80',
-                                                                                '#70A6A6',
-                                                                                '#FACD63',
-                                                                                '#578AA2',
-                                                                                '#E64E5E',
-                                                                                '#91BD7E',
-                                                                                '#F9A98F',
-                                                                                '#76C4D1',
-                                                                                '#FEDB8A',
-                                                                                '#5C97B2',
-                                                                                '#D85A6A',
-                                                                                '#89A86B',
-                                                                                '#F7BC92',
-                                                                                '#6FACB5',
-                                                                                '#E14953',
-                                                                                '#A1C588',
-                                                                                '#F5D39A',
-                                                                                '#568BA5',
-                                                                                '#C44D59',
-                                                                                '#7FA569',
-                                                                                '#E6A17C',
-                                                                                '#619BB0',
-                                                                                '#F39C9F',
-                                                                                '#ADC192',
-                                                                                '#FFD07D',
-                                                                                '#5499AE',
-                                                                                '#E6606F',
-                                                                                '#97BD83',
-                                                                                '#F6C2A3',
-                                                                                '#6BA3B8',
-                                                                                '#E15661',
-                                                                                '#90B67A',
-                                                                                '#F7AE9C',
-                                                                                '#75BFCB',
-                                                                                '#E6737D',
-                                                                                '#A2CA93',
-                                                                                '#FAD4AC',
-                                                                                '#639FB7',
-                                                                                '#D45B66',
-                                                                                '#83AB77',
-                                                                                '#F9B69B',
-                                                                                '#71B4C6',
-                                                                                '#E75762',
-                                                                                '#A8C599',
-                                                                            ],
-                                                                            is3D: true,
-                                                                        }}
-                                                                        height={'400px'}
+                                                                    {item.itemOptions.map((option, index) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={'answer-' + option.id}
+                                                                                className="bg-white rounded-4 mb-3 p-2 px-3"
+                                                                            >
+                                                                                <p className="fw-medium fs-6 m-0 mb-1">
+                                                                                    {option.text +
+                                                                                        ' - ' +
+                                                                                        (selectedAnswer === undefined
+                                                                                            ? Object.keys(option.optionAnswers).length
+                                                                                            : option.optionAnswers[selectedAnswer] ===
+                                                                                              undefined
+                                                                                            ? '0'
+                                                                                            : '1') +
+                                                                                        ' respostas'}
+                                                                                </p>
+                                                                                {Object.entries(option.optionAnswers).map(
+                                                                                    ([applicationAnswerId, answerGroupId]) => {
+                                                                                        return Object.entries(answerGroupId).map(
+                                                                                            ([answerGroupId, groupAnswers]) => {
+                                                                                                return (
+                                                                                                    (selectedAnswer === undefined ||
+                                                                                                        selectedAnswer ===
+                                                                                                            applicationAnswerId) && (
+                                                                                                        <p
+                                                                                                            className="fw-medium fs-6 color-dark-gray m-0"
+                                                                                                            key={
+                                                                                                                'answer-' +
+                                                                                                                applicationAnswerId +
+                                                                                                                '-' +
+                                                                                                                answerGroupId
+                                                                                                            }
+                                                                                                        >
+                                                                                                            {answer.answers[
+                                                                                                                applicationAnswerId
+                                                                                                            ].user.username +
+                                                                                                                ' (' +
+                                                                                                                new Date(
+                                                                                                                    answer.answers[
+                                                                                                                        applicationAnswerId
+                                                                                                                    ].date
+                                                                                                                ).toLocaleDateString() +
+                                                                                                                '); '}
+                                                                                                        </p>
+                                                                                                    )
+                                                                                                );
+                                                                                            }
+                                                                                        );
+                                                                                    }
+                                                                                )}
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                    {item.itemOptions.length > 0 && selectedAnswer === undefined && (
+                                                                        <div className="rounded-4 overflow-hidden mb-3">
+                                                                            <Chart
+                                                                                chartType="PieChart"
+                                                                                data={[['Resposta', 'Quantidade']].concat(
+                                                                                    item.itemOptions.map((io) => {
+                                                                                        return [
+                                                                                            io.text,
+                                                                                            Object.keys(io.optionAnswers).length,
+                                                                                        ];
+                                                                                    })
+                                                                                )}
+                                                                                options={{
+                                                                                    chartArea: { top: 8, height: '90%', width: '90%' },
+                                                                                    legend: { position: 'bottom' },
+                                                                                    colors: [
+                                                                                        '#F59489',
+                                                                                        '#91CAD6',
+                                                                                        '#FECF86',
+                                                                                        '#4E9BB9',
+                                                                                        '#EC6571',
+                                                                                        '#AAD390',
+                                                                                        '#8C6A80',
+                                                                                        '#70A6A6',
+                                                                                        '#FACD63',
+                                                                                        '#578AA2',
+                                                                                        '#E64E5E',
+                                                                                        '#91BD7E',
+                                                                                        '#F9A98F',
+                                                                                        '#76C4D1',
+                                                                                        '#FEDB8A',
+                                                                                        '#5C97B2',
+                                                                                        '#D85A6A',
+                                                                                        '#89A86B',
+                                                                                        '#F7BC92',
+                                                                                        '#6FACB5',
+                                                                                        '#E14953',
+                                                                                        '#A1C588',
+                                                                                        '#F5D39A',
+                                                                                        '#568BA5',
+                                                                                        '#C44D59',
+                                                                                        '#7FA569',
+                                                                                        '#E6A17C',
+                                                                                        '#619BB0',
+                                                                                        '#F39C9F',
+                                                                                        '#ADC192',
+                                                                                        '#FFD07D',
+                                                                                        '#5499AE',
+                                                                                        '#E6606F',
+                                                                                        '#97BD83',
+                                                                                        '#F6C2A3',
+                                                                                        '#6BA3B8',
+                                                                                        '#E15661',
+                                                                                        '#90B67A',
+                                                                                        '#F7AE9C',
+                                                                                        '#75BFCB',
+                                                                                        '#E6737D',
+                                                                                        '#A2CA93',
+                                                                                        '#FAD4AC',
+                                                                                        '#639FB7',
+                                                                                        '#D45B66',
+                                                                                        '#83AB77',
+                                                                                        '#F9B69B',
+                                                                                        '#71B4C6',
+                                                                                        '#E75762',
+                                                                                        '#A8C599',
+                                                                                    ],
+                                                                                    is3D: true,
+                                                                                }}
+                                                                                height={'400px'}
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )
+                                                        );
+                                                    });
+                                                case 'TEXTBOX_TABLE':
+                                                case 'RADIO_TABLE':
+                                                case 'CHECKBOX_TABLE':
+                                                    return Object.entries(answer.answers).map(([key, value], index) => {
+                                                        return (
+                                                            (selectedAnswer === undefined || selectedAnswer === key) && (
+                                                                <div
+                                                                    key={`group-${itemGroupIndex}-${index}`}
+                                                                    className="row justify-content-center m-0 pt-3"
+                                                                >
+                                                                    <TableInput
+                                                                        applicationAnswerId={key}
+                                                                        group={itemGroup}
+                                                                        answersPage={true}
+                                                                        disabled={true}
                                                                     />
                                                                 </div>
-                                                            )}
-                                                    </div>
-                                                )
-                                            );
-                                        });
+                                                            )
+                                                        );
+                                                    });
+                                                default:
+                                                    return null;
+                                            }
+                                        })();
                                     });
                                 })}
                             </div>

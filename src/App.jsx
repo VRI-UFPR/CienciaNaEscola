@@ -12,6 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import './assets/styles/custom-bootstrap.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { StorageProvider } from './contexts/StorageContext';
