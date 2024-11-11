@@ -14,6 +14,7 @@ import React, { useState, useImperativeHandle, forwardRef, useCallback } from 'r
 import { Modal, Carousel } from 'bootstrap';
 import RoundedButton from './RoundedButton';
 import iconExit from '../assets/images/ExitSidebarIcon.svg';
+import baseUrl from '../contexts/RouteContext.js';
 
 const GalleryModalStyles = `
     .font-century-gothic {
@@ -91,7 +92,11 @@ const GalleryModal = forwardRef((props, ref) => {
                                             className={`carousel-item ${modal.currentImage === index && 'active'}`}
                                             key={`gallery-img-${image.id}`}
                                         >
-                                            <img src={image.path} className="d-block rounded-4 w-100" alt={'Figura' + index + 1}></img>
+                                            <img
+                                                src={baseUrl + 'api/' + image.path}
+                                                className="d-block rounded-4 w-100"
+                                                alt={'Figura' + index + 1}
+                                            ></img>
                                         </div>
                                     );
                                 })}

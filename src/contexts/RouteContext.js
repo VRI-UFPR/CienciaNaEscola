@@ -11,8 +11,8 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 */
 
 // Production
-// const baseUrl = 'https://cienciaescola.c3sl.ufpr.br/';
+const baseUrl = 'https://cienciaescola.c3sl.ufpr.br/';
 // Development
-const baseUrl = 'http://localhost:3000/';
+// const baseUrl = 'http://localhost:3000/';
 
 export default baseUrl;

@@ -239,6 +239,7 @@ function AnswerPage(props) {
             userAnswers[items.length] = userAnswers[items.length] + '"';
 
             answers[i] = userAnswers.join('","');
+            userAnswers = [];
         }
 
         const csv = [headerString, ...answers].join('\r\n');
@@ -340,7 +341,7 @@ function AnswerPage(props) {
                                                                                         className="mb-3"
                                                                                         item={{
                                                                                             files: groupAnswer.files.map((file) => ({
-                                                                                                path: baseUrl + 'api/' + file.path,
+                                                                                                path: file.path,
                                                                                             })),
                                                                                         }}
                                                                                         galleryModalRef={galleryModalRef}
