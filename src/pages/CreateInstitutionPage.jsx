@@ -287,6 +287,8 @@ function CreateInstitutionPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
+                                        minLength="1"
+                                        maxLength="255"
                                         required
                                     />
                                 </div>
