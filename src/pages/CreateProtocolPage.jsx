@@ -50,20 +50,32 @@ const CreateProtocolStyles = `
         }
     }
 
-    .bg-light-grey {
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus {
-        background-color: #D9D9D9 !important;
+    .bg-light-grey:focus,
+    .bg-light-grey:active,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-pastel-blue {
+    .bg-light-grey:disabled,
+    .bg-light-pastel-blue:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
+    }
+
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
-    }
-
-    .bg-light-pastel-blue:focus {
-        background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
     .bg-pastel-blue {
@@ -172,17 +184,11 @@ function CreateProtocolPage(props) {
 
     const insertItem = (type, page, group) => {
         if (page === '') {
-            showAlert({
-                title: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.',
-                dismissible: true,
-            });
+            showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.' });
             return;
         }
         if (group === '') {
-            showAlert({
-                title: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar o item.',
-                dismissible: true,
-            });
+            showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar o item.' });
             return;
         }
         const newProtocol = { ...protocol };
@@ -227,10 +233,7 @@ function CreateProtocolPage(props) {
     const insertItemGroup = useCallback(
         (page) => {
             if (page === '') {
-                showAlert({
-                    title: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.' });
                 return;
             }
             const newProtocol = { ...protocol };
@@ -244,17 +247,11 @@ function CreateProtocolPage(props) {
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
             if (pageIndex === '') {
-                showAlert({
-                    title: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar a dependência.',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar a dependência.' });
                 return;
             }
             if (groupIndex !== undefined && groupIndex === '') {
-                showAlert({
-                    title: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar a dependência.',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar a dependência.' });
                 return;
             }
             const newProtocol = { ...protocol };
@@ -296,18 +293,10 @@ function CreateProtocolPage(props) {
                 })
                 .then((response) => {
                     clearLocalApplications();
-                    showAlert({
-                        title: 'Formulário atualizado com sucesso.',
-                        onHide: () => navigate('/dash/protocols'),
-                        dismissible: true,
-                    });
+                    showAlert({ headerText: 'Formulário atualizado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
                 })
                 .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar protocolo.',
-                        description: error.response?.data.message || '',
-                        dismissible: true,
-                    });
+                    showAlert({ headerText: 'Erro ao atualizar protocolo.', bodyText: error.response?.data.message || '' });
                 });
         } else {
             axios
@@ -317,12 +306,10 @@ function CreateProtocolPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
-                    showAlert({ title: 'Protocolo criado com sucesso.', onHide: () => navigate('/dash/protocols'), dismissible: true });
-                })
-                .catch((error) => {
-                    showAlert({ title: 'Erro ao criar protocolo.', description: error.response?.data.message || '', dismissible: true });
-                });
+                .then((response) =>
+                    showAlert({ headerText: 'Protocolo criado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao criar protocolo.', bodyText: error.response?.data.message || '' }));
         }
     };
 
@@ -335,23 +322,9 @@ function CreateProtocolPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({
-                    title: 'Protocolo excluído com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-                navigate(`/dash/protocols/`);
+                showAlert({ headerText: 'Protocolo excluído com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir protocolo.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo.', bodyText: error.response?.data.message }));
     };
 
     useEffect(() => {
@@ -396,17 +369,17 @@ function CreateProtocolPage(props) {
                                 answersVisibility: d.answersVisibility,
                                 pages: d.pages.map((p) => ({
                                     id: p.id,
-                                    tempId: Date.now() + Math.random() * 1000,
+                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     type: p.type,
                                     placement: p.placement,
                                     itemGroups: p.itemGroups.map((g) => ({
                                         id: g.id,
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         type: g.type,
                                         isRepeatable: g.isRepeatable,
                                         placement: g.placement,
                                         items: g.items.map((i) => {
-                                            const tempId = Date.now() + Math.random() * 1000;
+                                            const tempId = Math.floor(Date.now() + Math.random() * 1000);
                                             tempIdMap[i.id] = tempId;
                                             return {
                                                 id: i.id,
@@ -418,7 +391,7 @@ function CreateProtocolPage(props) {
                                                 placement: i.placement,
                                                 itemOptions: i.itemOptions.map((o) => ({
                                                     id: o.id,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                     placement: o.placement,
                                                     text: o.text,
                                                     files: o.files.map((f) => ({ id: f.id, path: f.path })),
@@ -426,20 +399,20 @@ function CreateProtocolPage(props) {
                                                 files: i.files.map((f) => ({ id: f.id, path: f.path })),
                                                 itemValidations: i.itemValidations.map((v) => ({
                                                     ...v,
-                                                    tempId: Date.now() + Math.random() * 1000,
+                                                    tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                 })),
                                             };
                                         }),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
-                                            tempId: Date.now() + Math.random() * 1000,
+                                            tempId: Math.floor(Date.now() + Math.random() * 1000),
                                         })),
                                     })),
                                     dependencies: p.dependencies.map((dep) => ({
                                         ...dep,
                                         itemTempId: tempIdMap[dep.itemId],
-                                        tempId: Date.now() + Math.random() * 1000,
+                                        tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     })),
                                 })),
                                 viewersUser: d.viewersUser.map((u) => u.id),
@@ -602,17 +575,14 @@ function CreateProtocolPage(props) {
                                                                     text={isEditing ? 'Editar' : 'Concluir'}
                                                                     onClick={() => {
                                                                         showAlert({
-                                                                            title: `Tem certeza que deseja ${
+                                                                            headerText: `Tem certeza que deseja ${
                                                                                 isEditing ? 'editar' : 'criar'
                                                                             } o protocolo?`,
-                                                                            dismissHsl: [355, 78, 66],
-                                                                            dismissText: 'Não',
-                                                                            actionHsl: [97, 43, 70],
-                                                                            actionText: 'Sim',
-                                                                            dismissible: true,
-                                                                            actionOnClick: () => {
-                                                                                formRef.current.requestSubmit();
-                                                                            },
+                                                                            primaryBtnHsl: [355, 78, 66],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [97, 43, 70],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
                                                                         });
                                                                     }}
                                                                 />
@@ -634,15 +604,12 @@ function CreateProtocolPage(props) {
                                                                         hsl={[355, 78, 66]}
                                                                         onClick={() => {
                                                                             showAlert({
-                                                                                title: `Tem certeza que deseja excluir o protocolo?`,
-                                                                                dismissHsl: [97, 43, 70],
-                                                                                dismissText: 'Não',
-                                                                                actionHsl: [355, 78, 66],
-                                                                                actionText: 'Sim',
-                                                                                dismissible: true,
-                                                                                actionOnClick: () => {
-                                                                                    deleteProtocol();
-                                                                                },
+                                                                                headerText: `Tem certeza que deseja excluir o protocolo?`,
+                                                                                primaryBtnHsl: [97, 43, 70],
+                                                                                primaryBtnLabel: 'Não',
+                                                                                secondaryBtnHsl: [355, 78, 66],
+                                                                                secondaryBtnLabel: 'Sim',
+                                                                                onSecondaryBtnClick: () => deleteProtocol(),
                                                                             });
                                                                         }}
                                                                     />

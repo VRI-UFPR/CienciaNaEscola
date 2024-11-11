@@ -55,12 +55,22 @@ const style = `
         color: #535353;
     }
 
-    .bg-light-grey{
+    .bg-light-grey,
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
         background-color: #D9D9D9;
+        border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus{
-        background-color: #D9D9D9;
+    .bg-light-grey:focus,
+    .bg-light-grey:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .bg-light-grey:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
     }
 
     .color-steel-blue {
@@ -157,8 +167,8 @@ function InstitutionPage(props) {
                                             />
                                         </div>
                                         <div className="col-auto">
-                                            <Link to={'users/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon="add" />
+                                            <Link to={'users/create'} className="text-decoration-none">
+                                                <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
                                             </Link>
                                         </div>
                                     </div>
@@ -200,8 +210,8 @@ function InstitutionPage(props) {
                                             />
                                         </div>
                                         <div className="col-auto">
-                                            <Link to={'classrooms/create'}>
-                                                <RoundedButton hsl={[197, 43, 52]} icon="add" />
+                                            <Link to={'classrooms/create'} className="text-decoration-none">
+                                                <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
                                             </Link>
                                         </div>
                                     </div>

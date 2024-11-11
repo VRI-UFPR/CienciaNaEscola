@@ -97,24 +97,11 @@ function ApplicationsPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({
-                    title: 'Aplicação excluída com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
+                showAlert({ headerText: 'Aplicação excluída com sucesso.' });
                 const newVisibleApplications = [...visibleApplications];
                 setVisibleApplications(newVisibleApplications.filter((a) => a.id !== applicationId));
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir aplicação.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação.', bodyText: error.response?.data.message }));
     };
 
     if (error) {

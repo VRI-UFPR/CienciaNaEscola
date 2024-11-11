@@ -18,7 +18,7 @@ export const LayoutContext = createContext();
 
 export const LayoutProvider = (props) => {
     const { isDashboard } = props;
-    const { hideAlert, isAlertVisible, isDismissable } = useContext(AlertContext);
+    const { hideAlert, isAlertVisible, isClosable } = useContext(AlertContext);
     const blocker = useBlocker(({ currentLocation, nextLocation }) => isAlertVisible && currentLocation.pathname !== nextLocation.pathname);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export const LayoutProvider = (props) => {
                 hideAlert();
             }
         }
-    }, [blocker, hideAlert, isDismissable]);
+    }, [blocker, hideAlert, isClosable]);
 
     return (
         <LayoutContext.Provider value={{ isDashboard }}>
