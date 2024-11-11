@@ -175,6 +175,8 @@ function CreateRangeInput(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">
@@ -288,6 +290,7 @@ function CreateRangeInput(props) {
                                 return newItem;
                             })
                         }
+                        required
                     />
                     {!item.itemValidations.find((validation) => validation.type === 'MIN').argument && (
                         <div id="interval-min-help" className="form-text text-danger fs-6 fw-medium">
@@ -328,6 +331,7 @@ function CreateRangeInput(props) {
                                 return newItem;
                             })
                         }
+                        required
                     />
                     {!item.itemValidations.find((validation) => validation.type === 'MAX').argument && (
                         <div id="interval-max-help" className="form-text text-danger fs-6 fw-medium">
@@ -368,6 +372,7 @@ function CreateRangeInput(props) {
                                 return newItem;
                             })
                         }
+                        required
                     />
                     {!item.itemValidations.find((validation) => validation.type === 'STEP').argument && (
                         <div id="interval-step-help" className="form-text text-danger fs-6 fw-medium">

@@ -215,30 +215,56 @@ function CreateClassroomPage(props) {
     const submitClassroom = (e) => {
         e.preventDefault();
         const formData = serialize(classroom, { indices: true });
-        if (isEditing) {
-            axios
-                .put(`${baseUrl}api/classroom/updateClassroom/${classroomId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) =>
-                    showAlert({ headerText: 'Grupo atualizado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-                )
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar grupo.', bodyText: error.response?.data.message }));
+        if (classroom.users.length >= 2) {
+            if (isEditing) {
+                axios
+                    .put(`${baseUrl}api/classroom/updateClassroom/${classroomId}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        showAlert({
+                            headerText: 'Grupo atualizado com sucesso.',
+                            onHide: () => {
+                                navigate(`/dash/institutions/my`);
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        showAlert({
+                            headerText: 'Erro ao atualizar grupo.',
+                            bodyText: error.response?.data.message,
+                        });
+                    });
+            } else {
+                axios
+                    .post(`${baseUrl}api/classroom/createClassroom`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        showAlert({
+                            headerText: 'Grupo criado com sucesso.',
+                            onHide: () => {
+                                navigate(`/dash/institutions/my`);
+                            },
+                        });
+                    })
+                    .catch((error) => {
+                        showAlert({
+                            headerText: 'Erro ao criar grupo.',
+                            bodyText: error.response?.data.message,
+                        });
+                    });
+            }
         } else {
-            axios
-                .post(`${baseUrl}api/classroom/createClassroom`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                })
-                .then((response) =>
-                    showAlert({ headerText: 'Grupo criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-                )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar grupo.', bodyText: error.response?.data.message }));
+            showAlert({
+                headerText: 'Adicione pelo menos dois usuários no grupo!',
+            });
         }
     };
 
@@ -301,6 +327,9 @@ function CreateClassroomPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setClassroom({ ...classroom, name: e.target.value })}
+                                        minLength="3"
+                                        maxLength="20"
+                                        required
                                     />
                                 </div>
                                 {(institutionId || user.institutionId) && (
@@ -348,7 +377,13 @@ function CreateClassroomPage(props) {
                                             <div className="col-auto">
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
-                                                    onClick={() => searchUsers(userSearchTerm)}
+                                                    onClick={() => {
+                                                        String(userSearchTerm).length >= 3
+                                                            ? searchUsers(userSearchTerm)
+                                                            : showAlert({
+                                                                  headerText: 'Insira pelo menos 3 caracteres',
+                                                              });
+                                                    }}
                                                     icon="person_search"
                                                 />
                                             </div>

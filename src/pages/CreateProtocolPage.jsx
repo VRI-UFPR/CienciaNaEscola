@@ -529,7 +529,26 @@ function CreateProtocolPage(props) {
                                                                     hsl={[97, 43, 70]}
                                                                     text={'Adicionar itens'}
                                                                     onClick={() => {
-                                                                        setCreationMode('children');
+                                                                        if (String(protocol.title).length < 3) {
+                                                                            showAlert({
+                                                                                headerText: 'Insira pelo menos 3 caracteres no título',
+                                                                            });
+                                                                        } else if (protocol.visibility === '') {
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Visibilidade',
+                                                                            });
+                                                                        } else if (protocol.applicability === '') {
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Aplicabilidade',
+                                                                            });
+                                                                        } else if (protocol.answersVisibility === '') {
+                                                                            showAlert({
+                                                                                headerText:
+                                                                                    'Selecione uma opção válida em Visibilidade das respostas',
+                                                                            });
+                                                                        } else {
+                                                                            setCreationMode('children');
+                                                                        }
                                                                     }}
                                                                 />
                                                             </div>

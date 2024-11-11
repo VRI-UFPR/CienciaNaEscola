@@ -265,6 +265,8 @@ function CreateMultipleInputItens(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">
@@ -360,6 +362,7 @@ function CreateMultipleInputItens(props) {
                                         value={data.text || ''}
                                         aria-describedby="questionHelp"
                                         onChange={(event) => updateOption(i, event.target.value)}
+                                        required
                                     />
                                 </div>
                                 <div className="col-auto">
