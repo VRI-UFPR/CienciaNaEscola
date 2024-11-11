@@ -226,10 +226,7 @@ function CreateClassroomPage(props) {
                     })
                     .then((response) => {
                         showAlert({
-                            title: 'Grupo atualizado com sucesso.',
-                            dismissHsl: [97, 43, 70],
-                            dismissText: 'Ok',
-                            dismissible: true,
+                            headerText: 'Grupo atualizado com sucesso.',
                             onHide: () => {
                                 navigate(`/dash/institutions/my`);
                             },
@@ -237,11 +234,8 @@ function CreateClassroomPage(props) {
                     })
                     .catch((error) => {
                         showAlert({
-                            title: 'Erro ao atualizar grupo.',
-                            description: error.response?.data.message,
-                            dismissHsl: [97, 43, 70],
-                            dismissText: 'Ok',
-                            dismissible: true,
+                            headerText: 'Erro ao atualizar grupo.',
+                            bodyText: error.response?.data.message,
                         });
                     });
             } else {
@@ -254,10 +248,7 @@ function CreateClassroomPage(props) {
                     })
                     .then((response) => {
                         showAlert({
-                            title: 'Grupo criado com sucesso.',
-                            dismissHsl: [97, 43, 70],
-                            dismissText: 'Ok',
-                            dismissible: true,
+                            headerText: 'Grupo criado com sucesso.',
                             onHide: () => {
                                 navigate(`/dash/institutions/my`);
                             },
@@ -265,20 +256,14 @@ function CreateClassroomPage(props) {
                     })
                     .catch((error) => {
                         showAlert({
-                            title: 'Erro ao criar grupo.',
-                            description: error.response?.data.message,
-                            dismissHsl: [97, 43, 70],
-                            dismissText: 'Ok',
-                            dismissible: true,
+                            headerText: 'Erro ao criar grupo.',
+                            bodyText: error.response?.data.message,
                         });
                     });
             }
         } else {
             showAlert({
-                title: 'Adicione pelo menos dois usuários no grupo!',
-                dismissHsl: [97, 43, 70],
-                dismissText: 'Ok',
-                dismissible: true,
+                headerText: 'Adicione pelo menos dois usuários no grupo!',
             });
         }
     };
@@ -396,10 +381,7 @@ function CreateClassroomPage(props) {
                                                         String(userSearchTerm).length >= 3
                                                             ? searchUsers(userSearchTerm)
                                                             : showAlert({
-                                                                  title: 'Insira pelo menos 3 caracteres',
-                                                                  dismissHsl: [97, 43, 70],
-                                                                  dismissText: 'Ok',
-                                                                  dismissible: true,
+                                                                  headerText: 'Insira pelo menos 3 caracteres',
                                                               });
                                                     }}
                                                     icon="person_search"

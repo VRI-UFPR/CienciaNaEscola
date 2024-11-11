@@ -486,10 +486,7 @@ function CreateUserPage(props) {
                                                             String(classroomSearchTerm).length >= 3
                                                                 ? searchClassrooms(classroomSearchTerm)
                                                                 : showAlert({
-                                                                      title: 'Insira pelo menos 3 caracteres',
-                                                                      dismissHsl: [97, 43, 70],
-                                                                      dismissText: 'Ok',
-                                                                      dismissible: true,
+                                                                      headerText: 'Insira pelo menos 3 caracteres',
                                                                   });
                                                         }}
                                                         icon="search"

@@ -108,11 +108,8 @@ function CreateInstitutionPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao atualizar localizações disponíveis',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Erro ao atualizar localizações disponíveis',
+                        bodyText: error.response?.data.message,
                     });
                 });
         },

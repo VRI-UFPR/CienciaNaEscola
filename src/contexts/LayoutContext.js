@@ -23,7 +23,7 @@ export const LayoutProvider = (props) => {
 
     useEffect(() => {
         if (blocker.state === 'blocked') {
-            if (!isDismissable) {
+            if (!isClosable) {
                 alert('Você não pode sair da página agora. Aguarde finalizar a ação.');
             } else {
                 blocker.reset?.();
