@@ -185,6 +185,14 @@ function CreateProtocolPage(props) {
             });
             return;
         }
+        const groupType = protocol.pages[page].itemGroups[group].type;
+        if (groupType !== 'ONE_DIMENSIONAL' && type !== 'TABLEROW') {
+            showAlert({
+                title: 'Selecione um grupo que não seja do tipo tabela.',
+                dismissible: true,
+            });
+            return;
+        }
         const newProtocol = { ...protocol };
         const newInput = {
             ...defaultNewInput(
@@ -503,11 +511,11 @@ function CreateProtocolPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col h-100">
+                <div className="col overflow-hidden h-100">
                     <div className="d-flex flex-column h-100">
                         <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                         <div className="row flex-grow-1 overflow-hidden g-0">
-                            <div className="col h-100">
+                            <div className="col overflow-hidden h-100">
                                 <div className="d-flex flex-column h-100">
                                     <div className="row justify-content-center font-barlow g-0">
                                         <div className="col-12 col-md-10">

@@ -142,35 +142,9 @@ function CreateItemGroup(props) {
                 placement: newIndex + 1, // Adjust placement to reflect the new index
             }));
 
-            // Verifica se o grupo é "CHECKBOX_TABLE" ou "RADIO_TABLE"
-            if (['CHECKBOX_TABLE', 'RADIO_TABLE'].includes(newGroup.type)) {
-                newGroup.items?.map((item, itemIndex) => {
-                    if (item.itemOptions.length > index) {
-                        // Remove a opção do item correspondente ao índice da coluna removida
-                        const updatedItemOptions = item.itemOptions.filter((_, optionIndex) => optionIndex !== index);
-
-                        // Reajusta os placements das opções restantes
-                        const adjustedItemOptions = updatedItemOptions.map((option, newOptionIndex) => ({
-                            ...option,
-                            placement: newOptionIndex + 1,
-                        }));
-
-                        const updatedItem = {
-                            ...item,
-                            itemOptions: adjustedItemOptions,
-                        };
-
-                        updateItem(updatedItem, itemTarget.page, group, itemIndex);
-
-                        return updatedItem;
-                    }
-                    return item;
-                });
-            }
-
             setGroup(newGroup);
         },
-        [group, itemTarget, updateItem]
+        [group]
     );
 
     const updateTableColumn = useCallback(
@@ -373,40 +347,8 @@ function CreateItemGroup(props) {
                             ))}
                     </div>
                 ))}
-            {group.type === 'TEXTBOX_TABLE' && (
-                <div className="bg-light mb-3">
-                    <CreateTableInput
-                        group={group}
-                        page={page}
-                        groupIndex={itemTarget.group}
-                        pageIndex={itemTarget.page}
-                        insertItem={insertItem}
-                        updateItem={updateItem}
-                        removeItem={removeItem}
-                        insertTableColumn={insertTableColumn}
-                        updateTableColumn={updateTableColumn}
-                        removeTableColumn={removeTableColumn}
-                    />
-                </div>
-            )}
-            {group.type === 'RADIO_TABLE' && (
-                <div className="bg-light mb-3">
-                    <CreateTableInput
-                        group={group}
-                        page={page}
-                        groupIndex={itemTarget.group}
-                        pageIndex={itemTarget.page}
-                        insertItem={insertItem}
-                        updateItem={updateItem}
-                        removeItem={removeItem}
-                        insertTableColumn={insertTableColumn}
-                        updateTableColumn={updateTableColumn}
-                        removeTableColumn={removeTableColumn}
-                    />
-                </div>
-            )}
-            {group.type === 'CHECKBOX_TABLE' && (
-                <div className="bg-light mb-3">
+            {(group.type === 'TEXTBOX_TABLE' || group.type === 'RADIO_TABLE' || group.type === 'CHECKBOX_TABLE') && (
+                <div className="mb-3">
                     <CreateTableInput
                         group={group}
                         page={page}

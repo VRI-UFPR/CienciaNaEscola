@@ -57,12 +57,13 @@ function CreateTableInput(props) {
     return (
         <div className="pb-4 pb-lg-5">
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
-                <div className=" table-grid overflow-auto">
+                <div className="table-grid overflow-auto">
                     <table className="table table-bordered border-black">
                         <thead>
                             <tr>
                                 <th>
-                                    <div className='row justify-content-center'>
+                                    <div className="row justify-content-center">
+                                        <span>Adicionar: </span>
                                         <RoundedButton
                                             className="ms-2"
                                             hsl={[190, 46, 70]}
