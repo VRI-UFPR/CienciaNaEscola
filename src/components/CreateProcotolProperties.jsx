@@ -17,7 +17,7 @@ import axios from 'axios';
 import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 function CreateProtocolProperties(props) {

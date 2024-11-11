@@ -12,7 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { brazilianStates } from '../../../utils/constants';
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';

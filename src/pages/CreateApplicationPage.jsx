@@ -675,7 +675,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchClassrooms(VCSearchInput)}
-                                                                icon="search"
+                                                                icon="group_search"
                                                             />
                                                         </div>
                                                     </div>
@@ -836,7 +836,7 @@ function CreateApplicationPage(props) {
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
                                                                 onClick={() => searchAnswerClassrooms(AVCSearchInput)}
-                                                                icon="search"
+                                                                icon="group_search"
                                                             />
                                                         </div>
                                                     </div>

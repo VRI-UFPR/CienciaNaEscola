@@ -489,7 +489,7 @@ function CreateUserPage(props) {
                                                                       headerText: 'Insira pelo menos 3 caracteres',
                                                                   });
                                                         }}
-                                                        icon="search"
+                                                        icon="group_search"
                                                     />
                                                 </div>
                                             </div>

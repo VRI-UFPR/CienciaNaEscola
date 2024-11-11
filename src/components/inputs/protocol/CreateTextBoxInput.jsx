@@ -12,7 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 const textBoxStyles = `

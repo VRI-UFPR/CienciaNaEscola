@@ -12,7 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { Tooltip } from 'bootstrap';
 import { useEffect } from 'react';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 
 const style = `
     .btn-addbar:hover {

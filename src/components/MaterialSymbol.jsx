@@ -10,27 +10,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { StorageProvider } from './contexts/StorageContext';
-import appRoutes from './routes/AppRoutes';
-import { AlertProvider } from './contexts/AlertContext';
+import 'material-symbols';
 
-const styles = ``;
-
-function App(props) {
+function MaterialSymbol(props) {
+    const { icon, size, weight, fill = 1, color, grade = 200 } = props;
     return (
-        <StorageProvider>
-            <AuthProvider>
-                <AlertProvider>
-                    <RouterProvider router={createBrowserRouter(appRoutes)} />
-                    <style> {styles} </style>
-                </AlertProvider>
-            </AuthProvider>
-        </StorageProvider>
+        <span
+            className="material-symbols-rounded"
+            style={{
+                color: color,
+                fontVariationSettings: `"FILL" ${fill ? 1 : 0}${weight ? `, "wght" ${weight}` : ''}${grade ? `, "GRAD" ${grade}` : ''}${
+                    size ? `, "opsz" ${size}` : ''
+                }`,
+                fontSize: size ? `${size}px` : undefined,
+            }}
+        >
+            {icon}
+        </span>
     );
 }
 
-export default App;
+export default MaterialSymbol;
