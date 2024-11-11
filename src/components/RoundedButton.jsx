@@ -41,6 +41,19 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
             box-shadow: inset 0px 4px 4px 0px #00000040;
         }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus {
+            color: #fff !important;
+            background-color: hsl(${hue}, ${sat}%, ${lig}%);
+            border-color: hsl(${hue}, ${sat}%, ${lig}%);
+            box-shadow: none;
+        }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:disabled {
+            color: #000 !important;
+            background-color: hsl(0,0%,85%) !important;
+            border-color: hsl(0,0%,60%);
+        }
     `;
 };
 
@@ -48,7 +61,6 @@ function RoundedButton(props) {
     const {
         icon = 'question_mark',
         size = 36,
-        color = '#FFFFFF',
         hsl: [hue, sat, lig] = [355, 78, 66],
         onClick = () => undefined,
         role = undefined,
@@ -72,7 +84,7 @@ function RoundedButton(props) {
             onClick={onClick}
             disabled={disabled}
         >
-            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill color={color} grade={200} weight={400} />
+            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill grade={200} weight={400} />
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
         </button>
     );

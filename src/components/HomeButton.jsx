@@ -81,15 +81,12 @@ function HomeButton(props) {
                         onClick={(e) => {
                             e.stopPropagation();
                             showAlert({
-                                title: 'Tem certeza que deseja excluir?',
-                                dismissHsl: [355, 78, 66],
-                                dismissText: 'Não',
-                                actionHsl: [97, 43, 70],
-                                actionText: 'Sim',
-                                dismissible: true,
-                                actionOnClick: () => {
-                                    deleteFunction();
-                                },
+                                headerText: 'Tem certeza que deseja excluir?',
+                                primaryBtnHsl: [355, 78, 66],
+                                primaryBtnLabel: 'Não',
+                                secondaryBtnHsl: [97, 43, 70],
+                                secondaryBtnLabel: 'Sim',
+                                onSecondaryBtnClick: () => deleteFunction(),
                             });
                         }}
                         icon="delete"

@@ -72,6 +72,7 @@ function CreateValidationInput(props) {
                                 return newValidation;
                             });
                         }}
+                        required
                     >
                         <option value="">Selecione...</option>
                         {item.type === 'NUMBERBOX' && (
@@ -122,6 +123,7 @@ function CreateValidationInput(props) {
                                 return newValidation;
                             });
                         }}
+                        required
                     />
                 </div>
                 <div className="mb-3">

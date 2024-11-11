@@ -18,6 +18,27 @@ const style = `
     .btn-addbar:hover {
         background-color: rgba(255, 255, 255, 0.5);
     }
+
+    .bg-steel-blue {
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+    }
+
+    .bg-steel-blue:focus {
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+        box-shadow: none;
+    }
+
+    .bg-steel-blue:active{
+        background-color: #4E9BB9;
+        border-color: #4E9BB9;
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .border-steel-blue {
+        border-color: #4E9BB9;
+    }
 `;
 
 function AddBar(props) {
@@ -57,7 +78,7 @@ function AddBar(props) {
             <div className="d-flex bg-transparent flex-column justify-content-center h-100">
                 <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 p-0 py-3">
                     <h1 className="font-century-gothic fs-3 fw-bold text-white mb-1">Adicionar</h1>
-                    <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao protocolo</h1>
+                    <hr className="w-100 border border-steel-blue opacity-25 m-0 mb-2" />
                     <button
                         type="button"
                         className="btn btn-addbar rounded-0 add-page-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
@@ -69,7 +90,17 @@ function AddBar(props) {
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Nova página</span>
                     </button>
-                    <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">À página atual</h1>
+                    <div className="row justify-content-center gx-1 mb-2">
+                        <div className="col-auto">
+                            <h1 className="font-century-gothic fs-6 fw-bold text-white m-0">Ao protocolo</h1>
+                        </div>
+                        <div className="col-auto">
+                            <div className="d-flex">
+                                <MaterialSymbol icon="keyboard_arrow_up" size={24} weight={700} fill color="#FFFFFF" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr className="w-100 border border-steel-blue opacity-25 m-0 mb-2" />
                     <button
                         type="button"
                         className="btn btn-addbar rounded-0 add-group-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
@@ -92,7 +123,17 @@ function AddBar(props) {
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
                     </button>
-                    <h1 className="font-century-gothic fs-6 fw-bold text-white mb-3">Ao grupo atual</h1>
+                    <div className="row justify-content-center gx-1 mb-2">
+                        <div className="col-auto">
+                            <h1 className="font-century-gothic fs-6 fw-bold text-white m-0">À página atual</h1>
+                        </div>
+                        <div className="col-auto">
+                            <div className="d-flex">
+                                <MaterialSymbol icon="keyboard_arrow_up" size={24} weight={700} fill color="#FFFFFF" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr className="w-100 border border-steel-blue opacity-25 m-0 mb-2" />
                     <button
                         type="button"
                         className="btn btn-addbar rounded-0 add-textbox-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
@@ -194,6 +235,17 @@ function AddBar(props) {
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Dependência</span>
                     </button>
+
+                    <div className="row justify-content-center gx-1">
+                        <div className="col-auto">
+                            <h1 className="font-century-gothic fs-6 fw-bold text-white m-0">Ao grupo atual</h1>
+                        </div>
+                        <div className="col-auto">
+                            <div className="d-flex">
+                                <MaterialSymbol icon="keyboard_arrow_up" size={24} weight={700} fill color="#FFFFFF" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="w-100 mt-2 px-3">
                     <select

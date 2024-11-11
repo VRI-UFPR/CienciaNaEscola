@@ -74,7 +74,7 @@ function CreateTextBoxInput(props) {
 
     const insertImage = (e) => {
         const newItem = { ...item };
-        newItem.files.push(e.target.files[0]);
+        newItem.files.push({ content: e.target.files[0], description: '' });
         setItem(newItem);
     };
 
@@ -198,6 +198,8 @@ function CreateTextBoxInput(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">
@@ -221,12 +223,12 @@ function CreateTextBoxInput(props) {
                     )}
                 </div>
                 {item.files?.length > 0 && (
-                    <div className="row mb-3 mt-4">
+                    <div className="row mb-3 mt-4 gy-4">
                         {item.files.map((file, i) => {
-                            if (file && file instanceof File)
+                            if (file?.content instanceof File || file?.path)
                                 return (
                                     <div
-                                        key={'item-' + item.tempId + '-image-' + file.name}
+                                        key={'item-' + item.tempId + '-image-' + file?.content?.name || file?.id}
                                         className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
                                         <div
@@ -235,7 +237,7 @@ function CreateTextBoxInput(props) {
                                             } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
                                         >
                                             <img
-                                                src={URL.createObjectURL(file)}
+                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
                                                 className="img-fluid object-fit-contain w-100 rounded-4"
                                                 alt="Imagem selecionada"
                                             />

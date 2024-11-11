@@ -39,11 +39,22 @@ export const AlertProvider = ({ children }) => {
             const element = document.getElementById('alert-modal');
 
             setAlert((prev) => {
-                element.removeEventListener('hidden.bs.modal', prev?.onHide);
-                if (prev?.actionOnClick) {
-                    element.removeEventListener('hidden.bs.modal', prev?.actionOnClick);
+                element.removeEventListener('hidden.bs.modal', prev?.onPrimaryBtnClick);
+                if (prev?.onSecondaryBtnClick) {
+                    element.removeEventListener('hidden.bs.modal', prev?.onSecondaryBtnClick);
                 }
-                return data;
+
+                return {
+                    headerText: data.headerText || 'Alerta',
+                    bodyText: data.bodyText,
+                    isClosable: data.isClosable !== false,
+                    primaryBtnLabel: data.primaryBtnLabel || 'Ok',
+                    primaryBtnHsl: data.primaryBtnHsl || [97, 43, 70],
+                    secondaryBtnLabel: data.secondaryBtnLabel || 'Cancelar',
+                    secondaryBtnHsl: data.secondaryBtnHsl || [355, 78, 66],
+                    onPrimaryBtnClick: data.onPrimaryBtnClick,
+                    onSecondaryBtnClick: data.onSecondaryBtnClick,
+                };
             });
             setIsAlertVisible(true);
 
@@ -62,7 +73,7 @@ export const AlertProvider = ({ children }) => {
     }, []);
 
     return (
-        <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isDismissable: alert?.dismissible }}>
+        <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isClosable: alert?.isClosable }}>
             {children}
             <div className="modal fade" id="alert-modal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
                 <div className="modal-dialog modal-dialog-centered p-5">
@@ -70,31 +81,31 @@ export const AlertProvider = ({ children }) => {
                         <div className="d-flex flex-column shadow text-break bg-white rounded-4 w-100 mx-0 p-4 py-5 p-md-5">
                             <h1
                                 className={`font-century-gothic color-dark-gray text-center fs-3 fw-bold ${
-                                    alert?.description ? 'mb-3' : 'mb-4 mb-md-5'
+                                    alert?.bodyText ? 'mb-3' : 'mb-4 mb-md-5'
                                 }`}
                             >
-                                {alert?.title}
+                                {alert?.headerText}
                             </h1>
-                            {alert?.description && (
+                            {alert?.bodyText && (
                                 <p className="font-century-gothic color-dark-gray text-center mb-4 mb-md-5 fs-5 fw-medium">
-                                    {alert?.description}
+                                    {alert?.bodyText}
                                 </p>
                             )}
-                            <div className={`row ${alert?.dismissible ? '' : 'd-none'} justify-content-center m-0`}>
-                                <div className={`${alert?.actionHsl ? 'col' : 'col-auto'} d-flex px-1`}>
+                            <div className={`row ${alert?.isClosable ? '' : 'd-none'} justify-content-center m-0`}>
+                                <div className={`${alert?.onSecondaryBtnClick ? 'col' : 'col-auto'} d-flex px-1`}>
                                     <TextButton
-                                        className={`p-3 ${alert?.actionHsl ? '' : 'px-5'} py-md-4 fs-3`}
-                                        hsl={alert?.dismissHsl || [97, 43, 70]}
-                                        text={alert?.dismissText || 'Ok'}
-                                        onClick={() => hideAlert(alert?.onHide)}
+                                        className={`p-3 ${alert?.onSecondaryBtnClick ? '' : 'px-5'} py-md-4 fs-3`}
+                                        hsl={alert?.primaryBtnHsl || [97, 43, 70]}
+                                        text={alert?.primaryBtnLabel || 'Ok'}
+                                        onClick={() => hideAlert(alert?.onPrimaryBtnClick)}
                                     />
                                 </div>
-                                <div className={`col ${alert?.actionHsl ? 'd-flex' : 'd-none'} px-1`}>
+                                <div className={`col ${alert?.onSecondaryBtnClick ? 'd-flex' : 'd-none'} px-1`}>
                                     <TextButton
                                         className="p-3 p-md-4 fs-3"
-                                        hsl={alert?.actionHsl}
-                                        text={alert?.actionText}
-                                        onClick={() => hideAlert(alert?.actionOnClick)}
+                                        hsl={alert?.secondaryBtnHsl}
+                                        text={alert?.secondaryBtnLabel}
+                                        onClick={() => hideAlert(alert?.onSecondaryBtnClick)}
                                     />
                                 </div>
                             </div>

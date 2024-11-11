@@ -52,12 +52,22 @@ const style = `
       }
     }
 
-    .bg-light-pastel-blue{
+    .bg-light-pastel-blue,
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
         background-color: #b8d7e3;
+        border-color: #b8d7e3;
     }
 
-    .bg-light-pastel-blue:focus{
-        background-color: #b8d7e3;
+    .bg-light-pastel-blue:focus,
+    .bg-light-pastel-blue:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .bg-light-pastel-blue:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
     }
 
     .color-steel-blue {
@@ -98,11 +108,8 @@ function CreateInstitutionPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao atualizar localizações disponíveis',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Erro ao atualizar localizações disponíveis',
+                        bodyText: error.response?.data.message,
                     });
                 });
         },
@@ -135,15 +142,7 @@ function CreateInstitutionPage(props) {
                         setLocation(d.address.id, d.address.state);
                         setIsLoading(false);
                     })
-                    .catch((error) => {
-                        showAlert({
-                            title: 'Erro ao buscar instituição.',
-                            description: error.response?.data.message,
-                            dismissHsl: [97, 43, 70],
-                            dismissText: 'Ok',
-                            dismissible: true,
-                        });
-                    });
+                    .catch((error) => showAlert({ headerText: 'Erro ao buscar instituição.', bodyText: error.response?.data.message }));
             } else {
                 setIsLoading(false);
             }
@@ -161,26 +160,13 @@ function CreateInstitutionPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
+                .then((response) =>
                     showAlert({
-                        title: 'Instituição atualizada com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/${response.data.data.id}`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao atualizar instituição.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                        headerText: 'Instituição atualizada com sucesso.',
+                        onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
+                    })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição.', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${baseUrl}api/institution/createInstitution`, formData, {
@@ -189,26 +175,13 @@ function CreateInstitutionPage(props) {
                         Authorization: `Bearer ${user.token}`,
                     },
                 })
-                .then((response) => {
+                .then((response) =>
                     showAlert({
-                        title: 'Instituição criada com sucesso.',
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                        onHide: () => {
-                            navigate(`/dash/institutions/${response.data.data.id}`);
-                        },
-                    });
-                })
-                .catch((error) => {
-                    showAlert({
-                        title: 'Erro ao criar instituição.',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
-                    });
-                });
+                        headerText: 'Instituição criada com sucesso.',
+                        onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
+                    })
+                )
+                .catch((error) => showAlert({ headerText: 'Erro ao criar instituição.', bodyText: error.response?.data.message }));
         }
     };
 
@@ -219,26 +192,10 @@ function CreateInstitutionPage(props) {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) => {
-                showAlert({
-                    title: 'Instituição excluída com sucesso.',
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                    onHide: () => {
-                        navigate(`/dash/institutions`);
-                    },
-                });
-            })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao excluir instituição.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .then((response) =>
+                showAlert({ headerText: 'Instituição excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions`) })
+            )
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição.', bodyText: error.response?.data.message }));
     };
 
     if (error) {
@@ -287,6 +244,9 @@ function CreateInstitutionPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
+                                        minLength="1"
+                                        maxLength="255"
+                                        required
                                     />
                                 </div>
                                 <div>
@@ -300,6 +260,7 @@ function CreateInstitutionPage(props) {
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         form="institution-form"
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -314,7 +275,7 @@ function CreateInstitutionPage(props) {
                                             Ensino Médio
                                         </option>
                                         <option value="TERTIARY" className="color-grey fw-medium fs-5">
-                                            Ensino superior
+                                            Ensino Superior
                                         </option>
                                     </select>
                                 </div>
@@ -329,6 +290,7 @@ function CreateInstitutionPage(props) {
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
                                         form="institution-form"
                                         onChange={(e) => setLocation('', e.target.value)}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -352,6 +314,7 @@ function CreateInstitutionPage(props) {
                                         form="institution-form"
                                         disabled={!state}
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, addressId: e.target.value || undefined }))}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -375,15 +338,12 @@ function CreateInstitutionPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                title: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a instituição?`,
-                                                dismissHsl: [355, 78, 66],
-                                                dismissText: 'Não',
-                                                actionHsl: [97, 43, 70],
-                                                actionText: 'Sim',
-                                                dismissible: true,
-                                                actionOnClick: () => {
-                                                    formRef.current.requestSubmit();
-                                                },
+                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a instituição?`,
+                                                primaryBtnHsl: [355, 78, 66],
+                                                primaryBtnLabel: 'Não',
+                                                secondaryBtnHsl: [97, 43, 70],
+                                                secondaryBtnLabel: 'Sim',
+                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
                                             });
                                         }}
                                     />
@@ -395,15 +355,12 @@ function CreateInstitutionPage(props) {
                                             hsl={[355, 78, 66]}
                                             onClick={() => {
                                                 showAlert({
-                                                    title: `Tem certeza que deseja excluir a instituição?`,
-                                                    dismissHsl: [355, 78, 66],
-                                                    dismissText: 'Não',
-                                                    actionHsl: [97, 43, 70],
-                                                    actionText: 'Sim',
-                                                    dismissible: true,
-                                                    actionOnClick: () => {
-                                                        deleteInstitution();
-                                                    },
+                                                    headerText: `Tem certeza que deseja excluir a instituição?`,
+                                                    primaryBtnHsl: [355, 78, 66],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [97, 43, 70],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => deleteInstitution(),
                                                 });
                                             }}
                                         />

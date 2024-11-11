@@ -80,15 +80,7 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, appliers: newUsers }));
                 }
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao buscar usuários.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term, target) => {
@@ -127,15 +119,7 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, answersViewersClassroom: concatenedClassrooms }));
                 }
             })
-            .catch((error) => {
-                showAlert({
-                    title: 'Erro ao buscar grupos.',
-                    description: error.response?.data.message,
-                    dismissHsl: [97, 43, 70],
-                    dismissText: 'Ok',
-                    dismissible: true,
-                });
-            });
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id, target) => {
@@ -240,6 +224,8 @@ function CreateProtocolProperties(props) {
                 type="text"
                 value={protocol.title || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, title: event.target.value }))}
+                minLength="3"
+                required
             ></input>
             <label htmlFor="description" className="form-label color-steel-blue fs-5 fw-medium me-1">
                 Descrição do protocolo
@@ -329,6 +315,7 @@ function CreateProtocolProperties(props) {
                 id="visibility"
                 value={protocol.visibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>
@@ -486,6 +473,7 @@ function CreateProtocolProperties(props) {
                 id="applicability"
                 value={protocol.applicability || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>
@@ -575,6 +563,7 @@ function CreateProtocolProperties(props) {
                 id="answer-visiblity"
                 value={protocol.answersVisibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))}
+                required
             >
                 <option value="">Selecione...</option>
                 <option value="PUBLIC">Público</option>

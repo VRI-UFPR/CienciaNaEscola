@@ -101,7 +101,7 @@ function CreateMultipleInputItens(props) {
 
     const insertImage = (e) => {
         const newItem = { ...item };
-        newItem.files.push(e.target.files[0]);
+        newItem.files.push({ content: e.target.files[0], description: '' });
         setItem(newItem);
     };
 
@@ -131,7 +131,7 @@ function CreateMultipleInputItens(props) {
     const addOption = () => {
         const newItem = { ...item };
         const newPlacement = newItem.itemOptions.length + 1;
-        const tempId = Date.now() + Math.random() * 1000;
+        const tempId = Math.floor(Date.now() + Math.random() * 1000);
         newItem.itemOptions.push({ text: '', placement: newPlacement, tempId: tempId });
         setItem(newItem);
     };
@@ -265,6 +265,8 @@ function CreateMultipleInputItens(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">
@@ -287,33 +289,38 @@ function CreateMultipleInputItens(props) {
                     )}
                 </div>
                 {item.files?.length > 0 && (
-                    <div className="row mb-3 mt-4">
+                    <div className="row mb-3 mt-4 gy-4">
                         {item.files.map((file, i) => {
-                            return (
-                                <div
-                                    key={'item-' + item.tempId + '-image-' + file.name}
-                                    className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
-                                >
+                            if (file?.content instanceof File || file?.path)
+                                return (
                                     <div
-                                        className={`${
-                                            item.files.length > 1 && 'ratio ratio-1x1'
-                                        } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                        key={'item-' + item.tempId + '-image-' + file?.content?.name || file?.id}
+                                        className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
-                                        <img
-                                            src={URL.createObjectURL(file)}
-                                            className="img-fluid object-fit-contain w-100 rounded-4"
-                                            alt="Imagem selecionada"
-                                        />
-                                        <RoundedButton
-                                            className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
-                                            hsl={[190, 46, 70]}
-                                            size={32}
-                                            icon="delete"
-                                            onClick={() => removeImage(i)}
-                                        />
+                                        <div
+                                            className={`${
+                                                item.files.length > 1 && 'ratio ratio-1x1'
+                                            } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
+                                        >
+                                            <img
+                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
+                                                className="img-fluid object-fit-contain w-100 rounded-4"
+                                                alt="Imagem selecionada"
+                                            />
+                                            <RoundedButton
+                                                className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                hsl={[190, 46, 70]}
+                                                size={32}
+                                                icon="delete"
+                                                onClick={() => removeImage(i)}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            );
+                                );
+                            else {
+                                removeImage(i);
+                                return null;
+                            }
                         })}
                     </div>
                 )}
@@ -355,6 +362,7 @@ function CreateMultipleInputItens(props) {
                                         value={data.text || ''}
                                         aria-describedby="questionHelp"
                                         onChange={(event) => updateOption(i, event.target.value)}
+                                        required
                                     />
                                 </div>
                                 <div className="col-auto">
