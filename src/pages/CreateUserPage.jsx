@@ -462,7 +462,6 @@ function CreateUserPage(props) {
                                                 <option value="PUBLISHER">Publicador</option>
                                             )}
                                             {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
-                                            {user.role === 'ADMIN' && <option value="ADMIN">Admin</option>}
                                         </select>
                                     </div>
                                 )}
