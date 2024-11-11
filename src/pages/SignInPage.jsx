@@ -179,6 +179,8 @@ function SignInPage(props) {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            minLength="3"
+                            maxLength="20"
                             required
                         />
                         <input
