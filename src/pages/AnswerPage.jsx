@@ -68,28 +68,20 @@ const styles = `
 `;
 
 function AnswerPage(props) {
-    const [isLoading, setIsLoading] = useState(true);
+    const { applicationId } = useParams();
     const [error, setError] = useState(undefined);
     const [answer, setAnswer] = useState();
     const [selectedAnswer, setSelectedAnswer] = useState(undefined);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState(undefined);
-    const galleryModalRef = useRef(null);
-    const { applicationId } = useParams();
     const { user } = useContext(AuthContext);
-    const modalRef = useRef(null);
     const { showAlert } = useContext(AlertContext);
+    const modalRef = useRef(null);
+    const galleryModalRef = useRef(null);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
         setSelectedItem(question);
-    };
-
-    const sumOptionAnswers = (itemOptions) => {
-        let sum = 0;
-        for (const option of itemOptions) {
-            sum += Object.keys(option.optionAnswers).length;
-        }
-        return sum;
     };
 
     useEffect(() => {
@@ -119,7 +111,6 @@ function AnswerPage(props) {
     }
 
     // Função de exportar csv
-
     const createFile = (modalRef) => {
         let obj, csv;
 
@@ -148,110 +139,169 @@ function AnswerPage(props) {
         }
     };
 
-    function jsonToCsv(ans) {
-        let header = [],
+    const jsonToCsv = (ans) => {
+        let header = ['username'],
             answers = [],
             userAnswers = [];
         let headerString;
-        let items = ans.protocol.pages[0].itemGroups[0].items;
-        let ansIds = Object.keys(ans.answers);
+        const ansIds = Object.keys(ans.answers);
+        const protocol = ans.protocol;
+        let totalItems = 0;
+        let countTables = 0;
 
         // Armazena todas as perguntas no vetor 'header'
-        header.push('username');
-        for (let i = 0; i < items.length; i++) {
-            // Substitui '\n' por um espaço para evitar quebra de linha no CSV
-            let cleanText = String(items[i].text).replace(/\n/g, ' ');
-            header.push(cleanText);
-        }
-        // Tratamentos para exportar corretamente
-        // items.length já contém o +1 do "username"
-        header[0] = '"' + header[0];
-        header[items.length] = header[items.length] + '"';
+        protocol.pages.forEach((page) => {
+            page.itemGroups.forEach((itemGroup) => {
+                const items = itemGroup.items;
+                switch (itemGroup.type) {
+                    case 'ONE_DIMENSIONAL':
+                        items.forEach((item) => {
+                            header.push(String(item.text).replace(/\n/g, ' '));
+                            totalItems++;
+                        });
+                        break;
+                    case 'TEXTBOX_TABLE':
+                    case 'RADIO_TABLE':
+                    case 'CHECKBOX_TABLE':
+                        const tableColumns = itemGroup.tableColumns;
+                        items.forEach((item) => {
+                            tableColumns.forEach((column) => {
+                                let cleanText = `Table${countTables}_${String(item.text).replace(/\n/g, ' ').replace(/\s+/g, '')}_${String(
+                                    column.text
+                                )
+                                    .replace(/\n/g, ' ')
+                                    .replace(/\s+/g, '')}`;
+                                header.push(cleanText);
+                                totalItems++;
+                            });
+                        });
+                        countTables++;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
 
+        // Tratamentos para exportar corretamente
+        header[0] = `"${header[0]}`;
+        header[totalItems] = `${header[totalItems]}"`;
         // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
         headerString = header.join('","');
 
         // Armazena as respostas
-        for (let i = 0; i < ansIds.length; i++) {
-            userAnswers[0] = String(ans.answers[ansIds[i]].user.username);
+        ansIds.forEach((ansId, index) => {
+            userAnswers = [];
+            userAnswers[0] = `"${String(ans.answers[ansId].user.username)}`;
+            totalItems = 0;
+            countTables = 0;
 
-            // Respostas em si
-            for (let j = 0; j < items.length; j++) {
-                switch (items[j].type) {
-                    case 'TIMEBOX':
-                    case 'DATEBOX':
-                    case 'LOCATIONBOX':
-                    case 'TEXTBOX':
-                        userAnswers[j + 1] = String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].text).replace(/\n/g, ' ');
-                        break;
+            protocol.pages.forEach((page) => {
+                page.itemGroups.forEach((itemGroup) => {
+                    const items = itemGroup.items;
+                    items.forEach((item) => {
+                        let cleanText = ' ';
+                        switch (itemGroup.type) {
+                            case 'ONE_DIMENSIONAL':
+                                switch (item.type) {
+                                    case 'TIMEBOX':
+                                    case 'DATEBOX':
+                                    case 'LOCATIONBOX':
+                                    case 'NUMBERBOX':
+                                    case 'TEXTBOX':
+                                    case 'RANGE':
+                                        cleanText = ' ';
+                                        Object.entries(item.itemAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                            if (applicationAnswerId === ansId) {
+                                                Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                    groupAnswers.forEach((groupAnswer) => {
+                                                        cleanText = String(groupAnswer.text || '').replace(/\n/g, ' ');
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        userAnswers[totalItems + 1] = cleanText;
+                                        break;
+                                    case 'TEXT':
+                                        userAnswers[totalItems + 1] = 'Enunciado*';
+                                        break;
+                                    case 'CHECKBOX':
+                                    case 'SELECT':
+                                    case 'RADIO':
+                                        const currentTotalItems = totalItems;
+                                        userAnswers[currentTotalItems + 1] = '';
+                                        item.itemOptions.forEach((option, optionIndex) => {
+                                            Object.entries(option.optionAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                                if (applicationAnswerId === ansId) {
+                                                    Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                        groupAnswers.forEach((groupAnswer) => {
+                                                            if (groupAnswer.text !== undefined) {
+                                                                userAnswers[currentTotalItems + 1] +=
+                                                                    userAnswers[currentTotalItems + 1] !== ''
+                                                                        ? ` | ${String(option.text).replace(/\n/g, ' ')}`
+                                                                        : String(option.text).replace(/\n/g, ' ');
+                                                            }
+                                                        });
+                                                    });
+                                                }
+                                            });
+                                        });
+                                        break;
+                                    case 'UPLOAD':
+                                        // const uploadFiles = item.itemAnswers?.[ansId]?.[ansId]?.[0]?.files || [];
+                                        // const imageFiles = uploadFiles.filter((file) => {
+                                        //     const filePath = file?.path || '';
+                                        //     return filePath.includes('.png') || filePath.includes('.jpg') || filePath.includes('.jpeg');
+                                        // });
 
-                    case 'TEXT':
-                        userAnswers[j + 1] = 'Enunciado*';
-                        break;
-
-                    case 'RADIO':
-                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
-                        for (let k = 0; k < items[j].itemOptions.length; k++) {
-                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
-                                userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
+                                        // userAnswers[totalItems + 1] =
+                                        //     imageFiles.map((file) => `baseUrl.concat('api/', String(file.path || ''))`).join(' | ') || ' ';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                totalItems++;
+                                break;
+                            case 'RADIO_TABLE':
+                            case 'CHECKBOX_TABLE':
+                            case 'TEXTBOX_TABLE':
+                                const tableColumns = itemGroup.tableColumns;
+                                if (item.tableAnswers[ansId]) {
+                                    Object.values(item.tableAnswers[ansId] || {}).forEach((rowAnswers) => {
+                                        tableColumns.forEach((column) => {
+                                            // Verifica se a tabela é do tipo RADIO_TABLE ou CHECKBOX_TABLE
+                                            if (itemGroup.type === 'RADIO_TABLE' || itemGroup.type === 'CHECKBOX_TABLE') {
+                                                // Se a resposta for uma string vazia, marca como "Selected"
+                                                cleanText = rowAnswers[column.id] === '' ? 'Selected' : '';
+                                            } else {
+                                                cleanText = rowAnswers[column.id] || '';
+                                            }
+                                            userAnswers[totalItems + 1] = cleanText;
+                                            totalItems++;
+                                        });
+                                    });
+                                } else {
+                                    tableColumns.forEach((column) => {
+                                        userAnswers[totalItems + 1] = '';
+                                        totalItems++;
+                                    });
+                                }
+                                countTables++;
+                                break;
+                            default:
+                                break;
                         }
-                        break;
+                    });
+                });
+            });
 
-                    case 'CHECKBOX':
-                        // Percorre todas as opções buscando pela opção selecionada pelo usuário
-                        for (let k = 0; k < items[j].itemOptions.length; k++) {
-                            if (items[j].itemOptions[k].optionAnswers[ansIds[i]] !== undefined)
-                                if (userAnswers[j + 1] !== undefined)
-                                    userAnswers[j + 1] =
-                                        userAnswers[j + 1] + ' | ' + String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
-                                else userAnswers[j + 1] = String(items[j].itemOptions[k].text).replace(/\n/g, ' ');
-                        }
-                        break;
-
-                    case 'UPLOAD':
-                        for (let k = 0; k < items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files.length; k++) {
-                            if (
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.png') ||
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpg') ||
-                                items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path.includes('.jpeg')
-                            ) {
-                                if (userAnswers[j + 1] !== undefined)
-                                    userAnswers[j + 1] =
-                                        userAnswers[j + 1] +
-                                        ' | ' +
-                                        baseUrl.concat('api/', String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path));
-                                else
-                                    userAnswers[j + 1] = baseUrl.concat(
-                                        'api/',
-                                        String(items[j].itemAnswers[ansIds[i]][ansIds[i]][0].files[k].path)
-                                    );
-                            }
-                        }
-                        break;
-
-                    case 'NUMBERBOX':
-                        break;
-
-                    case 'SELECT':
-                        break;
-
-                    case 'SCALE':
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            userAnswers[0] = '"' + userAnswers[0];
-            userAnswers[items.length] = userAnswers[items.length] + '"';
-
-            answers[i] = userAnswers.join('","');
-        }
+            userAnswers[totalItems] = `${userAnswers[totalItems] || ''}"`;
+            answers[index] = userAnswers.join('","');
+        });
 
         const csv = [headerString, ...answers].join('\r\n');
-
         return csv;
-    }
+    };
 
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">

@@ -72,7 +72,7 @@ function ApplicationPage(props) {
     const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
-    const [addressId, setAddressId] = useState(undefined);
+    const addressId = 1;
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const { applicationId } = useParams();

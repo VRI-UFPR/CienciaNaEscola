@@ -49,6 +49,11 @@ function RangeInput(props) {
     const [step, setStep] = useState(1);
     const [hasUpdated, setHasUpdated] = useState(false);
 
+    const updateAnswer = (newAnswer) => {
+        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        setValue(newAnswer.text);
+    };
+
     useEffect(() => {
         if (!hasUpdated) {
             if (item) {
@@ -71,20 +76,16 @@ function RangeInput(props) {
                     }
                 }
             }
+            onAnswerChange(answer.group, item.id, 'ITEM', { ...answer, text: String(Math.floor((min + max) / 2)) });
             setHasUpdated(true);
         }
-    }, [hasUpdated, item]);
+    }, [hasUpdated, item, onAnswerChange, answer, min, max]);
 
     useEffect(() => {
         if (hasUpdated) {
             setValue(Math.floor((min + max) / 2));
         }
     }, [hasUpdated, min, max]);
-
-    const updateAnswer = (newAnswer) => {
-        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
-        setValue(newAnswer.text);
-    };
 
     const rangeStyle = {
         background: `linear-gradient(to right, #AAD390 ${((value - min) / (max - min)) * 100}%, #ccc ${
