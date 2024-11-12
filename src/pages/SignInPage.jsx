@@ -52,16 +52,8 @@ const styles = `
         opacity: 1;
     }
 
-    .login-links {
+    .color-pastel-blue {
         color: #91CAD6;
-    }
-
-    .login-links:hover {
-        cursor: pointer;
-    }
-
-    .button-position {
-        z-index: 1;
     }
 
     .background-style {
@@ -73,10 +65,6 @@ const styles = `
         .background-style{
             background-image: url(${BackgroundWeb});
         }
-    }
-
-    .mw-200{
-        max-width: 200px;
     }
 
     .mw-115{
@@ -155,58 +143,62 @@ function SignInPage(props) {
     };
 
     return (
-        <div className="background-style d-flex flex-column align-items-center font-century-gothic vh-100 w-100">
-            <div className="d-flex flex-column align-items-center justify-content-end h-75 w-100">
-                <div className="d-flex flex-column align-items-center justify-content-end h-50">
-                    <img src={picceTitle} alt="PICCE" className="mw-270 pb-4" />
-                    <span className="login-title text-center fw-medium lh-sm fs-5 w-75 w-sm-50">
-                        Bem-vindo(a) ao Ciência Cidadã na Escola!
-                    </span>
-                </div>
-
-                <form className="row justify-content-center g-0 h-50 w-75 pt-5" onSubmit={loginHandler}>
-                    <div className="col-12 col-lg-8 d-flex flex-column align-items-center">
-                        <input
-                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                            placeholder="Username"
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <input
-                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
-                            placeholder="Senha"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <p
-                            className="login-links text-decoration-underline fs-6 cursor-pointer"
-                            onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
-                        >
-                            Esqueci minha senha
-                        </p>
-                    </div>
-                    <div className="button-position row flex-column justify-content-end align-items-center g-0 pt-5">
-                        <div className="col-12 col-lg-6 mb-3">
-                            <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
-                        </div>
-                        {!isDashboard && (
-                            <div className="col-12 col-lg-6">
-                                <TextButton
-                                    hsl={[190, 46, 70]}
-                                    text="Entrar sem registro"
-                                    className="rounded-pill"
-                                    type="button"
-                                    onClick={passwordlessLoginHandler}
+        <div className="background-style font-century-gothic overflow-y-scroll vh-100">
+            <div className="container d-flex flex-column h-100">
+                <div className="row justify-content-center align-items-center flex-grow-1 w-100 g-0 py-5">
+                    <div className="col-9 col-lg-8">
+                        <div className="d-flex flex-column text-center align-items-center">
+                            <img src={picceTitle} alt="PICCE" className="mw-270 mb-2 mb-sm-3" />
+                            <span className="text-center fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
+                            <form onSubmit={loginHandler}>
+                                <input
+                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
+                                    placeholder="Username"
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    minLength="3"
+                                    maxLength="20"
+                                    required
                                 />
-                            </div>
-                        )}
+                                <input
+                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
+                                    placeholder="Senha"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <button
+                                    className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"
+                                    type="button"
+                                    onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
+                                >
+                                    Esqueci minha senha
+                                </button>
+                                <div className="row justify-content-center g-0 mb-2 mb-sm-3">
+                                    <div className="col-12 col-lg-8">
+                                        <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                                    </div>
+                                </div>
+                                {!isDashboard && (
+                                    <div className="row justify-content-center g-0">
+                                        <div className="col-12 col-lg-8">
+                                            <TextButton
+                                                hsl={[190, 46, 70]}
+                                                text="Entrar sem registro"
+                                                className="rounded-pill"
+                                                type="button"
+                                                onClick={passwordlessLoginHandler}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
+                        </div>
                     </div>
-                </form>
-            </div>
-            <div className="d-flex flex-column justify-content-end h-25 w-100">
-                <div className="row align-items-center justify-content-between g-0 w-100 pb-3 px-3">
+                </div>
+                <div className="row justify-content-between g-0 w-100 pb-3 px-3">
                     <div className="col-3 justify-content-start d-flex align-items-center">
                         <img className="h-auto mw-115 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                     </div>
@@ -215,7 +207,6 @@ function SignInPage(props) {
                     </div>
                 </div>
             </div>
-
             <style> {styles}</style>
         </div>
     );

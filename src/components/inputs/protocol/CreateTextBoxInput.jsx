@@ -89,7 +89,21 @@ function CreateTextBoxInput(props) {
             <div className="row gx-2 pb-2">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
-                        Item {itemIndex + 1} - {item.type === 'NUMBERBOX' ? 'Caixa numérica' : 'Caixa de texto'}
+                        Item {itemIndex + 1} -{' '}
+                        {(() => {
+                            switch (item.type) {
+                                case 'TEXTBOX':
+                                    return 'Caixa de texto';
+                                case 'NUMBERBOX':
+                                    return 'Caixa numérica';
+                                case 'UPLOAD':
+                                    return 'Seletor de imagem';
+                                case 'TEXT':
+                                    return 'Enunciado';
+                                default:
+                                    return 'Item';
+                            }
+                        })()}
                     </h1>
                 </div>
                 <div className="col-auto">
@@ -198,6 +212,8 @@ function CreateTextBoxInput(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">

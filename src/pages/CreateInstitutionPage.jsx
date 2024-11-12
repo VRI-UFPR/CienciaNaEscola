@@ -109,11 +109,8 @@ function CreateInstitutionPage(props) {
                 })
                 .catch((error) => {
                     showAlert({
-                        title: 'Erro ao atualizar localizações disponíveis',
-                        description: error.response?.data.message,
-                        dismissHsl: [97, 43, 70],
-                        dismissText: 'Ok',
-                        dismissible: true,
+                        headerText: 'Erro ao atualizar localizações disponíveis',
+                        bodyText: error.response?.data.message,
                     });
                 });
         },
@@ -243,6 +240,9 @@ function CreateInstitutionPage(props) {
                                         id="name"
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
+                                        minLength="1"
+                                        maxLength="255"
+                                        required
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -256,6 +256,7 @@ function CreateInstitutionPage(props) {
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         form="institution-form"
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -270,7 +271,7 @@ function CreateInstitutionPage(props) {
                                             Ensino Médio
                                         </option>
                                         <option value="TERTIARY" className="color-grey fw-medium fs-5">
-                                            Ensino superior
+                                            Ensino Superior
                                         </option>
                                     </select>
                                 </div>
@@ -285,6 +286,7 @@ function CreateInstitutionPage(props) {
                                         className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         form="institution-form"
                                         onChange={(e) => setLocation('', e.target.value)}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
@@ -308,6 +310,7 @@ function CreateInstitutionPage(props) {
                                         form="institution-form"
                                         disabled={!state}
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, addressId: e.target.value || undefined }))}
+                                        required
                                     >
                                         <option value="" className="color-grey fw-medium fs-5">
                                             Selecione uma opção:
