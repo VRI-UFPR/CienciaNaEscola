@@ -155,9 +155,11 @@ function ProtocolPage(props) {
                                             />
                                         </div>
                                     )}
-                                    <div className="col-4 align-self-center pb-4">
-                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Aplicar" onClick={() => navigate('apply')} />
-                                    </div>
+                                    {(protocol.applicability === 'PUBLIC' || protocol.appliers !== undefined) && (
+                                        <div className="col-4 align-self-center pb-4">
+                                            <TextButton type="submit" hsl={[97, 43, 70]} text="Aplicar" onClick={() => navigate('apply')} />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="row justify-content-center m-0">
                                     {<ProtocolInfo title={protocol.title} description={protocol.description} />}
