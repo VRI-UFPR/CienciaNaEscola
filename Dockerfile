@@ -16,6 +16,7 @@ COPY public/ /app/public
 COPY src/ /app/src
 COPY package.json /app/
 COPY uploads /app/uploads
+COPY config-overrides.js /app/config-overrides.js
 
 # Define a variável de ambiente para a porta
 ENV PORT=3001
