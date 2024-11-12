@@ -69,7 +69,6 @@ function ProtocolPage(props) {
 
     const { protocolId } = useParams();
     const [protocol, setProtocol] = useState(undefined);
-    console.log(protocol);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
     const galleryModalRef = useRef(null);
