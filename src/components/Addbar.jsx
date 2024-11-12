@@ -42,7 +42,8 @@ const style = `
 `;
 
 function AddBar(props) {
-    const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, setItemTarget, protocol } = props;
+    const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, insertTable, setItemTarget, protocol } =
+        props;
 
     useEffect(() => {
         const tooltipList = [];
@@ -103,7 +104,7 @@ function AddBar(props) {
                     <button
                         type="button"
                         className="btn btn-addbar rounded-0 add-group-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
-                        onClick={() => insertItemGroup(pageIndex)}
+                        onClick={() => insertItemGroup('ONE_DIMENSIONAL', pageIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-group-tooltip"
                         data-bs-title="Um grupo organiza itens dentro de uma página. O usuário respondendo o protocolo não verá os grupos diretamente, mas este é útil para definir condicionais e repetições dentro de uma mesma página."
@@ -223,7 +224,31 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn btn-addbar rounded-0 add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        className="btn btn-addbar rounded-0 shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        onClick={() => insertTable('TEXTBOX_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Tabela de texto</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-addbar rounded-0 shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        onClick={() => insertTable('RADIO_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Tabela de escolha simples</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-addbar rounded-0 shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        onClick={() => insertTable('CHECKBOX_TABLE', pageIndex)}
+                    >
+                        <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
+                        <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Tabela de múltipla escolha</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-addbar rounded-0 add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0 px-4"
                         onClick={() => insertDependency(pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-group-dependency-tooltip"

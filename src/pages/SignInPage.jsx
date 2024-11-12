@@ -157,6 +157,9 @@ function SignInPage(props) {
                                     type="text"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
+                                    minLength="3"
+                                    maxLength="20"
+                                    required
                                 />
                                 <input
                                     className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
@@ -164,6 +167,7 @@ function SignInPage(props) {
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    required
                                 />
                                 <button
                                     className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"

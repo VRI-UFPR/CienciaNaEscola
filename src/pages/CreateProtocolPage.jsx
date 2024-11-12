@@ -191,6 +191,14 @@ function CreateProtocolPage(props) {
             showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar o item.' });
             return;
         }
+        const groupType = protocol.pages[page].itemGroups[group].type;
+        if (groupType !== 'ONE_DIMENSIONAL' && type !== 'TABLEROW') {
+            showAlert({
+                title: 'Selecione um grupo que não seja do tipo tabela.',
+                dismissible: true,
+            });
+            return;
+        }
         const newProtocol = { ...protocol };
         const newInput = {
             ...defaultNewInput(
@@ -231,13 +239,13 @@ function CreateProtocolPage(props) {
     );
 
     const insertItemGroup = useCallback(
-        (page) => {
+        (type, page) => {
             if (page === '') {
                 showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.' });
                 return;
             }
             const newProtocol = { ...protocol };
-            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(newProtocol.pages[page].itemGroups.length + 1));
+            newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(type, newProtocol.pages[page].itemGroups.length + 1));
             setProtocol(newProtocol);
             setItemTarget((prev) => ({ ...prev, group: newProtocol.pages[page].itemGroups.length - 1 }));
         },
@@ -260,6 +268,15 @@ function CreateProtocolPage(props) {
             setProtocol(newProtocol);
         },
         [protocol, showAlert]
+    );
+
+    const insertTable = useCallback(
+        (type, page) => {
+            const newProtocol = { ...protocol };
+            insertItemGroup(type, page);
+            setProtocol(newProtocol);
+        },
+        [protocol, insertItemGroup]
     );
 
     useEffect(() => {
@@ -403,6 +420,13 @@ function CreateProtocolPage(props) {
                                                 })),
                                             };
                                         }),
+                                        tableColumns: g.tableColumns.map((c) => {
+                                            return {
+                                                id: c.id,
+                                                text: c.text,
+                                                placement: c.placement,
+                                            };
+                                        }),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
@@ -460,11 +484,11 @@ function CreateProtocolPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col h-100">
+                <div className="col overflow-hidden h-100">
                     <div className="d-flex flex-column h-100">
                         <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                         <div className="row flex-grow-1 overflow-hidden g-0">
-                            <div className="col h-100">
+                            <div className="col overflow-hidden h-100">
                                 <div className="d-flex flex-column h-100">
                                     <div className="row justify-content-center font-barlow g-0">
                                         <div className="col-12 col-md-10">
@@ -512,6 +536,7 @@ function CreateProtocolPage(props) {
                                                             removePage={removePage}
                                                             protocol={protocol}
                                                             updatePage={updatePage}
+                                                            insertItem={insertItem}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (
@@ -529,7 +554,26 @@ function CreateProtocolPage(props) {
                                                                     hsl={[97, 43, 70]}
                                                                     text={'Adicionar itens'}
                                                                     onClick={() => {
-                                                                        setCreationMode('children');
+                                                                        if (String(protocol.title).length < 3) {
+                                                                            showAlert({
+                                                                                headerText: 'Insira pelo menos 3 caracteres no título',
+                                                                            });
+                                                                        } else if (protocol.visibility === '') {
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Visibilidade',
+                                                                            });
+                                                                        } else if (protocol.applicability === '') {
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Aplicabilidade',
+                                                                            });
+                                                                        } else if (protocol.answersVisibility === '') {
+                                                                            showAlert({
+                                                                                headerText:
+                                                                                    'Selecione uma opção válida em Visibilidade das respostas',
+                                                                            });
+                                                                        } else {
+                                                                            setCreationMode('children');
+                                                                        }
                                                                     }}
                                                                 />
                                                             </div>
@@ -603,6 +647,7 @@ function CreateProtocolPage(props) {
                                             insertPage={insertPage}
                                             insertItemGroup={insertItemGroup}
                                             insertItem={insertItem}
+                                            insertTable={insertTable}
                                             setItemTarget={setItemTarget}
                                             insertDependency={insertDependency}
                                             protocol={protocol}

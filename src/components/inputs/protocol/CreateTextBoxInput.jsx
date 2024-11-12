@@ -212,6 +212,8 @@ function CreateTextBoxInput(props) {
                                 value={item.text || ''}
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
+                                minLength="3"
+                                required
                             />
                         </div>
                         <div className="col-auto">

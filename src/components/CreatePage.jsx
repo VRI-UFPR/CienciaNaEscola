@@ -17,7 +17,7 @@ import CreateItemGroup from './CreateItemGroup';
 import { Tooltip } from 'bootstrap';
 
 function CreatePage(props) {
-    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage } = props;
+    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
 
     const [page, setPage] = useState(currentPage);
     const currentGroup = page.itemGroups[itemTarget.group];
@@ -29,9 +29,9 @@ function CreatePage(props) {
     useEffect(() => {
         const tooltipList = [];
         if (page.tempId) {
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId}-up-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.delete-page-${page.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-page-${page.tempId.toString().slice(0, 13)}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {
@@ -104,7 +104,7 @@ function CreatePage(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement + 1, page.placement, itemTarget.page)}
                         icon="keyboard_arrow_down"
-                        className={`move-page-${page.tempId}-down-tooltip`}
+                        className={`move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`move-page-${page.tempId}-down-tooltip`}
                         data-bs-title="Mover a página uma posição abaixo na ordem das páginas do protocolo."
@@ -115,7 +115,7 @@ function CreatePage(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updatePagePlacement(page.placement - 1, page.placement, itemTarget.page)}
                         icon="keyboard_arrow_up"
-                        className={`move-page-${page.tempId}-up-tooltip`}
+                        className={`move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`move-page-${page.tempId}-up-tooltip`}
                         data-bs-title="Mover a página uma posição acima na ordem das páginas do protocolo."
@@ -126,7 +126,7 @@ function CreatePage(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => removePage(itemTarget.page)}
                         icon="delete"
-                        className={`delete-page-${page.tempId}-tooltip`}
+                        className={`delete-page-${page.tempId.toString().slice(0, 13)}-tooltip`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`delete-page-${page.tempId}-tooltip`}
                         data-bs-title="Remover a página do protocolo."
@@ -153,6 +153,8 @@ function CreatePage(props) {
                     updateGroupPlacement={updateGroupPlacement}
                     removeItemGroup={removeItemGroup}
                     protocol={protocol}
+                    page={page}
+                    insertItem={insertItem}
                 />
             )}
             {!currentGroup && (
