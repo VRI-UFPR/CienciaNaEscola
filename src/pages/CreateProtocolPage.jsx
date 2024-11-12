@@ -639,7 +639,7 @@ function CreateProtocolPage(props) {
                             </div>
                             {creationMode === 'children' && (
                                 <div className="col-auto position-lg-sticky h-100 mh-100">
-                                    <div className="offcanvas-lg bg-pastel-blue offcanvas-end h-100 w-auto" tabIndex="-1" id="addbar">
+                                    <div className="offcanvas-lg bg-pastel-blue d-flex overflow-y-scroll offcanvas-end h-100 w-auto" tabIndex="-1" id="addbar">
                                         <AddBar
                                             showExitButton={true}
                                             pageIndex={itemTarget.page}

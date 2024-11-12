@@ -64,7 +64,7 @@ function AddBar(props) {
     }, []);
 
     return (
-        <div className="bg-transparent d-flex flex-column h-100">
+        <div className="bg-transparent d-flex flex-column flex-grow-1 mt-2">
             <div className="d-flex justify-content-end">
                 <button
                     type="button"
@@ -75,7 +75,7 @@ function AddBar(props) {
                     <MaterialSymbol icon="close" size={24} weight={700} fill color="#FFFFFF" />
                 </button>
             </div>
-            <div className="d-flex bg-transparent flex-column justify-content-center h-100">
+            <div className="d-flex bg-transparent flex-column justify-content-center flex-grow-1 pb-2">
                 <div className="bg-pastel-blue d-flex flex-column align-items-center rounded-start-4 p-0 py-3">
                     <h1 className="font-century-gothic fs-3 fw-bold text-white mb-1">Adicionar</h1>
                     <hr className="w-100 border border-steel-blue opacity-25 m-0 mb-2" />
