@@ -125,13 +125,13 @@ function ProtocolsPage(props) {
                 <div className="col d-flex flex-column h-100 p-0 pb-4">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4">
+                        <div className="col-12 col-lg-10 p-4">
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Protocolos</h1>
                         </div>
                     </div>
                     <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
                         {user.role !== 'USER' && user.role !== 'APPLIER' && (
-                            <div className="col-12 col-md-10 col-lg-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
+                            <div className="col-12 col-lg-10 col-xl-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
                                 <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Meus protocolos</h1>
                                 <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                     <ProtocolList
@@ -149,7 +149,7 @@ function ProtocolsPage(props) {
                             </div>
                         )}
                         <div
-                            className={`col-12 col-md-10 d-flex flex-column mh-100 h-lg-100 p-4 pb-0 pt-lg-0 ${
+                            className={`col-12 col-lg-10 col-xl-5 d-flex flex-column mh-100 h-lg-100 p-4 pb-0 pt-lg-0 ${
                                 user.role !== 'USER' && user.role !== 'APPLIER' ? 'col-lg-5' : ''
                             }`}
                         >

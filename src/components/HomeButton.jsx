@@ -58,7 +58,7 @@ function HomeButton(props) {
     return (
         <div className="custom-btn rounded-4 row g-0 align-items-center font-barlow h-100 w-100 py-2 px-4" onClick={viewFunction}>
             <div className="col home-btn-title">
-                <h5 className="text-wrap fw-medium m-0">{title}</h5>
+                <h5 className="text-break fw-medium m-0">{title}</h5>
             </div>
             {allowEdit && (
                 <div className="col-auto ms-2">
