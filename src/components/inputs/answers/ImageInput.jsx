@@ -146,7 +146,7 @@ function ImageInput(props) {
                         )}
                         {answer.files.length > 0 || disableUpload ? (
                             answer.files.slice(0, ImageVisibility ? answer.files.length : 2 - (disableUpload ? 1 : 0)).map((image, i) => {
-                                if (answer.files[i] && answer.files[i] instanceof File)
+                                if (answer.files[i] && (answer.files[i] instanceof Blob || answer.files[i] instanceof File)) {
                                     return (
                                         <div key={i} className="col-6 pt-3 position-relative">
                                             <div className="ratio ratio-1x1 w-100 position-relative border border-light-subtle rounded-4 overflow-hidden">
@@ -165,7 +165,7 @@ function ImageInput(props) {
                                             />
                                         </div>
                                     );
-                                else {
+                                } else {
                                     removeImage(i);
                                     return null;
                                 }

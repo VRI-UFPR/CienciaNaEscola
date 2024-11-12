@@ -172,7 +172,6 @@ function ProtocolPage(props) {
                                     ) {
                                         return (
                                             <div key={'group' + itemGroupIndex}>
-                                                <p className="m-0">Grupo de itens {itemGroupIndex + 1}</p>
                                                 {(() =>
                                                     itemGroup.items.map((item) => {
                                                         switch (item.type) {

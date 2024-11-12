@@ -543,7 +543,7 @@ function CreateApplicationPage(props) {
                 <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
                     <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
-                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} grupo</h1>
+                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} aplicação</h1>
                         <div className="d-flex flex-column flex-grow-1">
                             <form
                                 name="application-form"
@@ -893,7 +893,7 @@ function CreateApplicationPage(props) {
                                         hsl={[97, 43, 70]}
                                         onClick={() => {
                                             showAlert({
-                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a aplicação?`,
                                                 primaryBtnHsl: [355, 78, 66],
                                                 primaryBtnLabel: 'Não',
                                                 secondaryBtnHsl: [97, 43, 70],
@@ -904,20 +904,22 @@ function CreateApplicationPage(props) {
                                     />
                                 </div>
                                 {isEditing && (
-                                    <TextButton
-                                        text={'Excluir'}
-                                        hsl={[355, 78, 66]}
-                                        onClick={() => {
-                                            showAlert({
-                                                headerText: `Tem certeza que deseja excluir a aplicação?`,
-                                                primaryBtnHsl: [355, 78, 66],
-                                                primaryBtnLabel: 'Não',
-                                                secondaryBtnHsl: [97, 43, 70],
-                                                secondaryBtnLabel: 'Sim',
-                                                onSecondaryBtnClick: () => deleteApplication(),
-                                            });
-                                        }}
-                                    />
+                                    <div className="col-5 col-sm-3 col-xl-2">
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    headerText: `Tem certeza que deseja excluir a aplicação?`,
+                                                    primaryBtnHsl: [355, 78, 66],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [97, 43, 70],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => deleteApplication(),
+                                                });
+                                            }}
+                                        />
+                                    </div>
                                 )}
                             </div>
                         </div>

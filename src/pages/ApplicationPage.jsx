@@ -452,7 +452,6 @@ function ApplicationPage(props) {
                                         ) {
                                             return (
                                                 <div>
-                                                    <p>Grupo de itens {itemGroupIndex + 1}</p>
                                                     {itemGroup.items.map((item) => {
                                                         switch (item.type) {
                                                             case 'RANGE':
@@ -600,7 +599,7 @@ function ApplicationPage(props) {
                                                                                     files: [],
                                                                                     group: itemGroup.id,
                                                                                 }}
-                                                                                onAnswerChange={handleAnswerChange}
+                                                                                setAddressId={setAddressId}
                                                                             />
                                                                         }
                                                                     </div>

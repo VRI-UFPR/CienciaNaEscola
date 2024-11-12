@@ -14,7 +14,6 @@ import { useState, useContext } from 'react';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
-import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from '../contexts/AlertContext';
 

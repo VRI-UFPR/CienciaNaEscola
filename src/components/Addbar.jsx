@@ -248,7 +248,7 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn btn-addbar rounded-0 add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0 px-4"
+                        className="btn btn-addbar rounded-0 add-group-dependency-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 p-0 px-4 mb-2"
                         onClick={() => insertDependency(pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class="add-group-dependency-tooltip"

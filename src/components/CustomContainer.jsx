@@ -27,7 +27,7 @@ function CustomContainer(props) {
     return (
         <div className={`row justify-content-center align-items-stretch gx-0 ${className}`}>
             <div className={colClass}>
-                <div className="d-flex flex-column align-items-center h-100">{children}</div>
+                <div className="d-flex flex-column h-100">{children}</div>
             </div>
         </div>
     );

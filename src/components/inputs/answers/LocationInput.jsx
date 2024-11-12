@@ -56,7 +56,7 @@ const styles = `
 `;
 
 export function Location(props) {
-    const { onAnswerChange, addressId, disabled } = props;
+    const { addressId, setAddressId, disabled } = props;
 
     const [state, setState] = useState('');
     const [searchedCities, setSearchedCities] = useState([]);
@@ -74,7 +74,7 @@ export function Location(props) {
         return () => window.removeEventListener('resize', updateIconSize);
     }, [updateIconSize]);
 
-    const updateAddressId = useCallback((addressId) => onAnswerChange(addressId), [onAnswerChange]);
+    const updateAddressId = useCallback((addressId) => setAddressId(addressId), [setAddressId]);
 
     const getAddressId = useCallback(
         async (city, state, country) => {

@@ -75,7 +75,7 @@ function CreateRangeInput(props) {
     };
 
     return (
-        <div className="pb-4 pb-lg-5">
+        <div className="pb-4 pb-lg-4">
             <div className="row gx-2 pb-2">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">Item {itemIndex + 1} - Intervalo numérico</h1>

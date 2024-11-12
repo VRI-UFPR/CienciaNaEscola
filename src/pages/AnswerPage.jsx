@@ -252,8 +252,7 @@ function AnswerPage(props) {
                                         //     return filePath.includes('.png') || filePath.includes('.jpg') || filePath.includes('.jpeg');
                                         // });
 
-                                        // userAnswers[totalItems + 1] =
-                                        //     imageFiles.map((file) => `baseUrl.concat('api/', String(file.path || ''))`).join(' | ') || ' ';
+                                        userAnswers[totalItems + 1] = '';
                                         break;
                                     default:
                                         break;
@@ -407,9 +406,7 @@ function AnswerPage(props) {
                                                                                                             item={{
                                                                                                                 files: groupAnswer.files.map(
                                                                                                                     (file) => ({
-                                                                                                                        path:
-                                                                                                                            baseUrl +
-                                                                                                                            file.path,
+                                                                                                                        path: file.path,
                                                                                                                     })
                                                                                                                 ),
                                                                                                             }}
