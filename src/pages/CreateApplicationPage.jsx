@@ -24,6 +24,7 @@ import TextButton from '../components/TextButton';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/Navbar';
 import RoundedButton from '../components/RoundedButton';
+import CustomContainer from '../components/CustomContainer';
 
 const style = `
     .font-barlow {
@@ -532,86 +533,81 @@ function CreateApplicationPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column vh-100">
-            <div className="row h-100 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4 pb-0">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">{isEditing ? 'Editar' : 'Criar'} aplicação</h1>
-                        </div>
-                    </div>
-                    <div className="d-flex flex-column flex-grow-1 overflow-x-scroll scrollbar-none">
-                        <div className="row justify-content-center flex-grow-1 font-barlow gx-0">
-                            <div className="col col-md-10 d-flex flex-column h-100 p-4">
-                                <div>
-                                    <form
-                                        name="application-form"
-                                        id="application-form"
-                                        ref={formRef}
-                                        action="/submit"
-                                        onSubmit={(e) => submitApplication(e)}
+                    <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
+                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} grupo</h1>
+                        <div className="d-flex flex-column flex-grow-1">
+                            <form
+                                name="application-form"
+                                id="application-form"
+                                className="flex-grow-1 mb-4"
+                                ref={formRef}
+                                action="/submit"
+                                onSubmit={(e) => submitApplication(e)}
+                            >
+                                <div className="mb-3">
+                                    <label label="visibility" className="form-label color-steel-blue fs-5 fw-medium">
+                                        Selecione a visibilidade da aplicação
+                                    </label>
+                                    <select
+                                        name="visibility"
+                                        value={application.visibility || ''}
+                                        id="visibility"
+                                        form="application-form"
+                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                        onChange={(e) => setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))}
                                     >
-                                        <div>
-                                            <label label="visibility" className="form-label color-steel-blue fs-5 fw-medium">
-                                                Selecione a visibilidade da aplicação
-                                            </label>
-                                            <select
-                                                name="visibility"
-                                                value={application.visibility || ''}
-                                                id="visibility"
-                                                form="application-form"
-                                                className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
-                                                onChange={(e) =>
-                                                    setApplication((prev) => ({ ...prev, visibility: e.target.value || undefined }))
-                                                }
-                                            >
-                                                <option value="">Selecione uma opção:</option>
-                                                {protocol.visibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
-                                                <option value="RESTRICT">Restringir visualizadores</option>
-                                            </select>
-                                        </div>
-                                        {application.visibility === 'RESTRICT' && (
-                                            <div>
-                                                <fieldset>
-                                                    <div className="row gx-2 gy-0">
-                                                        <div className="col-12 col-md-auto">
-                                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                Selecione os usuários que visualizarão a aplicação:
-                                                            </p>
-                                                        </div>
-                                                        <div className="col">
-                                                            <input
-                                                                type="text"
-                                                                name="users-search"
-                                                                value={VUSearchInput || ''}
-                                                                id="users-search"
-                                                                placeholder="Buscar por nome de usuário"
-                                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                                onChange={(e) => setVUSearchInput(e.target.value)}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        searchUsers(VUSearchInput);
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="col-auto">
-                                                            <RoundedButton
-                                                                hsl={[197, 43, 52]}
-                                                                onClick={() => searchUsers(VUSearchInput)}
-                                                                icon="person_search"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row gy-2 mb-3">
-                                                        {searchedUsers.map((u) => (
-                                                            <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-lg-3">
+                                        <option value="">Selecione uma opção:</option>
+                                        {protocol.visibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
+                                        <option value="RESTRICT">Restringir visualizadores</option>
+                                    </select>
+                                </div>
+                                {application.visibility === 'RESTRICT' && (
+                                    <div>
+                                        <fieldset>
+                                            <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                                <div className="col-12 col-xxl-auto">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-0">
+                                                        Selecione os usuários que visualizarão a aplicação:
+                                                    </p>
+                                                </div>
+                                                <div className="col">
+                                                    <input
+                                                        type="text"
+                                                        name="users-search"
+                                                        value={VUSearchInput || ''}
+                                                        id="users-search"
+                                                        placeholder="Buscar por nome de usuário"
+                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                        onChange={(e) => setVUSearchInput(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchUsers(VUSearchInput);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchUsers(VUSearchInput)}
+                                                        icon="person_search"
+                                                    />
+                                                </div>
+                                            </div>
+                                            {searchedUsers.length > 0 && (
+                                                <div className="row gy-2 mb-3">
+                                                    {searchedUsers.map((u) => (
+                                                        <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                            <div className="form-check">
                                                                 <input
                                                                     form="application-form"
                                                                     type="checkbox"
@@ -641,47 +637,51 @@ function CreateApplicationPage(props) {
                                                                     {u.username}
                                                                 </label>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                </fieldset>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </fieldset>
+                                    </div>
+                                )}
+                                {application.visibility === 'RESTRICT' && (
+                                    <div>
+                                        <fieldset>
+                                            <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                                <div className="col-12 col-xxl-auto">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-0">
+                                                        Selecione os grupos que visualizarão a aplicação:
+                                                    </p>
+                                                </div>
+                                                <div className="col">
+                                                    <input
+                                                        type="text"
+                                                        name="classrooms-search"
+                                                        value={VCSearchInput || ''}
+                                                        id="classrooms-search"
+                                                        placeholder="Buscar por nome do grupo"
+                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                        onChange={(e) => setVCSearchInput(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchClassrooms(VCSearchInput);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchClassrooms(VCSearchInput)}
+                                                        icon="search"
+                                                    />
+                                                </div>
                                             </div>
-                                        )}
-                                        {application.visibility === 'RESTRICT' && (
-                                            <div>
-                                                <fieldset>
-                                                    <div className="row gx-2 gy-0">
-                                                        <div className="col-12 col-md-auto">
-                                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                Selecione os grupos que visualizarão a aplicação:
-                                                            </p>
-                                                        </div>
-                                                        <div className="col">
-                                                            <input
-                                                                type="text"
-                                                                name="classrooms-search"
-                                                                value={VCSearchInput || ''}
-                                                                id="classrooms-search"
-                                                                placeholder="Buscar por nome do grupo"
-                                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                                onChange={(e) => setVCSearchInput(e.target.value)}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        searchClassrooms(VCSearchInput);
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="col-auto">
-                                                            <RoundedButton
-                                                                hsl={[197, 43, 52]}
-                                                                onClick={() => searchClassrooms(VCSearchInput)}
-                                                                icon="search"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row gy-2 mb-3">
-                                                        {searchedClassrooms.map((c) => (
-                                                            <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-lg-3">
+                                            {searchedClassrooms.length > 0 && (
+                                                <div className="row gy-2 mb-3">
+                                                    {searchedClassrooms.map((c) => (
+                                                        <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
+                                                            <div className="form-check">
                                                                 <input
                                                                     form="application-form"
                                                                     type="checkbox"
@@ -710,69 +710,71 @@ function CreateApplicationPage(props) {
                                                                     {c.name}
                                                                 </label>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </fieldset>
+                                    </div>
+                                )}
 
-                                        <div>
-                                            <label label="answer-visibility" className="form-label color-steel-blue fs-5 fw-medium">
-                                                Selecione a visibilidade das respostas da aplicação
-                                            </label>
-                                            <select
-                                                name="answer-visibility"
-                                                value={application.answersVisibility || ''}
-                                                id="answer-visibility"
-                                                form="application-form"
-                                                className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0 mb-3"
-                                                onChange={(e) =>
-                                                    setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))
-                                                }
-                                            >
-                                                <option value="">Selecione uma opção:</option>
-                                                {protocol.answersVisibility === 'PUBLIC' && (
-                                                    <option value="PUBLIC">Visível para todos</option>
-                                                )}
-                                                <option value="RESTRICT">Restringir visualizadores</option>
-                                            </select>
-                                        </div>
-                                        {application.answersVisibility === 'RESTRICT' && (
-                                            <div>
-                                                <fieldset>
-                                                    <div className="row gx-2 gy-0">
-                                                        <div className="col-12 col-md-auto">
-                                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                Selecione os usuários que visualizarão as respostas da aplicação:
-                                                            </p>
-                                                        </div>
-                                                        <div className="col">
-                                                            <input
-                                                                type="text"
-                                                                name="answer-users-search"
-                                                                value={AVUSearchInput || ''}
-                                                                id="answer-users-search"
-                                                                placeholder="Buscar por nome de usuário"
-                                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                                onChange={(e) => setAVUSearchInput(e.target.value)}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        searchAnswerUsers(AVUSearchInput);
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="col-auto">
-                                                            <RoundedButton
-                                                                hsl={[197, 43, 52]}
-                                                                onClick={() => searchAnswerUsers(AVUSearchInput)}
-                                                                icon="person_search"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row gy-2 mb-3">
-                                                        {searchedAnswerUsers.map((u) => (
-                                                            <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-lg-3">
+                                <div className="mb-3">
+                                    <label label="answer-visibility" className="form-label color-steel-blue fs-5 fw-medium">
+                                        Selecione a visibilidade das respostas da aplicação
+                                    </label>
+                                    <select
+                                        name="answer-visibility"
+                                        value={application.answersVisibility || ''}
+                                        id="answer-visibility"
+                                        form="application-form"
+                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                        onChange={(e) =>
+                                            setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))
+                                        }
+                                    >
+                                        <option value="">Selecione uma opção:</option>
+                                        {protocol.answersVisibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}
+                                        <option value="RESTRICT">Restringir visualizadores</option>
+                                    </select>
+                                </div>
+                                {application.answersVisibility === 'RESTRICT' && (
+                                    <div>
+                                        <fieldset>
+                                            <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                                <div className="col-12 col-xxl-auto">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-0">
+                                                        Selecione os usuários que visualizarão as respostas da aplicação:
+                                                    </p>
+                                                </div>
+                                                <div className="col">
+                                                    <input
+                                                        type="text"
+                                                        name="answer-users-search"
+                                                        value={AVUSearchInput || ''}
+                                                        id="answer-users-search"
+                                                        placeholder="Buscar por nome de usuário"
+                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                        onChange={(e) => setAVUSearchInput(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchAnswerUsers(AVUSearchInput);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchAnswerUsers(AVUSearchInput)}
+                                                        icon="person_search"
+                                                    />
+                                                </div>
+                                            </div>
+                                            {searchedAnswerUsers.length > 0 && (
+                                                <div className="row gy-2 mb-3">
+                                                    {searchedAnswerUsers.map((u) => (
+                                                        <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                            <div className="form-check">
                                                                 <input
                                                                     form="application-form"
                                                                     type="checkbox"
@@ -802,50 +804,51 @@ function CreateApplicationPage(props) {
                                                                     {u.username}
                                                                 </label>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                </fieldset>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </fieldset>
+                                    </div>
+                                )}
+                                {application.answersVisibility === 'RESTRICT' && (
+                                    <div>
+                                        <fieldset>
+                                            <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                                <div className="col-12 col-xxl-auto">
+                                                    <p className="form-label color-steel-blue fs-5 fw-medium mb-0">
+                                                        Selecione os grupos que visualizarão as respostas da aplicação:
+                                                    </p>
+                                                </div>
+                                                <div className="col">
+                                                    <input
+                                                        type="text"
+                                                        name="answer-classrooms-search"
+                                                        value={AVCSearchInput || ''}
+                                                        id="answer-classrooms-search"
+                                                        placeholder="Buscar por nome do grupo"
+                                                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                        onChange={(e) => setAVCSearchInput(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                                searchAnswerClassrooms(AVCSearchInput);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-auto">
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        onClick={() => searchAnswerClassrooms(AVCSearchInput)}
+                                                        icon="search"
+                                                    />
+                                                </div>
                                             </div>
-                                        )}
-                                        {application.answersVisibility === 'RESTRICT' && (
-                                            <div>
-                                                <fieldset>
-                                                    <div className="row gx-2 gy-0">
-                                                        <div className="col-12 col-md-auto">
-                                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-2">
-                                                                Selecione os grupos que visualizarão as respostas da aplicação:
-                                                            </p>
-                                                        </div>
-                                                        <div className="col">
-                                                            <input
-                                                                type="text"
-                                                                name="answer-classrooms-search"
-                                                                value={AVCSearchInput || ''}
-                                                                id="answer-classrooms-search"
-                                                                placeholder="Buscar por nome do grupo"
-                                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                                onChange={(e) => setAVCSearchInput(e.target.value)}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        searchAnswerClassrooms(AVCSearchInput);
-                                                                    }
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="col-auto">
-                                                            <RoundedButton
-                                                                hsl={[197, 43, 52]}
-                                                                onClick={() => searchAnswerClassrooms(AVCSearchInput)}
-                                                                icon="search"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row gy-2 mb-3">
-                                                        {searchedAnswerClassrooms.map((c) => (
-                                                            <div
-                                                                key={'answer-viewer-classroom-' + c.id}
-                                                                className="col-6 col-md-4 col-lg-3"
-                                                            >
+                                            {searchedAnswerClassrooms.length > 0 && (
+                                                <div className="row gy-2 mb-3">
+                                                    {searchedAnswerClassrooms.map((c) => (
+                                                        <div key={'answer-viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
+                                                            <div className="form-check">
                                                                 <input
                                                                     form="application-form"
                                                                     type="checkbox"
@@ -875,56 +878,50 @@ function CreateApplicationPage(props) {
                                                                     {c.name}
                                                                 </label>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                        )}
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row justify-content-center font-barlow gx-0">
-                            <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                                <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
-                                    <div className="col-3 col-md-2">
-                                        <TextButton
-                                            text={isEditing ? 'Concluir' : 'Criar'}
-                                            hsl={[97, 43, 70]}
-                                            onClick={() => {
-                                                showAlert({
-                                                    headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
-                                                    primaryBtnHsl: [355, 78, 66],
-                                                    primaryBtnLabel: 'Não',
-                                                    secondaryBtnHsl: [97, 43, 70],
-                                                    secondaryBtnLabel: 'Sim',
-                                                    onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                                });
-                                            }}
-                                        />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </fieldset>
                                     </div>
-                                    {isEditing && (
-                                        <div className="col-3 col-md-2">
-                                            <TextButton
-                                                text={'Excluir'}
-                                                hsl={[355, 78, 66]}
-                                                onClick={() => {
-                                                    showAlert({
-                                                        headerText: `Tem certeza que deseja excluir a aplicação?`,
-                                                        primaryBtnHsl: [355, 78, 66],
-                                                        primaryBtnLabel: 'Não',
-                                                        secondaryBtnHsl: [97, 43, 70],
-                                                        secondaryBtnLabel: 'Sim',
-                                                        onSecondaryBtnClick: () => deleteApplication(),
-                                                    });
-                                                }}
-                                            />
-                                        </div>
-                                    )}
+                                )}
+                            </form>
+                            <div className="row justify-content-center justify-content-lg-start gx-2">
+                                <div className="col-5 col-sm-3 col-xl-2">
+                                    <TextButton
+                                        text={isEditing ? 'Concluir' : 'Criar'}
+                                        hsl={[97, 43, 70]}
+                                        onClick={() => {
+                                            showAlert({
+                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} a sala de aula?`,
+                                                primaryBtnHsl: [355, 78, 66],
+                                                primaryBtnLabel: 'Não',
+                                                secondaryBtnHsl: [97, 43, 70],
+                                                secondaryBtnLabel: 'Sim',
+                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                            });
+                                        }}
+                                    />
                                 </div>
+                                {isEditing && (
+                                    <TextButton
+                                        text={'Excluir'}
+                                        hsl={[355, 78, 66]}
+                                        onClick={() => {
+                                            showAlert({
+                                                headerText: `Tem certeza que deseja excluir a aplicação?`,
+                                                primaryBtnHsl: [355, 78, 66],
+                                                primaryBtnLabel: 'Não',
+                                                secondaryBtnHsl: [97, 43, 70],
+                                                secondaryBtnLabel: 'Sim',
+                                                onSecondaryBtnClick: () => deleteApplication(),
+                                            });
+                                        }}
+                                    />
+                                )}
                             </div>
                         </div>
-                    </div>
+                    </CustomContainer>
                 </div>
             </div>
             <style>{style}</style>

@@ -23,6 +23,7 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import { brazilianStates } from '../utils/constants';
+import CustomContainer from '../components/CustomContainer';
 
 const style = `
     .font-barlow {
@@ -207,32 +208,27 @@ function CreateInstitutionPage(props) {
     }
 
     return (
-        <div className="d-flex flex-column vh-100">
-            <div className="row h-100 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column overflow-x-hidden h-100 p-0">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-md-10 p-4 pb-0">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
-                                {isEditing ? 'Editar' : 'Criar'} instituição
-                            </h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center flex-grow-1 overflow-hidden font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 p-4">
+                    <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
+                        <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">{isEditing ? 'Editar' : 'Criar'} instituição</h1>
+                        <div className="d-flex flex-column flex-grow-1">
                             <form
                                 name="institution-form"
+                                className="flex-grow-1 mb-4"
                                 ref={formRef}
                                 action="/submit"
                                 id="institution-form"
                                 onSubmit={(e) => submitInstitution(e)}
                             >
-                                <div>
+                                <div className="mb-3">
                                     <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
                                         Nome da instituição:
                                     </label>
@@ -242,14 +238,14 @@ function CreateInstitutionPage(props) {
                                         value={institution.name || ''}
                                         form="institution-form"
                                         id="name"
-                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         onChange={(e) => setInstitution({ ...institution, name: e.target.value })}
                                         minLength="1"
                                         maxLength="255"
                                         required
                                     />
                                 </div>
-                                <div>
+                                <div className="mb-3">
                                     <label label="type" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione o tipo da instituição
                                     </label>
@@ -257,7 +253,7 @@ function CreateInstitutionPage(props) {
                                         name="type"
                                         value={institution.type || ''}
                                         id="type"
-                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         form="institution-form"
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, type: e.target.value || undefined }))}
                                         required
@@ -279,7 +275,7 @@ function CreateInstitutionPage(props) {
                                         </option>
                                     </select>
                                 </div>
-                                <div>
+                                <div className="mb-3">
                                     <label label="type" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione o estado da instituição
                                     </label>
@@ -287,7 +283,7 @@ function CreateInstitutionPage(props) {
                                         name="state"
                                         value={state || ''}
                                         id="state"
-                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         form="institution-form"
                                         onChange={(e) => setLocation('', e.target.value)}
                                         required
@@ -310,7 +306,7 @@ function CreateInstitutionPage(props) {
                                         name="address-id"
                                         value={institution.addressId || ''}
                                         id="address-id"
-                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4 mb-3"
+                                        className="form-control bg-light-pastel-blue color-grey fw-medium fs-5 border-0 rounded-4"
                                         form="institution-form"
                                         disabled={!state}
                                         onChange={(e) => setInstitution((prev) => ({ ...prev, addressId: e.target.value || undefined }))}
@@ -327,12 +323,8 @@ function CreateInstitutionPage(props) {
                                     </select>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center font-barlow gx-0">
-                        <div className="col col-md-10 d-flex flex-column h-100 px-4">
-                            <div className="row justify-content-center justify-content-md-start gx-2 gy-4 mb-4">
-                                <div className="col-3 col-md-2">
+                            <div className="row justify-content-center justify-content-lg-start gx-2">
+                                <div className="col-5 col-sm-3 col-xl-2">
                                     <TextButton
                                         text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
@@ -349,7 +341,7 @@ function CreateInstitutionPage(props) {
                                     />
                                 </div>
                                 {isEditing && (
-                                    <div className="col-3 col-md-2">
+                                    <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton
                                             text={'Excluir'}
                                             hsl={[355, 78, 66]}
@@ -368,7 +360,7 @@ function CreateInstitutionPage(props) {
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </CustomContainer>
                 </div>
             </div>
             <style>{style}</style>
