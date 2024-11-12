@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import TextButton from '../../TextButton';
 
 const styles = `
@@ -25,27 +25,26 @@ const styles = `
 `;
 
 function SelectInput(props) {
-    const { onAnswerChange, item, group, galleryRef } = props;
-    const [options, setOptions] = useState({});
+    const { onAnswerChange, item, answer, galleryRef, disabled } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
+
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };
 
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'OPTION', options);
-    }, [options, item.id, onAnswerChange, group]);
-
     const handleOptionsUpdate = (optionId) => {
-        setOptions(() => {
-            const newOptions = {};
-            // eslint-disable-next-line
-            if (optionId != -1) {
-                newOptions[optionId] = '';
-            }
-            return newOptions;
-        });
+        const newOptions = {};
+        if (optionId !== -1) {
+            newOptions[optionId] = '';
+        }
+        updateAnswer({ ...newOptions, group: answer.group });
     };
 
     return (
@@ -92,13 +91,15 @@ function SelectInput(props) {
             <div className="row px-0 py-2 m-0">
                 <select
                     className="form-select border border-dark-subtle px-2 py-0"
-                    defaultValue="-1"
                     onChange={(e) => handleOptionsUpdate(e.target.value)}
+                    value={Object.keys(answer)[0] || -1}
                 >
                     <option value="-1" label="Selecione uma opção:"></option>
                     {item.itemOptions.map((option) => {
                         const optname = option.text.toLowerCase().replace(/\s/g, '');
-                        return <option key={optname + 'input' + item.id} value={option.id} label={option.text}></option>;
+                        return (
+                            <option key={optname + 'input' + item.id} value={option.id} label={option.text} disabled={disabled}></option>
+                        );
                     })}
                 </select>
             </div>

@@ -10,10 +10,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import React, { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
+import { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { Modal, Carousel } from 'bootstrap';
 import RoundedButton from './RoundedButton';
-import iconExit from '../assets/images/ExitSidebarIcon.svg';
 import baseUrl from '../contexts/RouteContext.js';
 
 const GalleryModalStyles = `
@@ -31,7 +30,7 @@ const GalleryModalStyles = `
 `;
 
 const GalleryModal = forwardRef((props, ref) => {
-    const [modal, setModal] = useState(props);
+    const [modal, setModal] = useState({ id: 'Gallery', currentImage: 0, images: [] });
 
     const handleSlide = useCallback((event) => {
         const targetId = event.to;
@@ -56,13 +55,13 @@ const GalleryModal = forwardRef((props, ref) => {
             Modal.getOrCreateInstance(alert).show();
 
             const carousel = document.getElementById(modal.id + '-carousel');
-            carousel.addEventListener('slide.bs.carousel', handleSlide);
+            carousel.addEventListener('slid.bs.carousel', handleSlide);
             Carousel.getOrCreateInstance(carousel).to(modalData.currentImage);
         }
     };
 
     const hideModal = () => {
-        document.getElementById(modal.id + '-carousel').removeEventListener('slide.bs.carousel', handleSlide);
+        document.getElementById(modal.id + '-carousel').removeEventListener('slid.bs.carousel', handleSlide);
         Modal.getInstance(document.getElementById(modal.id)).hide();
     };
 
@@ -72,66 +71,72 @@ const GalleryModal = forwardRef((props, ref) => {
 
     return (
         <div className="modal fade" id={modal.id} tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content rounded-4">
-                    <div className="modal-header">
-                        <h5 className="modal-title font-century-gothic color-dark-gray text-center text-nowrap fs-3 fw-bold">
+            <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div className="modal-content rounded-4 h-75">
+                    <div className="modal-header d-flex justify-content-between">
+                        <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
                             Figura {modal.currentImage + 1}
                         </h5>
-                        <div className="d-flex flex-grow-1 flex-column align-items-end">
-                            <RoundedButton hsl={[355, 78, 66]} icon={iconExit} onClick={hideModal} />
-                        </div>
+                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} />
                     </div>
 
                     <div className="modal-body">
-                        <div id={modal.id + '-carousel'} className="carousel slide">
+                        <div id={modal.id + '-carousel'} className="carousel carousel-dark slide d-flex h-100 w-100">
                             <div className="carousel-inner">
                                 {modal.images.map((image, index) => {
                                     return (
                                         <div
-                                            className={`carousel-item ${modal.currentImage === index && 'active'}`}
+                                            className={`carousel-item h-100 w-100 ${modal.currentImage === index && 'd-flex active'}`}
                                             key={`gallery-img-${image.id}`}
                                         >
-                                            <img
-                                                src={baseUrl + 'api/' + image.path}
-                                                className="d-block rounded-4 w-100"
-                                                alt={'Figura' + index + 1}
-                                            ></img>
+                                            <div className="d-flex justify-content-center align-items-center rounded-4 h-100 w-100 p-0 m-0">
+                                                <img
+                                                    src={baseUrl + 'api/' + image.path}
+                                                    className="w-auto h-auto mh-100 mw-100 object-fit-contain rounded-4"
+                                                    alt={'Figura' + index + 1}
+                                                ></img>
+                                            </div>
                                         </div>
                                     );
                                 })}
                             </div>
-                            <button
-                                className="carousel-control-prev"
-                                type="button"
-                                data-bs-target={'#' + modal.id + '-carousel'}
-                                data-bs-slide="prev"
-                            >
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button
-                                className="carousel-control-next"
-                                type="button"
-                                data-bs-target={'#' + modal.id + '-carousel'}
-                                data-bs-slide="next"
-                            >
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
+                            {modal.images.length > 1 && (
+                                <button
+                                    className="carousel-control-prev"
+                                    type="button"
+                                    data-bs-target={'#' + modal.id + '-carousel'}
+                                    data-bs-slide="prev"
+                                >
+                                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Previous</span>
+                                </button>
+                            )}
+
+                            {modal.images.length > 1 && (
+                                <button
+                                    className="carousel-control-next"
+                                    type="button"
+                                    data-bs-target={'#' + modal.id + '-carousel'}
+                                    data-bs-slide="next"
+                                >
+                                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Next</span>
+                                </button>
+                            )}
                         </div>
                     </div>
+                    {modal.images[modal.currentImage]?.description && (
+                        <div className="modal-footer d-flex justify-content-center">
+                            <p className="text-center color-dark-gray font-barlow fw-medium fs-6 lh-sm m-0 p-0">
+                                {modal.images[modal.currentImage]?.description}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
             <style>{GalleryModalStyles}</style>
         </div>
     );
 });
-
-GalleryModal.defaultProps = {
-    id: 'Gallery',
-    currentImage: 0,
-    images: [],
-};
 
 export default GalleryModal;

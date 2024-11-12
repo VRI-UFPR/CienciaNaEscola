@@ -10,8 +10,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import React from 'react';
-
 const TextButtonStyles = (hue, sat, lig) => {
     return `
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig} {
@@ -28,24 +26,37 @@ const TextButtonStyles = (hue, sat, lig) => {
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
         }
 
-        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus, .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
             color: #fff !important;
             background-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%) !important;
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
-            box-shadow: 0 0 0 0.25rem hsla(${hue}, ${sat}%, ${+lig * 0.7}%, 0.5);
+            box-shadow: inset 0px 4px 4px 0px #00000040;
+        }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus {
+            color: #fff !important;
+            background-color: hsl(${hue}, ${sat}%, ${lig}%);
+            border-color: hsl(${hue}, ${sat}%, ${lig}%);
+            box-shadow: none;
+        }
+
+        .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:disabled {
+            background-color: hsl(0,0%,85%) !important;
+            border-color: hsl(0,0%,60%);
+            box-shadow: none;
         }
     `;
 };
 
 function TextButton(props) {
     const {
-        hsl: [hue, sat, lig],
-        text,
+        hsl: [hue, sat, lig] = [0, 0, 0],
+        text = 'Button',
         className,
-        type,
-        onClick,
-        role,
-        overWriteStyles,
+        type = 'button',
+        onClick = () => undefined,
+        role = undefined,
+        overWriteStyles = false,
     } = props;
     return (
         <button
@@ -63,14 +74,5 @@ function TextButton(props) {
         </button>
     );
 }
-
-TextButton.defaultProps = {
-    hsl: [0, 0, 0],
-    text: 'Button',
-    type: 'button',
-    role: undefined,
-    overWriteStyles: false,
-    onClick: () => undefined,
-};
 
 export default TextButton;

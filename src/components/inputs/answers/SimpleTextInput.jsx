@@ -10,7 +10,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useEffect, useState } from 'react';
 import MarkdownText from '../../MarkdownText';
 import Gallery from '../../Gallery';
 
@@ -34,11 +33,11 @@ const styles = `
 `;
 
 function SimpleTextInput(props) {
-    const [answer, setAnswer] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group, galleryModalRef } = props;
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', answer);
-    }, [answer, item.id, onAnswerChange, group]);
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
+
+    const updateAnswer = (newAnswer) => {
+        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+    };
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
@@ -52,8 +51,10 @@ function SimpleTextInput(props) {
                 type={item.type === 'NUMBERBOX' ? 'number' : 'text'}
                 className="simple-text-input form-control rounded-0 shadow-none bg-dark-grey font-barlow fw-medium fs-6 mb-3 p-0"
                 id="simpletextinput"
+                value={answer.text}
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => setAnswer((prevText) => ({ ...prevText, text: e.target.value }))}
+                onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
+                disabled={disabled}
             ></input>
             <style>{styles}</style>
         </div>

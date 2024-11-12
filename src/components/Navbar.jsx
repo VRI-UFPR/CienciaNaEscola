@@ -10,10 +10,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React } from 'react';
 import titleCE from '../assets/images/titleCE.svg';
-import iconToggler from '../assets/images/navToggler.svg';
 import ColoredBorder from './ColoredBorder';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .ce-navbar {
@@ -28,13 +27,13 @@ const styles = `
         max-width: 300px;
     }
 
-    .icon-toggler{
-        max-width: 50px;
+    .icon-toggler:hover{
+        color: #e8e8e8 !important;
     }
 `;
 
 function NavBar(props) {
-    const { showNavTogglerMobile, showNavTogglerDesktop } = props;
+    const { showNavTogglerMobile = true, showNavTogglerDesktop = true } = props;
 
     return (
         <>
@@ -43,15 +42,15 @@ function NavBar(props) {
                 <div className="row justify-content-between align-items-center w-100 px-4 py-3 m-0">
                     <div className="col-2 d-flex justify-content-start p-0">
                         <button
-                            className={`navbar-toggler icon-toggler btn border-0 h-auto shadow-none p-1 ${
-                                showNavTogglerMobile ? 'd-flex' : 'd-none'
-                            } ${showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'}`}
+                            className={`navbar-toggler btn border-0 h-auto shadow-none ${showNavTogglerMobile ? 'd-flex' : 'd-none'} ${
+                                showNavTogglerDesktop ? 'd-lg-flex' : 'd-lg-none'
+                            } flex-column`}
                             type="button"
                             data-bs-toggle="offcanvas"
                             data-bs-target="#sidebar"
                             aria-controls="sidebar"
                         >
-                            <img src={iconToggler} width="100%" alt="Ícone"></img>
+                            <MaterialSymbol className="icon-toggler" icon="menu" size={40} weight={700} fill color="#FFFFFF" />
                         </button>
                     </div>
                     <div className="col-7 d-flex justify-content-center p-0">
@@ -64,10 +63,5 @@ function NavBar(props) {
         </>
     );
 }
-
-NavBar.defaultProps = {
-    showNavTogglerDesktop: true,
-    showNavTogglerMobile: true,
-};
 
 export default NavBar;

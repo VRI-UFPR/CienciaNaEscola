@@ -10,10 +10,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import React from 'react';
-
-import pinkArrow from '../assets/images/pinkArrow.svg';
-
 const styles = `
     .font-barlow {
         font-family: 'Barlow', sans-serif;
@@ -47,12 +43,12 @@ function HomeArrows(props) {
     return (
         <div className="general d-flex container-fluid align-itens-center justify-content-between mt-3 p-0">
             <div className="d-flex align-items-center justify-content-center">
-                <img src={pinkArrow} alt="Seta" className="leftArrow"></img>
+                {/* <img src={pinkArrow} alt="Seta" className="leftArrow"></img> */}
                 <span className="arrowText d-flex">Voltar</span>
             </div>
             <div className="d-flex align-items-center justify-content-center">
                 <span className="arrowText">Ver mais</span>
-                <img src={pinkArrow} alt="Seta" className="rightArrow"></img>
+                {/* <img src={pinkArrow} alt="Seta" className="rightArrow"></img> */}
             </div>
             <style>{styles}</style>
         </div>

@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import MarkdownText from '../../MarkdownText';
 import Gallery from '../../Gallery';
 
@@ -23,25 +23,35 @@ const styles = `
         background-color: #D9D9D9
     }
 
-    .color-dark-gray {
-        color: #535353;
+    .form-check-input {
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check-input:focus {
+        border: 0;
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    .form-check input:checked {
+        border: 0;
+        background-color: #91CAD6;
     }
 `;
 
 function RadioButtonInput(props) {
-    const { onAnswerChange, item, group, galleryModalRef } = props;
-    const [options, setOptions] = useState({});
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
-    useEffect(() => {
-        onAnswerChange(group, item.id, 'OPTION', options);
-    }, [options, item.id, onAnswerChange, group]);
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
 
     const handleOptionsUpdate = (optionId) => {
-        setOptions(() => {
-            const newOptions = {};
-            newOptions[optionId] = '';
-            return newOptions;
-        });
+        const newOptions = {};
+        newOptions[optionId] = '';
+        updateAnswer({ ...newOptions, group: answer.group });
     };
 
     return (
@@ -58,16 +68,15 @@ function RadioButtonInput(props) {
                     return (
                         <div key={optname + 'input' + item.id} className="form-check m-0 mb-3 pe-0">
                             <input
-                                className={`form-check-input bg-grey`}
+                                className={`form-check-input border-0 bg-grey`}
                                 type="radio"
                                 name={'radiooptions' + item.id}
                                 id={optname + 'input' + item.id}
+                                checked={answer[option.id] !== undefined}
                                 onChange={() => handleOptionsUpdate(option.id)}
+                                disabled={disabled}
                             ></input>
-                            <label
-                                className={`form-check-label color-dark-gray font-barlow fw-medium fs-6`}
-                                htmlFor={optname + 'input' + item.id}
-                            >
+                            <label className={`form-check-label font-barlow fw-medium fs-6`} htmlFor={optname + 'input' + item.id}>
                                 {option.text}
                             </label>
                             <Gallery className="mt-1" item={option} galleryModalRef={galleryModalRef} />

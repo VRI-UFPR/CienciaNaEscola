@@ -10,12 +10,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useState, useRef } from 'react';
+import { useState, useContext } from 'react';
 import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import axios from 'axios';
-import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { AlertContext } from '../contexts/AlertContext';
 
 const signUpPageStyles = `
     .font-barlow {
@@ -66,7 +66,7 @@ function SignUpPage(props) {
     /*  const [username, setUsername] = useState('');
     const [institution, setInstitution] = useState('');
     const [role, setRole] = useState(''); */
-    const modalRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
     const validateEmptyFields = () => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
@@ -107,23 +107,24 @@ function SignUpPage(props) {
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: preencha todos os campos' });
+            showAlert({ headerText: 'Falha no cadastro: preencha todos os campos.' });
         } else if (!validateEmail()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: email inválido' });
+            showAlert({ headerText: 'Falha no cadastro: email inválido.' });
         } else if (!validateName()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: nome inválido' });
+            showAlert({ headerText: 'Falha no cadastro: nome inválido.' });
         } else if (!validatePassword()) {
-            modalRef.current.showModal({
-                title: 'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula',
+            showAlert({
+                headerText:
+                    'Falha no cadastro: a senha deve ter ao menos oito dígitos, caractere especial, letra maiúscula e letra minúscula.',
             });
         } else if (!validatePasswordMatch()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: as senhas não coincidem' });
+            showAlert({ headerText: 'Falha no cadastro: as senhas não coincidem.' });
             /*  } else if (!validateUsername()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: nome de usuário inválido' });
+            showAlert({ headerText: 'Falha no cadastro: nome de usuário inválido' });
         } else if (!validateInstitution()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: insituição inválida' });
+            showAlert({ headerText: 'Falha no cadastro: insituição inválida' });
         } else if (!validateRole()) {
-            modalRef.current.showModal({ title: 'Falha no cadastro: função inválida' }); */
+            showAlert({ headerText: 'Falha no cadastro: função inválida' }); */
         } else {
             axios
                 .post('https://genforms.c3sl.ufpr.br/api/user/signUp', {
@@ -133,9 +134,9 @@ function SignUpPage(props) {
                 })
                 .then((response) => {
                     if (response.data.message === 'User registered with sucess.') {
-                        modalRef.current.showModal({ title: 'Cadastrado com sucesso', onHide: () => navigate('/login') });
+                        showAlert({ headerText: 'Cadastrado com sucesso.', onPrimaryBtnClick: () => navigate('/signin') });
                     } else {
-                        modalRef.current.showModal({ title: 'Falha no cadastro: erro no servidor' });
+                        showAlert({ headerText: 'Falha no cadastro: erro no servidor.' });
                     }
                 })
                 .catch((error) => {
@@ -269,12 +270,9 @@ function SignUpPage(props) {
                 </div>
             </div>
 
-            <Alert id="SignUpModal" ref={modalRef} />
             <style>{signUpPageStyles}</style>
         </div>
     );
 }
-
-SignUpPage.defaultProps = {};
 
 export default SignUpPage;

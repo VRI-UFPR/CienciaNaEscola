@@ -1,0 +1,43 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+$utilities: map-merge(
+    $utilities,
+    (
+        'max-width': (
+            property: max-width,
+            class: mw,
+            values: (
+                150: 150px,
+                100: 100%,
+                75: 75%,
+                50: 50%,
+                25: 25%,
+            ),
+        ),
+        'min-width': (
+            property: min-width,
+            class: miw,
+            values: (
+                200: 200px,
+                150: 150px,
+                100: 100px,
+                80: 80px,
+            ),
+        ),
+        'max-height': (
+            property: max-height,
+            class: mh,
+            values: (
+                100: 100%,
+                90: 90px,
+            ),
+        ),
+    )
+);
+
+@import 'bootstrap/scss/utilities/api';

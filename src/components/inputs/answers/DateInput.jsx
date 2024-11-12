@@ -10,8 +10,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { React, useEffect, useState } from 'react';
-import iconDate from '../../../assets/images/iconDate.svg';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
     .font-barlow {
@@ -44,27 +44,45 @@ const styles = `
 `;
 
 function DateInput(props) {
-    const [date, setDate] = useState({ text: '', files: [] });
-    const { onAnswerChange, item, group } = props;
+    const { onAnswerChange, item, answer, disabled } = props;
+    const iconContainerRef = useRef(null);
+    const [iconSize, setIconSize] = useState(0);
 
-    useEffect(() => {
-        const date = new Date();
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear());
-        setDate((prev) => ({ ...prev, text: `${year}-${month}-${day}` }));
+    const updateIconSize = useCallback(() => {
+        setIconSize(iconContainerRef.current.offsetWidth);
     }, []);
 
     useEffect(() => {
-        onAnswerChange(group, item.id, 'ITEM', date);
-    }, [date, item.id, onAnswerChange, group]);
+        updateIconSize();
+        window.addEventListener('resize', updateIconSize);
+        return () => {
+            window.removeEventListener('resize', updateIconSize);
+        };
+    }, [updateIconSize]);
+
+    const updateAnswer = useCallback(
+        (newAnswer) => {
+            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+        },
+        [onAnswerChange, answer.group, item]
+    );
+
+    useEffect(() => {
+        if (!answer.text) {
+            const date = new Date();
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear());
+            updateAnswer({ ...answer, text: `${year}-${month}-${day}` });
+        }
+    }, [answer, updateAnswer]);
 
     return (
         <div className="rounded-4 shadow bg-white overflow-hidden font-barlow p-0">
             <div className="row overflow-hidden m-0">
                 <div className="col-2 d-flex bg-pastel-blue p-0">
-                    <div className="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto">
-                        <img src={iconDate} alt="Ícone de calendário" />
+                    <div className="date-icon ratio ratio-1x1 align-self-center w-50 mx-auto" ref={iconContainerRef}>
+                        <MaterialSymbol icon="calendar_month" size={iconSize} fill color="#FFFFFF" />
                     </div>
                 </div>
                 <div className="col p-3">
@@ -78,8 +96,9 @@ function DateInput(props) {
                             type="date"
                             className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            onChange={(e) => setDate((prev) => ({ ...prev, text: e.target.value }))}
-                            defaultValue={date.text}
+                            onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
+                            value={answer.text}
+                            disabled={disabled}
                         ></input>
                     </div>
                 </div>
