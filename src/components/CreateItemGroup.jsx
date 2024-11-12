@@ -245,18 +245,8 @@ function CreateItemGroup(props) {
                         {(() => {
                             switch (item.type) {
                                 case 'TEXTBOX':
-                                    return (
-                                        <CreateTextBoxInput
-                                            currentItem={item}
-                                            pageIndex={itemTarget.page}
-                                            groupIndex={itemTarget.group}
-                                            itemIndex={itemIndex}
-                                            updateItem={updateItem}
-                                            removeItem={removeItem}
-                                            updateItemPlacement={updateItemPlacement}
-                                            insertItemValidation={insertItemValidation}
-                                        />
-                                    );
+                                case 'TEXT':
+                                case 'UPLOAD':
                                 case 'NUMBERBOX':
                                     return (
                                         <CreateTextBoxInput
@@ -266,7 +256,6 @@ function CreateItemGroup(props) {
                                             itemIndex={itemIndex}
                                             updateItem={updateItem}
                                             removeItem={removeItem}
-                                            isNumberBox={true}
                                             updateItemPlacement={updateItemPlacement}
                                             insertItemValidation={insertItemValidation}
                                         />
