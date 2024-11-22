@@ -19,6 +19,7 @@ import { StorageProvider } from './contexts/StorageContext';
 import appRoutes from './routes/AppRoutes';
 import { AlertProvider } from './contexts/AlertContext';
 import 'react-material-symbols/rounded';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 const styles = ``;
 
@@ -28,6 +29,7 @@ function App(props) {
             <AuthProvider>
                 <AlertProvider>
                     <RouterProvider router={createBrowserRouter(appRoutes)} />
+                    <ScrollToTopButton />
                     <style> {styles} </style>
                 </AlertProvider>
             </AuthProvider>
