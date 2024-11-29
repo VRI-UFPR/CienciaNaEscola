@@ -38,11 +38,6 @@ const style = `
     .color-grey {
         color: #535353;
     }
-
-    .scrollbar-none::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-    }
         
     .m-vh-80 {
         max-height: 80vh;

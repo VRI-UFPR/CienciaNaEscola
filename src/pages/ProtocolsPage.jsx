@@ -43,11 +43,6 @@ const style = `
         max-height: 80vh;
     }
 
-    .scrollbar-none::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-    }
-
     @media (min-width: 992px) {
         .position-lg-sticky {
             position: sticky !important;
