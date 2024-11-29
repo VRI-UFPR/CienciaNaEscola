@@ -62,10 +62,6 @@ const style = `
             overflow-y: hidden !important;
         }
     }
-
-    .border-box {
-        box-sizing: border-box;
-    }
 `;
 
 function ProtocolsPage(props) {
@@ -130,14 +126,14 @@ function ProtocolsPage(props) {
     return (
         <div className="d-flex flex-column vh-100">
             <div className="row align-items-stretch h-100 g-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
+                <div className="col-auto d-flex bg-coral-red position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
                 <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="p-4 border-box d-flex flex-column flex-grow-1 overflow-y-auto">
+                    <div className="d-flex flex-column flex-grow-1 overflow-y-auto p-4">
                         <CustomContainer
                             className="font-barlow flex-grow-1 overflow-lg-y-hidden"
                             childrenClassName="mh-100"
@@ -145,12 +141,10 @@ function ProtocolsPage(props) {
                             md="10"
                         >
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Protocolos</h1>
-                            <div class="row g-4 flex-grow-1 overflow-lg-y-hidden pb-lg-4">
+                            <div class="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
                                 {user.role !== 'USER' && user.role !== 'APPLIER' && (
                                     <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
-                                        <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">
-                                            Meus protocolos
-                                        </h1>
+                                        <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">Meus protocolos</h1>
                                         <ProtocolList
                                             listItems={visibleProtocols
                                                 .filter((p) => p.creator.id === user.id)
@@ -165,9 +159,7 @@ function ProtocolsPage(props) {
                                     </div>
                                 )}
                                 <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
-                                    <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">
-                                        Protocolos disponíveis
-                                    </h1>
+                                    <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">Protocolos disponíveis</h1>
                                     <ProtocolList
                                         listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}
                                         hsl={[16, 100, 88]}
