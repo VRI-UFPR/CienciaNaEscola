@@ -65,7 +65,7 @@ function ProtocolList(props) {
         <div
             className={` list-container-${
                 'hsl-' + hue + '-' + sat + '-' + lig
-            } d-flex flex-column flex-grow-1 rounded-4 w-100 m-0 p-0 px-4 py-4`}
+            } d-flex flex-column flex-grow-1 rounded-4 w-100 m-0 p-0 px-4 py-4 overflow-hidden`}
         >
             <div
                 className={`button-list-${

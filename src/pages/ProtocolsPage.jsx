@@ -24,6 +24,7 @@ import ProtocolList from '../components/ProtocolList';
 import ErrorPage from './ErrorPage';
 import { AlertContext } from '../contexts/AlertContext';
 import { StorageContext } from '../contexts/StorageContext';
+import CustomContainer from '../components/CustomContainer';
 
 const style = `
     .font-barlow {
@@ -38,20 +39,32 @@ const style = `
         color: #535353;
     }
 
+    .m-vh-80 {
+        max-height: 80vh;
+    }
+
     .scrollbar-none::-webkit-scrollbar {
         width: 0px;
         height: 0px;
     }
 
     @media (min-width: 992px) {
-      .position-lg-sticky {
-        position: sticky !important;
-        top: 0;
-      }
+        .position-lg-sticky {
+            position: sticky !important;
+            top: 0;
+        }
 
-      .h-lg-100 {
-        height: 100% !important;
-      }
+        .h-lg-100 {
+            height: 100% !important;
+        }
+
+        .overflow-lg-y-hidden {
+            overflow-y: hidden !important;
+        }
+    }
+
+    .border-box {
+        box-sizing: border-box;
     }
 `;
 
@@ -116,66 +129,68 @@ function ProtocolsPage(props) {
 
     return (
         <div className="d-flex flex-column vh-100">
-            <div className="row h-100 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky h-100 top-0 p-0">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className="col-auto bg-coral-red d-flex position-lg-sticky top-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red d-flex w-auto" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column h-100 p-0 pb-4">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
-                    <div className="row align-items-center justify-content-center font-barlow m-0">
-                        <div className="col-12 col-lg-10 p-4">
-                            <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">Protocolos</h1>
-                        </div>
-                    </div>
-                    <div className="row justify-content-center font-barlow flex-grow-1 m-0 overflow-y-scroll scrollbar-none pb-4">
-                        {user.role !== 'USER' && user.role !== 'APPLIER' && (
-                            <div className="col-12 col-lg-10 col-xl-5 d-flex flex-column mh-100 h-lg-100 p-4 py-0">
-                                <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Meus protocolos</h1>
-                                <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
+                    <div className="p-4 border-box d-flex flex-column flex-grow-1 overflow-y-auto">
+                        <CustomContainer
+                            className="font-barlow flex-grow-1 overflow-lg-y-hidden"
+                            childrenClassName="mh-100"
+                            df="12"
+                            md="10"
+                        >
+                            <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Protocolos</h1>
+                            <div class="row g-4 flex-grow-1 overflow-lg-y-hidden pb-lg-4">
+                                {user.role !== 'USER' && user.role !== 'APPLIER' && (
+                                    <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
+                                        <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">
+                                            Meus protocolos
+                                        </h1>
+                                        <ProtocolList
+                                            listItems={visibleProtocols
+                                                .filter((p) => p.creator.id === user.id)
+                                                .map((p) => ({ id: p.id, title: p.title }))}
+                                            hsl={[36, 98, 83]}
+                                            allowEdit={true}
+                                            allowDelete={true}
+                                            viewFunction={(id) => navigate(`${id}`)}
+                                            editFunction={(id) => navigate(`${id}/manage`)}
+                                            deleteFunction={(id) => deleteProtocol(id)}
+                                        />
+                                    </div>
+                                )}
+                                <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
+                                    <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">
+                                        Protocolos disponíveis
+                                    </h1>
                                     <ProtocolList
-                                        listItems={visibleProtocols
-                                            .filter((p) => p.creator.id === user.id)
-                                            .map((p) => ({ id: p.id, title: p.title }))}
-                                        hsl={[36, 98, 83]}
-                                        allowEdit={true}
-                                        allowDelete={true}
+                                        listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}
+                                        hsl={[16, 100, 88]}
                                         viewFunction={(id) => navigate(`${id}`)}
-                                        editFunction={(id) => navigate(`${id}/manage`)}
-                                        deleteFunction={(id) => deleteProtocol(id)}
                                     />
                                 </div>
                             </div>
-                        )}
-                        <div
-                            className={`col-12 col-lg-10 col-xl-5 d-flex flex-column mh-100 h-lg-100 p-4 pb-0 pt-lg-0 ${
-                                user.role !== 'USER' && user.role !== 'APPLIER' ? 'col-lg-5' : ''
-                            }`}
-                        >
-                            <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Protocolos disponíveis</h1>
-                            <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                <ProtocolList
-                                    listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}
-                                    hsl={[16, 100, 88]}
-                                    viewFunction={(id) => navigate(`${id}`)}
-                                />
-                            </div>
-                        </div>
+                            {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
+                                <div className="row justify-content-center justify-content-lg-start gx-2">
+                                    <div className="col-10 col-sm-6 col-md-5 col-xl-4 col-xxl-3">
+                                        <TextButton
+                                            text={'Criar novo protocolo'}
+                                            hsl={[97, 43, 70]}
+                                            className="mt-4"
+                                            onClick={() => {
+                                                navigate('create');
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </CustomContainer>
                     </div>
-                    {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
-                        <div className="row d-flex justify-content-center pt-4 m-0">
-                            <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
-                                <TextButton
-                                    text={'Criar novo protocolo'}
-                                    hsl={[97, 43, 70]}
-                                    onClick={() => {
-                                        navigate('create');
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
             <style>{style}</style>
