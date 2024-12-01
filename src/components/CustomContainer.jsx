@@ -11,7 +11,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 */
 
 function CustomContainer(props) {
-    const { df = 'auto', sm, md, lg, xl, xxl, className, children } = props;
+    const { df = 'auto', sm, md, lg, xl, xxl, className, childrenClassName, children } = props;
 
     const colClass = [
         `col-${df}`,
@@ -20,6 +20,7 @@ function CustomContainer(props) {
         lg && `col-lg-${lg}`,
         xl && `col-xl-${xl}`,
         xxl && `col-xxl-${xxl}`,
+        childrenClassName,
     ]
         .filter(Boolean)
         .join(' ');
