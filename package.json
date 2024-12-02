@@ -34,8 +34,7 @@
         "build": "react-app-rewired build",
         "test": "react-app-rewired test",
         "eject": "react-app-rewired eject",
-        "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,jsx}\"",
-        "docker-back": "cp ./form-creator-back/form-creator-api/config/config.env.example ./form-creator-back/form-creator-api/config/config.env && cp ./form-creator-back/form-creator-api/config/test.env.example ./form-creator-back/form-creator-api/config/test.env && docker-compose --file ./form-creator-back/form-creator-api/docker-compose.yaml up --build"
+        "prettier": "prettier --config .prettierrc --write \"src/**/*.{js,jsx}\""
     },
     "eslintConfig": {
         "extends": [

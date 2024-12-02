@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
@@ -77,7 +76,7 @@ function ProtocolsPage(props) {
                 return;
             }
             axios
-                .get(baseUrl + `api/protocol/getVisibleProtocols`, {
+                .get(process.env.REACT_APP_API_URL + `api/protocol/getVisibleProtocols`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
@@ -92,7 +91,7 @@ function ProtocolsPage(props) {
 
     const deleteProtocol = (protocolId) => {
         axios
-            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/protocol/deleteProtocol/${protocolId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
