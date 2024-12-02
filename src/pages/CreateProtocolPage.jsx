@@ -51,29 +51,30 @@ const CreateProtocolStyles = `
     }
 
     .bg-light-grey,
-    .bg-light-grey:focus,
-    .bg-light-grey:active {
+    .light-grey-input,
+    .light-grey-input:focus,
+    .light-grey-input:active {
         background-color: #D9D9D9;
         border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus,
-    .bg-light-grey:active,
-    .bg-light-pastel-blue:focus,
-    .bg-light-pastel-blue:active {
+    .light-grey-input:focus,
+    .light-grey-input:active,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
         box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-grey:disabled,
-    .bg-light-pastel-blue:disabled{
+    .light-grey-input:disabled,
+    .pastel-blue-input:disabled{
         background-color: hsl(0,0%,85%) !important;
         border-color: hsl(0,0%,60%);
         box-shadow: none;
     }
 
-    .bg-light-pastel-blue,
-    .bg-light-pastel-blue:focus,
-    .bg-light-pastel-blue:active {
+    .pastel-blue-input,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
         background-color: #b8d7e3;
         border-color: #b8d7e3;
     }
@@ -130,6 +131,11 @@ const CreateProtocolStyles = `
     .scrollbar-none::-webkit-scrollbar {
         width: 0px;
         height: 0px;
+    }
+
+    .border-bottom.border-steel-blue:focus,
+    .border-bottom.border-steel-blue:active {
+        box-shadow: inset 0 -8px 8px -9px #00000040;
     }
 `;
 
