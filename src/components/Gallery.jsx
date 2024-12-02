@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useState } from 'react';
 import TextButton from './TextButton';
-import baseUrl from '../contexts/RouteContext.js';
 
 const galleryStyles = `
     .img-gallery{
@@ -47,7 +46,7 @@ function Gallery(props) {
                                     onClick={() => galleryModalRef.current.showModal({ images: item.files, currentImage: index })}
                                 >
                                     <img
-                                        src={baseUrl + 'api/' + image.path}
+                                        src={process.env.REACT_APP_API_URL + 'api/' + image.path}
                                         className="img-fluid object-fit-contain w-100"
                                         alt="Responsive"
                                     />

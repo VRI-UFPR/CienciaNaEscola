@@ -14,7 +14,6 @@ import { useContext, useEffect } from 'react';
 import RoundedButton from './RoundedButton';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
 import { MaterialSymbol } from 'react-material-symbols';
@@ -38,7 +37,7 @@ function CreateProtocolProperties(props) {
     const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -86,7 +85,7 @@ function CreateProtocolProperties(props) {
     const searchClassrooms = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,

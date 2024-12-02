@@ -14,7 +14,6 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import ErrorPage from './ErrorPage';
 import SplashPage from './SplashPage';
@@ -146,7 +145,7 @@ function CreateClassroomPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/classroom/getClassroom/${classroomId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/classroom/getClassroom/${classroomId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -166,7 +165,7 @@ function CreateClassroomPage(props) {
             if (institutionId || user.institutionId) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -189,7 +188,7 @@ function CreateClassroomPage(props) {
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -224,7 +223,7 @@ function CreateClassroomPage(props) {
         if (classroom.users.length >= 2) {
             if (isEditing) {
                 axios
-                    .put(`${baseUrl}api/classroom/updateClassroom/${classroomId}`, formData, {
+                    .put(`${process.env.REACT_APP_API_URL}api/classroom/updateClassroom/${classroomId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
@@ -246,7 +245,7 @@ function CreateClassroomPage(props) {
                     });
             } else {
                 axios
-                    .post(`${baseUrl}api/classroom/createClassroom`, formData, {
+                    .post(`${process.env.REACT_APP_API_URL}api/classroom/createClassroom`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
@@ -276,7 +275,7 @@ function CreateClassroomPage(props) {
 
     const deleteClassroom = () => {
         axios
-            .delete(`${baseUrl}api/classroom/deleteClassroom/${classroomId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/classroom/deleteClassroom/${classroomId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

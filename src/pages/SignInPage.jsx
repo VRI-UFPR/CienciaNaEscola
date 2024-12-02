@@ -17,7 +17,6 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import TextButton from '../components/TextButton';
 import logoFA from '../assets/images/logoFA.png';
 import logoUFPR from '../assets/images/logoUFPR.svg';
@@ -99,7 +98,7 @@ function SignInPage(props) {
         const salt = process.env.REACT_APP_SALT;
         const formData = serialize({ username, hash: hashSync(password, salt) });
         axios
-            .post(baseUrl + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .post(process.env.REACT_APP_API_URL + 'api/auth/signIn', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(
@@ -122,7 +121,7 @@ function SignInPage(props) {
 
     const passwordlessLoginHandler = () => {
         axios
-            .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
+            .get(process.env.REACT_APP_API_URL + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 if (response.data.data.token) {
                     login(

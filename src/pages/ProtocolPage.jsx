@@ -29,7 +29,6 @@ import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import ErrorPage from './ErrorPage';
 import TableInput from '../components/inputs/answers/TableInput';
 import RangeInput from '../components/inputs/answers/RangeInput';
@@ -107,7 +106,7 @@ function ProtocolPage(props) {
                 return;
             }
             axios
-                .get(baseUrl + `api/protocol/getProtocol/${protocolId}`, {
+                .get(process.env.REACT_APP_API_URL + `api/protocol/getProtocol/${protocolId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },

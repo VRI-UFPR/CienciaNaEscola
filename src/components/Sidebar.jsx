@@ -18,7 +18,6 @@ import { AuthContext } from '../contexts/AuthContext';
 import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
-import baseUrl from '../contexts/RouteContext';
 import { MaterialSymbol } from 'react-material-symbols';
 
 const styles = `
@@ -109,7 +108,7 @@ function Sidebar(props) {
                     <div className="rounded-circle">
                         <img
                             className="profile-image rounded-circle"
-                            src={user.profileImage ? baseUrl + user.profileImage : PerfilImg}
+                            src={user.profileImage ? process.env.REACT_APP_API_URL + user.profileImage : PerfilImg}
                             alt="Perfil"
                         />
                     </div>

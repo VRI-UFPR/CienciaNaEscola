@@ -14,7 +14,6 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import SplashPage from './SplashPage';
 import ErrorPage from './ErrorPage';
@@ -96,7 +95,7 @@ function CreateInstitutionPage(props) {
             const searchParams = { state, country: 'Brasil' };
             const formData = serialize(searchParams);
             axios
-                .post(`${baseUrl}api/address/getAddressesByState`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/address/getAddressesByState`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -132,7 +131,7 @@ function CreateInstitutionPage(props) {
             }
             if (isEditing) {
                 axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId}`, {
+                    .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
@@ -155,7 +154,7 @@ function CreateInstitutionPage(props) {
         const formData = serialize(institution, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/institution/updateInstitution/${institutionId}`, formData, {
+                .put(`${process.env.REACT_APP_API_URL}api/institution/updateInstitution/${institutionId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -170,7 +169,7 @@ function CreateInstitutionPage(props) {
                 .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição.', bodyText: error.response?.data.message }));
         } else {
             axios
-                .post(`${baseUrl}api/institution/createInstitution`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/institution/createInstitution`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -188,7 +187,7 @@ function CreateInstitutionPage(props) {
 
     const deleteInstitution = () => {
         axios
-            .delete(`${baseUrl}api/institution/deleteInstitution/${institutionId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/institution/deleteInstitution/${institutionId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

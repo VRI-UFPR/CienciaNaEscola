@@ -14,7 +14,6 @@ import { useContext, useEffect, useState } from 'react';
 import SplashPage from './SplashPage';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import ErrorPage from './ErrorPage';
 import TextButton from '../components/TextButton';
@@ -99,7 +98,7 @@ function InstitutionPage(props) {
             }
             if (institutionId || user.institutionId) {
                 axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                    .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
