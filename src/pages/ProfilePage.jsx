@@ -137,7 +137,7 @@ function ProfilePage(props) {
                             <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0">
                                 <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-75">
                                     <img
-                                        src={curUser.profileImage ? baseUrl + curUser.profileImage.path : BlankProfilePic}
+                                        src={curUser.profileImage ? baseUrl + 'api/' + curUser.profileImage.path : BlankProfilePic}
                                         className="rounded-circle h-100 w-100"
                                         alt="Foto de perfil"
                                     />

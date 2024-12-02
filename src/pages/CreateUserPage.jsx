@@ -112,7 +112,7 @@ const style = `
 function CreateUserPage(props) {
     const { institutionId, userId } = useParams();
     const { isEditing } = props;
-    const { user, renewUser } = useContext(AuthContext);
+    const { user, renewUser, logout } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
     const profilePicRef = useRef(null);
@@ -241,7 +241,7 @@ function CreateUserPage(props) {
                         onPrimaryBtnClick: () => {
                             if (response.data.data.id === user.id)
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                            navigate(`/dash/institutions/my`);
+                            navigate(`/dash/profile`);
                         },
                     });
                 })
@@ -268,9 +268,19 @@ function CreateUserPage(props) {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) =>
-                showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-            )
+            .then((response) => {
+                if (!userId || userId === user.id) {
+                    showAlert({
+                        headerText: 'Usuário excluído com sucesso.',
+                        onPrimaryBtnClick: () => {
+                            logout();
+                            navigate(`/dash/signin`);
+                        },
+                    });
+                } else {
+                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/applications`) });
+                }
+            })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
     };
 
@@ -309,7 +319,7 @@ function CreateUserPage(props) {
                                                 !newUser.profileImage
                                                     ? BlankProfilePic
                                                     : newUser.profileImageId
-                                                    ? baseUrl + newUser.profileImage.path
+                                                    ? baseUrl + 'api/' + newUser.profileImage.path
                                                     : URL.createObjectURL(newUser.profileImage)
                                             }
                                             className="rounded-circle h-100 w-100"

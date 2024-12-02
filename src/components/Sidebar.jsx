@@ -109,7 +109,7 @@ function Sidebar(props) {
                     <div className="rounded-circle">
                         <img
                             className="profile-image rounded-circle"
-                            src={user.profileImage ? baseUrl + user.profileImage : PerfilImg}
+                            src={user.profileImage ? baseUrl + 'api/' + user.profileImage : PerfilImg}
                             alt="Perfil"
                         />
                     </div>
