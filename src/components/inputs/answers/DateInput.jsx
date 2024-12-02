@@ -34,6 +34,11 @@ const styles = `
         color: #787878;
     }
 
+    input.bg-white:active,
+    input.bg-white:focus{
+        box-shadow: none !important;
+    }
+
     .fs-7 {
         font-size: 1.1rem !important;
     }
@@ -94,7 +99,7 @@ function DateInput(props) {
                     <div className="row m-0">
                         <input
                             type="date"
-                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
+                            className="form-control border-0 color-sonic-silver bg-white fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
                             onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
                             value={answer.text}
