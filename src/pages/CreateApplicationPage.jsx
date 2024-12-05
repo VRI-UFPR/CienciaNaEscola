@@ -13,7 +13,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
 import { useContext, useEffect, useState, useRef } from 'react';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
@@ -155,7 +154,7 @@ function CreateApplicationPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/application/getApplication/${applicationId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/application/getApplication/${applicationId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -195,7 +194,7 @@ function CreateApplicationPage(props) {
             Promise.all(promises)
                 .then(() => {
                     axios
-                        .get(`${baseUrl}api/protocol/getProtocol/${reqProtocolId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/protocol/getProtocol/${reqProtocolId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -254,7 +253,7 @@ function CreateApplicationPage(props) {
         const formData = serialize(application, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/application/updateApplication/${applicationId}`, formData, {
+                .put(`${process.env.REACT_APP_API_URL}api/application/updateApplication/${applicationId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -270,7 +269,7 @@ function CreateApplicationPage(props) {
                 .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação.', description: error.response?.data.message }));
         } else {
             axios
-                .post(`${baseUrl}api/application/createApplication`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/application/createApplication`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -288,7 +287,7 @@ function CreateApplicationPage(props) {
 
     const deleteApplication = () => {
         axios
-            .delete(`${baseUrl}api/application/deleteApplication/${applicationId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/application/deleteApplication/${applicationId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -303,7 +302,7 @@ function CreateApplicationPage(props) {
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -331,7 +330,7 @@ function CreateApplicationPage(props) {
     const searchAnswerUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -359,7 +358,7 @@ function CreateApplicationPage(props) {
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -404,7 +403,7 @@ function CreateApplicationPage(props) {
     const searchAnswerClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,

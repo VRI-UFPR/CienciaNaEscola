@@ -17,7 +17,6 @@ import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
-import baseUrl from '../contexts/RouteContext';
 import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
@@ -87,7 +86,7 @@ function AnswerPage(props) {
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             axios
-                .get(`${baseUrl}api/application/getApplicationWithAnswers/${applicationId}`, {
+                .get(`${process.env.REACT_APP_API_URL}api/application/getApplicationWithAnswers/${applicationId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
