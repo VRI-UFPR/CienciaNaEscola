@@ -25,6 +25,7 @@ import TableInput from '../components/inputs/answers/TableInput';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
     .bg-yellow-orange {
@@ -301,6 +302,28 @@ function AnswerPage(props) {
         return csv;
     };
 
+    const approveAnswer = (applicationAnswerId) => {
+        axios
+            .put(
+                `${process.env.REACT_APP_API_URL}api/applicationAnswer/approveApplicationAnswer/${applicationAnswerId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            )
+            .then((response) => {
+                showAlert({ headerText: 'Resposta aprovada com sucesso', message: response.data.message });
+                setAnswer((prev) => {
+                    const newAnswer = { ...prev };
+                    newAnswer.answers[applicationAnswerId].approved = true;
+                    return newAnswer;
+                });
+            })
+            .catch((error) => showAlert({ headerText: 'Erro ao aprovar resposta', message: error.response?.data.message || '' }));
+    };
+
     return (
         <div className="container-fluid d-flex flex-column flex-grow-1 p-0 m-0">
             <div className="row flex-grow-1 m-0">
@@ -344,18 +367,33 @@ function AnswerPage(props) {
                                     {Object.entries(answer.answers).map(([key, value]) => {
                                         return (
                                             <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
-                                                <p className="fw-medium fs-6 m-0">
-                                                    <a
-                                                        className="color-dark-gray fw-bold"
-                                                        href="#answerTab"
-                                                        onClick={() => {
-                                                            setVisualization(key, undefined);
-                                                            mapRef.current.setView([value.coordinate.latitude, value.coordinate.longitude]);
-                                                        }}
-                                                    >
-                                                        {value.user.username + ' - ' + new Date(value.date).toLocaleDateString() + ''}
-                                                    </a>
-                                                </p>
+                                                <div className="row gx-2 justify-content-between align-items-center">
+                                                    <div className="col-auto">
+                                                        <a
+                                                            className="color-dark-gray fw-bold fs-6"
+                                                            href="#answerTab"
+                                                            onClick={() => {
+                                                                setVisualization(key, undefined);
+                                                                mapRef.current.setView([
+                                                                    value.coordinate.latitude,
+                                                                    value.coordinate.longitude,
+                                                                ]);
+                                                            }}
+                                                        >
+                                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
+                                                        </a>
+                                                    </div>
+                                                    {value.approved !== true && (
+                                                        <div className="col-auto">
+                                                            <RoundedButton
+                                                                hsl={[97, 43, 70]}
+                                                                size={24}
+                                                                onClick={() => approveAnswer(key)}
+                                                                icon="check"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
