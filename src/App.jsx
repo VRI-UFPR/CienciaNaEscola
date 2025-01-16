@@ -32,7 +32,7 @@ function App(props) {
             <AuthProvider>
                 <AlertProvider>
                     <RouterProvider router={createBrowserRouter(appRoutes)} />
-                    {/* <ScrollToTopButton /> */}
+                    <ScrollToTopButton />
                     <style> {styles} </style>
                 </AlertProvider>
             </AuthProvider>
