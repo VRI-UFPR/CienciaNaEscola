@@ -74,6 +74,9 @@ function ApplicationPage(props) {
     const [addressId, setAddressId] = useState(undefined);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
+    const [answerDate, setAnswerDate] = useState(undefined);
+    const [answerTime, setAnswerTime] = useState(undefined);
+    const [answerLocation, setAnswerLocation] = useState(undefined);
     const { applicationId } = useParams();
     const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
     const { showAlert } = useContext(AlertContext);
@@ -122,13 +125,7 @@ function ApplicationPage(props) {
             const answer = findAnswer(dependency.itemId);
             switch (dependency.type) {
                 case 'EXACT_ANSWER':
-                    if (
-                        item.type === 'TEXTBOX' ||
-                        item.type === 'NUMBERBOX' ||
-                        item.type === 'DATEBOX' ||
-                        item.type === 'TIMEBOX' ||
-                        item.type === 'LOCATIONBOX'
-                    ) {
+                    if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX') {
                         if (!answer || answer.text !== dependency.argument) {
                             dependencyAttended = false;
                         }
@@ -262,7 +259,8 @@ function ApplicationPage(props) {
         const applicationAnswer = {
             applicationId: application.id,
             addressId: addressId,
-            date: new Date(),
+            date: new Date(answerDate + 'T' + answerTime),
+            coordinate: answerLocation,
             itemAnswerGroups: [],
         };
         for (const group in itemAnswerGroups) {
@@ -439,8 +437,22 @@ function ApplicationPage(props) {
                                     </div>
                                 )}
                                 <div className="row justify-content-center m-0">
-                                    {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
+                                    <ProtocolInfo title={application.protocol.title} description={application.protocol.description} />
                                 </div>
+                                <div className="row justify-content-center m-0 pt-3">
+                                    <DateInput answer={answerDate || ''} onAnswerChange={(newDate) => setAnswerDate(newDate)} />
+                                </div>
+                                <div className="row justify-content-center m-0 pt-3">
+                                    <TimeInput answer={answerTime || ''} onAnswerChange={(newTime) => setAnswerTime(newTime)} />
+                                </div>
+                                {application.keepLocation && (
+                                    <div className="row justify-content-center m-0 pt-3">
+                                        <LocationInput
+                                            answer={answerLocation || { latitude: '', longitude: '' }}
+                                            onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
+                                        />
+                                    </div>
+                                )}
                                 {application.protocol.pages[currentPageIndex].itemGroups
                                     .filter((group) => isDependenciesAttended(group.dependencies))
                                     .map((itemGroup, itemGroupIndex) => {
@@ -545,60 +557,6 @@ function ApplicationPage(props) {
                                                                                     ],
                                                                                 }}
                                                                                 onAnswerChange={handleAnswerChange}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            case 'DATEBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <DateInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={handleAnswerChange}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            case 'TIMEBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <TimeInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={handleAnswerChange}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            case 'LOCATIONBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <LocationInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                setAddressId={setAddressId}
                                                                             />
                                                                         }
                                                                     </div>
