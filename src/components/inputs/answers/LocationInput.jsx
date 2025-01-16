@@ -143,9 +143,7 @@ export function Location(props) {
                                     updateAnswer({ latitude: lat, longitude: lng });
                                     mapRef.current.setView([lat, lng]);
                                 },
-                                add: (e) => {
-                                    mapRef.current.setView([answer.latitude, answer.longitude]);
-                                },
+                                add: () => mapRef.current.setView([answer.latitude, answer.longitude]),
                             }}
                         >
                             <Popup>

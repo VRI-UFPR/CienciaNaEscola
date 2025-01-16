@@ -78,6 +78,7 @@ function AnswerPage(props) {
     const { showAlert } = useContext(AlertContext);
     const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
+    const mapRef = useRef(null);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
@@ -337,25 +338,6 @@ function AnswerPage(props) {
                                 </h2>
                             </div>
 
-                            <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
-                                <p className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3">Localizações</p>
-                                <div className="rounded-4 overflow-hidden bg-white mb-3">
-                                    <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }}>
-                                        <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-                                        <Marker position={[-14.235, -51.9253]}>
-                                            <Popup>
-                                                <a className="color-dark-gray fw-bold fs-6" href="https://google.com">
-                                                    Username - dd/mm/aaaa
-                                                </a>
-                                            </Popup>
-                                        </Marker>
-                                    </MapContainer>
-                                </div>
-                            </div>
-
                             {Object.entries(answer.answers).length > 0 && (
                                 <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
@@ -366,7 +348,10 @@ function AnswerPage(props) {
                                                     <a
                                                         className="color-dark-gray fw-bold"
                                                         href="#answerTab"
-                                                        onClick={() => setVisualization(key, undefined)}
+                                                        onClick={() => {
+                                                            setVisualization(key, undefined);
+                                                            mapRef.current.setView([value.coordinate.latitude, value.coordinate.longitude]);
+                                                        }}
                                                     >
                                                         {value.user.username + ' - ' + new Date(value.date).toLocaleDateString() + ''}
                                                     </a>
@@ -377,7 +362,41 @@ function AnswerPage(props) {
                                 </div>
                             )}
 
-                            <div id="answerTab" className=" mb-lg-4">
+                            <div id="answerTab" className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                                <p className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3">Localizações</p>
+                                <div className="rounded-4 overflow-hidden bg-white mb-3">
+                                    <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }} ref={mapRef}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        {Object.entries(answer.answers).map(([key, value]) => {
+                                            return selectedAnswer === undefined || selectedAnswer === key ? (
+                                                <Marker
+                                                    position={[value.coordinate.latitude, value.coordinate.longitude]}
+                                                    key={'marker-' + key}
+                                                    eventHandlers={{
+                                                        add: () =>
+                                                            mapRef.current.setView([value.coordinate.latitude, value.coordinate.longitude]),
+                                                    }}
+                                                >
+                                                    <Popup>
+                                                        <a
+                                                            className="color-dark-gray fw-bold"
+                                                            href="#answerTab"
+                                                            onClick={() => setVisualization(key, undefined)}
+                                                        >
+                                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
+                                                        </a>
+                                                    </Popup>
+                                                </Marker>
+                                            ) : null;
+                                        })}
+                                    </MapContainer>
+                                </div>
+                            </div>
+
+                            <div className=" mb-lg-4">
                                 {answer.protocol.pages.map((page, pageIndex) => {
                                     return page.itemGroups.map((itemGroup, itemGroupIndex) => {
                                         return (() => {

@@ -71,7 +71,6 @@ function ApplicationPage(props) {
     const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
-    const [addressId, setAddressId] = useState(undefined);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
     const [answerDate, setAnswerDate] = useState(undefined);
@@ -258,7 +257,6 @@ function ApplicationPage(props) {
 
         const applicationAnswer = {
             applicationId: application.id,
-            addressId: addressId,
             date: new Date(answerDate + 'T' + answerTime),
             coordinate: answerLocation,
             itemAnswerGroups: [],
