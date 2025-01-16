@@ -24,6 +24,7 @@ import ErrorPage from './ErrorPage';
 import TableInput from '../components/inputs/answers/TableInput';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 const styles = `
     .bg-yellow-orange {
@@ -43,7 +44,7 @@ const styles = `
     }
 
     .color-gray {
-        color: #787878;
+        color: #787878 !important;
     }
 
     .font-century-gothic {
@@ -51,7 +52,7 @@ const styles = `
     }
 
     .color-dark-gray {
-        color: #535353;
+        color: #535353 !important;
     }
 
     .font-barlow {
@@ -335,6 +336,26 @@ function AnswerPage(props) {
                                     </a>
                                 </h2>
                             </div>
+
+                            <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                                <p className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3">Localizações</p>
+                                <div className="rounded-4 overflow-hidden bg-white mb-3">
+                                    <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker position={[-14.235, -51.9253]}>
+                                            <Popup>
+                                                <a className="color-dark-gray fw-bold fs-6" href="https://google.com">
+                                                    Username - dd/mm/aaaa
+                                                </a>
+                                            </Popup>
+                                        </Marker>
+                                    </MapContainer>
+                                </div>
+                            </div>
+
                             {Object.entries(answer.answers).length > 0 && (
                                 <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
