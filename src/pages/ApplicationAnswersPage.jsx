@@ -648,19 +648,22 @@ function AnswerPage(props) {
                                                 case 'CHECKBOX_TABLE':
                                                     return Object.entries(answer.answers).map(([key, value], index) => {
                                                         return (
-                                                            (selectedAnswer === undefined || selectedAnswer === key) && (
-                                                                <div
-                                                                    key={`group-${itemGroupIndex}-${index}`}
-                                                                    className="row justify-content-center m-0 pt-3"
-                                                                >
-                                                                    <TableInput
-                                                                        applicationAnswerId={key}
-                                                                        group={itemGroup}
-                                                                        answersPage={true}
-                                                                        disabled={true}
-                                                                    />
-                                                                </div>
-                                                            )
+                                                            <div
+                                                                key={`group-${itemGroupIndex}-${index}`}
+                                                                className="row justify-content-center m-0 pt-3"
+                                                            >
+                                                                <TableInput
+                                                                    applicationAnswerId={key}
+                                                                    group={itemGroup}
+                                                                    answersPage={true}
+                                                                    disabled={true}
+                                                                />
+                                                            </div>
+                                                            // <div>
+                                                            //     <p>VALUE: {JSON.stringify(value)}</p>
+                                                            //     <p>KEY: {JSON.stringify(key)}</p>
+                                                            //     <p>ITEMGROUP: {JSON.stringify(itemGroup)}</p>
+                                                            // </div>
                                                         );
                                                     });
                                                 default:
