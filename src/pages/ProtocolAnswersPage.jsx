@@ -160,7 +160,7 @@ function ProtocolAnswersPage(props) {
                         <div className="row align-items-center gx-2 gy-3 mb-4">
                             <div className="col-12 col-md-9 order-2 order-md-1 ">
                                 <h1 className="color-dark-gray font-century-gothic fw-bold fs-2 m-0">
-                                    <Link className="color-dark-gray" to={`/protocols/${protocolId}`}>
+                                    <Link className="color-dark-gray" to={`/dash/protocols/${protocolId}`}>
                                         {protocolWAnswers.title}
                                     </Link>
                                 </h1>
@@ -266,52 +266,67 @@ function ProtocolAnswersPage(props) {
                             </div>
                         </div>
                         <div className="bg-light-gray rounded-4 mb-3 p-3">
-                            <div className="row gx-2 justify-content-between align-items-center mb-3">
+                            <div className="row gx-2 justify-content-between align-items-center">
                                 <div className="col">
-                                    <h2 className="color-dark-gray fw-medium fs-5 m-0">Localizações</h2>
+                                    <div className="col">
+                                        <h2 className="color-dark-gray fw-medium fs-5 m-0">Localizações</h2>
+                                    </div>
+                                </div>
+                                <div className="col-auto">
+                                    <RoundedButton
+                                        hsl={[0, 0, 85]}
+                                        size={32}
+                                        icon="expand_content"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#locationCollapse"
+                                        aria-controls="locationCollapse"
+                                        className="color-dark-gray"
+                                    />
                                 </div>
                             </div>
-                            <div className="rounded-4 overflow-hidden bg-white">
-                                <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }} ref={mapRef}>
-                                    <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
-                                    {protocolWAnswers.applications
-                                        .filter(
-                                            (application) => selectedApplication === undefined || application.id === selectedApplication
-                                        )
-                                        .flatMap((application) => application.answers)
-                                        .filter((answer) => selectedAnswer === undefined || answer.id === selectedAnswer)
-                                        .map((answer) => {
-                                            return (
-                                                <Marker
-                                                    position={[answer.coordinate.latitude, answer.coordinate.longitude]}
-                                                    key={'marker-' + answer.id}
-                                                    eventHandlers={{
-                                                        add: () =>
-                                                            mapRef.current.setView([
-                                                                answer.coordinate.latitude,
-                                                                answer.coordinate.longitude,
-                                                            ]),
-                                                    }}
-                                                >
-                                                    <Popup>
-                                                        <a
-                                                            className="color-dark-gray fw-bold"
-                                                            href="#answerTab"
-                                                            onClick={() => setVisualization(answer.id, undefined, undefined)}
-                                                        >
-                                                            {answer.user.username + ' - ' + new Date(answer.date).toLocaleDateString()}
-                                                        </a>
-                                                    </Popup>
-                                                </Marker>
-                                            );
-                                        })}
-                                </MapContainer>
+                            <div className="collapse show" id="locationCollapse">
+                                <div className="rounded-4 overflow-hidden bg-white mt-3">
+                                    <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }} ref={mapRef}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        {protocolWAnswers.applications
+                                            .filter(
+                                                (application) => selectedApplication === undefined || application.id === selectedApplication
+                                            )
+                                            .flatMap((application) => application.answers)
+                                            .filter((answer) => selectedAnswer === undefined || answer.id === selectedAnswer)
+                                            .map((answer) => {
+                                                return (
+                                                    <Marker
+                                                        position={[answer.coordinate.latitude, answer.coordinate.longitude]}
+                                                        key={'marker-' + answer.id}
+                                                        eventHandlers={{
+                                                            add: () =>
+                                                                mapRef.current.setView([
+                                                                    answer.coordinate.latitude,
+                                                                    answer.coordinate.longitude,
+                                                                ]),
+                                                        }}
+                                                    >
+                                                        <Popup>
+                                                            <a
+                                                                className="color-dark-gray fw-bold"
+                                                                href="#answerTab"
+                                                                onClick={() => setVisualization(answer.id, undefined, undefined)}
+                                                            >
+                                                                {answer.user.username + ' - ' + new Date(answer.date).toLocaleDateString()}
+                                                            </a>
+                                                        </Popup>
+                                                    </Marker>
+                                                );
+                                            })}
+                                    </MapContainer>
+                                </div>
                             </div>
                         </div>
-                        <div className="row align-items-center gx-2 gy-3 mb-4">
+                        <div className="row align-items-center gx-2 gy-3 mb-4" id="answerTab">
                             <div className="col">
                                 <h1 className="color-dark-gray font-century-gothic fw-bold fs-2 m-0">Respostas</h1>
                             </div>
@@ -327,7 +342,7 @@ function ProtocolAnswersPage(props) {
                                                         (selectedItem === undefined || selectedItem === item.id) && (
                                                             <div key={'input-' + item.id} className="bg-light-gray rounded-4 mb-3 p-3">
                                                                 <div className="row gx-2 justify-content-between align-items-center">
-                                                                    <div className="col-11">
+                                                                    <div className="col-10">
                                                                         <a
                                                                             href="#answerTab"
                                                                             onClick={() => setVisualization(undefined, item.id, undefined)}
@@ -348,7 +363,7 @@ function ProtocolAnswersPage(props) {
                                                                         />
                                                                     </div>
                                                                 </div>
-                                                                <div className="collapse" id={'itemCollapse' + item.id}>
+                                                                <div className="collapse show" id={'itemCollapse' + item.id}>
                                                                     {item.itemAnswers.map((itemAnswer) => {
                                                                         return (
                                                                             (selectedAnswer === undefined ||
@@ -486,116 +501,117 @@ function ProtocolAnswersPage(props) {
                                                                             </div>
                                                                         );
                                                                     })}
+                                                                    {item.itemOptions
+                                                                        .flatMap((itemOption) => itemOption.optionAnswers)
+                                                                        .filter(
+                                                                            (optionAnswer) =>
+                                                                                (selectedAnswer === undefined ||
+                                                                                    optionAnswer.group.applicationAnswer.id ===
+                                                                                        selectedAnswer) &&
+                                                                                (selectedApplication === undefined ||
+                                                                                    protocolWAnswers.applications
+                                                                                        .find(
+                                                                                            (application) =>
+                                                                                                application.id === selectedApplication
+                                                                                        )
+                                                                                        .answers.find(
+                                                                                            (answer) =>
+                                                                                                answer.id ===
+                                                                                                optionAnswer.group.applicationAnswer.id
+                                                                                        ) !== undefined)
+                                                                        ).length > 0 && (
+                                                                        <div className="rounded-4 overflow-hidden mt-3">
+                                                                            <Chart
+                                                                                chartType="PieChart"
+                                                                                data={[['Resposta', 'Quantidade']].concat(
+                                                                                    item.itemOptions.map((itemOption) => {
+                                                                                        return [
+                                                                                            itemOption.text,
+                                                                                            itemOption.optionAnswers.filter(
+                                                                                                (optionAnswer) =>
+                                                                                                    (selectedAnswer === undefined ||
+                                                                                                        optionAnswer.group.applicationAnswer
+                                                                                                            .id === selectedAnswer) &&
+                                                                                                    (selectedApplication === undefined ||
+                                                                                                        protocolWAnswers.applications
+                                                                                                            .find(
+                                                                                                                (application) =>
+                                                                                                                    application.id ===
+                                                                                                                    selectedApplication
+                                                                                                            )
+                                                                                                            .answers.find(
+                                                                                                                (answer) =>
+                                                                                                                    answer.id ===
+                                                                                                                    optionAnswer.group
+                                                                                                                        .applicationAnswer
+                                                                                                                        .id
+                                                                                                            ) !== undefined)
+                                                                                            ).length,
+                                                                                        ];
+                                                                                    })
+                                                                                )}
+                                                                                options={{
+                                                                                    chartArea: { top: 8, height: '90%', width: '90%' },
+                                                                                    legend: { position: 'bottom' },
+                                                                                    colors: [
+                                                                                        '#F59489',
+                                                                                        '#91CAD6',
+                                                                                        '#FECF86',
+                                                                                        '#4E9BB9',
+                                                                                        '#EC6571',
+                                                                                        '#AAD390',
+                                                                                        '#8C6A80',
+                                                                                        '#70A6A6',
+                                                                                        '#FACD63',
+                                                                                        '#578AA2',
+                                                                                        '#E64E5E',
+                                                                                        '#91BD7E',
+                                                                                        '#F9A98F',
+                                                                                        '#76C4D1',
+                                                                                        '#FEDB8A',
+                                                                                        '#5C97B2',
+                                                                                        '#D85A6A',
+                                                                                        '#89A86B',
+                                                                                        '#F7BC92',
+                                                                                        '#6FACB5',
+                                                                                        '#E14953',
+                                                                                        '#A1C588',
+                                                                                        '#F5D39A',
+                                                                                        '#568BA5',
+                                                                                        '#C44D59',
+                                                                                        '#7FA569',
+                                                                                        '#E6A17C',
+                                                                                        '#619BB0',
+                                                                                        '#F39C9F',
+                                                                                        '#ADC192',
+                                                                                        '#FFD07D',
+                                                                                        '#5499AE',
+                                                                                        '#E6606F',
+                                                                                        '#97BD83',
+                                                                                        '#F6C2A3',
+                                                                                        '#6BA3B8',
+                                                                                        '#E15661',
+                                                                                        '#90B67A',
+                                                                                        '#F7AE9C',
+                                                                                        '#75BFCB',
+                                                                                        '#E6737D',
+                                                                                        '#A2CA93',
+                                                                                        '#FAD4AC',
+                                                                                        '#639FB7',
+                                                                                        '#D45B66',
+                                                                                        '#83AB77',
+                                                                                        '#F9B69B',
+                                                                                        '#71B4C6',
+                                                                                        '#E75762',
+                                                                                        '#A8C599',
+                                                                                    ],
+                                                                                    is3D: true,
+                                                                                }}
+                                                                                height={'400px'}
+                                                                            />
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                                {item.itemOptions
-                                                                    .flatMap((itemOption) => itemOption.optionAnswers)
-                                                                    .filter(
-                                                                        (optionAnswer) =>
-                                                                            (selectedAnswer === undefined ||
-                                                                                optionAnswer.group.applicationAnswer.id ===
-                                                                                    selectedAnswer) &&
-                                                                            (selectedApplication === undefined ||
-                                                                                protocolWAnswers.applications
-                                                                                    .find(
-                                                                                        (application) =>
-                                                                                            application.id === selectedApplication
-                                                                                    )
-                                                                                    .answers.find(
-                                                                                        (answer) =>
-                                                                                            answer.id ===
-                                                                                            optionAnswer.group.applicationAnswer.id
-                                                                                    ) !== undefined)
-                                                                    ).length > 0 && (
-                                                                    <div className="rounded-4 overflow-hidden mt-3">
-                                                                        <Chart
-                                                                            chartType="PieChart"
-                                                                            data={[['Resposta', 'Quantidade']].concat(
-                                                                                item.itemOptions.map((itemOption) => {
-                                                                                    return [
-                                                                                        itemOption.text,
-                                                                                        itemOption.optionAnswers.filter(
-                                                                                            (optionAnswer) =>
-                                                                                                (selectedAnswer === undefined ||
-                                                                                                    optionAnswer.group.applicationAnswer
-                                                                                                        .id === selectedAnswer) &&
-                                                                                                (selectedApplication === undefined ||
-                                                                                                    protocolWAnswers.applications
-                                                                                                        .find(
-                                                                                                            (application) =>
-                                                                                                                application.id ===
-                                                                                                                selectedApplication
-                                                                                                        )
-                                                                                                        .answers.find(
-                                                                                                            (answer) =>
-                                                                                                                answer.id ===
-                                                                                                                optionAnswer.group
-                                                                                                                    .applicationAnswer.id
-                                                                                                        ) !== undefined)
-                                                                                        ).length,
-                                                                                    ];
-                                                                                })
-                                                                            )}
-                                                                            options={{
-                                                                                chartArea: { top: 8, height: '90%', width: '90%' },
-                                                                                legend: { position: 'bottom' },
-                                                                                colors: [
-                                                                                    '#F59489',
-                                                                                    '#91CAD6',
-                                                                                    '#FECF86',
-                                                                                    '#4E9BB9',
-                                                                                    '#EC6571',
-                                                                                    '#AAD390',
-                                                                                    '#8C6A80',
-                                                                                    '#70A6A6',
-                                                                                    '#FACD63',
-                                                                                    '#578AA2',
-                                                                                    '#E64E5E',
-                                                                                    '#91BD7E',
-                                                                                    '#F9A98F',
-                                                                                    '#76C4D1',
-                                                                                    '#FEDB8A',
-                                                                                    '#5C97B2',
-                                                                                    '#D85A6A',
-                                                                                    '#89A86B',
-                                                                                    '#F7BC92',
-                                                                                    '#6FACB5',
-                                                                                    '#E14953',
-                                                                                    '#A1C588',
-                                                                                    '#F5D39A',
-                                                                                    '#568BA5',
-                                                                                    '#C44D59',
-                                                                                    '#7FA569',
-                                                                                    '#E6A17C',
-                                                                                    '#619BB0',
-                                                                                    '#F39C9F',
-                                                                                    '#ADC192',
-                                                                                    '#FFD07D',
-                                                                                    '#5499AE',
-                                                                                    '#E6606F',
-                                                                                    '#97BD83',
-                                                                                    '#F6C2A3',
-                                                                                    '#6BA3B8',
-                                                                                    '#E15661',
-                                                                                    '#90B67A',
-                                                                                    '#F7AE9C',
-                                                                                    '#75BFCB',
-                                                                                    '#E6737D',
-                                                                                    '#A2CA93',
-                                                                                    '#FAD4AC',
-                                                                                    '#639FB7',
-                                                                                    '#D45B66',
-                                                                                    '#83AB77',
-                                                                                    '#F9B69B',
-                                                                                    '#71B4C6',
-                                                                                    '#E75762',
-                                                                                    '#A8C599',
-                                                                                ],
-                                                                                is3D: true,
-                                                                            }}
-                                                                            height={'400px'}
-                                                                        />
-                                                                    </div>
-                                                                )}
                                                             </div>
                                                         )
                                                     );

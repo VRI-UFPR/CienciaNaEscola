@@ -338,7 +338,7 @@ function AnswerPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
                             <div className="row p-0 m-0">
                                 <h1 className="col col-12 col-md-9 order-2 order-md-1 color-dark-gray font-century-gothic fw-bold fs-2 py-4 pt-md-0 m-0">
-                                    <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
+                                    <Link className="color-dark-gray" to={`/dash/applications/${applicationId}`}>
                                         {answer.protocol.title}
                                     </Link>{' '}
                                     - Respostas
