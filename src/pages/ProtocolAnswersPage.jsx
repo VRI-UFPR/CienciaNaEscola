@@ -204,7 +204,7 @@ function ProtocolAnswersPage(props) {
                                     return (
                                         <div key={'answer-' + application.id} className="bg-white rounded-4 mt-3 p-3">
                                             <div className="row gx-2 justify-content-between align-items-center">
-                                                <div className="col-11">
+                                                <div className="col-10">
                                                     <a
                                                         className="color-dark-gray fw-bold fs-6"
                                                         href="#answerTab"
@@ -233,7 +233,7 @@ function ProtocolAnswersPage(props) {
                                                     return (
                                                         <div key={'answer-' + answer.id} className="mt-1">
                                                             <div className="row gx-2 justify-content-between align-items-center">
-                                                                <div className="col-11">
+                                                                <div className="col-10">
                                                                     <a
                                                                         className="color-dark-gray fs-6"
                                                                         href="#answerTab"
