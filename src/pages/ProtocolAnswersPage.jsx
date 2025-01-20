@@ -26,6 +26,7 @@ import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
 import Chart from 'react-google-charts';
 import TableInput from '../components/inputs/answers/TableInput';
+import { AlertContext } from '../contexts/AlertContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -76,6 +77,16 @@ function ProtocolAnswersPage(props) {
     const [error, setError] = useState(undefined);
     const mapRef = useRef();
     const galleryModalRef = useRef();
+    const [selectedAnswer, setSelectedAnswer] = useState(undefined);
+    const [selectedItem, setSelectedItem] = useState(undefined);
+    const [selectedApplication, setSelectedApplication] = useState(undefined);
+    const { showAlert } = useContext(AlertContext);
+
+    const setVisualization = (person, question, application) => {
+        setSelectedAnswer(person);
+        setSelectedItem(question);
+        setSelectedApplication(application);
+    };
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
@@ -94,6 +105,38 @@ function ProtocolAnswersPage(props) {
                 });
         }
     }, [protocolId, user.token, user.status, isLoading]);
+
+    const approveAnswer = (applicationAnswerId) => {
+        axios
+            .put(
+                `${process.env.REACT_APP_API_URL}api/applicationAnswer/approveApplicationAnswer/${applicationAnswerId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            )
+            .then((response) => {
+                showAlert({ headerText: 'Resposta aprovada com sucesso', message: response.data.message });
+                setProtocolWAnswers((prev) => {
+                    const newProtocol = { ...prev };
+                    newProtocol.applications = newProtocol.applications.map((application) => {
+                        const newApplication = { ...application };
+                        newApplication.answers = newApplication.answers.map((answer) => {
+                            const newAnswer = { ...answer };
+                            if (newAnswer.id === applicationAnswerId) {
+                                newAnswer.approved = true;
+                            }
+                            return newAnswer;
+                        });
+                        return newApplication;
+                    });
+                    return newProtocol;
+                });
+            })
+            .catch((error) => showAlert({ headerText: 'Erro ao aprovar resposta', message: error.response?.data.message || '' }));
+    };
 
     if (error) {
         return <ErrorPage text={error.text} description={error.description} />;
@@ -135,7 +178,11 @@ function ProtocolAnswersPage(props) {
                                     </h2>
                                     <p className="color-dark-gray fw-medium fs-6 m-0">
                                         Clique em uma aplicação ou resposta para filtrar{' '}
-                                        <a href="#answerTab" onClick={() => {}} className="color-dark-gray fw-bold fs-6">
+                                        <a
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(undefined, undefined, undefined)}
+                                            className="color-dark-gray fw-bold fs-6"
+                                        >
                                             (limpar filtros)
                                         </a>
                                     </p>
@@ -144,7 +191,6 @@ function ProtocolAnswersPage(props) {
                                     <RoundedButton
                                         hsl={[0, 0, 85]}
                                         size={32}
-                                        onClick={() => {}}
                                         icon="expand_content"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#applicationCollapse"
@@ -159,7 +205,11 @@ function ProtocolAnswersPage(props) {
                                         <div key={'answer-' + application.id} className="bg-white rounded-4 mt-3 p-3">
                                             <div className="row gx-2 justify-content-between align-items-center">
                                                 <div className="col-11">
-                                                    <a className="color-dark-gray fw-bold fs-6" href="#answerTab" onClick={() => {}}>
+                                                    <a
+                                                        className="color-dark-gray fw-bold fs-6"
+                                                        href="#answerTab"
+                                                        onClick={() => setVisualization(undefined, undefined, application.id)}
+                                                    >
                                                         Aplicação #{application.id} -{' '}
                                                         {application.applier.username +
                                                             ' - ' +
@@ -170,16 +220,15 @@ function ProtocolAnswersPage(props) {
                                                     <RoundedButton
                                                         hsl={[0, 0, 100]}
                                                         size={20}
-                                                        onClick={() => {}}
                                                         icon="expand_content"
                                                         data-bs-toggle="collapse"
-                                                        data-bs-target="#answerCollapse"
-                                                        aria-controls="answerCollapse"
+                                                        data-bs-target={'#answerCollapse' + application.id}
+                                                        aria-controls={'answerCollapse' + application.id}
                                                         className="color-dark-gray"
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="collapse" id="answerCollapse">
+                                            <div className="collapse" id={'answerCollapse' + application.id}>
                                                 {application.answers.map((answer) => {
                                                     return (
                                                         <div key={'answer-' + answer.id} className="mt-1">
@@ -188,7 +237,7 @@ function ProtocolAnswersPage(props) {
                                                                     <a
                                                                         className="color-dark-gray fs-6"
                                                                         href="#answerTab"
-                                                                        onClick={() => {}}
+                                                                        onClick={() => setVisualization(answer.id, undefined, undefined)}
                                                                     >
                                                                         Resposta #{answer.id} -{' '}
                                                                         {answer.user.username +
@@ -201,7 +250,7 @@ function ProtocolAnswersPage(props) {
                                                                         <RoundedButton
                                                                             hsl={[97, 43, 70]}
                                                                             size={20}
-                                                                            onClick={() => {}}
+                                                                            onClick={() => approveAnswer(answer.id)}
                                                                             icon="check"
                                                                         />
                                                                     </div>
@@ -217,7 +266,7 @@ function ProtocolAnswersPage(props) {
                             </div>
                         </div>
                         <div className="bg-light-gray rounded-4 mb-3 p-3">
-                            <div className="row gx-2 justify-content-between align-items-center mb-4">
+                            <div className="row gx-2 justify-content-between align-items-center mb-3">
                                 <div className="col">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0">Localizações</h2>
                                 </div>
@@ -229,7 +278,11 @@ function ProtocolAnswersPage(props) {
                                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     />
                                     {protocolWAnswers.applications
+                                        .filter(
+                                            (application) => selectedApplication === undefined || application.id === selectedApplication
+                                        )
                                         .flatMap((application) => application.answers)
+                                        .filter((answer) => selectedAnswer === undefined || answer.id === selectedAnswer)
                                         .map((answer) => {
                                             return (
                                                 <Marker
@@ -244,7 +297,11 @@ function ProtocolAnswersPage(props) {
                                                     }}
                                                 >
                                                     <Popup>
-                                                        <a className="color-dark-gray fw-bold" href="#answerTab" onClick={() => {}}>
+                                                        <a
+                                                            className="color-dark-gray fw-bold"
+                                                            href="#answerTab"
+                                                            onClick={() => setVisualization(answer.id, undefined, undefined)}
+                                                        >
                                                             {answer.user.username + ' - ' + new Date(answer.date).toLocaleDateString()}
                                                         </a>
                                                     </Popup>
@@ -267,162 +324,280 @@ function ProtocolAnswersPage(props) {
                                             case 'ONE_DIMENSIONAL':
                                                 return itemGroup.items.map((item) => {
                                                     return (
-                                                        <div key={'input-' + item.id} className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
-                                                            <a
-                                                                href="#answerTab"
-                                                                onClick={() => {}}
-                                                                className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3"
-                                                            >
-                                                                {item.text}
-                                                            </a>
-                                                            {item.itemAnswers.map((itemAnswer) => {
-                                                                return (
-                                                                    <div
-                                                                        key={'answer-' + itemAnswer.id}
-                                                                        className="bg-white rounded-4 mb-3 p-2 px-3"
-                                                                    >
-                                                                        <p className="fw-medium fs-6 m-0 mb-1">
-                                                                            {protocolWAnswers.applications.flatMap((application) =>
-                                                                                application.answers.map((answer) => {
-                                                                                    return answer.id ===
-                                                                                        itemAnswer.group.applicationAnswer.id
-                                                                                        ? answer.user.username +
-                                                                                              ' - ' +
-                                                                                              new Date(answer.date).toLocaleDateString()
-                                                                                        : '';
+                                                        (selectedItem === undefined || selectedItem === item.id) && (
+                                                            <div key={'input-' + item.id} className="bg-light-gray rounded-4 mb-3 p-3">
+                                                                <div className="row gx-2 justify-content-between align-items-center">
+                                                                    <div className="col-11">
+                                                                        <a
+                                                                            href="#answerTab"
+                                                                            onClick={() => setVisualization(undefined, item.id, undefined)}
+                                                                            className="d-block color-dark-gray fw-bold fw-medium fs-5"
+                                                                        >
+                                                                            {item.text}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div className="col-auto">
+                                                                        <RoundedButton
+                                                                            hsl={[0, 0, 85]}
+                                                                            size={32}
+                                                                            icon="expand_content"
+                                                                            data-bs-toggle="collapse"
+                                                                            data-bs-target={'#itemCollapse' + item.id}
+                                                                            aria-controls={'itemCollapse' + item.id}
+                                                                            className="color-dark-gray"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="collapse" id={'itemCollapse' + item.id}>
+                                                                    {item.itemAnswers.map((itemAnswer) => {
+                                                                        return (
+                                                                            (selectedAnswer === undefined ||
+                                                                                itemAnswer.group.applicationAnswer.id === selectedAnswer) &&
+                                                                            (selectedApplication === undefined ||
+                                                                                protocolWAnswers.applications
+                                                                                    .find(
+                                                                                        (application) =>
+                                                                                            application.id === selectedApplication
+                                                                                    )
+                                                                                    .answers.find(
+                                                                                        (answer) =>
+                                                                                            answer.id ===
+                                                                                            itemAnswer.group.applicationAnswer.id
+                                                                                    ) !== undefined) && (
+                                                                                <div
+                                                                                    key={'answer-' + itemAnswer.id}
+                                                                                    className="bg-white rounded-4 mt-3 p-2 px-3"
+                                                                                >
+                                                                                    <p className="fw-medium fs-6 m-0 mb-1">
+                                                                                        {protocolWAnswers.applications.flatMap(
+                                                                                            (application) =>
+                                                                                                application.answers.map((answer) => {
+                                                                                                    return answer.id ===
+                                                                                                        itemAnswer.group.applicationAnswer
+                                                                                                            .id
+                                                                                                        ? answer.user.username +
+                                                                                                              ' - ' +
+                                                                                                              new Date(
+                                                                                                                  answer.date
+                                                                                                              ).toLocaleDateString()
+                                                                                                        : '';
+                                                                                                })
+                                                                                        )}
+                                                                                    </p>
+                                                                                    {item.type === 'UPLOAD' ? (
+                                                                                        <Gallery
+                                                                                            className="mt-3"
+                                                                                            item={{
+                                                                                                files: itemAnswer.files.map((file) => ({
+                                                                                                    path: file.path,
+                                                                                                })),
+                                                                                            }}
+                                                                                            galleryModalRef={galleryModalRef}
+                                                                                        />
+                                                                                    ) : (
+                                                                                        <p className="fw-medium fs-6 color-dark-gray m-0">
+                                                                                            {itemAnswer.text}
+                                                                                        </p>
+                                                                                    )}
+                                                                                </div>
+                                                                            )
+                                                                        );
+                                                                    })}
+                                                                    {item.itemAnswers.length === 0 && item.itemOptions.length === 0 && (
+                                                                        <div className="bg-white rounded-4 mt-3 p-2 px-3">
+                                                                            <p className="fw-medium fs-6 color-dark-gray m-0">
+                                                                                0 respostas
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
+                                                                    {item.itemOptions.map((itemOption) => {
+                                                                        return (
+                                                                            <div
+                                                                                key={'answer-' + itemOption.id}
+                                                                                className="bg-white rounded-4 mt-3 p-2 px-3"
+                                                                            >
+                                                                                <p className="fw-medium fs-6 m-0 mb-1">
+                                                                                    {itemOption.text +
+                                                                                        ' - ' +
+                                                                                        itemOption.optionAnswers.filter(
+                                                                                            (optionAnswer) =>
+                                                                                                (selectedAnswer === undefined ||
+                                                                                                    optionAnswer.group.applicationAnswer
+                                                                                                        .id === selectedAnswer) &&
+                                                                                                (selectedApplication === undefined ||
+                                                                                                    protocolWAnswers.applications
+                                                                                                        .find(
+                                                                                                            (application) =>
+                                                                                                                application.id ===
+                                                                                                                selectedApplication
+                                                                                                        )
+                                                                                                        .answers.find(
+                                                                                                            (answer) =>
+                                                                                                                answer.id ===
+                                                                                                                optionAnswer.group
+                                                                                                                    .applicationAnswer.id
+                                                                                                        ) !== undefined)
+                                                                                        ).length +
+                                                                                        ' respostas'}
+                                                                                </p>
+                                                                                {itemOption.optionAnswers.map((optionAnswer) => {
+                                                                                    return (
+                                                                                        (selectedAnswer === undefined ||
+                                                                                            optionAnswer.group.applicationAnswer.id ===
+                                                                                                selectedAnswer) &&
+                                                                                        (selectedApplication === undefined ||
+                                                                                            protocolWAnswers.applications
+                                                                                                .find(
+                                                                                                    (application) =>
+                                                                                                        application.id ===
+                                                                                                        selectedApplication
+                                                                                                )
+                                                                                                .answers.find(
+                                                                                                    (answer) =>
+                                                                                                        answer.id ===
+                                                                                                        optionAnswer.group.applicationAnswer
+                                                                                                            .id
+                                                                                                ) !== undefined) && (
+                                                                                            <p
+                                                                                                className="fw-medium fs-6 color-dark-gray m-0"
+                                                                                                key={'option-answer-' + optionAnswer.id}
+                                                                                            >
+                                                                                                {protocolWAnswers.applications.flatMap(
+                                                                                                    (application) =>
+                                                                                                        application.answers.map(
+                                                                                                            (answer) => {
+                                                                                                                return answer.id ===
+                                                                                                                    optionAnswer.group
+                                                                                                                        .applicationAnswer
+                                                                                                                        .id
+                                                                                                                    ? answer.user.username +
+                                                                                                                          ' - ' +
+                                                                                                                          new Date(
+                                                                                                                              answer.date
+                                                                                                                          ).toLocaleDateString()
+                                                                                                                    : '';
+                                                                                                            }
+                                                                                                        )
+                                                                                                )}
+                                                                                            </p>
+                                                                                        )
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                                {item.itemOptions
+                                                                    .flatMap((itemOption) => itemOption.optionAnswers)
+                                                                    .filter(
+                                                                        (optionAnswer) =>
+                                                                            (selectedAnswer === undefined ||
+                                                                                optionAnswer.group.applicationAnswer.id ===
+                                                                                    selectedAnswer) &&
+                                                                            (selectedApplication === undefined ||
+                                                                                protocolWAnswers.applications
+                                                                                    .find(
+                                                                                        (application) =>
+                                                                                            application.id === selectedApplication
+                                                                                    )
+                                                                                    .answers.find(
+                                                                                        (answer) =>
+                                                                                            answer.id ===
+                                                                                            optionAnswer.group.applicationAnswer.id
+                                                                                    ) !== undefined)
+                                                                    ).length > 0 && (
+                                                                    <div className="rounded-4 overflow-hidden mt-3">
+                                                                        <Chart
+                                                                            chartType="PieChart"
+                                                                            data={[['Resposta', 'Quantidade']].concat(
+                                                                                item.itemOptions.map((itemOption) => {
+                                                                                    return [
+                                                                                        itemOption.text,
+                                                                                        itemOption.optionAnswers.filter(
+                                                                                            (optionAnswer) =>
+                                                                                                (selectedAnswer === undefined ||
+                                                                                                    optionAnswer.group.applicationAnswer
+                                                                                                        .id === selectedAnswer) &&
+                                                                                                (selectedApplication === undefined ||
+                                                                                                    protocolWAnswers.applications
+                                                                                                        .find(
+                                                                                                            (application) =>
+                                                                                                                application.id ===
+                                                                                                                selectedApplication
+                                                                                                        )
+                                                                                                        .answers.find(
+                                                                                                            (answer) =>
+                                                                                                                answer.id ===
+                                                                                                                optionAnswer.group
+                                                                                                                    .applicationAnswer.id
+                                                                                                        ) !== undefined)
+                                                                                        ).length,
+                                                                                    ];
                                                                                 })
                                                                             )}
-                                                                        </p>
-                                                                        {item.type === 'UPLOAD' ? (
-                                                                            <Gallery
-                                                                                className="mb-3"
-                                                                                item={{
-                                                                                    files: itemAnswer.files.map((file) => ({
-                                                                                        path: file.path,
-                                                                                    })),
-                                                                                }}
-                                                                                galleryModalRef={galleryModalRef}
-                                                                            />
-                                                                        ) : (
-                                                                            <p className="fw-medium fs-6 color-dark-gray m-0">
-                                                                                {itemAnswer.text}
-                                                                            </p>
-                                                                        )}
+                                                                            options={{
+                                                                                chartArea: { top: 8, height: '90%', width: '90%' },
+                                                                                legend: { position: 'bottom' },
+                                                                                colors: [
+                                                                                    '#F59489',
+                                                                                    '#91CAD6',
+                                                                                    '#FECF86',
+                                                                                    '#4E9BB9',
+                                                                                    '#EC6571',
+                                                                                    '#AAD390',
+                                                                                    '#8C6A80',
+                                                                                    '#70A6A6',
+                                                                                    '#FACD63',
+                                                                                    '#578AA2',
+                                                                                    '#E64E5E',
+                                                                                    '#91BD7E',
+                                                                                    '#F9A98F',
+                                                                                    '#76C4D1',
+                                                                                    '#FEDB8A',
+                                                                                    '#5C97B2',
+                                                                                    '#D85A6A',
+                                                                                    '#89A86B',
+                                                                                    '#F7BC92',
+                                                                                    '#6FACB5',
+                                                                                    '#E14953',
+                                                                                    '#A1C588',
+                                                                                    '#F5D39A',
+                                                                                    '#568BA5',
+                                                                                    '#C44D59',
+                                                                                    '#7FA569',
+                                                                                    '#E6A17C',
+                                                                                    '#619BB0',
+                                                                                    '#F39C9F',
+                                                                                    '#ADC192',
+                                                                                    '#FFD07D',
+                                                                                    '#5499AE',
+                                                                                    '#E6606F',
+                                                                                    '#97BD83',
+                                                                                    '#F6C2A3',
+                                                                                    '#6BA3B8',
+                                                                                    '#E15661',
+                                                                                    '#90B67A',
+                                                                                    '#F7AE9C',
+                                                                                    '#75BFCB',
+                                                                                    '#E6737D',
+                                                                                    '#A2CA93',
+                                                                                    '#FAD4AC',
+                                                                                    '#639FB7',
+                                                                                    '#D45B66',
+                                                                                    '#83AB77',
+                                                                                    '#F9B69B',
+                                                                                    '#71B4C6',
+                                                                                    '#E75762',
+                                                                                    '#A8C599',
+                                                                                ],
+                                                                                is3D: true,
+                                                                            }}
+                                                                            height={'400px'}
+                                                                        />
                                                                     </div>
-                                                                );
-                                                            })}
-                                                            {item.itemAnswers.length === 0 && item.itemOptions.length === 0 && (
-                                                                <div className="bg-white rounded-4 mb-3 p-2 px-3">
-                                                                    <p className="fw-medium fs-6 color-dark-gray m-0">0 respostas</p>
-                                                                </div>
-                                                            )}
-                                                            {item.itemOptions.map((itemOption) => {
-                                                                return (
-                                                                    <div
-                                                                        key={'answer-' + itemOption.id}
-                                                                        className="bg-white rounded-4 mb-3 p-2 px-3"
-                                                                    >
-                                                                        <p className="fw-medium fs-6 m-0 mb-1">
-                                                                            {itemOption.text +
-                                                                                ' - ' +
-                                                                                itemOption.optionAnswers.length +
-                                                                                ' respostas'}
-                                                                        </p>
-                                                                        {itemOption.optionAnswers.map((optionAnswer) => {
-                                                                            return (
-                                                                                <p
-                                                                                    className="fw-medium fs-6 color-dark-gray m-0"
-                                                                                    key={'option-answer-' + optionAnswer.id}
-                                                                                >
-                                                                                    {protocolWAnswers.applications.flatMap((application) =>
-                                                                                        application.answers.map((answer) => {
-                                                                                            return answer.id ===
-                                                                                                optionAnswer.group.applicationAnswer.id
-                                                                                                ? answer.user.username +
-                                                                                                      ' - ' +
-                                                                                                      new Date(
-                                                                                                          answer.date
-                                                                                                      ).toLocaleDateString()
-                                                                                                : '';
-                                                                                        })
-                                                                                    )}
-                                                                                </p>
-                                                                            );
-                                                                        })}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                            {item.itemOptions.length > 0 && (
-                                                                <div className="rounded-4 overflow-hidden mb-3">
-                                                                    <Chart
-                                                                        chartType="PieChart"
-                                                                        data={[['Resposta', 'Quantidade']].concat(
-                                                                            item.itemOptions.map((itemOption) => {
-                                                                                return [itemOption.text, itemOption.optionAnswers.length];
-                                                                            })
-                                                                        )}
-                                                                        options={{
-                                                                            chartArea: { top: 8, height: '90%', width: '90%' },
-                                                                            legend: { position: 'bottom' },
-                                                                            colors: [
-                                                                                '#F59489',
-                                                                                '#91CAD6',
-                                                                                '#FECF86',
-                                                                                '#4E9BB9',
-                                                                                '#EC6571',
-                                                                                '#AAD390',
-                                                                                '#8C6A80',
-                                                                                '#70A6A6',
-                                                                                '#FACD63',
-                                                                                '#578AA2',
-                                                                                '#E64E5E',
-                                                                                '#91BD7E',
-                                                                                '#F9A98F',
-                                                                                '#76C4D1',
-                                                                                '#FEDB8A',
-                                                                                '#5C97B2',
-                                                                                '#D85A6A',
-                                                                                '#89A86B',
-                                                                                '#F7BC92',
-                                                                                '#6FACB5',
-                                                                                '#E14953',
-                                                                                '#A1C588',
-                                                                                '#F5D39A',
-                                                                                '#568BA5',
-                                                                                '#C44D59',
-                                                                                '#7FA569',
-                                                                                '#E6A17C',
-                                                                                '#619BB0',
-                                                                                '#F39C9F',
-                                                                                '#ADC192',
-                                                                                '#FFD07D',
-                                                                                '#5499AE',
-                                                                                '#E6606F',
-                                                                                '#97BD83',
-                                                                                '#F6C2A3',
-                                                                                '#6BA3B8',
-                                                                                '#E15661',
-                                                                                '#90B67A',
-                                                                                '#F7AE9C',
-                                                                                '#75BFCB',
-                                                                                '#E6737D',
-                                                                                '#A2CA93',
-                                                                                '#FAD4AC',
-                                                                                '#639FB7',
-                                                                                '#D45B66',
-                                                                                '#83AB77',
-                                                                                '#F9B69B',
-                                                                                '#71B4C6',
-                                                                                '#E75762',
-                                                                                '#A8C599',
-                                                                            ],
-                                                                            is3D: true,
-                                                                        }}
-                                                                        height={'400px'}
-                                                                    />
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                                )}
+                                                            </div>
+                                                        )
                                                     );
                                                 });
                                             case 'TEXTBOX_TABLE':
