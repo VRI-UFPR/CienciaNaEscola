@@ -151,7 +151,12 @@ function ApplicationsPage(props) {
                                     </h1>
                                     <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                         <ProtocolList
-                                            listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))}
+                                            listItems={visibleApplications.map((a) => ({
+                                                id: a.id,
+                                                title: a.protocol.title,
+                                                allowEdit: a.actions.toUpdate,
+                                                allowDelete: a.actions.toDelete,
+                                            }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
                                         />
@@ -162,7 +167,14 @@ function ApplicationsPage(props) {
                             <div className="col col-md-10 d-flex flex-column mh-100 h-lg-100 p-4 pt-0">
                                 <h1 className="color-grey font-century-gothic fw-bold fs-3 pb-4 m-0">Aplicações visíveis</h1>
                                 <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                    <ProtocolCarousel listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))} />
+                                    <ProtocolCarousel
+                                        listItems={visibleApplications.map((a) => ({
+                                            id: a.id,
+                                            title: a.protocol.title,
+                                            allowEdit: a.actions.toUpdate,
+                                            allowDelete: a.actions.toDelete,
+                                        }))}
+                                    />
                                 </div>
                             </div>
                         )}

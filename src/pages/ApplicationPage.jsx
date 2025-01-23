@@ -414,7 +414,7 @@ function ApplicationPage(props) {
                             <div className="d-flex flex-column flex-grow-1">
                                 {isDashboard && (
                                     <div className="row g-2 justify-content-center mb-4">
-                                        {(application.applier.id === user.id || user.role === 'ADMIN') && (
+                                        {application.actions.toUpdate && (
                                             <div className="col align-self-cente">
                                                 <TextButton
                                                     type="submit"
@@ -424,14 +424,16 @@ function ApplicationPage(props) {
                                                 />
                                             </div>
                                         )}
-                                        <div className="col align-self-center">
-                                            <TextButton
-                                                type="submit"
-                                                hsl={[197, 43, 61]}
-                                                text="Respostas"
-                                                onClick={() => navigate('answers')}
-                                            />
-                                        </div>
+                                        {application.actions.toGetAnswers && (
+                                            <div className="col align-self-center">
+                                                <TextButton
+                                                    type="submit"
+                                                    hsl={[197, 43, 61]}
+                                                    text="Respostas"
+                                                    onClick={() => navigate('answers')}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 <div className="row justify-content-center m-0">

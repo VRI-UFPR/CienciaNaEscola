@@ -155,7 +155,12 @@ function ProtocolsPage(props) {
                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Protocolos disponíveis</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                 <ProtocolList
-                                    listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}
+                                    listItems={visibleProtocols.map((p) => ({
+                                        id: p.id,
+                                        title: p.title,
+                                        allowEdit: p.actions.toUpdate,
+                                        allowDelete: p.actions.toDelete,
+                                    }))}
                                     hsl={[16, 100, 88]}
                                     viewFunction={(id) => navigate(`${id}`)}
                                 />

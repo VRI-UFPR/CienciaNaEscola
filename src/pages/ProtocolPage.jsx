@@ -144,7 +144,7 @@ function ProtocolPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
                                 <div className="row justify-content-center g-2 mb-4">
-                                    {(protocol.creator.id === user.id || user.role === 'ADMIN') && (
+                                    {protocol.actions.toUpdate && (
                                         <div className="col align-self-center">
                                             <TextButton
                                                 type="submit"
@@ -154,7 +154,7 @@ function ProtocolPage(props) {
                                             />
                                         </div>
                                     )}
-                                    {(protocol.applicability === 'PUBLIC' || protocol.appliers !== undefined) && (
+                                    {protocol.actions.toApply && (
                                         <div className="col align-self-center">
                                             <TextButton
                                                 type="submit"
@@ -164,14 +164,16 @@ function ProtocolPage(props) {
                                             />
                                         </div>
                                     )}
-                                    <div className="col align-self-center">
-                                        <TextButton
-                                            type="submit"
-                                            hsl={[197, 43, 61]}
-                                            text="Respostas"
-                                            onClick={() => navigate('answers')}
-                                        />
-                                    </div>
+                                    {protocol.actions.toGetWAnswers && (
+                                        <div className="col align-self-center">
+                                            <TextButton
+                                                type="submit"
+                                                hsl={[197, 43, 61]}
+                                                text="Respostas"
+                                                onClick={() => navigate('answers')}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="row justify-content-center m-0">
                                     {<ProtocolInfo title={protocol.title} description={protocol.description} />}
