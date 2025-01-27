@@ -159,6 +159,8 @@ function ApplicationsPage(props) {
                                             }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
+                                            editFunction={(id) => navigate(`${id}/manage`)}
+                                            deleteFunction={(id) => deleteApplication(id)}
                                         />
                                     </div>
                                 </div>
@@ -174,6 +176,9 @@ function ApplicationsPage(props) {
                                             allowEdit: a.actions.toUpdate,
                                             allowDelete: a.actions.toDelete,
                                         }))}
+                                        viewFunction={(id) => navigate(`${id}`)}
+                                        editFunction={(id) => navigate(`${id}/manage`)}
+                                        deleteFunction={(id) => deleteApplication(id)}
                                     />
                                 </div>
                             </div>

@@ -163,6 +163,8 @@ function ProtocolsPage(props) {
                                     }))}
                                     hsl={[16, 100, 88]}
                                     viewFunction={(id) => navigate(`${id}`)}
+                                    editFunction={(id) => navigate(`${id}/manage`)}
+                                    deleteFunction={(id) => deleteProtocol(id)}
                                 />
                             </div>
                         </div>
