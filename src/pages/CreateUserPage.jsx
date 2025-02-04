@@ -437,14 +437,18 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    <option value="USER">Usuário</option>
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="APPLIER">Aplicador</option>
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="USER">Usuário</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="APPLIER">Aplicador</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="PUBLISHER">Publicador</option>}
+                                                    {user.role === 'ADMIN' && newUser.role !== 'ADMIN' && (
+                                                        <option value="COORDINATOR">Coordenador</option>
                                                     )}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="PUBLISHER">Publicador</option>
+                                                    {user.role === 'ADMIN' && newUser.role === 'ADMIN' && (
+                                                        <option value="ADMIN">Administrador</option>
                                                     )}
-                                                    {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}
