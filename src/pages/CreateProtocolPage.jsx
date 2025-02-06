@@ -16,7 +16,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
 import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewPage, defaultNewProtocol } from '../utils/constants';
@@ -308,7 +307,7 @@ function CreateProtocolPage(props) {
 
         if (isEditing) {
             axios
-                .put(baseUrl + 'api/protocol/updateProtocol/' + protocolId, formData, {
+                .put(process.env.REACT_APP_API_URL + 'api/protocol/updateProtocol/' + protocolId, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -323,7 +322,7 @@ function CreateProtocolPage(props) {
                 });
         } else {
             axios
-                .post(baseUrl + 'api/protocol/createProtocol', formData, {
+                .post(process.env.REACT_APP_API_URL + 'api/protocol/createProtocol', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -338,7 +337,7 @@ function CreateProtocolPage(props) {
 
     const deleteProtocol = () => {
         axios
-            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/protocol/deleteProtocol/${protocolId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -366,7 +365,7 @@ function CreateProtocolPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/protocol/getProtocol/${protocolId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/protocol/getProtocol/${protocolId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },

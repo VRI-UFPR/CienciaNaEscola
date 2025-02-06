@@ -16,7 +16,6 @@ import { MaterialSymbol } from 'react-material-symbols';
 import { brazilianStates } from '../../../utils/constants';
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
-import baseUrl from '../../../contexts/RouteContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { AlertContext } from '../../../contexts/AlertContext';
 
@@ -89,7 +88,7 @@ export function Location(props) {
             const promises = [];
             promises.push(
                 axios
-                    .post(`${baseUrl}api/address/getAddressId`, formData, {
+                    .post(`${process.env.REACT_APP_API_URL}api/address/getAddressId`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
@@ -117,7 +116,7 @@ export function Location(props) {
             const searchParams = { state, country: 'Brasil' };
             const formData = serialize(searchParams);
             axios
-                .post(`${baseUrl}api/address/getAddressesByState`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/address/getAddressesByState`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
