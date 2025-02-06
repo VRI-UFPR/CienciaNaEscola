@@ -13,7 +13,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { serialize } from 'object-to-formdata';
 import SplashPage from './SplashPage';
@@ -112,7 +111,7 @@ const style = `
 function CreateUserPage(props) {
     const { institutionId, userId } = useParams();
     const { isEditing } = props;
-    const { user, renewUser } = useContext(AuthContext);
+    const { user, renewUser, logout } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
     const profilePicRef = useRef(null);
@@ -145,7 +144,7 @@ function CreateUserPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/user/getUser/${userId || user.id}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/user/getUser/${userId || user.id}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -171,7 +170,7 @@ function CreateUserPage(props) {
             if (user.role !== 'USER' && (institutionId || user.institutionId)) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                             headers: {
                                 Authorization: `Bearer ${user.token}`,
                             },
@@ -194,7 +193,7 @@ function CreateUserPage(props) {
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -227,7 +226,7 @@ function CreateUserPage(props) {
         const formData = serialize({ ...newUser, hash: hashSync(newUser.hash, salt) });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/user/updateUser/${userId || user.id}`, formData, {
+                .put(`${process.env.REACT_APP_API_URL}api/user/updateUser/${userId || user.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -239,16 +238,19 @@ function CreateUserPage(props) {
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
-                            if (response.data.data.id === user.id)
+                            if (!userId || userId === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                            navigate(`/dash/institutions/my`);
+                                navigate(`/dash/profile`);
+                            } else {
+                                navigate(`/dash/institutions/my`);
+                            }
                         },
                     });
                 })
                 .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário.', bodyText: error.response?.data.message }));
         } else {
             axios
-                .post(`${baseUrl}api/user/createUser`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/user/createUser`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -263,14 +265,24 @@ function CreateUserPage(props) {
 
     const deleteUser = () => {
         axios
-            .delete(`${baseUrl}api/user/deleteUser/${userId || user.id}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/user/deleteUser/${userId || user.id}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) =>
-                showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-            )
+            .then((response) => {
+                if (!userId || userId === user.id) {
+                    showAlert({
+                        headerText: 'Usuário excluído com sucesso.',
+                        onPrimaryBtnClick: () => {
+                            logout();
+                            navigate(`/dash/signin`);
+                        },
+                    });
+                } else {
+                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) });
+                }
+            })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
     };
 
@@ -309,7 +321,7 @@ function CreateUserPage(props) {
                                                 !newUser.profileImage
                                                     ? BlankProfilePic
                                                     : newUser.profileImageId
-                                                    ? baseUrl + newUser.profileImage.path
+                                                    ? process.env.REACT_APP_API_URL + newUser.profileImage.path
                                                     : URL.createObjectURL(newUser.profileImage)
                                             }
                                             className="rounded-circle h-100 w-100"
@@ -427,14 +439,18 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    <option value="USER">Usuário</option>
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="APPLIER">Aplicador</option>
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="USER">Usuário</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="APPLIER">Aplicador</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="PUBLISHER">Publicador</option>}
+                                                    {user.role === 'ADMIN' && newUser.role !== 'ADMIN' && (
+                                                        <option value="COORDINATOR">Coordenador</option>
                                                     )}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="PUBLISHER">Publicador</option>
+                                                    {user.role === 'ADMIN' && newUser.role === 'ADMIN' && (
+                                                        <option value="ADMIN">Administrador</option>
                                                     )}
-                                                    {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}

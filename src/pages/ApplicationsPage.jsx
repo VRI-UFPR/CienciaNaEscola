@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
@@ -75,7 +74,7 @@ function ApplicationsPage(props) {
             }
         } else if (isLoading && user.status !== 'loading') {
             axios
-                .get(baseUrl + `api/application/getVisibleApplications`, {
+                .get(process.env.REACT_APP_API_URL + `api/application/getVisibleApplications`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
@@ -90,7 +89,7 @@ function ApplicationsPage(props) {
 
     const deleteApplication = (applicationId) => {
         axios
-            .delete(`${baseUrl}api/application/deleteApplication/${applicationId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/application/deleteApplication/${applicationId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

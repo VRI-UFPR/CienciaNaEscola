@@ -62,7 +62,7 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-type-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <select
-                        className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                        className="form-select light-grey-input border border-steel-blue rounded-4 fs-5"
                         id="validation-type"
                         value={validation.type || ''}
                         onChange={(event) => {
@@ -112,7 +112,7 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-argument-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="validation-argument"
                         type="number"
                         value={validation.argument || ''}
@@ -142,7 +142,7 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-message-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="validation-custom-message"
                         type="text"
                         value={validation.customMessage || ''}
