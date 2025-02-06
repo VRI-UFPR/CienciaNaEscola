@@ -31,7 +31,6 @@ import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
@@ -326,7 +325,7 @@ function ApplicationPage(props) {
 
         if (connected === true) {
             axios
-                .post(baseUrl + `api/applicationAnswer/createApplicationAnswer`, formData, {
+                .post(process.env.REACT_APP_API_URL + `api/applicationAnswer/createApplicationAnswer`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -349,7 +348,7 @@ function ApplicationPage(props) {
                 id: applicationId,
                 userId: user.id,
                 title: 'Resposta da aplicação ' + applicationId + ' referente ao protocolo ' + application.protocol.title,
-                url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
+                url: process.env.REACT_APP_API_URL + `api/applicationAnswer/createApplicationAnswer`,
                 data: formData,
                 config: {
                     headers: {
@@ -370,7 +369,7 @@ function ApplicationPage(props) {
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
                 axios
-                    .get(baseUrl + `api/application/getApplicationWithProtocol/${applicationId}`, {
+                    .get(process.env.REACT_APP_API_URL + `api/application/getApplicationWithProtocol/${applicationId}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },

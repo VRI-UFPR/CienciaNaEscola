@@ -15,8 +15,17 @@ import { useEffect } from 'react';
 import { MaterialSymbol } from 'react-material-symbols';
 
 const style = `
-    .btn-addbar:hover {
-        background-color: rgba(255, 255, 255, 0.5);
+    .btn-addbar {
+        border: 0 !important;
+    }
+
+    .btn-addbar:hover,
+    .btn-addbar:active {
+        background-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    .btn-addbar:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040 !important;
     }
 
     .bg-steel-blue {
