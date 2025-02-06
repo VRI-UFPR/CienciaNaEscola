@@ -239,9 +239,12 @@ function CreateUserPage(props) {
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
-                            if (response.data.data.id === user.id)
+                            if (response.data.data.id === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                            navigate(`/dash/profile`);
+                                navigate(`/dash/profile`);
+                            } else {
+                                navigate(`/dash/institutions/my`);
+                            }
                         },
                     });
                 })
@@ -278,7 +281,7 @@ function CreateUserPage(props) {
                         },
                     });
                 } else {
-                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/applications`) });
+                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) });
                 }
             })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
