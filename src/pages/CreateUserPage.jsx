@@ -239,7 +239,7 @@ function CreateUserPage(props) {
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
-                            if (response.data.data.id === user.id) {
+                            if (!userId || userId === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
                                 navigate(`/dash/profile`);
                             } else {
