@@ -139,7 +139,7 @@ function ApplicationsPage(props) {
                         >
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Aplicações</h1>
                             {isDashboard ? (
-                                <div class="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
+                                <div className="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
                                     {user.role !== 'USER' && user.role !== 'APPLIER' && (
                                         <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
                                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">
@@ -170,7 +170,7 @@ function ApplicationsPage(props) {
                                     </div>
                                 </div>
                             ) : (
-                                <div class="row flex-grow-1 overflow-y-hidden pb-lg-4 g-4">
+                                <div className="row flex-grow-1 overflow-y-hidden pb-lg-4 g-4">
                                     <div className="col-12 d-flex flex-column min-vh-80 h-lg-100">
                                         <ProtocolCarousel
                                             listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))}

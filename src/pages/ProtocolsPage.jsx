@@ -136,7 +136,7 @@ function ProtocolsPage(props) {
                             md="10"
                         >
                             <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Protocolos</h1>
-                            <div class="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
+                            <div className="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
                                 {user.role !== 'USER' && user.role !== 'APPLIER' && (
                                     <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
                                         <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">Meus protocolos</h1>
