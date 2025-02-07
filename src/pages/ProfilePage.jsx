@@ -226,7 +226,7 @@ function ProfilePage(props) {
                                 </div>
                             </div>
                         </div>
-                        {(user.role === 'PUBLISHER' || user.role === 'COORDINATOR' || user.role === 'ADMIN') && (
+                        {user.id !== 1 && (
                             <div className="row flex-grow-1 justify-center justify-content-center mx-0">
                                 <div className="col-6 col-lg-4 pt-4">
                                     <TextButton className="px-5" hsl={[97, 43, 70]} text="Editar" onClick={() => navigate(`manage`)} />
