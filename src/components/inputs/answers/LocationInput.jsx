@@ -146,11 +146,6 @@ export function Location(props) {
                                 add: () => mapRef.current.setView([answer.latitude, answer.longitude]),
                             }}
                         >
-                            <Popup>
-                                <a className="color-dark-gray fw-bold fs-6" href="https://google.com">
-                                    Username - dd/mm/aaaa
-                                </a>
-                            </Popup>
                         </Marker>
                     )}
                 </MapContainer>
