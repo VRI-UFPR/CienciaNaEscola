@@ -175,7 +175,12 @@ function InstitutionPage(props) {
                                                     .filter((u) => u.username.startsWith(VUSearchInput))
                                                     .map((u) => (
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                            {user.role === 'ADMIN' ? (
+                                                            {user.role === 'ADMIN' ||
+                                                            (user.role === 'COORDINATOR' &&
+                                                                u.role !== 'ADMIN' &&
+                                                                u.role !== 'COORDINATOR') ||
+                                                            ((user.role === 'PUBLISHER' || user.role === 'APPLIER') &&
+                                                                u.role === 'USER') ? (
                                                                 <Link
                                                                     to={`users/${u.id}/manage`}
                                                                     className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
