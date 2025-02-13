@@ -132,10 +132,10 @@ function Sidebar(props) {
                             Instituições
                         </Link>
                     )}
-                    {isDashboard && user.role !== 'USER' && user.role !== 'ADMIN' && (
+                    {isDashboard && user.role !== 'USER' && user.role !== 'ADMIN' && user.institutionId && (
                         <Link
                             className="text-white text-decoration-none ps-5 py-2"
-                            to={`/dash/institutions/my`}
+                            to={`/dash/institutions/${user.institutionId}`}
                             onClick={() => closeSidebar()}
                         >
                             Minha Instituição
