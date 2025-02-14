@@ -413,25 +413,27 @@ function ApplicationPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
                                 {isDashboard && (
-                                    <div className="row m-0 justify-content-center">
-                                        {(application.applier.id === user.id || user.role === 'ADMIN') && (
-                                            <div className="col-6 col-md-4 align-self-center pb-4">
+                                    <div className="row g-2 justify-content-center mb-4">
+                                        {application.actions.toUpdate && (
+                                            <div className="col">
                                                 <TextButton
                                                     type="submit"
-                                                    hsl={[97, 43, 70]}
+                                                    hsl={[197, 43, 61]}
                                                     text="Gerenciar"
                                                     onClick={() => navigate('manage')}
                                                 />
                                             </div>
                                         )}
-                                        <div className="col-6 col-md-4 align-self-center pb-4">
-                                            <TextButton
-                                                type="submit"
-                                                hsl={[97, 43, 70]}
-                                                text="Respostas"
-                                                onClick={() => navigate('answers')}
-                                            />
-                                        </div>
+                                        {application.actions.toGetAnswers && (
+                                            <div className="col">
+                                                <TextButton
+                                                    type="submit"
+                                                    hsl={[197, 43, 61]}
+                                                    text="Respostas"
+                                                    onClick={() => navigate('answers')}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 <div className="row justify-content-center m-0">

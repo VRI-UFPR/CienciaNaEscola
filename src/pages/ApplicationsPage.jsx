@@ -151,9 +151,16 @@ function ApplicationsPage(props) {
                                     </h1>
                                     <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                         <ProtocolList
-                                            listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))}
+                                            listItems={visibleApplications.map((a) => ({
+                                                id: a.id,
+                                                title: a.protocol.title,
+                                                allowEdit: a.actions.toUpdate,
+                                                allowDelete: a.actions.toDelete,
+                                            }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
+                                            editFunction={(id) => navigate(`${id}/manage`)}
+                                            deleteFunction={(id) => deleteApplication(id)}
                                         />
                                     </div>
                                 </div>

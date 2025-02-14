@@ -338,7 +338,7 @@ function AnswerPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
                             <div className="row p-0 m-0">
                                 <h1 className="col col-12 col-md-9 order-2 order-md-1 color-dark-gray font-century-gothic fw-bold fs-2 py-4 pt-md-0 m-0">
-                                    <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
+                                    <Link className="color-dark-gray" to={`/dash/applications/${applicationId}`}>
                                         {answer.protocol.title}
                                     </Link>{' '}
                                     - Respostas
@@ -351,13 +351,15 @@ function AnswerPage(props) {
                             <div className="bg-light-gray rounded-4 mb-3 p-3">
                                 <h2 className="color-dark-gray fw-medium fs-5 m-0">
                                     {Object.keys(answer.answers).length + ' respostas '}
-                                    <a
-                                        href="#answerTab"
-                                        onClick={() => setVisualization(undefined, undefined)}
-                                        className="color-dark-gray fw-bold fs-6"
-                                    >
-                                        (ver todas)
-                                    </a>
+                                    {(selectedAnswer !== undefined || selectedAnswer !== undefined) && (
+                                        <a
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(undefined, undefined)}
+                                            className="color-dark-gray fw-bold fs-6"
+                                        >
+                                            (ver todas)
+                                        </a>
+                                    )}
                                 </h2>
                             </div>
 

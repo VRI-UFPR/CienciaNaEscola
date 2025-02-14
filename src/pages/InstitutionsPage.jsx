@@ -118,10 +118,13 @@ function InstitutionsPage(props) {
                             <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 pb-4 m-0">Minhas instituições</h1>
                             <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
                                 <ProtocolList
-                                    listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))}
+                                    listItems={visibleInstitutions.map((i) => ({
+                                        id: i.id,
+                                        title: i.name,
+                                        allowEdit: i.actions.toUpdate,
+                                        allowDelete: i.actions.toDelete,
+                                    }))}
                                     hsl={[36, 98, 83]}
-                                    allowEdit={user.role === 'ADMIN' || user.role === 'COORDINATOR'}
-                                    allowDelete={user.role === 'ADMIN'}
                                     viewFunction={(id) => navigate(`${id}`)}
                                     editFunction={(id) => navigate(`${id}/manage`)}
                                     deleteFunction={(id) => deleteInstitution(id)}
@@ -132,13 +135,7 @@ function InstitutionsPage(props) {
                     {user.role === 'ADMIN' && (
                         <div className="row d-flex justify-content-center pb-4 m-0">
                             <div className="col-9 col-sm-6 col-md-5 col-lg-4 d-flex flex-column p-0 m-0">
-                                <TextButton
-                                    text={'Criar nova instituição'}
-                                    hsl={[97, 43, 70]}
-                                    onClick={() => {
-                                        navigate('create');
-                                    }}
-                                />
+                                <TextButton text={'Criar nova instituição'} hsl={[97, 43, 70]} onClick={() => navigate('create')} />
                             </div>
                         </div>
                     )}
