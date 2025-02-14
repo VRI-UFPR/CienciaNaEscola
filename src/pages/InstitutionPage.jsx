@@ -236,15 +236,9 @@ function InstitutionPage(props) {
                                         </div>
                                     </div>
                                     <div className="row d-flex justify-content-center justify-content-lg-start">
-                                        {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                        {institution.actions.toUpdate && (
                                             <div className="col-5 col-sm-3 col-xl-2">
-                                                <TextButton
-                                                    text={'Gerenciar'}
-                                                    hsl={[97, 43, 70]}
-                                                    onClick={() => {
-                                                        navigate('manage');
-                                                    }}
-                                                />
+                                                <TextButton text={'Gerenciar'} hsl={[97, 43, 70]} onClick={() => navigate('manage')} />
                                             </div>
                                         )}
                                     </div>
@@ -267,9 +261,7 @@ function InstitutionPage(props) {
                                             <TextButton
                                                 text={'Criar grupo sem vínculo'}
                                                 hsl={[97, 43, 70]}
-                                                onClick={() => {
-                                                    navigate('classrooms/create');
-                                                }}
+                                                onClick={() => navigate('classrooms/create')}
                                             />
                                         </div>
                                     </div>
