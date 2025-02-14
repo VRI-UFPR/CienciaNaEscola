@@ -169,17 +169,7 @@ function ApplicationsPage(props) {
                             <div className="col col-md-10 d-flex flex-column mh-100 h-lg-100 p-4 pt-0">
                                 <h1 className="color-grey font-century-gothic fw-bold fs-3 pb-4 m-0">Aplicações visíveis</h1>
                                 <div className="d-flex justify-content-center flex-grow-1 overflow-hidden">
-                                    <ProtocolCarousel
-                                        listItems={visibleApplications.map((a) => ({
-                                            id: a.id,
-                                            title: a.protocol.title,
-                                            allowEdit: a.actions.toUpdate,
-                                            allowDelete: a.actions.toDelete,
-                                        }))}
-                                        viewFunction={(id) => navigate(`${id}`)}
-                                        editFunction={(id) => navigate(`${id}/manage`)}
-                                        deleteFunction={(id) => deleteApplication(id)}
-                                    />
+                                    <ProtocolCarousel listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))} />
                                 </div>
                             </div>
                         )}
