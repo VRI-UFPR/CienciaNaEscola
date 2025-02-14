@@ -132,10 +132,13 @@ function InstitutionsPage(props) {
                             <div className="row flex-grow-1 overflow-lg-y-hidden pb-lg-4 g-4">
                                 <div className="col-12 d-flex flex-column m-vh-80 h-lg-100">
                                     <ProtocolList
-                                        listItems={visibleInstitutions.map((i) => ({ id: i.id, title: i.name }))}
+                                        listItems={visibleInstitutions.map((i) => ({
+                                            id: i.id,
+                                            title: i.name,
+                                            allowEdit: i.actions.toUpdate,
+                                            allowDelete: i.actions.toDelete,
+                                        }))}
                                         hsl={[36, 98, 83]}
-                                        allowEdit={user.role === 'ADMIN' || user.role === 'COORDINATOR'}
-                                        allowDelete={user.role === 'ADMIN'}
                                         viewFunction={(id) => navigate(`${id}`)}
                                         editFunction={(id) => navigate(`${id}/manage`)}
                                         deleteFunction={(id) => deleteInstitution(id)}
