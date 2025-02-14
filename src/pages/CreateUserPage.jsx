@@ -111,7 +111,7 @@ const style = `
 function CreateUserPage(props) {
     const { institutionId, userId } = useParams();
     const { isEditing } = props;
-    const { user, renewUser } = useContext(AuthContext);
+    const { user, renewUser, logout } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
     const profilePicRef = useRef(null);
@@ -135,7 +135,7 @@ function CreateUserPage(props) {
             ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
-            } else if (isEditing && user.role !== 'ADMIN' && userId && user.id !== parseInt(userId)) {
+            } else if (isEditing && user.role !== 'ADMIN' && user.role !== 'COORDINATOR' && userId && user.id !== parseInt(userId)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
                 return;
             }
@@ -238,9 +238,12 @@ function CreateUserPage(props) {
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
-                            if (response.data.data.id === user.id)
+                            if (!userId || userId === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
-                            navigate(`/dash/institutions/my`);
+                                navigate(`/dash/profile`);
+                            } else {
+                                navigate(`/dash/institutions/my`);
+                            }
                         },
                     });
                 })
@@ -267,9 +270,19 @@ function CreateUserPage(props) {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
-            .then((response) =>
-                showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-            )
+            .then((response) => {
+                if (!userId || userId === user.id) {
+                    showAlert({
+                        headerText: 'Usuário excluído com sucesso.',
+                        onPrimaryBtnClick: () => {
+                            logout();
+                            navigate(`/dash/signin`);
+                        },
+                    });
+                } else {
+                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) });
+                }
+            })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
     };
 
@@ -426,14 +439,18 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    <option value="USER">Usuário</option>
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="APPLIER">Aplicador</option>
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="USER">Usuário</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="APPLIER">Aplicador</option>}
+                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
+                                                        user.role === 'COORDINATOR') && <option value="PUBLISHER">Publicador</option>}
+                                                    {user.role === 'ADMIN' && newUser.role !== 'ADMIN' && (
+                                                        <option value="COORDINATOR">Coordenador</option>
                                                     )}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="PUBLISHER">Publicador</option>
+                                                    {user.role === 'ADMIN' && newUser.role === 'ADMIN' && (
+                                                        <option value="ADMIN">Administrador</option>
                                                     )}
-                                                    {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}

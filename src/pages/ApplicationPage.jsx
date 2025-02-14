@@ -462,7 +462,7 @@ function ApplicationPage(props) {
                                             itemGroup.type !== 'CHECKBOX_TABLE'
                                         ) {
                                             return (
-                                                <div>
+                                                <div key={'group' + itemGroupIndex}>
                                                     {itemGroup.items.map((item) => {
                                                         switch (item.type) {
                                                             case 'RANGE':

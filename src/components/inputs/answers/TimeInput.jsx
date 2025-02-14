@@ -26,6 +26,11 @@ const styles = `
         background-color: #91CAD6;
     }
 
+    input.bg-white:active,
+    input.bg-white:focus{
+        box-shadow: none !important;
+    }
+
     .color-dark-gray {
         color: #535353;
     }
@@ -84,7 +89,7 @@ function TimeInput(props) {
                     <div className="row m-0">
                         <input
                             type="time"
-                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
+                            className="form-control border-0 color-sonic-silver bg-white fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
                             value={answer}
                             onChange={(e) => updateAnswer(e.target.value)}

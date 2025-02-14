@@ -13,7 +13,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import { useCallback, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 
 const styles = `
     .font-barlow {
@@ -26,6 +26,12 @@ const styles = `
 
     .bg-pastel-blue {
         background-color: #91CAD6;
+    }
+
+    .bg-white:active,
+    .bg-white:focus {
+        border-color: rgb(222, 226, 230);
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
     .color-dark-gray {
@@ -145,8 +151,7 @@ export function Location(props) {
                                 },
                                 add: () => mapRef.current.setView([answer.latitude, answer.longitude]),
                             }}
-                        >
-                        </Marker>
+                        ></Marker>
                     )}
                 </MapContainer>
             </div>

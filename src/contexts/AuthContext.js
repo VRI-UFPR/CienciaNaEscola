@@ -105,63 +105,61 @@ export const AuthProvider = ({ children }) => {
 
     // Check user's token expiration time and renew it if necessary or clear traces if expired
     const renewLogin = useCallback(() => {
-        setUser((prev) => {
-            if (prev.status === 'authenticated') {
-                const now = new Date();
-                const renewTime = new Date(new Date(prev.expiresIn).getTime() - 600000);
-                const expirationTime = new Date(prev.expiresIn);
-                if (now >= renewTime && now <= expirationTime) {
-                    axios
-                        .post(`${process.env.REACT_APP_API_URL}api/auth/renewSignIn`, null, {
-                            headers: {
-                                Authorization: `Bearer ${prev.token}`,
-                            },
-                        })
-                        .then((response) => {
-                            if (response.data.data.token) {
-                                const token = response.data.data.token;
-                                const expiresIn = new Date(new Date().getTime() + response.data.data.expiresIn);
-                                const role = response.data.data.role;
-                                localStorage.setItem('user', JSON.stringify({ ...prev, token, expiresIn }));
-                                return {
-                                    ...prev,
-                                    role,
-                                    token,
-                                    expiresIn,
-                                    status: 'authenticated',
-                                };
-                            }
-                        })
-                        .catch((error) => {
-                            clearDBAndStorage();
-                            return { status: 'unauthenticated' };
-                        });
-                } else if (now > expirationTime) {
-                    clearDBAndStorage();
-                    return { status: 'unauthenticated' };
-                }
+        if (user.status === 'authenticated') {
+            const now = new Date();
+            const renewTime = new Date(new Date(user.expiresIn).getTime() - 600000);
+            const expirationTime = new Date(user.expiresIn);
+            if (now >= renewTime && now <= expirationTime) {
+                axios
+                    .post(`${process.env.REACT_APP_API_URL}api/auth/renewSignIn`, null, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        if (response.data.data.token) {
+                            const token = response.data.data.token;
+                            const expiresIn = new Date(new Date().getTime() + response.data.data.expiresIn);
+                            const role = response.data.data.role;
+                            localStorage.setItem('user', JSON.stringify({ ...user, token, expiresIn }));
+                            setUser((prev) => ({
+                                ...prev,
+                                role,
+                                token,
+                                expiresIn,
+                                status: 'authenticated',
+                            }));
+                        }
+                    })
+                    .catch((error) => {
+                        clearDBAndStorage();
+                        setUser({ status: 'unauthenticated' });
+                    });
+            } else if (now > expirationTime) {
+                clearDBAndStorage();
+                setUser({ status: 'unauthenticated' });
             }
-            return prev;
-        });
-    }, [clearDBAndStorage]);
+        }
+    }, [user, clearDBAndStorage]);
 
-    // Load user from localStorage and schedule periodic token expiration check
+    // Load user from localStorage
     useEffect(() => {
         setUser((prev) =>
             JSON.parse(localStorage.getItem('user'))
                 ? { ...JSON.parse(localStorage.getItem('user')), status: 'authenticated' }
                 : { status: 'unauthenticated' }
         );
+    }, []);
+
+    // Schedule periodic token expiration check
+    useEffect(() => {
+        renewLogin();
 
         const interval = setInterval(() => {
             renewLogin();
         }, 300000);
         return () => clearInterval(interval);
     }, [renewLogin]);
-
-    useEffect(() => {
-        if (user.status === 'authenticated') renewLogin();
-    }, [user.status, renewLogin]);
 
     return <AuthContext.Provider value={{ user, login, logout, acceptTerms, renewUser }}>{children}</AuthContext.Provider>;
 };

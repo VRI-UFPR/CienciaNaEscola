@@ -187,7 +187,7 @@ function AnswerPage(props) {
         header[0] = `"${header[0]}`;
         header[totalItems] = `${header[totalItems]}"`;
         // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
-        headerString = header.join('","');
+        headerString = header.join('";"');
 
         // Armazena as respostas
         ansIds.forEach((ansId, index) => {
@@ -248,13 +248,27 @@ function AnswerPage(props) {
                                         });
                                         break;
                                     case 'UPLOAD':
-                                        // const uploadFiles = item.itemAnswers?.[ansId]?.[ansId]?.[0]?.files || [];
-                                        // const imageFiles = uploadFiles.filter((file) => {
-                                        //     const filePath = file?.path || '';
-                                        //     return filePath.includes('.png') || filePath.includes('.jpg') || filePath.includes('.jpeg');
-                                        // });
-
-                                        userAnswers[totalItems + 1] = '';
+                                        Object.entries(item.itemAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                            if (applicationAnswerId === ansId) {
+                                                Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                    groupAnswers.forEach((groupAnswer) => {
+                                                        const uploadFiles = groupAnswer.files || [];
+                                                        const imageFiles = uploadFiles.filter((file) => {
+                                                            const filePath = file?.path || '';
+                                                            return (
+                                                                filePath.includes('.png') ||
+                                                                filePath.includes('.jpg') ||
+                                                                filePath.includes('.jpeg')
+                                                            );
+                                                        });
+                                                        userAnswers[totalItems + 1] = imageFiles
+                                                            .map((file) => process.env.REACT_APP_API_URL + file.path)
+                                                            .join(' | ');
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        userAnswers[totalItems + 1] = userAnswers[totalItems + 1] || '';
                                         break;
                                     default:
                                         break;
@@ -295,7 +309,7 @@ function AnswerPage(props) {
             });
 
             userAnswers[totalItems] = `${userAnswers[totalItems] || ''}"`;
-            answers[index] = userAnswers.join('","');
+            answers[index] = userAnswers.join('";"');
         });
 
         const csv = [headerString, ...answers].join('\r\n');

@@ -218,7 +218,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue title-tooltip p-1 rounded-circle"
             />
             <input
-                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
                 id="title"
                 type="text"
                 value={protocol.title || ''}
@@ -241,7 +241,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue description-tooltip p-1 rounded-circle"
             />
             <textarea
-                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
                 id="description"
                 rows="4"
                 value={protocol.description || ''}
@@ -310,7 +310,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue visibility-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="visibility"
                 value={protocol.visibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
@@ -468,7 +468,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue applicability-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="applicability"
                 value={protocol.applicability || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
@@ -558,7 +558,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue answer-visiblity-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="answer-visiblity"
                 value={protocol.answersVisibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))}
