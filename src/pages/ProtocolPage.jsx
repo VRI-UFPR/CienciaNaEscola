@@ -145,7 +145,7 @@ function ProtocolPage(props) {
                             <div className="d-flex flex-column flex-grow-1">
                                 <div className="row justify-content-center g-2 mb-4">
                                     {(protocol.creator.id === user.id || user.role === 'ADMIN') && (
-                                        <div className="col align-self-center">
+                                        <div className="col">
                                             <TextButton
                                                 type="submit"
                                                 hsl={[197, 43, 61]}
@@ -155,7 +155,7 @@ function ProtocolPage(props) {
                                         </div>
                                     )}
                                     {(protocol.applicability === 'PUBLIC' || protocol.appliers !== undefined) && (
-                                        <div className="col align-self-center">
+                                        <div className="col">
                                             <TextButton
                                                 type="submit"
                                                 hsl={[197, 43, 61]}
@@ -164,7 +164,7 @@ function ProtocolPage(props) {
                                             />
                                         </div>
                                     )}
-                                    <div className="col align-self-center">
+                                    <div className="col">
                                         <TextButton
                                             type="submit"
                                             hsl={[197, 43, 61]}

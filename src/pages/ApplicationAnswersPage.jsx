@@ -351,13 +351,15 @@ function AnswerPage(props) {
                             <div className="bg-light-gray rounded-4 mb-3 p-3">
                                 <h2 className="color-dark-gray fw-medium fs-5 m-0">
                                     {Object.keys(answer.answers).length + ' respostas '}
-                                    <a
-                                        href="#answerTab"
-                                        onClick={() => setVisualization(undefined, undefined)}
-                                        className="color-dark-gray fw-bold fs-6"
-                                    >
-                                        (ver todas)
-                                    </a>
+                                    {(selectedAnswer !== undefined || selectedAnswer !== undefined) && (
+                                        <a
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(undefined, undefined)}
+                                            className="color-dark-gray fw-bold fs-6"
+                                        >
+                                            (ver todas)
+                                        </a>
+                                    )}
                                 </h2>
                             </div>
 
@@ -648,22 +650,19 @@ function AnswerPage(props) {
                                                 case 'CHECKBOX_TABLE':
                                                     return Object.entries(answer.answers).map(([key, value], index) => {
                                                         return (
-                                                            <div
-                                                                key={`group-${itemGroupIndex}-${index}`}
-                                                                className="row justify-content-center m-0 pt-3"
-                                                            >
-                                                                <TableInput
-                                                                    applicationAnswerId={key}
-                                                                    group={itemGroup}
-                                                                    answersPage={true}
-                                                                    disabled={true}
-                                                                />
-                                                            </div>
-                                                            // <div>
-                                                            //     <p>VALUE: {JSON.stringify(value)}</p>
-                                                            //     <p>KEY: {JSON.stringify(key)}</p>
-                                                            //     <p>ITEMGROUP: {JSON.stringify(itemGroup)}</p>
-                                                            // </div>
+                                                            (selectedAnswer === undefined || selectedAnswer === key) && (
+                                                                <div
+                                                                    key={`group-${itemGroupIndex}-${index}`}
+                                                                    className="row justify-content-center m-0 pt-3"
+                                                                >
+                                                                    <TableInput
+                                                                        applicationAnswerId={key}
+                                                                        group={itemGroup}
+                                                                        answersPage={true}
+                                                                        disabled={true}
+                                                                    />
+                                                                </div>
+                                                            )
                                                         );
                                                     });
                                                 default:

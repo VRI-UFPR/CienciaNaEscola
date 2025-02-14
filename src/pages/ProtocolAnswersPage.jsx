@@ -19,7 +19,7 @@ import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import SplashPage from './SplashPage';
 import ErrorPage from './ErrorPage';
-import TextButton from '../components/TextButton';
+// import TextButton from '../components/TextButton';
 import RoundedButton from '../components/RoundedButton';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import Gallery from '../components/Gallery';
@@ -165,9 +165,9 @@ function ProtocolAnswersPage(props) {
                                     </Link>
                                 </h1>
                             </div>
-                            <div className="col order-1 order-md-2">
+                            {/* <div className="col order-1 order-md-2">
                                 <TextButton text={'Exportar'} hsl={[197, 43, 61]} onClick={() => {}} disabled={true} />
-                            </div>
+                            </div> */}
                         </div>
                         <div className="bg-light-gray rounded-4 mb-3 p-3">
                             <div className="row gx-2 justify-content-between align-items-center">
@@ -177,14 +177,18 @@ function ProtocolAnswersPage(props) {
                                         {protocolWAnswers.applications.flatMap((application) => application.answers).length})
                                     </h2>
                                     <p className="color-dark-gray fw-medium fs-6 m-0">
-                                        Clique em uma aplicação ou resposta para filtrar{' '}
-                                        <a
-                                            href="#answerTab"
-                                            onClick={() => setVisualization(undefined, undefined, undefined)}
-                                            className="color-dark-gray fw-bold fs-6"
-                                        >
-                                            (limpar filtros)
-                                        </a>
+                                        Clique em uma aplicação, questão ou resposta para filtrar{' '}
+                                        {(selectedAnswer !== undefined ||
+                                            selectedItem !== undefined ||
+                                            selectedApplication !== undefined) && (
+                                            <a
+                                                href="#answerTab"
+                                                onClick={() => setVisualization(undefined, undefined, undefined)}
+                                                className="color-dark-gray fw-bold fs-6"
+                                            >
+                                                (limpar filtros)
+                                            </a>
+                                        )}
                                     </p>
                                 </div>
                                 <div className="col-auto">
