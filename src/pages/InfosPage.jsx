@@ -17,7 +17,6 @@ import TextButton from '../components/TextButton';
 import { useNavigate } from 'react-router-dom';
 import MarkdownText from '../components/MarkdownText';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
 import { LayoutContext } from '../contexts/LayoutContext';
 import CustomContainer from '../components/CustomContainer';
@@ -57,7 +56,7 @@ function InfosPage(props) {
 
     const handleTermsAcceptance = () => {
         axios
-            .get(baseUrl + 'api/auth/acceptTerms', {
+            .get(process.env.REACT_APP_API_URL + 'api/auth/acceptTerms', {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,

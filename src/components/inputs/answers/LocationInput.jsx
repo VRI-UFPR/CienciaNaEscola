@@ -16,7 +16,6 @@ import { MaterialSymbol } from 'react-material-symbols';
 import { brazilianStates } from '../../../utils/constants';
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
-import baseUrl from '../../../contexts/RouteContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { AlertContext } from '../../../contexts/AlertContext';
 
@@ -31,6 +30,12 @@ const styles = `
 
     .bg-pastel-blue {
         background-color: #91CAD6;
+    }
+
+    .bg-white:active,
+    .bg-white:focus {
+        border-color: rgb(222, 226, 230);
+        box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
     .color-dark-gray {
@@ -83,7 +88,7 @@ export function Location(props) {
             const promises = [];
             promises.push(
                 axios
-                    .post(`${baseUrl}api/address/getAddressId`, formData, {
+                    .post(`${process.env.REACT_APP_API_URL}api/address/getAddressId`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
@@ -111,7 +116,7 @@ export function Location(props) {
             const searchParams = { state, country: 'Brasil' };
             const formData = serialize(searchParams);
             axios
-                .post(`${baseUrl}api/address/getAddressesByState`, formData, {
+                .post(`${process.env.REACT_APP_API_URL}api/address/getAddressesByState`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${user.token}`,
@@ -188,7 +193,7 @@ export function Location(props) {
                         <div className="row align-items-center justify-content-end gx-1 gy-2">
                             <div className="col-12 col-sm">
                                 <select
-                                    className="form-select rounded-4 bg-light-pastel-blue fs-5"
+                                    className="form-select bg-white rounded-4 fs-5"
                                     id="cityinput"
                                     value={addressId || ''}
                                     onChange={(e) => updateAddressId(e.target.value)}
@@ -204,7 +209,7 @@ export function Location(props) {
                             </div>
                             <div className="col-12 col-sm">
                                 <select
-                                    className="form-select rounded-4 bg-light-pastel-blue fs-5"
+                                    className="form-select bg-white rounded-4 fs-5"
                                     id="stateinput"
                                     value={state || ''}
                                     onChange={(e) => {

@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/Navbar';
@@ -76,7 +75,7 @@ function InstitutionsPage(props) {
                 return;
             }
             axios
-                .get(baseUrl + `api/institution/getVisibleInstitutions`, {
+                .get(process.env.REACT_APP_API_URL + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
@@ -91,7 +90,7 @@ function InstitutionsPage(props) {
 
     const deleteInstitution = (institutionId) => {
         axios
-            .delete(`${baseUrl}api/institution/deleteInstitution/${institutionId}`, {
+            .delete(`${process.env.REACT_APP_API_URL}api/institution/deleteInstitution/${institutionId}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },

@@ -14,7 +14,6 @@ import { useContext, useEffect, useState } from 'react';
 import SplashPage from './SplashPage';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import ErrorPage from './ErrorPage';
 import TextButton from '../components/TextButton';
@@ -99,7 +98,7 @@ function InstitutionPage(props) {
             }
             if (institutionId || user.institutionId) {
                 axios
-                    .get(`${baseUrl}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                    .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${user.token}`,
@@ -176,7 +175,12 @@ function InstitutionPage(props) {
                                                     .filter((u) => u.username.startsWith(VUSearchInput))
                                                     .map((u) => (
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                            {user.role === 'ADMIN' ? (
+                                                            {user.role === 'ADMIN' ||
+                                                            (user.role === 'COORDINATOR' &&
+                                                                u.role !== 'ADMIN' &&
+                                                                u.role !== 'COORDINATOR') ||
+                                                            ((user.role === 'PUBLISHER' || user.role === 'APPLIER') &&
+                                                                u.role === 'USER') ? (
                                                                 <Link
                                                                     to={`users/${u.id}/manage`}
                                                                     className="font-barlow color-grey text-break fw-medium fs-6 mb-0"

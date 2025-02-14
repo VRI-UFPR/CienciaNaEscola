@@ -18,7 +18,6 @@ import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import { useNavigate, useParams } from 'react-router-dom';
-import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
 import CustomContainer from '../components/CustomContainer';
@@ -84,7 +83,7 @@ function ProfilePage(props) {
             const promises = [];
             promises.push(
                 axios
-                    .get(`${baseUrl}api/user/getUser/${user.id}`, {
+                    .get(`${process.env.REACT_APP_API_URL}api/user/getUser/${user.id}`, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
@@ -143,7 +142,11 @@ function ProfilePage(props) {
                                 <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0">
                                     <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-100">
                                         <img
-                                            src={curUser.profileImage ? baseUrl + curUser.profileImage.path : BlankProfilePic}
+                                            src={
+                                                curUser.profileImage
+                                                    ? process.env.REACT_APP_API_URL + curUser.profileImage.path
+                                                    : BlankProfilePic
+                                            }
                                             className="rounded-circle h-100 w-100"
                                             alt="Foto de perfil"
                                         />

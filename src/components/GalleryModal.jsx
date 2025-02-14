@@ -13,7 +13,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import { useState, useImperativeHandle, forwardRef, useCallback } from 'react';
 import { Modal, Carousel } from 'bootstrap';
 import RoundedButton from './RoundedButton';
-import baseUrl from '../contexts/RouteContext.js';
 
 const GalleryModalStyles = `
     .font-century-gothic {
@@ -91,7 +90,7 @@ const GalleryModal = forwardRef((props, ref) => {
                                         >
                                             <div className="d-flex justify-content-center align-items-center rounded-4 h-100 w-100 p-0 m-0">
                                                 <img
-                                                    src={baseUrl + 'api/' + image.path}
+                                                    src={process.env.REACT_APP_API_URL + 'api/' + image.path}
                                                     className="w-auto h-auto mh-100 mw-100 object-fit-contain rounded-4"
                                                     alt={'Figura' + index + 1}
                                                 ></img>
