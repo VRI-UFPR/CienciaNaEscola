@@ -415,7 +415,7 @@ function ApplicationPage(props) {
                                 {isDashboard && (
                                     <div className="row g-2 justify-content-center mb-4">
                                         {application.actions.toUpdate && (
-                                            <div className="col align-self-cente">
+                                            <div className="col">
                                                 <TextButton
                                                     type="submit"
                                                     hsl={[197, 43, 61]}
@@ -425,7 +425,7 @@ function ApplicationPage(props) {
                                             </div>
                                         )}
                                         {application.actions.toGetAnswers && (
-                                            <div className="col align-self-center">
+                                            <div className="col">
                                                 <TextButton
                                                     type="submit"
                                                     hsl={[197, 43, 61]}
