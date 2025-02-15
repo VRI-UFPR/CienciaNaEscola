@@ -99,10 +99,7 @@ function InstitutionPage(props) {
             if (institutionId || user.institutionId) {
                 axios
                     .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => {
                         setInstitution(response.data.data);
@@ -110,22 +107,16 @@ function InstitutionPage(props) {
                         setSearchedClassrooms(response.data.data.classrooms);
                         setIsLoading(false);
                     })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' });
-                    });
-            } else {
-                setIsLoading(false);
-            }
+                    .catch((error) =>
+                        setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' })
+                    );
+            } else setIsLoading(false);
         }
     }, [institutionId, user.token, user.status, user.role, user.institutionId]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando instituição..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando instituição..." />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -164,7 +155,7 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'users/create'} className="text-decoration-none">
+                                                <Link to={'/dash/users/create'} className="text-decoration-none">
                                                     <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
                                                 </Link>
                                             </div>
@@ -177,7 +168,7 @@ function InstitutionPage(props) {
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             {user.role === 'ADMIN' ? (
                                                                 <Link
-                                                                    to={`users/${u.id}/manage`}
+                                                                    to={`/dash/users/${u.id}/manage`}
                                                                     className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
                                                                 >
                                                                     {u.username}
@@ -209,7 +200,7 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'classrooms/create'} className="text-decoration-none">
+                                                <Link to={'/dash/classrooms/create'} className="text-decoration-none">
                                                     <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
                                                 </Link>
                                             </div>
@@ -221,7 +212,7 @@ function InstitutionPage(props) {
                                                     <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                         {user.role !== 'USER' && user.role !== 'APPLIER' ? (
                                                             <Link
-                                                                to={`classrooms/${c.id}/manage`}
+                                                                to={`/dash/classrooms/${c.id}/manage`}
                                                                 className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
                                                             >
                                                                 {c.name}
@@ -238,40 +229,9 @@ function InstitutionPage(props) {
                                     <div className="row d-flex justify-content-center justify-content-lg-start">
                                         {institution && (user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
                                             <div className="col-5 col-sm-3 col-xl-2">
-                                                <TextButton
-                                                    text={'Gerenciar'}
-                                                    hsl={[97, 43, 70]}
-                                                    onClick={() => {
-                                                        navigate('manage');
-                                                    }}
-                                                />
+                                                <TextButton text={'Gerenciar'} hsl={[97, 43, 70]} onClick={() => navigate('manage')} />
                                             </div>
                                         )}
-                                    </div>
-                                </div>
-                            )}
-                            {!institution && (
-                                <div>
-                                    <p className="color-steel-blue fs-5 fw-medium mb-3">Você não está vinculado a nenhuma instituição</p>
-                                    <div className="row d-flex justify-content-center-lg-start gy-3">
-                                        <div className="col-12 col-md-6 col-xl-5">
-                                            <TextButton
-                                                text={'Criar usuário sem vínculo'}
-                                                hsl={[97, 43, 70]}
-                                                onClick={() => {
-                                                    navigate('users/create');
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-md-6 col-xl-5">
-                                            <TextButton
-                                                text={'Criar grupo sem vínculo'}
-                                                hsl={[97, 43, 70]}
-                                                onClick={() => {
-                                                    navigate('classrooms/create');
-                                                }}
-                                            />
-                                        </div>
                                     </div>
                                 </div>
                             )}

@@ -105,13 +105,13 @@ const style = `
 `;
 
 function CreateClassroomPage(props) {
-    const { institutionId, classroomId } = useParams();
+    const { classroomId } = useParams();
     const { isEditing } = props;
     const { user } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
 
-    const [classroom, setClassroom] = useState({ institutionId: institutionId, users: [] });
+    const [classroom, setClassroom] = useState({ institutionId: undefined, users: [] });
     const [institutionUsers, setInstitutionUsers] = useState([]);
     const [searchedUsers, setSearchedUsers] = useState([]);
     const [userSearchTerm, setUserSearchTerm] = useState('');
@@ -122,33 +122,25 @@ function CreateClassroomPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (
-                !isEditing &&
-                user.role !== 'ADMIN' &&
-                (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))
-            ) {
-                setError({
-                    text: 'Operação não permitida',
-                    description: 'Você não tem permissão para criar grupos nesta instituição',
-                });
+            if (!isEditing && user.role === 'USER') {
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar grupos nesta instituição' });
                 return;
             } else if (
                 isEditing &&
                 user.role !== 'ADMIN' &&
-                (user.role === 'USER' || user.role === 'APPLIER' || (institutionId && user.institutionId !== parseInt(institutionId)))
+                (user.role === 'USER' ||
+                    user.role === 'APPLIER' ||
+                    (classroom.institutionId && user.institutionId !== classroom.institutionId))
             ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este grupo' });
                 return;
             }
-            setClassroom((prev) => ({ ...prev, institutionId: institutionId || user.institutionId }));
             const promises = [];
             if (isEditing) {
                 promises.push(
                     axios
                         .get(`${process.env.REACT_APP_API_URL}api/classroom/getClassroom/${classroomId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
@@ -162,13 +154,11 @@ function CreateClassroomPage(props) {
                         .catch((error) => showAlert({ headerText: 'Erro ao buscar sala de aula.', bodyText: error.response?.data.message }))
                 );
             }
-            if (institutionId || user.institutionId) {
+            if (user.institutionId) {
                 promises.push(
                     axios
-                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${user.institutionId}`, {
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
@@ -179,20 +169,15 @@ function CreateClassroomPage(props) {
                         )
                 );
             }
-            Promise.all(promises).then(() => {
-                setIsLoading(false);
-            });
+            Promise.all(promises).then(() => setIsLoading(false));
         }
-    }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId, showAlert]);
+    }, [classroomId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, classroom.institutionId]);
 
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
             .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -224,75 +209,35 @@ function CreateClassroomPage(props) {
             if (isEditing) {
                 axios
                     .put(`${process.env.REACT_APP_API_URL}api/classroom/updateClassroom/${classroomId}`, formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
-                    .then((response) => {
-                        showAlert({
-                            headerText: 'Grupo atualizado com sucesso.',
-                            onHide: () => {
-                                navigate(`/dash/institutions/my`);
-                            },
-                        });
-                    })
-                    .catch((error) => {
-                        showAlert({
-                            headerText: 'Erro ao atualizar grupo.',
-                            bodyText: error.response?.data.message,
-                        });
-                    });
+                    .then(() =>
+                        showAlert({ headerText: 'Grupo atualizado com sucesso!', onPrimaryBtnClick: () => navigate(`/dash/users`) })
+                    )
+                    .catch((error) => showAlert({ headerText: 'Erro ao atualizar grupo.', bodyText: error.response?.data.message }));
             } else {
                 axios
                     .post(`${process.env.REACT_APP_API_URL}api/classroom/createClassroom`, formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
-                    .then((response) => {
-                        showAlert({
-                            headerText: 'Grupo criado com sucesso.',
-                            onHide: () => {
-                                navigate(`/dash/institutions/my`);
-                            },
-                        });
-                    })
-                    .catch((error) => {
-                        showAlert({
-                            headerText: 'Erro ao criar grupo.',
-                            bodyText: error.response?.data.message,
-                        });
-                    });
+                    .then(() => showAlert({ headerText: 'Grupo criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
+                    .catch((error) => showAlert({ headerText: 'Erro ao criar grupo.', bodyText: error.response?.data.message }));
             }
-        } else {
-            showAlert({
-                headerText: 'Adicione pelo menos dois usuários no grupo!',
-            });
-        }
+        } else showAlert({ headerText: 'Adicione pelo menos dois usuários no grupo!' });
     };
 
     const deleteClassroom = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/classroom/deleteClassroom/${classroomId}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { Authorization: `Bearer ${user.token}` },
             })
-            .then((response) =>
-                showAlert({ headerText: 'Grupo excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
-            )
+            .then(() => showAlert({ headerText: 'Grupo excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
             .catch((error) => showAlert({ headerText: 'Erro ao excluir grupo.', bodyText: error.response?.data.message }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando criação de grupo..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando criação de grupo..." />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -332,7 +277,7 @@ function CreateClassroomPage(props) {
                                         required
                                     />
                                 </div>
-                                {(institutionId || user.institutionId) && (
+                                {user.institutionId && (
                                     <div className="mb-3">
                                         <div className="form-check form-switch fs-5">
                                             <input
@@ -340,13 +285,11 @@ function CreateClassroomPage(props) {
                                                 type="checkbox"
                                                 role="switch"
                                                 id="enabled"
-                                                checked={classroom.institutionId === (institutionId || user.institutionId)}
+                                                checked={classroom.institutionId !== undefined}
                                                 onChange={(event) =>
                                                     setClassroom((prev) => ({
                                                         ...prev,
-                                                        institutionId: event.target.checked
-                                                            ? institutionId || user.institutionId
-                                                            : undefined,
+                                                        institutionId: event.target.checked ? user.institutionId : undefined,
                                                     }))
                                                 }
                                             />
@@ -384,9 +327,7 @@ function CreateClassroomPage(props) {
                                                     onClick={() => {
                                                         String(userSearchTerm).length >= 3
                                                             ? searchUsers(userSearchTerm)
-                                                            : showAlert({
-                                                                  headerText: 'Insira pelo menos 3 caracteres',
-                                                              });
+                                                            : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
                                                     }}
                                                     icon="person_search"
                                                 />
@@ -432,7 +373,7 @@ function CreateClassroomPage(props) {
                                                 ))}
                                             </div>
                                         )}
-                                        {(institutionId || user.institutionId) && (
+                                        {user.institutionId && (
                                             <div>
                                                 <TextButton
                                                     className="fs-6 w-auto p-2 py-0"

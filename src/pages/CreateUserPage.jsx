@@ -109,14 +109,14 @@ const style = `
 `;
 
 function CreateUserPage(props) {
-    const { institutionId, userId } = useParams();
+    const { userId } = useParams();
     const { isEditing } = props;
     const { user, renewUser, logout } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
     const formRef = useRef(null);
     const profilePicRef = useRef(null);
 
-    const [newUser, setNewUser] = useState({ institutionId, classrooms: [] });
+    const [newUser, setNewUser] = useState({ institutionId: undefined, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
@@ -128,26 +128,19 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (
-                !isEditing &&
-                user.role !== 'ADMIN' &&
-                (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))
-            ) {
+            if (!isEditing && user.role === 'USER') {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
             } else if (isEditing && user.role !== 'ADMIN' && userId && user.id !== parseInt(userId)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
                 return;
             }
-            setNewUser((prev) => ({ ...prev, institutionId: institutionId || user.institutionId }));
             const promises = [];
             if (isEditing) {
                 promises.push(
                     axios
                         .get(`${process.env.REACT_APP_API_URL}api/user/getUser/${userId || user.id}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
@@ -162,42 +155,35 @@ function CreateUserPage(props) {
                             });
                             setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
-                        .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
-                        })
+                        .catch((error) =>
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                        )
                 );
             }
-            if (user.role !== 'USER' && (institutionId || user.institutionId)) {
+            if (user.role !== 'USER' && user.institutionId) {
                 promises.push(
                     axios
-                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${user.institutionId}`, {
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
                             setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
-                        .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
-                        })
+                        .catch((error) =>
+                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                        )
                 );
             }
-            Promise.all(promises).then(() => {
-                setIsLoading(false);
-            });
+            Promise.all(promises).then(() => setIsLoading(false));
         }
-    }, [userId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.id, user.institutionId]);
+    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
 
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
             .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -227,10 +213,7 @@ function CreateUserPage(props) {
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/user/updateUser/${userId || user.id}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     showAlert({
@@ -241,9 +224,7 @@ function CreateUserPage(props) {
                             if (!userId || userId === user.id) {
                                 renewUser(response.data.data.username, response.data.data.role, response.data.data.profileImage?.path);
                                 navigate(`/dash/profile`);
-                            } else {
-                                navigate(`/dash/institutions/my`);
-                            }
+                            } else navigate(`/dash/users`);
                         },
                     });
                 })
@@ -251,13 +232,10 @@ function CreateUserPage(props) {
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/user/createUser`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
-                    showAlert({ headerText: 'Usuário criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) })
+                    showAlert({ headerText: 'Usuário criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) })
                 )
                 .catch((error) => showAlert({ headerText: 'Erro ao criar usuário.', bodyText: error.response?.data.message }));
         }
@@ -266,9 +244,7 @@ function CreateUserPage(props) {
     const deleteUser = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/user/deleteUser/${userId || user.id}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 if (!userId || userId === user.id) {
@@ -279,9 +255,7 @@ function CreateUserPage(props) {
                             navigate(`/dash/signin`);
                         },
                     });
-                } else {
-                    showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions/my`) });
-                }
+                } else showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) });
             })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
     };
@@ -292,13 +266,9 @@ function CreateUserPage(props) {
         setNewUser((prev) => ({ ...prev, hash: randomHash }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando criação de usuário..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando criação de usuário..." />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -334,9 +304,7 @@ function CreateUserPage(props) {
                                                 className="lh-1 px-3 py-2"
                                                 hsl={[197, 43, 52]}
                                                 text="Atualizar foto"
-                                                onClick={() => {
-                                                    profilePicRef.current.click();
-                                                }}
+                                                onClick={() => profilePicRef.current.click()}
                                             />
                                         </div>
                                         {newUser.profileImage && (
@@ -454,7 +422,7 @@ function CreateUserPage(props) {
                                                 </select>
                                             </div>
                                         )}
-                                        {(institutionId || user.institutionId) && !isEditing && (
+                                        {user.institutionId && !isEditing && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
@@ -462,13 +430,11 @@ function CreateUserPage(props) {
                                                         type="checkbox"
                                                         role="switch"
                                                         id="enabled"
-                                                        checked={newUser.institutionId === (institutionId || user.institutionId)}
+                                                        checked={newUser.institutionId === user.institutionId}
                                                         onChange={(event) =>
                                                             setNewUser((prev) => ({
                                                                 ...prev,
-                                                                institutionId: event.target.checked
-                                                                    ? institutionId || user.institutionId
-                                                                    : undefined,
+                                                                institutionId: event.target.checked ? user.institutionId : undefined,
                                                             }))
                                                         }
                                                     />
@@ -497,9 +463,7 @@ function CreateUserPage(props) {
                                                                 className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                                 onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                                 onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        searchClassrooms(classroomSearchTerm);
-                                                                    }
+                                                                    if (e.key === 'Enter') searchClassrooms(classroomSearchTerm);
                                                                 }}
                                                             />
                                                         </div>
@@ -558,7 +522,7 @@ function CreateUserPage(props) {
                                                             ))}
                                                         </div>
                                                     )}
-                                                    {(institutionId || user.institutionId) && (
+                                                    {user.institutionId && (
                                                         <div>
                                                             <TextButton
                                                                 className="fs-6 w-auto p-2 py-0"
