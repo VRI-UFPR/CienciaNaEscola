@@ -79,6 +79,8 @@ function ProtocolList(props) {
                     >
                         <HomeButton
                             title={li.title}
+                            primaryDescription={li.primaryDescription}
+                            secondaryDescription={li.secondaryDescription}
                             viewFunction={() => viewFunction(li.id)}
                             allowEdit={allowEdit || li.allowEdit}
                             editFunction={() => editFunction(li.id)}
