@@ -124,10 +124,9 @@ export function Location(props) {
                         <div className="col-auto search-col d-flex justify-content-end m-0 p-0">
                             <RoundedButton
                                 hsl={[190, 46, 70]}
-                                onClick={() => {
-                                    defaultLocation();
-                                }}
+                                onClick={() => defaultLocation()}
                                 icon="add_location"
+                                className="text-white"
                             />
                         </div>
                     </div>

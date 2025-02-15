@@ -26,7 +26,7 @@ function ScrollToTopButton() {
                 windowScroll > 20 ? 'd-flex' : 'd-none'
             } flex-column justify-content-end align-items-end position-fixed bottom-0 end-0 overflow-hidden w-auto h-auto pb-4 pe-4`}
         >
-            <RoundedButton icon="stat_3" hsl={[197, 43, 52]} onClick={scrollToTop} />
+            <RoundedButton icon="stat_3" hsl={[197, 43, 52]} onClick={scrollToTop} className="text-white" />
         </div>
     );
 }

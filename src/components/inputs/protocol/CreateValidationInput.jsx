@@ -41,7 +41,7 @@ function CreateValidationInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + validation.tempId + '-tooltip'}
                         data-bs-title="Remover a validação do item."
-                        className={'delete-' + validation.tempId + '-tooltip'}
+                        className={'delete-' + validation.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>

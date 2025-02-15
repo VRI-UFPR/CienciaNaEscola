@@ -415,12 +415,18 @@ function CreateUserPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         icon="visibility"
                                                         onClick={() => setPasswordVisibility((prev) => !prev)}
                                                     />
                                                 </div>
                                                 <div className="col-auto">
-                                                    <RoundedButton hsl={[197, 43, 52]} icon="shuffle" onClick={generateRandomHash} />
+                                                    <RoundedButton
+                                                        hsl={[197, 43, 52]}
+                                                        className="text-white"
+                                                        icon="shuffle"
+                                                        onClick={generateRandomHash}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -506,6 +512,7 @@ function CreateUserPage(props) {
                                                         <div className="col-auto">
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
+                                                                className="text-white"
                                                                 onClick={() => {
                                                                     String(classroomSearchTerm).length >= 3
                                                                         ? searchClassrooms(classroomSearchTerm)

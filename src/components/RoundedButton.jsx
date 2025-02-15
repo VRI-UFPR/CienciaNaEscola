@@ -36,7 +36,7 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
         }
 
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:active {
-            color: #fff !important;
+            color: #fff;
             background-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%) !important;
             border-color: hsl(${hue}, ${sat}%, ${+lig * 0.7}%);
             box-shadow: inset 0px 4px 4px 0px #00000040;
