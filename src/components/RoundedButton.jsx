@@ -43,7 +43,7 @@ const roundedButtonStyles = (hue, sat, lig, size) => {
         }
 
         .btn-${'hsl-' + hue + '-' + sat + '-' + lig}:focus {
-            color: #fff !important;
+            color: #fff;
             background-color: hsl(${hue}, ${sat}%, ${lig}%);
             border-color: hsl(${hue}, ${sat}%, ${lig}%);
             box-shadow: none;
@@ -67,6 +67,7 @@ function RoundedButton(props) {
         className = '',
         disabled,
         'data-bs-toggle': dataBsToggle,
+        'data-bs-target': dataBsTarget,
         'data-bs-custom-class': dataBsCustomClass,
         'data-bs-title': dataBsTitle,
     } = props;
@@ -77,6 +78,7 @@ function RoundedButton(props) {
             data-bs-toggle={dataBsToggle}
             data-bs-title={dataBsTitle}
             data-bs-custom-class={dataBsCustomClass}
+            data-bs-target={dataBsTarget}
             role={role}
             className={`btn btn-${
                 'hsl-' + hue + '-' + sat + '-' + lig

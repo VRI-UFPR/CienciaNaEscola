@@ -140,19 +140,24 @@ function ProtocolsPage(props) {
                                     <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
                                         <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">Meus protocolos</h1>
                                         <ProtocolList
-                                            listItems={visibleProtocols
-                                                .filter((p) => p.creator.id === user.id)
-                                                .map((p) => ({ id: p.id, title: p.title }))}
-                                            hsl={[36, 98, 83]}
-                                            allowEdit={true}
-                                            allowDelete={true}
+                                            listItems={visibleProtocols.map((p) => ({
+                                                id: p.id,
+                                                title: p.title,
+                                                allowEdit: p.actions.toUpdate,
+                                                allowDelete: p.actions.toDelete,
+                                            }))}
+                                            hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
                                             editFunction={(id) => navigate(`${id}/manage`)}
                                             deleteFunction={(id) => deleteProtocol(id)}
                                         />
                                     </div>
                                 )}
-                                <div className="col-12 col-lg-6 d-flex flex-column m-vh-80 h-lg-100">
+                                <div
+                                    className={`col-12 d-flex flex-column m-vh-80 h-lg-100 ${
+                                        user.role !== 'USER' && user.role !== 'APPLIER' ? 'col-lg-6' : ''
+                                    }`}
+                                >
                                     <h1 className="color-grey font-century-gothic text-nowrap fw-bold fs-3 mb-4">Protocolos disponíveis</h1>
                                     <ProtocolList
                                         listItems={visibleProtocols.map((p) => ({ id: p.id, title: p.title }))}

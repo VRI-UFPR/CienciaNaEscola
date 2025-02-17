@@ -80,9 +80,9 @@ function ProtocolList(props) {
                         <HomeButton
                             title={li.title}
                             viewFunction={() => viewFunction(li.id)}
-                            allowEdit={allowEdit}
+                            allowEdit={allowEdit || li.allowEdit}
                             editFunction={() => editFunction(li.id)}
-                            allowDelete={allowDelete}
+                            allowDelete={allowDelete || li.allowDelete}
                             deleteFunction={() => deleteFunction(li.id)}
                         />
                     </div>

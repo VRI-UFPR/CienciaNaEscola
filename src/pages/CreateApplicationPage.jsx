@@ -109,6 +109,7 @@ function CreateApplicationPage(props) {
 
     const [application, setApplication] = useState({
         protocolId: protocolId,
+        keepLocation: false,
         viewersUser: [],
         viewersClassroom: [],
         answersViewersUser: [],
@@ -175,6 +176,7 @@ function CreateApplicationPage(props) {
                                 viewersClassroom: d.viewersClassroom.map((v) => v.id),
                                 answersViewersUser: d.answersViewersUser.map((v) => v.id),
                                 answersViewersClassroom: d.answersViewersClassroom.map((v) => v.id),
+                                keepLocation: d.keepLocation,
                             });
                             setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                             setSearchedUsers(d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
@@ -552,6 +554,23 @@ function CreateApplicationPage(props) {
                                 action="/submit"
                                 onSubmit={(e) => submitApplication(e)}
                             >
+                                <div className="mb-3">
+                                    <div className="form-check form-switch fs-5">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={application.keepLocation || false}
+                                            onChange={(event) =>
+                                                setApplication((prev) => ({ ...prev, keepLocation: event.target.checked }))
+                                            }
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Solicitar localização das respostas
+                                        </label>
+                                    </div>
+                                </div>
                                 <div className="mb-3">
                                     <label label="visibility" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione a visibilidade da aplicação
