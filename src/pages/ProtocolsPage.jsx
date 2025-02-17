@@ -72,10 +72,8 @@ function ProtocolsPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (user.role === 'USER') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar protocolos' });
-                return;
-            }
+            if (user.role === 'USER')
+                return setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar protocolos' });
             axios
                 .get(process.env.REACT_APP_API_URL + `api/protocol/getVisibleProtocols`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },

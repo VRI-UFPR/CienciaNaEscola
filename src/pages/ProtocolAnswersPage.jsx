@@ -92,17 +92,13 @@ function ProtocolAnswersPage(props) {
         if (isLoading && user.status !== 'loading') {
             axios
                 .get(`${process.env.REACT_APP_API_URL}api/protocol/getProtocolWithAnswers/${protocolId}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     setProtocolWAnswers(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => {
-                    setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' });
-                });
+                .catch((error) => setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' }));
         }
     }, [protocolId, user.token, user.status, isLoading]);
 
@@ -111,11 +107,7 @@ function ProtocolAnswersPage(props) {
             .put(
                 `${process.env.REACT_APP_API_URL}api/applicationAnswer/approveApplicationAnswer/${applicationAnswerId}`,
                 {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                }
+                { headers: { Authorization: `Bearer ${user.token}` } }
             )
             .then((response) => {
                 showAlert({ headerText: 'Resposta aprovada com sucesso', message: response.data.message });
@@ -138,13 +130,9 @@ function ProtocolAnswersPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao aprovar resposta', message: error.response?.data.message || '' }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando protocolo..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando protocolo..." />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">

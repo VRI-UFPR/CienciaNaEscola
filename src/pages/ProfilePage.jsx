@@ -17,7 +17,7 @@ import TextButton from '../components/TextButton';
 import SplashPage from './SplashPage';
 import { AuthContext } from '../contexts/AuthContext';
 import BlankProfilePic from '../assets/images/blankProfile.jpg';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
 import CustomContainer from '../components/CustomContainer';
@@ -55,7 +55,6 @@ const profilePageStyles = `
 
 function ProfilePage(props) {
     const { user } = useContext(AuthContext);
-    const { userId } = useParams();
     const [curUser, setCurUser] = useState();
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -80,13 +79,13 @@ function ProfilePage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
+            if (user.role === 'GUEST')
+                setError({ text: 'Operação não permitida', description: 'Usuários visitantes não têm acesso à página de perfil' });
             const promises = [];
             promises.push(
                 axios
                     .get(`${process.env.REACT_APP_API_URL}api/user/getUser/${user.id}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                        headers: { Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => {
                         const d = response.data.data;
@@ -97,25 +96,20 @@ function ProfilePage(props) {
                             classrooms: d.classrooms.map((c) => c.id),
                             institution: d.institution,
                             profileImage: d.profileImage,
+                            actions: d.actions,
                         });
                     })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' });
-                    })
+                    .catch((error) =>
+                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                    )
             );
-            Promise.all(promises).then(() => {
-                setIsLoading(false);
-            });
+            Promise.all(promises).then(() => setIsLoading(false));
         }
-    }, [isLoading, user, userId]);
+    }, [isLoading, user]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando perfil..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando perfil..." />;
 
     return (
         <div className="d-flex flex-column vh-100">
@@ -235,11 +229,18 @@ function ProfilePage(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row justify-content-center justify-content-lg-start gx-2">
-                                <div className="col-5 col-sm-3 col-xl-2">
-                                    <TextButton className="px-5 mt-4" hsl={[97, 43, 70]} text="Editar" onClick={() => navigate(`manage`)} />
+                            {curUser.actions.toUpdate === true && (
+                                <div className="row justify-content-center justify-content-lg-start gx-2">
+                                    <div className="col-5 col-sm-3 col-xl-2">
+                                        <TextButton
+                                            className="px-5 mt-4"
+                                            hsl={[97, 43, 70]}
+                                            text="Editar"
+                                            onClick={() => navigate(`manage`)}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </CustomContainer>
                     </div>
                 </div>
