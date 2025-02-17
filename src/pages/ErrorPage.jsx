@@ -55,15 +55,25 @@ function ErrorPage(props) {
                 <div className="d-flex flex-column flex-grow-1 align-items-center justify-content-start w-100 pb-5">
                     <span className="font-barlow color-grey text-center text-break fw-medium fs-3 mb-2">{text || ''}</span>
                     <span className="font-barlow color-grey text-center text-break fw-medium fs-5 mb-4">{description || ''}</span>
-                    <TextButton
-                        text="Voltar ao início"
-                        className="w-auto px-4"
-                        onClick={() => {
-                            logout();
-                            navigate(isDashboard ? '/dash/' : '/');
-                        }}
-                        hsl={[355, 78, 66]}
-                    ></TextButton>
+                    <div className="row">
+                        <div className="col">
+                            <TextButton
+                                text="Voltar ao início"
+                                className=" px-4 mb-2"
+                                onClick={() => navigate(isDashboard ? '/dash/' : '/')}
+                                hsl={[97, 43, 70]}
+                            ></TextButton>
+                            <TextButton
+                                text="Sair"
+                                className=" px-4"
+                                onClick={() => {
+                                    logout();
+                                    navigate(isDashboard ? '/dash/' : '/');
+                                }}
+                                hsl={[355, 78, 66]}
+                            ></TextButton>
+                        </div>
+                    </div>
                 </div>
                 <div className="d-flex flex-column align-items-center w-100 pb-5">
                     <img src={logoPicceTextual} className="logo-picce-textual w-50 px-3" alt="Logo textual Picce"></img>

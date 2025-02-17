@@ -88,9 +88,7 @@ function SignInPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.status === 'authenticated') {
-            navigate(isDashboard ? '/dash/applications' : '/applications');
-        }
+        if (user.status === 'authenticated') navigate(isDashboard ? '/dash/applications' : '/applications');
     }, [navigate, isDashboard, user]);
 
     const loginHandler = (event) => {
@@ -112,9 +110,7 @@ function SignInPage(props) {
                         response.data.data.profileImage?.path
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
@@ -134,9 +130,7 @@ function SignInPage(props) {
                         response.data.data.institutionId
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
