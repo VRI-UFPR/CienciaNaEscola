@@ -136,7 +136,7 @@ function CreateUserPage(props) {
             ) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
                 return;
-            } else if (isEditing && user.role !== 'ADMIN' && userId && user.id !== parseInt(userId)) {
+            } else if (isEditing && user.role !== 'ADMIN' && ((userId && user.id !== parseInt(userId)) || user.role === 'USER' || user.id === 1)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
                 return;
             }
@@ -412,7 +412,7 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {(user.role === 'ADMIN' || !isEditing) && (
+                                        {((user.role === 'ADMIN' && userId ) || !isEditing) && (
                                             <div className="mb-3">
                                                 <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                                     Selecione o papel do usuário
