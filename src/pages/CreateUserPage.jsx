@@ -224,7 +224,6 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        console.log(newUser.hash, newUser.hashValidation);
         if(newUser.hash){ console.log("Abacate") }
         const formData = newUser.hash ? serialize({ ...newUser, hash: hashSync(newUser.hash, salt) }) : serialize({...newUser});
         if (isEditing) {
