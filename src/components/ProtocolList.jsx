@@ -23,9 +23,6 @@ const ProtocolListStyles = (hue, sat, lig) => {
         }
 
         .button-container {
-            min-height: 7rem;
-            height: 7rem;
-            max-height: 7rem;
             color: #262626;
         }
 

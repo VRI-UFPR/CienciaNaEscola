@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import CheckIcon from '../assets/images/CheckIcon.svg';
 import RoundedButton from './RoundedButton';
 import { AlertContext } from '../contexts/AlertContext';
@@ -37,6 +37,12 @@ const styles = `
         width: 0px;
     }
 
+    .h-100px {
+        height: 100px;
+        min-heigth: 100px;
+        max-height: 100px;
+    }
+
     .icon-check{
         width: 35px;
         height: 35px;
@@ -55,10 +61,15 @@ function HomeButton(props) {
         deleteFunction = () => {},
         check = false,
     } = props;
+
     const { showAlert } = useContext(AlertContext);
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
     return (
-        <div className="custom-btn rounded-4 row g-1 align-items-center font-barlow h-100 w-100 p-3" onClick={viewFunction}>
+        <div
+            className={`custom-btn rounded-4 row g-1 align-items-center font-barlow w-100 p-3 ${isCollapsed ? 'h-100px' : ''}`}
+            onClick={viewFunction}
+        >
             <div className="col home-btn-title">
                 <h5 className="text-break fs-6 lh-1 fw-medium m-0">{title}</h5>
                 <p className="text-break fs-6 lh-1 fw-light m-0">{primaryDescription || ''}</p>
@@ -67,7 +78,7 @@ function HomeButton(props) {
             <div className="col-auto">
                 <div className="row d-flex flex-column flex-lg-row g-1">
                     <div className="col-12 col-lg-auto">
-                        {allowEdit && (
+                        {allowEdit && !isCollapsed && (
                             <RoundedButton
                                 hsl={[37, 98, 76]}
                                 size={30}
@@ -81,7 +92,21 @@ function HomeButton(props) {
                         )}
                     </div>
                     <div className="col-12 col-lg-auto">
-                        {allowDelete && (
+                        {allowEdit && (
+                            <RoundedButton
+                                hsl={[197, 43, 52]}
+                                size={30}
+                                className="text-white"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsCollapsed((prev) => !prev);
+                                }}
+                                icon={isCollapsed ? 'expand_content' : 'collapse_content'}
+                            />
+                        )}
+                    </div>
+                    <div className="col-12 col-lg-auto">
+                        {allowDelete && !isCollapsed && (
                             <RoundedButton
                                 hsl={[355, 78, 66]}
                                 size={30}
