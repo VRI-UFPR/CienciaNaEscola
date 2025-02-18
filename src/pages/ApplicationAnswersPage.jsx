@@ -97,14 +97,14 @@ function AnswerPage(props) {
                     setIsLoading(false);
                 })
                 .catch((error) =>
-                    setError({ text: 'Erro ao carregar respostas de aplicação', description: error.response?.data.message || '' })
+                    setError({ text: 'Erro ao obter respostas da aplicação', description: error.response?.data.message || '' })
                 );
         }
     }, [applicationId, isLoading, user.status, user.token]);
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando respostas de aplicação..." />;
+    if (isLoading) return <SplashPage text="Carregando respostas da aplicação..." />;
 
     // Função de exportar csv
     const createFile = (modalRef) => {

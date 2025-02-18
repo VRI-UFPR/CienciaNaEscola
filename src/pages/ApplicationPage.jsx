@@ -313,7 +313,9 @@ function ApplicationPage(props) {
                         storeLocalApplication(response.data.data);
                         setIsLoading(false);
                     })
-                    .catch((error) => setError({ text: 'Erro ao carregar aplicação', description: error.response?.data.message || '' }));
+                    .catch((error) =>
+                        setError({ text: 'Erro ao obter informações da aplicação', description: error.response?.data.message || '' })
+                    );
             }
         }
     }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard, connected]);

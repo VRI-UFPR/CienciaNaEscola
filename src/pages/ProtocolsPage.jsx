@@ -82,7 +82,9 @@ function ProtocolsPage(props) {
                     setVisibleProtocols(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => setError({ text: 'Erro ao carregar protocolos', description: error.response?.data.message || '' }));
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações de protocolos', description: error.response?.data.message || '' })
+                );
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role, user.id]);
 
@@ -93,11 +95,11 @@ function ProtocolsPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Protocolo excluído com sucesso.' });
+                showAlert({ headerText: 'Protocolo excluído com sucesso' });
                 const newVisibleProtocols = [...visibleProtocols];
                 setVisibleProtocols(newVisibleProtocols.filter((a) => a.id !== protocolId));
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo', bodyText: error.response?.data.message }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;

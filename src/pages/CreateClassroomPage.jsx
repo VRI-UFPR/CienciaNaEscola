@@ -150,7 +150,11 @@ function CreateClassroomPage(props) {
                             setSearchedUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
                         })
                         .catch((error) =>
-                            Promise.reject({ text: 'Erro ao obter informações do grupo', description: error.response?.data.message })
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : { text: 'Erro ao obter informações do grupo', description: error.response?.data.message }
+                            )
                         )
                 );
             }
@@ -162,12 +166,19 @@ function CreateClassroomPage(props) {
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            setInstitutionUsers(d.users.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
+                            setInstitutionUsers(d.users.map(({ id, username, classrooms }) => ({ id, username, classrooms })));
                         })
                         .catch((error) =>
                             showAlert({
-                                headerText: 'Erro ao buscar informações da sua instituição',
-                                bodyText: error.response?.data.message,
+                                headerText: 'Houve um problema ao buscar os usuários da sua instituição',
+                                bodyText: `Você ainda poderá ${
+                                    isEditing ? 'editar' : 'criar'
+                                } o grupo, mas alguns usuários podem estar inacessíveis. Deseja continuar?`,
+                                primaryBtnLabel: 'Sim',
+                                primaryBtnHsl: [97, 43, 70],
+                                secondaryBtnLabel: 'Não',
+                                secondaryBtnHsl: [355, 78, 66],
+                                onSecondaryBtnClick: () => navigate('/dash/applications'),
                             })
                         )
                 );
@@ -176,7 +187,18 @@ function CreateClassroomPage(props) {
                 .then(() => setIsLoading(false))
                 .catch((error) => setError(error));
         }
-    }, [classroomId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, classroom.institutionId]);
+    }, [
+        classroomId,
+        isEditing,
+        isLoading,
+        user.token,
+        user.status,
+        user.role,
+        user.institutionId,
+        showAlert,
+        classroom.institutionId,
+        navigate,
+    ]);
 
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
@@ -198,7 +220,7 @@ function CreateClassroomPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
         setUserSearchTerm('');
     };
 
@@ -224,14 +246,14 @@ function CreateClassroomPage(props) {
                     .then(() =>
                         showAlert({ headerText: 'Grupo atualizado com sucesso!', onPrimaryBtnClick: () => navigate(`/dash/users`) })
                     )
-                    .catch((error) => showAlert({ headerText: 'Erro ao atualizar grupo.', bodyText: error.response?.data.message }));
+                    .catch((error) => showAlert({ headerText: 'Erro ao atualizar grupo', bodyText: error.response?.data.message }));
             } else {
                 axios
                     .post(`${process.env.REACT_APP_API_URL}api/classroom/createClassroom`, formData, {
                         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
-                    .then(() => showAlert({ headerText: 'Grupo criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
-                    .catch((error) => showAlert({ headerText: 'Erro ao criar grupo.', bodyText: error.response?.data.message }));
+                    .then(() => showAlert({ headerText: 'Grupo criado com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
+                    .catch((error) => showAlert({ headerText: 'Erro ao criar grupo', bodyText: error.response?.data.message }));
             }
         } else showAlert({ headerText: 'Adicione pelo menos dois usuários no grupo!' });
     };
@@ -241,13 +263,13 @@ function CreateClassroomPage(props) {
             .delete(`${process.env.REACT_APP_API_URL}api/classroom/deleteClassroom/${classroomId}`, {
                 headers: { Authorization: `Bearer ${user.token}` },
             })
-            .then(() => showAlert({ headerText: 'Grupo excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir grupo.', bodyText: error.response?.data.message }));
+            .then(() => showAlert({ headerText: 'Grupo excluído com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) }))
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir grupo', bodyText: error.response?.data.message }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de grupo..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de grupo...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -398,7 +420,7 @@ function CreateClassroomPage(props) {
                                                 ))}
                                             </div>
                                         )}
-                                        {user.institutionId && (
+                                        {user.institutionId && classroom.institutionId && institutionUsers.length > 0 && (
                                             <div>
                                                 <TextButton
                                                     className="fs-6 w-auto p-2 py-0"

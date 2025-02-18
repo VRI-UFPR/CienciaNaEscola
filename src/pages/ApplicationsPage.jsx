@@ -89,7 +89,9 @@ function ApplicationsPage(props) {
                     setVisibleApplications(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => setError({ text: 'Erro ao carregar aplicações', description: error.response?.data.message || '' }));
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações de aplicações', description: error.response?.data.message || '' })
+                );
         }
     }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);
 
@@ -100,11 +102,11 @@ function ApplicationsPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Aplicação excluída com sucesso.' });
+                showAlert({ headerText: 'Aplicação excluída com sucesso' });
                 const newVisibleApplications = [...visibleApplications];
                 setVisibleApplications(newVisibleApplications.filter((a) => a.id !== applicationId));
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação', bodyText: error.response?.data.message }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;

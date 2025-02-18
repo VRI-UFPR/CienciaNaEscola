@@ -180,7 +180,13 @@ function CreateApplicationPage(props) {
                                 d.answersViewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms }))
                             );
                         })
-                        .catch((error) => Promise.reject({ text: 'Erro ao buscar aplicação.', description: error.response?.data.message }))
+                        .catch((error) =>
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : { text: 'Erro ao obter informações da aplicação', description: error.response?.data.message }
+                            )
+                        )
                 );
             }
             Promise.all(promises)
@@ -226,7 +232,7 @@ function CreateApplicationPage(props) {
                             setIsLoading(false);
                         })
                         .catch((error) =>
-                            setError({
+                            Promise.reject({
                                 text: 'Erro ao obter informações do protocolo',
                                 description: error.response?.data.message,
                             })
@@ -247,11 +253,11 @@ function CreateApplicationPage(props) {
                 .then((response) => {
                     clearLocalApplications();
                     showAlert({
-                        headerText: 'Aplicação atualizada com sucesso.',
+                        headerText: 'Aplicação atualizada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação.', description: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação', description: error.response?.data.message }));
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/application/createApplication`, formData, {
@@ -259,11 +265,11 @@ function CreateApplicationPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        headerText: 'Aplicação criada com sucesso.',
+                        headerText: 'Aplicação criada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao criar aplicação.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar aplicação', bodyText: error.response?.data.message }));
         }
     };
 
@@ -274,9 +280,9 @@ function CreateApplicationPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Aplicação excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/applications/`) });
+                showAlert({ headerText: 'Aplicação excluída com sucesso', onPrimaryBtnClick: () => navigate(`/dash/applications/`) });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação', bodyText: error.response?.data.message }));
     };
 
     const searchUsers = (term) => {
@@ -301,7 +307,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerUsers = (term) => {
@@ -326,7 +332,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedAnswerUsers(newUsers);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term) => {
@@ -368,7 +374,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedClassrooms(concatenedClassrooms);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
     const searchAnswerClassrooms = (term) => {
@@ -410,7 +416,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedAnswerClassrooms(concatenedClassrooms);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id) => {
@@ -489,7 +495,7 @@ function CreateApplicationPage(props) {
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de instituição..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de aplicação...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -520,7 +526,7 @@ function CreateApplicationPage(props) {
                                             role="switch"
                                             id="enabled"
                                             checked={application.keepLocation || false}
-                                            onChange={(event) => setApplication((p) => ({ ...p, keepLocation: event.target.checked }))}
+                                            onChange={(e) => setApplication((prev) => ({ ...prev, keepLocation: e.target.checked }))}
                                         />
                                         <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
                                             Solicitar localização das respostas
@@ -694,7 +700,9 @@ function CreateApplicationPage(props) {
                                         id="answer-visibility"
                                         form="application-form"
                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
-                                        onChange={(e) => setApplication((p) => ({ ...p, answersVisibility: e.target.value || undefined }))}
+                                        onChange={(e) =>
+                                            setApplication((prev) => ({ ...prev, answersVisibility: e.target.value || undefined }))
+                                        }
                                     >
                                         <option value="">Selecione uma opção:</option>
                                         {protocol.answersVisibility === 'PUBLIC' && <option value="PUBLIC">Visível para todos</option>}

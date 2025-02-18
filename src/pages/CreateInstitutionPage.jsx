@@ -105,7 +105,7 @@ function CreateInstitutionPage(props) {
                 })
                 .catch((error) =>
                     showAlert({
-                        headerText: 'Erro ao atualizar localizações disponíveis',
+                        headerText: 'Erro ao obter localizações disponíveis',
                         bodyText: error.response?.data.message,
                     })
                 );
@@ -134,7 +134,9 @@ function CreateInstitutionPage(props) {
                         setLocation(d.address.id, d.address.state);
                         setIsLoading(false);
                     })
-                    .catch((error) => showAlert({ headerText: 'Erro ao buscar instituição.', bodyText: error.response?.data.message }));
+                    .catch((error) =>
+                        showAlert({ headerText: 'Erro ao obter informações da instituição', bodyText: error.response?.data.message })
+                    );
             } else setIsLoading(false);
         }
     }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, setLocation]);
@@ -149,11 +151,11 @@ function CreateInstitutionPage(props) {
                 })
                 .then((response) =>
                     showAlert({
-                        headerText: 'Instituição atualizada com sucesso.',
+                        headerText: 'Instituição atualizada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
                     })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/institution/createInstitution`, formData, {
@@ -161,11 +163,11 @@ function CreateInstitutionPage(props) {
                 })
                 .then((response) =>
                     showAlert({
-                        headerText: 'Instituição criada com sucesso.',
+                        headerText: 'Instituição criada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
                     })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar instituição.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar instituição', bodyText: error.response?.data.message }));
         }
     };
 
@@ -175,14 +177,14 @@ function CreateInstitutionPage(props) {
                 headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) =>
-                showAlert({ headerText: 'Instituição excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions`) })
+                showAlert({ headerText: 'Instituição excluída com sucesso', onPrimaryBtnClick: () => navigate(`/dash/institutions`) })
             )
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição', bodyText: error.response?.data.message }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de instituição..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de instituição...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">

@@ -90,7 +90,7 @@ function InstitutionsPage(props) {
                 headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
-                showAlert({ headerText: 'Instituição excluída com sucesso.' });
+                showAlert({ headerText: 'Instituição excluída com sucesso' });
                 const newVisibleInstitutions = [...visibleInstitutions];
                 setVisibleInstitutions(newVisibleInstitutions.filter((i) => i.id !== institutionId));
             })

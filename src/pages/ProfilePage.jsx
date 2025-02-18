@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
 import CustomContainer from '../components/CustomContainer';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const profilePageStyles = `
     .font-barlow {
@@ -59,6 +60,7 @@ function ProfilePage(props) {
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const { isDashboard } = useContext(LayoutContext);
 
     const localizeUserRole = (role) => {
         switch (role) {
@@ -100,7 +102,7 @@ function ProfilePage(props) {
                         });
                     })
                     .catch((error) =>
-                        setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                        setError({ text: 'Erro ao obter informações do usuário', description: error.response?.data.message || '' })
                     )
             );
             Promise.all(promises).then(() => setIsLoading(false));
@@ -229,7 +231,7 @@ function ProfilePage(props) {
                                     </div>
                                 </div>
                             </div>
-                            {curUser.actions.toUpdate === true && (
+                            {isDashboard && curUser.actions.toUpdate === true && (
                                 <div className="row justify-content-center justify-content-lg-start gx-2">
                                     <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton

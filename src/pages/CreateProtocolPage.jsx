@@ -300,18 +300,18 @@ function CreateProtocolPage(props) {
                 })
                 .then((response) => {
                     clearLocalApplications();
-                    showAlert({ headerText: 'Formulário atualizado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
+                    showAlert({ headerText: 'Protocolo atualizado com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar protocolo.', bodyText: error.response?.data.message || '' }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar protocolo', bodyText: error.response?.data.message || '' }));
         } else {
             axios
                 .post(process.env.REACT_APP_API_URL + 'api/protocol/createProtocol', formData, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
-                    showAlert({ headerText: 'Protocolo criado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') })
+                    showAlert({ headerText: 'Protocolo criado com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar protocolo.', bodyText: error.response?.data.message || '' }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar protocolo', bodyText: error.response?.data.message || '' }));
         }
     };
 
@@ -322,9 +322,9 @@ function CreateProtocolPage(props) {
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Protocolo excluído com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
+                showAlert({ headerText: 'Protocolo excluído com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo', bodyText: error.response?.data.message }));
     };
 
     useEffect(() => {
@@ -428,7 +428,7 @@ function CreateProtocolPage(props) {
                             });
                         })
                         .catch((error) =>
-                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' })
+                            setError({ text: 'Erro ao obter informações do protocolo', description: error.response?.data.message || '' })
                         )
                 );
             }
@@ -438,7 +438,7 @@ function CreateProtocolPage(props) {
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de protocolo..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de protocolo...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">

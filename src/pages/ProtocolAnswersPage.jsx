@@ -98,7 +98,9 @@ function ProtocolAnswersPage(props) {
                     setProtocolWAnswers(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' }));
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter respostas do protocolo', description: error.response?.data.message || '' })
+                );
         }
     }, [protocolId, user.token, user.status, isLoading]);
 
@@ -132,7 +134,7 @@ function ProtocolAnswersPage(props) {
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando protocolo..." />;
+    if (isLoading) return <SplashPage text="Carregando respostas do protocolo..." />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">

@@ -102,7 +102,9 @@ function ProtocolPage(props) {
                     setProtocol(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' }));
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações do protocolo', description: error.response?.data.message || '' })
+                );
         }
     }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);
 

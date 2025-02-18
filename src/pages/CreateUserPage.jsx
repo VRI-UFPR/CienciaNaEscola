@@ -160,10 +160,14 @@ function CreateUserPage(props) {
                             setSearchedClassrooms(d.classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
-                            Promise.reject({
-                                text: 'Erro ao obter informações do usuário',
-                                description: error.response?.data.message || '',
-                            })
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : {
+                                          text: 'Erro ao obter informações do usuário',
+                                          description: error.response?.data.message || '',
+                                      }
+                            )
                         )
                 );
             }
@@ -178,7 +182,17 @@ function CreateUserPage(props) {
                             setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
                         })
                         .catch((error) =>
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                            showAlert({
+                                headerText: 'Houve um problema ao buscar os grupos da sua instituição',
+                                bodyText: `Você ainda poderá ${
+                                    isEditing ? 'editar' : 'criar'
+                                } o usuário, mas alguns grupos podem estar inacessíveis. Deseja continuar?`,
+                                primaryBtnLabel: 'Sim',
+                                primaryBtnHsl: [97, 43, 70],
+                                secondaryBtnLabel: 'Não',
+                                secondaryBtnHsl: [355, 78, 66],
+                                onSecondaryBtnClick: () => navigate('/dash/applications'),
+                            })
                         )
                 );
             }
@@ -186,7 +200,7 @@ function CreateUserPage(props) {
                 .then(() => setIsLoading(false))
                 .catch((error) => setError(error));
         }
-    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
+    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId, showAlert, navigate]);
 
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
@@ -208,7 +222,7 @@ function CreateUserPage(props) {
                 ];
                 setSearchedClassrooms(newClassroomss);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
         setClassroomSearchTerm('');
     };
 
@@ -233,7 +247,7 @@ function CreateUserPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        headerText: 'Usuário atualizado com sucesso.',
+                        headerText: 'Usuário atualizado com sucesso',
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
@@ -244,16 +258,16 @@ function CreateUserPage(props) {
                         },
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/user/createUser`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
-                    showAlert({ headerText: 'Usuário criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) })
+                    showAlert({ headerText: 'Usuário criado com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar usuário.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar usuário', bodyText: error.response?.data.message }));
         }
     };
 
@@ -265,15 +279,15 @@ function CreateUserPage(props) {
             .then((response) => {
                 if (!userId || userId === user.id) {
                     showAlert({
-                        headerText: 'Usuário excluído com sucesso.',
+                        headerText: 'Usuário excluído com sucesso',
                         onPrimaryBtnClick: () => {
                             logout();
                             navigate(`/dash/signin`);
                         },
                     });
-                } else showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) });
+                } else showAlert({ headerText: 'Usuário excluído com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário', bodyText: error.response?.data.message }));
     };
 
     const generateRandomHash = () => {
@@ -284,7 +298,7 @@ function CreateUserPage(props) {
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de usuário..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de usuário...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -330,7 +344,11 @@ function CreateUserPage(props) {
                                                     hsl={[355, 78, 66]}
                                                     text="Remover"
                                                     onClick={() =>
-                                                        setNewUser((p) => ({ ...p, profileImage: undefined, profileImageId: undefined }))
+                                                        setNewUser((prev) => ({
+                                                            ...prev,
+                                                            profileImage: undefined,
+                                                            profileImageId: undefined,
+                                                        }))
                                                     }
                                                 />
                                             </div>
@@ -481,7 +499,7 @@ function CreateUserPage(props) {
                                                             name="classrooms-search"
                                                             value={classroomSearchTerm || ''}
                                                             id="classrooms-search"
-                                                            placeholder="Buscar por nome de grupo"
+                                                            placeholder="Buscar por nome do grupo"
                                                             className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                             onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                             onKeyDown={(e) => {
@@ -544,7 +562,7 @@ function CreateUserPage(props) {
                                                         ))}
                                                     </div>
                                                 )}
-                                                {user.institutionId && newUser.institutionId && (
+                                                {user.institutionId && newUser.institutionId && institutionClassrooms.length > 0 && (
                                                     <div>
                                                         <TextButton
                                                             className="fs-6 w-auto p-2 py-0"
