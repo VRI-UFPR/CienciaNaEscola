@@ -88,9 +88,7 @@ function SignInPage(props) {
     const { isDashboard } = useContext(LayoutContext);
 
     useEffect(() => {
-        if (user.status === 'authenticated') {
-            navigate(isDashboard ? '/dash/applications' : '/applications');
-        }
+        if (user.status === 'authenticated') navigate(isDashboard ? '/dash/applications' : '/applications');
     }, [navigate, isDashboard, user]);
 
     const loginHandler = (event) => {
@@ -112,9 +110,7 @@ function SignInPage(props) {
                         response.data.data.profileImage?.path
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
@@ -134,9 +130,7 @@ function SignInPage(props) {
                         response.data.data.institutionId
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
@@ -152,7 +146,7 @@ function SignInPage(props) {
                             <form onSubmit={loginHandler}>
                                 <input
                                     className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                                    placeholder="Username"
+                                    placeholder="Nome de usuário (username)"
                                     type="text"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
@@ -171,7 +165,12 @@ function SignInPage(props) {
                                 <button
                                     className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"
                                     type="button"
-                                    onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
+                                    onClick={() =>
+                                        showAlert({
+                                            headerText:
+                                                'Para recuperar sua senha, entre em contato com o coordenador de sua instituição ou com quem forneceu seus credenciais',
+                                        })
+                                    }
                                 >
                                     Esqueci minha senha
                                 </button>
