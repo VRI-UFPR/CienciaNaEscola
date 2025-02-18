@@ -114,7 +114,7 @@ function CreateTextBoxInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
                         data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-down-tooltip'}
+                        className={'move-item-' + item.tempId + '-down-tooltip text-white'}
                     />
                 </div>
                 <div className="col-auto">
@@ -125,7 +125,7 @@ function CreateTextBoxInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
                         data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-up-tooltip'}
+                        className={'move-item-' + item.tempId + '-up-tooltip text-white'}
                     />
                 </div>
                 <div className="col-auto">
@@ -136,7 +136,7 @@ function CreateTextBoxInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
                         data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
-                        className={'add-validation-' + item.tempId + '-tooltip'}
+                        className={'add-validation-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
                 <div className="col-auto">
@@ -147,7 +147,7 @@ function CreateTextBoxInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
                         data-bs-title="Remover o item do grupo."
-                        className={'delete-' + item.tempId + '-tooltip'}
+                        className={'delete-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>
@@ -225,7 +225,7 @@ function CreateTextBoxInput(props) {
                                 data-bs-toggle="tooltip"
                                 data-bs-custom-class={'upload-image-' + item.tempId}
                                 data-bs-title="Adicione imagens ao enunciado da pergunta."
-                                className={'upload-image-' + item.tempId + '-tooltip'}
+                                className={'upload-image-' + item.tempId + '-tooltip text-white'}
                             />
                         </div>
                     </div>
@@ -256,7 +256,7 @@ function CreateTextBoxInput(props) {
                                                 alt="Imagem selecionada"
                                             />
                                             <RoundedButton
-                                                className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                className="position-absolute top-0 start-100 translate-middle text-white mb-2 me-2"
                                                 hsl={[190, 46, 70]}
                                                 size={32}
                                                 icon="delete"

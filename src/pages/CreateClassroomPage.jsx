@@ -381,6 +381,7 @@ function CreateClassroomPage(props) {
                                             <div className="col-auto">
                                                 <RoundedButton
                                                     hsl={[197, 43, 52]}
+                                                    className="text-white"
                                                     onClick={() => {
                                                         String(userSearchTerm).length >= 3
                                                             ? searchUsers(userSearchTerm)

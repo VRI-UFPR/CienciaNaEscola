@@ -147,7 +147,14 @@ function ApplicationsPage(props) {
                                             <ProtocolList
                                                 listItems={visibleApplications
                                                     .filter((a) => a.applier.id === user.id)
-                                                    .map((a) => ({ id: a.id, title: a.protocol.title }))}
+                                                    .map((a) => ({
+                                                        id: a.id,
+                                                        title: a.protocol.title,
+                                                        primaryDescription: `${a.applier?.username}`,
+                                                        secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString(
+                                                            'pt-BR'
+                                                        )}`,
+                                                    }))}
                                                 hsl={[36, 98, 83]}
                                                 allowEdit={true}
                                                 allowDelete={true}
@@ -162,9 +169,18 @@ function ApplicationsPage(props) {
                                             Aplicações disponíveis
                                         </h1>
                                         <ProtocolList
-                                            listItems={visibleApplications.map((a) => ({ id: a.id, title: a.protocol.title }))}
+                                            listItems={visibleApplications.map((a) => ({
+                                                id: a.id,
+                                                title: a.protocol.title,
+                                                allowEdit: a.actions.toUpdate,
+                                                allowDelete: a.actions.toDelete,
+                                                primaryDescription: `${a.applier?.username}`,
+                                                secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString('pt-BR')}`,
+                                            }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
+                                            editFunction={(id) => navigate(`${id}/manage`)}
+                                            deleteFunction={(id) => deleteApplication(id)}
                                         />
                                     </div>
                                 </div>
