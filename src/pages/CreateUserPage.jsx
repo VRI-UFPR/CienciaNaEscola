@@ -412,7 +412,7 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {((user.role === 'ADMIN' && userId ) || !isEditing) && (
+                                        {((user.role === 'ADMIN' && userId && user.id !== parseInt(userId)) || !isEditing) && (
                                             <div className="mb-3">
                                                 <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                                     Selecione o papel do usuário

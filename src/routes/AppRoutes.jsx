@@ -79,7 +79,6 @@ const appRoutes = [
             { path: 'terms', element: <InfosPage content={terms} showAccept={false} showNavTogglerDesktop={false} /> },
             { path: 'profile', element: <ProfilePage /> },
             { path: 'profile/manage', element: <CreateUserPage isEditing={true} /> },
-            //{ path: 'profile/:userId/manage', element: <CreateUserPage isEditing={true} /> }, Solução temporaria para passar userId para CreateUserPage
             {
                 path: 'acceptTerms',
                 element: <InfosPage content={terms} showSidebar={false} showNavTogglerDesktop={false} showNavTogglerMobile={false} />,
