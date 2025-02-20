@@ -193,7 +193,7 @@ function CreateItemGroup(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
                         icon="keyboard_arrow_down"
-                        className={`move-group-${group.tempId.toString().slice(0, 13)}-down-tooltip`}
+                        className={`move-group-${group.tempId.toString().slice(0, 13)}-down-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`move-group-${group.tempId}-down-tooltip`}
                         data-bs-title="Mover o grupo uma posição abaixo na ordem dos grupos da página."
@@ -204,7 +204,7 @@ function CreateItemGroup(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
                         icon="keyboard_arrow_up"
-                        className={`move-group-${group.tempId.toString().slice(0, 13)}-up-tooltip`}
+                        className={`move-group-${group.tempId.toString().slice(0, 13)}-up-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`move-group-${group.tempId}-up-tooltip`}
                         data-bs-title="Mover o grupo uma posição acima na ordem dos grupos da página."
@@ -215,7 +215,7 @@ function CreateItemGroup(props) {
                         hsl={[197, 43, 52]}
                         onClick={() => removeItemGroup(itemTarget.group)}
                         icon="delete"
-                        className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip`}
+                        className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`delete-group-${group.tempId}-tooltip`}
                         data-bs-title="Remover o grupo da página."

@@ -137,6 +137,7 @@ function InstitutionsPage(props) {
                                             title: i.name,
                                             allowEdit: i.actions.toUpdate,
                                             allowDelete: i.actions.toDelete,
+                                            primaryDescription: `${i.address.city} - ${i.address.state}`,
                                         }))}
                                         hsl={[36, 98, 83]}
                                         viewFunction={(id) => navigate(`${id}`)}

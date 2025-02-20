@@ -100,6 +100,7 @@ function ImageInput(props) {
                     <div className="btn-group dropend">
                         <RoundedButton
                             hsl={[190, 46, 70]}
+                            className="text-white"
                             icon="upload_file"
                             size={41}
                             alt={'Selecionar imagem'}
@@ -157,7 +158,7 @@ function ImageInput(props) {
                                                 />
                                             </div>
                                             <RoundedButton
-                                                className="position-absolute d-inline-block top-0 end-0"
+                                                className="position-absolute d-inline-block text-white top-0 end-0"
                                                 hsl={[190, 46, 70]}
                                                 icon="delete"
                                                 onClick={() => removeImage(i)}
@@ -179,7 +180,7 @@ function ImageInput(props) {
                 </div>
             </div>
             <div className={`${answer.files.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 mt-3 p-0`}>
-                <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon="visibility" onClick={toggleImageVisibility} />
+                <RoundedButton className="text-white mb-2 me-2" hsl={[190, 46, 70]} icon="visibility" onClick={toggleImageVisibility} />
             </div>
             <input
                 type="file"

@@ -350,6 +350,7 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.viewersUser, 'viewersUser')}
                                 icon="search"
                             />
@@ -415,6 +416,7 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchClassrooms(searchInputs.viewersClassroom, 'viewersClassroom')}
                                 icon="search"
                             />
@@ -503,6 +505,7 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.appliers, 'appliers')}
                                 icon="search"
                             />
@@ -598,6 +601,7 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.answersViewersUser, 'answersViewersUser')}
                                 icon="search"
                             />
@@ -662,6 +666,7 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchClassrooms(searchInputs.answersViewersClassroom, 'answersViewersClassroom')}
                                 icon="search"
                             />

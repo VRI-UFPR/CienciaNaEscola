@@ -95,7 +95,7 @@ function CreateDependencyInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + dependency.tempId + '-tooltip'}
                         data-bs-title={'Remover a dependência ' + (isPageDependency ? 'da página.' : 'do grupo.')}
-                        className={'delete-' + dependency.tempId + '-tooltip'}
+                        className={'delete-' + dependency.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>

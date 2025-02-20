@@ -76,7 +76,7 @@ const GalleryModal = forwardRef((props, ref) => {
                         <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
                             Figura {modal.currentImage + 1}
                         </h5>
-                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} />
+                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} className="text-white" />
                     </div>
 
                     <div className="modal-body">
