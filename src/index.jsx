@@ -36,8 +36,6 @@ const styles = `
 `;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const port = process.env.PORT || 3001;
-console.log(`Server running on port ${port}`);
 root.render(
     <StrictMode>
         <App />

@@ -17,7 +17,6 @@ import SplashPage from './SplashPage';
 import NavBar from '../components/Navbar';
 import { AuthContext } from '../contexts/AuthContext';
 import Sidebar from '../components/Sidebar';
-import baseUrl from '../contexts/RouteContext';
 import { Chart } from 'react-google-charts';
 import Gallery from '../components/Gallery';
 import GalleryModal from '../components/GalleryModal';
@@ -25,6 +24,8 @@ import ErrorPage from './ErrorPage';
 import TableInput from '../components/inputs/answers/TableInput';
 import TextButton from '../components/TextButton';
 import { AlertContext } from '../contexts/AlertContext';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
     .bg-yellow-orange {
@@ -44,7 +45,7 @@ const styles = `
     }
 
     .color-gray {
-        color: #787878;
+        color: #787878 !important;
     }
 
     .font-century-gothic {
@@ -52,7 +53,7 @@ const styles = `
     }
 
     .color-dark-gray {
-        color: #535353;
+        color: #535353 !important;
     }
 
     .font-barlow {
@@ -78,6 +79,7 @@ function AnswerPage(props) {
     const { showAlert } = useContext(AlertContext);
     const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
+    const mapRef = useRef(null);
 
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
@@ -87,7 +89,7 @@ function AnswerPage(props) {
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             axios
-                .get(`${baseUrl}api/application/getApplicationWithAnswers/${applicationId}`, {
+                .get(`${process.env.REACT_APP_API_URL}api/application/getApplicationWithAnswers/${applicationId}`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
                     },
@@ -185,7 +187,7 @@ function AnswerPage(props) {
         header[0] = `"${header[0]}`;
         header[totalItems] = `${header[totalItems]}"`;
         // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
-        headerString = header.join('","');
+        headerString = header.join('";"');
 
         // Armazena as respostas
         ansIds.forEach((ansId, index) => {
@@ -246,13 +248,27 @@ function AnswerPage(props) {
                                         });
                                         break;
                                     case 'UPLOAD':
-                                        // const uploadFiles = item.itemAnswers?.[ansId]?.[ansId]?.[0]?.files || [];
-                                        // const imageFiles = uploadFiles.filter((file) => {
-                                        //     const filePath = file?.path || '';
-                                        //     return filePath.includes('.png') || filePath.includes('.jpg') || filePath.includes('.jpeg');
-                                        // });
-
-                                        userAnswers[totalItems + 1] = '';
+                                        Object.entries(item.itemAnswers || {}).forEach(([applicationAnswerId, answerGroup]) => {
+                                            if (applicationAnswerId === ansId) {
+                                                Object.entries(answerGroup || {}).forEach(([_, groupAnswers]) => {
+                                                    groupAnswers.forEach((groupAnswer) => {
+                                                        const uploadFiles = groupAnswer.files || [];
+                                                        const imageFiles = uploadFiles.filter((file) => {
+                                                            const filePath = file?.path || '';
+                                                            return (
+                                                                filePath.includes('.png') ||
+                                                                filePath.includes('.jpg') ||
+                                                                filePath.includes('.jpeg')
+                                                            );
+                                                        });
+                                                        userAnswers[totalItems + 1] = imageFiles
+                                                            .map((file) => process.env.REACT_APP_API_URL + file.path)
+                                                            .join(' | ');
+                                                    });
+                                                });
+                                            }
+                                        });
+                                        userAnswers[totalItems + 1] = userAnswers[totalItems + 1] || '';
                                         break;
                                     default:
                                         break;
@@ -293,11 +309,33 @@ function AnswerPage(props) {
             });
 
             userAnswers[totalItems] = `${userAnswers[totalItems] || ''}"`;
-            answers[index] = userAnswers.join('","');
+            answers[index] = userAnswers.join('";"');
         });
 
         const csv = [headerString, ...answers].join('\r\n');
         return csv;
+    };
+
+    const approveAnswer = (applicationAnswerId) => {
+        axios
+            .put(
+                `${process.env.REACT_APP_API_URL}api/applicationAnswer/approveApplicationAnswer/${applicationAnswerId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            )
+            .then((response) => {
+                showAlert({ headerText: 'Resposta aprovada com sucesso', message: response.data.message });
+                setAnswer((prev) => {
+                    const newAnswer = { ...prev };
+                    newAnswer.answers[applicationAnswerId].approved = true;
+                    return newAnswer;
+                });
+            })
+            .catch((error) => showAlert({ headerText: 'Erro ao aprovar resposta', message: error.response?.data.message || '' }));
     };
 
     return (
@@ -314,7 +352,7 @@ function AnswerPage(props) {
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5 pb-lg-4">
                             <div className="row p-0 m-0">
                                 <h1 className="col col-12 col-md-9 order-2 order-md-1 color-dark-gray font-century-gothic fw-bold fs-2 py-4 pt-md-0 m-0">
-                                    <Link className="color-dark-gray" to={`/applications/${applicationId}`}>
+                                    <Link className="color-dark-gray" to={`/dash/applications/${applicationId}`}>
                                         {answer.protocol.title}
                                     </Link>{' '}
                                     - Respostas
@@ -327,37 +365,92 @@ function AnswerPage(props) {
                             <div className="bg-light-gray rounded-4 mb-3 p-3">
                                 <h2 className="color-dark-gray fw-medium fs-5 m-0">
                                     {Object.keys(answer.answers).length + ' respostas '}
-                                    <a
-                                        href="#answerTab"
-                                        onClick={() => setVisualization(undefined, undefined)}
-                                        className="color-dark-gray fw-bold fs-6"
-                                    >
-                                        (ver todas)
-                                    </a>
+                                    {(selectedAnswer !== undefined || selectedAnswer !== undefined) && (
+                                        <a
+                                            href="#answerTab"
+                                            onClick={() => setVisualization(undefined, undefined)}
+                                            className="color-dark-gray fw-bold fs-6"
+                                        >
+                                            (ver todas)
+                                        </a>
+                                    )}
                                 </h2>
                             </div>
+
                             {Object.entries(answer.answers).length > 0 && (
                                 <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
                                     {Object.entries(answer.answers).map(([key, value]) => {
                                         return (
                                             <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
-                                                <p className="fw-medium fs-6 m-0">
-                                                    <a
-                                                        className="color-dark-gray fw-bold"
-                                                        href="#answerTab"
-                                                        onClick={() => setVisualization(key, undefined)}
-                                                    >
-                                                        {value.user.username + ' - ' + new Date(value.date).toLocaleDateString() + ''}
-                                                    </a>
-                                                </p>
+                                                <div className="row gx-2 justify-content-between align-items-center">
+                                                    <div className="col-auto">
+                                                        <a
+                                                            className="color-dark-gray fw-bold fs-6"
+                                                            href="#answerTab"
+                                                            onClick={() => {
+                                                                setVisualization(key, undefined);
+                                                                mapRef.current.setView([
+                                                                    value.coordinate.latitude,
+                                                                    value.coordinate.longitude,
+                                                                ]);
+                                                            }}
+                                                        >
+                                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
+                                                        </a>
+                                                    </div>
+                                                    {value.approved !== true && (
+                                                        <div className="col-auto">
+                                                            <RoundedButton
+                                                                hsl={[97, 43, 70]}
+                                                                size={24}
+                                                                onClick={() => approveAnswer(key)}
+                                                                icon="check"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
                                 </div>
                             )}
 
-                            <div id="answerTab" className=" mb-lg-4">
+                            <div id="answerTab" className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
+                                <p className="d-block color-dark-gray fw-bold fw-medium fs-5 mb-3">Localizações</p>
+                                <div className="rounded-4 overflow-hidden bg-white mb-3">
+                                    <MapContainer center={[-14.235, -51.9253]} zoom={3} style={{ height: '400px' }} ref={mapRef}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        {Object.entries(answer.answers).map(([key, value]) => {
+                                            return selectedAnswer === undefined || selectedAnswer === key ? (
+                                                <Marker
+                                                    position={[value.coordinate.latitude, value.coordinate.longitude]}
+                                                    key={'marker-' + key}
+                                                    eventHandlers={{
+                                                        add: () =>
+                                                            mapRef.current.setView([value.coordinate.latitude, value.coordinate.longitude]),
+                                                    }}
+                                                >
+                                                    <Popup>
+                                                        <a
+                                                            className="color-dark-gray fw-bold"
+                                                            href="#answerTab"
+                                                            onClick={() => setVisualization(key, undefined)}
+                                                        >
+                                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
+                                                        </a>
+                                                    </Popup>
+                                                </Marker>
+                                            ) : null;
+                                        })}
+                                    </MapContainer>
+                                </div>
+                            </div>
+
+                            <div className=" mb-lg-4">
                                 {answer.protocol.pages.map((page, pageIndex) => {
                                     return page.itemGroups.map((itemGroup, itemGroupIndex) => {
                                         return (() => {

@@ -17,7 +17,7 @@ import ProfilePage from './../pages/ProfilePage';
 import ApplicationPage from '../pages/ApplicationPage';
 import ProtocolPage from './../pages/ProtocolPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
-import AnswerPage from '../pages/AnswerPage';
+import ApplicationAnswersPage from '../pages/ApplicationAnswersPage';
 import { aboutPICCE, terms } from '../utils/constants';
 import InstallPage from '../pages/InstallPage';
 import { LayoutProvider } from '../contexts/LayoutContext';
@@ -28,6 +28,7 @@ import InstitutionPage from '../pages/InstitutionPage';
 import CreateApplicationPage from '../pages/CreateApplicationPage';
 import CreateUserPage from '../pages/CreateUserPage';
 import CreateClassroomPage from '../pages/CreateClassroomPage';
+import ProtocolAnswersPage from '../pages/ProtocolAnswersPage';
 
 // App navigation flow
 // Install page (InstallPage) -> Login (SignInPage) -> Visible applications (ApplicationsPage) -> Answer application (ApplicationPage)
@@ -66,7 +67,7 @@ const appRoutes = [
             },
             { path: 'applications', element: <ApplicationsPage /> },
             { path: 'applications/:applicationId', element: <ApplicationPage /> },
-            { path: 'applications/:applicationId/answers', element: <AnswerPage /> },
+            { path: 'applications/:applicationId/answers', element: <ApplicationAnswersPage /> },
         ],
     },
     {
@@ -89,9 +90,10 @@ const appRoutes = [
             { path: 'protocols', element: <ProtocolsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
             { path: 'protocols/create', element: <CreateProtocolPage /> },
             { path: 'protocols/:protocolId', element: <ProtocolPage /> },
+            { path: 'protocols/:protocolId/answers', element: <ProtocolAnswersPage /> },
             { path: 'protocols/:protocolId/manage', element: <CreateProtocolPage isEditing={true} /> },
             { path: 'protocols/:protocolId/apply', element: <CreateApplicationPage /> },
-            { path: 'applications/:applicationId/answers', element: <AnswerPage /> },
+            { path: 'applications/:applicationId/answers', element: <ApplicationAnswersPage /> },
             { path: 'institutions', element: <InstitutionsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
             { path: 'institutions/create', element: <CreateInstitutionPage /> },
             { path: 'institutions/:institutionId', element: <InstitutionPage /> },
