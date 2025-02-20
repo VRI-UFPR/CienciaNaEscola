@@ -143,20 +143,35 @@ function ProtocolPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
-                                <div className="row m-0 justify-content-center">
-                                    {(protocol.creator.id === user.id || user.role === 'ADMIN') && (
-                                        <div className="col-4 align-self-center pb-4">
+                                <div className="row justify-content-center g-2 mb-4">
+                                    {protocol.actions.toUpdate && (
+                                        <div className="col">
                                             <TextButton
                                                 type="submit"
-                                                hsl={[97, 43, 70]}
+                                                hsl={[197, 43, 61]}
                                                 text="Gerenciar"
                                                 onClick={() => navigate('manage')}
                                             />
                                         </div>
                                     )}
-                                    {(protocol.applicability === 'PUBLIC' || protocol.appliers !== undefined) && (
-                                        <div className="col-4 align-self-center pb-4">
-                                            <TextButton type="submit" hsl={[97, 43, 70]} text="Aplicar" onClick={() => navigate('apply')} />
+                                    {protocol.actions.toApply && (
+                                        <div className="col">
+                                            <TextButton
+                                                type="submit"
+                                                hsl={[197, 43, 61]}
+                                                text="Aplicar"
+                                                onClick={() => navigate('apply')}
+                                            />
+                                        </div>
+                                    )}
+                                    {protocol.actions.toGetWAnswers && (
+                                        <div className="col">
+                                            <TextButton
+                                                type="submit"
+                                                hsl={[197, 43, 61]}
+                                                text="Respostas"
+                                                onClick={() => navigate('answers')}
+                                            />
                                         </div>
                                     )}
                                 </div>
