@@ -89,7 +89,7 @@ function UsersPage(props) {
     useEffect(() => {
         if (user.status !== 'loading') {
             if (user.role !== 'ADMIN' && (user.role === 'USER' || user.role === 'GUEST')) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar esta instituição' });
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar esta página' });
                 return;
             }
             const promises = [];
@@ -99,7 +99,7 @@ function UsersPage(props) {
                         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => setManagedClassrooms(response.data.data))
-                    .catch((error) => setError({ text: 'Erro ao carregar instituição', description: error.message }))
+                    .catch((error) => setError({ text: 'Erro ao carregar grupos gerenciados', description: error.message }))
             );
             promises.push(
                 axios
@@ -107,7 +107,7 @@ function UsersPage(props) {
                         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => setManagedUsers(response.data.data))
-                    .catch((error) => setError({ text: 'Erro ao carregar instituição', description: error.message }))
+                    .catch((error) => setError({ text: 'Erro ao carregar usuários gerenciados', description: error.message }))
             );
 
             // Finish loading
@@ -120,7 +120,7 @@ function UsersPage(props) {
     }
 
     if (isLoading) {
-        return <SplashPage text="Carregando usuários..." />;
+        return <SplashPage text="Carregando usuários e grupos..." />;
     }
 
     return (
@@ -136,92 +136,90 @@ function UsersPage(props) {
                     <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
                         <h1 className="color-grey font-century-gothic fw-bold fs-2 mb-4">Usuários e grupos</h1>
                         <div className="d-flex flex-column flex-grow-1">
-                            <div>
-                                <div className="mb-3">
-                                    <div className="row gx-2 gy-0 mb-2 align-items-center">
-                                        <div className="col-12 col-sm-auto">
-                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Usuários gerenciados:</p>
-                                        </div>
-                                        <div className="col">
-                                            <input
-                                                type="text"
-                                                name="users-search"
-                                                value={MUSearchInput || ''}
-                                                id="users-search"
-                                                placeholder="Buscar por nome de usuário"
-                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                onChange={(e) => setMUSearchInput(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="col-auto">
-                                            <Link to={'/dash/users/create'} className="text-decoration-none">
-                                                <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
-                                            </Link>
-                                        </div>
+                            <div className="mb-3">
+                                <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                    <div className="col-12 col-sm-auto">
+                                        <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Usuários gerenciados:</p>
                                     </div>
-                                    {managedUsers.length > 0 && (
-                                        <div className="row gy-2">
-                                            {managedUsers
-                                                .filter((u) => u.username.startsWith(MUSearchInput))
-                                                .map((u) => (
-                                                    <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                        {user.role === 'ADMIN' ? (
-                                                            <Link
-                                                                to={`/dash/users/${u.id}/manage`}
-                                                                className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
-                                                            >
-                                                                {u.username}
-                                                            </Link>
-                                                        ) : (
-                                                            <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">
-                                                                {u.username}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    )}
+                                    <div className="col">
+                                        <input
+                                            type="text"
+                                            name="users-search"
+                                            value={MUSearchInput || ''}
+                                            id="users-search"
+                                            placeholder="Buscar por nome de usuário"
+                                            className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                            onChange={(e) => setMUSearchInput(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-auto">
+                                        <Link to={'/dash/users/create'} className="text-decoration-none">
+                                            <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div className="mb-4">
-                                    <div className="row gx-2 gy-0 mb-2 align-items-center">
-                                        <div className="col-12 col-sm-auto">
-                                            <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Grupos gerenciados:</p>
-                                        </div>
-                                        <div className="col">
-                                            <input
-                                                type="text"
-                                                name="classrooms-search"
-                                                value={MCSearchInput || ''}
-                                                id="classrooms-search"
-                                                placeholder="Buscar por nome do grupo"
-                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                onChange={(e) => setMCSearchInput(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="col-auto">
-                                            <Link to={'/dash/classrooms/create'} className="text-decoration-none">
-                                                <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
-                                            </Link>
-                                        </div>
-                                    </div>
+                                {managedUsers.length > 0 && (
                                     <div className="row gy-2">
-                                        {managedClassrooms
-                                            .filter((c) => c.name.startsWith(MCSearchInput))
-                                            .map((c) => (
-                                                <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
-                                                    {user.role !== 'USER' && user.role !== 'APPLIER' ? (
+                                        {managedUsers
+                                            .filter((u) => u.username.startsWith(MUSearchInput))
+                                            .map((u) => (
+                                                <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
+                                                    {user.role === 'ADMIN' ? (
                                                         <Link
-                                                            to={`/dash/classrooms/${c.id}/manage`}
+                                                            to={`/dash/users/${u.id}/manage`}
                                                             className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
                                                         >
-                                                            {c.name}
+                                                            {u.username}
                                                         </Link>
                                                     ) : (
-                                                        <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">{c.name}</p>
+                                                        <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">
+                                                            {u.username}
+                                                        </p>
                                                     )}
                                                 </div>
                                             ))}
                                     </div>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <div className="row gx-2 gy-0 mb-2 align-items-center">
+                                    <div className="col-12 col-sm-auto">
+                                        <p className="form-label color-steel-blue fs-5 fw-medium mb-0">Grupos gerenciados:</p>
+                                    </div>
+                                    <div className="col">
+                                        <input
+                                            type="text"
+                                            name="classrooms-search"
+                                            value={MCSearchInput || ''}
+                                            id="classrooms-search"
+                                            placeholder="Buscar por nome do grupo"
+                                            className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                            onChange={(e) => setMCSearchInput(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-auto">
+                                        <Link to={'/dash/classrooms/create'} className="text-decoration-none">
+                                            <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
+                                        </Link>
+                                    </div>
+                                </div>
+                                <div className="row gy-2">
+                                    {managedClassrooms
+                                        .filter((c) => c.name.startsWith(MCSearchInput))
+                                        .map((c) => (
+                                            <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
+                                                {user.role !== 'USER' && user.role !== 'APPLIER' ? (
+                                                    <Link
+                                                        to={`/dash/classrooms/${c.id}/manage`}
+                                                        className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
+                                                    >
+                                                        {c.name}
+                                                    </Link>
+                                                ) : (
+                                                    <p className="font-barlow color-grey text-break fw-medium fs-6 mb-0">{c.name}</p>
+                                                )}
+                                            </div>
+                                        ))}
                                 </div>
                             </div>
                         </div>

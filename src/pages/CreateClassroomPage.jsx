@@ -123,7 +123,7 @@ function CreateClassroomPage(props) {
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (!isEditing && user.role === 'USER') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar grupos nesta instituição' });
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar grupos' });
                 return;
             } else if (
                 isEditing &&

@@ -129,7 +129,7 @@ function CreateUserPage(props) {
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (!isEditing && user.role === 'USER') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários nesta instituição' });
+                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários' });
                 return;
             } else if (isEditing && user.role !== 'ADMIN' && user.role !== 'COORDINATOR' && userId && user.id !== parseInt(userId)) {
                 setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
