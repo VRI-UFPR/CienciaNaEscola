@@ -223,7 +223,7 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        const formData = serialize({ ...newUser, hash: hashSync(newUser.hash, salt) });
+        const formData = newUser.hash ? serialize({ ...newUser, hash: hashSync(newUser.hash, salt) }) : serialize({...newUser});
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/user/updateUser/${userId || user.id}`, formData, {
@@ -289,7 +289,7 @@ function CreateUserPage(props) {
     const generateRandomHash = () => {
         //Random hash with special chars and exactly 12 characters
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
-        setNewUser((prev) => ({ ...prev, hash: randomHash }));
+        setNewUser((prev) => ({ ...prev, hash: randomHash , hashValidation: randomHash }));
     };
 
     if (error) {
@@ -409,7 +409,6 @@ function CreateUserPage(props) {
                                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                         autoComplete="new-password"
                                                         onChange={(e) => setNewUser({ ...newUser, hash: e.target.value })}
-                                                        required
                                                     />
                                                 </div>
                                                 <div className="col-auto">
@@ -426,6 +425,25 @@ function CreateUserPage(props) {
                                                         className="text-white"
                                                         icon="shuffle"
                                                         onClick={generateRandomHash}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label label="hash-validation" className="form-label color-steel-blue fs-5 fw-medium">
+                                                Confirmar senha:
+                                            </label>
+                                            <div className="row align-items-center gx-1">
+                                                <div className="col">
+                                                    <input
+                                                        type={passwordVisibility ? 'text' : 'password'}
+                                                        name="hash"
+                                                        value={newUser.hashValidation || ''}
+                                                        form="user-form"
+                                                        id="hash"
+                                                        className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
+                                                        autoComplete="new-password"
+                                                        onChange={(e) => setNewUser({ ...newUser, hashValidation: e.target.value })}
                                                     />
                                                 </div>
                                             </div>
@@ -600,7 +618,7 @@ function CreateUserPage(props) {
                                     <TextButton
                                         text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
-                                        onClick={() => {
+                                        onClick={ newUser.hash === newUser.hashValidation ? () => {
                                             showAlert({
                                                 headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
                                                 primaryBtnHsl: [355, 78, 66],
@@ -608,8 +626,8 @@ function CreateUserPage(props) {
                                                 secondaryBtnHsl: [97, 43, 70],
                                                 secondaryBtnLabel: 'Sim',
                                                 onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                            });
-                                        }}
+                                            })
+                                        } : () => showAlert({ headerText: 'As senhas não coincidem'})}
                                     />
                                 </div>
                                 {isEditing && (
