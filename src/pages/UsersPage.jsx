@@ -99,7 +99,7 @@ function UsersPage(props) {
                         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => setManagedClassrooms(response.data.data))
-                    .catch((error) => setError({ text: 'Erro ao carregar grupos gerenciados', description: error.message }))
+                    .catch((error) => setError({ text: 'Erro ao obter informações de grupos gerenciados', description: error.message }))
             );
             promises.push(
                 axios
@@ -107,7 +107,7 @@ function UsersPage(props) {
                         headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => setManagedUsers(response.data.data))
-                    .catch((error) => setError({ text: 'Erro ao carregar usuários gerenciados', description: error.message }))
+                    .catch((error) => setError({ text: 'Erro ao obter informações de usuários gerenciados', description: error.message }))
             );
 
             // Finish loading

@@ -144,7 +144,8 @@ function CreateUserPage(props) {
                         })
                         .then((response) => {
                             const { name, username, role, classrooms, profileImageId, profileImage, institutionId } = response.data.data;
-                            setNewUser({ name, username, role, classrooms, profileImageId, profileImage, institutionId });
+                            const classroomsIds = classrooms.map(({ id }) => id);
+                            setNewUser({ name, username, role, classroomsIds, profileImageId, profileImage, institutionId });
                             setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
@@ -456,7 +457,7 @@ function CreateUserPage(props) {
                                                     Instituição do usuário:
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     name="institution"
                                                     value={newUser.institutionId || ''}
                                                     form="user-form"

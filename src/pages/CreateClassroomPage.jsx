@@ -144,7 +144,8 @@ function CreateClassroomPage(props) {
                         })
                         .then((response) => {
                             const { name, users, institutionId } = response.data.data;
-                            setClassroom({ name, users, institutionId });
+                            const usersIds = users.map(({ id }) => id);
+                            setClassroom({ name, users: usersIds, institutionId });
                             setSearchedUsers(users.map(({ id, username, classrooms }) => ({ id, username, classrooms })));
                         })
                         .catch((error) => showAlert({ headerText: 'Erro ao buscar sala de aula.', bodyText: error.response?.data.message }))
@@ -296,7 +297,7 @@ function CreateClassroomPage(props) {
                                             Instituição do grupo:
                                         </label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             name="institution"
                                             value={classroom.institutionId || ''}
                                             form="classroom-form"
