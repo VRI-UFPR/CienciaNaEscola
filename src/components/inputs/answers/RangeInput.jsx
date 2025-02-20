@@ -99,7 +99,7 @@ function RangeInput(props) {
                     id="customRange"
                     onChange={(e) => updateAnswer({ ...answer, text: String(e.target.value) })}
                     style={rangeStyle}
-                    value={parseFloat(answer.text)}
+                    value={parseFloat(answer.text) || min}
                     disabled={disabled}
                 />
             </div>
