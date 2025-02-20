@@ -20,6 +20,7 @@ import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
+import { LayoutContext } from '../contexts/LayoutContext';
 import CustomContainer from '../components/CustomContainer';
 
 const profilePageStyles = `
@@ -60,6 +61,7 @@ function ProfilePage(props) {
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const { isDashboard = false } = useContext(LayoutContext);
 
     const localizeUserRole = (role) => {
         switch (role) {
@@ -235,11 +237,18 @@ function ProfilePage(props) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row justify-content-center justify-content-lg-start gx-2">
-                                <div className="col-5 col-sm-3 col-xl-2">
-                                    <TextButton className="px-5 mt-4" hsl={[97, 43, 70]} text="Editar" onClick={() => navigate(`manage`)} />
+                            {user.id !== 1 && user.role !== 'USER' && isDashboard && (
+                                <div className="row justify-content-center justify-content-lg-start gx-2">
+                                    <div className="col-5 col-sm-3 col-xl-2">
+                                        <TextButton
+                                            className="px-5 mt-4"
+                                            hsl={[97, 43, 70]}
+                                            text="Editar"
+                                            onClick={() => navigate(`manage`)}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </CustomContainer>
                     </div>
                 </div>
