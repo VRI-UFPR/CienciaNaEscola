@@ -118,7 +118,7 @@ function CreateUserPage(props) {
 
     const [newUser, setNewUser] = useState({ institutionId: undefined, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
-    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+    const [institutionClassrooms, setInstitutionClassrooms] = useState(undefined);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
     const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -143,32 +143,9 @@ function CreateUserPage(props) {
                             headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
-                            const d = response.data.data;
-                            setNewUser({
-                                name: d.name,
-                                username: d.username,
-                                role: d.role,
-                                classrooms: d.classrooms.map((c) => c.id),
-                                profileImageId: d.profileImage?.id,
-                                profileImage: d.profileImage,
-                                institutionId: d.institution?.id,
-                            });
-                            setSearchedClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                        })
-                        .catch((error) =>
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
-                        )
-                );
-            }
-            if (user.role !== 'USER' && user.institutionId) {
-                promises.push(
-                    axios
-                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${user.institutionId}`, {
-                            headers: { Authorization: `Bearer ${user.token}` },
-                        })
-                        .then((response) => {
-                            const d = response.data.data;
-                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                            const { name, username, role, classrooms, profileImageId, profileImage, institutionId } = response.data.data;
+                            setNewUser({ name, username, role, classrooms, profileImageId, profileImage, institutionId });
+                            setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
                             setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
@@ -185,19 +162,29 @@ function CreateUserPage(props) {
             .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
-            .then((response) => {
-                const d = response.data.data;
-                const newClassroomss = [
-                    ...d.filter((c) => !newUser.classrooms.includes(c.id)).map(({ id, name, users }) => ({ id, name, users })),
-                    ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
-                ];
-                setSearchedClassrooms(newClassroomss);
-            })
+            .then((response) => concatenateClassrooms(response.data.data.map(({ id, name, users }) => ({ id, name, users }))))
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
-    const showInstitutionClassrooms = () => {
-        const newClassrooms = institutionClassrooms.filter((c) => !newUser.classrooms.includes(c.id));
+    const searchInstitutionGroups = async () => {
+        if ((!newUser.institutionId && !user.institutionId) || user.role === 'USER') return;
+        if (institutionClassrooms === undefined)
+            axios
+                .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${newUser.institutionId || user.institutionId}`, {
+                    headers: { Authorization: `Bearer ${user.token}` },
+                })
+                .then((response) => {
+                    const classrooms = response.data.data.classrooms.map(({ id, name, users }) => ({ id, name, users }));
+                    setInstitutionClassrooms(classrooms);
+                    concatenateClassrooms(classrooms);
+                })
+                .catch((error) =>
+                    setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                );
+    };
+
+    const concatenateClassrooms = (classrooms) => {
+        const newClassrooms = classrooms.filter((c) => !newUser.classrooms.includes(c.id));
         const concatenedClassrooms = [
             ...newClassrooms,
             ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
@@ -209,7 +196,7 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        const formData = newUser.hash ? serialize({ ...newUser, hash: hashSync(newUser.hash, salt) }) : serialize({...newUser});
+        const formData = newUser.hash ? serialize({ ...newUser, hash: hashSync(newUser.hash, salt) }) : serialize({ ...newUser });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/user/updateUser/${userId || user.id}`, formData, {
@@ -263,7 +250,7 @@ function CreateUserPage(props) {
     const generateRandomHash = () => {
         //Random hash with special chars and exactly 12 characters
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
-        setNewUser((prev) => ({ ...prev, hash: randomHash , hashValidation: randomHash }));
+        setNewUser((prev) => ({ ...prev, hash: randomHash, hashValidation: randomHash }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
@@ -440,14 +427,15 @@ function CreateUserPage(props) {
                                                 </select>
                                             </div>
                                         )}
-                                        {user.institutionId && !isEditing && (
+                                        {user.institutionId && user.role !== 'ADMIN' && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
                                                         className="form-check-input"
                                                         type="checkbox"
                                                         role="switch"
-                                                        id="enabled"
+                                                        name="institution"
+                                                        id="institution"
                                                         checked={newUser.institutionId === user.institutionId}
                                                         onChange={(event) =>
                                                             setNewUser((prev) => ({
@@ -460,6 +448,26 @@ function CreateUserPage(props) {
                                                         Pertencente à minha instituição
                                                     </label>
                                                 </div>
+                                            </div>
+                                        )}
+                                        {user.role === 'ADMIN' && (
+                                            <div className="mb-3">
+                                                <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
+                                                    Instituição do usuário:
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="institution"
+                                                    value={newUser.institutionId || ''}
+                                                    form="user-form"
+                                                    id="institution"
+                                                    className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4"
+                                                    onChange={(e) => {
+                                                        setNewUser((prev) => ({ ...prev, institutionId: e.target.value, classrooms: [] }));
+                                                        setInstitutionClassrooms(undefined);
+                                                        setSearchedClassrooms([]);
+                                                    }}
+                                                />
                                             </div>
                                         )}
                                         {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
@@ -481,18 +489,21 @@ function CreateUserPage(props) {
                                                                 className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                                 onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                                 onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') searchClassrooms(classroomSearchTerm);
+                                                                    if (e.key === 'Enter')
+                                                                        String(classroomSearchTerm).length >= 3
+                                                                            ? searchClassrooms(classroomSearchTerm)
+                                                                            : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
                                                                 }}
                                                             />
                                                         </div>
                                                         <div className="col-auto">
                                                             <RoundedButton
                                                                 hsl={[197, 43, 52]}
-                                                                onClick={() => {
+                                                                onClick={() =>
                                                                     String(classroomSearchTerm).length >= 3
                                                                         ? searchClassrooms(classroomSearchTerm)
-                                                                        : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
-                                                                }}
+                                                                        : showAlert({ headerText: 'Insira pelo menos 3 caracteres' })
+                                                                }
                                                                 icon="search"
                                                             />
                                                         </div>
@@ -540,13 +551,13 @@ function CreateUserPage(props) {
                                                             ))}
                                                         </div>
                                                     )}
-                                                    {user.institutionId && (
+                                                    {(user.institutionId || newUser.institutionId) && (
                                                         <div>
                                                             <TextButton
                                                                 className="fs-6 w-auto p-2 py-0"
                                                                 hsl={[190, 46, 70]}
                                                                 text={`Ver grupos da instituição`}
-                                                                onClick={showInstitutionClassrooms}
+                                                                onClick={searchInstitutionGroups}
                                                             />
                                                         </div>
                                                     )}
@@ -575,16 +586,20 @@ function CreateUserPage(props) {
                                     <TextButton
                                         text={isEditing ? 'Concluir' : 'Criar'}
                                         hsl={[97, 43, 70]}
-                                        onClick={ newUser.hash === newUser.hashValidation ? () => {
-                                            showAlert({
-                                                headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
-                                                primaryBtnHsl: [355, 78, 66],
-                                                primaryBtnLabel: 'Não',
-                                                secondaryBtnHsl: [97, 43, 70],
-                                                secondaryBtnLabel: 'Sim',
-                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                            })
-                                        } : () => showAlert({ headerText: 'As senhas não coincidem'})}
+                                        onClick={
+                                            newUser.hash === newUser.hashValidation
+                                                ? () => {
+                                                      showAlert({
+                                                          headerText: `Tem certeza que deseja ${isEditing ? 'editar' : 'criar'} o usuário?`,
+                                                          primaryBtnHsl: [355, 78, 66],
+                                                          primaryBtnLabel: 'Não',
+                                                          secondaryBtnHsl: [97, 43, 70],
+                                                          secondaryBtnLabel: 'Sim',
+                                                          onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                                      });
+                                                  }
+                                                : () => showAlert({ headerText: 'As senhas não coincidem' })
+                                        }
                                     />
                                 </div>
                                 {isEditing && (

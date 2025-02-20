@@ -104,7 +104,6 @@ const appRoutes = [
             { path: 'institutions/create', element: <CreateInstitutionPage /> },
             { path: 'institutions/:institutionId', element: <InstitutionPage /> },
             { path: 'institutions/:institutionId/manage', element: <CreateInstitutionPage isEditing={true} /> },
-            { path: 'institutions/my', element: <InstitutionPage /> },
             { path: 'users/create', element: <CreateUserPage /> },
             { path: 'users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
             { path: 'classrooms/create', element: <CreateClassroomPage /> },
