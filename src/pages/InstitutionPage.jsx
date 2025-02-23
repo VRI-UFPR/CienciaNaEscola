@@ -150,7 +150,7 @@ function InstitutionPage(props) {
                                             </div>
                                             <div className="col-auto">
                                                 <Link to={'/dash/users/create'} className="text-decoration-none">
-                                                    <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
+                                                    <RoundedButton hsl={[197, 43, 52]} className="text-white" icon="person_add" />
                                                 </Link>
                                             </div>
                                         </div>
@@ -195,7 +195,7 @@ function InstitutionPage(props) {
                                             </div>
                                             <div className="col-auto">
                                                 <Link to={'/dash/classrooms/create'} className="text-decoration-none">
-                                                    <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
+                                                    <RoundedButton hsl={[197, 43, 52]} className="text-white" icon="group_add" />
                                                 </Link>
                                             </div>
                                         </div>

@@ -393,6 +393,7 @@ function AnswerPage(props) {
                                                         <div className="col-auto">
                                                             <RoundedButton
                                                                 hsl={[97, 43, 70]}
+                                                                className="text-white"
                                                                 size={24}
                                                                 onClick={() => approveAnswer(key)}
                                                                 icon="check"

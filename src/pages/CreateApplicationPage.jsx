@@ -576,6 +576,7 @@ function CreateApplicationPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchUsers(VUSearchInput)}
                                                         icon="person_search"
                                                     />
@@ -646,6 +647,7 @@ function CreateApplicationPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchClassrooms(VCSearchInput)}
                                                         icon="search"
                                                     />
@@ -735,6 +737,7 @@ function CreateApplicationPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchAnswerUsers(AVUSearchInput)}
                                                         icon="person_search"
                                                     />
@@ -805,6 +808,7 @@ function CreateApplicationPage(props) {
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchAnswerClassrooms(AVCSearchInput)}
                                                         icon="search"
                                                     />

@@ -65,13 +65,13 @@ function CreateTableInput(props) {
                                     <div className="row justify-content-center">
                                         <span>Adicionar: </span>
                                         <RoundedButton
-                                            className="ms-2"
+                                            className="text-white ms-2"
                                             hsl={[190, 46, 70]}
                                             icon="table_rows"
                                             onClick={() => insertItem('TABLEROW', pageIndex, groupIndex)}
                                         />
                                         <RoundedButton
-                                            className="ms-2"
+                                            className="text-white ms-2"
                                             hsl={[190, 46, 70]}
                                             icon="view_column"
                                             onClick={() => insertTableColumn()}
@@ -92,7 +92,7 @@ function CreateTableInput(props) {
                                                     onChange={(e) => updateTableColumn(columnIndex, e.target.value)}
                                                 />
                                                 <RoundedButton
-                                                    className="ms-2"
+                                                    className="text-white ms-2"
                                                     hsl={[190, 46, 70]}
                                                     size={32}
                                                     icon="delete"
@@ -120,7 +120,7 @@ function CreateTableInput(props) {
                                                     onChange={(event) => changeItem(event, itemIndex)}
                                                 />
                                                 <RoundedButton
-                                                    className="ms-2"
+                                                    className="text-white ms-2"
                                                     hsl={[190, 46, 70]}
                                                     size={32}
                                                     icon="delete"

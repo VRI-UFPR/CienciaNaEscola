@@ -144,6 +144,10 @@ function ApplicationsPage(props) {
                                                     .map((a) => ({
                                                         id: a.id,
                                                         title: a.protocol.title,
+                                                        primaryDescription: `${a.applier?.username}`,
+                                                        secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString(
+                                                            'pt-BR'
+                                                        )}`,
                                                         allowEdit: a.actions.toUpdate,
                                                         allowDelete: a.actions.toDelete,
                                                     }))}
@@ -164,6 +168,8 @@ function ApplicationsPage(props) {
                                                 title: a.protocol.title,
                                                 allowEdit: a.actions.toUpdate,
                                                 allowDelete: a.actions.toDelete,
+                                                primaryDescription: `${a.applier?.username}`,
+                                                secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString('pt-BR')}`,
                                             }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
