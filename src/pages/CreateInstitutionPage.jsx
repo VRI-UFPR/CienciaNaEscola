@@ -96,56 +96,48 @@ function CreateInstitutionPage(props) {
             const formData = serialize(searchParams);
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/address/getAddressesByState`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     setSearchedCities(response.data.data);
                     setState(state);
                     setInstitution((prev) => ({ ...prev, addressId: addressId }));
                 })
-                .catch((error) => {
+                .catch((error) =>
                     showAlert({
-                        headerText: 'Erro ao atualizar localizações disponíveis',
+                        headerText: 'Erro ao obter localizações disponíveis',
                         bodyText: error.response?.data.message,
-                    });
-                });
+                    })
+                );
         },
         [showAlert, user.token]
     );
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role !== 'ADMIN') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar instituições' });
-                return;
-            } else if (
-                isEditing &&
-                user.role !== 'ADMIN' &&
-                (user.role !== 'COORDINATOR' || user.institutionId !== parseInt(institutionId))
-            ) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta instituição' });
-                return;
-            }
+            if (!isEditing && user.role !== 'ADMIN')
+                return setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar instituições' });
             if (isEditing) {
                 axios
                     .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                        headers: { Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => {
                         const d = response.data.data;
-                        setInstitution({ name: d.name, type: d.type, addressId: d.address.id });
+                        if (d.actions.toUpdate !== true) {
+                            return setError({
+                                text: 'Operação não permitida',
+                                description: 'Você não tem permissão para editar esta instituição',
+                            });
+                        }
+                        setInstitution({ name: d.name, type: d.type, addressId: d.address.id, actions: d.actions });
                         setLocation(d.address.id, d.address.state);
                         setIsLoading(false);
                     })
-                    .catch((error) => showAlert({ headerText: 'Erro ao buscar instituição.', bodyText: error.response?.data.message }));
-            } else {
-                setIsLoading(false);
-            }
+                    .catch((error) =>
+                        showAlert({ headerText: 'Erro ao obter informações da instituição', bodyText: error.response?.data.message })
+                    );
+            } else setIsLoading(false);
         }
     }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, setLocation]);
 
@@ -155,56 +147,44 @@ function CreateInstitutionPage(props) {
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/institution/updateInstitution/${institutionId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
                     showAlert({
-                        headerText: 'Instituição atualizada com sucesso.',
+                        headerText: 'Instituição atualizada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
                     })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar instituição', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/institution/createInstitution`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
                     showAlert({
-                        headerText: 'Instituição criada com sucesso.',
+                        headerText: 'Instituição criada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/institutions/${response.data.data.id}`),
                     })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar instituição.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar instituição', bodyText: error.response?.data.message }));
         }
     };
 
     const deleteInstitution = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/institution/deleteInstitution/${institutionId}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) =>
-                showAlert({ headerText: 'Instituição excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/institutions`) })
+                showAlert({ headerText: 'Instituição excluída com sucesso', onPrimaryBtnClick: () => navigate(`/dash/institutions`) })
             )
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição', bodyText: error.response?.data.message }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando criação de instituição..." />;
-    }
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de instituição...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -339,7 +319,7 @@ function CreateInstitutionPage(props) {
                                         }}
                                     />
                                 </div>
-                                {isEditing && (
+                                {isEditing && institution.actions.toDelete === true && (
                                     <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton
                                             text={'Excluir'}

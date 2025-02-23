@@ -57,10 +57,7 @@ function InfosPage(props) {
     const handleTermsAcceptance = () => {
         axios
             .get(process.env.REACT_APP_API_URL + 'api/auth/acceptTerms', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 acceptTerms();

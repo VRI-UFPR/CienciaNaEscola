@@ -24,6 +24,7 @@ import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
 import { hashSync } from 'bcryptjs';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
 
@@ -86,11 +87,11 @@ function SignInPage(props) {
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
     const { isDashboard } = useContext(LayoutContext);
+    const [show, setShow] = useState(false)
+
 
     useEffect(() => {
-        if (user.status === 'authenticated') {
-            navigate(isDashboard ? '/dash/applications' : '/applications');
-        }
+        if (user.status === 'authenticated') navigate(isDashboard ? '/dash/applications' : '/applications');
     }, [navigate, isDashboard, user]);
 
     const loginHandler = (event) => {
@@ -112,9 +113,7 @@ function SignInPage(props) {
                         response.data.data.profileImage?.path
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
@@ -134,9 +133,7 @@ function SignInPage(props) {
                         response.data.data.institutionId
                     );
                     navigate(isDashboard ? '/dash/acceptTerms' : '/acceptTerms');
-                } else {
-                    throw new Error('Authentication failed!');
-                }
+                } else throw new Error('Authentication failed!');
             })
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
@@ -152,7 +149,7 @@ function SignInPage(props) {
                             <form onSubmit={loginHandler}>
                                 <input
                                     className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                                    placeholder="Username"
+                                    placeholder="Nome de usuário (username)"
                                     type="text"
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
@@ -160,18 +157,34 @@ function SignInPage(props) {
                                     maxLength="20"
                                     required
                                 />
-                                <input
-                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
-                                    placeholder="Senha"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
+                                <div className="row align-items-center gx-1">
+                                    <div className="col">
+                                        <input
+                                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 w-100"
+                                            placeholder="Senha"
+                                            type={show ? 'text' : 'password'}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="col-auto">
+                                        <RoundedButton
+                                            hsl={[197, 43, 52]}
+                                            icon="visibility"
+                                            onClick={() => setShow(!show)}
+                                        />
+                                    </div>
+                                </div>
                                 <button
                                     className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"
                                     type="button"
-                                    onClick={() => showAlert({ headerText: 'Fale com seu coordenador para recuperar sua senha.' })}
+                                    onClick={() =>
+                                        showAlert({
+                                            headerText:
+                                                'Para recuperar sua senha, entre em contato com o coordenador de sua instituição ou com quem forneceu seus credenciais',
+                                        })
+                                    }
                                 >
                                     Esqueci minha senha
                                 </button>

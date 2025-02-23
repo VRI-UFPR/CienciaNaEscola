@@ -284,7 +284,7 @@ function AddBar(props) {
                         id="item-target-page"
                         value={pageIndex}
                         className="form-select rounded-4 text-center text-white bg-steel-blue fs-6 fw-medium border-0"
-                        onChange={(e) => setItemTarget((prev) => ({ group: '', page: e.target.value }))}
+                        onChange={(e) => setItemTarget(() => ({ group: '', page: e.target.value }))}
                     >
                         <option value={''}>Página...</option>
                         {protocol.pages.map((page, index) => (
