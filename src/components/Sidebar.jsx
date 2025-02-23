@@ -127,6 +127,11 @@ function Sidebar(props) {
                             Protocolos
                         </Link>
                     )}
+                    {isDashboard && user.role !== 'USER' && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/users" onClick={() => closeSidebar()}>
+                            Usuários e grupos
+                        </Link>
+                    )}
                     {isDashboard && user.role === 'ADMIN' && (
                         <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/institutions" onClick={() => closeSidebar()}>
                             Instituições

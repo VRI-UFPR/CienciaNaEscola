@@ -20,8 +20,8 @@ import BlankProfilePic from '../assets/images/blankProfile.jpg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
-import CustomContainer from '../components/CustomContainer';
 import { LayoutContext } from '../contexts/LayoutContext';
+import CustomContainer from '../components/CustomContainer';
 
 const profilePageStyles = `
     .font-barlow {
@@ -60,7 +60,7 @@ function ProfilePage(props) {
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-    const { isDashboard } = useContext(LayoutContext);
+    const { isDashboard = false } = useContext(LayoutContext);
 
     const localizeUserRole = (role) => {
         switch (role) {

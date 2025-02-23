@@ -118,7 +118,7 @@ function CreateUserPage(props) {
 
     const [newUser, setNewUser] = useState({ institutionId: undefined, classrooms: [] });
     const [passwordVisibility, setPasswordVisibility] = useState(false);
-    const [institutionClassrooms, setInstitutionClassrooms] = useState([]);
+    const [institutionClassrooms, setInstitutionClassrooms] = useState(undefined);
     const [searchedClassrooms, setSearchedClassrooms] = useState([]);
     const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -141,23 +141,25 @@ function CreateUserPage(props) {
                             headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
-                            const d = response.data.data;
-                            if (d.actions.toUpdate !== true)
+                            const { name, username, role, classrooms, profileImageId, profileImage, institution, actions } =
+                                response.data.data;
+                            if (actions.toUpdate !== true)
                                 return Promise.reject({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar este usuário',
                                 });
+                            const ids = classrooms.map(({ id }) => id);
                             setNewUser({
-                                name: d.name,
-                                username: d.username,
-                                role: d.role,
-                                classrooms: d.classrooms.map((c) => c.id),
-                                profileImageId: d.profileImage?.id,
-                                profileImage: d.profileImage,
-                                institutionId: d.institution?.id,
-                                actions: d.actions,
+                                name,
+                                username,
+                                role,
+                                classrooms: ids,
+                                profileImageId,
+                                profileImage,
+                                institutionId: institution?.id,
+                                actions,
                             });
-                            setSearchedClassrooms(d.classrooms.map(({ id, name, users }) => ({ id, name, users })));
+                            setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
                             Promise.reject(
@@ -171,36 +173,9 @@ function CreateUserPage(props) {
                         )
                 );
             }
-            if (user.role !== 'USER' && user.institutionId) {
-                promises.push(
-                    axios
-                        .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${user.institutionId}`, {
-                            headers: { Authorization: `Bearer ${user.token}` },
-                        })
-                        .then((response) => {
-                            const d = response.data.data;
-                            setInstitutionClassrooms(d.classrooms.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                        })
-                        .catch((error) =>
-                            showAlert({
-                                headerText: 'Houve um problema ao buscar os grupos da sua instituição',
-                                bodyText: `Você ainda poderá ${
-                                    isEditing ? 'editar' : 'criar'
-                                } o usuário, mas alguns grupos podem estar inacessíveis. Deseja continuar?`,
-                                primaryBtnLabel: 'Sim',
-                                primaryBtnHsl: [97, 43, 70],
-                                secondaryBtnLabel: 'Não',
-                                secondaryBtnHsl: [355, 78, 66],
-                                onSecondaryBtnClick: () => navigate('/dash/applications'),
-                            })
-                        )
-                );
-            }
-            Promise.all(promises)
-                .then(() => setIsLoading(false))
-                .catch((error) => setError(error));
+            Promise.all(promises).then(() => setIsLoading(false));
         }
-    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId, showAlert, navigate]);
+    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
 
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
@@ -208,26 +183,48 @@ function CreateUserPage(props) {
             .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
-            .then((response) => {
-                const d = response.data.data;
-                const newClassroomss = [
-                    ...d
-                        .filter(
-                            (c) =>
-                                !newUser.classrooms.includes(c.id) &&
-                                (c.institution?.id === newUser.institutionId || c.institution === null)
-                        )
-                        .map(({ id, name, users }) => ({ id, name, users })),
-                    ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
-                ];
-                setSearchedClassrooms(newClassroomss);
-            })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
-        setClassroomSearchTerm('');
+            .then((response) =>
+                concatenateClassrooms(response.data.data.map(({ id, name, users, institution }) => ({ id, name, users, institution })))
+            )
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
-    const showInstitutionClassrooms = () => {
-        const newClassrooms = institutionClassrooms.filter((c) => !newUser.classrooms.includes(c.id));
+    const searchInstitutionGroups = async () => {
+        if ((!newUser.institutionId && !user.institutionId) || user.role === 'USER') return;
+        if (institutionClassrooms === undefined)
+            axios
+                .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${newUser.institutionId || user.institutionId}`, {
+                    headers: { Authorization: `Bearer ${user.token}` },
+                })
+                .then((response) => {
+                    const classrooms = response.data.data.classrooms.map(({ id, name, users }) => ({
+                        id,
+                        name,
+                        users,
+                        institution: { id: newUser.institutionId || user.institutionId },
+                    }));
+                    setInstitutionClassrooms(classrooms);
+                    concatenateClassrooms(classrooms);
+                })
+                .catch((error) =>
+                    showAlert({
+                        headerText: 'Houve um problema ao buscar os grupos da sua instituição',
+                        bodyText: `Você ainda poderá ${
+                            isEditing ? 'editar' : 'criar'
+                        } o usuário, mas alguns grupos podem estar inacessíveis. Deseja continuar?`,
+                        primaryBtnLabel: 'Sim',
+                        primaryBtnHsl: [97, 43, 70],
+                        secondaryBtnLabel: 'Não',
+                        secondaryBtnHsl: [355, 78, 66],
+                        onSecondaryBtnClick: () => navigate('/dash/applications'),
+                    })
+                );
+    };
+
+    const concatenateClassrooms = (classrooms) => {
+        const newClassrooms = classrooms.filter(
+            (c) => !newUser.classrooms.includes(c.id) && (c.institution?.id === newUser.institutionId || c.institution === null)
+        );
         const concatenedClassrooms = [
             ...newClassrooms,
             ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
@@ -469,14 +466,15 @@ function CreateUserPage(props) {
                                                 </select>
                                             </div>
                                         )}
-                                        {user.institutionId && (
+                                        {user.institutionId && user.role !== 'ADMIN' && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
                                                         className="form-check-input"
                                                         type="checkbox"
                                                         role="switch"
-                                                        id="enabled"
+                                                        name="institution"
+                                                        id="institution"
                                                         checked={newUser.institutionId === user.institutionId}
                                                         onChange={(event) => {
                                                             setNewUser((prev) => ({
@@ -503,6 +501,26 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         )}
+                                        {user.role === 'ADMIN' && (
+                                            <div className="mb-3">
+                                                <label label="name" className="form-label color-steel-blue fs-5 fw-medium">
+                                                    Instituição do usuário:
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    name="institution"
+                                                    value={newUser.institutionId || ''}
+                                                    form="user-form"
+                                                    id="institution"
+                                                    className="form-control bg-light-pastel-blue fs-5 border-0 rounded-4"
+                                                    onChange={(e) => {
+                                                        setNewUser((prev) => ({ ...prev, institutionId: e.target.value, classrooms: [] }));
+                                                        setInstitutionClassrooms(undefined);
+                                                        setSearchedClassrooms([]);
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
                                         <div>
                                             <fieldset>
                                                 <div className="row gx-2 gy-2 mb-2">
@@ -521,18 +539,21 @@ function CreateUserPage(props) {
                                                             className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                             onChange={(e) => setClassroomSearchTerm(e.target.value)}
                                                             onKeyDown={(e) => {
-                                                                if (e.key === 'Enter') searchClassrooms(classroomSearchTerm);
+                                                                if (e.key === 'Enter')
+                                                                    String(classroomSearchTerm).length >= 3
+                                                                        ? searchClassrooms(classroomSearchTerm)
+                                                                        : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
                                                             }}
                                                         />
                                                     </div>
                                                     <div className="col-auto">
                                                         <RoundedButton
                                                             hsl={[197, 43, 52]}
-                                                            onClick={() => {
+                                                            onClick={() =>
                                                                 String(classroomSearchTerm).length >= 3
                                                                     ? searchClassrooms(classroomSearchTerm)
-                                                                    : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
-                                                            }}
+                                                                    : showAlert({ headerText: 'Insira pelo menos 3 caracteres' })
+                                                            }
                                                             icon="search"
                                                         />
                                                     </div>
@@ -580,13 +601,13 @@ function CreateUserPage(props) {
                                                         ))}
                                                     </div>
                                                 )}
-                                                {user.institutionId && newUser.institutionId && institutionClassrooms.length > 0 && (
+                                                {user.institutionId && newUser.institutionId && (
                                                     <div>
                                                         <TextButton
                                                             className="fs-6 w-auto p-2 py-0"
                                                             hsl={[190, 46, 70]}
                                                             text={`Ver grupos da instituição`}
-                                                            onClick={showInstitutionClassrooms}
+                                                            onClick={searchInstitutionGroups}
                                                         />
                                                     </div>
                                                 )}
@@ -630,26 +651,24 @@ function CreateUserPage(props) {
                                         }
                                     />
                                 </div>
-                                {isEditing &&
-                                    newUser.actions.toDelete ===
-                                        true(
-                                            <div className="col-5 col-sm-3 col-xl-2">
-                                                <TextButton
-                                                    text={'Excluir'}
-                                                    hsl={[355, 78, 66]}
-                                                    onClick={() => {
-                                                        showAlert({
-                                                            headerText: `Tem certeza que deseja excluir o usuário?`,
-                                                            primaryBtnHsl: [97, 43, 70],
-                                                            primaryBtnLabel: 'Não',
-                                                            secondaryBtnHsl: [355, 78, 66],
-                                                            secondaryBtnLabel: 'Sim',
-                                                            onSecondaryBtnClick: () => deleteUser(),
-                                                        });
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
+                                {isEditing && newUser.actions.toDelete === true && (
+                                    <div className="col-5 col-sm-3 col-xl-2">
+                                        <TextButton
+                                            text={'Excluir'}
+                                            hsl={[355, 78, 66]}
+                                            onClick={() => {
+                                                showAlert({
+                                                    headerText: `Tem certeza que deseja excluir o usuário?`,
+                                                    primaryBtnHsl: [97, 43, 70],
+                                                    primaryBtnLabel: 'Não',
+                                                    secondaryBtnHsl: [355, 78, 66],
+                                                    secondaryBtnLabel: 'Sim',
+                                                    onSecondaryBtnClick: () => deleteUser(),
+                                                });
+                                            }}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </CustomContainer>

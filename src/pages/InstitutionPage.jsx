@@ -149,7 +149,7 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'users/create'} className="text-decoration-none">
+                                                <Link to={'/dash/users/create'} className="text-decoration-none">
                                                     <RoundedButton hsl={[197, 43, 52]} icon="person_add" />
                                                 </Link>
                                             </div>
@@ -162,7 +162,7 @@ function InstitutionPage(props) {
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             {u.actions.toUpdate === true ? (
                                                                 <Link
-                                                                    to={`users/${u.id}/manage`}
+                                                                    to={`/dash/users/${u.id}/manage`}
                                                                     className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
                                                                 >
                                                                     {u.username}
@@ -194,7 +194,7 @@ function InstitutionPage(props) {
                                                 />
                                             </div>
                                             <div className="col-auto">
-                                                <Link to={'classrooms/create'} className="text-decoration-none">
+                                                <Link to={'/dash/classrooms/create'} className="text-decoration-none">
                                                     <RoundedButton hsl={[197, 43, 52]} icon="group_add" />
                                                 </Link>
                                             </div>
@@ -206,7 +206,7 @@ function InstitutionPage(props) {
                                                     <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                         {c.actions.toUpdate === true ? (
                                                             <Link
-                                                                to={`classrooms/${c.id}/manage`}
+                                                                to={`/dash/classrooms/${c.id}/manage`}
                                                                 className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
                                                             >
                                                                 {c.name}
