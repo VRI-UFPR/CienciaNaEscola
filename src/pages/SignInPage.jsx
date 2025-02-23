@@ -24,6 +24,7 @@ import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
 import { hashSync } from 'bcryptjs';
+import RoundedButton from '../components/RoundedButton';
 
 const styles = `
 
@@ -86,6 +87,8 @@ function SignInPage(props) {
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
     const { isDashboard } = useContext(LayoutContext);
+    const [show, setShow] = useState(false)
+
 
     useEffect(() => {
         if (user.status === 'authenticated') {
@@ -160,14 +163,25 @@ function SignInPage(props) {
                                     maxLength="20"
                                     required
                                 />
-                                <input
-                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-3 w-100"
-                                    placeholder="Senha"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
+                                <div className="row align-items-center gx-1">
+                                    <div className="col">
+                                        <input
+                                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 w-100"
+                                            placeholder="Senha"
+                                            type={show ? 'text' : 'password'}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="col-auto">
+                                        <RoundedButton
+                                            hsl={[197, 43, 52]}
+                                            icon="visibility"
+                                            onClick={() => setShow(!show)}
+                                        />
+                                    </div>
+                                </div>
                                 <button
                                     className="btn btn-link color-pastel-blue fs-6 p-0 mb-4 mb-sm-5"
                                     type="button"
