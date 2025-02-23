@@ -90,27 +90,21 @@ function AnswerPage(props) {
         if (isLoading && user.status !== 'loading') {
             axios
                 .get(`${process.env.REACT_APP_API_URL}api/application/getApplicationWithAnswers/${applicationId}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     setAnswer(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => {
-                    setError({ text: 'Erro ao carregar respostas de aplicação', description: error.response?.data.message || '' });
-                });
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter respostas da aplicação', description: error.response?.data.message || '' })
+                );
         }
     }, [applicationId, isLoading, user.status, user.token]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando respostas de aplicação..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando respostas da aplicação..." />;
 
     // Função de exportar csv
     const createFile = (modalRef) => {
@@ -321,11 +315,7 @@ function AnswerPage(props) {
             .put(
                 `${process.env.REACT_APP_API_URL}api/applicationAnswer/approveApplicationAnswer/${applicationAnswerId}`,
                 {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                }
+                { headers: { Authorization: `Bearer ${user.token}` } }
             )
             .then((response) => {
                 showAlert({ headerText: 'Resposta aprovada com sucesso', message: response.data.message });
@@ -399,7 +389,7 @@ function AnswerPage(props) {
                                                             {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
                                                         </a>
                                                     </div>
-                                                    {value.approved !== true && (
+                                                    {value.approved !== true && answer.actions.toApproveAnswers === true && (
                                                         <div className="col-auto">
                                                             <RoundedButton
                                                                 hsl={[97, 43, 70]}

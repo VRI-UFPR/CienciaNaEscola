@@ -79,9 +79,7 @@ function InstallPage(props) {
     const [installPrompt, setInstallPrompt] = useState(null);
 
     useEffect(() => {
-        if ((isAndroid || isIos) && isStandalone) {
-            navigate('/signin');
-        }
+        if ((isAndroid || isIos) && isStandalone) navigate('/signin');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -99,9 +97,7 @@ function InstallPage(props) {
 
     const installApp = () => {
         installPrompt.prompt();
-        installPrompt.userChoice.then((choiceResult) => {
-            setInstallPrompt(null);
-        });
+        installPrompt.userChoice.then((choiceResult) => setInstallPrompt(null));
     };
 
     return (

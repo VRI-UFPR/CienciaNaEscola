@@ -128,18 +128,11 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role === 'USER') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para criar usuários' });
-                return;
-            } else if (
-                isEditing &&
-                user.role !== 'ADMIN' &&
-                user.role !== 'COORDINATOR' &&
-                ((userId && user.id !== parseInt(userId)) || user.role === 'USER' || user.id === 1)
-            ) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este usuário' });
-                return;
-            }
+            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER'))
+                return setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para criar usuários nesta instituição',
+                });
             const promises = [];
             if (isEditing) {
                 promises.push(
@@ -148,13 +141,35 @@ function CreateUserPage(props) {
                             headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
-                            const { name, username, role, classrooms, profileImageId, profileImage, institutionId } = response.data.data;
-                            const classroomsIds = classrooms.map(({ id }) => id);
-                            setNewUser({ name, username, role, classroomsIds, profileImageId, profileImage, institutionId });
+                            const { name, username, role, classrooms, profileImageId, profileImage, institution, actions } =
+                                response.data.data;
+                            if (actions.toUpdate !== true)
+                                return Promise.reject({
+                                    text: 'Operação não permitida',
+                                    description: 'Você não tem permissão para editar este usuário',
+                                });
+                            const ids = classrooms.map(({ id }) => id);
+                            setNewUser({
+                                name,
+                                username,
+                                role,
+                                classrooms: ids,
+                                profileImageId,
+                                profileImage,
+                                institutionId: institution?.id,
+                                actions,
+                            });
                             setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
-                            setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : {
+                                          text: 'Erro ao obter informações do usuário',
+                                          description: error.response?.data.message || '',
+                                      }
+                            )
                         )
                 );
             }
@@ -168,7 +183,9 @@ function CreateUserPage(props) {
             .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
-            .then((response) => concatenateClassrooms(response.data.data.map(({ id, name, users }) => ({ id, name, users }))))
+            .then((response) =>
+                concatenateClassrooms(response.data.data.map(({ id, name, users, institution }) => ({ id, name, users, institution })))
+            )
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
@@ -180,17 +197,34 @@ function CreateUserPage(props) {
                     headers: { Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
-                    const classrooms = response.data.data.classrooms.map(({ id, name, users }) => ({ id, name, users }));
+                    const classrooms = response.data.data.classrooms.map(({ id, name, users }) => ({
+                        id,
+                        name,
+                        users,
+                        institution: { id: newUser.institutionId || user.institutionId },
+                    }));
                     setInstitutionClassrooms(classrooms);
                     concatenateClassrooms(classrooms);
                 })
                 .catch((error) =>
-                    setError({ text: 'Erro ao carregar criação de usuário', description: error.response?.data.message || '' })
+                    showAlert({
+                        headerText: 'Houve um problema ao buscar os grupos da sua instituição',
+                        bodyText: `Você ainda poderá ${
+                            isEditing ? 'editar' : 'criar'
+                        } o usuário, mas alguns grupos podem estar inacessíveis. Deseja continuar?`,
+                        primaryBtnLabel: 'Sim',
+                        primaryBtnHsl: [97, 43, 70],
+                        secondaryBtnLabel: 'Não',
+                        secondaryBtnHsl: [355, 78, 66],
+                        onSecondaryBtnClick: () => navigate('/dash/applications'),
+                    })
                 );
     };
 
     const concatenateClassrooms = (classrooms) => {
-        const newClassrooms = classrooms.filter((c) => !newUser.classrooms.includes(c.id));
+        const newClassrooms = classrooms.filter(
+            (c) => !newUser.classrooms.includes(c.id) && (c.institution?.id === newUser.institutionId || c.institution === null)
+        );
         const concatenedClassrooms = [
             ...newClassrooms,
             ...searchedClassrooms.filter((c) => newUser.classrooms.includes(c.id)).sort((a, b) => a.name.localeCompare(b.name)),
@@ -210,7 +244,7 @@ function CreateUserPage(props) {
                 })
                 .then((response) => {
                     showAlert({
-                        headerText: 'Usuário atualizado com sucesso.',
+                        headerText: 'Usuário atualizado com sucesso',
                         primaryBtnHsl: [97, 43, 70],
                         primaryBtnLabel: 'Ok',
                         onPrimaryBtnClick: () => {
@@ -221,16 +255,16 @@ function CreateUserPage(props) {
                         },
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar usuário', bodyText: error.response?.data.message }));
         } else {
             axios
                 .post(`${process.env.REACT_APP_API_URL}api/user/createUser`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
-                    showAlert({ headerText: 'Usuário criado com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) })
+                    showAlert({ headerText: 'Usuário criado com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar usuário.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar usuário', bodyText: error.response?.data.message }));
         }
     };
 
@@ -242,15 +276,15 @@ function CreateUserPage(props) {
             .then((response) => {
                 if (!userId || userId === user.id) {
                     showAlert({
-                        headerText: 'Usuário excluído com sucesso.',
+                        headerText: 'Usuário excluído com sucesso',
                         onPrimaryBtnClick: () => {
                             logout();
                             navigate(`/dash/signin`);
                         },
                     });
-                } else showAlert({ headerText: 'Usuário excluído com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/users`) });
+                } else showAlert({ headerText: 'Usuário excluído com sucesso', onPrimaryBtnClick: () => navigate(`/dash/users`) });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário', bodyText: error.response?.data.message }));
     };
 
     const generateRandomHash = () => {
@@ -261,7 +295,7 @@ function CreateUserPage(props) {
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) return <SplashPage text="Carregando criação de usuário..." />;
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de usuário...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -403,7 +437,7 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {((user.role === 'ADMIN' && userId && user.id !== parseInt(userId)) || !isEditing) && (
+                                        {(!isEditing || userId !== user.id) && (
                                             <div className="mb-3">
                                                 <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                                     Selecione o papel do usuário
@@ -418,18 +452,17 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
-                                                        user.role === 'COORDINATOR') && <option value="USER">Usuário</option>}
-                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
-                                                        user.role === 'COORDINATOR') && <option value="APPLIER">Aplicador</option>}
-                                                    {((user.role === 'ADMIN' && newUser.role !== 'ADMIN') ||
-                                                        user.role === 'COORDINATOR') && <option value="PUBLISHER">Publicador</option>}
-                                                    {user.role === 'ADMIN' && newUser.role !== 'ADMIN' && (
-                                                        <option value="COORDINATOR">Coordenador</option>
+                                                    {(user.role === 'ADMIN' ||
+                                                        user.role === 'COORDINATOR' ||
+                                                        user.role === 'PUBLISHER' ||
+                                                        user.role === 'APPLIER') && <option value="USER">Usuário</option>}
+                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                                        <option value="APPLIER">Aplicador</option>
                                                     )}
-                                                    {user.role === 'ADMIN' && newUser.role === 'ADMIN' && (
-                                                        <option value="ADMIN">Administrador</option>
+                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                                        <option value="PUBLISHER">Publicador</option>
                                                     )}
+                                                    {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}
@@ -443,12 +476,24 @@ function CreateUserPage(props) {
                                                         name="institution"
                                                         id="institution"
                                                         checked={newUser.institutionId === user.institutionId}
-                                                        onChange={(event) =>
+                                                        onChange={(event) => {
                                                             setNewUser((prev) => ({
                                                                 ...prev,
                                                                 institutionId: event.target.checked ? user.institutionId : undefined,
-                                                            }))
-                                                        }
+                                                                classrooms: event.target.checked
+                                                                    ? prev.classrooms
+                                                                    : prev.classrooms.filter(
+                                                                          (c) => !institutionClassrooms.map(({ id }) => id).includes(c)
+                                                                      ),
+                                                            }));
+                                                            setSearchedClassrooms((prev) =>
+                                                                event.target.checked
+                                                                    ? prev
+                                                                    : prev.filter(
+                                                                          (c) => !institutionClassrooms.map(({ id }) => id).includes(c.id)
+                                                                      )
+                                                            );
+                                                        }}
                                                     />
                                                     <label className="form-check-label color-steel-blue fs-5 fw-medium" htmlFor="enabled">
                                                         Pertencente à minha instituição
@@ -476,100 +521,98 @@ function CreateUserPage(props) {
                                                 />
                                             </div>
                                         )}
-                                        {(user.role === 'ADMIN' || user.role === 'COORDINATOR' || !isEditing) && (
-                                            <div>
-                                                <fieldset>
-                                                    <div className="row gx-2 gy-2 mb-2">
-                                                        <div className="col-12 col-xl-auto">
-                                                            <p className="form-label color-steel-blue fs-5 fw-medium">
-                                                                Selecione os grupos do usuário:
-                                                            </p>
-                                                        </div>
-                                                        <div className="col">
-                                                            <input
-                                                                type="text"
-                                                                name="classrooms-search"
-                                                                value={classroomSearchTerm || ''}
-                                                                id="classrooms-search"
-                                                                placeholder="Buscar por nome de grupo"
-                                                                className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
-                                                                onChange={(e) => setClassroomSearchTerm(e.target.value)}
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter')
-                                                                        String(classroomSearchTerm).length >= 3
-                                                                            ? searchClassrooms(classroomSearchTerm)
-                                                                            : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="col-auto">
-                                                            <RoundedButton
-                                                                hsl={[197, 43, 52]}
-                                                                onClick={() =>
+                                        <div>
+                                            <fieldset>
+                                                <div className="row gx-2 gy-2 mb-2">
+                                                    <div className="col-12 col-xl-auto">
+                                                        <p className="form-label color-steel-blue fs-5 fw-medium">
+                                                            Selecione os grupos do usuário:
+                                                        </p>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input
+                                                            type="text"
+                                                            name="classrooms-search"
+                                                            value={classroomSearchTerm || ''}
+                                                            id="classrooms-search"
+                                                            placeholder="Buscar por nome do grupo"
+                                                            className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                                                            onChange={(e) => setClassroomSearchTerm(e.target.value)}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter')
                                                                     String(classroomSearchTerm).length >= 3
                                                                         ? searchClassrooms(classroomSearchTerm)
-                                                                        : showAlert({ headerText: 'Insira pelo menos 3 caracteres' })
-                                                                }
-                                                                icon="search"
-                                                            />
-                                                        </div>
+                                                                        : showAlert({ headerText: 'Insira pelo menos 3 caracteres' });
+                                                            }}
+                                                        />
                                                     </div>
-                                                    {searchedClassrooms.length > 0 && (
-                                                        <div className="row gy-2 mb-3">
-                                                            {searchedClassrooms.map((c) => (
-                                                                <div key={c.id} className="col-6 col-md-4 col-xl-3">
-                                                                    <div className="form-check">
-                                                                        <input
-                                                                            form="user-form"
-                                                                            type="checkbox"
-                                                                            name="classrooms"
-                                                                            id={`classroom-${c.id}`}
-                                                                            value={c.id}
-                                                                            className="form-check-input bg-grey"
-                                                                            checked={newUser.classrooms.includes(c.id)}
-                                                                            onChange={(e) => {
-                                                                                if (e.target.checked) {
-                                                                                    setNewUser((prev) => ({
-                                                                                        ...prev,
-                                                                                        classrooms: [
-                                                                                            ...prev.classrooms,
-                                                                                            parseInt(e.target.value),
-                                                                                        ],
-                                                                                    }));
-                                                                                } else {
-                                                                                    setNewUser((prev) => ({
-                                                                                        ...prev,
-                                                                                        classrooms: prev.classrooms.filter(
-                                                                                            (id) => id !== parseInt(e.target.value)
-                                                                                        ),
-                                                                                    }));
-                                                                                }
-                                                                            }}
-                                                                        />
-                                                                        <label
-                                                                            htmlFor={`classroom-${c.id}`}
-                                                                            className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
-                                                                        >
-                                                                            {c.name}
-                                                                        </label>
-                                                                    </div>
+                                                    <div className="col-auto">
+                                                        <RoundedButton
+                                                            hsl={[197, 43, 52]}
+                                                            onClick={() =>
+                                                                String(classroomSearchTerm).length >= 3
+                                                                    ? searchClassrooms(classroomSearchTerm)
+                                                                    : showAlert({ headerText: 'Insira pelo menos 3 caracteres' })
+                                                            }
+                                                            icon="search"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {searchedClassrooms.length > 0 && (
+                                                    <div className="row gy-2 mb-3">
+                                                        {searchedClassrooms.map((c) => (
+                                                            <div key={c.id} className="col-6 col-md-4 col-xl-3">
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        form="user-form"
+                                                                        type="checkbox"
+                                                                        name="classrooms"
+                                                                        id={`classroom-${c.id}`}
+                                                                        value={c.id}
+                                                                        className="form-check-input bg-grey"
+                                                                        checked={newUser.classrooms.includes(c.id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                setNewUser((prev) => ({
+                                                                                    ...prev,
+                                                                                    classrooms: [
+                                                                                        ...prev.classrooms,
+                                                                                        parseInt(e.target.value),
+                                                                                    ],
+                                                                                }));
+                                                                            } else {
+                                                                                setNewUser((prev) => ({
+                                                                                    ...prev,
+                                                                                    classrooms: prev.classrooms.filter(
+                                                                                        (id) => id !== parseInt(e.target.value)
+                                                                                    ),
+                                                                                }));
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`classroom-${c.id}`}
+                                                                        className="font-barlow color-grey text-break fw-medium ms-2 fs-6"
+                                                                    >
+                                                                        {c.name}
+                                                                    </label>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                    {(user.institutionId || newUser.institutionId) && (
-                                                        <div>
-                                                            <TextButton
-                                                                className="fs-6 w-auto p-2 py-0"
-                                                                hsl={[190, 46, 70]}
-                                                                text={`Ver grupos da instituição`}
-                                                                onClick={searchInstitutionGroups}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </fieldset>
-                                            </div>
-                                        )}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                                {user.institutionId && newUser.institutionId && (
+                                                    <div>
+                                                        <TextButton
+                                                            className="fs-6 w-auto p-2 py-0"
+                                                            hsl={[190, 46, 70]}
+                                                            text={`Ver grupos da instituição`}
+                                                            onClick={searchInstitutionGroups}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </fieldset>
+                                        </div>
                                         <div>
                                             <input
                                                 type="file"
@@ -608,7 +651,7 @@ function CreateUserPage(props) {
                                         }
                                     />
                                 </div>
-                                {isEditing && (
+                                {isEditing && newUser.actions.toDelete === true && (
                                     <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton
                                             text={'Excluir'}

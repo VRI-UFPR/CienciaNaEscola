@@ -70,10 +70,8 @@ function InstitutionsPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (user.role !== 'ADMIN') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar instituições' });
-                return;
-            }
+            if (user.role !== 'ADMIN')
+                return setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar instituições' });
             axios
                 .get(process.env.REACT_APP_API_URL + `api/institution/getVisibleInstitutions`, {
                     headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
@@ -82,34 +80,26 @@ function InstitutionsPage(props) {
                     setVisibleInstitutions(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => {
-                    setError({ text: 'Erro ao carregar as instituições', description: error.response?.data.message || '' });
-                });
+                .catch((error) => setError({ text: 'Erro ao carregar as instituições', description: error.response?.data.message || '' }));
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);
 
     const deleteInstitution = (institutionId) => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/institution/deleteInstitution/${institutionId}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
-                showAlert({ headerText: 'Instituição excluída com sucesso.' });
+                showAlert({ headerText: 'Instituição excluída com sucesso' });
                 const newVisibleInstitutions = [...visibleInstitutions];
                 setVisibleInstitutions(newVisibleInstitutions.filter((i) => i.id !== institutionId));
             })
             .catch((error) => showAlert({ headerText: 'Erro ao excluir instituição.', bodyText: error.response?.data.message }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando instituições..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando instituições..." />;
 
     return (
         <div className="d-flex flex-column vh-100">
@@ -151,9 +141,7 @@ function InstitutionsPage(props) {
                                         text={'Criar nova instituição'}
                                         hsl={[97, 43, 70]}
                                         className="mt-4"
-                                        onClick={() => {
-                                            navigate('create');
-                                        }}
+                                        onClick={() => navigate('create')}
                                     />
                                 </div>
                             </div>

@@ -74,60 +74,43 @@ function ProtocolPage(props) {
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
-    const hasNextPage = () => {
-        return currentPageIndex < protocol.pages.length - 1;
-    };
-
+    const hasNextPage = () => currentPageIndex < protocol.pages.length - 1;
     const hasPreviousPage = () => {
         return currentPageIndex > 0;
     };
 
     const nextPage = () => {
-        if (hasNextPage()) {
-            const nextPageIndex = currentPageIndex + 1;
-            setCurrentPageIndex(nextPageIndex);
-        }
+        if (hasNextPage()) setCurrentPageIndex(currentPageIndex + 1);
     };
 
     const previousPage = () => {
-        if (hasPreviousPage()) {
-            const previousPageIndex = currentPageIndex - 1;
-            setCurrentPageIndex(previousPageIndex);
-        }
+        if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
     };
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (user.role === 'USER') {
-                setError({
+            if (user.role === 'USER')
+                return setError({
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para visualizar este protocolo',
                 });
-                return;
-            }
             axios
                 .get(process.env.REACT_APP_API_URL + `api/protocol/getProtocol/${protocolId}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                    headers: { Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     setProtocol(response.data.data);
                     setIsLoading(false);
                 })
-                .catch((error) => {
-                    setError({ text: 'Erro ao carregar protocolo', description: error.response?.data.message || '' });
-                });
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações do protocolo', description: error.response?.data.message || '' })
+                );
         }
     }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando protocolo..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando protocolo..." />;
 
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
@@ -176,7 +159,7 @@ function ProtocolPage(props) {
                                     )}
                                 </div>
                                 <div className="row justify-content-center m-0">
-                                    {<ProtocolInfo title={protocol.title} description={protocol.description} />}
+                                    <ProtocolInfo title={protocol.title} description={protocol.description} />
                                 </div>
                                 {protocol.pages[currentPageIndex].itemGroups.map((itemGroup, itemGroupIndex) => {
                                     if (
@@ -192,189 +175,168 @@ function ProtocolPage(props) {
                                                             case 'RANGE':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <RangeInput
-                                                                                item={item}
-                                                                                group={itemGroup.id}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <RangeInput
+                                                                            item={item}
+                                                                            group={itemGroup.id}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <SimpleTextInput
-                                                                                item={item}
-                                                                                galleryModalRef={galleryModalRef}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <SimpleTextInput
+                                                                            item={item}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'CHECKBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <CheckBoxInput
-                                                                                item={item}
-                                                                                galleryModalRef={galleryModalRef}
-                                                                                answer={{
-                                                                                    group: itemGroup.id,
-                                                                                    ...protocol.pages[currentPageIndex].itemGroups[
-                                                                                        itemGroup.id
-                                                                                    ]?.optionAnswers[item.id],
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <CheckBoxInput
+                                                                            item={item}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
 
                                                             case 'RADIO':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <RadioButtonInput
-                                                                                item={item}
-                                                                                galleryModalRef={galleryModalRef}
-                                                                                answer={{
-                                                                                    group: itemGroup.id,
-                                                                                    ...protocol.pages[currentPageIndex].itemGroups[
-                                                                                        itemGroup.id
-                                                                                    ]?.optionAnswers[item.id],
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <RadioButtonInput
+                                                                            item={item}
+                                                                            galleryModalRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
 
                                                             case 'SELECT':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <SelectInput
-                                                                                item={item}
-                                                                                galleryRef={galleryModalRef}
-                                                                                answer={{
-                                                                                    group: itemGroup.id,
-                                                                                    ...protocol.pages[currentPageIndex].itemGroups[
-                                                                                        itemGroup.id
-                                                                                    ]?.optionAnswers[item.id],
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <SelectInput
+                                                                            item={item}
+                                                                            galleryRef={galleryModalRef}
+                                                                            answer={{
+                                                                                group: itemGroup.id,
+                                                                                ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
+                                                                                    ?.optionAnswers[item.id],
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'DATEBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <DateInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <DateInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'TIMEBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <TimeInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <TimeInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'LOCATIONBOX':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <LocationInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <LocationInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.text || '',
+                                                                                files: [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'UPLOAD':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <ImageInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text: '',
-                                                                                    files:
-                                                                                        protocol.pages[currentPageIndex].itemGroups[
-                                                                                            itemGroup.id
-                                                                                        ]?.itemAnswers[item.id]?.files || [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={() => {}}
-                                                                                disabled={true}
-                                                                            />
-                                                                        }
+                                                                        <ImageInput
+                                                                            item={item}
+                                                                            answer={{
+                                                                                text: '',
+                                                                                files:
+                                                                                    protocol.pages[currentPageIndex].itemGroups[
+                                                                                        itemGroup.id
+                                                                                    ]?.itemAnswers[item.id]?.files || [],
+                                                                                group: itemGroup.id,
+                                                                            }}
+                                                                            onAnswerChange={() => {}}
+                                                                            disabled={true}
+                                                                        />
                                                                     </div>
                                                                 );
                                                             case 'TEXT':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {<TextImageInput item={item} galleryModalRef={galleryModalRef} />}
+                                                                        <TextImageInput item={item} galleryModalRef={galleryModalRef} />
                                                                     </div>
                                                                 );
                                                             default:
@@ -399,19 +361,17 @@ function ProtocolPage(props) {
                                     }
                                 })}
                                 <div className="row justify-content-center m-0 pt-3">
-                                    {
-                                        <TextImageInput
-                                            item={{
-                                                text:
-                                                    'Identificador do protocolo: ' +
-                                                    protocol.id +
-                                                    '<br>Versão do protocolo: ' +
-                                                    protocol.createdAt.replace(/\D/g, ''),
-                                                files: [],
-                                            }}
-                                            galleryModalRef={galleryModalRef}
-                                        />
-                                    }
+                                    <TextImageInput
+                                        item={{
+                                            text:
+                                                'Identificador do protocolo: ' +
+                                                protocol.id +
+                                                '<br>Versão do protocolo: ' +
+                                                protocol.createdAt.replace(/\D/g, ''),
+                                            files: [],
+                                        }}
+                                        galleryModalRef={galleryModalRef}
+                                    />
                                 </div>
                                 {hasPreviousPage() && (
                                     <div className="col-4 align-self-center pt-4">

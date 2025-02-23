@@ -92,25 +92,19 @@ function InstitutionPage(props) {
 
     useEffect(() => {
         if (user.status !== 'loading') {
-            if (user.role !== 'ADMIN' && (user.role === 'USER' || (institutionId && user.institutionId !== parseInt(institutionId)))) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para visualizar esta instituição' });
-                return;
-            }
-            if (institutionId || user.institutionId) {
-                axios
-                    .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
-                        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
-                    })
-                    .then((response) => {
-                        setInstitution(response.data.data);
-                        setSearchedUsers(response.data.data.users);
-                        setSearchedClassrooms(response.data.data.classrooms);
-                        setIsLoading(false);
-                    })
-                    .catch((error) =>
-                        setError({ text: 'Erro ao carregar a instituição', description: error.response?.data.message || '' })
-                    );
-            } else setIsLoading(false);
+            axios
+                .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${institutionId || user.institutionId}`, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
+                })
+                .then((response) => {
+                    setInstitution(response.data.data);
+                    setSearchedUsers(response.data.data.users);
+                    setSearchedClassrooms(response.data.data.classrooms);
+                    setIsLoading(false);
+                })
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações da instituição', description: error.response?.data.message || '' })
+                );
         }
     }, [institutionId, user.token, user.status, user.role, user.institutionId]);
 
@@ -166,12 +160,7 @@ function InstitutionPage(props) {
                                                     .filter((u) => u.username.startsWith(VUSearchInput))
                                                     .map((u) => (
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                            {user.role === 'ADMIN' ||
-                                                            (user.role === 'COORDINATOR' &&
-                                                                u.role !== 'ADMIN' &&
-                                                                u.role !== 'COORDINATOR') ||
-                                                            ((user.role === 'PUBLISHER' || user.role === 'APPLIER') &&
-                                                                u.role === 'USER') ? (
+                                                            {u.actions.toUpdate === true ? (
                                                                 <Link
                                                                     to={`/dash/users/${u.id}/manage`}
                                                                     className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
@@ -215,7 +204,7 @@ function InstitutionPage(props) {
                                                 .filter((c) => c.name.startsWith(VCSearchInput))
                                                 .map((c) => (
                                                     <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
-                                                        {user.role !== 'USER' && user.role !== 'APPLIER' ? (
+                                                        {c.actions.toUpdate === true ? (
                                                             <Link
                                                                 to={`/dash/classrooms/${c.id}/manage`}
                                                                 className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
