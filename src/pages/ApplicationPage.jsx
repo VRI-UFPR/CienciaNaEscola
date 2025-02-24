@@ -215,7 +215,7 @@ function ApplicationPage(props) {
 
         const applicationAnswer = {
             applicationId: application.id,
-            date: new Date(answerDate + 'T' + answerTime),
+            date: new Date(answerDate + 'T' + answerTime + ':00Z'),
             coordinate: answerLocation,
             itemAnswerGroups: [],
         };
@@ -381,7 +381,7 @@ function ApplicationPage(props) {
                                 {application.keepLocation && (
                                     <div className="row justify-content-center m-0 pt-3">
                                         <LocationInput
-                                            answer={answerLocation || { latitude: '', longitude: '' }}
+                                            answer={answerLocation || { latitude: 0.0, longitude: 0.0 }}
                                             onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
                                         />
                                     </div>
