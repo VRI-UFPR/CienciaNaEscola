@@ -24,6 +24,6 @@ ENV PORT=3001
 EXPOSE 3001
 
 # Os comandos a seguir são necessários somente caso o compose não seja utilizado
-RUN npm install
+# RUN npm install
 
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
