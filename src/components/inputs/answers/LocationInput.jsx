@@ -103,7 +103,8 @@ export function Location(props) {
                     <div className="row m-0 align-items-center">
                         <div className="col m-0 p-0 pe-2">
                             <input
-                                type="text"
+                                type="number"
+                                disabled
                                 className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                                 id="latitudeinput"
                                 placeholder="Latitude"
@@ -113,7 +114,8 @@ export function Location(props) {
                         </div>
                         <div className="col m-0 p-0 pe-2">
                             <input
-                                type="text"
+                                type="number"
+                                disabled
                                 className="location-input form-control color-sonic-silver rounded-0 shadow-none fw-semibold fs-6 p-0"
                                 id="longitudeinput"
                                 placeholder="Longitude"
@@ -133,25 +135,29 @@ export function Location(props) {
                 </div>
             </div>
             <div className="row overflow-hidden m-0">
-                <MapContainer center={[-14.235, -51.9253]} zoom={16} style={{ height: '400px' }} ref={mapRef}>
+                <MapContainer center={[-14.235, -51.9253]} zoom={6} style={{ height: '400px' }} ref={mapRef} worldCopyJump={true}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {answer.latitude && answer.longitude && (
-                        <Marker
-                            position={[answer.latitude, answer.longitude]}
-                            draggable={true}
-                            eventHandlers={{
-                                moveend: (e) => {
-                                    const { lat, lng } = e.target.getLatLng();
-                                    updateAnswer({ latitude: lat, longitude: lng });
-                                    mapRef.current.setView([lat, lng]);
-                                },
-                                add: () => mapRef.current.setView([answer.latitude, answer.longitude]),
-                            }}
-                        ></Marker>
-                    )}
+                    <Marker
+                        position={[answer.latitude || -14.235, answer.longitude || -51.9253]}
+                        draggable={true}
+                        eventHandlers={{
+                            moveend: (e) => {
+                                const { lat, lng } = e.target.getLatLng();
+                                const longitude = (((lng % 360) + 540) % 360) - 180;
+                                updateAnswer({ latitude: lat, longitude });
+                                mapRef.current.setView([lat, longitude]);
+                            },
+                            add: () => {
+                                const latitude = answer.latitude || -14.235;
+                                const longitude = (((answer.longitude % 360) + 540) % 360) - 180 || -51.9253;
+                                mapRef.current.setView([latitude, longitude]);
+                                updateAnswer({ latitude, longitude });
+                            },
+                        }}
+                    ></Marker>
                 </MapContainer>
             </div>
             <style>{styles}</style>
