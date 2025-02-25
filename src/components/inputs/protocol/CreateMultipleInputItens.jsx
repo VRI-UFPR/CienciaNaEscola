@@ -82,18 +82,21 @@ function CreateMultipleInputItens(props) {
             tooltipList.push(new Tooltip('.move-item-' + item.tempId + '-up-tooltip', { trigger: 'hover' }));
             if (item.type === 'CHECKBOX')
                 tooltipList.push(new Tooltip('.add-validation-' + item.tempId + '-tooltip', { trigger: 'hover' }));
-            tooltipList.push(new Tooltip('.delete-' + item.tempId + '-tooltip', { trigger: 'hover' }));
+            tooltipList.push(new Tooltip('.toggle-enablement-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.question-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.description-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.mandatory-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.upload-image-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.add-option-' + item.tempId + '-tooltip', { trigger: 'hover' }));
         }
+        if (!item.id) {
+            tooltipList.push(new Tooltip('.delete-' + item.tempId + '-tooltip', { trigger: 'hover' }));
+        }
 
         return () => {
             tooltipList.forEach((tooltip) => tooltip.dispose());
         };
-    }, [item.tempId, item.type]);
+    }, [item.tempId, item.type, item.id]);
 
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
@@ -151,7 +154,7 @@ function CreateMultipleInputItens(props) {
 
     return (
         <div className="pb-4">
-            <div className="row gx-2 pb-2">
+            <div className="row g-2 pb-2">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
                         Item {itemIndex + 1} - {title}
@@ -192,25 +195,51 @@ function CreateMultipleInputItens(props) {
                         />
                     </div>
                 )}
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="delete"
-                        onClick={() => removeItem(itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
-                        data-bs-title="Remover o item do grupo."
-                        className={'delete-' + item.tempId + '-tooltip text-white'}
-                    />
-                </div>
+                {!item.id && (
+                    <div className="col-auto">
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon="delete"
+                            onClick={() => removeItem(itemIndex)}
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
+                            data-bs-title="Remover o item do grupo."
+                            className={'delete-' + item.tempId + '-tooltip text-white'}
+                        />
+                    </div>
+                )}
             </div>
-            <div className="form-check form-switch fs-5 mb-2">
+            <div className="form-check form-switch fs-5 pb-2">
                 <input
                     className="form-check-input"
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
+                    checked={item.enabled}
+                    onChange={(event) => setItem((prev) => ({ ...prev, enabled: event.target.checked }))}
+                />
+                <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
+                    Habilitado
+                </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class={'enablement-' + item.tempId + '-tooltip'}
+                    data-bs-title="Se o item deve estar visível nas aplicações do protocolo. Um item desabilitado não aparece para novos respondentes, mas suas respostas anteriores ainda podem ser visualizadas. Você pode reativá-lo a qualquer momento."
+                    className={'bg-steel-blue toggle-enablement-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                />
+            </div>
+            <div className="form-check form-switch fs-5 pb-2">
+                <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
                     onChange={(event) =>
                         setItem((prev) => {
                             if (event.target.checked) {
@@ -383,9 +412,11 @@ function CreateMultipleInputItens(props) {
                                         onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}
                                     />
                                 </div>
-                                <div className="col-auto">
-                                    <RoundedButton hsl={[190, 46, 70]} size={32} icon="delete" onClick={() => removeOption(i)} />
-                                </div>
+                                {!data.id && (
+                                    <div className="col-auto">
+                                        <RoundedButton hsl={[190, 46, 70]} size={32} icon="delete" onClick={() => removeOption(i)} />
+                                    </div>
+                                )}
                             </div>
                             {!item.itemOptions[i] && (
                                 <div id="questionHelp" className="form-text text-danger fs-6 fw-medium">

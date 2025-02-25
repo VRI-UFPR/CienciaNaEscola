@@ -91,13 +91,15 @@ function CreateTableInput(props) {
                                                     aria-describedby="questionHelp"
                                                     onChange={(e) => updateTableColumn(columnIndex, e.target.value)}
                                                 />
-                                                <RoundedButton
-                                                    className="text-white ms-2"
-                                                    hsl={[190, 46, 70]}
-                                                    size={32}
-                                                    icon="delete"
-                                                    onClick={() => removeTableColumn(columnIndex)}
-                                                />
+                                                {!group.id && (
+                                                    <RoundedButton
+                                                        className="text-white ms-2"
+                                                        hsl={[190, 46, 70]}
+                                                        size={32}
+                                                        icon="delete"
+                                                        onClick={() => removeTableColumn(columnIndex)}
+                                                    />
+                                                )}
                                             </div>
                                         </td>
                                     );
@@ -119,13 +121,15 @@ function CreateTableInput(props) {
                                                     aria-describedby="questionHelp"
                                                     onChange={(event) => changeItem(event, itemIndex)}
                                                 />
-                                                <RoundedButton
-                                                    className="text-white ms-2"
-                                                    hsl={[190, 46, 70]}
-                                                    size={32}
-                                                    icon="delete"
-                                                    onClick={() => removeItem(itemIndex)}
-                                                />
+                                                {!group.id && (
+                                                    <RoundedButton
+                                                        className="text-white ms-2"
+                                                        hsl={[190, 46, 70]}
+                                                        size={32}
+                                                        icon="delete"
+                                                        onClick={() => removeItem(itemIndex)}
+                                                    />
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

@@ -360,6 +360,7 @@ function CreateProtocolPage(props) {
                                 visibility: d.visibility,
                                 applicability: d.applicability,
                                 answersVisibility: d.answersVisibility,
+                                actions: d.actions,
                                 pages: d.pages.map((p) => ({
                                     id: p.id,
                                     tempId: Math.floor(Date.now() + Math.random() * 1000),
@@ -510,13 +511,26 @@ function CreateProtocolPage(props) {
                                                             </p>
                                                         </div>
                                                     )}
-                                                    {creationMode === 'properties' && (
-                                                        <div className="row justify-content-center">
-                                                            <div className="col-7 col-md-5 col-xl-3">
+
+                                                    <div className="row justify-content-center g-2">
+                                                        {creationMode === 'children' && (
+                                                            <div className="col">
                                                                 <TextButton
                                                                     type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={'Adicionar itens'}
+                                                                    className="text-nowrap"
+                                                                    hsl={[197, 43, 61]}
+                                                                    text={'Voltar para propriedades'}
+                                                                    onClick={() => setCreationMode('properties')}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                        {creationMode === 'properties' && (
+                                                            <div className="col">
+                                                                <TextButton
+                                                                    type="button"
+                                                                    className="text-nowrap"
+                                                                    hsl={[197, 43, 61]}
+                                                                    text={'Gerenciar itens'}
                                                                     onClick={() => {
                                                                         if (String(protocol.title).length < 3)
                                                                             showAlert({
@@ -539,21 +553,16 @@ function CreateProtocolPage(props) {
                                                                     }}
                                                                 />
                                                             </div>
-                                                        </div>
-                                                    )}
-
-                                                    {creationMode === 'children' && (
-                                                        <div className="row justify-content-center">
-                                                            <div className="col-4 col-xl-2">
+                                                        )}
+                                                        {!isEditing && (
+                                                            <div className="col">
                                                                 <TextButton
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
-                                                                    text={isEditing ? 'Editar' : 'Concluir'}
+                                                                    text="Concluir"
                                                                     onClick={() =>
                                                                         showAlert({
-                                                                            headerText: `Tem certeza que deseja ${
-                                                                                isEditing ? 'editar' : 'criar'
-                                                                            } o protocolo?`,
+                                                                            headerText: 'Tem certeza que deseja criar o protocolo?',
                                                                             primaryBtnHsl: [355, 78, 66],
                                                                             primaryBtnLabel: 'Não',
                                                                             secondaryBtnHsl: [97, 43, 70],
@@ -563,34 +572,66 @@ function CreateProtocolPage(props) {
                                                                     }
                                                                 />
                                                             </div>
-                                                            <div className="col-4 col-xl-2">
+                                                        )}
+                                                        {isEditing && protocol.actions.toUpdate && (
+                                                            <div className="col">
                                                                 <TextButton
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
-                                                                    text={'Voltar'}
-                                                                    onClick={() => setCreationMode('properties')}
+                                                                    text="Concluir"
+                                                                    onClick={() =>
+                                                                        showAlert({
+                                                                            headerText: 'Tem certeza que editar criar o protocolo?',
+                                                                            primaryBtnHsl: [355, 78, 66],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [97, 43, 70],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                                                        })
+                                                                    }
                                                                 />
                                                             </div>
-                                                            {isEditing && (
-                                                                <div className="col-4 col-xl-2">
-                                                                    <TextButton
-                                                                        text={'Excluir'}
-                                                                        hsl={[355, 78, 66]}
-                                                                        onClick={() =>
-                                                                            showAlert({
-                                                                                headerText: `Tem certeza que deseja excluir o protocolo?`,
-                                                                                primaryBtnHsl: [97, 43, 70],
-                                                                                primaryBtnLabel: 'Não',
-                                                                                secondaryBtnHsl: [355, 78, 66],
-                                                                                secondaryBtnLabel: 'Sim',
-                                                                                onSecondaryBtnClick: () => deleteProtocol(),
-                                                                            })
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                        {isEditing && protocol.actions.toUpdate && !protocol.actions.toDelete && (
+                                                            <div className="col">
+                                                                <TextButton
+                                                                    text={'Excluir'}
+                                                                    hsl={[355, 78, 66]}
+                                                                    onClick={() =>
+                                                                        showAlert({
+                                                                            headerText: `Este protocolo não pode ser excluído!`,
+                                                                            bodyText:
+                                                                                'Para exclusão definitiva, as aplicações precisam ser excluídas primeiro. Você gostaria de desativá-lo? O protocolo não poderá ser visto ou ter novas aplicações. Isso não afeta as aplicações existentes. Você poderá reativá-lo quando quiser.',
+                                                                            primaryBtnHsl: [355, 78, 66],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [97, 43, 70],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () =>
+                                                                                setProtocol({ ...protocol, enabled: false }),
+                                                                        })
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        )}
+                                                        {isEditing && protocol.actions.toDelete && (
+                                                            <div className="col">
+                                                                <TextButton
+                                                                    text={'Excluir'}
+                                                                    hsl={[355, 78, 66]}
+                                                                    onClick={() =>
+                                                                        showAlert({
+                                                                            headerText: `Tem certeza que deseja excluir o protocolo?`,
+                                                                            primaryBtnHsl: [97, 43, 70],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [355, 78, 66],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () => deleteProtocol(),
+                                                                        })
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

@@ -43,7 +43,6 @@ function CreateRangeInput(props) {
         if (item.tempId) {
             tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
@@ -51,12 +50,16 @@ function CreateRangeInput(props) {
             tooltipList.push(new Tooltip(`.max-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.step-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.enablement-${item.tempId}-tooltip`, { trigger: 'hover' }));
+        }
+        if (!item.id) {
+            tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {
             tooltipList.forEach((tooltip) => tooltip.dispose());
         };
-    }, [item.tempId]);
+    }, [item.tempId, item.id]);
 
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
@@ -102,17 +105,43 @@ function CreateRangeInput(props) {
                         className={'move-item-' + item.tempId + '-up-tooltip text-white'}
                     />
                 </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="delete"
-                        onClick={() => removeItem(itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
-                        data-bs-title="Remover o item do grupo."
-                        className={'delete-' + item.tempId + '-tooltip text-white'}
-                    />
-                </div>
+                {!item.id && (
+                    <div className="col-auto">
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon="delete"
+                            onClick={() => removeItem(itemIndex)}
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
+                            data-bs-title="Remover o item do grupo."
+                            className={'delete-' + item.tempId + '-tooltip text-white'}
+                        />
+                    </div>
+                )}
+            </div>
+            <div className="form-check form-switch fs-5 pb-2">
+                <input
+                    className="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                    checked={item.enabled}
+                    onChange={(event) => setItem((prev) => ({ ...prev, enabled: event.target.checked }))}
+                />
+                <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
+                    Habilitado
+                </label>
+                <MaterialSymbol
+                    icon="question_mark"
+                    size={13}
+                    weight={700}
+                    fill
+                    color="#FFFFFF"
+                    data-bs-toggle="tooltip"
+                    data-bs-custom-class={'enablement-' + item.tempId + '-tooltip'}
+                    data-bs-title="Se o item deve estar visível nas aplicações do protocolo. Um item desabilitado não aparece para novos respondentes, mas suas respostas anteriores ainda podem ser visualizadas. Você pode reativá-lo a qualquer momento."
+                    className={'bg-steel-blue toggle-enablement-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                />
             </div>
             <div className="form-check form-switch fs-5 mb-2">
                 <input
