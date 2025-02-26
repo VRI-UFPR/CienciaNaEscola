@@ -55,7 +55,6 @@ function CreateTextBoxInput(props) {
         if (item.tempId) {
             tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
@@ -272,38 +271,6 @@ function CreateTextBoxInput(props) {
                         })}
                     </div>
                 )}
-                <div>
-                    <label htmlFor="description" className="form-label fs-5 fw-medium me-2">
-                        Descrição
-                    </label>
-                    <MaterialSymbol
-                        icon="question_mark"
-                        size={13}
-                        weight={700}
-                        fill
-                        color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'description-' + item.tempId + '-tooltip'}
-                        data-bs-title="Texto que descreva outros detalhes da pergunta. Suporta Markdown com até 3000 caracteres."
-                        className={'bg-steel-blue description-' + item.tempId + '-tooltip p-1 rounded-circle'}
-                    />
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="description"
-                        value={item.description || ''}
-                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
-                    />
-                </div>
-                <input
-                    type="file"
-                    accept="image/*"
-                    name="imageinput"
-                    id="imageinput"
-                    style={{ display: 'none' }}
-                    onChange={insertImage}
-                    ref={galleryInputRef}
-                />
             </div>
             <style>{textBoxStyles}</style>
         </div>
