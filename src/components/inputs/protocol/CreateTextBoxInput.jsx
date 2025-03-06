@@ -271,6 +271,15 @@ function CreateTextBoxInput(props) {
                         })}
                     </div>
                 )}
+                <input
+                    type="file"
+                    accept="image/*"
+                    name="imageinput"
+                    id="imageinput"
+                    style={{ display: 'none' }}
+                    onChange={insertImage}
+                    ref={galleryInputRef}
+                />
             </div>
             <style>{textBoxStyles}</style>
         </div>
