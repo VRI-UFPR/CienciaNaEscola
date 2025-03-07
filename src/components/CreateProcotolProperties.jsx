@@ -19,6 +19,26 @@ import { AlertContext } from '../contexts/AlertContext';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
 
+const CreateProtocolPropertiesStyles = `
+    .create-page-custom-scroll::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
+`;
+
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
     const { user } = useContext(AuthContext);
@@ -202,7 +222,7 @@ function CreateProtocolProperties(props) {
     };
 
     return (
-        <div className="flex-grow-1 mb-3">
+        <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3">
             <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium me-1">
                 Título do protocolo
             </label>
@@ -707,6 +727,7 @@ function CreateProtocolProperties(props) {
                     </div>
                 </fieldset>
             )}
+            <style>{CreateProtocolPropertiesStyles}</style>
         </div>
     );
 }

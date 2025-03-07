@@ -474,9 +474,9 @@ function CreateProtocolPage(props) {
                                     </div>
                                     <div className="row justify-content-center font-barlow flex-grow-1 overflow-hidden g-0">
                                         <div className="col col-md-10 h-100">
-                                            <div className="d-flex flex-column h-100 overflow-y-scroll scrollbar-none">
+                                            <div className="d-flex flex-column h-100">
                                                 <form
-                                                    className="d-flex flex-column justify-content-between flex-grow-1 p-4 pt-0"
+                                                    className="d-flex flex-column justify-content-between h-100 p-4 pt-0"
                                                     ref={formRef}
                                                     action="/submit"
                                                     onSubmit={(e) => handleSubmit(e)}
@@ -600,7 +600,7 @@ function CreateProtocolPage(props) {
                             {creationMode === 'children' && (
                                 <div className="col-auto position-lg-sticky h-100 mh-100">
                                     <div
-                                        className="offcanvas-lg bg-pastel-blue d-flex overflow-y-scroll offcanvas-end h-100 w-auto"
+                                        className="offcanvas-lg bg-pastel-blue d-flex overflow-y-auto offcanvas-end h-100 w-auto"
                                         tabIndex="-1"
                                         id="addbar"
                                     >

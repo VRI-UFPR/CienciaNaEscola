@@ -16,6 +16,26 @@ import RoundedButton from './RoundedButton';
 import CreateItemGroup from './CreateItemGroup';
 import { Tooltip } from 'bootstrap';
 
+const CreatePageStyles = `
+    .create-page-custom-scroll::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
+`;
+
 function CreatePage(props) {
     const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
 
@@ -93,7 +113,7 @@ function CreatePage(props) {
     );
 
     return (
-        <div className="" key={'page-' + page.tempId}>
+        <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3" key={'page-' + page.tempId}>
             <div className="row gx-2 align-items-center mb-3">
                 <div className="col-auto">
                     <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">Página {Number(itemTarget.page) + 1}</p>
@@ -165,6 +185,7 @@ function CreatePage(props) {
                     </p>
                 </div>
             )}
+            <style>{CreatePageStyles}</style>
         </div>
     );
 }
