@@ -443,7 +443,7 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {(!isEditing || userId !== user.id) && (
+                                        {(!isEditing || (userId && userId !== user.id)) && (
                                             <div className="mb-3">
                                                 <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                                     Selecione o papel do usuário

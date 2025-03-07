@@ -18,6 +18,18 @@ const TableInputStyles = `
     .column-input:focus {
         outline: none !important;
     }
+
+    .mw-150 {
+        max-width: 150px;
+    }
+
+    .min-w-150 {
+        min-width: 150px;
+    }
+
+    .mh-134 {
+        max-height: 134px;
+    }
 `;
 
 function TableInput(props) {
@@ -69,11 +81,15 @@ function TableInput(props) {
                 <table className="table table-bordered border-black">
                     <thead>
                         <tr>
-                            <th scope="col" className="miw-150 mw-150 mh-90"></th>
+                            <th scope="col" className="min-w-150 mw-150 mh-134"></th>
                             {group.tableColumns?.map((column, columnIndex) => {
                                 return (
-                                    <th key={'column-' + columnIndex} scope="col" className="overflow-auto miw-150 mw-150 mh-90">
-                                        <div className="d-flex justify-content-center">{column.text}</div>
+                                    <th
+                                        key={'column-' + columnIndex}
+                                        scope="col"
+                                        className="align-middle overflow-auto min-w-150 mw-150 mh-134"
+                                    >
+                                        <div className="overflow-auto text-break text-center mh-134">{column.text}</div>
                                     </th>
                                 );
                             })}
@@ -83,13 +99,13 @@ function TableInput(props) {
                         {group.items?.map((item, itemIndex) => {
                             return (
                                 <tr key={'item-line-' + itemIndex}>
-                                    <th scope="row" className="miw-150 mw-150 mh-90">
-                                        <div className="overflow-auto text-break mh-90">{item.text}</div>
+                                    <th scope="row" className="min-w-150 mw-150 mh-134">
+                                        <div className="overflow-auto text-break mh-134">{item.text}</div>
                                     </th>
                                     {!answersPage &&
                                         group.tableColumns?.map((column, columnIndex) => {
                                             return (
-                                                <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
+                                                <td key={'column' + columnIndex} className="overflow-auto min-w-150 mw-150 mh-134">
                                                     {group.type === 'TEXTBOX_TABLE' && (
                                                         <textarea
                                                             type="text"
@@ -134,7 +150,10 @@ function TableInput(props) {
                                                         );
                                                         const value = answerEntry ? answerEntry[1] : null;
                                                         return (
-                                                            <td key={'column' + columnIndex} className="overflow-auto miw-150 mw-150 mh-90">
+                                                            <td
+                                                                key={'column' + columnIndex}
+                                                                className="overflow-auto min-w-150 mw-150 mh-134"
+                                                            >
                                                                 {group.type === 'TEXTBOX_TABLE' && (
                                                                     <textarea
                                                                         type="text"
@@ -179,7 +198,7 @@ function TableInput(props) {
                                                     tableAnswer.columnId === tableColumn.id
                                             );
                                             return (
-                                                <td key={'column' + tableColumn.id} className="overflow-auto miw-150 mw-150 mh-90">
+                                                <td key={'column' + tableColumn.id} className="overflow-auto min-w-150 mw-150 mh-134">
                                                     {group.type === 'TEXTBOX_TABLE' && (
                                                         <textarea
                                                             type="text"

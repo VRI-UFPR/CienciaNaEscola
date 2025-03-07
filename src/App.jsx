@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
-import './assets/styles/custom-bootstrap.scss';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 import 'leaflet-defaulticon-compatibility';
