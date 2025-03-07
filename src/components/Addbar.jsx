@@ -54,8 +54,6 @@ function AddBar(props) {
     const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, insertTable, setItemTarget, protocol } =
         props;
 
-    console.log('protocol', protocol);
-
     useEffect(() => {
         const tooltipList = [];
         tooltipList.push(new Tooltip('.add-page-tooltip', { trigger: 'hover' }));
