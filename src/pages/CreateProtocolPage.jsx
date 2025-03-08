@@ -132,11 +132,6 @@ const CreateProtocolStyles = `
         height: 0px;
     }
 
-    .user-list {
-        max-height: 15vh;
-        overflow-y: auto;
-    }
-
     .border-bottom.border-steel-blue:focus,
     .border-bottom.border-steel-blue:active {
         box-shadow: inset 0 -8px 8px -9px #00000040;

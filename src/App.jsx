@@ -24,7 +24,12 @@ import { AlertProvider } from './contexts/AlertContext';
 import 'react-material-symbols/rounded';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
-const styles = ``;
+const styles = `
+    .user-list {
+        max-height: 15vh;
+        overflow-y: auto;
+    }
+`;
 
 function App(props) {
     return (
