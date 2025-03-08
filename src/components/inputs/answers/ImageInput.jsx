@@ -15,6 +15,7 @@ import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
 import { MaterialSymbol } from 'react-material-symbols';
 import imageCompression from 'browser-image-compression';
+import Gallery from '../../Gallery';
 
 const styles = `
     .color-dark-gray {
@@ -40,7 +41,7 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, item, answer, disabled } = props;
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
     const [ImageVisibility, setImageVisibility] = useState(false);
     const [disableUpload, setDisableUpload] = useState(false);
@@ -95,6 +96,7 @@ function ImageInput(props) {
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <MarkdownText text={item.text} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
             <div className="row gx-3">
                 <div className="col-auto align-self-center">
                     <div className="btn-group dropend">

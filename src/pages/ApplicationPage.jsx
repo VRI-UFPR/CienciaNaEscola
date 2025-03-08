@@ -400,6 +400,7 @@ function ApplicationPage(props) {
                                                                         {
                                                                             <RangeInput
                                                                                 item={item}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     text:
                                                                                         itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
@@ -478,7 +479,7 @@ function ApplicationPage(props) {
                                                                         {
                                                                             <SelectInput
                                                                                 item={item}
-                                                                                galleryRef={galleryModalRef}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     group: itemGroup.id,
                                                                                     ...itemAnswerGroups[itemGroup.id]?.optionAnswers[
@@ -496,6 +497,7 @@ function ApplicationPage(props) {
                                                                         {
                                                                             <ImageInput
                                                                                 item={item}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     text: '',
                                                                                     files:
