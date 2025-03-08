@@ -155,7 +155,7 @@ function InstitutionPage(props) {
                                             </div>
                                         </div>
                                         {searchedUsers.length > 0 && (
-                                            <div className="row gy-2">
+                                            <div className="row user-list gy-2">
                                                 {searchedUsers
                                                     .filter((u) => u.username.startsWith(VUSearchInput))
                                                     .map((u) => (
@@ -199,7 +199,7 @@ function InstitutionPage(props) {
                                                 </Link>
                                             </div>
                                         </div>
-                                        <div className="row gy-2">
+                                        <div className="row user-list gy-2">
                                             {searchedClassrooms
                                                 .filter((c) => c.name.startsWith(VCSearchInput))
                                                 .map((c) => (

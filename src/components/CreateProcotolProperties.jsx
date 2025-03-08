@@ -356,7 +356,7 @@ function CreateProtocolProperties(props) {
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.viewersUser.map((u) => (
                             <div key={'viewer-user-' + u.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -422,7 +422,7 @@ function CreateProtocolProperties(props) {
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.viewersClassroom.map((c) => (
                             <div key={'viewer-classroom-' + c.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -511,7 +511,7 @@ function CreateProtocolProperties(props) {
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.appliers
                             .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
                             .map((u) => (
@@ -607,7 +607,7 @@ function CreateProtocolProperties(props) {
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.answersViewersUser.map((u) => (
                             <div key={'answer-viewer-user-' + u.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -672,7 +672,7 @@ function CreateProtocolProperties(props) {
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.answersViewersClassroom.map((c) => (
                             <div key={'answer-viewer-classroom-' + c.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
