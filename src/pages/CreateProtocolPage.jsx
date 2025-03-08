@@ -133,7 +133,7 @@ const CreateProtocolStyles = `
     }
 
     .user-list {
-        max-height: 40vh;
+        max-height: 15vh;
         overflow-y: auto;
     }
 
