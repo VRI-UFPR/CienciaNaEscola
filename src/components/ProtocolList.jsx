@@ -83,6 +83,7 @@ function ProtocolList(props) {
                             editFunction={() => editFunction(li.id)}
                             allowDelete={allowDelete || li.allowDelete}
                             deleteFunction={() => deleteFunction(li.id)}
+                            enabled={li.enabled}
                         />
                     </div>
                 ))}

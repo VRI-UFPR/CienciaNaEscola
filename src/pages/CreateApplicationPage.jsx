@@ -86,6 +86,27 @@ const style = `
         color: #4E9BB9;
     }
 
+    .light-grey-input:focus,
+    .light-grey-input:active,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
+        box-shadow: inset 0px 4px 4px 0px #00000040;
+    }
+
+    .light-grey-input:disabled,
+    .pastel-blue-input:disabled{
+        background-color: hsl(0,0%,85%) !important;
+        border-color: hsl(0,0%,60%);
+        box-shadow: none;
+    }
+
+    .pastel-blue-input,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
+        background-color: #b8d7e3;
+        border-color: #b8d7e3;
+    }
+
     .form-check-input {
         box-shadow: 0px 4px 4px 0px #00000040 inset;
     }
@@ -109,11 +130,13 @@ function CreateApplicationPage(props) {
 
     const [application, setApplication] = useState({
         protocolId: protocolId,
-        keepLocation: false,
+        keepLocation: true,
+        enabled: true,
         viewersUser: [],
         viewersClassroom: [],
         answersViewersUser: [],
         answersViewersClassroom: [],
+        startDate: new Date(),
     });
 
     const [protocol, setProtocol] = useState({
@@ -171,6 +194,9 @@ function CreateApplicationPage(props) {
                                 answersViewersUser: d.answersViewersUser.map(({ id }) => id),
                                 answersViewersClassroom: d.answersViewersClassroom.map(({ id }) => id),
                                 keepLocation: d.keepLocation,
+                                enabled: d.enabled,
+                                startDate: d.startDate.split('.')[0],
+                                endDate: d.endDate.split('.')[0],
                                 actions: d.actions,
                             });
                             setSearchedClassrooms(d.viewersClassroom.map(({ id, name, users }) => ({ id, name, users })));
@@ -205,6 +231,11 @@ function CreateApplicationPage(props) {
                                 visibility: d.visibility,
                                 answersVisibility: d.answersVisibility,
                             });
+                            setApplication((prev) => ({
+                                ...prev,
+                                visibility: d.visibility,
+                                answersVisibility: d.answersVisibility,
+                            }));
                             if (!isEditing) {
                                 if (d.visibility === 'RESTRICT') {
                                     setApplication((prev) => ({
@@ -244,7 +275,7 @@ function CreateApplicationPage(props) {
 
     const submitApplication = (e) => {
         e.preventDefault();
-        const formData = serialize(application, { indices: true });
+        const formData = serialize({ ...application, actions: undefined }, { indices: true });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/application/updateApplication/${applicationId}`, formData, {
@@ -524,7 +555,7 @@ function CreateApplicationPage(props) {
                                             className="form-check-input"
                                             type="checkbox"
                                             role="switch"
-                                            id="enabled"
+                                            id="keepLocation"
                                             checked={application.keepLocation || false}
                                             onChange={(e) => setApplication((prev) => ({ ...prev, keepLocation: e.target.checked }))}
                                         />
@@ -532,6 +563,49 @@ function CreateApplicationPage(props) {
                                             Solicitar localização das respostas
                                         </label>
                                     </div>
+                                </div>
+                                <div className="mb-3">
+                                    <div className="form-check form-switch fs-5">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={application.enabled || false}
+                                            onChange={(e) => setApplication((prev) => ({ ...prev, enabled: e.target.checked }))}
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Habilitado
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium me-1">
+                                        Data de início
+                                    </label>
+                                    <input
+                                        className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
+                                        id="startDate"
+                                        type="datetime-local"
+                                        value={application.startDate || ''}
+                                        onChange={(event) =>
+                                            setApplication((prev) => ({ ...prev, startDate: event.target.value || undefined }))
+                                        }
+                                    ></input>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium me-1">
+                                        Data de fim
+                                    </label>
+                                    <input
+                                        className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
+                                        id="endDate"
+                                        type="datetime-local"
+                                        value={application.endDate || ''}
+                                        onChange={(event) =>
+                                            setApplication((prev) => ({ ...prev, endDate: event.target.value || undefined }))
+                                        }
+                                    ></input>
                                 </div>
                                 <div className="mb-3">
                                     <label label="visibility" className="form-label color-steel-blue fs-5 fw-medium">
@@ -691,7 +765,6 @@ function CreateApplicationPage(props) {
                                         </fieldset>
                                     </div>
                                 )}
-
                                 <div className="mb-3">
                                     <label label="answer-visibility" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione a visibilidade das respostas da aplicação

@@ -137,7 +137,10 @@ function ProtocolsPage(props) {
                                                     allowEdit: p.actions.toUpdate,
                                                     allowDelete: p.actions.toDelete,
                                                     primaryDescription: `${p.creator?.username}`,
-                                                    secondaryDescription: `#${p.id} - ${new Date(p.createdAt).toLocaleDateString('pt-BR')}`,
+                                                    secondaryDescription: `${p.enabled ? '' : '[DESATIVADO] '}#${p.id} - ${new Date(
+                                                        p.createdAt
+                                                    ).toLocaleDateString('pt-BR')}`,
+                                                    enabled: p.enabled,
                                                 }))}
                                             hsl={[36, 98, 83]}
                                             viewFunction={(id) => navigate(`${id}`)}
@@ -155,7 +158,10 @@ function ProtocolsPage(props) {
                                             allowEdit: p.actions.toUpdate,
                                             allowDelete: p.actions.toDelete,
                                             primaryDescription: `${p.creator?.username}`,
-                                            secondaryDescription: `#${p.id} - ${new Date(p.createdAt).toLocaleDateString('pt-BR')}`,
+                                            secondaryDescription: `#${p.id} - ${new Date(p.createdAt).toLocaleDateString('pt-BR')}${
+                                                p.enabled ? '' : ' - Desativado'
+                                            }`,
+                                            enabled: p.enabled,
                                         }))}
                                         hsl={[16, 100, 88]}
                                         viewFunction={(id) => navigate(`${id}`)}

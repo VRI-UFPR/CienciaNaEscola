@@ -60,6 +60,7 @@ function HomeButton(props) {
         allowDelete = false,
         deleteFunction = () => {},
         check = false,
+        enabled = true,
     } = props;
 
     const { showAlert } = useContext(AlertContext);
@@ -67,7 +68,9 @@ function HomeButton(props) {
 
     return (
         <div
-            className={`custom-btn rounded-4 row g-1 align-items-center font-barlow w-100 p-3 ${isCollapsed ? 'h-100px' : ''}`}
+            className={`custom-btn rounded-4 row g-1 align-items-center font-barlow w-100 p-3 ${isCollapsed ? 'h-100px' : ''} ${
+                enabled ? '' : 'bg-dark-subtle'
+            }`}
             onClick={viewFunction}
         >
             <div className="col home-btn-title">

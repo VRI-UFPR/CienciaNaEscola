@@ -158,6 +158,13 @@ function ProtocolPage(props) {
                                         </div>
                                     )}
                                 </div>
+                                {!protocol.enabled && (
+                                    <div className="w-100 rounded-4 text-center font-barlow bg-coral-red p-2 mb-4">
+                                        <p className="text-white font-century-gothic text-break fw-bold fs-5 m-0">
+                                            Este protocolo está desativado
+                                        </p>
+                                    </div>
+                                )}
                                 <div className="row justify-content-center m-0">
                                     <ProtocolInfo title={protocol.title} description={protocol.description} />
                                 </div>

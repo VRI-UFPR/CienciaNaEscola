@@ -150,6 +150,7 @@ function ApplicationsPage(props) {
                                                         )}`,
                                                         allowEdit: a.actions.toUpdate,
                                                         allowDelete: a.actions.toDelete,
+                                                        enabled: a.enabled,
                                                     }))}
                                                 hsl={[36, 98, 83]}
                                                 viewFunction={(id) => navigate(`${id}`)}
@@ -170,6 +171,7 @@ function ApplicationsPage(props) {
                                                 allowDelete: a.actions.toDelete,
                                                 primaryDescription: `${a.applier?.username}`,
                                                 secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString('pt-BR')}`,
+                                                enabled: a.enabled,
                                             }))}
                                             hsl={[16, 100, 88]}
                                             viewFunction={(id) => navigate(`${id}`)}
