@@ -29,6 +29,20 @@ const styles = `
         max-height: 15vh;
         overflow-y: auto;
     }
+    .user-list::-webkit-scrollbar {
+        width: 10px;
+    }
+    .user-list::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+    .user-list::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+    .user-list::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
 `;
 
 function App(props) {
