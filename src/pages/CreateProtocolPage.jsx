@@ -289,9 +289,16 @@ function CreateProtocolPage(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const placedProtocol = { ...protocol, creatorId: user.id, owners: [] };
+        const processedProtocol = {
+            ...protocol,
+            creatorId: isEditing ? undefined : user.id,
+            pages: protocol.pages.map(({ tempId, ...rest }) => ({
+                ...rest,
+                itemGroups: rest.itemGroups.map(({ tempId, ...rest }) => rest),
+            })),
+        };
 
-        const formData = serialize(placedProtocol, { indices: true });
+        const formData = serialize(processedProtocol, { indices: true });
 
         if (isEditing) {
             axios

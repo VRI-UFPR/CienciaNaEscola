@@ -220,7 +220,7 @@ function CreateClassroomPage(props) {
 
     const submitClassroom = (e) => {
         e.preventDefault();
-        const formData = serialize(classroom, { indices: true });
+        const formData = serialize({ ...classroom, actions: undefined }, { indices: true });
         if (classroom.users.length >= 2) {
             if (isEditing) {
                 axios
