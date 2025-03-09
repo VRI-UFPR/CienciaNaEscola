@@ -42,7 +42,21 @@ const textBoxStyles = `
 `;
 
 function CreateTextBoxInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement, insertItemValidation } = props;
+    const {
+        currentItem,
+        pageIndex,
+        groupIndex,
+        itemIndex,
+        updateItem,
+        removeItem,
+        updateItemPlacement,
+        moveItemBetweenPages,
+        moveItemBetweenItemGroups,
+        insertItemValidation,
+        pagesQty,
+        groupsQty,
+        itemsQty,
+    } = props;
     const [item, setItem] = useState(currentItem);
     const galleryInputRef = useRef(null);
 
@@ -56,8 +70,6 @@ function CreateTextBoxInput(props) {
             tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`, { trigger: 'hover' }));
         }
@@ -85,7 +97,7 @@ function CreateTextBoxInput(props) {
 
     return (
         <div className="pb-4">
-            <div className="row gx-2 pb-2">
+            <div className="row g-2 pb-2 align-items-center justify-content-end">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
                         Item {itemIndex + 1} -{' '}
@@ -104,28 +116,6 @@ function CreateTextBoxInput(props) {
                             }
                         })()}
                     </h1>
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_down"
-                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
-                        data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-down-tooltip text-white'}
-                    />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_up"
-                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
-                        data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-up-tooltip text-white'}
-                    />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
@@ -185,6 +175,56 @@ function CreateTextBoxInput(props) {
                     data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
                     className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
                 />
+            </div>
+            <div className="row g-2 mb-2">
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={pageIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => moveItemBetweenPages(e.target.value, pageIndex, groupIndex, itemIndex)}
+                    >
+                        <option value={''}>Página...</option>
+                        {[...Array(pagesQty).keys()].map((page) => (
+                            <option key={'item-page-' + (page + 1)} value={page}>
+                                Página {page + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={groupIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => moveItemBetweenItemGroups(e.target.value, groupIndex, itemIndex)}
+                    >
+                        <option value={''}>Grupo...</option>
+                        {[...Array(groupsQty).keys()].map((group) => (
+                            <option key={'item-group-' + (group + 1)} value={group}>
+                                Grupo {group + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={item.placement}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => updateItemPlacement(e.target.value, item.placement, itemIndex)}
+                    >
+                        <option value={''}>Posição...</option>
+                        {[...Array(itemsQty).keys()].map((placement) => (
+                            <option key={'item-placement-' + (placement + 1)} value={placement + 1}>
+                                Posição {placement + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">

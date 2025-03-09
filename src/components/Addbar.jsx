@@ -306,6 +306,7 @@ function AddBar(props) {
                         {protocol.pages[pageIndex]?.itemGroups.map((group, index) => (
                             <option key={'group-' + group.tempId + '-option'} value={index}>
                                 Grupo {index + 1}
+                                {group.type === 'ONE_DIMENSIONAL' ? '' : ' (Tabela)'}
                             </option>
                         ))}
                     </select>
