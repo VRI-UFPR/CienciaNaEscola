@@ -177,6 +177,7 @@ function ProtocolPage(props) {
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                         <RangeInput
                                                                             item={item}
+                                                                            galleryModalRef={galleryModalRef}
                                                                             group={itemGroup.id}
                                                                             answer={{
                                                                                 text:
@@ -250,7 +251,7 @@ function ProtocolPage(props) {
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                         <SelectInput
                                                                             item={item}
-                                                                            galleryRef={galleryModalRef}
+                                                                            galleryModalRef={galleryModalRef}
                                                                             answer={{
                                                                                 group: itemGroup.id,
                                                                                 ...protocol.pages[currentPageIndex].itemGroups[itemGroup.id]
@@ -320,6 +321,7 @@ function ProtocolPage(props) {
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                         <ImageInput
                                                                             item={item}
+                                                                            galleryModalRef={galleryModalRef}
                                                                             answer={{
                                                                                 text: '',
                                                                                 files:

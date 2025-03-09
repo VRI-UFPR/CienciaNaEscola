@@ -302,7 +302,11 @@ function CreateMultipleInputItens(props) {
                                             } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
                                         >
                                             <img
-                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
+                                                src={
+                                                    file.path
+                                                        ? process.env.REACT_APP_API_URL + 'api/' + file.path
+                                                        : URL.createObjectURL(file.content)
+                                                }
                                                 className="img-fluid object-fit-contain w-100 rounded-4"
                                                 alt="Imagem selecionada"
                                             />

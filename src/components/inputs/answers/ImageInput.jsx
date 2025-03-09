@@ -10,11 +10,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useContext } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
 import { MaterialSymbol } from 'react-material-symbols';
 import imageCompression from 'browser-image-compression';
+import Gallery from '../../Gallery';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const styles = `
     .color-dark-gray {
@@ -40,10 +42,11 @@ const styles = `
 `;
 
 function ImageInput(props) {
-    const { onAnswerChange, item, answer, disabled } = props;
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
     const [ImageVisibility, setImageVisibility] = useState(false);
     const [disableUpload, setDisableUpload] = useState(false);
+    const { showAlert } = useContext(AlertContext);
     const galleryInputRef = useRef(null);
     const cameraInputRef = useRef(null);
 
@@ -70,6 +73,10 @@ function ImageInput(props) {
         if (e.target?.files[0]) {
             setDisableUpload(true);
             const image = e.target.files[0];
+
+            // Verifica se o arquivo tem um nome válido e obtém a extensão
+            const fileNameParts = image.name.split('.');
+            const extension = fileNameParts.length > 1 ? fileNameParts.pop() : 'jpg'; // Default para jpg se não houver extensão
             galleryInputRef.current.value = '';
             cameraInputRef.current.value = '';
             galleryInputRef.current.files = null;
@@ -78,11 +85,24 @@ function ImageInput(props) {
                 maxSizeMB: 2,
                 useWebWorker: true,
             };
-            const processedImage = await imageCompression(image, options);
-            const newAnswer = { ...answer };
-            newAnswer.files.push(processedImage);
-            updateAnswer(newAnswer);
-            setDisableUpload(false);
+            await imageCompression(image, options)
+                .then((processedImage) => {
+                    const processedFile = new File([processedImage], `compressed.${extension}`, {
+                        type: processedImage.type,
+                    });
+
+                    const newAnswer = { ...answer };
+                    newAnswer.files.push(processedFile);
+                    updateAnswer(newAnswer);
+                    setDisableUpload(false);
+                })
+                .catch((error) =>
+                    showAlert({
+                        headerText: 'Erro ao submeter imagem',
+                        bodyText: error.message,
+                        onPrimaryBtnClick: () => setDisableUpload(false),
+                    })
+                );
         }
     };
 
@@ -95,6 +115,7 @@ function ImageInput(props) {
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <MarkdownText text={item.text} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
             <div className="row gx-3">
                 <div className="col-auto align-self-center">
                     <div className="btn-group dropend">

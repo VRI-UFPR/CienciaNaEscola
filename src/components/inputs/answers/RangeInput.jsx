@@ -12,6 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useEffect, useState } from 'react';
 import MarkdownText from '../../MarkdownText';
+import Gallery from '../../Gallery';
 
 const styles = `
     #customRange {
@@ -42,7 +43,7 @@ const styles = `
 `;
 
 function RangeInput(props) {
-    const { onAnswerChange, answer, item, disabled } = props;
+    const { onAnswerChange, answer, item, galleryModalRef, disabled } = props;
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(10);
     const [step, setStep] = useState(1);
@@ -86,10 +87,13 @@ function RangeInput(props) {
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
-            <div className="d-flex flex-column">
-                <label htmlFor="customRange" className="">
+            <div className="row g-0">
+                <label htmlFor="customRange">
                     <MarkdownText text={item.text} />
                 </label>
+            </div>
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
+            <div className="row g-0">
                 <input
                     type="range"
                     className="w-100"
