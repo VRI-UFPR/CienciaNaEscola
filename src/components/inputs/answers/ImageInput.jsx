@@ -10,12 +10,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useContext } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
 import { MaterialSymbol } from 'react-material-symbols';
 import imageCompression from 'browser-image-compression';
 import Gallery from '../../Gallery';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const styles = `
     .color-dark-gray {
@@ -45,6 +46,7 @@ function ImageInput(props) {
 
     const [ImageVisibility, setImageVisibility] = useState(false);
     const [disableUpload, setDisableUpload] = useState(false);
+    const { showAlert } = useContext(AlertContext);
     const galleryInputRef = useRef(null);
     const cameraInputRef = useRef(null);
 
@@ -83,15 +85,24 @@ function ImageInput(props) {
                 maxSizeMB: 2,
                 useWebWorker: true,
             };
-            const processedImage = await imageCompression(image, options);
-            const processedFile = new File([processedImage], `compressed.${extension}`, {
-                type: processedImage.type,
-            });
+            await imageCompression(image, options)
+                .then((processedImage) => {
+                    const processedFile = new File([processedImage], `compressed.${extension}`, {
+                        type: processedImage.type,
+                    });
 
-            const newAnswer = { ...answer };
-            newAnswer.files.push(processedFile);
-            updateAnswer(newAnswer);
-            setDisableUpload(false);
+                    const newAnswer = { ...answer };
+                    newAnswer.files.push(processedFile);
+                    updateAnswer(newAnswer);
+                    setDisableUpload(false);
+                })
+                .catch((error) =>
+                    showAlert({
+                        headerText: 'Erro ao submeter imagem',
+                        bodyText: error.message,
+                        onPrimaryBtnClick: () => setDisableUpload(false),
+                    })
+                );
         }
     };
 
