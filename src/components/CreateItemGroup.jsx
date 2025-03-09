@@ -329,7 +329,7 @@ function CreateItemGroup(props) {
                                     groupIndex={itemTarget.group}
                                     itemIndex={itemIndex}
                                     key={'item-validation-' + validation.tempId}
-                                    updateValidation={updateItemValidation}
+                                    updateItemValidation={updateItemValidation}
                                     removeValidation={removeItemValidation}
                                     item={item}
                                 />
