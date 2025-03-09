@@ -71,6 +71,10 @@ function ImageInput(props) {
         if (e.target?.files[0]) {
             setDisableUpload(true);
             const image = e.target.files[0];
+
+            // Verifica se o arquivo tem um nome válido e obtém a extensão
+            const fileNameParts = image.name.split('.');
+            const extension = fileNameParts.length > 1 ? fileNameParts.pop() : 'jpg'; // Default para jpg se não houver extensão
             galleryInputRef.current.value = '';
             cameraInputRef.current.value = '';
             galleryInputRef.current.files = null;
@@ -80,8 +84,12 @@ function ImageInput(props) {
                 useWebWorker: true,
             };
             const processedImage = await imageCompression(image, options);
+            const processedFile = new File([processedImage], `compressed.${extension}`, {
+                type: processedImage.type,
+            });
+
             const newAnswer = { ...answer };
-            newAnswer.files.push(processedImage);
+            newAnswer.files.push(processedFile);
             updateAnswer(newAnswer);
             setDisableUpload(false);
         }
