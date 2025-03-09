@@ -65,6 +65,8 @@ function AddBar(props) {
         tooltipList.push(new Tooltip('.add-radio-tooltip', { trigger: 'hover' }));
         tooltipList.push(new Tooltip('.add-checkbox-tooltip', { trigger: 'hover' }));
         tooltipList.push(new Tooltip('.add-range-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-text-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.add-upload-tooltip', { trigger: 'hover' }));
         tooltipList.push(new Tooltip('.add-group-dependency-tooltip', { trigger: 'hover' }));
         tooltipList.push(new Tooltip('.add-textbox-table-tooltip', { trigger: 'hover' }));
         tooltipList.push(new Tooltip('.add-radio-table-tooltip', { trigger: 'hover' }));
@@ -182,11 +184,11 @@ function AddBar(props) {
                     <hr className="w-100 border border-steel-blue opacity-25 m-0 mb-2" />
                     <button
                         type="button"
-                        className="btn btn-addbar rounded-0 add-range-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        className="btn btn-addbar rounded-0 add-text-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('TEXT', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
-                        data-bs-custom-class="add-range-tooltip"
-                        data-bs-title="Um item que é mostrado para o usuário como uma barra horizontal deslizante para que seja selecionado um valor numérico dentro de um intervalo."
+                        data-bs-custom-class="add-text-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como um texto formatado, sem quaisquer campos para preenchimento."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Enunciado</span>
@@ -259,11 +261,11 @@ function AddBar(props) {
                     </button>
                     <button
                         type="button"
-                        className="btn btn-addbar rounded-0 add-range-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
+                        className="btn btn-addbar rounded-0 add-upload-tooltip btn-transparent shadow-none d-flex align-items-center w-100 m-0 mb-2 p-0 px-4"
                         onClick={() => insertItem('UPLOAD', pageIndex, groupIndex)}
                         data-bs-toggle="tooltip"
-                        data-bs-custom-class="add-range-tooltip"
-                        data-bs-title="Um item que é mostrado para o usuário como uma barra horizontal deslizante para que seja selecionado um valor numérico dentro de um intervalo."
+                        data-bs-custom-class="add-upload-tooltip"
+                        data-bs-title="Um item que é mostrado para o usuário como um botão de submissão de arquivo para que seja enviado um arquivo de imagem."
                     >
                         <MaterialSymbol icon="add" size={24} weight={700} fill color="#FFFFFF" />
                         <span className="fs-6 fw-medium lh-1 ps-1 text-nowrap">Seletor de imagem</span>
