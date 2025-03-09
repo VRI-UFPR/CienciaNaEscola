@@ -143,7 +143,7 @@ function CreateInstitutionPage(props) {
 
     const submitInstitution = (e) => {
         e.preventDefault();
-        const formData = serialize(institution, { indices: true });
+        const formData = serialize({ ...institution, actions: undefined }, { indices: true });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/institution/updateInstitution/${institutionId}`, formData, {
