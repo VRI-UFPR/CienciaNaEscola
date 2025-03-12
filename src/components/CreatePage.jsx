@@ -37,7 +37,18 @@ const CreatePageStyles = `
 `;
 
 function CreatePage(props) {
-    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
+    const {
+        currentPage,
+        itemTarget,
+        updatePagePlacement,
+        removePage,
+        protocol,
+        updatePage,
+        insertItem,
+        moveItemBetweenPages,
+        pagesQty,
+        moveGroupBetweenPages,
+    } = props;
 
     const [page, setPage] = useState(currentPage);
     const currentGroup = page.itemGroups[itemTarget.group];
@@ -49,8 +60,6 @@ function CreatePage(props) {
     useEffect(() => {
         const tooltipList = [];
         if (page.tempId) {
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-page-${page.tempId.toString().slice(0, 13)}-tooltip`, { trigger: 'hover' }));
         }
 
@@ -70,6 +79,24 @@ function CreatePage(props) {
             }
             newPage.itemGroups[groupIndex].placement = newPlacement;
             newPage.itemGroups.sort((a, b) => a.placement - b.placement);
+            setPage(newPage);
+        },
+        [page]
+    );
+
+    const moveItemBetweenItemGroups = useCallback(
+        (newGroupIndex, oldGroupIndex, itemIndex) => {
+            if (newGroupIndex === oldGroupIndex) return;
+            const newPage = { ...page };
+            // Find and update the item
+            const item = newPage.itemGroups[oldGroupIndex].items[itemIndex];
+            item.placement = newPage.itemGroups[newGroupIndex].items.length + 1;
+            // Remove the item from the old group, update the placements of the remaining items and sort them (just in case)
+            newPage.itemGroups[oldGroupIndex].items.splice(itemIndex, 1);
+            newPage.itemGroups[oldGroupIndex].items.sort((a, b) => a.placement - b.placement);
+            for (const [i, item] of newPage.itemGroups[oldGroupIndex].items.entries()) item.placement = i + 1;
+            // Add the item to the new group
+            newPage.itemGroups[newGroupIndex].items.push(item);
             setPage(newPage);
         },
         [page]
@@ -114,32 +141,28 @@ function CreatePage(props) {
 
     return (
         <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3" key={'page-' + page.tempId}>
-            <div className="row gx-2 align-items-center mb-3">
+            <div className="row g-2 align-items-center justify-content-end mb-3">
                 <div className="col-auto">
                     <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">Página {Number(itemTarget.page) + 1}</p>
                 </div>
                 <div className="col"></div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updatePagePlacement(page.placement + 1, page.placement, itemTarget.page)}
-                        icon="keyboard_arrow_down"
-                        className={`move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip text-white`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-page-${page.tempId}-down-tooltip`}
-                        data-bs-title="Mover a página uma posição abaixo na ordem das páginas do protocolo."
-                    />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updatePagePlacement(page.placement - 1, page.placement, itemTarget.page)}
-                        icon="keyboard_arrow_up"
-                        className={`move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip text-white`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-page-${page.tempId}-up-tooltip`}
-                        data-bs-title="Mover a página uma posição acima na ordem das páginas do protocolo."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={page.placement}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => updatePagePlacement(e.target.value, page.placement, itemTarget.page)}
+                        >
+                            <option value={''}>Página...</option>
+                            {[...Array(pagesQty).keys()].map((page) => (
+                                <option key={page + 1} value={page + 1}>
+                                    Posição {page + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
                     <RoundedButton
@@ -175,6 +198,11 @@ function CreatePage(props) {
                     protocol={protocol}
                     page={page}
                     insertItem={insertItem}
+                    moveItemBetweenPages={moveItemBetweenPages}
+                    moveGroupBetweenPages={moveGroupBetweenPages}
+                    moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                    pagesQty={pagesQty}
+                    groupsQty={page.itemGroups.length}
                 />
             )}
             {!currentGroup && (

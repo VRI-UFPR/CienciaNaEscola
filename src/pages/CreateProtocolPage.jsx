@@ -334,6 +334,49 @@ function CreateProtocolPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo', bodyText: error.response?.data.message }));
     };
 
+    const moveItemBetweenPages = useCallback(
+        (newPage, oldPage, groupIndex, itemIndex) => {
+            if (newPage === oldPage) return;
+            const newProtocol = { ...protocol };
+            // Find the item
+            const item = newProtocol.pages[oldPage].itemGroups[groupIndex].items[itemIndex];
+            // Remove the item from the old page, update the placements of the remaining items and sort them (just in case)
+            newProtocol.pages[oldPage].itemGroups[groupIndex].items.splice(itemIndex, 1);
+            for (const [i, item] of newProtocol.pages[oldPage].itemGroups[groupIndex].items.entries()) item.placement = i + 1;
+            newProtocol.pages[oldPage].itemGroups[groupIndex].items.sort((a, b) => a.placement - b.placement);
+            if (newProtocol.pages[newPage].itemGroups.length > 0) {
+                // If the new page has groups, add the item to the last group and sort the items (just in case)
+                item.placement = newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.length + 1;
+                newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.push(item);
+            } else {
+                // If the new page has no groups, create a new group and add the item to it
+                item.placement = 1;
+                newProtocol.pages[newPage].itemGroups = [defaultNewItemGroup('ONE_DIMENSIONAL', 1)];
+                newProtocol.pages[newPage].itemGroups[0].items.push(item);
+            }
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const moveGroupBetweenPages = useCallback(
+        (newPage, oldPage, groupIndex) => {
+            if (newPage === oldPage) return;
+            const newProtocol = { ...protocol };
+            // Find and update the group
+            const group = newProtocol.pages[oldPage].itemGroups[groupIndex];
+            group.placement = newProtocol.pages[newPage].itemGroups.length + 1;
+            // Remove the group from the old page, update the placements of the remaining groups and sort them (just in case)
+            newProtocol.pages[oldPage].itemGroups.splice(groupIndex, 1);
+            for (const [i, group] of newProtocol.pages[oldPage].itemGroups.entries()) group.placement = i + 1;
+            newProtocol.pages[oldPage].itemGroups.sort((a, b) => a.placement - b.placement);
+            // Add the group to the new page
+            newProtocol.pages[newPage].itemGroups.push(group);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
@@ -508,6 +551,9 @@ function CreateProtocolPage(props) {
                                                             protocol={protocol}
                                                             updatePage={updatePage}
                                                             insertItem={insertItem}
+                                                            moveItemBetweenPages={moveItemBetweenPages}
+                                                            moveGroupBetweenPages={moveGroupBetweenPages}
+                                                            pagesQty={protocol.pages.length}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (
