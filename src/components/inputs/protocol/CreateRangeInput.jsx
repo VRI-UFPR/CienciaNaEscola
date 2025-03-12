@@ -57,7 +57,6 @@ function CreateRangeInput(props) {
             tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.min-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.max-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.step-${item.tempId}-tooltip`, { trigger: 'hover' }));
@@ -252,7 +251,11 @@ function CreateRangeInput(props) {
                                             } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
                                         >
                                             <img
-                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
+                                                src={
+                                                    file.path
+                                                        ? process.env.REACT_APP_API_URL + 'api/' + file.path
+                                                        : URL.createObjectURL(file.content)
+                                                }
                                                 className="img-fluid object-fit-contain w-100 rounded-4"
                                                 alt="Imagem selecionada"
                                             />
@@ -273,29 +276,6 @@ function CreateRangeInput(props) {
                         })}
                     </div>
                 )}
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label fs-5 fw-medium me-2">
-                        Descrição
-                    </label>
-                    <MaterialSymbol
-                        icon="question_mark"
-                        size={13}
-                        weight={700}
-                        fill
-                        color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'description-' + item.tempId + '-tooltip'}
-                        data-bs-title="Texto que descreva outros detalhes da pergunta. Suporta Markdown com até 3000 caracteres."
-                        className={'bg-steel-blue description-' + item.tempId + '-tooltip p-1 rounded-circle'}
-                    />
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="description"
-                        value={item.description || ''}
-                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
-                    />
-                </div>
                 <div className="mb-3">
                     <label htmlFor="interval-min" className="form-label fs-5 fw-medium me-2">
                         Início do intervalo

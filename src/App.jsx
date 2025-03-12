@@ -12,7 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
-import './assets/styles/custom-bootstrap.scss';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 import 'leaflet-defaulticon-compatibility';
@@ -24,7 +23,26 @@ import { AlertProvider } from './contexts/AlertContext';
 import 'react-material-symbols/rounded';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
-const styles = ``;
+const styles = `
+    .user-list {
+        max-height: 15vh;
+        overflow-y: auto;
+    }
+    .user-list::-webkit-scrollbar {
+        width: 10px;
+    }
+    .user-list::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+    .user-list::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+    .user-list::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
+`;
 
 function App(props) {
     return (

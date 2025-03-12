@@ -244,7 +244,7 @@ function CreateApplicationPage(props) {
 
     const submitApplication = (e) => {
         e.preventDefault();
-        const formData = serialize(application, { indices: true });
+        const formData = serialize({ ...application, actions: undefined }, { indices: true });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/application/updateApplication/${applicationId}`, formData, {
@@ -583,7 +583,7 @@ function CreateApplicationPage(props) {
                                                 </div>
                                             </div>
                                             {searchedUsers.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedUsers.map((u) => (
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -654,7 +654,7 @@ function CreateApplicationPage(props) {
                                                 </div>
                                             </div>
                                             {searchedClassrooms.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedClassrooms.map((c) => (
                                                         <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -744,7 +744,7 @@ function CreateApplicationPage(props) {
                                                 </div>
                                             </div>
                                             {searchedAnswerUsers.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedAnswerUsers.map((u) => (
                                                         <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -815,7 +815,7 @@ function CreateApplicationPage(props) {
                                                 </div>
                                             </div>
                                             {searchedAnswerClassrooms.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedAnswerClassrooms.map((c) => (
                                                         <div key={'answer-viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">

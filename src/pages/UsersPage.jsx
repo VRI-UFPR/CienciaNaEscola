@@ -159,7 +159,7 @@ function UsersPage(props) {
                                     </div>
                                 </div>
                                 {managedUsers.length > 0 && (
-                                    <div className="row gy-2">
+                                    <div className="row user-list gy-2">
                                         {managedUsers
                                             .filter((u) => u.username.startsWith(MUSearchInput))
                                             .map((u) => (
@@ -203,7 +203,7 @@ function UsersPage(props) {
                                         </Link>
                                     </div>
                                 </div>
-                                <div className="row gy-2">
+                                <div className="row user-list gy-2">
                                     {managedClassrooms
                                         .filter((c) => c.name.startsWith(MCSearchInput))
                                         .map((c) => (

@@ -236,7 +236,10 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        const formData = newUser.hash ? serialize({ ...newUser, hash: hashSync(newUser.hash, salt) }) : serialize({ ...newUser });
+        const processedUser = { ...newUser, actions: undefined, hashValidation: undefined, profileImage: undefined };
+        const formData = newUser.hash
+            ? serialize({ ...processedUser, hash: hashSync(processedUser.hash, salt) })
+            : serialize({ ...processedUser });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/user/updateUser/${userId || user.id}`, formData, {
@@ -443,7 +446,7 @@ function CreateUserPage(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {(!isEditing || userId !== user.id) && (
+                                        {(!isEditing || (userId && userId !== user.id)) && (
                                             <div className="mb-3">
                                                 <label label="role" className="form-label color-steel-blue fs-5 fw-medium">
                                                     Selecione o papel do usuário
