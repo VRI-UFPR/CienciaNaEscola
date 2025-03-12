@@ -248,7 +248,7 @@ function AnswerPage(props) {
                                                     groupAnswers.forEach((groupAnswer) => {
                                                         const uploadFiles = groupAnswer.files || [];
                                                         const imageFiles = uploadFiles.filter((file) => {
-                                                            const filePath = file?.path || '';
+                                                            const filePath = process.env.REACT_APP_API_URL + 'api/' + file?.path || '';
                                                             return (
                                                                 filePath.includes('.png') ||
                                                                 filePath.includes('.jpg') ||
@@ -256,7 +256,7 @@ function AnswerPage(props) {
                                                             );
                                                         });
                                                         userAnswers[totalItems + 1] = imageFiles
-                                                            .map((file) => process.env.REACT_APP_API_URL + file.path)
+                                                            .map((file) => process.env.REACT_APP_API_URL + 'api/' + file.path)
                                                             .join(' | ');
                                                     });
                                                 });
