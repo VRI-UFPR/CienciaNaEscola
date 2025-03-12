@@ -86,7 +86,7 @@ function CreatePage(props) {
 
     const moveItemBetweenItemGroups = useCallback(
         (newGroupIndex, oldGroupIndex, itemIndex) => {
-            if (newGroupIndex === oldGroupIndex) return;
+            if (newGroupIndex === oldGroupIndex || page.itemGroups[newGroupIndex].type !== 'ONE_DIMENSIONAL') return false;
             const newPage = { ...page };
             // Find and update the item
             const item = newPage.itemGroups[oldGroupIndex].items[itemIndex];
@@ -98,6 +98,7 @@ function CreatePage(props) {
             // Add the item to the new group
             newPage.itemGroups[newGroupIndex].items.push(item);
             setPage(newPage);
+            return true;
         },
         [page]
     );
@@ -155,7 +156,6 @@ function CreatePage(props) {
                             className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
                             onChange={(e) => updatePagePlacement(e.target.value, page.placement, itemTarget.page)}
                         >
-                            <option value={''}>Página...</option>
                             {[...Array(pagesQty).keys()].map((page) => (
                                 <option key={page + 1} value={page + 1}>
                                     Posição {page + 1}
