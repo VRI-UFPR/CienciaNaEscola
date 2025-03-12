@@ -10,10 +10,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const textBoxStyles = `
     .font-century-gothic {
@@ -59,6 +60,7 @@ function CreateTextBoxInput(props) {
     } = props;
     const [item, setItem] = useState(currentItem);
     const galleryInputRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     useEffect(() => {
         if (item !== currentItem) updateItem(item, itemIndex);
@@ -199,7 +201,14 @@ function CreateTextBoxInput(props) {
                         id="item-target-page"
                         value={groupIndex}
                         className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
-                        onChange={(e) => moveItemBetweenItemGroups(e.target.value, groupIndex, itemIndex)}
+                        onChange={(e) =>
+                            moveItemBetweenItemGroups(e.target.value, groupIndex, itemIndex)
+                                ? {}
+                                : showAlert({
+                                      headerText: 'Erro ao mover item',
+                                      bodyText: 'O item não pode ser movido para um grupo do tipo tabela ou ao qual já pertence',
+                                  })
+                        }
                     >
                         <option value={''}>Grupo...</option>
                         {[...Array(groupsQty).keys()].map((group) => (

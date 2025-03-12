@@ -291,7 +291,7 @@ function CreateProtocolPage(props) {
 
         const processedProtocol = {
             ...protocol,
-            creatorId: isEditing ? undefined : user.id,
+            creatorId: undefined,
             pages: protocol.pages.map(({ tempId, ...rest }) => ({
                 ...rest,
                 itemGroups: rest.itemGroups.map(({ tempId, ...rest }) => rest),
@@ -344,15 +344,22 @@ function CreateProtocolPage(props) {
             newProtocol.pages[oldPage].itemGroups[groupIndex].items.splice(itemIndex, 1);
             for (const [i, item] of newProtocol.pages[oldPage].itemGroups[groupIndex].items.entries()) item.placement = i + 1;
             newProtocol.pages[oldPage].itemGroups[groupIndex].items.sort((a, b) => a.placement - b.placement);
-            if (newProtocol.pages[newPage].itemGroups.length > 0) {
-                // If the new page has groups, add the item to the last group and sort the items (just in case)
-                item.placement = newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.length + 1;
-                newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.push(item);
+            // Find the last group of the new page that is 'ONE_DIMENSIONAL'
+            const lastGroup = newProtocol.pages[newPage].itemGroups
+                .slice()
+                .reverse()
+                .find((g) => g.type === 'ONE_DIMENSIONAL');
+            if (lastGroup) {
+                // If the new page has a group of type 'ONE_DIMENSIONAL', add the item to it and sort the items (just in case)
+                item.placement = lastGroup.items.length + 1;
+                lastGroup.items.push(item);
             } else {
-                // If the new page has no groups, create a new group and add the item to it
+                // If the new page has no group of type 'ONE_DIMENSIONAL', create a new group and add the item to it
                 item.placement = 1;
-                newProtocol.pages[newPage].itemGroups = [defaultNewItemGroup('ONE_DIMENSIONAL', 1)];
-                newProtocol.pages[newPage].itemGroups[0].items.push(item);
+                newProtocol.pages[newPage].itemGroups.push(
+                    defaultNewItemGroup('ONE_DIMENSIONAL', newProtocol.pages[newPage].itemGroups.length + 1)
+                );
+                newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.push(item);
             }
             setProtocol(newProtocol);
         },

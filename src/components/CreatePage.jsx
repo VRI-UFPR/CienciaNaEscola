@@ -86,7 +86,7 @@ function CreatePage(props) {
 
     const moveItemBetweenItemGroups = useCallback(
         (newGroupIndex, oldGroupIndex, itemIndex) => {
-            if (newGroupIndex === oldGroupIndex) return;
+            if (newGroupIndex === oldGroupIndex || page.itemGroups[newGroupIndex].type !== 'ONE_DIMENSIONAL') return false;
             const newPage = { ...page };
             // Find and update the item
             const item = newPage.itemGroups[oldGroupIndex].items[itemIndex];
@@ -98,6 +98,7 @@ function CreatePage(props) {
             // Add the item to the new group
             newPage.itemGroups[newGroupIndex].items.push(item);
             setPage(newPage);
+            return true;
         },
         [page]
     );
