@@ -206,7 +206,6 @@ function CreateItemGroup(props) {
                             className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
                             onChange={(e) => updateGroupPlacement(e.target.value, group.placement, itemTarget.group)}
                         >
-                            <option value={''}>Posição...</option>
                             {[...Array(groupsQty).keys()].map((placement) => (
                                 <option key={'item-group-placement-' + (placement + 1)} value={placement + 1}>
                                     Posição {placement + 1}
@@ -224,7 +223,6 @@ function CreateItemGroup(props) {
                             className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
                             onChange={(e) => moveGroupBetweenPages(e.target.value, itemTarget.page, itemTarget.group)}
                         >
-                            <option value={''}>Página...</option>
                             {[...Array(pagesQty).keys()].map((page) => (
                                 <option key={'item-group-page-' + (page + 1)} value={page}>
                                     Página {page + 1}

@@ -240,7 +240,6 @@ function CreateMultipleInputItens(props) {
                         className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
                         onChange={(e) => moveItemBetweenPages(e.target.value, pageIndex, groupIndex, itemIndex)}
                     >
-                        <option value={''}>Página...</option>
                         {[...Array(pagesQty).keys()].map((page) => (
                             <option key={'item-page-' + (page + 1)} value={page}>
                                 Página {page + 1}
@@ -263,7 +262,6 @@ function CreateMultipleInputItens(props) {
                                   })
                         }
                     >
-                        <option value={''}>Grupo...</option>
                         {[...Array(groupsQty).keys()].map((group) => (
                             <option key={'item-group-' + (group + 1)} value={group}>
                                 Grupo {group + 1}
@@ -279,7 +277,6 @@ function CreateMultipleInputItens(props) {
                         className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
                         onChange={(e) => updateItemPlacement(e.target.value, item.placement, itemIndex)}
                     >
-                        <option value={''}>Posição...</option>
                         {[...Array(itemsQty).keys()].map((placement) => (
                             <option key={'item-placement-' + (placement + 1)} value={placement + 1}>
                                 Posição {placement + 1}
