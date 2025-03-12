@@ -244,7 +244,7 @@ function CreateApplicationPage(props) {
 
     const submitApplication = (e) => {
         e.preventDefault();
-        const formData = serialize(application, { indices: true });
+        const formData = serialize({ ...application, actions: undefined }, { indices: true });
         if (isEditing) {
             axios
                 .put(`${process.env.REACT_APP_API_URL}api/application/updateApplication/${applicationId}`, formData, {
