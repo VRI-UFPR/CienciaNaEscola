@@ -73,13 +73,15 @@ function CreateTextBoxInput(props) {
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX') {
+                tooltipList.push(new Tooltip(`.add-validation-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            }
         }
 
         return () => {
             tooltipList.forEach((tooltip) => tooltip.dispose());
         };
-    }, [item.tempId]);
+    }, [item.tempId, item.type]);
 
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
@@ -119,17 +121,19 @@ function CreateTextBoxInput(props) {
                         })()}
                     </h1>
                 </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="checklist"
-                        onClick={() => insertItemValidation(itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
-                        data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
-                        className={'add-validation-' + item.tempId + '-tooltip text-white'}
-                    />
-                </div>
+                {(item.type === 'TEXTBOX' || item.type === 'NUMBERBOX') && (
+                    <div className="col-auto">
+                        <RoundedButton
+                            hsl={[190, 46, 70]}
+                            icon="checklist"
+                            onClick={() => insertItemValidation(itemIndex)}
+                            data-bs-toggle="tooltip"
+                            data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
+                            data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
+                            className={'add-validation-' + item.tempId + '-tooltip text-white'}
+                        />
+                    </div>
+                )}
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[190, 46, 70]}
