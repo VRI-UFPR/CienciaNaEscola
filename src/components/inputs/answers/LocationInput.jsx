@@ -55,6 +55,13 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por gerenciar a seleção e atualização de localizações.
+ * @param {Object} props - Propriedades do componente.
+ * @param {string} props.addressId - ID do endereço selecionado.
+ * @param {Funcion} props.setAddressId - Função para atualizar o ID do endereço.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada. 
+ */
 export function Location(props) {
     const { addressId, setAddressId, disabled } = props;
 
@@ -66,6 +73,7 @@ export function Location(props) {
     const { user } = useContext(AuthContext);
     const iconContainerRef = useRef(null);
 
+    /** Atualiza o tamanho do ícone. */
     const updateIconSize = useCallback(() => setIconSize(iconContainerRef.current.offsetWidth), []);
 
     useEffect(() => {
@@ -74,8 +82,18 @@ export function Location(props) {
         return () => window.removeEventListener('resize', updateIconSize);
     }, [updateIconSize]);
 
+    /**
+     * Atualiza o ID do endereço selecionado.
+     * @param {string} addressId - Novo ID do endereço.
+     */
     const updateAddressId = useCallback((addressId) => setAddressId(addressId), [setAddressId]);
 
+    /**
+     * Obtém o endereço com base na cidade, Estado e país informados.
+     * @param {string} city - Nome da cidade.
+     * @param {string} state - Nome do Estado.
+     * @param {string} country - Nome do país.
+     */
     const getAddressId = useCallback(
         async (city, state, country) => {
             const searchParams = { city, state, country };
@@ -106,6 +124,11 @@ export function Location(props) {
         [showAlert, user.token]
     );
 
+    /**
+     * Atualiza a localização do usuário.
+     * @param {string} addressId - ID do endereço selecionado.
+     * @param {string} state - Nome do Estado.
+     */
     const setLocation = useCallback(
         (addressId, state) => {
             const searchParams = { state, country: 'Brasil' };
@@ -135,6 +158,7 @@ export function Location(props) {
         [showAlert, updateAddressId, user.token]
     );
 
+    /** Obtém a localização do dispositivo e busca o endereço correspondente. */
     const getDeviceLocation = useCallback(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {

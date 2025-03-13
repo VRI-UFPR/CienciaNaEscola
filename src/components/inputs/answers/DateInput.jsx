@@ -43,11 +43,20 @@ const styles = `
     }
 `;
 
+/**
+ * Componente para entrada de datas, permitindo que o usuário selecione ou insira uma data.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto representando a resposta.
+ * @param {boolean} props.disabled - Define se o campo de data está desabilitado.
+ */
 function DateInput(props) {
     const { onAnswerChange, item, answer, disabled } = props;
     const iconContainerRef = useRef(null);
     const [iconSize, setIconSize] = useState(0);
 
+    /** Atualiza o tamanho do ícone */
     const updateIconSize = useCallback(() => {
         setIconSize(iconContainerRef.current.offsetWidth);
     }, []);
@@ -60,6 +69,10 @@ function DateInput(props) {
         };
     }, [updateIconSize]);
 
+    /**
+     * Atualiza a resposta do input da data.
+     * @param {Object} newAnswer - Novo objeto de resposta.
+     */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
@@ -67,6 +80,7 @@ function DateInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /** Caso não tenha sido recebida uma data, será definida a data atual do sistema */
     useEffect(() => {
         if (!answer.text) {
             const date = new Date();

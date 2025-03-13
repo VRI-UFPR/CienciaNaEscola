@@ -38,9 +38,22 @@ const styles = `
     }
 `;
 
+/**
+ * Este componente representa um grupo de checkboxes que permite ao usuário selecionar múltiplas opções.
+ * @param {Object} props - Propriedades do componente.  
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta tem alteração.
+ * @param {Object} props.item - Objeto que representa o item da pergunta.
+ * @param {Object} props.answer - Objeto que contêm as respostas.
+ * @param {React.Ref} props.galleryModalRef - Referência para o modal da galeria.
+ * @param {boolean} props.disabled - Define se a checkbox está desabilitada. 
+ */
 function CheckBoxInput(props) {
     const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
+    /**
+     * Aualiza a resposta.
+     * @param {Object} newAnswer - Novo objeo de resposta.
+     */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
@@ -48,6 +61,11 @@ function CheckBoxInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /**
+     * Manipula a atualização das opções do checkbox.
+     * @param {Object} optionId - Identificador da opção a ser atualizada.
+     * @param {boolean} updatedOption - Indica se a opção foi marcada ou desmarcada.
+     */
     const handleOptionsUpdate = (optionId, updatedOption) => {
         const newOptions = { ...answer };
         if (updatedOption) {
