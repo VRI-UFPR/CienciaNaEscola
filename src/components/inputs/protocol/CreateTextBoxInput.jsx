@@ -254,7 +254,7 @@ function CreateTextBoxInput(props) {
                     />
                     <div className="row gx-2 align-items-end">
                         <div className="col">
-                            <input
+                            <textarea
                                 type="text"
                                 className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                                 id="question"
@@ -262,8 +262,9 @@ function CreateTextBoxInput(props) {
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                                 minLength="3"
+                                rows="4"
                                 required
-                            />
+                            ></textarea>
                         </div>
                         <div className="col-auto">
                             <RoundedButton
