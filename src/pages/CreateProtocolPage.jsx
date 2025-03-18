@@ -301,7 +301,7 @@ function CreateProtocolPage(props) {
                         itemValidations: itemValidations.map(({ tempId, ...rest }) => rest),
                         itemOptions: itemOptions.map(({ tempId, files, ...rest }) => ({
                             ...rest,
-                            files: files.map(({ path, ...rest }) => rest),
+                            files: files?.map(({ path, ...rest }) => rest),
                         })),
                         files: files.map(({ path, ...rest }) => rest),
                     })),
