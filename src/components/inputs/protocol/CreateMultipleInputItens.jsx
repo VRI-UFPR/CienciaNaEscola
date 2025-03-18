@@ -336,12 +336,10 @@ function CreateMultipleInputItens(props) {
                 {item.files?.length > 0 && (
                     <div className="row mb-3 mt-4 gy-4">
                         {item.files.map((file, i) => {
-                            if (file?.content instanceof File || file?.path)
+                            if (file?.path || file?.content instanceof File)
                                 return (
                                     <div
-                                        key={
-                                            'item-' + item.tempId + '-' + itemIndex + '-image-' + file?.content?.name || file?.id + '-' + i
-                                        }
+                                        key={'item-' + item.tempId + '-' + itemIndex + '-image-' + file?.id || file?.content?.name}
                                         className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
                                         <div
