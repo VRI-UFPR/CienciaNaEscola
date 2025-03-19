@@ -540,11 +540,11 @@ function ApplicationPage(props) {
                                     <TextImageInput
                                         item={{
                                             text:
-                                                'Identificador da aplicação: ' +
+                                                'Identificador da aplicaçãssso:  ' +
                                                 application.id +
-                                                '<br>Identificador do protocolo: ' +
+                                                '  \nIdentificador do protocolo: ' +
                                                 application.protocol.id +
-                                                '<br>Versão do protocolo: ' +
+                                                '  \nVersão do protocolo: ' +
                                                 application.protocol.updatedAt.replace(/\D/g, ''),
                                             files: [],
                                         }}
