@@ -305,9 +305,9 @@ function CreateProtocolPage(props) {
                         })),
                         files: files.map(({ path, ...rest }) => rest),
                     })),
-                    dependencies: dependencies.map(({ tempId, ...rest }) => rest),
+                    dependencies: dependencies.map(({ tempId, itemId, ...rest }) => rest),
                 })),
-                dependencies: dependencies.map(({ tempId, ...rest }) => rest),
+                dependencies: dependencies.map(({ tempId, itemId, ...rest }) => rest),
             })),
         };
 
