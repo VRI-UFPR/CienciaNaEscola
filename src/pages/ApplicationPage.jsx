@@ -372,18 +372,22 @@ function ApplicationPage(props) {
                                 <div className="row justify-content-center m-0">
                                     <ProtocolInfo title={application.protocol.title} description={application.protocol.description} />
                                 </div>
-                                <div className="row justify-content-center m-0 pt-3">
-                                    <DateInput answer={answerDate || ''} onAnswerChange={(newDate) => setAnswerDate(newDate)} />
-                                </div>
-                                <div className="row justify-content-center m-0 pt-3">
-                                    <TimeInput answer={answerTime || ''} onAnswerChange={(newTime) => setAnswerTime(newTime)} />
-                                </div>
-                                {application.keepLocation && (
-                                    <div className="row justify-content-center m-0 pt-3">
-                                        <LocationInput
-                                            answer={answerLocation || { latitude: 0.0, longitude: 0.0 }}
-                                            onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
-                                        />
+                                {currentPageIndex === 0 && (
+                                    <div>
+                                        <div className="row justify-content-center m-0 pt-3">
+                                            <DateInput answer={answerDate || ''} onAnswerChange={(newDate) => setAnswerDate(newDate)} />
+                                        </div>
+                                        <div className="row justify-content-center m-0 pt-3">
+                                            <TimeInput answer={answerTime || ''} onAnswerChange={(newTime) => setAnswerTime(newTime)} />
+                                        </div>
+                                        {application.keepLocation && (
+                                            <div className="row justify-content-center m-0 pt-3">
+                                                <LocationInput
+                                                    answer={answerLocation || { latitude: 0.0, longitude: 0.0 }}
+                                                    onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 {application.protocol.pages[currentPageIndex].itemGroups
