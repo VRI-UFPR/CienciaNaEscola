@@ -292,9 +292,9 @@ function CreateProtocolPage(props) {
         const processedProtocol = {
             ...protocol,
             creatorId: undefined,
-            pages: protocol.pages.map(({ tempId, ...rest }) => ({
+            pages: protocol.pages.map(({ tempId, dependencies, ...rest }) => ({
                 ...rest,
-                itemGroups: rest.itemGroups.map(({ tempId, items, ...rest }) => ({
+                itemGroups: rest.itemGroups.map(({ tempId, items, dependencies, ...rest }) => ({
                     ...rest,
                     items: items.map(({ itemValidations, itemOptions, files, ...rest }) => ({
                         ...rest,
@@ -305,7 +305,9 @@ function CreateProtocolPage(props) {
                         })),
                         files: files.map(({ path, ...rest }) => rest),
                     })),
+                    dependencies: dependencies.map(({ tempId, ...rest }) => rest),
                 })),
+                dependencies: dependencies.map(({ tempId, ...rest }) => rest),
             })),
         };
 
