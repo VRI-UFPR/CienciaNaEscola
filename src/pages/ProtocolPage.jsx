@@ -368,7 +368,7 @@ function ProtocolPage(props) {
                                             text:
                                                 'Identificador do protocolo: ' +
                                                 protocol.id +
-                                                '<br>Versão do protocolo: ' +
+                                                '  \nVersão do protocolo: ' +
                                                 protocol.createdAt.replace(/\D/g, ''),
                                             files: [],
                                         }}

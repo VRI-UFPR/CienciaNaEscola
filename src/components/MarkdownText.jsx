@@ -38,6 +38,7 @@ function MarkdownText(props) {
                 options={{
                     wrapper: 'div',
                     forceWrapper: true,
+                    disableParsingRawHTML: true,
                     forceBlock: true,
                     overrides: {
                         img: {
