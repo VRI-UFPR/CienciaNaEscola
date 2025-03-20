@@ -221,32 +221,6 @@ function CreateDependencyInput(props) {
                         </select>
                     </div>
                 )}
-                {getItemTargetOptions().length > 0 && (
-                    <div>
-                        <label
-                            className="form-label fs-5 fw-medium"
-                            htmlFor={
-                                (isPageDependency ? 'page-dependency-custom-message-' : 'group-dependency-custom-message') +
-                                dependency.tempId
-                            }
-                        >
-                            Mensagem personalizada
-                        </label>
-                        <input
-                            className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                            id="page-dependency-custom-message"
-                            type="text"
-                            value={dependency.customMessage || ''}
-                            onChange={(event) => {
-                                setDependency((prev) => {
-                                    const newDependency = { ...prev };
-                                    newDependency.customMessage = event.target.value;
-                                    return newDependency;
-                                });
-                            }}
-                        />
-                    </div>
-                )}
             </div>
         </div>
     );

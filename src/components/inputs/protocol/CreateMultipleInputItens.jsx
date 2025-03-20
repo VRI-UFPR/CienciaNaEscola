@@ -201,20 +201,17 @@ function CreateMultipleInputItens(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
-                    onChange={(event) =>
-                        setItem((prev) => {
-                            if (event.target.checked) {
-                                const newItem = { ...prev };
-                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
-                                return newItem;
-                            } else {
-                                const newItem = { ...prev };
-                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
-                                return newItem;
-                            }
-                        })
-                    }
+                    checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument)}
+                    onChange={(event) => {
+                        const newItem = {
+                            ...item,
+                            itemValidations:
+                                event.target.checked && !item.itemValidations.some((validation) => validation.type === 'MANDATORY')
+                                    ? [...item.itemValidations, { type: 'MANDATORY', argument: 'true' }] // Add mandatory validation
+                                    : item.itemValidations.filter((validation) => validation.type !== 'MANDATORY'), // Remove mandatory validation
+                        };
+                        setItem(newItem);
+                    }}
                 />
                 <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
                     Obrigatório

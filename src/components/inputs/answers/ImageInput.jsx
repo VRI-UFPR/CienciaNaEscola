@@ -109,7 +109,7 @@ function ImageInput(props) {
     const removeImage = (indexToRemove) => {
         const newAnswer = { ...answer };
         newAnswer.files = newAnswer.files.filter((_, index) => index !== indexToRemove);
-        updateAnswer(newAnswer);
+        updateAnswer(newAnswer.files.length === 0 ? {} : newAnswer);
     };
 
     return (

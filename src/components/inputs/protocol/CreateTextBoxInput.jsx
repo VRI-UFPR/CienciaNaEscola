@@ -69,7 +69,9 @@ function CreateTextBoxInput(props) {
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
-            tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            if (item.type !== 'TEXT') {
+                tooltipList.push(new Tooltip(`.mandatory-${item.tempId}-tooltip`, { trigger: 'hover' }));
+            }
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
@@ -146,42 +148,41 @@ function CreateTextBoxInput(props) {
                     />
                 </div>
             </div>
-            <div className="form-check form-switch fs-5 mb-2">
-                <input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
-                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
-                    onChange={(event) =>
-                        setItem((prev) => {
-                            if (event.target.checked) {
-                                const newItem = { ...prev };
-                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
-                                return newItem;
-                            } else {
-                                const newItem = { ...prev };
-                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
-                                return newItem;
-                            }
-                        })
-                    }
-                />
-                <label className="form-check-label font-barlow fs-5 fw-medium me-2" htmlFor="flexSwitchCheckDefault">
-                    Obrigatório
-                </label>
-                <MaterialSymbol
-                    icon="question_mark"
-                    size={13}
-                    weight={700}
-                    fill
-                    color="#FFFFFF"
-                    data-bs-toggle="tooltip"
-                    data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
-                    data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
-                    className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
-                />
-            </div>
+            {item.type !== 'TEXT' && (
+                <div className="form-check form-switch fs-5 mb-2">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="flexSwitchCheckDefault"
+                        checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument)}
+                        onChange={(event) => {
+                            const newItem = {
+                                ...item,
+                                itemValidations:
+                                    event.target.checked && !item.itemValidations.some((validation) => validation.type === 'MANDATORY')
+                                        ? [...item.itemValidations, { type: 'MANDATORY', argument: 'true' }] // Add mandatory validation
+                                        : item.itemValidations.filter((validation) => validation.type !== 'MANDATORY'), // Remove mandatory validation
+                            };
+                            setItem(newItem);
+                        }}
+                    />
+                    <label className="form-check-label font-barlow fs-5 fw-medium me-2" htmlFor="flexSwitchCheckDefault">
+                        Obrigatório
+                    </label>
+                    <MaterialSymbol
+                        icon="question_mark"
+                        size={13}
+                        weight={700}
+                        fill
+                        color="#FFFFFF"
+                        data-bs-toggle="tooltip"
+                        data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
+                        data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
+                        className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
+                    />
+                </div>
+            )}
             <div className="row g-2 mb-2">
                 <div className="col">
                     <select
