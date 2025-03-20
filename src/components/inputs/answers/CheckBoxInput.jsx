@@ -50,12 +50,11 @@ function CheckBoxInput(props) {
 
     const handleOptionsUpdate = (optionId, updatedOption) => {
         const newOptions = { ...answer };
-        if (updatedOption) {
-            newOptions[optionId] = '';
-        } else {
-            delete newOptions[optionId];
-        }
-        updateAnswer({ ...newOptions, group: answer.group });
+
+        updatedOption ? (newOptions[optionId] = '') : delete newOptions[optionId];
+
+        const { group, ...optionsWithoutGroup } = newOptions;
+        updateAnswer(Object.keys(optionsWithoutGroup).length === 0 ? {} : newOptions);
     };
 
     return (

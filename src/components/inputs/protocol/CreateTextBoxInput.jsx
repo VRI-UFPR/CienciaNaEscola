@@ -155,13 +155,13 @@ function CreateTextBoxInput(props) {
                         type="checkbox"
                         role="switch"
                         id="flexSwitchCheckDefault"
-                        value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
+                        checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument)}
                         onChange={(event) => {
                             const newItem = {
                                 ...item,
                                 itemValidations:
                                     event.target.checked && !item.itemValidations.some((validation) => validation.type === 'MANDATORY')
-                                        ? [...item.itemValidations, { type: 'MANDATORY', argument: true }] // Add mandatory validation
+                                        ? [...item.itemValidations, { type: 'MANDATORY', argument: 'true' }] // Add mandatory validation
                                         : item.itemValidations.filter((validation) => validation.type !== 'MANDATORY'), // Remove mandatory validation
                             };
                             setItem(newItem);

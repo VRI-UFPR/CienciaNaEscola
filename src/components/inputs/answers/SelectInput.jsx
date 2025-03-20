@@ -35,11 +35,7 @@ function SelectInput(props) {
     );
 
     const handleOptionsUpdate = (optionId) => {
-        const newOptions = {};
-        if (optionId !== -1) {
-            newOptions[optionId] = '';
-        }
-        updateAnswer({ ...newOptions, group: answer.group });
+        optionId === '-1' ? updateAnswer({}) : updateAnswer({ [optionId]: '' });
     };
 
     return (

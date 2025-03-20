@@ -193,19 +193,23 @@ function ApplicationPage(props) {
             if (newItemAnswerGroups[groupToUpdate] === undefined)
                 newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
 
-            switch (itemType) {
-                case 'ITEM':
-                    newItemAnswerGroups[groupToUpdate]['itemAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                case 'OPTION':
-                    newItemAnswerGroups[groupToUpdate]['optionAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                case 'TABLE':
-                    newItemAnswerGroups[groupToUpdate]['tableAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                default:
-                    break;
+            const targetAnswers =
+                newItemAnswerGroups[groupToUpdate][
+                    itemType === 'ITEM'
+                        ? 'itemAnswers'
+                        : itemType === 'OPTION'
+                        ? 'optionAnswers'
+                        : itemType === 'TABLE'
+                        ? 'tableAnswers'
+                        : null
+                ];
+
+            if (targetAnswers) {
+                Object.keys(updatedAnswer).length === 0
+                    ? delete targetAnswers[itemToUpdate]
+                    : (targetAnswers[itemToUpdate] = updatedAnswer);
             }
+
             return newItemAnswerGroups;
         });
     }, []);
@@ -280,7 +284,10 @@ function ApplicationPage(props) {
                 .catch((error) =>
                     showAlert({
                         headerText: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                        bodyText: error.response?.data.message,
+                        bodyText:
+                            error.response?.data.message === 'ItemAnswerGroups is a required field'
+                                ? 'É necessário responder ao menos 1 item.'
+                                : error.response?.data.message,
                     })
                 );
         else {
@@ -544,7 +551,7 @@ function ApplicationPage(props) {
                                     <TextImageInput
                                         item={{
                                             text:
-                                                'Identificador da aplicaçãssso:  ' +
+                                                'Identificador da aplicação:  ' +
                                                 application.id +
                                                 '  \nIdentificador do protocolo: ' +
                                                 application.protocol.id +
