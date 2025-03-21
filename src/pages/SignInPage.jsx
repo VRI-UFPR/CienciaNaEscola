@@ -10,39 +10,49 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
+// react
 import { useContext, useState, useEffect } from 'react';
-import picceTitle from '../assets/images/picceTitle.svg';
+// third-party
 import axios from 'axios';
+import { hashSync } from 'bcryptjs';
+import { serialize } from 'object-to-formdata';
+import { useNavigate } from 'react-router-dom';
+// contexts
+import { AuthContext } from '../contexts/AuthContext';
+import { AlertContext } from '../contexts/AlertContext';
+import { LayoutContext } from '../contexts/LayoutContext';
+// assets
+import picceTitle from '../assets/images/picceTitle.svg';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
 import TextButton from '../components/TextButton';
 import logoFA from '../assets/images/logoFA.png';
 import logoUFPR from '../assets/images/logoUFPR.svg';
-import { serialize } from 'object-to-formdata';
-import { LayoutContext } from '../contexts/LayoutContext';
-import { AlertContext } from '../contexts/AlertContext';
-import { hashSync } from 'bcryptjs';
 import RoundedButton from '../components/RoundedButton';
 
 const styles = `
-
     .font-century-gothic {
         font-family: 'Century Gothic', sans-serif;
     }
 
     .login-input,
+    .login-input:active,
     .login-input:focus,
-    .login-input:active {
-        color: #FFFFFF !important;
+    .login-input input:focus-visible {
         background-color: #4E9BB9 !important;
-        border: 1px solid #4E9BB9 !important;
+        box-shadow: none;
+        outline: none;
     }
 
-    .login-input:focus,
-    .login-input:active {
+    .login-input:focus-within,
+    .login-input:active,
+    .login-input:focus {
         box-shadow: inset 0px 4px 4px 0px #00000040 !important;
+    }
+
+    input:-webkit-autofill {
+        background-color: #4E9BB9 !important;
+        box-shadow: none;
     }
 
     ::placeholder {
@@ -83,17 +93,20 @@ const styles = `
 function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login, user } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const { showAlert } = useContext(AlertContext);
+    const { login, user } = useContext(AuthContext);
     const { isDashboard } = useContext(LayoutContext);
-    const [show, setShow] = useState(false)
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user.status === 'authenticated') navigate(isDashboard ? '/dash/applications' : '/applications');
     }, [navigate, isDashboard, user]);
 
+    /**
+     * Trata o evento de submissão do formulário de login
+     * @param {Event} event - Evento de submissão do formulário
+     */
     const loginHandler = (event) => {
         event.preventDefault();
         const salt = process.env.REACT_APP_SALT;
@@ -118,6 +131,9 @@ function SignInPage(props) {
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
+    /**
+     * Trata o evento de submissão do formulário de login sem registro
+     */
     const passwordlessLoginHandler = () => {
         axios
             .get(process.env.REACT_APP_API_URL + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -145,34 +161,38 @@ function SignInPage(props) {
                     <div className="col-9 col-lg-8">
                         <div className="d-flex flex-column text-center align-items-center">
                             <img src={picceTitle} alt="PICCE" className="mw-270 mb-2 mb-sm-3" />
-                            <span className="text-center fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
+                            <span className="fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
                             <form onSubmit={loginHandler}>
-                                <input
-                                    className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 mb-4 w-100"
-                                    placeholder="Nome de usuário (username)"
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    minLength="3"
-                                    maxLength="20"
-                                    required
-                                />
-                                <div className="row align-items-center gx-1">
+                                <div className="row login-input align-items-center rounded-pill gx-1 px-3 py-2 mb-2">
                                     <div className="col">
                                         <input
-                                            className="login-input color-white rounded-pill text-start fs-5 px-3 py-2 w-100"
-                                            placeholder="Senha"
-                                            type={show ? 'text' : 'password'}
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            type="text"
+                                            value={username}
                                             required
+                                            minLength="3"
+                                            maxLength="20"
+                                            placeholder="Nome de usuário (username)"
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            className="bg-transparent border-0 rounded-1 text-start text-white fs-5 w-100"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row login-input align-items-center rounded-pill gx-1 px-3 py-2">
+                                    <div className="col">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            required
+                                            value={password}
+                                            placeholder="Senha"
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="bg-transparent border-0 rounded-1 text-start text-white fs-5 w-100"
                                         />
                                     </div>
                                     <div className="col-auto">
                                         <RoundedButton
-                                            hsl={[197, 43, 52]}
-                                            icon="visibility"
-                                            onClick={() => setShow(!show)}
+                                            hsl={[197, 43, 40]}
+                                            icon={showPassword ? 'visibility_off' : 'visibility'}
+                                            onClick={() => setShowPassword(!showPassword)}
                                         />
                                     </div>
                                 </div>
@@ -190,18 +210,18 @@ function SignInPage(props) {
                                 </button>
                                 <div className="row justify-content-center g-0 mb-2 mb-sm-3">
                                     <div className="col-12 col-lg-8">
-                                        <TextButton hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" type="submit" />
+                                        <TextButton type="submit" hsl={[97, 43, 70]} text="Entrar" className="rounded-pill" />
                                     </div>
                                 </div>
                                 {!isDashboard && (
                                     <div className="row justify-content-center g-0">
                                         <div className="col-12 col-lg-8">
                                             <TextButton
+                                                type="button"
                                                 hsl={[190, 46, 70]}
                                                 text="Entrar sem registro"
-                                                className="rounded-pill"
-                                                type="button"
                                                 onClick={passwordlessLoginHandler}
+                                                className="rounded-pill"
                                             />
                                         </div>
                                     </div>
