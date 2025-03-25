@@ -22,12 +22,13 @@ import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
 import { LayoutContext } from '../contexts/LayoutContext';
 // assets
-import picceTitle from '../assets/images/picceTitle.svg';
+import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import TextButton from '../components/TextButton';
+import logoUFPR from '../assets/images/logoUFPR.jpg';
+import logoNAPI from '../assets/images/logoNAPI.png';
 import logoFA from '../assets/images/logoFA.png';
-import logoUFPR from '../assets/images/logoUFPR.svg';
 import RoundedButton from '../components/RoundedButton';
 
 const styles = `
@@ -66,6 +67,10 @@ const styles = `
         color: #91CAD6;
     }
 
+    .bg-pastel-blue {
+        background-color: #91CAD6;
+    }
+
     .background-style {
         background-size: cover;
         background-image: url(${Background});
@@ -77,16 +82,16 @@ const styles = `
         }
     }
 
-    .mw-115{
-        max-width: 115px;
+    .mw-80 {
+        max-width: 80px;
     }
 
-    .mw-150{
-        max-width: 150px;
+    .mw-90 {
+        max-width: 90px;
     }
 
-    .mw-270{
-        max-width: 270px;
+    .mw-240 {
+        max-width: 240px;
     }
 `;
 
@@ -156,12 +161,12 @@ function SignInPage(props) {
 
     return (
         <div className="background-style font-century-gothic overflow-y-scroll vh-100">
-            <div className="container d-flex flex-column h-100">
+            <div className="container d-flex flex-column h-100 g-0">
                 <div className="row justify-content-center align-items-center flex-grow-1 w-100 g-0 py-5">
                     <div className="col-9 col-lg-8">
                         <div className="d-flex flex-column text-center align-items-center">
-                            <img src={picceTitle} alt="PICCE" className="mw-270 mb-2 mb-sm-3" />
-                            <span className="fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao Ciência Cidadã na Escola!</span>
+                            <img src={logoPicceCircular} alt="PICCE" className="mw-240 mb-4 mt-5 mb-sm-3" />
+                            <span className="fw-medium lh-sm fs-5 mb-4 mb-sm-5">Bem-vindo(a) ao PICCE!</span>
                             <form onSubmit={loginHandler}>
                                 <div className="row login-input align-items-center rounded-pill gx-1 px-3 py-2 mb-2">
                                     <div className="col">
@@ -231,11 +236,14 @@ function SignInPage(props) {
                     </div>
                 </div>
                 <div className="row justify-content-between g-0 w-100 pb-3 px-3">
-                    <div className="col-3 justify-content-start d-flex align-items-center">
-                        <img className="h-auto mw-115 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
+                    <div className="col-3 justify-content-start d-flex align-items-center mw-80">
+                        <img className="h-auto w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                     </div>
-                    <div className="col-4 justify-content-end d-flex align-items-center">
-                        <img className="h-auto mw-150 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                    <div className="col justify-content-center d-flex align-items-center mw-90">
+                        <img className="h-auto w-100" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
+                    </div>
+                    <div className="col-4 justify-content-end d-flex align-items-center mw-90">
+                        <img className="h-auto w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
                     </div>
                 </div>
             </div>
