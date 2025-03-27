@@ -41,6 +41,14 @@ const styles = `
     }
 `;
 
+/**
+ * Componente para upload de imagens.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto contendo as imagens selecionadas.
+ * @param {boolean} props.disabled - Define se o upload de imagem está desabilitado.
+ */
 function ImageInput(props) {
     const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
@@ -50,6 +58,10 @@ function ImageInput(props) {
     const galleryInputRef = useRef(null);
     const cameraInputRef = useRef(null);
 
+    /**
+     * Aualiza a resposta com a nova imagem adicionada.
+     * @param {Object} newAnswer - Novo objeto de resposta contendo as imagens atualizadas.
+     */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
@@ -57,18 +69,25 @@ function ImageInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /** Alterna a visibilidade da imagem. */
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };
 
+    /** Simula um clique no input de galeria para selecionar uma imagem do dispositivo. */
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
     };
 
+    /** Simula um clique no input da câmera para capturar uma imagem. */
     const handleCameraButtonClick = () => {
         cameraInputRef.current.click();
     };
 
+    /**
+     * Insere uma imagem selecionada.
+     * @param {Event} e - Evento do input de arquivo. 
+     */
     const insertImage = async (e) => {
         if (e.target?.files[0]) {
             setDisableUpload(true);
@@ -106,6 +125,10 @@ function ImageInput(props) {
         }
     };
 
+    /**
+     * Remove uma imagem com base no índice.
+     * @param {number} indexToRemove - Índice da imagem a ser removida.
+     */
     const removeImage = (indexToRemove) => {
         const newAnswer = { ...answer };
         newAnswer.files = newAnswer.files.filter((_, index) => index !== indexToRemove);

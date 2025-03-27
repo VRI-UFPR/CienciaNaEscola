@@ -60,12 +60,20 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por gerenciar a seleção e atualização de localizações.
+ * @param {Object} props - Propriedades do componente.
+ * @param {string} props.addressId - ID do endereço selecionado.
+ * @param {Funcion} props.setAddressId - Função para atualizar o ID do endereço.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+ */
 export function Location(props) {
     const { onAnswerChange, answer } = props;
     const iconContainerRef = useRef(null);
     const [iconSize, setIconSize] = useState(0);
     const mapRef = useRef(null);
 
+    /** Atualiza o tamanho do ícone. */
     const updateIconSize = useCallback(() => setIconSize(iconContainerRef.current.offsetWidth), []);
 
     useEffect(() => {
@@ -74,8 +82,13 @@ export function Location(props) {
         return () => window.removeEventListener('resize', updateIconSize);
     }, [updateIconSize]);
 
+    /**
+     * Atualiza a resposta do input da data.
+     * @param {Object} newAnswer - Nova resposta do input.
+     */
     const updateAnswer = useCallback((newAnswer) => onAnswerChange(newAnswer), [onAnswerChange]);
 
+    /** Define a localização padrão do usuário. */
     const defaultLocation = useCallback(() => {
         navigator.geolocation?.getCurrentPosition((pos) =>
             updateAnswer({ latitude: pos.coords.latitude, longitude: pos.coords.longitude })

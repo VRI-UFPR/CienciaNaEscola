@@ -42,6 +42,14 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um controle de range com valores mínimos, máximos e passo configurável.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto contendo a resposta.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+ */
 function RangeInput(props) {
     const { onAnswerChange, answer, item, galleryModalRef, disabled } = props;
     const [min, setMin] = useState(0);
@@ -49,6 +57,7 @@ function RangeInput(props) {
     const [step, setStep] = useState(1);
     const [hasUpdated, setHasUpdated] = useState(false);
 
+    /** Atualiza a resposta com o novo valor do range. */
     const updateAnswer = (newAnswer) => {
         onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
     };
@@ -79,6 +88,7 @@ function RangeInput(props) {
         }
     }, [hasUpdated, item, answer, min, max]);
 
+    /** Esilização do controle do range. */
     const rangeStyle = {
         background: '#AAD390',
         borderRadius: '5px',
