@@ -26,7 +26,7 @@ import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import TextButton from '../components/TextButton';
-import logoUFPR from '../assets/images/logoUFPR.jpg';
+import logoUFPR from '../assets/images/logoUFPR.png';
 import logoNAPI from '../assets/images/logoNAPI.png';
 import logoFA from '../assets/images/logoFA.png';
 import RoundedButton from '../components/RoundedButton';
@@ -236,13 +236,13 @@ function SignInPage(props) {
                     </div>
                 </div>
                 <div className="row justify-content-between g-0 w-100 pb-3 px-3">
-                    <div className="col-3 justify-content-start d-flex align-items-center mw-80">
+                    <div className="col justify-content-start d-flex align-items-center mw-80">
                         <img className="h-auto w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
                     </div>
                     <div className="col justify-content-center d-flex align-items-center mw-90">
                         <img className="h-auto w-100" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
                     </div>
-                    <div className="col-4 justify-content-end d-flex align-items-center mw-90">
+                    <div className="col justify-content-end d-flex align-items-center mw-90">
                         <img className="h-auto w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
                     </div>
                 </div>
