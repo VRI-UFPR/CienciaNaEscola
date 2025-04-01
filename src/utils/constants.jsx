@@ -118,12 +118,12 @@ Os princípios da Ciência Cidadã podem e devem ser aplicados diretamente à ed
 
 Este projeto conta com a colaboração de pesquisadores e estudantes do [Laboratório de Visão, Robótica e Imagem (VRI)](https://web.inf.ufpr.br/vri/) do Departamento de Informática (DInf) da UFPR, incluindo:
 
+- Prof. Dr. Eduardo Todt (orientador)
 - Ana de Vasconcelos Oporto  
 - Clara Drimel  
 - Daniel Lins  
 - Eduarda de Aguiar Freitas  
 - Eduardo Mathias de Souza  
-- Eduardo Todt  
 - Eloisa Nielsen  
 - Guilherme Stonoga Tedardi  
 - Izalorran Bonaldi  
