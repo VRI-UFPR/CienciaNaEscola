@@ -340,13 +340,13 @@ function ApplicationPage(props) {
 
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
-            <div className="row flex-grow-1 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
+            <div className="d-flex flex-grow-1 w-100">
+                <div className="d-flex flex-column position-lg-sticky bg-coral-red vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column flex-grow-1 bg-yellow-orange p-0">
+                <div className="d-flex flex-column flex-grow-1 overflow-hidden bg-yellow-orange p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
 
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
