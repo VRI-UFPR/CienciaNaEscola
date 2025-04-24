@@ -67,6 +67,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página que exibe as respostas de uma aplicação específica.
+ * @param {Object} props - Propriedades do componente.
+*/
 function AnswerPage(props) {
     const { applicationId } = useParams();
     const [error, setError] = useState(undefined);
@@ -79,6 +83,11 @@ function AnswerPage(props) {
     const modalRef = useRef(null);
     const galleryModalRef = useRef(null);
 
+    /**
+     * Define a visualização da resposta e a questão selecionadas.
+     * @param {Object} person - Resposta do usuário.
+     * @param {Object} question - Pergunta associada à resposta.
+    */
     const setVisualization = (person, question) => {
         setSelectedAnswer(person);
         setSelectedItem(question);
@@ -110,7 +119,10 @@ function AnswerPage(props) {
         return <SplashPage text="Carregando respostas de aplicação..." />;
     }
 
-    // Função de exportar csv
+    /** 
+     * Função de exportar csv. 
+     * @param {React.RefObject} modalRef - Referência ao modal para exibição de alertas.
+    */
     const createFile = (modalRef) => {
         let obj, csv;
 
@@ -137,6 +149,10 @@ function AnswerPage(props) {
         } else showAlert({ headerText: 'O seguinte protocolo não possui respostas: ' + obj.protocol.title });
     };
 
+    /**
+     * Converte um objeto JSON contendo respostas em uma string CSV formatada.
+     * @param {Object} ans Objeto contendo as respostas do usuário.
+    */
     const jsonToCsv = (ans) => {
         let header = ['username'],
             answers = [],
@@ -147,7 +163,7 @@ function AnswerPage(props) {
         let totalItems = 0;
         let countTables = 0;
 
-        // Armazena todas as perguntas no vetor 'header'
+        /** Armazena todas as perguntas no vetor 'header'. */
         protocol.pages.forEach((page) => {
             page.itemGroups.forEach((itemGroup) => {
                 const items = itemGroup.items;
@@ -181,13 +197,13 @@ function AnswerPage(props) {
             });
         });
 
-        // Tratamentos para exportar corretamente
+        /** Tratamentos para exportar corretamente. */
         header[0] = `"${header[0]}`;
         header[totalItems] = `${header[totalItems]}"`;
-        // Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ','
+        /** Coloca tudo como uma string única dividindo as perguntas com o divisor de colunas do csv: ',' */
         headerString = header.join('","');
 
-        // Armazena as respostas
+        /** Armazena as respostas. */
         ansIds.forEach((ansId, index) => {
             userAnswers = [];
             userAnswers[0] = `"${String(ans.answers[ansId].user.username)}`;

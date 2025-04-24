@@ -3,14 +3,28 @@ import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
 
+/**
+ * Componente responsável por criar e gerenciar a validação de um item.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentValidation - A validação atual sendo editada.
+ * @param {number} props.pageIndex - Índice da página.
+ * @param {number} props.groupIndex - Índice do grupo.
+ * @param {number} props.validationIndex - Índice da validação.
+ * @param {Function} props.updateValidation - Função para atualizar a validação no estado.
+ * @param {number} props.itemIndex - Índice do item.
+ * @param {Function} props.removeValidation - Função para remover a validação do estado.
+ * @param {Object} props.item - O item que está associado à validação.
+*/
 function CreateValidationInput(props) {
     const { currentValidation, pageIndex, groupIndex, validationIndex, updateValidation, itemIndex, removeValidation, item } = props;
     const [validation, setValidation] = useState(currentValidation);
 
+    /** Efeito que atualiza a validação quando o item é modificado. */
     useEffect(() => {
         if (validation !== currentValidation) updateValidation(validation, validationIndex);
     }, [validation, pageIndex, groupIndex, validationIndex, updateValidation, currentValidation]);
 
+    /** Efeito que inicializa e limpa as tooltips quando a validação é atualizada. */
     useEffect(() => {
         const tooltipList = [];
         if (validation.tempId) {

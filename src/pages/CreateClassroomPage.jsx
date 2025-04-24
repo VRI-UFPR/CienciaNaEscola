@@ -105,6 +105,11 @@ const style = `
     }
 `;
 
+/**
+ * Permite a criação e edição de grupos dentro de uma instituição.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se a página está em modo de edição.
+*/
 function CreateClassroomPage(props) {
     const { institutionId, classroomId } = useParams();
     const { isEditing } = props;
@@ -121,6 +126,7 @@ function CreateClassroomPage(props) {
 
     const navigate = useNavigate();
 
+    /** useEffect responsável por carregar os dados da sala de aula e seus usuários. */
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (
@@ -186,6 +192,10 @@ function CreateClassroomPage(props) {
         }
     }, [classroomId, isEditing, isLoading, user.token, institutionId, user.status, user.role, user.institutionId, showAlert]);
 
+    /**
+     * Busca usuários pelo nome.
+     * @param {string} term - Termo de busca.
+    */
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -208,6 +218,7 @@ function CreateClassroomPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
+    /** Exibe a lista de usuários da instituição que ainda não foram adicionados à turma. */
     const showInstitutionUsers = () => {
         const newUsers = institutionUsers.filter((c) => !classroom.users.includes(c.id));
         const concatenedUsers = [
@@ -218,6 +229,7 @@ function CreateClassroomPage(props) {
         setUserSearchTerm('');
     };
 
+    /** Submete o formulário de criação ou edição do grupo. */
     const submitClassroom = (e) => {
         e.preventDefault();
         const formData = serialize(classroom, { indices: true });
@@ -274,6 +286,7 @@ function CreateClassroomPage(props) {
         }
     };
 
+    /** Exclui a sala. */
     const deleteClassroom = () => {
         axios
             .delete(`${baseUrl}api/classroom/deleteClassroom/${classroomId}`, {

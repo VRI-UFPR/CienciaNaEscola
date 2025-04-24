@@ -20,9 +20,24 @@ const TableInputStyles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir e gerenciar entradas em formato de tabela.
+ * @param {Object} props - Propriedades do componente. 
+ * @param {Function} props.onAnswerChange - Função chamada quando uma célula da tabela é atualizada.
+ * @param {string} props.applicationAnswerId - ID da resposta da aplicação.
+ * @param {Object} props.group - Objeto representando o grupo de perguntas da tabela.
+ * @param {Array} props.answers - Lista de respostas associadas à tabela.
+ * @param {number} props.answersPage - Página atual das respostas.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+ */
 function TableInput(props) {
     const { onAnswerChange, applicationAnswerId, group, answers, answersPage, disabled } = props;
 
+    /**
+     * Atualiza a resposta da tabela.
+     * @param {Object} newAnswer - Novo objeto de resposta.
+     * @param {sring} itemId - ID do item dentro da tabela.
+     */
     const updateAnswer = useCallback(
         (newAnswer, itemId) => {
             onAnswerChange(group.id, itemId, 'TABLE', newAnswer);
@@ -30,6 +45,12 @@ function TableInput(props) {
         [onAnswerChange, group.id]
     );
 
+    /**
+     * Gerencia a atualização de uma célula da tabela.
+     * @param {string} itemId - ID do item da tabela. 
+     * @param {number} columnId - ID da coluna. 
+     * @param {boolean} updatedText - Novo valor da célula.
+     */
     const handleTableUpdate = (itemId, columnId, updatedText) => {
         let newAnswer = { ...answers.find((a) => a.item === itemId).answer };
         if (group.type === 'RADIO_TABLE') newAnswer = { [`${columnId}`]: '' };

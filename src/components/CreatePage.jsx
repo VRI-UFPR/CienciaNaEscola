@@ -16,6 +16,17 @@ import RoundedButton from './RoundedButton';
 import CreateItemGroup from './CreateItemGroup';
 import { Tooltip } from 'bootstrap';
 
+/**
+ * Componente responsável por gerenciar uma página.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentPage - Dados da página atual.
+ * @param {Object} props.itemTarget - Informações sobre o item de destino para atualizações.
+ * @param {Function} props.updatePagePlacement - Função para alterar a posição da página.
+ * @param {Function} props.removePage - Função para remover a página.
+ * @param {Object} props.protocol - Dados do protocolo ao qual a página pertence.
+ * @param {Function} props.updatePage - Função para atualizar os dados da página.
+ * @param {Function} props.insertItem - Função para inserir um novo item na página.
+*/
 function CreatePage(props) {
     const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
 
@@ -26,6 +37,7 @@ function CreatePage(props) {
         if (page !== currentPage) updatePage(page, itemTarget.page);
     }, [page, itemTarget.page, updatePage, currentPage]);
 
+    /** Efeito para inicializar tooltips ao montar o componente. */
     useEffect(() => {
         const tooltipList = [];
         if (page.tempId) {
@@ -39,6 +51,12 @@ function CreatePage(props) {
         };
     }, [page.tempId]);
 
+    /**
+     * Atualiza a posição de um grupo dentro da página.
+     * @param {number} newPlacement - Nova posição desejada.
+     * @param {number} oldPlacement - Posição original do grupo.
+     * @param {number} groupIndex - Índice do grupo dentro da página.
+    */
     const updateGroupPlacement = useCallback(
         (newPlacement, oldPlacement, groupIndex) => {
             if (newPlacement < 1 || newPlacement > page.itemGroups.length) return;
@@ -55,6 +73,11 @@ function CreatePage(props) {
         [page]
     );
 
+    /**
+     * Atualiza um grupo de itens dentro da página.
+     * @param {Object} newGroup - Novo estado do grupo.
+     * @param {number} groupIndex - Índice do grupo dentro da página.
+    */
     const updateItemGroup = useCallback((newGroup, groupIndex) => {
         setPage((prev) => {
             const newPage = { ...prev };
@@ -63,6 +86,10 @@ function CreatePage(props) {
         });
     }, []);
 
+    /**
+     * Remove um grupo de itens da página.
+     * @param {number} index - Índice do grupo a ser removido.
+    */
     const removeItemGroup = useCallback(
         (index) => {
             const newPage = { ...page };
@@ -75,6 +102,11 @@ function CreatePage(props) {
         [page]
     );
 
+    /**
+     * Atualiza uma dependência dentro da página.
+     * @param {Object} dependency - Nova configuração da dependência.
+     * @param {number} dependencyIndex - Índice da dependência dentro da página.
+    */
     const updateDependency = useCallback((dependency, dependencyIndex) => {
         setPage((prev) => {
             const newPage = { ...prev };
@@ -83,6 +115,10 @@ function CreatePage(props) {
         });
     }, []);
 
+    /**
+     * Remove uma dependência da página.
+     * @param {number} dependencyIndex - Índice da dependência a ser removida dentro da página.
+    */
     const removeDependency = useCallback(
         (dependencyIndex) => {
             const newPage = { ...page };

@@ -20,10 +20,18 @@ const galleryStyles = `
     }
 `;
 
+/**
+ * Exibe uma imagem e permite alternar sua visibilidade.
+ * @param {Object} props - As propriedades do componente.
+ * @param {Object} props.item - O item da galeria.
+ * @param {React.RefObject} props.galleryModalRef - Referência para o modal da galeria.
+ * @param {string} props.className - Classe CSS.
+*/
 function Gallery(props) {
     const { item, galleryModalRef, className } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
 
+    /** Alterna a visibilidade da imagem. */
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };

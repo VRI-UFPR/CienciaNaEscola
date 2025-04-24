@@ -24,10 +24,23 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um menu de select e permitir a seleção de opções.
+ * @param {Object} props - Propriedades do componente.  
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta tem alteração.
+ * @param {Object} props.item - Objeto que representa o item da pergunta.
+ * @param {Object} props.answer - Objeto que contêm as respostas.
+ * @param {React.Ref} props.galleryRef - Referência para o modal da galeria.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+*/
 function SelectInput(props) {
     const { onAnswerChange, item, answer, galleryRef, disabled } = props;
     const [ImageVisibility, setImageVisibility] = useState(false);
 
+    /**
+     * Atualiza a resposta com a opção selecionada.
+     * @param {Object} newAnswer - Novo objeto de resposta contendo a opção selecionada.
+    */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
@@ -35,10 +48,15 @@ function SelectInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /** Alterna a visibilidade da imagem. */
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };
 
+    /**
+     * Atualiza a opção selecionada no menu de select.
+     * @param {number} optionId - ID da opção selecionada.
+    */
     const handleOptionsUpdate = (optionId) => {
         const newOptions = {};
         if (optionId !== -1) {

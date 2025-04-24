@@ -45,6 +45,10 @@ const style = `
     }
 `;
 
+/**
+ * Página de visualização e exclusão de instituições.
+ * @param {Object} props - Propriedades do componente.
+*/
 function InstitutionsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -76,6 +80,10 @@ function InstitutionsPage(props) {
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role]);
 
+    /**
+     * Função que exclui uma instituição por ID.
+     * @param {number} institutionId - ID da instituição a ser excluída.
+    */
     const deleteInstitution = (institutionId) => {
         axios
             .delete(`${baseUrl}api/institution/deleteInstitution/${institutionId}`, {

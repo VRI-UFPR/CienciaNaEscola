@@ -43,11 +43,20 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por capturar e exibir entradas de tempo.
+ * @param {Object} props - Propriedades do componente.  
+ * @param {Function} props.onAnswerChange - Função chamada quando o valor do tempo for aualizado.
+ * @param {Object} props.item - Objeto que representa o item da entrada.
+ * @param {Object} props.answer - Objeto que contêm as respostas.
+ * @param {boolean} props.disabled - Define se a entrada está desabilitada.
+*/
 function TimeInput(props) {
     const { onAnswerChange, item, answer, disabled } = props;
     const iconContainerRef = useRef(null);
     const [iconSize, setIconSize] = useState(0);
 
+    /** Atualiza o tamanho do ícone. */
     const updateIconSize = useCallback(() => {
         setIconSize(iconContainerRef.current.offsetWidth);
     }, []);
@@ -60,6 +69,10 @@ function TimeInput(props) {
         };
     }, [updateIconSize]);
 
+    /**
+     * Atualiza a resposta.
+     * @param {Object} newAnswer - Novo objeto contendo a resposta atualizada.
+     */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);

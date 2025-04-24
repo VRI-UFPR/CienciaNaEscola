@@ -41,10 +41,17 @@ const style = `
     }
 `;
 
+/**
+ * Componente de carrossel dinâmico para exibir itens de protocolo.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Array} props.listItems - Lista de itens para exibição no carrossel.
+*/
 function ProtocolCarousel(props) {
     const { listItems } = props;
 
     const carouselRef = useRef(null);
+
+    /** Calcula o número de itens por slide baseado na altura da tela. */
     const itemsPerSlide = Math.round((window.screen.height - 300) / 120);
     const totalSlides = Math.ceil(listItems.length / itemsPerSlide);
     const [currentPage, setCurrentPage] = useState(0);
@@ -54,6 +61,7 @@ function ProtocolCarousel(props) {
         new Carousel(carousel);
     }, []);
 
+    /** Renderiza os itens do carrossel, dividindo-os em slides conforme o número de itens por slide. */
     const renderCarouselItems = () => {
         const carouselItems = [];
 
@@ -82,6 +90,7 @@ function ProtocolCarousel(props) {
         return carouselItems;
     };
 
+    /** Renderiza os indicadores de página do carrossel. */
     const renderPageIndicators = () => {
         const indicators = [];
 

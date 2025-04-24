@@ -81,6 +81,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página de login do sistema.
+ * @param {Object} props - Propriedades do componente.
+*/
 function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -97,6 +101,10 @@ function SignInPage(props) {
         }
     }, [navigate, isDashboard, user]);
 
+    /**
+     * Manipula envio do formulário de login.
+     * @param {Event} event - Evento de envio do formulário
+    */
     const loginHandler = (event) => {
         event.preventDefault();
         const salt = process.env.REACT_APP_SALT;
@@ -123,6 +131,7 @@ function SignInPage(props) {
             .catch((error) => showAlert({ headerText: 'Falha de autenticação. Certifique-se que login e senha estão corretos.' }));
     };
 
+    /** Autentica o usuário como visitante, sem necessidade de senha. */
     const passwordlessLoginHandler = () => {
         axios
             .get(baseUrl + 'api/auth/passwordlessSignIn', { headers: { 'Content-Type': 'multipart/form-data' } })

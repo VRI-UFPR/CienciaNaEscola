@@ -29,9 +29,18 @@ const GalleryModalStyles = `
     }
 `;
 
+/**
+ * Componente de Modal de Galeria.
+ * @param {Object} props - As propriedades do componente.
+ * @param {React.Ref} ref - Referência do modal para manipulação externa.
+*/
 const GalleryModal = forwardRef((props, ref) => {
     const [modal, setModal] = useState({ id: 'Gallery', currentImage: 0, images: [] });
 
+    /**
+     * Manipula a mudança de slide.
+     * @param {Event} event - O evento de mudança de slide.
+    */
     const handleSlide = useCallback((event) => {
         const targetId = event.to;
         setModal((prevModal) => {
@@ -42,6 +51,12 @@ const GalleryModal = forwardRef((props, ref) => {
         });
     }, []);
 
+    /**
+     * Exibe o modal com as imagens fornecidas.
+     * @param {Object} modalData - Dados do modal contendo as imagens e índice inicial.
+     * @param {number} modalData.currentImage - Índice da imagem atual.
+     * @param {Array} modalData.images - Lista de URLs das imagens.
+    */
     const showModal = (modalData) => {
         if (modalData) {
             const alert = document.getElementById(modal.id);
@@ -60,11 +75,13 @@ const GalleryModal = forwardRef((props, ref) => {
         }
     };
 
+    /** Oculta o modal e remove o evento de slide. */
     const hideModal = () => {
         document.getElementById(modal.id + '-carousel').removeEventListener('slid.bs.carousel', handleSlide);
         Modal.getInstance(document.getElementById(modal.id)).hide();
     };
 
+    /** Expondo a função showModal para ser acessada externamente via ref. */
     useImperativeHandle(ref, () => ({
         showModal,
     }));

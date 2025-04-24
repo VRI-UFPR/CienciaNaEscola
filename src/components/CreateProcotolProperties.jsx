@@ -20,11 +20,22 @@ import { AlertContext } from '../contexts/AlertContext';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
 
+/**
+ * Componente responsável por gerenciar as propriedades de um protocolo.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.setSearchedOptions - Função para atualizar as opções pesquisadas.
+ * @param {Object} props.searchedOptions - Objeto contendo as opções pesquisadas.
+ * @param {Object} props.protocol - Objeto representando o protocolo atual.
+ * @param {Function} props.setProtocol - Função para atualizar o estado do protocolo.
+ * @param {Function} props.setSearchInputs - Função para atualizar os inputs de pesquisa.
+ * @param {Object} props.searchInputs - Objeto contendo os valores atuais dos inputs de pesquisa.
+*/
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
     const { user } = useContext(AuthContext);
     const { showAlert } = useContext(AlertContext);
 
+    /** Efeito para inicializar tooltips ao montar o componente. */
     useEffect(() => {
         new Tooltip('.title-tooltip', { trigger: 'hover' });
         new Tooltip('.description-tooltip', { trigger: 'hover' });
@@ -35,6 +46,11 @@ function CreateProtocolProperties(props) {
         new Tooltip('.answer-visiblity-tooltip', { trigger: 'hover' });
     }, []);
 
+    /**
+     * Realiza a busca de usuários com base no termo fornecido.
+     * @param {string} term - Termo de pesquisa.
+     * @param {string} target - Categoria do usuário a ser buscado (viewersUser, answersViewersUser, appliers).
+    */
     const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -83,6 +99,11 @@ function CreateProtocolProperties(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Realiza a busca de salas de aula com base no termo fornecido.
+     * @param {string} term - Termo de pesquisa.
+     * @param {string} target - Categoria da sala de aula a ser buscada (viewersClassroom, answersViewersClassroom).
+    */
     const searchClassrooms = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -122,6 +143,11 @@ function CreateProtocolProperties(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Remove um usuário selecionado de uma determinada categoria.
+     * @param {number} id - ID do usuário a ser removido.
+     * @param {string} target - Categoria do usuário a ser removido (viewersUser, answersViewersUser).
+    */
     const unselectUser = (id, target) => {
         if (target === 'viewersUser') {
             setProtocol((prev) => ({
@@ -142,6 +168,11 @@ function CreateProtocolProperties(props) {
         }
     };
 
+    /**
+     * Seleciona uma sala de aula e adiciona seus usuários correspondentes.
+     * @param {number} id - ID da sala de aula a ser selecionada.
+     * @param {string} target - Categoria da sala de aula a ser selecionada (viewersClassroom, answersViewersClassroom).
+    */
     const selectClassroom = (id, target) => {
         if (target === 'viewersClassroom') {
             const c = searchedOptions.viewersClassroom.find((c) => c.id === id);

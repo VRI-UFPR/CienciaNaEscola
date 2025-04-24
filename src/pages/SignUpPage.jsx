@@ -58,6 +58,10 @@ const signUpPageStyles = `
 
 `;
 
+/**
+ * Página de cadastro de novos usuários.
+ * @param {Object} props - Propriedades do componente.
+*/
 function SignUpPage(props) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -69,21 +73,26 @@ function SignUpPage(props) {
     const { showAlert } = useContext(AlertContext);
     const navigate = useNavigate();
 
+    /** Valida se os campos obrigatórios estão preenchidos. */
     const validateEmptyFields = () => name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
 
+    /** Valida se as senhas coincidem. */
     const validatePasswordMatch = () => password === passwordConf;
 
+    /** Valida a senha com base em regras de segurança. */
     const validatePassword = () => {
         const passwordRegex = /^(?=.*[!@#$%^&*()-_+=\\|[\]{};:'",<.>/?]).*(?=.*[A-Z]).*(?=.*[a-z]).{8,}$/;
 
         return password.match(passwordRegex);
     };
 
+    /** Valida se o e-mail possui um formato válido. */
     const validateEmail = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return email.trim() === '' || emailRegex.test(email);
     };
 
+    /** Valida se o nome contém apenas letras e espaços. */
     const validateName = () => {
         const nameRegex = /^[A-Za-z\s]+$/;
         return name.trim() === '' || nameRegex.test(name);
@@ -104,6 +113,10 @@ function SignUpPage(props) {
         return role.trim() === '' || roleRegex.test(role);
     }; */
 
+    /**
+     * Manipula o envio do formulário de cadastro.
+     * @param {Event} event - Evento do formulário.
+    */
     const signUpHandler = (event) => {
         event.preventDefault();
         if (!validateEmptyFields()) {

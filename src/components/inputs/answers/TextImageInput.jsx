@@ -27,6 +27,12 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um texto formatado em Markdown e uma galeria de imagens.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.item - Objeto representando o item da pergunta, contendo o texto e imagens.
+ * @param {Object} props.galleryModalRef - Referência para o modal da galeria de imagens.
+ */
 function TextImageInput(props) {
     const { item, galleryModalRef } = props;
 

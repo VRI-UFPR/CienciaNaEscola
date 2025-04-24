@@ -41,10 +41,25 @@ const style = `
     }
 `;
 
+/**
+ * Componente responsável por exibir a barra de ferramentas que permite adicionar
+ * páginas, grupos de itens, itens individuais, tabelas e dependências ao protocolo.
+ * @param {Object} props - Propriedades do componente.
+ * @param {number} props.pageIndex - Índice da página atual.
+ * @param {number} props.groupIndex - Índice do grupo atual.
+ * @param {Function} props.insertDependency - Função para inserir uma dependência entre grupos.
+ * @param {Function} props.insertPage - Função para adicionar uma nova página.
+ * @param {Function} props.insertItemGroup - Função para adicionar um novo grupo de itens.
+ * @param {Function} props.insertItem - Função para adicionar um novo item ao grupo.
+ * @param {Function} props.insertTable - Função para adicionar uma tabela ao grupo.
+ * @param {Function} props.setItemTarget - Função para definir um item de destino para dependências.
+ * @param {Object} props.protocol - Dados do protocolo ao qual os elementos serão adicionados.
+*/
 function AddBar(props) {
     const { pageIndex, groupIndex, insertDependency, insertPage, insertItemGroup, insertItem, insertTable, setItemTarget, protocol } =
         props;
 
+    /** Efeito para inicializar tooltips ao montar o componente. */
     useEffect(() => {
         const tooltipList = [];
         tooltipList.push(new Tooltip('.add-page-tooltip', { trigger: 'hover' }));

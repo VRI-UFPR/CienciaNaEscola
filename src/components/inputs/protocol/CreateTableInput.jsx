@@ -35,22 +35,39 @@ const createTableStyles = `
     }
 `;
 
+/**
+ * Componente responsável por criar um campo de entrada para uma tabela.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.group - Grupo de itens da tabela.
+ * @param {number} props.groupIndex - Índice do grupo dentro da página.
+ * @param {number} props.pageIndex - Índice da página.
+ * @param {Function} props.insertItem - Função para adicionar um novo item na tabela.
+ * @param {Function} props.updateItem - Função para atualizar um item na tabela.
+ * @param {Function} props.removeItem - Função para remover um item da tabela.
+ * @param {Function} props.insertTableColumn - Função para adicionar uma nova coluna na tabela.
+ * @param {Function} props.updateTableColumn - Função para atualizar uma coluna da tabela.
+ * @param {Function} props.removeTableColumn - Função para remover uma coluna da tabela.
+*/
 function CreateTableInput(props) {
     const { group, groupIndex, pageIndex, insertItem, updateItem, removeItem, insertTableColumn, updateTableColumn, removeTableColumn } =
         props;
 
+    /**
+     * Função chamada quando o texto de um item da tabela é alterado.
+     * Atualiza o texto do item no estado da tabela e propaga a alteração para o componente pai.
+     * @param {Object} event - Evento disparado pela alteração no campo de texto.
+     * @param {number} itemIndex - Índice do item na tabela que está sendo editado.
+    */
     const changeItem = (event, itemIndex) => {
         const updatedText = event.target.value;
 
-        // Update the text in the items array directly
         const updatedItems = group.items.map((currentItem, index) => {
             if (index === itemIndex) {
-                return { ...currentItem, text: updatedText }; // Update only the text of the item being edited
+                return { ...currentItem, text: updatedText };
             }
             return currentItem;
         });
 
-        // Use the updateItem function to propagate changes to the parent component
         updateItem(updatedItems[itemIndex], itemIndex);
     };
 

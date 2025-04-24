@@ -42,6 +42,15 @@ const infosPageStyles = `
     }
 `;
 
+/**
+ * Página de informações e aceitação de termos.
+ * @param {Object} props - Propriedades do componente.
+ * @param {React.ReactNode} props.content - Conteúdo a ser exibido na página.
+ * @param {boolean} props.showSidebar - Define se a sidebar deve ser exibida.
+ * @param {boolean} props.showAccept - Define se o botão de aceite de termos deve ser exibido.
+ * @param {boolean} props.showNavTogglerMobile - Define se o botão de navegação (mobile) deve ser exibido.
+ * @param {boolean} props.showNavTogglerDesktop - Define se o botão de navegação (desktop) deve ser exibido.
+ */
 function InfosPage(props) {
     const { content, showSidebar = true, showAccept = true, showNavTogglerMobile = true, showNavTogglerDesktop = true } = props;
     const navigate = useNavigate();
@@ -54,6 +63,7 @@ function InfosPage(props) {
         }
     }, [user.acceptedTerms, navigate, showAccept, isDashboard]);
 
+    /** Função chamada quando o usuário aceita os termos de uso. */
     const handleTermsAcceptance = () => {
         axios
             .get(baseUrl + 'api/auth/acceptTerms', {
