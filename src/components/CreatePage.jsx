@@ -48,6 +48,13 @@ function CreatePage(props) {
         moveItemBetweenPages,
         pagesQty,
         moveGroupBetweenPages,
+        ConfirmationButton,
+        confirmationProps,
+        creationMode,
+        BackButton,
+        backProps,
+        DeleteButton,
+        deleteProps
     } = props;
 
     const [page, setPage] = useState(currentPage);
@@ -142,6 +149,21 @@ function CreatePage(props) {
 
     return (
         <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3" key={'page-' + page.tempId}>
+                        <div className="p-4 ps-0">
+                            <div className="col-auto">
+                                <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0 ">
+                                    {/* ADD VARIAVEL PARA ALTERNAR ENTRE EDITAR E CRIAR */}
+                                    Editar protocolo
+                                </h1>
+                            </div>
+                            {/* {creationMode === 'children' && (
+                                <div className="col-5 d-lg-none">
+                                    <div data-bs-toggle="offcanvas" data-bs-target="#addbar" aria-controls="addbar">
+                                        <TextButton type="button" hsl={[197, 43, 52]} text="Adicionar..." />
+                                    </div>
+                                </div>
+                            )} */}
+                        </div>
             <div className="row g-2 align-items-center justify-content-end mb-3">
                 <div className="col-auto">
                     <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">Página {Number(itemTarget.page) + 1}</p>
@@ -214,6 +236,15 @@ function CreatePage(props) {
                 </div>
             )}
             <style>{CreatePageStyles}</style>
+
+            {creationMode === 'children' && (
+                <div className="row justify-content-center">
+                    <ConfirmationButton {...confirmationProps}/>
+                    <BackButton {...backProps}/>
+                    <DeleteButton {...deleteProps}/>
+                </div>
+            )}
+
         </div>
     );
 }

@@ -138,6 +138,60 @@ const CreateProtocolStyles = `
     }
 `;
 
+// REFATORAR ESTA PARTE 
+const ConfirmationButton = ( {isEditing, showAlert, formRef }) =>
+
+<div className="col-4 col-xl-2">
+    <TextButton
+        type="button"
+        hsl={[97, 43, 70]}
+        text={isEditing ? 'Editar' : 'Concluir'}
+        onClick={() =>
+            showAlert({
+                headerText: `Tem certeza que deseja ${
+                    isEditing ? 'editar' : 'criar'
+                } o protocolo?`,
+                primaryBtnHsl: [355, 78, 66],
+                primaryBtnLabel: 'Não',
+                secondaryBtnHsl: [97, 43, 70],
+                secondaryBtnLabel: 'Sim',
+                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+            })
+        }
+    />
+</div>
+
+const BackButton = ( {setCreationMode} ) => 
+
+<div className="col-4 col-xl-2">
+    <TextButton
+        type="button"
+        hsl={[97, 43, 70]}
+        text={'Voltar'}
+        onClick={() => setCreationMode('properties')}
+    />
+</div>
+
+const DeleteButton = ( {isEditing, deleteProtocol, showAlert} ) =>
+{isEditing && (
+    <div className="col-4 col-xl-2">
+        <TextButton
+            text={'Excluir'}
+            hsl={[355, 78, 66]}
+            onClick={() =>
+                showAlert({
+                    headerText: `Tem certeza que deseja excluir o protocolo?`,
+                    primaryBtnHsl: [97, 43, 70],
+                    primaryBtnLabel: 'Não',
+                    secondaryBtnHsl: [355, 78, 66],
+                    secondaryBtnLabel: 'Sim',
+                    onSecondaryBtnClick: () => deleteProtocol(),
+                })
+            }
+        />
+    </div>
+)}
+
 function CreateProtocolPage(props) {
     const { protocolId } = useParams();
     const { isEditing = false } = props;
@@ -524,24 +578,6 @@ function CreateProtocolPage(props) {
                         <div className="row flex-grow-1 overflow-hidden g-0">
                             <div className="col overflow-hidden h-100">
                                 <div className="d-flex flex-column h-100">
-                                    <div className="row justify-content-center font-barlow g-0">
-                                        <div className="col-12 col-md-10">
-                                            <div className="row justify-content-between align-items-center p-4">
-                                                <div className="col-auto">
-                                                    <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0">
-                                                        {isEditing ? 'Editar' : 'Criar'} protocolo
-                                                    </h1>
-                                                </div>
-                                                {creationMode === 'children' && (
-                                                    <div className="col-5 d-lg-none">
-                                                        <div data-bs-toggle="offcanvas" data-bs-target="#addbar" aria-controls="addbar">
-                                                            <TextButton type="button" hsl={[197, 43, 52]} text="Adicionar..." />
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div className="row justify-content-center font-barlow flex-grow-1 overflow-hidden g-0">
                                         <div className="col col-md-10 h-100">
                                             <div className="d-flex flex-column h-100">
@@ -574,13 +610,36 @@ function CreateProtocolPage(props) {
                                                             moveItemBetweenPages={moveItemBetweenPages}
                                                             moveGroupBetweenPages={moveGroupBetweenPages}
                                                             pagesQty={protocol.pages.length}
+                                                            ConfirmationButton={ConfirmationButton}
+                                                            confirmationProps={{ isEditing, showAlert, formRef }}
+                                                            BackButton={BackButton}
+                                                            backProps={ {setCreationMode} }
+                                                            DeleteButton={DeleteButton}
+                                                            deleteProps={{ isEditing, deleteProtocol, showAlert }}
+                                                            creationMode={creationMode}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (
-                                                        <div className="bg-light-grey rounded-4 p-4">
-                                                            <p className="font-barlow fw-medium text-center fs-5 m-0">
-                                                                Nenhuma página selecionada. Selecione ou crie uma por meio da aba Adicionar.
-                                                            </p>
+                                                        <div>
+                                                            <div className="p-4 ps-0">
+                                                                <div className="col-auto">
+                                                                    <h1 className="color-grey font-century-gothic fw-bold fs-2 m-0 ">
+                                                                        Editar protocolo
+                                                                    </h1>
+                                                                </div>
+                                                                {creationMode === 'children' && (
+                                                                    <div className="col-5 d-lg-none">
+                                                                        <div data-bs-toggle="offcanvas" data-bs-target="#addbar" aria-controls="addbar">
+                                                                            <TextButton type="button" hsl={[197, 43, 52]} text="Adicionar..." />
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="bg-light-grey rounded-4 p-4">
+                                                                <p className="font-barlow fw-medium text-center fs-5 m-0">
+                                                                    Nenhuma página selecionada. Selecione ou crie uma por meio da aba Adicionar.
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     )}
                                                     {creationMode === 'properties' && (
@@ -612,56 +671,6 @@ function CreateProtocolPage(props) {
                                                                     }}
                                                                 />
                                                             </div>
-                                                        </div>
-                                                    )}
-
-                                                    {creationMode === 'children' && (
-                                                        <div className="row justify-content-center">
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={isEditing ? 'Editar' : 'Concluir'}
-                                                                    onClick={() =>
-                                                                        showAlert({
-                                                                            headerText: `Tem certeza que deseja ${
-                                                                                isEditing ? 'editar' : 'criar'
-                                                                            } o protocolo?`,
-                                                                            primaryBtnHsl: [355, 78, 66],
-                                                                            primaryBtnLabel: 'Não',
-                                                                            secondaryBtnHsl: [97, 43, 70],
-                                                                            secondaryBtnLabel: 'Sim',
-                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                                                        })
-                                                                    }
-                                                                />
-                                                            </div>
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={'Voltar'}
-                                                                    onClick={() => setCreationMode('properties')}
-                                                                />
-                                                            </div>
-                                                            {isEditing && (
-                                                                <div className="col-4 col-xl-2">
-                                                                    <TextButton
-                                                                        text={'Excluir'}
-                                                                        hsl={[355, 78, 66]}
-                                                                        onClick={() =>
-                                                                            showAlert({
-                                                                                headerText: `Tem certeza que deseja excluir o protocolo?`,
-                                                                                primaryBtnHsl: [97, 43, 70],
-                                                                                primaryBtnLabel: 'Não',
-                                                                                secondaryBtnHsl: [355, 78, 66],
-                                                                                secondaryBtnLabel: 'Sim',
-                                                                                onSecondaryBtnClick: () => deleteProtocol(),
-                                                                            })
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            )}
                                                         </div>
                                                     )}
                                                 </form>
