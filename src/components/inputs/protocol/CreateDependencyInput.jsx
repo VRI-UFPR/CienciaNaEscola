@@ -16,7 +16,7 @@ function CreateDependencyInput(props) {
         if (isPageDependency) {
             const res =
                 protocol.pages
-                    .filter((p, i) => i < pageIndex)
+                    .filter((p, i) => i < Number(pageIndex))
                     .flatMap((p, i) =>
                         p.itemGroups.flatMap((g, j) =>
                             g.items.filter(
@@ -38,10 +38,10 @@ function CreateDependencyInput(props) {
         } else {
             const res =
                 protocol.pages
-                    .filter((p, i) => i <= pageIndex)
+                    .filter((p, i) => i <= Number(pageIndex))
                     .flatMap((p, i) =>
                         p.itemGroups
-                            .filter((g, j) => i < pageIndex || (i === pageIndex && j < groupIndex))
+                            .filter((g, j) => i < Number(pageIndex) || (i === Number(pageIndex) && j < Number(groupIndex)))
                             .flatMap((g, j) =>
                                 g.items.filter(
                                     (it, k) =>
