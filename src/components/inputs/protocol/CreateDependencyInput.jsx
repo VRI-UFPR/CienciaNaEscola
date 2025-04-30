@@ -7,60 +7,45 @@ function CreateDependencyInput(props) {
     const { currentDependency, pageIndex, groupIndex, dependencyIndex, updateDependency, removeDependency, protocol } = props;
     const [dependency, setDependency] = useState(currentDependency);
     const isPageDependency = groupIndex === undefined;
+    const groupIndexNumber = groupIndex === undefined ? -1 : Number(groupIndex);
+    const pageIndexNumber = pageIndex === undefined ? -1 : Number(pageIndex);
 
     useEffect(() => {
         if (dependency !== currentDependency) updateDependency(dependency, dependencyIndex);
     }, [dependency, pageIndex, groupIndex, dependencyIndex, updateDependency, currentDependency]);
 
-    const getItemTargetOptions = useCallback(() => {
-        if (isPageDependency) {
-            const res =
-                protocol.pages
-                    .filter((p, i) => i < Number(pageIndex))
-                    .flatMap((p, i) =>
-                        p.itemGroups.flatMap((g, j) =>
-                            g.items.filter(
-                                (it, k) =>
-                                    ((dependency.type === 'MIN' || dependency.type === 'MAX') &&
-                                        (it.type === 'CHECKBOX' ||
-                                            it.type === 'NUMBERBOX' ||
-                                            it.type === 'TEXTBOX' ||
-                                            it.type === 'RANGE')) ||
-                                    (dependency.type === 'OPTION_SELECTED' &&
-                                        (it.type === 'SELECT' || it.type === 'RADIO' || it.type === 'CHECKBOX')) ||
-                                    (dependency.type === 'EXACT_ANSWER' &&
-                                        (it.type === 'NUMBERBOX' || it.type === 'TEXTBOX' || it.type === 'RANGE')) ||
-                                    dependency.type === 'IS_ANSWERED'
-                            )
-                        )
-                    ) || [];
-            return res;
-        } else {
-            const res =
-                protocol.pages
-                    .filter((p, i) => i <= Number(pageIndex))
-                    .flatMap((p, i) =>
-                        p.itemGroups
-                            .filter((g, j) => i < Number(pageIndex) || (i === Number(pageIndex) && j < Number(groupIndex)))
-                            .flatMap((g, j) =>
-                                g.items.filter(
-                                    (it, k) =>
-                                        ((dependency.type === 'MIN' || dependency.type === 'MAX') &&
-                                            (it.type === 'CHECKBOX' ||
-                                                it.type === 'NUMBERBOX' ||
-                                                it.type === 'TEXTBOX' ||
-                                                it.type === 'RANGE')) ||
-                                        (dependency.type === 'OPTION_SELECTED' &&
-                                            (it.type === 'SELECT' || it.type === 'RADIO' || it.type === 'CHECKBOX')) ||
-                                        (dependency.type === 'EXACT_ANSWER' &&
-                                            (it.type === 'NUMBERBOX' || it.type === 'TEXTBOX' || it.type === 'RANGE')) ||
-                                        dependency.type === 'IS_ANSWERED'
-                                )
-                            )
-                    ) || [];
-            return res;
+    const validateType = (dependencyType, itemType) => {
+        switch (dependencyType) {
+            case 'MIN':
+            case 'MAX':
+                return ['CHECKBOX', 'NUMBERBOX', 'TEXTBOX', 'RANGE'].includes(itemType);
+            case 'OPTION_SELECTED':
+                return ['SELECT', 'RADIO', 'CHECKBOX'].includes(itemType);
+            case 'EXACT_ANSWER':
+                return ['NUMBERBOX', 'TEXTBOX', 'RANGE'].includes(itemType);
+            case 'IS_ANSWERED':
+                return itemType !== 'TEXT';
+            default:
+                return false;
         }
-    }, [protocol, pageIndex, groupIndex, dependency.type, isPageDependency]);
+    };
+
+    const getItemTargetOptions = useCallback(() => {
+        const res =
+            protocol.pages.flatMap((p, i) =>
+                p.itemGroups.flatMap((g, j) =>
+                    g.items
+                        .map((it, index) => ({ ...it, index: index + 1, pageIndex: i, groupIndex: j }))
+                        .filter(
+                            (it, _) =>
+                                (it.pageIndex < pageIndexNumber ||
+                                    (!isPageDependency && it.pageIndex === pageIndexNumber && it.groupIndex < groupIndexNumber)) &&
+                                validateType(dependency.type, it.type)
+                        )
+                )
+            ) || [];
+        return res;
+    }, [protocol, pageIndexNumber, groupIndexNumber, dependency.type, isPageDependency]);
 
     useEffect(() => {
         const tooltipList = [];
@@ -68,7 +53,9 @@ function CreateDependencyInput(props) {
             tooltipList.push(new Tooltip(`.delete-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.dependency-type-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
             if (getItemTargetOptions().length > 0) {
-                tooltipList.push(new Tooltip(`.dependency-argument-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
+                if (dependency.type !== 'IS_ANSWERED') {
+                    tooltipList.push(new Tooltip(`.dependency-argument-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
+                }
                 tooltipList.push(new Tooltip(`.dependency-target-${dependency.tempId}-tooltip`, { trigger: 'hover' }));
             }
         }
@@ -76,7 +63,7 @@ function CreateDependencyInput(props) {
         return () => {
             tooltipList.forEach((tooltip) => tooltip.dispose());
         };
-    }, [dependency.tempId, getItemTargetOptions]);
+    }, [dependency.tempId, getItemTargetOptions, dependency.type]);
 
     return (
         <div className="mb-4" key={isPageDependency ? 'page-dependency-' + dependency.tempId : 'group-dependency-' + dependency.tempId}>
@@ -84,7 +71,7 @@ function CreateDependencyInput(props) {
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
                         Dependência {Number(dependencyIndex) + 1} (
-                        {isPageDependency ? 'Página ' + (Number(pageIndex) + 1) : 'Grupo ' + (Number(groupIndex) + 1)})
+                        {isPageDependency ? 'Página ' + (pageIndexNumber + 1) : 'Grupo ' + (groupIndexNumber + 1)})
                     </h1>
                 </div>
                 <div className="col-auto">
@@ -145,7 +132,7 @@ function CreateDependencyInput(props) {
                         </div>
                     )}
                 </div>
-                {getItemTargetOptions().length > 0 && (
+                {getItemTargetOptions().length > 0 && dependency.type !== 'IS_ANSWERED' && (
                     <div className="mb-3">
                         <label
                             className="form-label fs-5 fw-medium me-2"
@@ -215,7 +202,7 @@ function CreateDependencyInput(props) {
                             <option value="">Selecione...</option>
                             {getItemTargetOptions().map((it, k) => (
                                 <option key={'dependency-' + dependency.tempId + '-target-' + it.tempId + '-option'} value={it.tempId}>
-                                    {k + 1} - {it.text || 'Item sem texto'}
+                                    P{it.pageIndex + 1}G{it.groupIndex + 1}I{it.index + 1} - {it.text || 'Item sem texto'}
                                 </option>
                             ))}
                         </select>
