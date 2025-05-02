@@ -83,6 +83,7 @@ function UsersPage(props) {
     const { user } = useContext(AuthContext);
     const [managedUsers, setManagedUsers] = useState([]);
     const [managedClassrooms, setManagedClassrooms] = useState([]);
+    console.log('managedClassrooms', managedClassrooms);
     const [MCSearchInput, setMCSearchInput] = useState('');
     const [MUSearchInput, setMUSearchInput] = useState('');
 
@@ -164,7 +165,7 @@ function UsersPage(props) {
                                             .filter((u) => u.username.startsWith(MUSearchInput))
                                             .map((u) => (
                                                 <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
-                                                    {user.role === 'ADMIN' ? (
+                                                    {u.actions.toUpdate ? (
                                                         <Link
                                                             to={`/dash/users/${u.id}/manage`}
                                                             className="font-barlow color-grey text-break fw-medium fs-6 mb-0"
@@ -208,7 +209,7 @@ function UsersPage(props) {
                                         .filter((c) => c.name.startsWith(MCSearchInput))
                                         .map((c) => (
                                             <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
-                                                {user.role !== 'USER' && user.role !== 'APPLIER' ? (
+                                                {c.actions.toUpdate ? (
                                                     <Link
                                                         to={`/dash/classrooms/${c.id}/manage`}
                                                         className="font-barlow color-grey text-break fw-medium fs-6 mb-0"

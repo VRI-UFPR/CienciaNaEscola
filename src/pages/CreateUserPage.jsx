@@ -128,7 +128,7 @@ function CreateUserPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER'))
+            if (!isEditing && user.role === 'USER')
                 return setError({
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para criar usuários nesta instituição',
@@ -144,7 +144,7 @@ function CreateUserPage(props) {
                             const { name, username, role, classrooms, profileImageId, profileImage, institution, actions } =
                                 response.data.data;
                             if (actions.toUpdate !== true)
-                                return Promise.reject({
+                                return setError({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar este usuário',
                                 });
@@ -162,14 +162,10 @@ function CreateUserPage(props) {
                             setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
-                            Promise.reject(
-                                error.text
-                                    ? error
-                                    : {
-                                          text: 'Erro ao obter informações do usuário',
-                                          description: error.response?.data.message || '',
-                                      }
-                            )
+                            setError({
+                                text: 'Erro ao obter informações do usuário',
+                                description: error.response?.data.message || '',
+                            })
                         )
                 );
             }
@@ -435,10 +431,10 @@ function CreateUserPage(props) {
                                                 <div className="col">
                                                     <input
                                                         type={passwordVisibility ? 'text' : 'password'}
-                                                        name="hash"
+                                                        name="validatehash"
                                                         value={newUser.hashValidation || ''}
                                                         form="user-form"
-                                                        id="hash"
+                                                        id="validatehash"
                                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                         autoComplete="new-password"
                                                         onChange={(e) => setNewUser({ ...newUser, hashValidation: e.target.value })}
@@ -461,21 +457,16 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    {(user.role === 'ADMIN' ||
-                                                        user.role === 'COORDINATOR' ||
-                                                        user.role === 'PUBLISHER' ||
-                                                        user.role === 'APPLIER') && <option value="USER">Usuário</option>}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="APPLIER">Aplicador</option>
-                                                    )}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                                    <option value="USER">Usuário</option>
+                                                    {user.role !== 'APPLIER' && <option value="APPLIER">Aplicador</option>}
+                                                    {user.role !== 'APPLIER' && user.role !== 'PUBLISHER' && (
                                                         <option value="PUBLISHER">Publicador</option>
                                                     )}
                                                     {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}
-                                        {user.institutionId && user.role !== 'ADMIN' && (
+                                        {user.institutionId && user.role !== 'ADMIN' && newUser.role !== 'COORDINATOR' && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
