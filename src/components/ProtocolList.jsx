@@ -9,6 +9,7 @@ CienciaNaEscola is distributed in the hope that it will be useful, but WITHOUT A
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
+import { useState, useMemo } from 'react';
 
 import HomeButton from './HomeButton';
 
@@ -58,18 +59,41 @@ function ProtocolList(props) {
         deleteFunction = () => {},
     } = props;
 
+    const [search, setSearch] = useState('');
+
+    const sortedAndFilteredItems = useMemo(() => {
+        const filtered = listItems.filter((li) => li.title.toLowerCase().includes(search.toLowerCase()));
+
+        const sorted = [...filtered].sort((a, b) => a.id - b.id);
+
+        return sorted;
+    }, [listItems, search]);
+
     return (
         <div
             className={` list-container-${
                 'hsl-' + hue + '-' + sat + '-' + lig
             } d-flex flex-column flex-grow-1 rounded-4 w-100 m-0 p-0 px-4 py-4 overflow-hidden`}
         >
+            <div className="row gx-2 gy-0 mb-3 align-items-center">
+                <div className="col">
+                    <input
+                        type="text"
+                        name="list-search"
+                        value={search}
+                        id="list-search"
+                        placeholder="Buscar pelo título"
+                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
+            </div>
             <div
                 className={`button-list-${
                     'hsl-' + hue + '-' + sat + '-' + lig
                 } d-flex flex-column align-items-center h-100 px-1 pe-3 overflow-y-scroll`}
             >
-                {listItems.map((li) => (
+                {sortedAndFilteredItems.map((li) => (
                     <div
                         key={'list-item-' + li.id}
                         className="button-container d-flex flex-column align-items-center text-decoration-none w-100 pb-3"
@@ -86,7 +110,7 @@ function ProtocolList(props) {
                         />
                     </div>
                 ))}
-                {listItems.length === 0 && (
+                {sortedAndFilteredItems.length === 0 && (
                     <p className="font-barlow text-center color-grey fw-medium m-0">Nada para mostrar por enquanto</p>
                 )}
             </div>
