@@ -2,7 +2,7 @@ name: Notifier
 
 on:
   pull_request:
-    types: [opened, review_requested]
+    types: [opened]
 
 jobs:
     notifyTelegram:
@@ -14,33 +14,6 @@ jobs:
                 CHAT_ID: -1002284863414  # com o prefixo -100
                 TOPIC_ID: 4              # ID do tópico do fórum
               run: |
-                echo "Lendo payload..."
-                echo "${{ toJson(github.event) }}" > event.json
-
-                ACTION=$(jq -r '.action' event.json)
-                NUMBER=$(jq -r '.number' event.json)
-                OWNER_NAME=$(jq -r '.repository.owner.login' event.json)
-                REPO_NAME=$(jq -r '.repository.name' event.json)
-                PR_TITLE=$(jq -r '.pull_request.title' event.json | sed 's/"/\\"/g')
-                SENDER_NAME=$(jq -r '.sender.login' event.json)
-
-                if [ "$ACTION" = "opened" ]; then
-                  MESSAGE="🔄 *Pull Request* \\\#${NUMBER}%0AOn [${OWNER_NAME}/${REPO_NAME}](https://github.com/${OWNER_NAME}/${REPO_NAME}/pull/${NUMBER})%0A*Title:* ${PR_TITLE}%0A*By:* [${SENDER_NAME}](https://github.com/${SENDER_NAME})%0A[View Pull Request](https://github.com/${OWNER_NAME}/${REPO_NAME}/pull/${NUMBER})"
-                elif [ "$ACTION" = "review_requested" ]; then
-                  REVIEWER_NAME=$(jq -r '.requested_reviewer.login' event.json)
-                  MESSAGE="📝 *Review Request*%0AOn \\\#${NUMBER} [${OWNER_NAME}/${REPO_NAME}](https://github.com/${OWNER_NAME}/${REPO_NAME}/pull/${NUMBER})%0A*Title:* ${PR_TITLE}%0A*By:* [${SENDER_NAME}](https://github.com/${SENDER_NAME})%0A*For:* [${REVIEWER_NAME}](https://github.com/${REVIEWER_NAME})%0A[View Request](https://github.com/${OWNER_NAME}/${REPO_NAME}/pull/${NUMBER})"
-                else
-                  echo "Ação não suportada: $ACTION"
-                  exit 0
-                fi
-
-                echo "Enviando mensagem para o Telegram..."
-
-                curl -s -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                curl -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
                 -H "Content-Type: application/json" \
-                -d "{
-                \"chat_id\": ${CHAT_ID},
-                \"message_thread_id\": ${TOPIC_ID},
-                \"text\": \"${MESSAGE}\",
-                \"parse_mode\": \"MarkdownV2\"
-                }"
+                -d "{\"chat_id\": ${CHAT_ID}, \"message_thread_id\": ${TOPIC_ID}, \"text\": \"PR aberta 🚀\"}"
