@@ -169,7 +169,9 @@ function CreateUserPage(props) {
                         )
                 );
             }
-            Promise.all(promises).then(() => setIsLoading(false));
+            Promise.all(promises)
+                .then(() => setIsLoading(false))
+                .catch((error) => setError(error));
         }
     }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
 
