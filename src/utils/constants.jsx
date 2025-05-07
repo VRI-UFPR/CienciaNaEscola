@@ -136,7 +136,7 @@ Este projeto conta com a colaboração de pesquisadores e estudantes do [Laborat
 
 <img src="${logoVRI}" alt="Logo do VRI" style="max-width: 25%; height: auto;" />
 
-Versão do aplicativo: ${version}
+Versão do aplicativo: v.${version}
 `;
 
 export const terms =
