@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 import { AlertContext } from '../../../contexts/AlertContext';
 

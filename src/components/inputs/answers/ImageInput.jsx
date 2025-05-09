@@ -13,7 +13,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import { useState, useRef, useCallback, useContext } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import imageCompression from 'browser-image-compression';
 import Gallery from '../../Gallery';
 import { AlertContext } from '../../../contexts/AlertContext';

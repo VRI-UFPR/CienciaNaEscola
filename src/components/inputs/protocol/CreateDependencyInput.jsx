@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 function CreateDependencyInput(props) {

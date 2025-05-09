@@ -11,7 +11,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 
 const styles = `
     .font-barlow {
