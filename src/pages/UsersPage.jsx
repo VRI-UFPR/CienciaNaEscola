@@ -162,6 +162,7 @@ function UsersPage(props) {
                                     <div className="row user-list gy-2">
                                         {managedUsers
                                             .filter((u) => u.username.startsWith(MUSearchInput))
+                                            .sort((a, b) => a.username.localeCompare(b.username))
                                             .map((u) => (
                                                 <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                     {user.role === 'ADMIN' ? (
@@ -206,6 +207,7 @@ function UsersPage(props) {
                                 <div className="row user-list gy-2">
                                     {managedClassrooms
                                         .filter((c) => c.name.startsWith(MCSearchInput))
+                                        .sort((a, b) => a.name.localeCompare(b.name))
                                         .map((c) => (
                                             <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                 {user.role !== 'USER' && user.role !== 'APPLIER' ? (

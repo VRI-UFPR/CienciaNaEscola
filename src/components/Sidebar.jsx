@@ -33,6 +33,10 @@ const styles = `
         background-color: #F59489;
     }
 
+    .bg-steel-blue {
+        background-color: #4E9BB9;
+    }
+
     .exit-image {
         max-width: 12px;
         max-height: 12px;
@@ -104,7 +108,7 @@ function Sidebar(props) {
                         </button>
                     </div>
                 )}
-                <div className="container d-flex flex-column align-items-center pt-3 pb-4 px-5">
+                <div className="container d-flex flex-column align-items-center py-3 px-5">
                     <div className="rounded-circle">
                         <img
                             className="profile-image rounded-circle"
@@ -112,6 +116,9 @@ function Sidebar(props) {
                             alt="Perfil"
                         />
                     </div>
+                </div>
+                <div className="container d-flex flex-column align-items-center font-barlow fw-medium p-0 pb-3">
+                    <span className="px-3 py-1 rounded text-white bg-steel-blue">{user.username}</span>
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
@@ -163,13 +170,15 @@ function Sidebar(props) {
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Conta</h1>
-                    <Link
-                        className="text-white text-decoration-none ps-5 py-2"
-                        to={isDashboard ? '/dash/profile' : '/profile'}
-                        onClick={() => closeSidebar()}
-                    >
-                        Perfil
-                    </Link>
+                    {user.role !== 'GUEST' && user.role !== 'ADMIN' && (
+                        <Link
+                            className="text-white text-decoration-none ps-5 py-2"
+                            to={isDashboard ? '/dash/profile' : '/profile'}
+                            onClick={() => closeSidebar()}
+                        >
+                            Perfil
+                        </Link>
+                    )}
                     <button
                         className="btn text-start text-white text-decoration-none rounded-0 fw-medium ps-5 py-2"
                         type="button"

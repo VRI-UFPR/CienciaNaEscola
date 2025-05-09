@@ -133,6 +133,12 @@ function CreateUserPage(props) {
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para criar usuários nesta instituição',
                 });
+            if (isEditing && user.role === 'ADMIN' && user.id === Number(userId)) {
+                return setError({
+                    text: 'Operação não permitida',
+                    description: 'Você não tem permissão para editar este usuário.',
+                });
+            }
             const promises = [];
             if (isEditing) {
                 promises.push(

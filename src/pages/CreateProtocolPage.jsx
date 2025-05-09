@@ -586,64 +586,48 @@ function CreateProtocolPage(props) {
                                                     {creationMode === 'properties' && (
                                                         <div className="row justify-content-center">
                                                             <div className="col-7 col-md-5 col-xl-3">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={'Adicionar itens'}
-                                                                    onClick={() => {
-                                                                        if (String(protocol.title).length < 3)
-                                                                            showAlert({
-                                                                                headerText: 'Insira pelo menos 3 caracteres no título',
-                                                                            });
-                                                                        else if (protocol.visibility === '')
-                                                                            showAlert({
-                                                                                headerText: 'Selecione uma opção válida em Visibilidade',
-                                                                            });
-                                                                        else if (protocol.applicability === '')
-                                                                            showAlert({
-                                                                                headerText: 'Selecione uma opção válida em Aplicabilidade',
-                                                                            });
-                                                                        else if (protocol.answersVisibility === '')
-                                                                            showAlert({
-                                                                                headerText:
-                                                                                    'Selecione uma opção válida em Visibilidade das respostas',
-                                                                            });
-                                                                        else setCreationMode('children');
-                                                                    }}
-                                                                />
+                                                                {isEditing ? (
+                                                                    <TextButton
+                                                                        type="button"
+                                                                        hsl={[97, 43, 70]}
+                                                                        text={'Editar itens'}
+                                                                        onClick={() => setCreationMode('children')}
+                                                                    />
+                                                                ) : (
+                                                                    <TextButton
+                                                                        type="button"
+                                                                        hsl={[97, 43, 70]}
+                                                                        text={'Adicionar itens'}
+                                                                        onClick={() => {
+                                                                            if (String(protocol.title).length < 3)
+                                                                                showAlert({
+                                                                                    headerText: 'Insira pelo menos 3 caracteres no título',
+                                                                                });
+                                                                            else if (protocol.visibility === '')
+                                                                                showAlert({
+                                                                                    headerText:
+                                                                                        'Selecione uma opção válida em Visibilidade',
+                                                                                });
+                                                                            else if (protocol.applicability === '')
+                                                                                showAlert({
+                                                                                    headerText:
+                                                                                        'Selecione uma opção válida em Aplicabilidade',
+                                                                                });
+                                                                            else if (protocol.answersVisibility === '')
+                                                                                showAlert({
+                                                                                    headerText:
+                                                                                        'Selecione uma opção válida em Visibilidade das respostas',
+                                                                                });
+                                                                            else setCreationMode('children');
+                                                                        }}
+                                                                    />
+                                                                )}
                                                             </div>
                                                         </div>
                                                     )}
 
                                                     {creationMode === 'children' && (
-                                                        <div className="row justify-content-center">
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={isEditing ? 'Editar' : 'Concluir'}
-                                                                    onClick={() =>
-                                                                        showAlert({
-                                                                            headerText: `Tem certeza que deseja ${
-                                                                                isEditing ? 'editar' : 'criar'
-                                                                            } o protocolo?`,
-                                                                            primaryBtnHsl: [355, 78, 66],
-                                                                            primaryBtnLabel: 'Não',
-                                                                            secondaryBtnHsl: [97, 43, 70],
-                                                                            secondaryBtnLabel: 'Sim',
-                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                                                        })
-                                                                    }
-                                                                />
-                                                            </div>
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={'Voltar'}
-                                                                    onClick={() => setCreationMode('properties')}
-                                                                />
-                                                            </div>
+                                                        <div className="row justify-content-center align-items-center">
                                                             {isEditing && (
                                                                 <div className="col-4 col-xl-2">
                                                                     <TextButton
@@ -662,6 +646,33 @@ function CreateProtocolPage(props) {
                                                                     />
                                                                 </div>
                                                             )}
+                                                            <div className="col-4 col-xl-2">
+                                                                <TextButton
+                                                                    type="button"
+                                                                    hsl={[97, 43, 70]}
+                                                                    text={'Voltar'}
+                                                                    onClick={() => setCreationMode('properties')}
+                                                                />
+                                                            </div>
+                                                            <div className="col-4 col-xl-2">
+                                                                <TextButton
+                                                                    type="button"
+                                                                    hsl={[97, 43, 70]}
+                                                                    text={isEditing ? 'Salvar' : 'Concluir'}
+                                                                    onClick={() =>
+                                                                        showAlert({
+                                                                            headerText: `Tem certeza que deseja ${
+                                                                                isEditing ? 'editar' : 'criar'
+                                                                            } o protocolo?`,
+                                                                            primaryBtnHsl: [355, 78, 66],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [97, 43, 70],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                                                        })
+                                                                    }
+                                                                />
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </form>
