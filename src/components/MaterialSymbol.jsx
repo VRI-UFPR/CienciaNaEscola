@@ -13,10 +13,12 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import 'material-symbols';
 
 function MaterialSymbol(props) {
-    const { icon, size, weight, fill = 1, color, grade = 200 } = props;
+    const { icon, size, weight, fill = 1, color, grade = 200, className = '', dataBsToggle, dataBsCustomClass, dataBsTitle } = props;
     return (
         <span
-            className="material-symbols-rounded"
+            data-bs-toggle={dataBsToggle}
+            data-bs-custom-class={dataBsCustomClass}
+            data-bs-title={dataBsTitle}
             style={{
                 color: color,
                 fontVariationSettings: `"FILL" ${fill ? 1 : 0}${weight ? `, "wght" ${weight}` : ''}${grade ? `, "GRAD" ${grade}` : ''}${
@@ -24,6 +26,7 @@ function MaterialSymbol(props) {
                 }`,
                 fontSize: size ? `${size}px` : undefined,
             }}
+            className={`material-symbols-rounded ${className}`}
         >
             {icon}
         </span>

@@ -70,6 +70,9 @@ function RoundedButton(props) {
         'data-bs-target': dataBsTarget,
         'data-bs-custom-class': dataBsCustomClass,
         'data-bs-title': dataBsTitle,
+        weight = 400,
+        fill = 1,
+        grade = 200,
     } = props;
 
     return (
@@ -86,7 +89,7 @@ function RoundedButton(props) {
             onClick={onClick}
             disabled={disabled}
         >
-            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill grade={200} weight={400} />
+            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill={fill} grade={grade} weight={weight} />
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
         </button>
     );
