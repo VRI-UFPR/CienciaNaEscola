@@ -76,7 +76,7 @@ const GalleryModal = forwardRef((props, ref) => {
                         <h5 className="modal-title font-century-gothic color-dark-gray text-center fs-3 fw-bold">
                             Figura {modal.currentImage + 1}
                         </h5>
-                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} />
+                        <RoundedButton hsl={[355, 78, 66]} icon="close" onClick={hideModal} className="text-white" />
                     </div>
 
                     <div className="modal-body">
@@ -90,7 +90,7 @@ const GalleryModal = forwardRef((props, ref) => {
                                         >
                                             <div className="d-flex justify-content-center align-items-center rounded-4 h-100 w-100 p-0 m-0">
                                                 <img
-                                                    src={image.path}
+                                                    src={process.env.REACT_APP_API_URL + 'api/' + image.path}
                                                     className="w-auto h-auto mh-100 mw-100 object-fit-contain rounded-4"
                                                     alt={'Figura' + index + 1}
                                                 ></img>

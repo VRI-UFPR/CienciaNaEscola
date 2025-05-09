@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const rangeStyles = `
     .font-century-gothic {
@@ -30,9 +31,23 @@ const rangeStyles = `
 `;
 
 function CreateRangeInput(props) {
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement } = props;
+    const {
+        currentItem,
+        pageIndex,
+        groupIndex,
+        itemIndex,
+        updateItem,
+        removeItem,
+        updateItemPlacement,
+        moveItemBetweenPages,
+        moveItemBetweenItemGroups,
+        pagesQty,
+        groupsQty,
+        itemsQty,
+    } = props;
     const [item, setItem] = useState(currentItem);
     const galleryInputRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     useEffect(() => {
         if (item !== currentItem) updateItem(item, itemIndex);
@@ -41,12 +56,9 @@ function CreateRangeInput(props) {
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-item-${item.tempId}-up-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.upload-image-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.question-${item.tempId}-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.description-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.min-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.max-${item.tempId}-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.step-${item.tempId}-tooltip`, { trigger: 'hover' }));
@@ -75,32 +87,10 @@ function CreateRangeInput(props) {
     };
 
     return (
-        <div className="pb-4 pb-lg-5">
-            <div className="row gx-2 pb-2">
+        <div className="pb-4 pb-lg-4">
+            <div className="row g-2 pb-2 align-items-center justify-content-end">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">Item {itemIndex + 1} - Intervalo numérico</h1>
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_down"
-                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
-                        data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-down-tooltip'}
-                    />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_up"
-                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
-                        data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-up-tooltip'}
-                    />
                 </div>
                 <div className="col-auto">
                     <RoundedButton
@@ -110,7 +100,7 @@ function CreateRangeInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
                         data-bs-title="Remover o item do grupo."
-                        className={'delete-' + item.tempId + '-tooltip'}
+                        className={'delete-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>
@@ -120,20 +110,17 @@ function CreateRangeInput(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
-                    onChange={(event) =>
-                        setItem((prev) => {
-                            if (event.target.checked) {
-                                const newItem = { ...prev };
-                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
-                                return newItem;
-                            } else {
-                                const newItem = { ...prev };
-                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
-                                return newItem;
-                            }
-                        })
-                    }
+                    checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument)}
+                    onChange={(event) => {
+                        const newItem = {
+                            ...item,
+                            itemValidations:
+                                event.target.checked && !item.itemValidations.some((validation) => validation.type === 'MANDATORY')
+                                    ? [...item.itemValidations, { type: 'MANDATORY', argument: 'true' }] // Add mandatory validation
+                                    : item.itemValidations.filter((validation) => validation.type !== 'MANDATORY'), // Remove mandatory validation
+                        };
+                        setItem(newItem);
+                    }}
                 />
                 <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
@@ -149,6 +136,60 @@ function CreateRangeInput(props) {
                     data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
                     className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
                 />
+            </div>
+            <div className="row g-2 mb-2">
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={pageIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => moveItemBetweenPages(e.target.value, pageIndex, groupIndex, itemIndex)}
+                    >
+                        {[...Array(pagesQty).keys()].map((page) => (
+                            <option key={'item-page-' + (page + 1)} value={page}>
+                                Página {page + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={groupIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) =>
+                            moveItemBetweenItemGroups(e.target.value, groupIndex, itemIndex)
+                                ? {}
+                                : showAlert({
+                                      headerText: 'Erro ao mover item',
+                                      bodyText: 'O item não pode ser movido para um grupo do tipo tabela ou ao qual já pertence',
+                                  })
+                        }
+                    >
+                        {[...Array(groupsQty).keys()].map((group) => (
+                            <option key={'item-group-' + (group + 1)} value={group}>
+                                Grupo {group + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={item.placement}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => updateItemPlacement(e.target.value, item.placement, itemIndex)}
+                    >
+                        {[...Array(itemsQty).keys()].map((placement) => (
+                            <option key={'item-placement-' + (placement + 1)} value={placement + 1}>
+                                Posição {placement + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
@@ -168,7 +209,7 @@ function CreateRangeInput(props) {
                     />
                     <div className="row gx-2 align-items-end">
                         <div className="col">
-                            <input
+                            <textarea
                                 type="text"
                                 className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                                 id="question"
@@ -176,8 +217,9 @@ function CreateRangeInput(props) {
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                                 minLength="3"
+                                rows="4"
                                 required
-                            />
+                            ></textarea>
                         </div>
                         <div className="col-auto">
                             <RoundedButton
@@ -188,7 +230,7 @@ function CreateRangeInput(props) {
                                 data-bs-toggle="tooltip"
                                 data-bs-custom-class={'upload-image-' + item.tempId + '-tooltip'}
                                 data-bs-title="Adicione imagens ao enunciado da pergunta."
-                                className={'upload-image-' + item.tempId + '-tooltip'}
+                                className={'upload-image-' + item.tempId + '-tooltip text-white'}
                             />
                         </div>
                     </div>
@@ -201,10 +243,10 @@ function CreateRangeInput(props) {
                 {item.files?.length > 0 && (
                     <div className="row mb-3 mt-4 gy-4">
                         {item.files.map((file, i) => {
-                            if (file?.content instanceof File || file?.path)
+                            if (file?.path || file?.content instanceof File)
                                 return (
                                     <div
-                                        key={'item-' + item.tempId + '-image-' + file?.content?.name || file?.id}
+                                        key={'item-' + item.tempId + '-image-' + file?.id || file?.content?.name}
                                         className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
                                         <div
@@ -213,12 +255,16 @@ function CreateRangeInput(props) {
                                             } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
                                         >
                                             <img
-                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
+                                                src={
+                                                    file.path
+                                                        ? process.env.REACT_APP_API_URL + 'api/' + file.path
+                                                        : URL.createObjectURL(file.content)
+                                                }
                                                 className="img-fluid object-fit-contain w-100 rounded-4"
                                                 alt="Imagem selecionada"
                                             />
                                             <RoundedButton
-                                                className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                className="position-absolute top-0 start-100 translate-middle text-white mb-2 me-2"
                                                 hsl={[190, 46, 70]}
                                                 size={32}
                                                 icon="delete"
@@ -234,29 +280,6 @@ function CreateRangeInput(props) {
                         })}
                     </div>
                 )}
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label fs-5 fw-medium me-2">
-                        Descrição
-                    </label>
-                    <MaterialSymbol
-                        icon="question_mark"
-                        size={13}
-                        weight={700}
-                        fill
-                        color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'description-' + item.tempId + '-tooltip'}
-                        data-bs-title="Texto que descreva outros detalhes da pergunta. Suporta Markdown com até 3000 caracteres."
-                        className={'bg-steel-blue description-' + item.tempId + '-tooltip p-1 rounded-circle'}
-                    />
-                    <input
-                        type="text"
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                        id="description"
-                        value={item.description || ''}
-                        onChange={(event) => setItem((prev) => ({ ...prev, description: event.target.value }))}
-                    />
-                </div>
                 <div className="mb-3">
                     <label htmlFor="interval-min" className="form-label fs-5 fw-medium me-2">
                         Início do intervalo

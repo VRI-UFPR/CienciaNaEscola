@@ -14,11 +14,30 @@ import { useContext, useEffect } from 'react';
 import RoundedButton from './RoundedButton';
 import { serialize } from 'object-to-formdata';
 import axios from 'axios';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
 import MaterialSymbol from './MaterialSymbol';
 import { Tooltip } from 'bootstrap';
+
+const CreateProtocolPropertiesStyles = `
+    .create-page-custom-scroll::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
+`;
 
 function CreateProtocolProperties(props) {
     const { setSearchedOptions, searchedOptions, protocol, setProtocol, setSearchInputs, searchInputs } = props;
@@ -38,7 +57,7 @@ function CreateProtocolProperties(props) {
     const searchUsers = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -80,13 +99,13 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, appliers: newUsers }));
                 }
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
     const searchClassrooms = (term, target) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${user.token}`,
@@ -119,7 +138,7 @@ function CreateProtocolProperties(props) {
                     setSearchedOptions((prev) => ({ ...prev, answersViewersClassroom: concatenedClassrooms }));
                 }
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
     const unselectUser = (id, target) => {
@@ -203,7 +222,7 @@ function CreateProtocolProperties(props) {
     };
 
     return (
-        <div className="flex-grow-1 mb-3">
+        <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3">
             <label htmlFor="title" className="form-label color-steel-blue fs-5 fw-medium me-1">
                 Título do protocolo
             </label>
@@ -219,7 +238,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue title-tooltip p-1 rounded-circle"
             />
             <input
-                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
                 id="title"
                 type="text"
                 value={protocol.title || ''}
@@ -242,7 +261,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue description-tooltip p-1 rounded-circle"
             />
             <textarea
-                className="form-control rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-control rounded-4 pastel-blue-input fs-5 mb-3"
                 id="description"
                 rows="4"
                 value={protocol.description || ''}
@@ -311,7 +330,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue visibility-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="visibility"
                 value={protocol.visibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, visibility: event.target.value }))}
@@ -351,12 +370,13 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.viewersUser, 'viewersUser')}
                                 icon="search"
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.viewersUser.map((u) => (
                             <div key={'viewer-user-' + u.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -416,12 +436,13 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchClassrooms(searchInputs.viewersClassroom, 'viewersClassroom')}
                                 icon="search"
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.viewersClassroom.map((c) => (
                             <div key={'viewer-classroom-' + c.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -469,7 +490,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue applicability-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="applicability"
                 value={protocol.applicability || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, applicability: event.target.value }))}
@@ -504,12 +525,13 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.appliers, 'appliers')}
                                 icon="search"
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.appliers
                             .filter((u) => u.role !== 'USER' && u.role !== 'ADMIN')
                             .map((u) => (
@@ -559,7 +581,7 @@ function CreateProtocolProperties(props) {
                 className="bg-steel-blue answer-visiblity-tooltip p-1 rounded-circle"
             />
             <select
-                className="form-select rounded-4 bg-light-pastel-blue fs-5 mb-3"
+                className="form-select rounded-4 pastel-blue-input fs-5 mb-3"
                 id="answer-visiblity"
                 value={protocol.answersVisibility || ''}
                 onChange={(event) => setProtocol((prev) => ({ ...prev, answersVisibility: event.target.value }))}
@@ -599,12 +621,13 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchUsers(searchInputs.answersViewersUser, 'answersViewersUser')}
                                 icon="search"
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.answersViewersUser.map((u) => (
                             <div key={'answer-viewer-user-' + u.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -663,12 +686,13 @@ function CreateProtocolProperties(props) {
                         <div className="col-auto">
                             <RoundedButton
                                 hsl={[197, 43, 52]}
+                                className="text-white"
                                 onClick={() => searchClassrooms(searchInputs.answersViewersClassroom, 'answersViewersClassroom')}
                                 icon="search"
                             />
                         </div>
                     </div>
-                    <div className="row gy-2 mb-3">
+                    <div className="row user-list gy-2 mb-3">
                         {searchedOptions.answersViewersClassroom.map((c) => (
                             <div key={'answer-viewer-classroom-' + c.id + '-option'} className="col-6 col-md-4 col-lg-3">
                                 <input
@@ -703,6 +727,7 @@ function CreateProtocolProperties(props) {
                     </div>
                 </fieldset>
             )}
+            <style>{CreateProtocolPropertiesStyles}</style>
         </div>
     );
 }

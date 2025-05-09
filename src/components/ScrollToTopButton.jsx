@@ -10,9 +10,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-// Production
-// const baseUrl = 'https://cienciaescola.c3sl.ufpr.br/';
-// Development
-const baseUrl = 'http://localhost:3000/';
+import { useState } from 'react';
+import RoundedButton from './RoundedButton';
 
-export default baseUrl;
+function ScrollToTopButton() {
+    const [windowScroll, setWindowScroll] = useState(window.scrollY);
+
+    window.onscroll = () => setWindowScroll(window.scrollY);
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    return (
+        <div
+            className={`${
+                windowScroll > 20 ? 'd-flex' : 'd-none'
+            } flex-column justify-content-end align-items-end position-fixed bottom-0 end-0 overflow-hidden w-auto h-auto pb-4 pe-4`}
+        >
+            <RoundedButton icon="stat_3" hsl={[197, 43, 52]} onClick={scrollToTop} className="text-white" />
+        </div>
+    );
+}
+
+export default ScrollToTopButton;

@@ -18,7 +18,6 @@ import { AuthContext } from '../contexts/AuthContext';
 import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
-import baseUrl from '../contexts/RouteContext';
 import MaterialSymbol from './MaterialSymbol';
 
 const styles = `
@@ -91,7 +90,7 @@ function Sidebar(props) {
     }, []);
 
     return (
-        <div className="d-flex flex-column h-100 bg-coral-red">
+        <div className="d-flex flex-column h-100 bg-coral-red overflow-auto scrollbar-none">
             <div className="sidebar-wrapper d-flex flex-column flex-grow-1">
                 {(isMobile || showExitButton) && ( // Se é móvel ou showExitButton está definido como true
                     <div className="container d-flex justify-content-end p-0 erro">
@@ -109,7 +108,7 @@ function Sidebar(props) {
                     <div className="rounded-circle">
                         <img
                             className="profile-image rounded-circle"
-                            src={user.profileImage ? baseUrl + user.profileImage : PerfilImg}
+                            src={user.profileImage ? process.env.REACT_APP_API_URL + user.profileImage : PerfilImg}
                             alt="Perfil"
                         />
                     </div>
@@ -128,15 +127,20 @@ function Sidebar(props) {
                             Protocolos
                         </Link>
                     )}
+                    {isDashboard && user.role !== 'USER' && (
+                        <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/users" onClick={() => closeSidebar()}>
+                            Usuários e grupos
+                        </Link>
+                    )}
                     {isDashboard && user.role === 'ADMIN' && (
                         <Link className="text-white text-decoration-none ps-5 py-2" to="/dash/institutions" onClick={() => closeSidebar()}>
                             Instituições
                         </Link>
                     )}
-                    {isDashboard && user.role !== 'USER' && user.role !== 'ADMIN' && (
+                    {isDashboard && user.role !== 'USER' && user.role !== 'ADMIN' && user.institutionId && (
                         <Link
                             className="text-white text-decoration-none ps-5 py-2"
-                            to={`/dash/institutions/my`}
+                            to={`/dash/institutions/${user.institutionId}`}
                             onClick={() => closeSidebar()}
                         >
                             Minha Instituição

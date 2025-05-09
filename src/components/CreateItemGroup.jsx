@@ -18,11 +18,25 @@ import CreateRangeInput from './inputs/protocol/CreateRangeInput';
 import CreateMultipleInputItens from './inputs/protocol/CreateMultipleInputItens';
 import { defaultNewValidation } from '../utils/constants';
 import CreateValidationInput from './inputs/protocol/CreateValidationInput';
+import CreateTableInput from './inputs/protocol/CreateTableInput';
 import { Tooltip } from 'bootstrap';
 
 function CreateItemGroup(props) {
-    const { currentGroup, updateGroup, itemTarget, updateGroupPlacement, removeItemGroup, protocol } = props;
-
+    const {
+        currentGroup,
+        updateGroup,
+        itemTarget,
+        updateGroupPlacement,
+        removeItemGroup,
+        protocol,
+        page,
+        insertItem,
+        moveItemBetweenPages,
+        moveItemBetweenItemGroups,
+        pagesQty,
+        groupsQty,
+        moveGroupBetweenPages,
+    } = props;
     const [group, setGroup] = useState(currentGroup);
 
     useEffect(() => {
@@ -32,9 +46,7 @@ function CreateItemGroup(props) {
     useEffect(() => {
         const tooltipList = [];
         if (group.tempId) {
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId}-up-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.delete-group-${group.tempId}-tooltip`, { trigger: 'hover' }));
+            tooltipList.push(new Tooltip(`.delete-group-${group.tempId.toString().slice(0, 13)}-tooltip`, { trigger: 'hover' }));
         }
 
         return () => {
@@ -121,41 +133,110 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    const insertTableColumn = useCallback(() => {
+        const newGroup = { ...group };
+        newGroup.tableColumns.push({
+            text: '',
+            placement: newGroup.tableColumns.length + 1,
+        });
+
+        setGroup(newGroup);
+    }, [group]);
+
+    const removeTableColumn = useCallback(
+        (index) => {
+            const newGroup = { ...group };
+            newGroup.tableColumns.splice(index, 1);
+
+            newGroup.tableColumns = newGroup.tableColumns.map((column, newIndex) => ({
+                ...column,
+                placement: newIndex + 1, // Adjust placement to reflect the new index
+            }));
+
+            setGroup(newGroup);
+        },
+        [group]
+    );
+
+    const updateTableColumn = useCallback(
+        (index, newText) => {
+            const newGroup = { ...group };
+            newGroup.tableColumns[index].text = newText;
+            setGroup(newGroup);
+        },
+        [group]
+    );
+
     return (
-        <div className="mb-3" key={'group-' + itemTarget.group}>
-            <div className="row gx-2 align-items-center mb-3">
-                <div className="col-auto">
-                    <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">Grupo {Number(itemTarget.group) + 1}</p>
-                </div>
+        <div className="mb-3">
+            <div className="row g-2 align-items-center mb-3 justify-content-end">
+                {group.type === 'ONE_DIMENSIONAL' && (
+                    <div className="col-auto">
+                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold m-0 p-0">Grupo {Number(itemTarget.group) + 1}</p>
+                    </div>
+                )}
+                {group.type !== 'ONE_DIMENSIONAL' && (
+                    <div className="col-auto">
+                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
+                            {(() => {
+                                switch (group.type) {
+                                    case 'TEXTBOX_TABLE':
+                                        return 'Tabela de texto';
+
+                                    case 'RADIO_TABLE':
+                                        return 'Tabela de escolha simples';
+
+                                    case 'CHECKBOX_TABLE':
+                                        return 'Tabela de múltipla escolha';
+
+                                    default:
+                                        return;
+                                }
+                            })()}
+                        </p>
+                    </div>
+                )}
                 <div className="col"></div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
-                        icon="keyboard_arrow_down"
-                        className={`move-group-${group.tempId}-down-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-group-${group.tempId}-down-tooltip`}
-                        data-bs-title="Mover o grupo uma posição abaixo na ordem dos grupos da página."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={group.placement}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => updateGroupPlacement(e.target.value, group.placement, itemTarget.group)}
+                        >
+                            {[...Array(groupsQty).keys()].map((placement) => (
+                                <option key={'item-group-placement-' + (placement + 1)} value={placement + 1}>
+                                    Posição {placement + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
-                        icon="keyboard_arrow_up"
-                        className={`move-group-${group.tempId}-up-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-group-${group.tempId}-up-tooltip`}
-                        data-bs-title="Mover o grupo uma posição acima na ordem dos grupos da página."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={itemTarget.page}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => moveGroupBetweenPages(e.target.value, itemTarget.page, itemTarget.group)}
+                        >
+                            {[...Array(pagesQty).keys()].map((page) => (
+                                <option key={'item-group-page-' + (page + 1)} value={page}>
+                                    Página {page + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => removeItemGroup(itemTarget.group)}
                         icon="delete"
-                        className={`delete-group-${group.tempId}-tooltip`}
+                        className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`delete-group-${group.tempId}-tooltip`}
                         data-bs-title="Remover o grupo da página."
@@ -168,123 +249,156 @@ function CreateItemGroup(props) {
                     dependencyIndex={dependencyIndex}
                     pageIndex={itemTarget.page}
                     groupIndex={itemTarget.group}
-                    key={'page-dependency-' + dependency.tempId}
+                    key={'page-dependency-' + dependency.tempId + '-' + dependencyIndex}
                     updateDependency={updateDependency}
                     removeDependency={removeDependency}
                     protocol={protocol}
                 />
             ))}
-            {group.items?.length === 0 && (
+            {group.type === 'ONE_DIMENSIONAL' && group.items?.length === 0 && (
                 <div className="bg-light-grey rounded-4 p-4">
                     <p className="font-barlow fw-medium text-center fs-5 m-0">Nenhum item criado. Crie um por meio da aba Adicionar.</p>
                 </div>
             )}
-            {group.items?.map((item, itemIndex) => (
-                <div key={'item-' + item.tempId}>
-                    {(() => {
-                        switch (item.type) {
-                            case 'TEXTBOX':
-                                return (
-                                    <CreateTextBoxInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'NUMBERBOX':
-                                return (
-                                    <CreateTextBoxInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        isNumberBox={true}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'RANGE':
-                                return (
-                                    <CreateRangeInput
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                    />
-                                );
-                            case 'SELECT':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'RADIO':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            case 'CHECKBOX':
-                                return (
-                                    <CreateMultipleInputItens
-                                        currentItem={item}
-                                        pageIndex={itemTarget.page}
-                                        groupIndex={itemTarget.group}
-                                        itemIndex={itemIndex}
-                                        updateItem={updateItem}
-                                        removeItem={removeItem}
-                                        updateItemPlacement={updateItemPlacement}
-                                        insertItemValidation={insertItemValidation}
-                                    />
-                                );
-                            default:
-                                return null;
-                        }
-                    })()}
-                    {item.itemValidations
-                        ?.filter(
-                            (v) =>
-                                (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX' || item.type === 'TEXTBOX') && v.type !== 'MANDATORY'
-                        )
-                        .map((validation, validationIndex) => (
-                            <CreateValidationInput
-                                currentValidation={validation}
-                                validationIndex={validationIndex}
-                                pageIndex={itemTarget.page}
-                                groupIndex={itemTarget.group}
-                                itemIndex={itemIndex}
-                                key={'item-validation-' + validation.tempId}
-                                updateValidation={updateItemValidation}
-                                removeValidation={removeItemValidation}
-                                item={item}
-                            />
-                        ))}
+            {group.type === 'ONE_DIMENSIONAL' &&
+                group.items?.map((item, itemIndex) => (
+                    <div key={'item-' + item.tempId + '-' + itemIndex}>
+                        {(() => {
+                            switch (item.type) {
+                                case 'TEXTBOX':
+                                case 'TEXT':
+                                case 'UPLOAD':
+                                case 'NUMBERBOX':
+                                    return (
+                                        <CreateTextBoxInput
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
+                                        />
+                                    );
+                                case 'RANGE':
+                                    return (
+                                        <CreateRangeInput
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
+                                        />
+                                    );
+                                case 'SELECT':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
+                                        />
+                                    );
+                                case 'RADIO':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
+                                        />
+                                    );
+                                case 'CHECKBOX':
+                                    return (
+                                        <CreateMultipleInputItens
+                                            currentItem={item}
+                                            pageIndex={itemTarget.page}
+                                            groupIndex={itemTarget.group}
+                                            itemIndex={itemIndex}
+                                            updateItem={updateItem}
+                                            removeItem={removeItem}
+                                            updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
+                                        />
+                                    );
+                                default:
+                                    return null;
+                            }
+                        })()}
+                        {item.itemValidations
+                            ?.filter(
+                                (v) =>
+                                    (item.type === 'NUMBERBOX' || item.type === 'CHECKBOX' || item.type === 'TEXTBOX') &&
+                                    v.type !== 'MANDATORY'
+                            )
+                            .map((validation, validationIndex) => (
+                                <CreateValidationInput
+                                    currentValidation={validation}
+                                    validationIndex={validationIndex}
+                                    pageIndex={itemTarget.page}
+                                    groupIndex={itemTarget.group}
+                                    itemIndex={itemIndex}
+                                    key={'item-validation-' + validation.tempId + '-' + validationIndex}
+                                    updateItemValidation={updateItemValidation}
+                                    removeValidation={removeItemValidation}
+                                    item={item}
+                                />
+                            ))}
+                    </div>
+                ))}
+            {(group.type === 'TEXTBOX_TABLE' || group.type === 'RADIO_TABLE' || group.type === 'CHECKBOX_TABLE') && (
+                <div className="mb-3">
+                    <CreateTableInput
+                        group={group}
+                        page={page}
+                        groupIndex={itemTarget.group}
+                        pageIndex={itemTarget.page}
+                        insertItem={insertItem}
+                        updateItem={updateItem}
+                        removeItem={removeItem}
+                        insertTableColumn={insertTableColumn}
+                        updateTableColumn={updateTableColumn}
+                        removeTableColumn={removeTableColumn}
+                    />
                 </div>
-            ))}
+            )}
         </div>
     );
 }

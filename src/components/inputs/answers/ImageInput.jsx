@@ -10,11 +10,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useContext } from 'react';
 import RoundedButton from '../../RoundedButton';
 import MarkdownText from '../../MarkdownText';
 import MaterialSymbol from '../../MaterialSymbol';
 import imageCompression from 'browser-image-compression';
+import Gallery from '../../Gallery';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const styles = `
     .color-dark-gray {
@@ -39,14 +41,27 @@ const styles = `
     }
 `;
 
+/**
+ * Componente para upload de imagens.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto contendo as imagens selecionadas.
+ * @param {boolean} props.disabled - Define se o upload de imagem está desabilitado.
+ */
 function ImageInput(props) {
-    const { onAnswerChange, item, answer, disabled } = props;
+    const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
     const [ImageVisibility, setImageVisibility] = useState(false);
     const [disableUpload, setDisableUpload] = useState(false);
+    const { showAlert } = useContext(AlertContext);
     const galleryInputRef = useRef(null);
     const cameraInputRef = useRef(null);
 
+    /**
+     * Aualiza a resposta com a nova imagem adicionada.
+     * @param {Object} newAnswer - Novo objeto de resposta contendo as imagens atualizadas.
+     */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
@@ -54,22 +69,33 @@ function ImageInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /** Alterna a visibilidade da imagem. */
     const toggleImageVisibility = () => {
         setImageVisibility(!ImageVisibility);
     };
 
+    /** Simula um clique no input de galeria para selecionar uma imagem do dispositivo. */
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
     };
 
+    /** Simula um clique no input da câmera para capturar uma imagem. */
     const handleCameraButtonClick = () => {
         cameraInputRef.current.click();
     };
 
+    /**
+     * Insere uma imagem selecionada.
+     * @param {Event} e - Evento do input de arquivo. 
+     */
     const insertImage = async (e) => {
         if (e.target?.files[0]) {
             setDisableUpload(true);
             const image = e.target.files[0];
+
+            // Verifica se o arquivo tem um nome válido e obtém a extensão
+            const fileNameParts = image.name.split('.');
+            const extension = fileNameParts.length > 1 ? fileNameParts.pop() : 'jpg'; // Default para jpg se não houver extensão
             galleryInputRef.current.value = '';
             cameraInputRef.current.value = '';
             galleryInputRef.current.files = null;
@@ -78,28 +104,47 @@ function ImageInput(props) {
                 maxSizeMB: 2,
                 useWebWorker: true,
             };
-            const processedImage = await imageCompression(image, options);
-            const newAnswer = { ...answer };
-            newAnswer.files.push(processedImage);
-            updateAnswer(newAnswer);
-            setDisableUpload(false);
+            await imageCompression(image, options)
+                .then((processedImage) => {
+                    const processedFile = new File([processedImage], `compressed.${extension}`, {
+                        type: processedImage.type,
+                    });
+
+                    const newAnswer = { ...answer };
+                    newAnswer.files.push(processedFile);
+                    updateAnswer(newAnswer);
+                    setDisableUpload(false);
+                })
+                .catch((error) =>
+                    showAlert({
+                        headerText: 'Erro ao submeter imagem',
+                        bodyText: error.message,
+                        onPrimaryBtnClick: () => setDisableUpload(false),
+                    })
+                );
         }
     };
 
+    /**
+     * Remove uma imagem com base no índice.
+     * @param {number} indexToRemove - Índice da imagem a ser removida.
+     */
     const removeImage = (indexToRemove) => {
         const newAnswer = { ...answer };
         newAnswer.files = newAnswer.files.filter((_, index) => index !== indexToRemove);
-        updateAnswer(newAnswer);
+        updateAnswer(newAnswer.files.length === 0 ? {} : newAnswer);
     };
 
     return (
         <div className="rounded-4 shadow bg-white w-100 p-3">
             <MarkdownText text={item.text} />
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
             <div className="row gx-3">
                 <div className="col-auto align-self-center">
                     <div className="btn-group dropend">
                         <RoundedButton
                             hsl={[190, 46, 70]}
+                            className="text-white"
                             icon="upload_file"
                             size={41}
                             alt={'Selecionar imagem'}
@@ -146,7 +191,7 @@ function ImageInput(props) {
                         )}
                         {answer.files.length > 0 || disableUpload ? (
                             answer.files.slice(0, ImageVisibility ? answer.files.length : 2 - (disableUpload ? 1 : 0)).map((image, i) => {
-                                if (answer.files[i] && answer.files[i] instanceof File)
+                                if (answer.files[i] && (answer.files[i] instanceof Blob || answer.files[i] instanceof File)) {
                                     return (
                                         <div key={i} className="col-6 pt-3 position-relative">
                                             <div className="ratio ratio-1x1 w-100 position-relative border border-light-subtle rounded-4 overflow-hidden">
@@ -157,7 +202,7 @@ function ImageInput(props) {
                                                 />
                                             </div>
                                             <RoundedButton
-                                                className="position-absolute d-inline-block top-0 end-0"
+                                                className="position-absolute d-inline-block text-white top-0 end-0"
                                                 hsl={[190, 46, 70]}
                                                 icon="delete"
                                                 onClick={() => removeImage(i)}
@@ -165,7 +210,7 @@ function ImageInput(props) {
                                             />
                                         </div>
                                     );
-                                else {
+                                } else {
                                     removeImage(i);
                                     return null;
                                 }
@@ -179,7 +224,7 @@ function ImageInput(props) {
                 </div>
             </div>
             <div className={`${answer.files.length < 3 ? 'd-none' : 'd-flex'} justify-content-end align-items-end w-100 m-0 mt-3 p-0`}>
-                <RoundedButton className="mb-2 me-2" hsl={[190, 46, 70]} icon="visibility" onClick={toggleImageVisibility} />
+                <RoundedButton className="text-white mb-2 me-2" hsl={[190, 46, 70]} icon="visibility" onClick={toggleImageVisibility} />
             </div>
             <input
                 type="file"

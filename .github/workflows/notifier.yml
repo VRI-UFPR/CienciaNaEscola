@@ -9,7 +9,11 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Pull Request Telegram
-              uses: F2had/pr-telegram-action@v1.0.0
-              with: 
-                bot_token: '${{ secrets.BotToken }}' # Your bot token from github secrets
-                chat_id: '${{ secrets.CHATID }}' # Your chat id from github secrets
+              env:
+                BOT_TOKEN: ${{ secrets.BotToken }}
+                CHAT_ID: -1002284863414  # com o prefixo -100
+                TOPIC_ID: 4              # ID do tópico do fórum
+              run: |
+                curl -X POST https://api.telegram.org/bot${BOT_TOKEN}/sendMessage \
+                -H "Content-Type: application/json" \
+                -d "{\"chat_id\": ${CHAT_ID}, \"message_thread_id\": ${TOPIC_ID}, \"text\": \"PR aberta 🚀\"}"

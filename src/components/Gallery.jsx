@@ -45,7 +45,11 @@ function Gallery(props) {
                                     } img-gallery d-flex justify-content-center border border-light-subtle rounded-4 overflow-hidden`}
                                     onClick={() => galleryModalRef.current.showModal({ images: item.files, currentImage: index })}
                                 >
-                                    <img src={image.path} className="img-fluid object-fit-contain w-100" alt="Responsive" />
+                                    <img
+                                        src={process.env.REACT_APP_API_URL + 'api/' + image.path}
+                                        className="img-fluid object-fit-contain w-100"
+                                        alt="Responsive"
+                                    />
                                 </div>
                             </div>
                         );

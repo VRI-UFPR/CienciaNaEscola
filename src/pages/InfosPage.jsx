@@ -17,9 +17,9 @@ import TextButton from '../components/TextButton';
 import { useNavigate } from 'react-router-dom';
 import MarkdownText from '../components/MarkdownText';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import axios from 'axios';
 import { LayoutContext } from '../contexts/LayoutContext';
+import CustomContainer from '../components/CustomContainer';
 
 const infosPageStyles = `
     .bg-coral-red {
@@ -56,11 +56,8 @@ function InfosPage(props) {
 
     const handleTermsAcceptance = () => {
         axios
-            .get(baseUrl + 'api/auth/acceptTerms', {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .get(process.env.REACT_APP_API_URL + 'api/auth/acceptTerms', {
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 acceptTerms();
@@ -78,9 +75,9 @@ function InfosPage(props) {
     };
 
     return (
-        <div className={`d-flex flex-column font-barlow vh-100`}>
-            <div className="row flex-grow-1 m-0">
-                <div className={`col-auto bg-coral-red ${showSidebar ? 'd-flex position-lg-sticky vh-100 top-0' : 'd-lg-none'}  p-0`}>
+        <div className="d-flex flex-column vh-100 overflow-hidden">
+            <div className="row align-items-stretch h-100 g-0">
+                <div className={`col-auto bg-coral-red ${showSidebar ? 'd-flex position-lg-sticky top-0' : 'd-lg-none'}`}>
                     <div
                         className={`${showNavTogglerDesktop ? 'offcanvas' : 'offcanvas-lg'} offcanvas-start bg-coral-red w-auto d-flex`}
                         tabIndex="-1"
@@ -89,40 +86,29 @@ function InfosPage(props) {
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column bg-white p-0">
+                <div className="col d-flex flex-column h-100">
                     <NavBar showNavTogglerMobile={showNavTogglerMobile} showNavTogglerDesktop={showNavTogglerDesktop} />
-                    <div className="container-fluid d-flex flex-column flex-grow-1 p-4 p-lg-5">
+                    <CustomContainer className="font-barlow flex-grow-1 overflow-y-scroll p-4" df="12" md="10">
                         <div className="d-flex flex-column flex-grow-1">
                             <MarkdownText text={content} />
                         </div>
-                        <div className="row justify-content-center pt-4 m-0">
-                            <div className="col-8 col-lg-4 p-0">
-                                <div className="row m-0">
-                                    <div className="col-6 p-0 pe-2">
-                                        <TextButton
-                                            role="link"
-                                            onClick={() => {
-                                                logout();
-                                                navigate(isDashboard ? '/dash' : '/');
-                                            }}
-                                            className={showAccept ? '' : 'd-none'}
-                                            hsl={[37, 98, 76]}
-                                            text="Voltar"
-                                        />
-                                    </div>
-                                    <div className="col-6 p-0">
-                                        <TextButton
-                                            role="link"
-                                            onClick={handleTermsAcceptance}
-                                            className={showAccept ? '' : 'd-none'}
-                                            hsl={[97, 43, 70]}
-                                            text="Aceitar"
-                                        />
-                                    </div>
-                                </div>
+                        <div className={`row justify-content-center justify-content-lg-start gx-2 mt-4 ${showAccept ? '' : 'd-none'}`}>
+                            <div className="col-5 col-sm-3 col-xl-2">
+                                <TextButton
+                                    role="link"
+                                    onClick={() => {
+                                        logout();
+                                        navigate(isDashboard ? '/dash' : '/');
+                                    }}
+                                    hsl={[37, 98, 76]}
+                                    text="Voltar"
+                                />
+                            </div>
+                            <div className="col-5 col-sm-3 col-xl-2">
+                                <TextButton role="link" onClick={handleTermsAcceptance} hsl={[97, 43, 70]} text="Aceitar" />
                             </div>
                         </div>
-                    </div>
+                    </CustomContainer>
                 </div>
             </div>
             <style>{infosPageStyles}</style>

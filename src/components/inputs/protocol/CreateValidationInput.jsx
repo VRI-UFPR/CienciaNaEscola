@@ -4,12 +4,12 @@ import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 function CreateValidationInput(props) {
-    const { currentValidation, pageIndex, groupIndex, validationIndex, updateValidation, itemIndex, removeValidation, item } = props;
+    const { currentValidation, pageIndex, groupIndex, validationIndex, updateItemValidation, itemIndex, removeValidation, item } = props;
     const [validation, setValidation] = useState(currentValidation);
 
     useEffect(() => {
-        if (validation !== currentValidation) updateValidation(validation, validationIndex);
-    }, [validation, pageIndex, groupIndex, validationIndex, updateValidation, currentValidation]);
+        if (validation !== currentValidation) updateItemValidation(validation, itemIndex, validationIndex);
+    }, [validation, pageIndex, itemIndex, groupIndex, validationIndex, updateItemValidation, currentValidation]);
 
     useEffect(() => {
         const tooltipList = [];
@@ -41,7 +41,7 @@ function CreateValidationInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + validation.tempId + '-tooltip'}
                         data-bs-title="Remover a validação do item."
-                        className={'delete-' + validation.tempId + '-tooltip'}
+                        className={'delete-' + validation.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>
@@ -62,16 +62,10 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-type-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <select
-                        className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                        className="form-select light-grey-input border border-steel-blue rounded-4 fs-5"
                         id="validation-type"
                         value={validation.type || ''}
-                        onChange={(event) => {
-                            setValidation((prev) => {
-                                const newValidation = { ...prev };
-                                newValidation.type = event.target.value;
-                                return newValidation;
-                            });
-                        }}
+                        onChange={(event) => setValidation((prev) => ({ ...prev, type: event.target.value }))}
                         required
                     >
                         <option value="">Selecione...</option>
@@ -112,17 +106,11 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-argument-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="validation-argument"
                         type="number"
                         value={validation.argument || ''}
-                        onChange={(event) => {
-                            setValidation((prev) => {
-                                const newValidation = { ...prev };
-                                newValidation.argument = event.target.value;
-                                return newValidation;
-                            });
-                        }}
+                        onChange={(event) => setValidation((prev) => ({ ...prev, argument: event.target.value }))}
                         required
                     />
                 </div>
@@ -142,17 +130,11 @@ function CreateValidationInput(props) {
                         className={'bg-steel-blue validation-message-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
-                        className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                        className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                         id="validation-custom-message"
                         type="text"
                         value={validation.customMessage || ''}
-                        onChange={(event) => {
-                            setValidation((prev) => {
-                                const newValidation = { ...prev };
-                                newValidation.customMessage = event.target.value;
-                                return newValidation;
-                            });
-                        }}
+                        onChange={(event) => setValidation((prev) => ({ ...prev, customMessage: event.target.value }))}
                     />
                 </div>
             </div>

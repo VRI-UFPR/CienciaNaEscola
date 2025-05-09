@@ -53,7 +53,7 @@ function SimpleTextInput(props) {
                 id="simpletextinput"
                 value={answer.text}
                 placeholder="Digite sua resposta aqui"
-                onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
+                onChange={(e) => updateAnswer(e.target.value.trim() === '' ? {} : { ...answer, text: e.target.value })}
                 disabled={disabled}
             ></input>
             <style>{styles}</style>

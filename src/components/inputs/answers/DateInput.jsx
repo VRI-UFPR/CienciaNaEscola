@@ -34,6 +34,11 @@ const styles = `
         color: #787878;
     }
 
+    input.bg-white:active,
+    input.bg-white:focus{
+        box-shadow: none !important;
+    }
+
     .fs-7 {
         font-size: 1.1rem !important;
     }
@@ -43,37 +48,42 @@ const styles = `
     }
 `;
 
+/**
+ * Componente para entrada de datas, permitindo que o usuário selecione ou insira uma data.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto representando a resposta.
+ * @param {boolean} props.disabled - Define se o campo de data está desabilitado.
+ */
 function DateInput(props) {
-    const { onAnswerChange, item, answer, disabled } = props;
+    const { onAnswerChange, answer } = props;
     const iconContainerRef = useRef(null);
     const [iconSize, setIconSize] = useState(0);
 
-    const updateIconSize = useCallback(() => {
-        setIconSize(iconContainerRef.current.offsetWidth);
-    }, []);
+    /** Atualiza o tamanho do ícone */
+    const updateIconSize = useCallback(() => setIconSize(iconContainerRef.current.offsetWidth), []);
 
     useEffect(() => {
         updateIconSize();
         window.addEventListener('resize', updateIconSize);
-        return () => {
-            window.removeEventListener('resize', updateIconSize);
-        };
+        return () => window.removeEventListener('resize', updateIconSize);
     }, [updateIconSize]);
 
-    const updateAnswer = useCallback(
-        (newAnswer) => {
-            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
-        },
-        [onAnswerChange, answer.group, item]
-    );
+    /**
+     * Atualiza a resposta do input da data.
+     * @param {Object} newAnswer - Novo objeto de resposta.
+     */
+    const updateAnswer = useCallback((newAnswer) => onAnswerChange(newAnswer), [onAnswerChange]);
 
+    /** Caso não tenha sido recebida uma data, será definida a data atual do sistema */
     useEffect(() => {
-        if (!answer.text) {
+        if (!answer) {
             const date = new Date();
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = String(date.getFullYear());
-            updateAnswer({ ...answer, text: `${year}-${month}-${day}` });
+            updateAnswer(`${year}-${month}-${day}`);
         }
     }, [answer, updateAnswer]);
 
@@ -94,11 +104,10 @@ function DateInput(props) {
                     <div className="row m-0">
                         <input
                             type="date"
-                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
+                            className="form-control border-0 color-sonic-silver bg-white fw-medium fs-7 w-auto m-0 p-0"
                             id="dateinput"
-                            onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
-                            value={answer.text}
-                            disabled={disabled}
+                            onChange={(e) => updateAnswer(e.target.value)}
+                            value={answer}
                         ></input>
                     </div>
                 </div>

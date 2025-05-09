@@ -12,6 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useEffect, useState } from 'react';
 import MarkdownText from '../../MarkdownText';
+import Gallery from '../../Gallery';
 
 const styles = `
     #customRange {
@@ -41,13 +42,25 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um controle de range com valores mínimos, máximos e passo configurável.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta é alterada.
+ * @param {Object} props.item - Objeto representando o item.
+ * @param {Object} props.answer - Objeto contendo a resposta.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+ */
 function RangeInput(props) {
-    const { onAnswerChange, answer, item, disabled } = props;
-    const [value, setValue] = useState(0);
+    const { onAnswerChange, answer, item, galleryModalRef, disabled } = props;
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(10);
     const [step, setStep] = useState(1);
     const [hasUpdated, setHasUpdated] = useState(false);
+
+    /** Atualiza a resposta com o novo valor do range. */
+    const updateAnswer = (newAnswer) => {
+        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
+    };
 
     useEffect(() => {
         if (!hasUpdated) {
@@ -73,33 +86,24 @@ function RangeInput(props) {
             }
             setHasUpdated(true);
         }
-    }, [hasUpdated, item]);
+    }, [hasUpdated, item, answer, min, max]);
 
-    useEffect(() => {
-        if (hasUpdated) {
-            setValue(Math.floor((min + max) / 2));
-        }
-    }, [hasUpdated, min, max]);
-
-    const updateAnswer = (newAnswer) => {
-        onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
-        setValue(newAnswer.text);
-    };
-
+    /** Esilização do controle do range. */
     const rangeStyle = {
-        background: `linear-gradient(to right, #AAD390 ${((value - min) / (max - min)) * 100}%, #ccc ${
-            ((value - min) / (max - min)) * 100
-        }%)`,
+        background: '#AAD390',
         borderRadius: '5px',
         cursor: disabled ? 'not-allowed' : 'pointer',
     };
 
     return (
         <div className="rounded-4 shadow bg-white p-3">
-            <div className="d-flex flex-column">
-                <label htmlFor="customRange" className="">
+            <div className="row g-0">
+                <label htmlFor="customRange">
                     <MarkdownText text={item.text} />
                 </label>
+            </div>
+            <Gallery className="mb-3" item={item} galleryModalRef={galleryModalRef} />
+            <div className="row g-0">
                 <input
                     type="range"
                     className="w-100"
@@ -109,20 +113,20 @@ function RangeInput(props) {
                     id="customRange"
                     onChange={(e) => updateAnswer({ ...answer, text: String(e.target.value) })}
                     style={rangeStyle}
-                    value={value}
+                    value={parseFloat(answer.text) || min}
                     disabled={disabled}
                 />
             </div>
             <div className="range-subtitle d-flex justify-content-between pt-2">
-                <span className={`${parseFloat(value) === parseFloat(min) ? 'fw-medium fs-5' : 'fw-normal fs-6'} w-25`}>{min}</span>
+                <span className={`${parseFloat(answer.text) === parseFloat(min) ? 'fw-medium fs-5' : 'fw-normal fs-6'} w-25`}>{min}</span>
                 <span
                     className={`${
-                        parseFloat(value) === parseFloat(min) || parseFloat(value) === parseFloat(max) ? 'd-none' : ''
+                        parseFloat(answer.text) === parseFloat(min) || parseFloat(answer.text) === parseFloat(max) ? 'd-none' : ''
                     } text-center fw-medium fs-5 w-25`}
                 >
-                    {value}
+                    {answer.text}
                 </span>
-                <span className={`${parseFloat(value) === parseFloat(max) ? 'fw-medium fs-5' : 'fw-normal fs-6'} text-end w-25`}>
+                <span className={`${parseFloat(answer.text) === parseFloat(max) ? 'fw-medium fs-5' : 'fw-normal fs-6'} text-end w-25`}>
                     {max}
                 </span>
             </div>

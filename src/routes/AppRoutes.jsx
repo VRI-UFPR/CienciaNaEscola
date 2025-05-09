@@ -17,7 +17,7 @@ import ProfilePage from './../pages/ProfilePage';
 import ApplicationPage from '../pages/ApplicationPage';
 import ProtocolPage from './../pages/ProtocolPage';
 import CreateProtocolPage from './../pages/CreateProtocolPage';
-import AnswerPage from '../pages/AnswerPage';
+import ApplicationAnswersPage from '../pages/ApplicationAnswersPage';
 import { aboutPICCE, terms } from '../utils/constants';
 import InstallPage from '../pages/InstallPage';
 import { LayoutProvider } from '../contexts/LayoutContext';
@@ -28,26 +28,33 @@ import InstitutionPage from '../pages/InstitutionPage';
 import CreateApplicationPage from '../pages/CreateApplicationPage';
 import CreateUserPage from '../pages/CreateUserPage';
 import CreateClassroomPage from '../pages/CreateClassroomPage';
+import UsersPage from '../pages/UsersPage';
+import ProtocolAnswersPage from '../pages/ProtocolAnswersPage';
 
 // App navigation flow
 // Install page (InstallPage) -> Login (SignInPage) -> Visible applications (ApplicationsPage) -> Answer application (ApplicationPage)
-//                                                  \                                          \> Applicattion statistics/details (AnswersPage)
-//                                                  \                                          \> About/Developers (InfosPage)
+//                                                  \                                          \> Applicattion statistics/details (ApplicationAnswersPage)
+//                                                  \> About/Developers (InfosPage)
 //                                                  \> Terms of use (InfosPage)
-//                                                  \> Profile (ProfilePage) ?
+//                                                  \> Profile (ProfilePage)
 // Dashboard navigation flow
 // Login (SignInPage) -> Created/visible applications (ApplicationsPage) -> Manage application (CreateApplicationPage)
-//                    \                                                  \> Application statistics/details (AnswersPage)
+//                    \                                                  \> Application statistics/details (ApplicationAnswersPage)
 //                    \> Created/visible protocols (ProtocolsPage) -> View protocol (ProtocolPage) -> Create application (CreateApplicationPage)
 //                    \                                                                            \> Manage protocol (CreateProtocolPage)
-//                    \                                                                            \> Protocol statistics/details (AnswersPage)
+//                    \                                                                            \> Protocol statistics/details (ProtocolAnswersPage)
 //                    \                                                                            \> Create protocol (CreateProtocolPage)
-//                    \> Managed institutions (InstitutionsPage) -> View institution (InstitutionPage) -> Manage institution (CreateInstitutionPage)
-//                                                                                                     \> Create institution (CreateInstitutionPage)
-//                                                                                                     \> Manage user (CreateUserPage)
-//                                                                                                     \> Create user (CreateUserPage)
-//                                                                                                     \> Manage classroom (CreateClassroomPage)
-//                                                                                                     \> Create classroom (CreateClassroomPage)
+//                    \> Managed institutions (InstitutionsPage) -> Create institution (CreateInstitutionPage)
+//                    \                                          \> View institution (InstitutionPage) -> Manage institution (CreateInstitutionPage)
+//                    \                                                                                \> Manage user (CreateUserPage)
+//                    \                                                                                \> Create user (CreateUserPage)
+//                    \                                                                                \> Manage classroom (CreateClassroomPage)
+//                    \                                                                                \> Create classroom (CreateClassroomPage)
+//                    \> Manage users (UsersPage) -> Manage user (CreateUserPage)
+//                    \                           \> Create user (CreateUserPage)
+//                    \                           \> Manage classroom (CreateClassroomPage)
+//                    \                           \> Create classroom (CreateClassroomPage)
+//                    \> Profile (ProfilePage) -> Manage user (CreateUserPage)
 //*Manage = Edit object and children objects
 
 const appRoutes = [
@@ -66,7 +73,7 @@ const appRoutes = [
             },
             { path: 'applications', element: <ApplicationsPage /> },
             { path: 'applications/:applicationId', element: <ApplicationPage /> },
-            { path: 'applications/:applicationId/answers', element: <AnswerPage /> },
+            { path: 'applications/:applicationId/answers', element: <ApplicationAnswersPage /> },
         ],
     },
     {
@@ -89,22 +96,19 @@ const appRoutes = [
             { path: 'protocols', element: <ProtocolsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
             { path: 'protocols/create', element: <CreateProtocolPage /> },
             { path: 'protocols/:protocolId', element: <ProtocolPage /> },
+            { path: 'protocols/:protocolId/answers', element: <ProtocolAnswersPage /> },
             { path: 'protocols/:protocolId/manage', element: <CreateProtocolPage isEditing={true} /> },
             { path: 'protocols/:protocolId/apply', element: <CreateApplicationPage /> },
-            { path: 'applications/:applicationId/answers', element: <AnswerPage /> },
+            { path: 'applications/:applicationId/answers', element: <ApplicationAnswersPage /> },
             { path: 'institutions', element: <InstitutionsPage showNavTogglerMobile={true} showNavTogglerDesktop={false} /> },
             { path: 'institutions/create', element: <CreateInstitutionPage /> },
             { path: 'institutions/:institutionId', element: <InstitutionPage /> },
             { path: 'institutions/:institutionId/manage', element: <CreateInstitutionPage isEditing={true} /> },
-            { path: 'institutions/:institutionId/users/create', element: <CreateUserPage /> },
-            { path: 'institutions/:institutionId/users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
-            { path: 'institutions/:institutionId/classrooms/create', element: <CreateClassroomPage /> },
-            { path: 'institutions/:institutionId/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
-            { path: 'institutions/my', element: <InstitutionPage /> },
-            { path: 'institutions/my/users/create', element: <CreateUserPage /> },
-            { path: 'institutions/my/users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
-            { path: 'institutions/my/classrooms/create', element: <CreateClassroomPage /> },
-            { path: 'institutions/my/classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
+            { path: 'users/create', element: <CreateUserPage /> },
+            { path: 'users/:userId/manage', element: <CreateUserPage isEditing={true} /> },
+            { path: 'classrooms/create', element: <CreateClassroomPage /> },
+            { path: 'classrooms/:classroomId/manage', element: <CreateClassroomPage isEditing={true} /> },
+            { path: 'users', element: <UsersPage /> },
         ],
     },
 ];
