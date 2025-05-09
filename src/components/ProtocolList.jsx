@@ -91,7 +91,7 @@ function ProtocolList(props) {
             <div
                 className={`button-list-${
                     'hsl-' + hue + '-' + sat + '-' + lig
-                } d-flex flex-column align-items-center h-100 px-1 pe-3 overflow-y-scroll`}
+                } d-flex flex-column align-items-center h-100 pt-1 pe-3 overflow-y-scroll`}
             >
                 {sortedAndFilteredItems.map((li) => (
                     <div
