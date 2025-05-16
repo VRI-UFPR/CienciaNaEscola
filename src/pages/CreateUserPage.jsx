@@ -134,7 +134,7 @@ function CreateUserPage(props) {
     /** Carrega dados iniciais para criação ou edição do usuário. */
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER'))
+            if (!isEditing && user.role === 'USER')
                 return setError({
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para criar usuários nesta instituição',
@@ -179,7 +179,9 @@ function CreateUserPage(props) {
                         )
                 );
             }
-            Promise.all(promises).then(() => setIsLoading(false));
+            Promise.all(promises)
+                .then(() => setIsLoading(false))
+                .catch((error) => setError(error));
         }
     }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
 
@@ -453,10 +455,10 @@ function CreateUserPage(props) {
                                                 <div className="col">
                                                     <input
                                                         type={passwordVisibility ? 'text' : 'password'}
-                                                        name="hash"
+                                                        name="validatehash"
                                                         value={newUser.hashValidation || ''}
                                                         form="user-form"
-                                                        id="hash"
+                                                        id="validatehash"
                                                         className="form-control rounded-4 bg-light-pastel-blue color-grey fw-medium fs-5 border-0"
                                                         autoComplete="new-password"
                                                         onChange={(e) => setNewUser({ ...newUser, hashValidation: e.target.value })}
@@ -479,21 +481,16 @@ function CreateUserPage(props) {
                                                     required
                                                 >
                                                     <option value="">Selecione uma opção:</option>
-                                                    {(user.role === 'ADMIN' ||
-                                                        user.role === 'COORDINATOR' ||
-                                                        user.role === 'PUBLISHER' ||
-                                                        user.role === 'APPLIER') && <option value="USER">Usuário</option>}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
-                                                        <option value="APPLIER">Aplicador</option>
-                                                    )}
-                                                    {(user.role === 'ADMIN' || user.role === 'COORDINATOR') && (
+                                                    <option value="USER">Usuário</option>
+                                                    {user.role !== 'APPLIER' && <option value="APPLIER">Aplicador</option>}
+                                                    {user.role !== 'APPLIER' && user.role !== 'PUBLISHER' && (
                                                         <option value="PUBLISHER">Publicador</option>
                                                     )}
                                                     {user.role === 'ADMIN' && <option value="COORDINATOR">Coordenador</option>}
                                                 </select>
                                             </div>
                                         )}
-                                        {user.institutionId && user.role !== 'ADMIN' && (
+                                        {user.institutionId && user.role !== 'ADMIN' && newUser.role !== 'COORDINATOR' && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
