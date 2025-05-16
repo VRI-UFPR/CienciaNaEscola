@@ -83,7 +83,6 @@ function UsersPage(props) {
     const { user } = useContext(AuthContext);
     const [managedUsers, setManagedUsers] = useState([]);
     const [managedClassrooms, setManagedClassrooms] = useState([]);
-    console.log('managedClassrooms', managedClassrooms);
     const [MCSearchInput, setMCSearchInput] = useState('');
     const [MUSearchInput, setMUSearchInput] = useState('');
 
