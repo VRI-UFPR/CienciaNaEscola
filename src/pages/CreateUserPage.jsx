@@ -144,7 +144,7 @@ function CreateUserPage(props) {
                             const { name, username, role, classrooms, profileImageId, profileImage, institution, actions } =
                                 response.data.data;
                             if (actions.toUpdate !== true)
-                                return setError({
+                                return Promise.reject({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar este usuário',
                                 });
