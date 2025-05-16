@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 
 const roundedButtonStyles = (hue, sat, lig, size) => {
     return `
@@ -66,10 +66,13 @@ function RoundedButton(props) {
         role = undefined,
         className = '',
         disabled,
-        'data-bs-toggle': dataBsToggle,
-        'data-bs-target': dataBsTarget,
-        'data-bs-custom-class': dataBsCustomClass,
-        'data-bs-title': dataBsTitle,
+        dataBsToggle,
+        dataBsTarget,
+        dataBsCustomClass,
+        dataBsTitle,
+        weight = 400,
+        fill = 1,
+        grade = 200,
     } = props;
 
     return (
@@ -86,7 +89,7 @@ function RoundedButton(props) {
             onClick={onClick}
             disabled={disabled}
         >
-            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill grade={200} weight={400} />
+            <MaterialSymbol icon={icon} size={Math.floor(size * 0.7)} fill={fill} grade={grade} weight={weight} />
             <style>{roundedButtonStyles(hue, sat, lig, size)}</style>
         </button>
     );

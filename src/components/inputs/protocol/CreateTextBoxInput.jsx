@@ -12,7 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import { useContext, useEffect, useRef, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 import { AlertContext } from '../../../contexts/AlertContext';
 
@@ -152,9 +152,9 @@ function CreateTextBoxInput(props) {
                             hsl={[190, 46, 70]}
                             icon="checklist"
                             onClick={() => insertItemValidation(itemIndex)}
-                            data-bs-toggle="tooltip"
-                            data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
-                            data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
+                            dataBsToggle="tooltip"
+                            dataBsCustomClass={'add-validation-' + item.tempId + '-tooltip'}
+                            dataBsTitle="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
                             className={'add-validation-' + item.tempId + '-tooltip text-white'}
                         />
                     </div>
@@ -164,9 +164,9 @@ function CreateTextBoxInput(props) {
                         hsl={[190, 46, 70]}
                         icon="delete"
                         onClick={() => removeItem(itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
-                        data-bs-title="Remover o item do grupo."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'delete-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Remover o item do grupo."
                         className={'delete-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
@@ -199,9 +199,9 @@ function CreateTextBoxInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
-                        data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'mandatory-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
                         className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                 </div>
@@ -271,9 +271,9 @@ function CreateTextBoxInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'question-' + item.tempId + '-tooltip'}
-                        data-bs-title="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'question-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
                         className={'bg-steel-blue question-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <div className="row gx-2 align-items-end">
@@ -296,9 +296,9 @@ function CreateTextBoxInput(props) {
                                 size={32}
                                 icon="add_photo_alternate"
                                 onClick={handleGalleryButtonClick}
-                                data-bs-toggle="tooltip"
-                                data-bs-custom-class={'upload-image-' + item.tempId}
-                                data-bs-title="Adicione imagens ao enunciado da pergunta."
+                                dataBsToggle="tooltip"
+                                dataBsCustomClass={'upload-image-' + item.tempId}
+                                dataBsTitle="Adicione imagens ao enunciado da pergunta."
                                 className={'upload-image-' + item.tempId + '-tooltip text-white'}
                             />
                         </div>

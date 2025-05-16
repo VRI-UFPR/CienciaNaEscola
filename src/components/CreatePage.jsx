@@ -212,9 +212,9 @@ function CreatePage(props) {
                         onClick={() => removePage(itemTarget.page)}
                         icon="delete"
                         className={`delete-page-${page.tempId.toString().slice(0, 13)}-tooltip text-white`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`delete-page-${page.tempId}-tooltip`}
-                        data-bs-title="Remover a página do protocolo."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={`delete-page-${page.tempId}-tooltip`}
+                        dataBsTitle="Remover a página do protocolo."
                     />
                 </div>
             </div>

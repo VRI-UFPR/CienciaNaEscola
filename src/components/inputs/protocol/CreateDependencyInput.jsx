@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 /**
@@ -91,9 +91,9 @@ function CreateDependencyInput(props) {
                         hsl={[190, 46, 70]}
                         icon="delete"
                         onClick={() => removeDependency(dependencyIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + dependency.tempId + '-tooltip'}
-                        data-bs-title={'Remover a dependência ' + (isPageDependency ? 'da página.' : 'do grupo.')}
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'delete-' + dependency.tempId + '-tooltip'}
+                        dataBsTitle={'Remover a dependência ' + (isPageDependency ? 'da página.' : 'do grupo.')}
                         className={'delete-' + dependency.tempId + '-tooltip text-white'}
                     />
                 </div>
@@ -112,9 +112,9 @@ function CreateDependencyInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'dependency-type-' + dependency.tempId + '-tooltip'}
-                        data-bs-title="Qual tipo de condição deve ser atendida para que a dependência seja válida."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'dependency-type-' + dependency.tempId + '-tooltip'}
+                        dataBsTitle="Qual tipo de condição deve ser atendida para que a dependência seja válida."
                         className={'bg-steel-blue dependency-type-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <select
@@ -158,9 +158,9 @@ function CreateDependencyInput(props) {
                             weight={700}
                             fill
                             color="#FFFFFF"
-                            data-bs-toggle="tooltip"
-                            data-bs-custom-class={'dependency-argument-' + dependency.tempId + '-tooltip'}
-                            data-bs-title="Dado o tipo de dependência, qual é o valor, qualidade ou quantidade que deve ser atendido."
+                            dataBsToggle="tooltip"
+                            dataBsCustomClass={'dependency-argument-' + dependency.tempId + '-tooltip'}
+                            dataBsTitle="Dado o tipo de dependência, qual é o valor, qualidade ou quantidade que deve ser atendido."
                             className={'bg-steel-blue dependency-argument-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                         />
                         <input
@@ -193,9 +193,9 @@ function CreateDependencyInput(props) {
                             weight={700}
                             fill
                             color="#FFFFFF"
-                            data-bs-toggle="tooltip"
-                            data-bs-custom-class={'dependency-target-' + dependency.tempId + '-tooltip'}
-                            data-bs-title="Qual item deverá atender a condição da dependência."
+                            dataBsToggle="tooltip"
+                            dataBsCustomClass={'dependency-target-' + dependency.tempId + '-tooltip'}
+                            dataBsTitle="Qual item deverá atender a condição da dependência."
                             className={'bg-steel-blue dependency-target-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                         />
                         <select

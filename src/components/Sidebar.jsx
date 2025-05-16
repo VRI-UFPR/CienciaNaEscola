@@ -18,7 +18,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { version } from '../utils/constants';
 import { LayoutContext } from '../contexts/LayoutContext';
 import { AlertContext } from '../contexts/AlertContext';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 
 const styles = `
     .font-barlow {

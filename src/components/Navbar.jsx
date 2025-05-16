@@ -12,7 +12,7 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import titleCE from '../assets/images/titleCE.svg';
 import ColoredBorder from './ColoredBorder';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 
 const styles = `
     .ce-navbar {

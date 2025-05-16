@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import RoundedButton from '../../RoundedButton';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from '../../MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 /**
@@ -52,9 +52,9 @@ function CreateValidationInput(props) {
                         hsl={[190, 46, 70]}
                         icon="delete"
                         onClick={() => removeValidation(itemIndex, validationIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + validation.tempId + '-tooltip'}
-                        data-bs-title="Remover a validação do item."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'delete-' + validation.tempId + '-tooltip'}
+                        dataBsTitle="Remover a validação do item."
                         className={'delete-' + validation.tempId + '-tooltip text-white'}
                     />
                 </div>
@@ -70,9 +70,9 @@ function CreateValidationInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'validation-type-' + validation.tempId + '-tooltip'}
-                        data-bs-title="Qual tipo de condição deve ser atendida para que a validação seja atendida."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'validation-type-' + validation.tempId + '-tooltip'}
+                        dataBsTitle="Qual tipo de condição deve ser atendida para que a validação seja atendida."
                         className={'bg-steel-blue validation-type-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <select
@@ -114,9 +114,9 @@ function CreateValidationInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'validation-argument-' + validation.tempId + '-tooltip'}
-                        data-bs-title="Dado o tipo de validação, qual é o valor, qualidade ou quantidade que deve ser atendido."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'validation-argument-' + validation.tempId + '-tooltip'}
+                        dataBsTitle="Dado o tipo de validação, qual é o valor, qualidade ou quantidade que deve ser atendido."
                         className={'bg-steel-blue validation-argument-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
@@ -138,9 +138,9 @@ function CreateValidationInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'validation-message-' + validation.tempId + '-tooltip'}
-                        data-bs-title="Mensagem que será exibida ao usuário caso a validação não seja atendida."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'validation-message-' + validation.tempId + '-tooltip'}
+                        dataBsTitle="Mensagem que será exibida ao usuário caso a validação não seja atendida."
                         className={'bg-steel-blue validation-message-' + validation.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input

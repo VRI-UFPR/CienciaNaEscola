@@ -84,13 +84,15 @@ function CreateTableInput(props) {
                                         <RoundedButton
                                             className="text-white ms-2"
                                             hsl={[190, 46, 70]}
-                                            icon="table_rows"
+                                            icon="add_row_below"
+                                            weight={300}
                                             onClick={() => insertItem('TABLEROW', pageIndex, groupIndex)}
                                         />
                                         <RoundedButton
                                             className="text-white ms-2"
                                             hsl={[190, 46, 70]}
-                                            icon="view_column"
+                                            icon="add_column_right"
+                                            weight={300}
                                             onClick={() => insertTableColumn()}
                                         />
                                     </div>

@@ -16,7 +16,7 @@ import { serialize } from 'object-to-formdata';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
 import { AlertContext } from '../contexts/AlertContext';
-import { MaterialSymbol } from 'react-material-symbols';
+import MaterialSymbol from './MaterialSymbol';
 import { Tooltip } from 'bootstrap';
 
 const CreateProtocolPropertiesStyles = `
@@ -56,13 +56,19 @@ function CreateProtocolProperties(props) {
 
     /** Efeito para inicializar tooltips ao montar o componente. */
     useEffect(() => {
-        new Tooltip('.title-tooltip', { trigger: 'hover' });
-        new Tooltip('.description-tooltip', { trigger: 'hover' });
-        new Tooltip('.enabled-tooltip', { trigger: 'hover' });
-        new Tooltip('.replicable-tooltip', { trigger: 'hover' });
-        new Tooltip('.visibility-tooltip', { trigger: 'hover' });
-        new Tooltip('.applicability-tooltip', { trigger: 'hover' });
-        new Tooltip('.answer-visiblity-tooltip', { trigger: 'hover' });
+        const tooltipList = [];
+
+        tooltipList.push(new Tooltip('.title-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.description-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.enabled-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.replicable-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.visibility-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.applicability-tooltip', { trigger: 'hover' }));
+        tooltipList.push(new Tooltip('.answer-visiblity-tooltip', { trigger: 'hover' }));
+
+        return () => {
+            tooltipList.forEach((tooltip) => tooltip.dispose());
+        };
     }, []);
 
     /**
@@ -263,9 +269,9 @@ function CreateProtocolProperties(props) {
                 weight={700}
                 fill
                 color="#FFFFFF"
-                data-bs-toggle="tooltip"
-                data-bs-custom-class="custom-tooltip"
-                data-bs-title="Texto curto que identifique o protocolo com no máximo 255 caracteres."
+                dataBsToggle="tooltip"
+                dataBsCustomClass="title-tooltip"
+                dataBsTitle="Texto curto que identifique o protocolo com no máximo 255 caracteres."
                 className="bg-steel-blue title-tooltip p-1 rounded-circle"
             />
             <input
@@ -286,9 +292,9 @@ function CreateProtocolProperties(props) {
                 weight={700}
                 fill
                 color="#FFFFFF"
-                data-bs-toggle="tooltip"
-                data-bs-custom-class="description-tooltip"
-                data-bs-title="Texto que descreva a finalidade do protocolo e/ou instruções para sua execução. Suporta Markdown com até 3000 caracteres."
+                dataBsToggle="tooltip"
+                dataBsCustomClass="description-tooltip"
+                dataBsTitle="Texto que descreva a finalidade do protocolo e/ou instruções para sua execução. Suporta Markdown com até 3000 caracteres."
                 className="bg-steel-blue description-tooltip p-1 rounded-circle"
             />
             <textarea
@@ -316,9 +322,9 @@ function CreateProtocolProperties(props) {
                     weight={700}
                     fill
                     color="#FFFFFF"
-                    data-bs-toggle="tooltip"
-                    data-bs-custom-class="enabled-tooltip"
-                    data-bs-title="Se o protocolo aceitará respostas e aplicações."
+                    dataBsToggle="tooltip"
+                    dataBsCustomClass="enabled-tooltip"
+                    dataBsTitle="Se o protocolo aceitará respostas e aplicações."
                     className="bg-steel-blue enabled-tooltip p-1 rounded-circle"
                 />
             </div>
@@ -340,9 +346,9 @@ function CreateProtocolProperties(props) {
                     weight={700}
                     fill
                     color="#FFFFFF"
-                    data-bs-toggle="tooltip"
-                    data-bs-custom-class="replicable-tooltip"
-                    data-bs-title="Se os aplicadores poderão criar réplicas do protocolo. Uma réplica possui os mesmos itens e estrutura do protocolo original, mas com regras (acesso, replicabilidade, etc) definidas pelo usuário que replicou, sem controle do criador original. A réplica não acompanhará futuras alterações deste protocolo."
+                    dataBsToggle="tooltip"
+                    dataBsCustomClass="replicable-tooltip"
+                    dataBsTitle="Se os aplicadores poderão criar réplicas do protocolo. Uma réplica possui os mesmos itens e estrutura do protocolo original, mas com regras (acesso, replicabilidade, etc) definidas pelo usuário que replicou, sem controle do criador original. A réplica não acompanhará futuras alterações deste protocolo."
                     className="bg-steel-blue replicable-tooltip p-1 rounded-circle"
                 />
             </div>
@@ -355,9 +361,9 @@ function CreateProtocolProperties(props) {
                 weight={700}
                 fill
                 color="#FFFFFF"
-                data-bs-toggle="tooltip"
-                data-bs-custom-class="visibility-tooltip"
-                data-bs-title="Quem poderá visualizar o protocolo. Um protocolo público é acessível para todos os usuários, enquanto o protocolo restrito só é acessível para os usuários e grupos que você selecionar. Aplicações definidas como mais restritas podem não ser acessíveis para todos os usuários definidos aqui."
+                dataBsToggle="tooltip"
+                dataBsCustomClass="visibility-tooltip"
+                dataBsTitle="Quem poderá visualizar o protocolo. Um protocolo público é acessível para todos os usuários, enquanto o protocolo restrito só é acessível para os usuários e grupos que você selecionar. Aplicações definidas como mais restritas podem não ser acessíveis para todos os usuários definidos aqui."
                 className="bg-steel-blue visibility-tooltip p-1 rounded-circle"
             />
             <select
@@ -515,9 +521,9 @@ function CreateProtocolProperties(props) {
                 weight={700}
                 fill
                 color="#FFFFFF"
-                data-bs-toggle="tooltip"
-                data-bs-custom-class="applicability-tooltip"
-                data-bs-title="Quem poderá aplicar o protocolo. Um protocolo público é aplicável por todos os usuários, enquanto o protocolo restrito só é aplicável pelos usuários e grupos que você selecionar. A aplicação herda as restrições de visibilidade do protocolo, mas pode ser definida para ser ainda mais restrita. O criador do protocolo terá acesso às respostas de todas as aplicações."
+                dataBsToggle="tooltip"
+                dataBsCustomClass="applicability-tooltip"
+                dataBsTitle="Quem poderá aplicar o protocolo. Um protocolo público é aplicável por todos os usuários, enquanto o protocolo restrito só é aplicável pelos usuários e grupos que você selecionar. A aplicação herda as restrições de visibilidade do protocolo, mas pode ser definida para ser ainda mais restrita. O criador do protocolo terá acesso às respostas de todas as aplicações."
                 className="bg-steel-blue applicability-tooltip p-1 rounded-circle"
             />
             <select
@@ -606,9 +612,9 @@ function CreateProtocolProperties(props) {
                 weight={700}
                 fill
                 color="#FFFFFF"
-                data-bs-toggle="tooltip"
-                data-bs-custom-class="answer-visiblity-tooltip"
-                data-bs-title="Quem poderá visualizar as respostas do protocolo. Um protocolo público permite que todos os usuários vejam suas respostas, enquanto o protocolo restrito só permite que os usuários e grupos que você selecionar vejam as respostas. Respostas de aplicações definidas como mais restritas que o protocolo não serão visíveis por todos os usuários definidos aqui."
+                dataBsToggle="tooltip"
+                dataBsCustomClass="answer-visiblity-tooltip"
+                dataBsTitle="Quem poderá visualizar as respostas do protocolo. Um protocolo público permite que todos os usuários vejam suas respostas, enquanto o protocolo restrito só permite que os usuários e grupos que você selecionar vejam as respostas. Respostas de aplicações definidas como mais restritas que o protocolo não serão visíveis por todos os usuários definidos aqui."
                 className="bg-steel-blue answer-visiblity-tooltip p-1 rounded-circle"
             />
             <select
