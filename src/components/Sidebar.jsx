@@ -118,7 +118,17 @@ function Sidebar(props) {
                     </div>
                 </div>
                 <div className="container d-flex flex-column align-items-center font-barlow fw-medium p-0 pb-3">
-                    <span className="px-3 py-1 rounded text-white bg-steel-blue">{user.username}</span>
+                    {user.role !== 'GUEST' && user.role !== 'ADMIN' ? (
+                        <Link
+                            className="px-3 py-1 rounded text-decoration-none text-white bg-steel-blue"
+                            to={isDashboard ? '/dash/profile' : '/profile'}
+                            onClick={() => closeSidebar()}
+                        >
+                            {user.username}
+                        </Link>
+                    ) : (
+                        <span className="px-3 py-1 rounded text-white bg-steel-blue">{user.username}</span>
+                    )}
                 </div>
                 <div className="container d-flex flex-column font-barlow fw-medium p-0 pb-4">
                     <h1 className="text-start text-white font-century-gothic fw-bold fs-2 mb-0 ps-4 pb-3">Menu</h1>
