@@ -586,42 +586,31 @@ function CreateProtocolPage(props) {
                                                     {creationMode === 'properties' && (
                                                         <div className="row justify-content-center">
                                                             <div className="col-7 col-md-5 col-xl-3">
-                                                                {isEditing ? (
-                                                                    <TextButton
-                                                                        type="button"
-                                                                        hsl={[97, 43, 70]}
-                                                                        text={'Editar itens'}
-                                                                        onClick={() => setCreationMode('children')}
-                                                                    />
-                                                                ) : (
-                                                                    <TextButton
-                                                                        type="button"
-                                                                        hsl={[97, 43, 70]}
-                                                                        text={'Adicionar itens'}
-                                                                        onClick={() => {
-                                                                            if (String(protocol.title).length < 3)
-                                                                                showAlert({
-                                                                                    headerText: 'Insira pelo menos 3 caracteres no título',
-                                                                                });
-                                                                            else if (protocol.visibility === '')
-                                                                                showAlert({
-                                                                                    headerText:
-                                                                                        'Selecione uma opção válida em Visibilidade',
-                                                                                });
-                                                                            else if (protocol.applicability === '')
-                                                                                showAlert({
-                                                                                    headerText:
-                                                                                        'Selecione uma opção válida em Aplicabilidade',
-                                                                                });
-                                                                            else if (protocol.answersVisibility === '')
-                                                                                showAlert({
-                                                                                    headerText:
-                                                                                        'Selecione uma opção válida em Visibilidade das respostas',
-                                                                                });
-                                                                            else setCreationMode('children');
-                                                                        }}
-                                                                    />
-                                                                )}
+                                                                <TextButton
+                                                                    type="button"
+                                                                    hsl={[97, 43, 70]}
+                                                                    text={isEditing ? 'Editar itens' : 'Adicionar itens'}
+                                                                    onClick={() => {
+                                                                        if (String(protocol.title).length < 3)
+                                                                            showAlert({
+                                                                                headerText: 'Insira pelo menos 3 caracteres no título',
+                                                                            });
+                                                                        else if (protocol.visibility === '')
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Visibilidade',
+                                                                            });
+                                                                        else if (protocol.applicability === '')
+                                                                            showAlert({
+                                                                                headerText: 'Selecione uma opção válida em Aplicabilidade',
+                                                                            });
+                                                                        else if (protocol.answersVisibility === '')
+                                                                            showAlert({
+                                                                                headerText:
+                                                                                    'Selecione uma opção válida em Visibilidade das respostas',
+                                                                            });
+                                                                        else setCreationMode('children');
+                                                                    }}
+                                                                />
                                                             </div>
                                                         </div>
                                                     )}
