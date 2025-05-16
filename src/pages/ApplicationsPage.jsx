@@ -72,6 +72,7 @@ function ApplicationsPage(props) {
     const { user, logout } = useContext(AuthContext);
 
     const [visibleApplications, setVisibleApplications] = useState([]);
+    const [managedApplications, setManagedApplications] = useState([]);
     const { localApplications, connected, clearLocalApplications } = useContext(StorageContext);
 
     const navigate = useNavigate();
@@ -82,6 +83,7 @@ function ApplicationsPage(props) {
         if (!connected) {
             if (localApplications !== undefined) {
                 setVisibleApplications(localApplications);
+                setManagedApplications(localApplications.filter((a) => a.applier.id === user.id));
                 setIsLoading(false);
             }
         } else if (isLoading && user.status !== 'loading') {
@@ -96,8 +98,19 @@ function ApplicationsPage(props) {
                 .catch((error) =>
                     setError({ text: 'Erro ao obter informações de aplicações', description: error.response?.data.message || '' })
                 );
+            axios
+                .get(process.env.REACT_APP_API_URL + `api/application/getMyApplications`, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
+                })
+                .then((response) => {
+                    setManagedApplications(response.data.data);
+                    setIsLoading(false);
+                })
+                .catch((error) =>
+                    setError({ text: 'Erro ao obter informações de aplicações', description: error.response?.data.message || '' })
+                );
         }
-    }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);
+    }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status, user.id]);
 
     /**
      * Exclui uma aplicação do sistema.
@@ -147,18 +160,14 @@ function ApplicationsPage(props) {
                                                 Minhas aplicações
                                             </h1>
                                             <ProtocolList
-                                                listItems={visibleApplications
-                                                    .filter((a) => a.applier.id === user.id)
-                                                    .map((a) => ({
-                                                        id: a.id,
-                                                        title: a.protocol.title,
-                                                        primaryDescription: `${a.applier?.username}`,
-                                                        secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString(
-                                                            'pt-BR'
-                                                        )}`,
-                                                        allowEdit: a.actions.toUpdate,
-                                                        allowDelete: a.actions.toDelete,
-                                                    }))}
+                                                listItems={managedApplications.map((a) => ({
+                                                    id: a.id,
+                                                    title: a.protocol.title,
+                                                    primaryDescription: `${a.applier?.username}`,
+                                                    secondaryDescription: `#${a.id} - ${new Date(a.createdAt).toLocaleDateString('pt-BR')}`,
+                                                    allowEdit: a.actions.toUpdate,
+                                                    allowDelete: a.actions.toDelete,
+                                                }))}
                                                 hsl={[36, 98, 83]}
                                                 viewFunction={(id) => navigate(`${id}`)}
                                                 editFunction={(id) => navigate(`${id}/manage`)}
