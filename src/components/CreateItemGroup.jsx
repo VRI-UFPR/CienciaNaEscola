@@ -237,9 +237,9 @@ function CreateItemGroup(props) {
                         onClick={() => removeItemGroup(itemTarget.group)}
                         icon="delete"
                         className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip text-white`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`delete-group-${group.tempId}-tooltip`}
-                        data-bs-title="Remover o grupo da página."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={`delete-group-${group.tempId}-tooltip`}
+                        dataBsTitlte="Remover o grupo da página."
                     />
                 </div>
             </div>

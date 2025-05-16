@@ -97,9 +97,9 @@ function CreateRangeInput(props) {
                         hsl={[190, 46, 70]}
                         icon="delete"
                         onClick={() => removeItem(itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
-                        data-bs-title="Remover o item do grupo."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'delete-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Remover o item do grupo."
                         className={'delete-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
@@ -131,9 +131,9 @@ function CreateRangeInput(props) {
                     weight={700}
                     fill
                     color="#FFFFFF"
-                    data-bs-toggle="tooltip"
-                    data-bs-custom-class={'mandatory-' + item.tempId + '-tooltip'}
-                    data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
+                    dataBsToggle="tooltip"
+                    dataBsCustomClass={'mandatory-' + item.tempId + '-tooltip'}
+                    dataBsTitle="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
                     className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
                 />
             </div>
@@ -202,9 +202,9 @@ function CreateRangeInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'question-' + item.tempId + '-tooltip'}
-                        data-bs-title="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'question-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Texto curto com a questão ou proposta a ser atendida. Suporta Markdown com até 3000 caracteres."
                         className={'bg-steel-blue question-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <div className="row gx-2 align-items-end">
@@ -227,9 +227,9 @@ function CreateRangeInput(props) {
                                 size={32}
                                 icon="add_photo_alternate"
                                 onClick={handleGalleryButtonClick}
-                                data-bs-toggle="tooltip"
-                                data-bs-custom-class={'upload-image-' + item.tempId + '-tooltip'}
-                                data-bs-title="Adicione imagens ao enunciado da pergunta."
+                                dataBsToggle="tooltip"
+                                dataBsCustomClass={'upload-image-' + item.tempId + '-tooltip'}
+                                dataBsTitle="Adicione imagens ao enunciado da pergunta."
                                 className={'upload-image-' + item.tempId + '-tooltip text-white'}
                             />
                         </div>
@@ -290,9 +290,9 @@ function CreateRangeInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'min-' + item.tempId + '-tooltip'}
-                        data-bs-title="Limite inferior da barra deslizante. O valor mínimo que o usuário pode selecionar."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'min-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Limite inferior da barra deslizante. O valor mínimo que o usuário pode selecionar."
                         className={'bg-steel-blue min-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
@@ -331,9 +331,9 @@ function CreateRangeInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'max-' + item.tempId + '-tooltip'}
-                        data-bs-title="Limite superior da barra deslizante. O valor máximo que o usuário pode selecionar."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'max-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Limite superior da barra deslizante. O valor máximo que o usuário pode selecionar."
                         className={'bg-steel-blue max-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
@@ -372,9 +372,9 @@ function CreateRangeInput(props) {
                         weight={700}
                         fill
                         color="#FFFFFF"
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'step-' + item.tempId + '-tooltip'}
-                        data-bs-title="Incremento entre os valores que o usuário pode escolher no intervalo. A barra deslizante 'salta' de acordo com este valor."
+                        dataBsToggle="tooltip"
+                        dataBsCustomClass={'step-' + item.tempId + '-tooltip'}
+                        dataBsTitle="Incremento entre os valores que o usuário pode escolher no intervalo. A barra deslizante 'salta' de acordo com este valor."
                         className={'bg-steel-blue step-' + item.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <input
