@@ -42,6 +42,18 @@ const textBoxStyles = `
     }
 `;
 
+/**
+ * Componente responsável por criar um campo de entrada de texto.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentItem - O item atual que está sendo editado.
+ * @param {number} props.pageIndex - Índice da página.
+ * @param {number} props.groupIndex - Índice do grupo.
+ * @param {number} props.itemIndex - Índice do item.
+ * @param {Function} props.updateItem - Função para atualizar o item no estado.
+ * @param {Function} props.removeItem - Função para remover um item do estado.
+ * @param {Function} props.updateItemPlacement - Função para atualizar a posição do item na lista.
+ * @param {Function} props.insertItemValidation - Função para adicionar validação a um item.
+*/
 function CreateTextBoxInput(props) {
     const {
         currentItem,
@@ -62,10 +74,12 @@ function CreateTextBoxInput(props) {
     const galleryInputRef = useRef(null);
     const { showAlert } = useContext(AlertContext);
 
+    /** Efeito que atualiza o item quando há mudanças no item atual. */
     useEffect(() => {
         if (item !== currentItem) updateItem(item, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
 
+    /** Efeito que inicializa e limpa as tooltips quando o item é atualizado. */
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
@@ -85,16 +99,25 @@ function CreateTextBoxInput(props) {
         };
     }, [item.tempId, item.type]);
 
+    /** Função chamada ao clicar no botão de galeria. */
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
     };
 
+    /** 
+     * Função para adicionar uma imagem ao item. 
+     * @param {Event} e - Evento de input de arquivo. 
+    */
     const insertImage = (e) => {
         const newItem = { ...item };
         newItem.files.push({ content: e.target.files[0], description: '' });
         setItem(newItem);
     };
 
+    /**
+     * Função para remover uma imagem do item.
+     * @param {number} indexToRemove - Índice da imagem a ser removida.
+    */
     const removeImage = (indexToRemove) => {
         const newItem = { ...item };
         newItem.files.splice(indexToRemove, 1);

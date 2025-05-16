@@ -95,6 +95,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página de login do sistema.
+ * @param {Object} props - Propriedades do componente.
+ */
 function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

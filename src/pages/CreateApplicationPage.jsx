@@ -99,6 +99,11 @@ const style = `
     }
 `;
 
+/**
+ * Página de criação/edição de aplicação.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se a aplicação está sendo editada.
+*/
 function CreateApplicationPage(props) {
     const { applicationId, protocolId } = useParams();
     const { isEditing } = props;
@@ -107,6 +112,7 @@ function CreateApplicationPage(props) {
     const { clearLocalApplications } = useContext(StorageContext);
     const formRef = useRef(null);
 
+    /** Estado inicial da aplicação. */
     const [application, setApplication] = useState({
         protocolId: protocolId,
         keepLocation: false,
@@ -116,6 +122,7 @@ function CreateApplicationPage(props) {
         answersViewersClassroom: [],
     });
 
+    /** Estado inicial do protocolo. */
     const [protocol, setProtocol] = useState({
         viewersUser: [],
         viewersClassroom: [],
@@ -242,6 +249,10 @@ function CreateApplicationPage(props) {
         }
     }, [isEditing, isLoading, user.status, user.institutionId, user.token, user.role, applicationId, protocolId, user.id, showAlert]);
 
+    /**
+     * Submete a aplicação, criando ou atualizando conforme o modo de edição.
+     * @param {Event} e - Evento de envio do formulário.
+    */
     const submitApplication = (e) => {
         e.preventDefault();
         const formData = serialize({ ...application, actions: undefined }, { indices: true });
@@ -273,6 +284,7 @@ function CreateApplicationPage(props) {
         }
     };
 
+    /** Deleta uma aplicação com base no ID fornecido. */
     const deleteApplication = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/application/deleteApplication/${applicationId}`, {
@@ -285,6 +297,10 @@ function CreateApplicationPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Busca usuários pelo nome de usuário.
+     * @param {string} term - Termo de busca para encontrar usuários.
+    */
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -293,6 +309,8 @@ function CreateApplicationPage(props) {
             })
             .then((response) => {
                 const d = response.data.data;
+
+                /** Filtra os usuários que ainda não são espectadores e que têm permissão para visualizar o protocolo. */
                 const newUsers = [
                     ...d
                         .filter(
@@ -310,6 +328,10 @@ function CreateApplicationPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Busca usuários pelo nome de usuário para visualizar respostas.
+     * @param {string} term - Termo de busca para encontrar usuários.
+    */
     const searchAnswerUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -335,6 +357,10 @@ function CreateApplicationPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Busca salas de aula pelo nome.
+     * @param {string} term - Termo de busca para encontrar salas de aula.
+    */
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -377,6 +403,10 @@ function CreateApplicationPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Busca salas de aula pelo nome para visualização de respostas.
+     * @param {string} term - Termo de busca para encontrar salas de aula.
+    */
     const searchAnswerClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -419,6 +449,10 @@ function CreateApplicationPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
+    /**
+     * Remove um usuário da lista de visualizadores da aplicação.
+     * @param {number|string} id - ID do usuário a ser removido.
+    */
     const unselectUser = (id) => {
         setApplication((prev) => ({
             ...prev,
@@ -429,6 +463,10 @@ function CreateApplicationPage(props) {
         }));
     };
 
+    /**
+     * Adiciona uma sala de aula à lista de visualizadores da aplicação e seus usuários à lista de visualizadores individuais. 
+     * @param {number|string} id - ID da sala de aula a ser selecionada.
+    */
     const selectClassroom = (id) => {
         const c = searchedClassrooms.find((c) => c.id === id);
         const newUsers = c.users
@@ -456,6 +494,10 @@ function CreateApplicationPage(props) {
         }));
     };
 
+    /**
+     * Remove um usuário da lista de visualizadores de respostas da aplicação.
+     * @param {number|string} id - ID do usuário a ser removido da lista de visualizadores de respostas.
+    */
     const unselectAnswerUser = (id) => {
         setApplication((prev) => ({
             ...prev,
@@ -466,6 +508,10 @@ function CreateApplicationPage(props) {
         }));
     };
 
+    /**
+     * Adiciona uma sala de aula à lista de visualizadores de respostas da aplicação.
+     * @param {number|string} id - ID da sala de aula a ser adicionada como visualizadora de respostas.
+    */
     const selectAnswerClassroom = (id) => {
         const c = searchedAnswerClassrooms.find((c) => c.id === id);
         const newUsers = c.users

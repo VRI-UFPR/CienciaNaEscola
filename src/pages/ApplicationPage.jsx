@@ -66,6 +66,10 @@ const styles = `
     }
 `;
 
+/**
+ * ApplicationPage - Componente responsável por exibir e manipular uma aplicação baseada em um protocolo.
+ * @param {Object} props - Propriedades do componente.
+ */
 function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(undefined);
@@ -83,6 +87,10 @@ function ApplicationPage(props) {
     const navigate = useNavigate();
     const { isDashboard } = useContext(LayoutContext);
 
+    /**
+     * Encontra a resposta associada a um item pelo ID.
+     * @param {number} id - ID do item.
+     */
     const findAnswer = (id) => {
         for (const group in itemAnswerGroups) {
             let res = undefined;
@@ -98,6 +106,10 @@ function ApplicationPage(props) {
         return undefined;
     };
 
+    /**
+     * Busca um item no protocolo pelo ID.
+     * @param {number} id - ID do item.
+     */
     const findItem = (id) => {
         for (const page of application.protocol.pages)
             for (const group of page.itemGroups) for (const item of group.items) if (item.id === id) return item;
@@ -105,6 +117,10 @@ function ApplicationPage(props) {
         return undefined;
     };
 
+    /**
+     * Verifica se as dependências de um item foram atendidas.
+     * @param {Array} dependencies - Lista de dependências.
+     */
     const isDependenciesAttended = (dependencies) => {
         let dependencyAttended = true;
         for (const dependency of dependencies) {
@@ -162,6 +178,7 @@ function ApplicationPage(props) {
         return dependencyAttended;
     };
 
+    /** Obtém o índice da próxima página. */
     const getNextPage = () => {
         const nextPageIndex = currentPageIndex + 1;
         for (let i = nextPageIndex; i < application.protocol.pages.length; i++) {
@@ -174,18 +191,29 @@ function ApplicationPage(props) {
         }
     };
 
+    /** Verifica se há uma página anterior. */
     const hasPreviousPage = () => currentPageIndex > 0;
 
+    /** Verifica se há uma próxima página. */
     const hasNextPage = () => getNextPage() !== undefined;
 
+    /** Navega para a próxima página. */
     const goToNextPage = () => {
         if (hasNextPage()) setCurrentPageIndex(getNextPage());
     };
 
+    /** Navega para a página anterior. */
     const goToPreviousPage = () => {
         if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
     };
 
+    /**
+     * Manipula mudanças nas respostas.
+     * @param {string} groupToUpdate - Grupo de itens atualizado.
+     * @param {string} itemToUpdate - Item atualizado.
+     * @param {string} itemType - Tipo de item (ITEM, OPTION, TABLE).
+     * @param {Object} updatedAnswer - Resposta atualizada.
+     */
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
         setItemAnswerGroups((prevItemAnswerGroups) => {
             const newItemAnswerGroups = { ...prevItemAnswerGroups };
@@ -214,6 +242,7 @@ function ApplicationPage(props) {
         });
     }, []);
 
+    /** Manipula submissão do protocolo. */
     const handleProtocolSubmit = () => {
         showAlert({ headerText: 'Aguarde o processamento da resposta.', isClosable: false });
 

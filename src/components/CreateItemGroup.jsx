@@ -21,6 +21,18 @@ import CreateValidationInput from './inputs/protocol/CreateValidationInput';
 import CreateTableInput from './inputs/protocol/CreateTableInput';
 import { Tooltip } from 'bootstrap';
 
+/**
+ * Componente responsável por gerenciar um grupo de itens dentro de um formulário dinâmico.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentGroup - Dados do grupo de itens atual.
+ * @param {Function} props.updateGroup - Função para atualizar os dados do grupo.
+ * @param {Object} props.itemTarget - Informações sobre o item de destino para atualizações.
+ * @param {Function} props.updateGroupPlacement - Função para alterar a posição do grupo.
+ * @param {Function} props.removeItemGroup - Função para remover um item do grupo.
+ * @param {Object} props.protocol - Dados do protocolo ao qual o grupo pertence.
+ * @param {Object} props.page - Dados da página onde o grupo está localizado.
+ * @param {Function} props.insertItem - Função para inserir um novo item no grupo.
+*/
 function CreateItemGroup(props) {
     const {
         currentGroup,
@@ -43,6 +55,7 @@ function CreateItemGroup(props) {
         if (group !== currentGroup) updateGroup(group, itemTarget.group);
     }, [group, itemTarget.group, updateGroup, currentGroup]);
 
+    /** Efeito para inicializar tooltips ao montar o componente. */
     useEffect(() => {
         const tooltipList = [];
         if (group.tempId) {
@@ -54,6 +67,12 @@ function CreateItemGroup(props) {
         };
     }, [group.tempId]);
 
+    /**
+     * Atualiza a validação de um item dentro do grupo.
+     * @param {Object} validation - Dados da validação.
+     * @param {number} item - Índice do item dentro do grupo.
+     * @param {number} index - Índice da validação dentro do item.
+    */
     const updateItemValidation = useCallback((validation, item, index) => {
         setGroup((prev) => {
             const newGroup = { ...prev };
@@ -62,6 +81,11 @@ function CreateItemGroup(props) {
         });
     }, []);
 
+    /**
+     * Remove uma validação específica de um item dentro do grupo.
+     * @param {number} item - Índice do item dentro do grupo.
+     * @param {number} index - Índice da validação dentro do item.
+    */
     const removeItemValidation = useCallback(
         (item, index) => {
             const newGroup = { ...group };
@@ -71,6 +95,10 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /**
+     * Insere uma nova validação para um item dentro do grupo.
+     * @param {number} item - Índice do item dentro do grupo.
+    */
     const insertItemValidation = useCallback(
         (item) => {
             const newGroup = { ...group };
@@ -80,6 +108,12 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /**
+     * Atualiza a posição de um item dentro do grupo.
+     * @param {number} newPlacement - Nova posição desejada.
+     * @param {number} oldPlacement - Posição original do item.
+     * @param {number} itemIndex - Índice do item dentro do grupo.
+    */
     const updateItemPlacement = useCallback(
         (newPlacement, oldPlacement, itemIndex) => {
             if (newPlacement < 1 || newPlacement > group.items.length) return;
@@ -96,6 +130,11 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /**
+     * Atualiza um item específico dentro do grupo.
+     * @param {Object} item - Novo estado do item.
+     * @param {number} index - Índice do item dentro do grupo.
+    */
     const updateItem = useCallback((item, index) => {
         setGroup((prev) => {
             const newGroup = { ...prev };
@@ -104,6 +143,10 @@ function CreateItemGroup(props) {
         });
     }, []);
 
+    /**
+     * Remove um item específico do grupo.
+     * @param {number} index - Índice do item a ser removido.
+    */
     const removeItem = useCallback(
         (index) => {
             const newGroup = { ...group };
@@ -116,6 +159,11 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /**
+     * Atualiza uma dependência do grupo.
+     * @param {Object} dependency - Nova configuração da dependência.
+     * @param {number} dependencyIndex - Índice da dependência dentro do grupo.
+    */
     const updateDependency = useCallback((dependency, dependencyIndex) => {
         setGroup((prev) => {
             const newGroup = { ...prev };
@@ -124,6 +172,10 @@ function CreateItemGroup(props) {
         });
     }, []);
 
+    /**
+     * Remove uma dependência do grupo.
+     * @param {number} dependencyIndex - Índice da dependência dentro do grupo.
+    */
     const removeDependency = useCallback(
         (dependencyIndex) => {
             const newGroup = { ...group };
@@ -133,6 +185,7 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /** Adiciona uma nova coluna à tabela do grupo. */
     const insertTableColumn = useCallback(() => {
         const newGroup = { ...group };
         newGroup.tableColumns.push({
@@ -143,6 +196,10 @@ function CreateItemGroup(props) {
         setGroup(newGroup);
     }, [group]);
 
+    /**
+     * Remove uma coluna específica da tabela do grupo.
+     * @param {number} index - Índice da coluna a ser removida.
+    */
     const removeTableColumn = useCallback(
         (index) => {
             const newGroup = { ...group };
@@ -158,6 +215,11 @@ function CreateItemGroup(props) {
         [group]
     );
 
+    /**
+     * Atualiza o texto de uma coluna da tabela do grupo.
+     * @param {number} index - Índice da coluna dentro da tabela.
+     * @param {string} newText - Novo texto da coluna.
+    */
     const updateTableColumn = useCallback(
         (index, newText) => {
             const newGroup = { ...group };

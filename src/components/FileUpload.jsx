@@ -13,13 +13,19 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import { useState } from 'react';
 import axios from 'axios';
 
+/** Componente de upload de arquivos. */
 function FileUpload() {
     const [file, setFile] = useState(null);
 
+    /**
+     * Manipula a seleção de arquivo pelo usuário.
+     * @param {Element} event O evento de mudança do input de arquivo.
+    */
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
     };
 
+    /** Envia o arquivo selecionado para o servidor usando uma requisição HTTP POST. */
     const handleUpload = () => {
         const formData = new FormData();
         formData.append('file', file);

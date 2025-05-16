@@ -62,6 +62,10 @@ const style = `
     }
 `;
 
+/**
+ * Exibe a lista de aplicações disponíveis para o usuário.
+ * @param {Object} props - Propriedades.
+*/
 function ApplicationsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -95,6 +99,10 @@ function ApplicationsPage(props) {
         }
     }, [user.token, logout, navigate, connected, localApplications, isDashboard, isLoading, user.status]);
 
+    /**
+     * Exclui uma aplicação do sistema.
+     * @param {number} applicationId - ID da aplicação a ser excluída.
+    */
     const deleteApplication = (applicationId) => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/application/deleteApplication/${applicationId}`, {

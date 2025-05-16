@@ -58,6 +58,10 @@ const style = `
     }
 `;
 
+/**
+ * Página de listagem de protocolos visíveis ao usuário atual.
+ * @param {Object} props - Propriedades do componente.
+*/
 function ProtocolsPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -88,6 +92,10 @@ function ProtocolsPage(props) {
         }
     }, [user.token, logout, navigate, isDashboard, user.status, isLoading, user.role, user.id]);
 
+    /**
+     * Exclui um protocolo específico pelo ID.
+     * @param {number|string} protocolId - ID do protocolo a ser excluído.
+    */
     const deleteProtocol = (protocolId) => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/protocol/deleteProtocol/${protocolId}`, {

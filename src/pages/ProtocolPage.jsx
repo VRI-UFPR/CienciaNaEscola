@@ -62,6 +62,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página de exibição de um protocolo.
+ * @param {Object} props - Propriedades do componente.
+ */
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -74,15 +78,20 @@ function ProtocolPage(props) {
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
+    /** Verifica se existe uma próxima página no protocolo. */
     const hasNextPage = () => currentPageIndex < protocol.pages.length - 1;
+
+    /** Verifica se existe uma página anterior no protocolo. */
     const hasPreviousPage = () => {
         return currentPageIndex > 0;
     };
 
+    /** Avança para a próxima página do protocolo, se existir. */
     const nextPage = () => {
         if (hasNextPage()) setCurrentPageIndex(currentPageIndex + 1);
     };
 
+    /** Volta para a página anterior do protocolo, se existir. */
     const previousPage = () => {
         if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
     };

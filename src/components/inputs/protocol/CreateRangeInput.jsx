@@ -30,6 +30,17 @@ const rangeStyles = `
     }
 `;
 
+/**
+ * Componente responsável por criar e gerenciar um controle de entrada de intervalo.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentItem - Item atual.
+ * @param {number} props.pageIndex - Índice da página em que o item está localizado.
+ * @param {number} props.groupIndex - Índice do grupo em que o item está localizado.
+ * @param {number} props.itemIndex - Índice do item dentro do grupo.
+ * @param {Function} props.updateItem - Função para atualizar um item no formulário.
+ * @param {Function} props.removeItem - Função para remover um item do formulário.
+ * @param {Function} props.updateItemPlacement - Função para atualizar a posição do item.
+*/
 function CreateRangeInput(props) {
     const {
         currentItem,
@@ -49,10 +60,12 @@ function CreateRangeInput(props) {
     const galleryInputRef = useRef(null);
     const { showAlert } = useContext(AlertContext);
 
+    /** Atualiza o estado do item caso haja alteração. */
     useEffect(() => {
         if (item !== currentItem) updateItem(item, itemIndex);
     }, [item, pageIndex, groupIndex, itemIndex, updateItem, currentItem]);
 
+    /** Configura tooltips interativos para diversos botões do item. */
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
@@ -70,16 +83,25 @@ function CreateRangeInput(props) {
         };
     }, [item.tempId]);
 
+    /** Aciona a seleção de arquivo para inserir imagens no item. */
     const handleGalleryButtonClick = () => {
         galleryInputRef.current.click();
     };
 
+    /**
+     * Insere uma nova imagem no item.
+     * @param {Event} e - Evento de alteração do input de arquivo.
+    */
     const insertImage = (e) => {
         const newItem = { ...item };
         newItem.files.push({ content: e.target.files[0], description: '' });
         setItem(newItem);
     };
 
+    /**
+     * Remove uma imagem do item.
+     * @param {number} indexToRemove - Índice da imagem a ser removida.
+    */
     const removeImage = (indexToRemove) => {
         const newItem = { ...item };
         newItem.files.splice(indexToRemove, 1);
