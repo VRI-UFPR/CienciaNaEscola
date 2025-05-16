@@ -3,6 +3,17 @@ import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
 
+/**
+ * Componente responsável por criar e gerenciar dependências entre diferentes itens dentro de um protocolo.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.currentDependency - Objeto representando a dependência atual.
+ * @param {number} props.pageIndex - Índice da página dentro do protocolo.
+ * @param {number} [props.groupIndex] - Índice do grupo dentro da página (se aplicável).
+ * @param {number} props.dependencyIndex - Índice da dependência dentro do grupo ou página.
+ * @param {Function} props.updateDependency - Função chamada para atualizar a dependência.
+ * @param {Function} props.removeDependency - Função chamada para remover a dependência.
+ * @param {Object} props.protocol - Objeto representando o protocolo contendo páginas e grupos de itens.
+ */
 function CreateDependencyInput(props) {
     const { currentDependency, pageIndex, groupIndex, dependencyIndex, updateDependency, removeDependency, protocol } = props;
     const [dependency, setDependency] = useState(currentDependency);
@@ -47,6 +58,7 @@ function CreateDependencyInput(props) {
         return res;
     }, [protocol, pageIndexNumber, groupIndexNumber, dependency.type, isPageDependency]);
 
+    /** Configura tooltips para elementos interativos relacionados à dependência. */
     useEffect(() => {
         const tooltipList = [];
         if (dependency.tempId) {

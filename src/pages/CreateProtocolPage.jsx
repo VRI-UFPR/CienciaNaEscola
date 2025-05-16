@@ -138,6 +138,11 @@ const CreateProtocolStyles = `
     }
 `;
 
+/**
+ * Página de criação e edição de protocolos.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se está editando um protocolo existente.
+*/
 function CreateProtocolPage(props) {
     const { protocolId } = useParams();
     const { isEditing = false } = props;
@@ -171,6 +176,12 @@ function CreateProtocolPage(props) {
     const navigate = useNavigate();
     const { showAlert } = useContext(AlertContext);
 
+    /**
+     * Atualiza o posicionamento de uma página no protocolo.
+     * @param {number} newPlacement - Novo índice da página.
+     * @param {number} oldPlacement - Índice anterior da página.
+     * @param {number} pageIndex - Índice da página no array.
+    */
     const updatePagePlacement = useCallback(
         (newPlacement, oldPlacement, pageIndex) => {
             if (newPlacement < 1 || newPlacement > protocol.pages.length) return;
@@ -187,6 +198,12 @@ function CreateProtocolPage(props) {
         [protocol]
     );
 
+    /**
+     * Insere um novo item em um grupo específico de uma página.
+     * @param {string} type - Tipo do item.
+     * @param {number|string} page - Índice ou ID da página.
+     * @param {number|string} group - Índice ou ID do grupo.
+    */
     const insertItem = (type, page, group) => {
         if (page === '')
             return showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.' });
@@ -210,6 +227,7 @@ function CreateProtocolPage(props) {
         setProtocol(newProtocol);
     };
 
+    /** Insere uma nova página no protocolo. */
     const insertPage = useCallback(() => {
         const newProtocol = { ...protocol };
         newProtocol.pages.push(defaultNewPage(newProtocol.pages.length + 1));
@@ -217,6 +235,11 @@ function CreateProtocolPage(props) {
         setItemTarget({ page: newProtocol.pages.length - 1, group: '' });
     }, [protocol]);
 
+    /**
+     * Atualiza uma página existente.
+     * @param {Object} page - Página atualizada.
+     * @param {number} pageIndex - Índice da página.
+    */
     const updatePage = useCallback((page, pageIndex) => {
         setProtocol((prev) => {
             const newProtocol = { ...prev };
@@ -225,6 +248,10 @@ function CreateProtocolPage(props) {
         });
     }, []);
 
+    /**
+     * Remove uma página do protocolo.
+     * @param {number} index - Índice da página a ser removida.
+    */
     const removePage = useCallback(
         (index) => {
             const newProtocol = { ...protocol };
@@ -235,6 +262,11 @@ function CreateProtocolPage(props) {
         [protocol]
     );
 
+    /**
+     * Insere um novo grupo de itens.
+     * @param {string} type - Tipo do grupo.
+     * @param {number|string} page - Índice ou ID da página.
+    */
     const insertItemGroup = useCallback(
         (type, page) => {
             if (page === '')
@@ -247,6 +279,11 @@ function CreateProtocolPage(props) {
         [protocol, showAlert]
     );
 
+    /**
+     * Insere uma nova dependência.
+     * @param {number|string} pageIndex - Índice da página.
+     * @param {number|string} groupIndex - Índice do grupo.
+    */
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
             if (pageIndex === '')
@@ -267,6 +304,11 @@ function CreateProtocolPage(props) {
         [protocol, showAlert]
     );
 
+    /**
+     * Insere uma tabela no protocolo.
+     * @param {string} type - Tipo da tabela.
+     * @param {number|string} page - Índice da página.
+    */
     const insertTable = useCallback(
         (type, page) => {
             const newProtocol = { ...protocol };
@@ -276,6 +318,7 @@ function CreateProtocolPage(props) {
         [protocol, insertItemGroup]
     );
 
+    /** Atualiza o estado `itemTarget` caso páginas ou grupos sejam removidos. */
     useEffect(() => {
         if (itemTarget.page >= protocol.pages.length && itemTarget.page !== '') {
             if (protocol.pages.length > 0) setItemTarget((prev) => ({ group: '', page: protocol.pages.length - 1 }));
@@ -286,6 +329,10 @@ function CreateProtocolPage(props) {
         }
     }, [itemTarget, protocol.pages, protocol.pages.length, currentPage?.itemGroups.length]);
 
+    /**
+     * Submete o formulário de criação ou edição do protocolo.
+     * @param {Event} event - Evento de envio do formulário.
+    */
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -335,6 +382,7 @@ function CreateProtocolPage(props) {
         }
     };
 
+    /** Deleta o protocolo atual. */
     const deleteProtocol = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/protocol/deleteProtocol/${protocolId}`, {

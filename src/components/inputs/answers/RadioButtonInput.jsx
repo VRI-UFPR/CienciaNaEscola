@@ -38,9 +38,22 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir e gerenciar a seleção de opções de um grupo de botões de rádio.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta do usuário muda.
+ * @param {Object} props.item - Objeto representando o item de entrada do formulário.
+ * @param {Object} props.answer - Objeto contendo a resposta selecionada.
+ * @param {Object} props.galleryModalRef - Referência para a modal da galeria.
+ * @param {boolean} props.disabled - Indica se o input está desabilitado.
+*/
 function RadioButtonInput(props) {
     const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
+    /**
+     * Atualiza a resposta selecionada e chama a função de callback `onAnswerChange`.
+     * @param {Object} newAnswer - Novo valor da resposta selecionada.
+    */
     const updateAnswer = useCallback(
         (newAnswer) => {
             onAnswerChange(answer.group, item.id, 'OPTION', newAnswer);
@@ -48,6 +61,10 @@ function RadioButtonInput(props) {
         [onAnswerChange, answer.group, item]
     );
 
+    /**
+     * Manipula a seleção de uma opção específica, atualizando a resposta do usuário.
+     * @param {number} optionId - ID da opção selecionada.
+    */
     const handleOptionsUpdate = (optionId) => {
         const newOptions = {};
         newOptions[optionId] = '';

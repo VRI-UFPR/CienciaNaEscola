@@ -75,6 +75,11 @@ const style = `
     }
 `;
 
+/**
+ * Componente de criação e edição de instituição.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se o formulário está no modo de edição.
+*/
 function CreateInstitutionPage(props) {
     const { institutionId } = useParams();
     const { isEditing } = props;
@@ -90,6 +95,11 @@ function CreateInstitutionPage(props) {
 
     const navigate = useNavigate();
 
+    /**
+     * Atualiza a localização da instituição.
+     * @param {number} addressId - ID do endereço da instituição.
+     * @param {string} state - Estado onde a instituição está localizada.
+    */
     const setLocation = useCallback(
         (addressId, state) => {
             const searchParams = { state, country: 'Brasil' };
@@ -113,6 +123,7 @@ function CreateInstitutionPage(props) {
         [showAlert, user.token]
     );
 
+    /** Efeito para carregar os dados da instituição. */
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (!isEditing && user.role !== 'ADMIN')
@@ -141,6 +152,10 @@ function CreateInstitutionPage(props) {
         }
     }, [institutionId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, setLocation]);
 
+    /**
+     * Submete os dados do formulário para criar ou atualizar a instituição.
+     * @param {Event} e - Evento de submissão do formulário.
+    */
     const submitInstitution = (e) => {
         e.preventDefault();
         const formData = serialize({ ...institution, actions: undefined }, { indices: true });
@@ -171,6 +186,7 @@ function CreateInstitutionPage(props) {
         }
     };
 
+    /** Exclui a instituição atual. */
     const deleteInstitution = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/institution/deleteInstitution/${institutionId}`, {

@@ -104,6 +104,11 @@ const style = `
     }
 `;
 
+/**
+ * Permite a criação e edição de grupos dentro de uma instituição.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se a página está em modo de edição.
+ */
 function CreateClassroomPage(props) {
     const { classroomId } = useParams();
     const { isEditing } = props;
@@ -120,6 +125,7 @@ function CreateClassroomPage(props) {
 
     const navigate = useNavigate();
 
+    /** useEffect responsável por carregar os dados da sala de aula e seus usuários. */
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (!isEditing && (user.role === 'USER' || user.role === 'GUEST'))
@@ -158,6 +164,10 @@ function CreateClassroomPage(props) {
         }
     }, [classroomId, isEditing, isLoading, user.token, user.status, user.role, user.institutionId, showAlert, classroom.institutionId]);
 
+    /**
+     * Busca usuários pelo nome.
+     * @param {string} term - Termo de busca.
+     */
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -172,6 +182,7 @@ function CreateClassroomPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
     };
 
+    /** * Busca usuários da instituição. */
     const searchInstitutionUsers = async () => {
         if (!classroom.institutionId && !user.institutionId) return;
         if (institutionUsers === undefined)
@@ -205,6 +216,16 @@ function CreateClassroomPage(props) {
         else concatenateUsers(institutionUsers);
     };
 
+    /**
+     * Concatena lista de usuários baseados em condições específicas
+     *
+     * @param {Array} users - A lista de usuários a ser filtrada e concatenada.
+     * @param {Object} users[].id - O identificador único de um usuário.
+     * @param {Object} users[].institution - O objeto de instituição associado ao usuário.
+     * @param {string} users[].institution.id - O identificador único da instituição do usuário.
+     *
+     * @returns {void} Esta função não retorna um valor. Ela atualiza o estado de `searchedUsers` e redefine `userSearchTerm`.
+     */
     const concatenateUsers = (users) => {
         const newUsers = users.filter(
             (u) =>
@@ -218,6 +239,7 @@ function CreateClassroomPage(props) {
         setUserSearchTerm('');
     };
 
+    /** Submete o formulário de criação ou edição do grupo. */
     const submitClassroom = (e) => {
         e.preventDefault();
         const formData = serialize({ ...classroom, actions: undefined }, { indices: true });
@@ -242,6 +264,7 @@ function CreateClassroomPage(props) {
         } else showAlert({ headerText: 'Adicione pelo menos dois usuários no grupo!' });
     };
 
+    /** Exclui a sala. */
     const deleteClassroom = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/classroom/deleteClassroom/${classroomId}`, {

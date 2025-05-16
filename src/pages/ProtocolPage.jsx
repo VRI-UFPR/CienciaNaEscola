@@ -62,6 +62,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página de exibição de um protocolo.
+ * @param {Object} props - Propriedades do componente.
+ */
 function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -74,15 +78,20 @@ function ProtocolPage(props) {
     const galleryModalRef = useRef(null);
     const navigate = useNavigate();
 
+    /** Verifica se existe uma próxima página no protocolo. */
     const hasNextPage = () => currentPageIndex < protocol.pages.length - 1;
+
+    /** Verifica se existe uma página anterior no protocolo. */
     const hasPreviousPage = () => {
         return currentPageIndex > 0;
     };
 
+    /** Avança para a próxima página do protocolo, se existir. */
     const nextPage = () => {
         if (hasNextPage()) setCurrentPageIndex(currentPageIndex + 1);
     };
 
+    /** Volta para a página anterior do protocolo, se existir. */
     const previousPage = () => {
         if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
     };
@@ -114,13 +123,13 @@ function ProtocolPage(props) {
 
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
-            <div className="row flex-grow-1 flex-nowrap m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
+            <div className="d-flex flex-grow-1 w-100">
+                <div className="d-flex flex-column position-lg-sticky bg-coral-red vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column flex-grow-1 bg-yellow-orange p-0">
+                <div className="d-flex flex-column flex-grow-1 overflow-hidden bg-yellow-orange p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
 
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">

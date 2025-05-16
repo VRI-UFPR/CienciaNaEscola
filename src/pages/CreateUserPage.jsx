@@ -108,6 +108,11 @@ const style = `
     }
 `;
 
+/**
+ * Página para criação ou edição de usuários.
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.isEditing - Indica se está editando um usuário existente.
+ */
 function CreateUserPage(props) {
     const { userId } = useParams();
     const { isEditing } = props;
@@ -126,6 +131,7 @@ function CreateUserPage(props) {
 
     const navigate = useNavigate();
 
+    /** Carrega dados iniciais para criação ou edição do usuário. */
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER'))
@@ -177,6 +183,10 @@ function CreateUserPage(props) {
         }
     }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
 
+    /**
+     * Busca salas por nome a partir do termo digitado.
+     * @param {string} term - Termo de busca.
+     */
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
@@ -189,6 +199,7 @@ function CreateUserPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
+    /** Busca grupos da instituição do usuário. */
     const searchInstitutionGroups = async () => {
         if ((!newUser.institutionId && !user.institutionId) || user.role === 'USER') return;
         if (institutionClassrooms === undefined)
@@ -221,6 +232,7 @@ function CreateUserPage(props) {
                 );
     };
 
+    /** Concatena as salas de aula filtradas com as salas de aula do usuário. */
     const concatenateClassrooms = (classrooms) => {
         const newClassrooms = classrooms.filter(
             (c) => !newUser.classrooms.includes(c.id) && (c.institution?.id === newUser.institutionId || c.institution === null)
@@ -233,6 +245,10 @@ function CreateUserPage(props) {
         setClassroomSearchTerm('');
     };
 
+    /**
+     * Submete os dados do novo usuário.
+     * @param {Event} e - Evento de envio do formulário.
+     */
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
@@ -271,6 +287,7 @@ function CreateUserPage(props) {
         }
     };
 
+    /** Exclui o usuário atual. */
     const deleteUser = () => {
         axios
             .delete(`${process.env.REACT_APP_API_URL}api/user/deleteUser/${userId || user.id}`, {
@@ -290,8 +307,9 @@ function CreateUserPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao excluir usuário', bodyText: error.response?.data.message }));
     };
 
+    /** Gera um hash aleatório com 12 caracteres. */
     const generateRandomHash = () => {
-        //Random hash with special chars and exactly 12 characters
+        /** Random hash with special chars and exactly 12 characters. */
         const randomHash = Array.from({ length: 12 }, () => String.fromCharCode(Math.floor(Math.random() * 93) + 33)).join('');
         setNewUser((prev) => ({ ...prev, hash: randomHash, hashValidation: randomHash }));
     };

@@ -34,12 +34,23 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um formulário secundário.
+ * @param {Object} props - Propriedades do componente.
+ * @param {Object} props.input - Dados do input do formulário.
+ * @param {Function} props.onInputChange - Função chamada quando há mudanças no input.
+ * @param {Function} props.onInputRemove - Função chamada para remover um input.
+*/
 function SubForm(props) {
     const { input, onInputChange, onInputRemove } = props;
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(AuthContext);
     const [userProtocols, setUserForms] = useState([]);
 
+    /**
+     * Faz uma requisição para buscar os formulários do usuário autenticado.
+     * A busca é feita apenas se o ID e o token do usuário estiverem disponíveis.
+    */
     useEffect(() => {
         if (user.id !== null && user.token !== null) {
             // .get(`http://localhost:3333/user/list/${user.id}`)

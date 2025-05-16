@@ -32,9 +32,22 @@ const styles = `
     }
 `;
 
+/**
+ * Componente responsável por exibir um menu de select e permitir a seleção de opções.
+ * @param {Object} props - Propriedades do componente.  
+ * @param {Function} props.onAnswerChange - Função chamada quando a resposta tem alteração.
+ * @param {Object} props.item - Objeto que representa o item da pergunta.
+ * @param {Object} props.answer - Objeto que contêm as respostas.
+ * @param {React.Ref} props.galleryModalRef - Referência para o modal da galeria.
+ * @param {boolean} props.disabled - Define se a interação com o componente está desabilitada.
+*/
 function SimpleTextInput(props) {
     const { onAnswerChange, item, answer, galleryModalRef, disabled } = props;
 
+    /**
+     * Atualiza a resposta com o novo valor digitado no campo de texto.
+     * @param {Object} newAnswer - Novo objeto de resposta contendo o texto atualizado.
+    */
     const updateAnswer = (newAnswer) => {
         onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
     };

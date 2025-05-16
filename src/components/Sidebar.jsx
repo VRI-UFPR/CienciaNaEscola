@@ -61,6 +61,11 @@ const styles = `
     }
 `;
 
+/**
+ * Componente de barra lateral (Sidebar).
+ * @param {Object} props - Propriedades do componente.
+ * @param {boolean} props.showExitButton - Define se o botão de saída será exibido.
+*/
 function Sidebar(props) {
     const { showExitButton = true } = props;
     const { user, logout } = useContext(AuthContext);
@@ -70,12 +75,14 @@ function Sidebar(props) {
 
     const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
+    /** Fecha a barra lateral. */
     const closeSidebar = () => {
         const offcanvas = document.getElementById('sidebar');
         const bsOffcanvas = Offcanvas.getOrCreateInstance(offcanvas);
         bsOffcanvas.hide();
     };
 
+    /** Atualiza o estado 'isMobile' conforme a largura da tela muda. */
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 992);

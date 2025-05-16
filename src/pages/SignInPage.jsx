@@ -26,9 +26,12 @@ import logoPicceCircular from '../assets/images/logoPicceCircular.svg';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import TextButton from '../components/TextButton';
-import logoUFPR from '../assets/images/logoUFPR.png';
+// logos
+import logoRedeClubes from '../assets/images/logoClubes.png';
 import logoNAPI from '../assets/images/logoNAPI.png';
-import logoFA from '../assets/images/logoFA.png';
+import logoFA from '../assets/images/logoFA1.png';
+import logoGovernoParana from '../assets/images/logoPR.png';
+import logoGovernoFederal from '../assets/images/logoGF.png';
 import RoundedButton from '../components/RoundedButton';
 
 const styles = `
@@ -95,6 +98,10 @@ const styles = `
     }
 `;
 
+/**
+ * Página de login do sistema.
+ * @param {Object} props - Propriedades do componente.
+ */
 function SignInPage(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -235,15 +242,32 @@ function SignInPage(props) {
                         </div>
                     </div>
                 </div>
-                <div className="row justify-content-between g-0 w-100 pb-3 px-3">
-                    <div className="col justify-content-start d-flex align-items-center mw-80">
-                        <img className="h-auto w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
+                <div
+                    className="row justify-content-center g-0 w-auto mx-auto bg-white rounded align-items-center px-0 py-0"
+                    style={{ border: '1px solid #91CAD6', marginBottom: '16px' }}
+                >
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img
+                            src={logoRedeClubes}
+                            alt="Logomarca da Rede de Clubes Paraná faz Ciência"
+                            style={{ maxHeight: '40px', height: 'auto' }}
+                        />
                     </div>
-                    <div className="col justify-content-center d-flex align-items-center mw-90">
-                        <img className="h-auto w-100" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" style={{ maxHeight: '20px', height: 'auto' }} />
                     </div>
-                    <div className="col justify-content-end d-flex align-items-center mw-90">
-                        <img className="h-auto w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                    <div className="col-auto d-flex align-items-center justify-content-center px-2">
+                        <img src={logoFA} alt="Logomarca da Fundação Araucária" style={{ maxHeight: '70px', height: 'auto' }} />
+                    </div>
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img
+                            src={logoGovernoParana}
+                            alt="Logomarca do Governo do Estado do Paraná"
+                            style={{ maxHeight: '90px', height: 'auto' }}
+                        />
+                    </div>
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img src={logoGovernoFederal} alt="Logomarca do Governo Federal" style={{ maxHeight: '90px', height: 'auto' }} />
                     </div>
                 </div>
             </div>
