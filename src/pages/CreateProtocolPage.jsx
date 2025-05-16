@@ -637,7 +637,7 @@ function CreateProtocolPage(props) {
                                                                 <TextButton
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
-                                                                    text={'Adicionar itens'}
+                                                                    text={isEditing ? 'Editar itens' : 'Adicionar itens'}
                                                                     onClick={() => {
                                                                         if (String(protocol.title).length < 3)
                                                                             showAlert({
@@ -664,34 +664,7 @@ function CreateProtocolPage(props) {
                                                     )}
 
                                                     {creationMode === 'children' && (
-                                                        <div className="row justify-content-center">
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={isEditing ? 'Editar' : 'Concluir'}
-                                                                    onClick={() =>
-                                                                        showAlert({
-                                                                            headerText: `Tem certeza que deseja ${
-                                                                                isEditing ? 'editar' : 'criar'
-                                                                            } o protocolo?`,
-                                                                            primaryBtnHsl: [355, 78, 66],
-                                                                            primaryBtnLabel: 'Não',
-                                                                            secondaryBtnHsl: [97, 43, 70],
-                                                                            secondaryBtnLabel: 'Sim',
-                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                                                        })
-                                                                    }
-                                                                />
-                                                            </div>
-                                                            <div className="col-4 col-xl-2">
-                                                                <TextButton
-                                                                    type="button"
-                                                                    hsl={[97, 43, 70]}
-                                                                    text={'Voltar'}
-                                                                    onClick={() => setCreationMode('properties')}
-                                                                />
-                                                            </div>
+                                                        <div className="row justify-content-center align-items-center">
                                                             {isEditing && (
                                                                 <div className="col-4 col-xl-2">
                                                                     <TextButton
@@ -710,6 +683,33 @@ function CreateProtocolPage(props) {
                                                                     />
                                                                 </div>
                                                             )}
+                                                            <div className="col-4 col-xl-2">
+                                                                <TextButton
+                                                                    type="button"
+                                                                    hsl={[97, 43, 70]}
+                                                                    text={'Voltar'}
+                                                                    onClick={() => setCreationMode('properties')}
+                                                                />
+                                                            </div>
+                                                            <div className="col-4 col-xl-2">
+                                                                <TextButton
+                                                                    type="button"
+                                                                    hsl={[97, 43, 70]}
+                                                                    text={isEditing ? 'Salvar' : 'Concluir'}
+                                                                    onClick={() =>
+                                                                        showAlert({
+                                                                            headerText: `Tem certeza que deseja ${
+                                                                                isEditing ? 'editar' : 'criar'
+                                                                            } o protocolo?`,
+                                                                            primaryBtnHsl: [355, 78, 66],
+                                                                            primaryBtnLabel: 'Não',
+                                                                            secondaryBtnHsl: [97, 43, 70],
+                                                                            secondaryBtnLabel: 'Sim',
+                                                                            onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                                                        })
+                                                                    }
+                                                                />
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </form>
