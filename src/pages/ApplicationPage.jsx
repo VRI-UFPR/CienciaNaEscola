@@ -112,7 +112,7 @@ function ApplicationPage(props) {
             const answer = findAnswer(dependency.itemId);
             switch (dependency.type) {
                 case 'EXACT_ANSWER':
-                    if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX') {
+                    if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX' || item.type === 'RANGE') {
                         if (!answer || answer.text !== dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'CHECKBOX' || item.type === 'RADIO' || item.type === 'SELECT') {
                         if (
