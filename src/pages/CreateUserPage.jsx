@@ -162,10 +162,14 @@ function CreateUserPage(props) {
                             setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
                         })
                         .catch((error) =>
-                            setError({
-                                text: 'Erro ao obter informações do usuário',
-                                description: error.response?.data.message || '',
-                            })
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : {
+                                          text: 'Erro ao obter informações do usuário',
+                                          description: error.response?.data.message || '',
+                                      }
+                            )
                         )
                 );
             }
