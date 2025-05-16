@@ -16,6 +16,26 @@ import RoundedButton from './RoundedButton';
 import CreateItemGroup from './CreateItemGroup';
 import { Tooltip } from 'bootstrap';
 
+const CreatePageStyles = `
+    .create-page-custom-scroll::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-track {
+        background: #53535360;
+        border-radius: 16px;
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb {
+        background: #53535390;
+        border-radius: 16px;  /* Rounded corners for the thumb */
+    }
+
+    .create-page-custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: #535353;
+    }
+`;
+
 /**
  * Componente responsável por gerenciar uma página.
  * @param {Object} props - Propriedades do componente.
@@ -26,9 +46,20 @@ import { Tooltip } from 'bootstrap';
  * @param {Object} props.protocol - Dados do protocolo ao qual a página pertence.
  * @param {Function} props.updatePage - Função para atualizar os dados da página.
  * @param {Function} props.insertItem - Função para inserir um novo item na página.
-*/
+ */
 function CreatePage(props) {
-    const { currentPage, itemTarget, updatePagePlacement, removePage, protocol, updatePage, insertItem } = props;
+    const {
+        currentPage,
+        itemTarget,
+        updatePagePlacement,
+        removePage,
+        protocol,
+        updatePage,
+        insertItem,
+        moveItemBetweenPages,
+        pagesQty,
+        moveGroupBetweenPages,
+    } = props;
 
     const [page, setPage] = useState(currentPage);
     const currentGroup = page.itemGroups[itemTarget.group];
@@ -41,8 +72,6 @@ function CreatePage(props) {
     useEffect(() => {
         const tooltipList = [];
         if (page.tempId) {
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-page-${page.tempId.toString().slice(0, 13)}-tooltip`, { trigger: 'hover' }));
         }
 
@@ -56,7 +85,7 @@ function CreatePage(props) {
      * @param {number} newPlacement - Nova posição desejada.
      * @param {number} oldPlacement - Posição original do grupo.
      * @param {number} groupIndex - Índice do grupo dentro da página.
-    */
+     */
     const updateGroupPlacement = useCallback(
         (newPlacement, oldPlacement, groupIndex) => {
             if (newPlacement < 1 || newPlacement > page.itemGroups.length) return;
@@ -74,10 +103,35 @@ function CreatePage(props) {
     );
 
     /**
+     * Move um item entre páginas.
+     * @param {number} newPageIndex - Índice da nova página.
+     * @param {number} oldPageIndex - Índice da página original.
+     * @param {number} itemIndex - Índice do item a ser movido.
+     */
+    const moveItemBetweenItemGroups = useCallback(
+        (newGroupIndex, oldGroupIndex, itemIndex) => {
+            if (newGroupIndex === oldGroupIndex || page.itemGroups[newGroupIndex].type !== 'ONE_DIMENSIONAL') return false;
+            const newPage = { ...page };
+            // Find and update the item
+            const item = newPage.itemGroups[oldGroupIndex].items[itemIndex];
+            item.placement = newPage.itemGroups[newGroupIndex].items.length + 1;
+            // Remove the item from the old group, update the placements of the remaining items and sort them (just in case)
+            newPage.itemGroups[oldGroupIndex].items.splice(itemIndex, 1);
+            newPage.itemGroups[oldGroupIndex].items.sort((a, b) => a.placement - b.placement);
+            for (const [i, item] of newPage.itemGroups[oldGroupIndex].items.entries()) item.placement = i + 1;
+            // Add the item to the new group
+            newPage.itemGroups[newGroupIndex].items.push(item);
+            setPage(newPage);
+            return true;
+        },
+        [page]
+    );
+
+    /**
      * Atualiza um grupo de itens dentro da página.
      * @param {Object} newGroup - Novo estado do grupo.
      * @param {number} groupIndex - Índice do grupo dentro da página.
-    */
+     */
     const updateItemGroup = useCallback((newGroup, groupIndex) => {
         setPage((prev) => {
             const newPage = { ...prev };
@@ -89,7 +143,7 @@ function CreatePage(props) {
     /**
      * Remove um grupo de itens da página.
      * @param {number} index - Índice do grupo a ser removido.
-    */
+     */
     const removeItemGroup = useCallback(
         (index) => {
             const newPage = { ...page };
@@ -106,7 +160,7 @@ function CreatePage(props) {
      * Atualiza uma dependência dentro da página.
      * @param {Object} dependency - Nova configuração da dependência.
      * @param {number} dependencyIndex - Índice da dependência dentro da página.
-    */
+     */
     const updateDependency = useCallback((dependency, dependencyIndex) => {
         setPage((prev) => {
             const newPage = { ...prev };
@@ -118,7 +172,7 @@ function CreatePage(props) {
     /**
      * Remove uma dependência da página.
      * @param {number} dependencyIndex - Índice da dependência a ser removida dentro da página.
-    */
+     */
     const removeDependency = useCallback(
         (dependencyIndex) => {
             const newPage = { ...page };
@@ -129,40 +183,35 @@ function CreatePage(props) {
     );
 
     return (
-        <div className="" key={'page-' + page.tempId}>
-            <div className="row gx-2 align-items-center mb-3">
+        <div className="create-page-custom-scroll overflow-y-auto mb-3 pe-3" key={'page-' + page.tempId}>
+            <div className="row g-2 align-items-center justify-content-end mb-3">
                 <div className="col-auto">
                     <p className="color-grey font-century-gothic text-nowrap fw-bold fs-3 m-0">Página {Number(itemTarget.page) + 1}</p>
                 </div>
                 <div className="col"></div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updatePagePlacement(page.placement + 1, page.placement, itemTarget.page)}
-                        icon="keyboard_arrow_down"
-                        className={`move-page-${page.tempId.toString().slice(0, 13)}-down-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-page-${page.tempId}-down-tooltip`}
-                        data-bs-title="Mover a página uma posição abaixo na ordem das páginas do protocolo."
-                    />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updatePagePlacement(page.placement - 1, page.placement, itemTarget.page)}
-                        icon="keyboard_arrow_up"
-                        className={`move-page-${page.tempId.toString().slice(0, 13)}-up-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-page-${page.tempId}-up-tooltip`}
-                        data-bs-title="Mover a página uma posição acima na ordem das páginas do protocolo."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={page.placement}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => updatePagePlacement(e.target.value, page.placement, itemTarget.page)}
+                        >
+                            {[...Array(pagesQty).keys()].map((page) => (
+                                <option key={page + 1} value={page + 1}>
+                                    Posição {page + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => removePage(itemTarget.page)}
                         icon="delete"
-                        className={`delete-page-${page.tempId.toString().slice(0, 13)}-tooltip`}
+                        className={`delete-page-${page.tempId.toString().slice(0, 13)}-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`delete-page-${page.tempId}-tooltip`}
                         data-bs-title="Remover a página do protocolo."
@@ -191,6 +240,11 @@ function CreatePage(props) {
                     protocol={protocol}
                     page={page}
                     insertItem={insertItem}
+                    moveItemBetweenPages={moveItemBetweenPages}
+                    moveGroupBetweenPages={moveGroupBetweenPages}
+                    moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                    pagesQty={pagesQty}
+                    groupsQty={page.itemGroups.length}
                 />
             )}
             {!currentGroup && (
@@ -201,6 +255,7 @@ function CreatePage(props) {
                     </p>
                 </div>
             )}
+            <style>{CreatePageStyles}</style>
         </div>
     );
 }

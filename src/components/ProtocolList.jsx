@@ -23,9 +23,6 @@ const ProtocolListStyles = (hue, sat, lig) => {
         }
 
         .button-container {
-            min-height: 7rem;
-            height: 7rem;
-            max-height: 7rem;
             color: #262626;
         }
 
@@ -65,7 +62,7 @@ function ProtocolList(props) {
         <div
             className={` list-container-${
                 'hsl-' + hue + '-' + sat + '-' + lig
-            } d-flex flex-column flex-grow-1 rounded-4 w-100 m-0 p-0 px-4 py-4`}
+            } d-flex flex-column flex-grow-1 rounded-4 w-100 m-0 p-0 px-4 py-4 overflow-hidden`}
         >
             <div
                 className={`button-list-${
@@ -79,10 +76,12 @@ function ProtocolList(props) {
                     >
                         <HomeButton
                             title={li.title}
+                            primaryDescription={li.primaryDescription}
+                            secondaryDescription={li.secondaryDescription}
                             viewFunction={() => viewFunction(li.id)}
-                            allowEdit={allowEdit}
+                            allowEdit={allowEdit || li.allowEdit}
                             editFunction={() => editFunction(li.id)}
-                            allowDelete={allowDelete}
+                            allowDelete={allowDelete || li.allowDelete}
                             deleteFunction={() => deleteFunction(li.id)}
                         />
                     </div>

@@ -26,6 +26,11 @@ const styles = `
         background-color: #91CAD6;
     }
 
+    input.bg-white:active,
+    input.bg-white:focus{
+        box-shadow: none !important;
+    }
+
     .color-dark-gray {
         color: #535353;
     }
@@ -45,47 +50,38 @@ const styles = `
 
 /**
  * Componente responsável por capturar e exibir entradas de tempo.
- * @param {Object} props - Propriedades do componente.  
+ * @param {Object} props - Propriedades do componente.
  * @param {Function} props.onAnswerChange - Função chamada quando o valor do tempo for aualizado.
  * @param {Object} props.item - Objeto que representa o item da entrada.
  * @param {Object} props.answer - Objeto que contêm as respostas.
  * @param {boolean} props.disabled - Define se a entrada está desabilitada.
-*/
+ */
 function TimeInput(props) {
-    const { onAnswerChange, item, answer, disabled } = props;
+    const { onAnswerChange, answer } = props;
     const iconContainerRef = useRef(null);
     const [iconSize, setIconSize] = useState(0);
 
     /** Atualiza o tamanho do ícone. */
-    const updateIconSize = useCallback(() => {
-        setIconSize(iconContainerRef.current.offsetWidth);
-    }, []);
+    const updateIconSize = useCallback(() => setIconSize(iconContainerRef.current.offsetWidth), []);
 
     useEffect(() => {
         updateIconSize();
         window.addEventListener('resize', updateIconSize);
-        return () => {
-            window.removeEventListener('resize', updateIconSize);
-        };
+        return () => window.removeEventListener('resize', updateIconSize);
     }, [updateIconSize]);
 
     /**
      * Atualiza a resposta.
      * @param {Object} newAnswer - Novo objeto contendo a resposta atualizada.
      */
-    const updateAnswer = useCallback(
-        (newAnswer) => {
-            onAnswerChange(answer.group, item.id, 'ITEM', newAnswer);
-        },
-        [onAnswerChange, answer.group, item]
-    );
+    const updateAnswer = useCallback((newAnswer) => onAnswerChange(newAnswer), [onAnswerChange]);
 
     useEffect(() => {
-        if (!answer.text) {
+        if (!answer) {
             const date = new Date();
             const hour = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
-            updateAnswer({ ...answer, text: `${hour}:${minutes}` });
+            updateAnswer(`${hour}:${minutes}`);
         }
     }, [answer, updateAnswer]);
 
@@ -106,11 +102,10 @@ function TimeInput(props) {
                     <div className="row m-0">
                         <input
                             type="time"
-                            className="form-control border-0 color-sonic-silver fw-medium fs-7 w-auto m-0 p-0"
+                            className="form-control border-0 color-sonic-silver bg-white fw-medium fs-7 w-auto m-0 p-0"
                             id="timeinput"
-                            value={answer.text}
-                            onChange={(e) => updateAnswer({ ...answer, text: e.target.value })}
-                            disabled={disabled}
+                            value={answer}
+                            onChange={(e) => updateAnswer(e.target.value)}
                         ></input>
                     </div>
                 </div>

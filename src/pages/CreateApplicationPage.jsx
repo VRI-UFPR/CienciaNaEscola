@@ -13,7 +13,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 import axios from 'axios';
 import { serialize } from 'object-to-formdata';
 import { useContext, useEffect, useState, useRef } from 'react';
-import baseUrl from '../contexts/RouteContext';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
@@ -116,6 +115,7 @@ function CreateApplicationPage(props) {
     /** Estado inicial da aplicação. */
     const [application, setApplication] = useState({
         protocolId: protocolId,
+        keepLocation: false,
         viewersUser: [],
         viewersClassroom: [],
         answersViewersUser: [],
@@ -147,14 +147,11 @@ function CreateApplicationPage(props) {
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
-            if (!isEditing && user.role === 'USER') {
+            if (user.role === 'USER') {
                 setError({
                     text: 'Operação não permitida',
-                    description: 'Você não tem permissão para criar aplicações',
+                    description: `Você não tem permissão para ${isEditing ? 'editar' : 'criar'} aplicações`,
                 });
-                return;
-            } else if (isEditing && user.role === 'USER') {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar esta aplicação' });
                 return;
             }
             const promises = [];
@@ -162,50 +159,48 @@ function CreateApplicationPage(props) {
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/application/getApplication/${applicationId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                        .get(`${process.env.REACT_APP_API_URL}api/application/getApplication/${applicationId}`, {
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
                             reqProtocolId = d.protocol.id;
-                            if (d.applier.id !== user.id && user.role !== 'ADMIN') {
+                            if (d.actions.toUpdate !== true)
                                 return Promise.reject({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar esta aplicação',
                                 });
-                            }
                             setApplication({
                                 visibility: d.visibility,
                                 answersVisibility: d.answersVisibility,
-                                viewersUser: d.viewersUser.map((v) => v.id),
-                                viewersClassroom: d.viewersClassroom.map((v) => v.id),
-                                answersViewersUser: d.answersViewersUser.map((v) => v.id),
-                                answersViewersClassroom: d.answersViewersClassroom.map((v) => v.id),
+                                viewersUser: d.viewersUser.map(({ id }) => id),
+                                viewersClassroom: d.viewersClassroom.map(({ id }) => id),
+                                answersViewersUser: d.answersViewersUser.map(({ id }) => id),
+                                answersViewersClassroom: d.answersViewersClassroom.map(({ id }) => id),
+                                keepLocation: d.keepLocation,
+                                actions: d.actions,
                             });
-                            setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
-                            setSearchedUsers(d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })));
-                            setSearchedAnswerClassrooms(d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                            setSearchedClassrooms(d.viewersClassroom.map(({ id, name, users }) => ({ id, name, users })));
+                            setSearchedUsers(d.viewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms })));
+                            setSearchedAnswerClassrooms(d.answersViewersClassroom.map(({ id, name, users }) => ({ id, name, users })));
                             setSearchedAnswerUsers(
-                                d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
+                                d.answersViewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms }))
                             );
                         })
-                        .catch((error) => {
-                            return Promise.reject({
-                                text: 'Erro ao buscar aplicação.',
-                                description: error.response?.data.message,
-                            });
-                        })
+                        .catch((error) =>
+                            Promise.reject(
+                                error.text
+                                    ? error
+                                    : { text: 'Erro ao obter informações da aplicação', description: error.response?.data.message }
+                            )
+                        )
                 );
             }
             Promise.all(promises)
                 .then(() => {
                     axios
-                        .get(`${baseUrl}api/protocol/getProtocol/${reqProtocolId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                        .get(`${process.env.REACT_APP_API_URL}api/protocol/getProtocol/${reqProtocolId}`, {
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
@@ -224,10 +219,8 @@ function CreateApplicationPage(props) {
                                         viewersUser: d.viewersUser.map((u) => u.id),
                                         viewersClassroom: d.viewersClassroom.map((c) => c.id),
                                     }));
-                                    setSearchedUsers(
-                                        d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
-                                    );
-                                    setSearchedClassrooms(d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })));
+                                    setSearchedUsers(d.viewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms })));
+                                    setSearchedClassrooms(d.viewersClassroom.map(({ id, name, users }) => ({ id, name, users })));
                                 }
                                 if (d.answersVisibility === 'RESTRICT') {
                                     setApplication((prev) => ({
@@ -236,21 +229,21 @@ function CreateApplicationPage(props) {
                                         answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
                                     }));
                                     setSearchedAnswerUsers(
-                                        d.answersViewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms }))
+                                        d.answersViewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms }))
                                     );
                                     setSearchedAnswerClassrooms(
-                                        d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users }))
+                                        d.answersViewersClassroom.map(({ id, name, users }) => ({ id, name, users }))
                                     );
                                 }
                             }
                             setIsLoading(false);
                         })
-                        .catch((error) => {
-                            showAlert({
-                                headerText: 'Erro ao buscar visualizadores do protocolo.',
-                                bodyText: error.response?.data.message,
-                            });
-                        });
+                        .catch((error) =>
+                            Promise.reject({
+                                text: 'Erro ao obter informações do protocolo',
+                                description: error.response?.data.message,
+                            })
+                        );
                 })
                 .catch((error) => setError(error));
         }
@@ -262,54 +255,46 @@ function CreateApplicationPage(props) {
     */
     const submitApplication = (e) => {
         e.preventDefault();
-        const formData = serialize(application, { indices: true });
+        const formData = serialize({ ...application, actions: undefined }, { indices: true });
         if (isEditing) {
             axios
-                .put(`${baseUrl}api/application/updateApplication/${applicationId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                .put(`${process.env.REACT_APP_API_URL}api/application/updateApplication/${applicationId}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     clearLocalApplications();
                     showAlert({
-                        headerText: 'Aplicação atualizada com sucesso.',
+                        headerText: 'Aplicação atualizada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação.', description: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar aplicação', description: error.response?.data.message }));
         } else {
             axios
-                .post(`${baseUrl}api/application/createApplication`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                .post(`${process.env.REACT_APP_API_URL}api/application/createApplication`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     showAlert({
-                        headerText: 'Aplicação criada com sucesso.',
+                        headerText: 'Aplicação criada com sucesso',
                         onPrimaryBtnClick: () => navigate(`/dash/applications/${response.data.data.id}`),
                     });
                 })
-                .catch((error) => showAlert({ headerText: 'Erro ao criar aplicação.', bodyText: error.response?.data.message }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar aplicação', bodyText: error.response?.data.message }));
         }
     };
 
     /** Deleta uma aplicação com base no ID fornecido. */
     const deleteApplication = () => {
         axios
-            .delete(`${baseUrl}api/application/deleteApplication/${applicationId}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .delete(`${process.env.REACT_APP_API_URL}api/application/deleteApplication/${applicationId}`, {
+                headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Aplicação excluída com sucesso.', onPrimaryBtnClick: () => navigate(`/dash/applications/`) });
+                showAlert({ headerText: 'Aplicação excluída com sucesso', onPrimaryBtnClick: () => navigate(`/dash/applications/`) });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir aplicação', bodyText: error.response?.data.message }));
     };
 
     /**
@@ -319,11 +304,8 @@ function CreateApplicationPage(props) {
     const searchUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -343,7 +325,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedUsers(newUsers);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
     /**
@@ -353,11 +335,8 @@ function CreateApplicationPage(props) {
     const searchAnswerUsers = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/user/searchUserByUsername`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .post(`${process.env.REACT_APP_API_URL}api/user/searchUserByUsername`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -375,7 +354,7 @@ function CreateApplicationPage(props) {
                 ];
                 setSearchedAnswerUsers(newUsers);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar usuários', bodyText: error.response?.data.message }));
     };
 
     /**
@@ -385,11 +364,8 @@ function CreateApplicationPage(props) {
     const searchClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -424,7 +400,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedClassrooms(concatenedClassrooms);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
     /**
@@ -434,11 +410,8 @@ function CreateApplicationPage(props) {
     const searchAnswerClassrooms = (term) => {
         const formData = serialize({ term }, { indices: true });
         axios
-            .post(`${baseUrl}api/classroom/searchClassroomByName`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .post(`${process.env.REACT_APP_API_URL}api/classroom/searchClassroomByName`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 const d = response.data.data;
@@ -473,7 +446,7 @@ function CreateApplicationPage(props) {
                 // }
                 setSearchedAnswerClassrooms(concatenedClassrooms);
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
     };
 
     /**
@@ -502,9 +475,7 @@ function CreateApplicationPage(props) {
         setSearchedUsers((prev) =>
             [
                 ...prev.map((u) => {
-                    if (newUsers.includes(u.id)) {
-                        return { ...u, classrooms: [...u.classrooms, c.id] };
-                    }
+                    if (newUsers.includes(u.id)) return { ...u, classrooms: [...u.classrooms, c.id] };
                     return u;
                 }),
                 ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
@@ -549,9 +520,7 @@ function CreateApplicationPage(props) {
         setSearchedAnswerUsers((prev) =>
             [
                 ...prev.map((u) => {
-                    if (newUsers.includes(u.id)) {
-                        return { ...u, classrooms: [...u.classrooms, c.id] };
-                    }
+                    if (newUsers.includes(u.id)) return { ...u, classrooms: [...u.classrooms, c.id] };
                     return u;
                 }),
                 ...newUsers.filter((u) => !prev.map((u) => u.id).includes(u.id)),
@@ -570,13 +539,9 @@ function CreateApplicationPage(props) {
         }));
     };
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando criação de instituição..." />;
-    }
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de aplicação...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -599,6 +564,21 @@ function CreateApplicationPage(props) {
                                 action="/submit"
                                 onSubmit={(e) => submitApplication(e)}
                             >
+                                <div className="mb-3">
+                                    <div className="form-check form-switch fs-5">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="enabled"
+                                            checked={application.keepLocation || false}
+                                            onChange={(e) => setApplication((prev) => ({ ...prev, keepLocation: e.target.checked }))}
+                                        />
+                                        <label className="form-check-label color-steel-blue fs-5 fw-medium me-2" htmlFor="enabled">
+                                            Solicitar localização das respostas
+                                        </label>
+                                    </div>
+                                </div>
                                 <div className="mb-3">
                                     <label label="visibility" className="form-label color-steel-blue fs-5 fw-medium">
                                         Selecione a visibilidade da aplicação
@@ -635,22 +615,21 @@ function CreateApplicationPage(props) {
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setVUSearchInput(e.target.value)}
                                                         onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                searchUsers(VUSearchInput);
-                                                            }
+                                                            if (e.key === 'Enter') searchUsers(VUSearchInput);
                                                         }}
                                                     />
                                                 </div>
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchUsers(VUSearchInput)}
                                                         icon="person_search"
                                                     />
                                                 </div>
                                             </div>
                                             {searchedUsers.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedUsers.map((u) => (
                                                         <div key={'viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -663,7 +642,7 @@ function CreateApplicationPage(props) {
                                                                     className="form-check-input bg-grey"
                                                                     checked={application.viewersUser.includes(u.id)}
                                                                     onChange={(e) => {
-                                                                        if (e.target.checked) {
+                                                                        if (e.target.checked)
                                                                             setApplication((prev) => ({
                                                                                 ...prev,
                                                                                 viewersUser: [
@@ -671,9 +650,7 @@ function CreateApplicationPage(props) {
                                                                                     parseInt(e.target.value),
                                                                                 ],
                                                                             }));
-                                                                        } else {
-                                                                            unselectUser(parseInt(e.target.value));
-                                                                        }
+                                                                        else unselectUser(parseInt(e.target.value));
                                                                     }}
                                                                 />
                                                                 <label
@@ -709,22 +686,21 @@ function CreateApplicationPage(props) {
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setVCSearchInput(e.target.value)}
                                                         onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                searchClassrooms(VCSearchInput);
-                                                            }
+                                                            if (e.key === 'Enter') searchClassrooms(VCSearchInput);
                                                         }}
                                                     />
                                                 </div>
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchClassrooms(VCSearchInput)}
                                                         icon="search"
                                                     />
                                                 </div>
                                             </div>
                                             {searchedClassrooms.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedClassrooms.map((c) => (
                                                         <div key={'viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -737,16 +713,14 @@ function CreateApplicationPage(props) {
                                                                     className="form-check-input bg-grey"
                                                                     checked={application.viewersClassroom.includes(c.id)}
                                                                     onChange={(e) => {
-                                                                        if (e.target.checked) {
-                                                                            selectClassroom(parseInt(e.target.value));
-                                                                        } else {
+                                                                        if (e.target.checked) selectClassroom(parseInt(e.target.value));
+                                                                        else
                                                                             setApplication((prev) => ({
                                                                                 ...prev,
                                                                                 viewersClassroom: prev.viewersClassroom.filter(
                                                                                     (id) => id !== parseInt(e.target.value)
                                                                                 ),
                                                                             }));
-                                                                        }
                                                                     }}
                                                                 />
                                                                 <label
@@ -802,22 +776,21 @@ function CreateApplicationPage(props) {
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setAVUSearchInput(e.target.value)}
                                                         onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                searchAnswerUsers(AVUSearchInput);
-                                                            }
+                                                            if (e.key === 'Enter') searchAnswerUsers(AVUSearchInput);
                                                         }}
                                                     />
                                                 </div>
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchAnswerUsers(AVUSearchInput)}
                                                         icon="person_search"
                                                     />
                                                 </div>
                                             </div>
                                             {searchedAnswerUsers.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedAnswerUsers.map((u) => (
                                                         <div key={'answer-viewer-user-' + u.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -830,7 +803,7 @@ function CreateApplicationPage(props) {
                                                                     className="form-check-input bg-grey"
                                                                     checked={application.answersViewersUser.includes(u.id)}
                                                                     onChange={(e) => {
-                                                                        if (e.target.checked) {
+                                                                        if (e.target.checked)
                                                                             setApplication((prev) => ({
                                                                                 ...prev,
                                                                                 answersViewersUser: [
@@ -838,9 +811,7 @@ function CreateApplicationPage(props) {
                                                                                     parseInt(e.target.value),
                                                                                 ],
                                                                             }));
-                                                                        } else {
-                                                                            unselectAnswerUser(parseInt(e.target.value));
-                                                                        }
+                                                                        else unselectAnswerUser(parseInt(e.target.value));
                                                                     }}
                                                                 />
                                                                 <label
@@ -876,22 +847,21 @@ function CreateApplicationPage(props) {
                                                         className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
                                                         onChange={(e) => setAVCSearchInput(e.target.value)}
                                                         onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') {
-                                                                searchAnswerClassrooms(AVCSearchInput);
-                                                            }
+                                                            if (e.key === 'Enter') searchAnswerClassrooms(AVCSearchInput);
                                                         }}
                                                     />
                                                 </div>
                                                 <div className="col-auto">
                                                     <RoundedButton
                                                         hsl={[197, 43, 52]}
+                                                        className="text-white"
                                                         onClick={() => searchAnswerClassrooms(AVCSearchInput)}
                                                         icon="search"
                                                     />
                                                 </div>
                                             </div>
                                             {searchedAnswerClassrooms.length > 0 && (
-                                                <div className="row gy-2 mb-3">
+                                                <div className="row user-list gy-2 mb-3">
                                                     {searchedAnswerClassrooms.map((c) => (
                                                         <div key={'answer-viewer-classroom-' + c.id} className="col-6 col-md-4 col-xl-3">
                                                             <div className="form-check">
@@ -904,9 +874,9 @@ function CreateApplicationPage(props) {
                                                                     className="form-check-input bg-grey"
                                                                     checked={application.answersViewersClassroom.includes(c.id)}
                                                                     onChange={(e) => {
-                                                                        if (e.target.checked) {
+                                                                        if (e.target.checked)
                                                                             selectAnswerClassroom(parseInt(e.target.value));
-                                                                        } else {
+                                                                        else
                                                                             setApplication((prev) => ({
                                                                                 ...prev,
                                                                                 answersViewersClassroom:
@@ -914,7 +884,6 @@ function CreateApplicationPage(props) {
                                                                                         (id) => id !== parseInt(e.target.value)
                                                                                     ),
                                                                             }));
-                                                                        }
                                                                     }}
                                                                 />
                                                                 <label
@@ -949,7 +918,7 @@ function CreateApplicationPage(props) {
                                         }}
                                     />
                                 </div>
-                                {isEditing && (
+                                {isEditing && application.actions.toDelete === true && (
                                     <div className="col-5 col-sm-3 col-xl-2">
                                         <TextButton
                                             text={'Excluir'}

@@ -10,10 +10,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import RoundedButton from '../../RoundedButton';
 import { MaterialSymbol } from 'react-material-symbols';
 import { Tooltip } from 'bootstrap';
+import { AlertContext } from '../../../contexts/AlertContext';
 
 const styles = `
     .font-century-gothic {
@@ -59,9 +60,24 @@ const styles = `
 */
 function CreateMultipleInputItens(props) {
     const [title, setTitle] = useState('');
-    const { currentItem, pageIndex, groupIndex, itemIndex, updateItem, removeItem, updateItemPlacement, insertItemValidation } = props;
+    const {
+        currentItem,
+        pageIndex,
+        groupIndex,
+        itemIndex,
+        updateItem,
+        removeItem,
+        updateItemPlacement,
+        insertItemValidation,
+        moveItemBetweenPages,
+        moveItemBetweenItemGroups,
+        pagesQty,
+        groupsQty,
+        itemsQty,
+    } = props;
     const [item, setItem] = useState(currentItem);
     const galleryInputRef = useRef(null);
+    const { showAlert } = useContext(AlertContext);
 
     /** Atualiza o título do item com base no seu tipo. */
     useEffect(() => {
@@ -93,8 +109,6 @@ function CreateMultipleInputItens(props) {
     useEffect(() => {
         const tooltipList = [];
         if (item.tempId) {
-            tooltipList.push(new Tooltip('.move-item-' + item.tempId + '-down-tooltip', { trigger: 'hover' }));
-            tooltipList.push(new Tooltip('.move-item-' + item.tempId + '-up-tooltip', { trigger: 'hover' }));
             if (item.type === 'CHECKBOX')
                 tooltipList.push(new Tooltip('.add-validation-' + item.tempId + '-tooltip', { trigger: 'hover' }));
             tooltipList.push(new Tooltip('.delete-' + item.tempId + '-tooltip', { trigger: 'hover' }));
@@ -190,33 +204,11 @@ function CreateMultipleInputItens(props) {
 
     return (
         <div className="pb-4">
-            <div className="row gx-2 pb-2">
+            <div className="row g-2 pb-2 align-items-center justify-content-end">
                 <div className="col">
                     <h1 className="font-century-gothic text-steel-blue fs-4 fw-bold p-0 m-0">
                         Item {itemIndex + 1} - {title}
                     </h1>
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_down"
-                        onClick={() => updateItemPlacement(item.placement + 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-down-tooltip'}
-                        data-bs-title="Mover o item uma posição abaixo na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-down-tooltip'}
-                    />
-                </div>
-                <div className="col-auto">
-                    <RoundedButton
-                        hsl={[190, 46, 70]}
-                        icon="keyboard_arrow_up"
-                        onClick={() => updateItemPlacement(item.placement - 1, item.placement, itemIndex)}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={'move-item-' + item.tempId + '-up-tooltip'}
-                        data-bs-title="Mover o item uma posição acima na ordem dos itens do grupo."
-                        className={'move-item-' + item.tempId + '-up-tooltip'}
-                    />
                 </div>
                 {item.type === 'CHECKBOX' && (
                     <div className="col-auto">
@@ -227,7 +219,7 @@ function CreateMultipleInputItens(props) {
                             data-bs-toggle="tooltip"
                             data-bs-custom-class={'add-validation-' + item.tempId + '-tooltip'}
                             data-bs-title="Adicionar uma validação ao item, como mínimo, máximo, dentre outras. O usuário deverá atender a todas as validações para submeter o protocolo."
-                            className={'add-validation-' + item.tempId + '-tooltip'}
+                            className={'add-validation-' + item.tempId + '-tooltip text-white'}
                         />
                     </div>
                 )}
@@ -239,7 +231,7 @@ function CreateMultipleInputItens(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + item.tempId + '-tooltip'}
                         data-bs-title="Remover o item do grupo."
-                        className={'delete-' + item.tempId + '-tooltip'}
+                        className={'delete-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>
@@ -249,20 +241,17 @@ function CreateMultipleInputItens(props) {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckDefault"
-                    value={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument === true)}
-                    onChange={(event) =>
-                        setItem((prev) => {
-                            if (event.target.checked) {
-                                const newItem = { ...prev };
-                                newItem.itemValidations.push({ type: 'MANDATORY', argument: true });
-                                return newItem;
-                            } else {
-                                const newItem = { ...prev };
-                                newItem.itemValidations = newItem.itemValidations.filter((validation) => validation.type !== 'MANDATORY');
-                                return newItem;
-                            }
-                        })
-                    }
+                    checked={item.itemValidations.some((validation) => validation.type === 'MANDATORY' && validation.argument)}
+                    onChange={(event) => {
+                        const newItem = {
+                            ...item,
+                            itemValidations:
+                                event.target.checked && !item.itemValidations.some((validation) => validation.type === 'MANDATORY')
+                                    ? [...item.itemValidations, { type: 'MANDATORY', argument: 'true' }] // Add mandatory validation
+                                    : item.itemValidations.filter((validation) => validation.type !== 'MANDATORY'), // Remove mandatory validation
+                        };
+                        setItem(newItem);
+                    }}
                 />
                 <label className="form-check-label font-barlow fw-medium me-2" htmlFor="flexSwitchCheckDefault">
                     Obrigatório
@@ -278,6 +267,60 @@ function CreateMultipleInputItens(props) {
                     data-bs-title="Se o usuário deverá obrigatoriamente responder a este item antes de submeter o protocolo."
                     className={'bg-steel-blue mandatory-' + item.tempId + '-tooltip p-1 rounded-circle'}
                 />
+            </div>
+            <div className="row g-2 mb-2">
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={pageIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => moveItemBetweenPages(e.target.value, pageIndex, groupIndex, itemIndex)}
+                    >
+                        {[...Array(pagesQty).keys()].map((page) => (
+                            <option key={'item-page-' + (page + 1)} value={page}>
+                                Página {page + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={groupIndex}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) =>
+                            moveItemBetweenItemGroups(e.target.value, groupIndex, itemIndex)
+                                ? {}
+                                : showAlert({
+                                      headerText: 'Erro ao mover item',
+                                      bodyText: 'O item não pode ser movido para um grupo do tipo tabela ou ao qual já pertence',
+                                  })
+                        }
+                    >
+                        {[...Array(groupsQty).keys()].map((group) => (
+                            <option key={'item-group-' + (group + 1)} value={group}>
+                                Grupo {group + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="col">
+                    <select
+                        name="item-target-page"
+                        id="item-target-page"
+                        value={item.placement}
+                        className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                        onChange={(e) => updateItemPlacement(e.target.value, item.placement, itemIndex)}
+                    >
+                        {[...Array(itemsQty).keys()].map((placement) => (
+                            <option key={'item-placement-' + (placement + 1)} value={placement + 1}>
+                                Posição {placement + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div className="bg-light-grey rounded-4 lh-1 w-100 p-4">
                 <div className="mb-3">
@@ -297,7 +340,7 @@ function CreateMultipleInputItens(props) {
                     />
                     <div className="row gx-2 align-items-end">
                         <div className="col">
-                            <input
+                            <textarea
                                 type="text"
                                 className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                                 id="question"
@@ -305,8 +348,9 @@ function CreateMultipleInputItens(props) {
                                 aria-describedby="questionHelp"
                                 onChange={(event) => setItem((prev) => ({ ...prev, text: event.target.value }))}
                                 minLength="3"
+                                rows="4"
                                 required
-                            />
+                            ></textarea>
                         </div>
                         <div className="col-auto">
                             <RoundedButton
@@ -317,7 +361,7 @@ function CreateMultipleInputItens(props) {
                                 data-bs-toggle="tooltip"
                                 data-bs-custom-class={'upload-image-' + item.tempId + '-tooltip'}
                                 data-bs-title="Adicione imagens ao enunciado da pergunta."
-                                className={'upload-image-' + item.tempId + '-tooltip'}
+                                className={'upload-image-' + item.tempId + '-tooltip text-white'}
                             />
                         </div>
                     </div>
@@ -330,10 +374,10 @@ function CreateMultipleInputItens(props) {
                 {item.files?.length > 0 && (
                     <div className="row mb-3 mt-4 gy-4">
                         {item.files.map((file, i) => {
-                            if (file?.content instanceof File || file?.path)
+                            if (file?.path || file?.content instanceof File)
                                 return (
                                     <div
-                                        key={'item-' + item.tempId + '-image-' + file?.content?.name || file?.id}
+                                        key={'item-' + item.tempId + '-' + itemIndex + '-image-' + file?.id || file?.content?.name}
                                         className={`col-${item.files.length > 3 ? 4 : 12 / item.files.length}`}
                                     >
                                         <div
@@ -342,12 +386,16 @@ function CreateMultipleInputItens(props) {
                                             } img-gallery d-flex justify-content-center border border-secondary-subtle rounded-4 position-relative`}
                                         >
                                             <img
-                                                src={file.path ? file.path : URL.createObjectURL(file.content)}
+                                                src={
+                                                    file.path
+                                                        ? process.env.REACT_APP_API_URL + 'api/' + file.path
+                                                        : URL.createObjectURL(file.content)
+                                                }
                                                 className="img-fluid object-fit-contain w-100 rounded-4"
                                                 alt="Imagem selecionada"
                                             />
                                             <RoundedButton
-                                                className="position-absolute top-0 start-100 translate-middle mb-2 me-2"
+                                                className="position-absolute top-0 start-100 translate-middle text-white mb-2 me-2"
                                                 hsl={[190, 46, 70]}
                                                 size={32}
                                                 icon="delete"
@@ -365,7 +413,7 @@ function CreateMultipleInputItens(props) {
                 )}
                 {item.itemOptions.map((data, i) => {
                     return (
-                        <div key={'item-option-' + data.tempId} className="mb-3">
+                        <div key={'item-option-' + data.tempId + '-' + i} className="mb-3">
                             <label htmlFor={'item-option-text-' + data.tempId} className="form-label fw-medium fs-5">
                                 Opção {i + 1}
                             </label>
@@ -385,6 +433,7 @@ function CreateMultipleInputItens(props) {
                                     <RoundedButton
                                         hsl={[190, 46, 70]}
                                         size={32}
+                                        className="text-white"
                                         icon="keyboard_arrow_down"
                                         onClick={() => updateOptionPlacement(data.placement + 1, data.placement, i)}
                                     />
@@ -393,6 +442,7 @@ function CreateMultipleInputItens(props) {
                                     <RoundedButton
                                         hsl={[190, 46, 70]}
                                         size={32}
+                                        className="text-white"
                                         icon="keyboard_arrow_up"
                                         onClick={() => updateOptionPlacement(data.placement - 1, data.placement, i)}
                                     />
@@ -423,7 +473,7 @@ function CreateMultipleInputItens(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'add-option-' + item.tempId + '-tooltip'}
                         data-bs-title="Adicionar uma nova opção ao item."
-                        className={'bg-steel-blue add-option-' + item.tempId + '-tooltip'}
+                        className={'bg-steel-blue add-option-' + item.tempId + '-tooltip text-white'}
                     />
                 </div>
                 <input

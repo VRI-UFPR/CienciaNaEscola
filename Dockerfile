@@ -8,14 +8,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy
 # of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 
-FROM node:20-alpine
+FROM node:22.14.0-alpine
 
 WORKDIR /app/
 
 COPY public/ /app/public
 COPY src/ /app/src
 COPY package.json /app/
-COPY uploads /app/uploads
+COPY config-overrides.js /app/
+COPY .env /app/
 
 # Define a variável de ambiente para a porta
 ENV PORT=3001

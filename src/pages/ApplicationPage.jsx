@@ -31,7 +31,6 @@ import TextImageInput from '../components/inputs/answers/TextImageInput';
 import Sidebar from '../components/Sidebar';
 import ProtocolInfo from '../components/ProtocolInfo';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import { serialize } from 'object-to-formdata';
 import { LayoutContext } from '../contexts/LayoutContext';
 import ErrorPage from './ErrorPage';
@@ -70,15 +69,17 @@ const styles = `
 /**
  * ApplicationPage - Componente responsável por exibir e manipular uma aplicação baseada em um protocolo.
  * @param {Object} props - Propriedades do componente.
-*/
+ */
 function ApplicationPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(undefined);
     const { user, logout } = useContext(AuthContext);
     const [application, setApplication] = useState(undefined);
-    const [addressId, setAddressId] = useState(undefined);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [itemAnswerGroups, setItemAnswerGroups] = useState({});
+    const [answerDate, setAnswerDate] = useState(undefined);
+    const [answerTime, setAnswerTime] = useState(undefined);
+    const [answerLocation, setAnswerLocation] = useState(undefined);
     const { applicationId } = useParams();
     const { connected, storeLocalApplication, storePendingRequest, localApplications } = useContext(StorageContext);
     const { showAlert } = useContext(AlertContext);
@@ -89,19 +90,13 @@ function ApplicationPage(props) {
     /**
      * Encontra a resposta associada a um item pelo ID.
      * @param {number} id - ID do item.
-    */
+     */
     const findAnswer = (id) => {
         for (const group in itemAnswerGroups) {
             let res = undefined;
-            if (itemAnswerGroups[group].itemAnswers[id] !== undefined) {
-                res = itemAnswerGroups[group].itemAnswers[id];
-            }
-            if (itemAnswerGroups[group].optionAnswers[id] !== undefined) {
-                res = itemAnswerGroups[group].optionAnswers[id];
-            }
-            if (itemAnswerGroups[group].tableAnswers[id] !== undefined) {
-                res = itemAnswerGroups[group].tableAnswers[id];
-            }
+            if (itemAnswerGroups[group].itemAnswers[id] !== undefined) res = itemAnswerGroups[group].itemAnswers[id];
+            if (itemAnswerGroups[group].optionAnswers[id] !== undefined) res = itemAnswerGroups[group].optionAnswers[id];
+            if (itemAnswerGroups[group].tableAnswers[id] !== undefined) res = itemAnswerGroups[group].tableAnswers[id];
             if (res !== undefined) {
                 // Drop group and files from res
                 let { group, files, ...answer } = res;
@@ -114,24 +109,18 @@ function ApplicationPage(props) {
     /**
      * Busca um item no protocolo pelo ID.
      * @param {number} id - ID do item.
-    */
+     */
     const findItem = (id) => {
-        for (const page of application.protocol.pages) {
-            for (const group of page.itemGroups) {
-                for (const item of group.items) {
-                    if (item.id === id) {
-                        return item;
-                    }
-                }
-            }
-        }
+        for (const page of application.protocol.pages)
+            for (const group of page.itemGroups) for (const item of group.items) if (item.id === id) return item;
+
         return undefined;
     };
 
     /**
      * Verifica se as dependências de um item foram atendidas.
      * @param {Array} dependencies - Lista de dependências.
-    */
+     */
     const isDependenciesAttended = (dependencies) => {
         let dependencyAttended = true;
         for (const dependency of dependencies) {
@@ -139,16 +128,8 @@ function ApplicationPage(props) {
             const answer = findAnswer(dependency.itemId);
             switch (dependency.type) {
                 case 'EXACT_ANSWER':
-                    if (
-                        item.type === 'TEXTBOX' ||
-                        item.type === 'NUMBERBOX' ||
-                        item.type === 'DATEBOX' ||
-                        item.type === 'TIMEBOX' ||
-                        item.type === 'LOCATIONBOX'
-                    ) {
-                        if (!answer || answer.text !== dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                    if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX') {
+                        if (!answer || answer.text !== dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'CHECKBOX' || item.type === 'RADIO' || item.type === 'SELECT') {
                         if (
                             !answer ||
@@ -156,9 +137,8 @@ function ApplicationPage(props) {
                                 .filter((o) => Object.keys(answer).includes(o.id.toString()))
                                 .map((o) => o.text)
                                 .includes(dependency.argument) === false
-                        ) {
+                        )
                             dependencyAttended = false;
-                        }
                     }
                     break;
                 case 'OPTION_SELECTED':
@@ -169,39 +149,26 @@ function ApplicationPage(props) {
                                 .filter((o) => Object.keys(answer).includes(o.id.toString()))
                                 .map((o) => o.text)
                                 .includes(dependency.argument) === false
-                        ) {
+                        )
                             dependencyAttended = false;
-                        }
                     }
                     break;
                 case 'MIN':
                     if (item.type === 'CHECKBOX') {
-                        if (!answer || Object.keys(answer).length < dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || Object.keys(answer).length < dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'RANGE' || item.type === 'NUMBERBOX') {
-                        if (!answer || Number(answer.text) < dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || Number(answer.text) < dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'TEXTBOX') {
-                        if (!answer || answer.text.length < dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || answer.text.length < dependency.argument) dependencyAttended = false;
                     }
                     break;
                 case 'MAX':
                     if (item.type === 'CHECKBOX') {
-                        if (!answer || Object.keys(answer).length > dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || Object.keys(answer).length > dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'RANGE' || item.type === 'NUMBERBOX') {
-                        if (!answer || Number(answer.text) > dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || Number(answer.text) > dependency.argument) dependencyAttended = false;
                     } else if (item.type === 'TEXTBOX') {
-                        if (!answer || answer.text.length > dependency.argument) {
-                            dependencyAttended = false;
-                        }
+                        if (!answer || answer.text.length > dependency.argument) dependencyAttended = false;
                     }
                     break;
                 default:
@@ -215,42 +182,29 @@ function ApplicationPage(props) {
     const getNextPage = () => {
         const nextPageIndex = currentPageIndex + 1;
         for (let i = nextPageIndex; i < application.protocol.pages.length; i++) {
-            if (application.protocol.pages[i].dependencies.length === 0) {
-                return i;
-            } else {
+            if (application.protocol.pages[i].dependencies.length === 0) return i;
+            else {
                 let dependencyAttended = isDependenciesAttended(application.protocol.pages[i].dependencies);
-                if (dependencyAttended === true) {
-                    return i;
-                }
+                if (dependencyAttended === true) return i;
             }
             return undefined;
         }
     };
 
     /** Verifica se há uma página anterior. */
-    const isPreviousPage = () => {
-        return currentPageIndex > 0;
-    };
+    const hasPreviousPage = () => currentPageIndex > 0;
 
     /** Verifica se há uma próxima página. */
-    const isNextPage = () => {
-        return getNextPage() !== undefined;
+    const hasNextPage = () => getNextPage() !== undefined;
+
+    /** Navega para a próxima página. */
+    const goToNextPage = () => {
+        if (hasNextPage()) setCurrentPageIndex(getNextPage());
     };
 
-    /** Avança para a próxima página. */
-    const nextPage = () => {
-        if (isNextPage()) {
-            const nextPageIndex = getNextPage();
-            setCurrentPageIndex(nextPageIndex);
-        }
-    };
-
-    /** Retorna para a página anterior. */
-    const previousPage = () => {
-        if (isPreviousPage()) {
-            const previousPageIndex = currentPageIndex - 1;
-            setCurrentPageIndex(previousPageIndex);
-        }
+    /** Navega para a página anterior. */
+    const goToPreviousPage = () => {
+        if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
     };
 
     /**
@@ -259,28 +213,31 @@ function ApplicationPage(props) {
      * @param {string} itemToUpdate - Item atualizado.
      * @param {string} itemType - Tipo de item (ITEM, OPTION, TABLE).
      * @param {Object} updatedAnswer - Resposta atualizada.
-    */
+     */
     const handleAnswerChange = useCallback((groupToUpdate, itemToUpdate, itemType, updatedAnswer) => {
         setItemAnswerGroups((prevItemAnswerGroups) => {
             const newItemAnswerGroups = { ...prevItemAnswerGroups };
 
-            if (newItemAnswerGroups[groupToUpdate] === undefined) {
+            if (newItemAnswerGroups[groupToUpdate] === undefined)
                 newItemAnswerGroups[groupToUpdate] = { itemAnswers: {}, optionAnswers: {}, tableAnswers: {} };
+
+            const targetAnswers =
+                newItemAnswerGroups[groupToUpdate][
+                    itemType === 'ITEM'
+                        ? 'itemAnswers'
+                        : itemType === 'OPTION'
+                        ? 'optionAnswers'
+                        : itemType === 'TABLE'
+                        ? 'tableAnswers'
+                        : null
+                ];
+
+            if (targetAnswers) {
+                Object.keys(updatedAnswer).length === 0
+                    ? delete targetAnswers[itemToUpdate]
+                    : (targetAnswers[itemToUpdate] = updatedAnswer);
             }
 
-            switch (itemType) {
-                case 'ITEM':
-                    newItemAnswerGroups[groupToUpdate]['itemAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                case 'OPTION':
-                    newItemAnswerGroups[groupToUpdate]['optionAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                case 'TABLE':
-                    newItemAnswerGroups[groupToUpdate]['tableAnswers'][itemToUpdate] = updatedAnswer;
-                    break;
-                default:
-                    break;
-            }
             return newItemAnswerGroups;
         });
     }, []);
@@ -291,11 +248,12 @@ function ApplicationPage(props) {
 
         const applicationAnswer = {
             applicationId: application.id,
-            addressId: addressId,
-            date: new Date(),
+            date: new Date(answerDate + 'T' + answerTime + ':00Z'),
+            coordinate: answerLocation,
             itemAnswerGroups: [],
         };
-        for (const group in itemAnswerGroups) {
+
+        for (const group in itemAnswerGroups)
             if (
                 application.protocol.pages
                     .flatMap((page) =>
@@ -306,85 +264,69 @@ function ApplicationPage(props) {
                             groupDependencies: group.dependencies,
                         }))
                     )
-                    .filter(
-                        (dependency) =>
-                            dependency.groupId === Number(group) &&
-                            !isDependenciesAttended(dependency.pageDependencies.concat(dependency.groupDependencies))
-                    ).length === 0
+                    .filter((d) => d.groupId === Number(group) && !isDependenciesAttended(d.pageDependencies.concat(d.groupDependencies)))
+                    .length === 0
             ) {
-                const itemAnswerGroup = {
-                    itemAnswers: [],
-                    optionAnswers: [],
-                    tableAnswers: [],
-                };
+                const itemAnswerGroup = { itemAnswers: [], optionAnswers: [], tableAnswers: [] };
 
-                for (const item in itemAnswerGroups[group].itemAnswers) {
+                for (const item in itemAnswerGroups[group].itemAnswers)
                     itemAnswerGroup.itemAnswers.push({
                         itemId: item,
                         text: itemAnswerGroups[group].itemAnswers[item].text,
                         files: itemAnswerGroups[group].itemAnswers[item].files,
                     });
-                }
-                for (const item in itemAnswerGroups[group].optionAnswers) {
-                    for (const option in itemAnswerGroups[group].optionAnswers[item]) {
-                        if (option !== 'group') {
+
+                for (const item in itemAnswerGroups[group].optionAnswers)
+                    for (const option in itemAnswerGroups[group].optionAnswers[item])
+                        if (option !== 'group')
                             itemAnswerGroup.optionAnswers.push({
                                 itemId: item,
                                 optionId: option,
                                 text: itemAnswerGroups[group].optionAnswers[item][option],
                             });
-                        }
-                    }
-                }
-                for (const item in itemAnswerGroups[group].tableAnswers) {
-                    for (const column in itemAnswerGroups[group].tableAnswers[item]) {
-                        if (column !== 'group') {
+
+                for (const item in itemAnswerGroups[group].tableAnswers)
+                    for (const column in itemAnswerGroups[group].tableAnswers[item])
+                        if (column !== 'group')
                             itemAnswerGroup.tableAnswers.push({
                                 itemId: item,
                                 columnId: column,
                                 text: itemAnswerGroups[group].tableAnswers[item][column],
                             });
-                        }
-                    }
-                }
+
                 applicationAnswer.itemAnswerGroups.push(itemAnswerGroup);
             }
-        }
 
         const formData = serialize(applicationAnswer, { indices: true });
 
-        if (connected === true) {
+        if (connected === true)
             axios
-                .post(baseUrl + `api/applicationAnswer/createApplicationAnswer`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                .post(process.env.REACT_APP_API_URL + `api/applicationAnswer/createApplicationAnswer`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
-                .then((response) => {
+                .then((response) =>
                     showAlert({
                         headerText: 'Muito obrigado por sua participação no projeto.',
                         onPrimaryBtnClick: () => navigate(isDashboard ? '/dash/applications' : '/applications'),
-                    });
-                })
-                .catch((error) => {
+                    })
+                )
+                .catch((error) =>
                     showAlert({
                         headerText: 'Não foi possível submeter a resposta. Tente novamente mais tarde.',
-                        bodyText: error.response?.data.message,
-                    });
-                });
-        } else {
+                        bodyText:
+                            error.response?.data.message === 'ItemAnswerGroups is a required field'
+                                ? 'É necessário responder ao menos 1 item.'
+                                : error.response?.data.message,
+                    })
+                );
+        else {
             storePendingRequest({
                 id: applicationId,
                 userId: user.id,
                 title: 'Resposta da aplicação ' + applicationId + ' referente ao protocolo ' + application.protocol.title,
-                url: baseUrl + `api/applicationAnswer/createApplicationAnswer`,
+                url: process.env.REACT_APP_API_URL + `api/applicationAnswer/createApplicationAnswer`,
                 data: formData,
-                config: {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                },
+                config: { headers: { 'Content-Type': 'multipart/form-data' } },
             });
             showAlert({ headerText: 'Você está offline. A resposta será armazenada localmente e submetida quando houver conexão.' });
         }
@@ -399,88 +341,97 @@ function ApplicationPage(props) {
                 setIsLoading(false);
             } else if (user.id !== null && user.token !== null) {
                 axios
-                    .get(baseUrl + `api/application/getApplicationWithProtocol/${applicationId}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
+                    .get(process.env.REACT_APP_API_URL + `api/application/getApplicationWithProtocol/${applicationId}`, {
+                        headers: { Authorization: `Bearer ${user.token}` },
                     })
                     .then((response) => {
                         setApplication(response.data.data);
                         storeLocalApplication(response.data.data);
                         setIsLoading(false);
                     })
-                    .catch((error) => {
-                        setError({ text: 'Erro ao carregar aplicação', description: error.response?.data.message || '' });
-                    });
+                    .catch((error) =>
+                        setError({ text: 'Erro ao obter informações da aplicação', description: error.response?.data.message || '' })
+                    );
             }
         }
     }, [applicationId, user, logout, navigate, localApplications, storeLocalApplication, application, isDashboard, connected]);
 
     useEffect(() => {
-        if (connected === false && application?.id) {
+        if (connected === false && application?.id)
             showAlert({
                 headerText: 'Você está offline. A aplicação ' + applicationId + ' está armazenada localmente e continuará acessível.',
             });
-        }
     }, [connected, application, applicationId, showAlert]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando aplicação..." />;
-    }
+    if (isLoading) return <SplashPage text="Carregando aplicação..." />;
 
     return (
         <div className="d-flex flex-column flex-grow-1 w-100 min-vh-100">
-            <div className="row flex-grow-1 m-0">
-                <div className="col-auto bg-coral-red d-flex position-lg-sticky vh-100 top-0 p-0">
+            <div className="d-flex flex-grow-1 w-100">
+                <div className="d-flex flex-column position-lg-sticky bg-coral-red vh-100 top-0 p-0">
                     <div className="offcanvas-lg offcanvas-start bg-coral-red w-auto d-flex" tabIndex="-1" id="sidebar">
                         <Sidebar showExitButton={false} />
                     </div>
                 </div>
-                <div className="col d-flex flex-column flex-grow-1 bg-yellow-orange p-0">
+                <div className="d-flex flex-column flex-grow-1 overflow-hidden bg-yellow-orange p-0">
                     <NavBar showNavTogglerMobile={true} showNavTogglerDesktop={false} />
 
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
                                 {isDashboard && (
-                                    <div className="row m-0 justify-content-center">
-                                        {(application.applier.id === user.id || user.role === 'ADMIN') && (
-                                            <div className="col-6 col-md-4 align-self-center pb-4">
+                                    <div className="row g-2 justify-content-center mb-4">
+                                        {application.actions.toUpdate && (
+                                            <div className="col">
                                                 <TextButton
                                                     type="submit"
-                                                    hsl={[97, 43, 70]}
+                                                    hsl={[197, 43, 61]}
                                                     text="Gerenciar"
                                                     onClick={() => navigate('manage')}
                                                 />
                                             </div>
                                         )}
-                                        <div className="col-6 col-md-4 align-self-center pb-4">
-                                            <TextButton
-                                                type="submit"
-                                                hsl={[97, 43, 70]}
-                                                text="Respostas"
-                                                onClick={() => navigate('answers')}
-                                            />
-                                        </div>
+                                        {application.actions.toGetAnswers && (
+                                            <div className="col">
+                                                <TextButton
+                                                    type="submit"
+                                                    hsl={[197, 43, 61]}
+                                                    text="Respostas"
+                                                    onClick={() => navigate('answers')}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 <div className="row justify-content-center m-0">
-                                    {<ProtocolInfo title={application.protocol.title} description={application.protocol.description} />}
+                                    <ProtocolInfo title={application.protocol.title} description={application.protocol.description} />
                                 </div>
+                                {currentPageIndex === 0 && (
+                                    <div>
+                                        <div className="row justify-content-center m-0 pt-3">
+                                            <DateInput answer={answerDate || ''} onAnswerChange={(newDate) => setAnswerDate(newDate)} />
+                                        </div>
+                                        <div className="row justify-content-center m-0 pt-3">
+                                            <TimeInput answer={answerTime || ''} onAnswerChange={(newTime) => setAnswerTime(newTime)} />
+                                        </div>
+                                        {application.keepLocation && (
+                                            <div className="row justify-content-center m-0 pt-3">
+                                                <LocationInput
+                                                    answer={answerLocation || { latitude: 0.0, longitude: 0.0 }}
+                                                    onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                                 {application.protocol.pages[currentPageIndex].itemGroups
                                     .filter((group) => isDependenciesAttended(group.dependencies))
                                     .map((itemGroup, itemGroupIndex) => {
-                                        if (
-                                            itemGroup.type !== 'TEXTBOX_TABLE' &&
-                                            itemGroup.type !== 'RADIO_TABLE' &&
-                                            itemGroup.type !== 'CHECKBOX_TABLE'
-                                        ) {
+                                        if (itemGroup.type === 'ONE_DIMENSIONAL')
                                             return (
-                                                <div>
+                                                <div key={'group' + itemGroupIndex}>
                                                     {itemGroup.items.map((item) => {
                                                         switch (item.type) {
                                                             case 'RANGE':
@@ -489,6 +440,7 @@ function ApplicationPage(props) {
                                                                         {
                                                                             <RangeInput
                                                                                 item={item}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     text:
                                                                                         itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
@@ -567,7 +519,7 @@ function ApplicationPage(props) {
                                                                         {
                                                                             <SelectInput
                                                                                 item={item}
-                                                                                galleryRef={galleryModalRef}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     group: itemGroup.id,
                                                                                     ...itemAnswerGroups[itemGroup.id]?.optionAnswers[
@@ -579,66 +531,13 @@ function ApplicationPage(props) {
                                                                         }
                                                                     </div>
                                                                 );
-                                                            case 'DATEBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <DateInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={handleAnswerChange}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            case 'TIMEBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <TimeInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                onAnswerChange={handleAnswerChange}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
-                                                            case 'LOCATIONBOX':
-                                                                return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
-                                                                        {
-                                                                            <LocationInput
-                                                                                item={item}
-                                                                                answer={{
-                                                                                    text:
-                                                                                        itemAnswerGroups[itemGroup.id]?.itemAnswers[item.id]
-                                                                                            ?.text || '',
-                                                                                    files: [],
-                                                                                    group: itemGroup.id,
-                                                                                }}
-                                                                                setAddressId={setAddressId}
-                                                                            />
-                                                                        }
-                                                                    </div>
-                                                                );
                                                             case 'UPLOAD':
                                                                 return (
                                                                     <div key={item.id} className="row justify-content-center m-0 pt-3">
                                                                         {
                                                                             <ImageInput
                                                                                 item={item}
+                                                                                galleryModalRef={galleryModalRef}
                                                                                 answer={{
                                                                                     text: '',
                                                                                     files:
@@ -663,7 +562,7 @@ function ApplicationPage(props) {
                                                     })}
                                                 </div>
                                             );
-                                        } else {
+                                        else
                                             return (
                                                 <div key={'group' + itemGroupIndex} className="row justify-content-center m-0 pt-3">
                                                     <TableInput
@@ -676,26 +575,23 @@ function ApplicationPage(props) {
                                                     />
                                                 </div>
                                             );
-                                        }
                                     })}
                                 <div className="row justify-content-center m-0 pt-3">
-                                    {
-                                        <TextImageInput
-                                            item={{
-                                                text:
-                                                    'Identificador da aplicação: ' +
-                                                    application.id +
-                                                    '<br>Identificador do protocolo: ' +
-                                                    application.protocol.id +
-                                                    '<br>Versão do protocolo: ' +
-                                                    application.protocol.updatedAt.replace(/\D/g, ''),
-                                                files: [],
-                                            }}
-                                            galleryModalRef={galleryModalRef}
-                                        />
-                                    }
+                                    <TextImageInput
+                                        item={{
+                                            text:
+                                                'Identificador da aplicação:  ' +
+                                                application.id +
+                                                '  \nIdentificador do protocolo: ' +
+                                                application.protocol.id +
+                                                '  \nVersão do protocolo: ' +
+                                                application.protocol.updatedAt.replace(/\D/g, ''),
+                                            files: [],
+                                        }}
+                                        galleryModalRef={galleryModalRef}
+                                    />
                                 </div>
-                                {!isNextPage() && (
+                                {!hasNextPage() && (
                                     <div className="col-4 align-self-center pt-4">
                                         <TextButton
                                             type="submit"
@@ -714,14 +610,14 @@ function ApplicationPage(props) {
                                         />
                                     </div>
                                 )}
-                                {isPreviousPage() && (
+                                {hasPreviousPage() && (
                                     <div className="col-4 align-self-center pt-4">
-                                        <TextButton type="button" hsl={[97, 43, 70]} text="Página anterior" onClick={previousPage} />
+                                        <TextButton type="button" hsl={[97, 43, 70]} text="Página anterior" onClick={goToPreviousPage} />
                                     </div>
                                 )}
-                                {isNextPage() && (
+                                {hasNextPage() && (
                                     <div className="col-4 align-self-center pt-4">
-                                        <TextButton type="button" hsl={[97, 43, 70]} text="Próxima página" onClick={nextPage} />
+                                        <TextButton type="button" hsl={[97, 43, 70]} text="Próxima página" onClick={goToNextPage} />
                                     </div>
                                 )}
                             </div>

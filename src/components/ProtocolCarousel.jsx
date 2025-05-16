@@ -71,7 +71,7 @@ function ProtocolCarousel(props) {
             const slideItems = listItems.slice(startIndex, endIndex);
 
             carouselItems.push(
-                <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100`}>
+                <div key={i} className={`carousel-item ${i === 0 ? ' active' : ''} h-100 px-4`}>
                     <div className="d-flex flex-column align-items-center h-100">
                         {slideItems.map((si) => (
                             <Link
@@ -117,7 +117,7 @@ function ProtocolCarousel(props) {
     return (
         <div
             id="dynamic-carousel"
-            className="custom-carousel d-flex flex-column flex-grow-1 carousel slide overflow-scroll rounded-4 w-100 m-0 p-0 px-4 px-lg-5 py-4"
+            className="custom-carousel d-flex flex-column flex-grow-1 carousel slide overflow-scroll rounded-4 w-100 m-0 p-0 px-lg-5 py-4"
             ref={carouselRef}
         >
             <div className="carousel-inner h-100 px-1">{renderCarouselItems()}</div>

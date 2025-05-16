@@ -111,7 +111,7 @@ function CreateDependencyInput(props) {
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={'delete-' + dependency.tempId + '-tooltip'}
                         data-bs-title={'Remover a dependência ' + (isPageDependency ? 'da página.' : 'do grupo.')}
-                        className={'delete-' + dependency.tempId + '-tooltip'}
+                        className={'delete-' + dependency.tempId + '-tooltip text-white'}
                     />
                 </div>
             </div>
@@ -135,7 +135,7 @@ function CreateDependencyInput(props) {
                         className={'bg-steel-blue dependency-type-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                     />
                     <select
-                        className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                        className="form-select light-grey-input border border-steel-blue rounded-4 fs-5"
                         id="group-dependency-type"
                         value={dependency.type || ''}
                         onChange={(event) => {
@@ -181,7 +181,7 @@ function CreateDependencyInput(props) {
                             className={'bg-steel-blue dependency-argument-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                         />
                         <input
-                            className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
+                            className="form-control light-grey-input border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
                             id="page-dependency-argument"
                             type={dependency.type === 'MIN' || dependency.type === 'MAX' ? 'number' : 'text'}
                             value={dependency.argument || ''}
@@ -216,7 +216,7 @@ function CreateDependencyInput(props) {
                             className={'bg-steel-blue dependency-target-' + dependency.tempId + '-tooltip p-1 rounded-circle'}
                         />
                         <select
-                            className="form-select bg-transparent border border-steel-blue rounded-4 fs-5"
+                            className="form-select light-grey-input border border-steel-blue rounded-4 fs-5"
                             id="page-dependency-target"
                             value={dependency.itemTempId || ''}
                             onChange={(event) => {
@@ -235,32 +235,6 @@ function CreateDependencyInput(props) {
                                 </option>
                             ))}
                         </select>
-                    </div>
-                )}
-                {getItemTargetOptions().length > 0 && (
-                    <div>
-                        <label
-                            className="form-label fs-5 fw-medium"
-                            htmlFor={
-                                (isPageDependency ? 'page-dependency-custom-message-' : 'group-dependency-custom-message') +
-                                dependency.tempId
-                            }
-                        >
-                            Mensagem personalizada
-                        </label>
-                        <input
-                            className="form-control bg-transparent border-0 border-bottom border-steel-blue rounded-0 fs-5 lh-1 p-0"
-                            id="page-dependency-custom-message"
-                            type="text"
-                            value={dependency.customMessage || ''}
-                            onChange={(event) => {
-                                setDependency((prev) => {
-                                    const newDependency = { ...prev };
-                                    newDependency.customMessage = event.target.value;
-                                    return newDependency;
-                                });
-                            }}
-                        />
                     </div>
                 )}
             </div>

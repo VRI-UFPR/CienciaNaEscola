@@ -34,8 +34,21 @@ import { Tooltip } from 'bootstrap';
  * @param {Function} props.insertItem - Função para inserir um novo item no grupo.
 */
 function CreateItemGroup(props) {
-    const { currentGroup, updateGroup, itemTarget, updateGroupPlacement, removeItemGroup, protocol, page, insertItem } = props;
-
+    const {
+        currentGroup,
+        updateGroup,
+        itemTarget,
+        updateGroupPlacement,
+        removeItemGroup,
+        protocol,
+        page,
+        insertItem,
+        moveItemBetweenPages,
+        moveItemBetweenItemGroups,
+        pagesQty,
+        groupsQty,
+        moveGroupBetweenPages,
+    } = props;
     const [group, setGroup] = useState(currentGroup);
 
     useEffect(() => {
@@ -46,8 +59,6 @@ function CreateItemGroup(props) {
     useEffect(() => {
         const tooltipList = [];
         if (group.tempId) {
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId.toString().slice(0, 13)}-down-tooltip`, { trigger: 'hover' }));
-            tooltipList.push(new Tooltip(`.move-group-${group.tempId.toString().slice(0, 13)}-up-tooltip`, { trigger: 'hover' }));
             tooltipList.push(new Tooltip(`.delete-group-${group.tempId.toString().slice(0, 13)}-tooltip`, { trigger: 'hover' }));
         }
 
@@ -219,13 +230,11 @@ function CreateItemGroup(props) {
     );
 
     return (
-        <div className="mb-3" key={'group-' + itemTarget.group}>
-            <div className="row gx-2 align-items-center mb-3">
+        <div className="mb-3">
+            <div className="row g-2 align-items-center mb-3 justify-content-end">
                 {group.type === 'ONE_DIMENSIONAL' && (
                     <div className="col-auto">
-                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold mb-2 m-0 p-0">
-                            Grupo {Number(itemTarget.group) + 1}
-                        </p>
+                        <p className="font-century-gothic color-steel-blue fs-3 fw-bold m-0 p-0">Grupo {Number(itemTarget.group) + 1}</p>
                     </div>
                 )}
                 {group.type !== 'ONE_DIMENSIONAL' && (
@@ -251,33 +260,45 @@ function CreateItemGroup(props) {
                 )}
                 <div className="col"></div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updateGroupPlacement(group.placement + 1, group.placement, itemTarget.group)}
-                        icon="keyboard_arrow_down"
-                        className={`move-group-${group.tempId.toString().slice(0, 13)}-down-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-group-${group.tempId}-down-tooltip`}
-                        data-bs-title="Mover o grupo uma posição abaixo na ordem dos grupos da página."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={group.placement}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => updateGroupPlacement(e.target.value, group.placement, itemTarget.group)}
+                        >
+                            {[...Array(groupsQty).keys()].map((placement) => (
+                                <option key={'item-group-placement-' + (placement + 1)} value={placement + 1}>
+                                    Posição {placement + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
-                    <RoundedButton
-                        hsl={[197, 43, 52]}
-                        onClick={() => updateGroupPlacement(group.placement - 1, group.placement, itemTarget.group)}
-                        icon="keyboard_arrow_up"
-                        className={`move-group-${group.tempId.toString().slice(0, 13)}-up-tooltip`}
-                        data-bs-toggle="tooltip"
-                        data-bs-custom-class={`move-group-${group.tempId}-up-tooltip`}
-                        data-bs-title="Mover o grupo uma posição acima na ordem dos grupos da página."
-                    />
+                    <div className="col">
+                        <select
+                            name="item-target-page"
+                            id="item-target-page"
+                            value={itemTarget.page}
+                            className="form-select rounded-4 text-center text-dark bg-light-grey fs-6 fw-medium border-0"
+                            onChange={(e) => moveGroupBetweenPages(e.target.value, itemTarget.page, itemTarget.group)}
+                        >
+                            {[...Array(pagesQty).keys()].map((page) => (
+                                <option key={'item-group-page-' + (page + 1)} value={page}>
+                                    Página {page + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="col-auto">
                     <RoundedButton
                         hsl={[197, 43, 52]}
                         onClick={() => removeItemGroup(itemTarget.group)}
                         icon="delete"
-                        className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip`}
+                        className={`delete-group-${group.tempId.toString().slice(0, 13)}-tooltip text-white`}
                         data-bs-toggle="tooltip"
                         data-bs-custom-class={`delete-group-${group.tempId}-tooltip`}
                         data-bs-title="Remover o grupo da página."
@@ -290,7 +311,7 @@ function CreateItemGroup(props) {
                     dependencyIndex={dependencyIndex}
                     pageIndex={itemTarget.page}
                     groupIndex={itemTarget.group}
-                    key={'page-dependency-' + dependency.tempId}
+                    key={'page-dependency-' + dependency.tempId + '-' + dependencyIndex}
                     updateDependency={updateDependency}
                     removeDependency={removeDependency}
                     protocol={protocol}
@@ -303,7 +324,7 @@ function CreateItemGroup(props) {
             )}
             {group.type === 'ONE_DIMENSIONAL' &&
                 group.items?.map((item, itemIndex) => (
-                    <div key={'item-' + item.tempId}>
+                    <div key={'item-' + item.tempId + '-' + itemIndex}>
                         {(() => {
                             switch (item.type) {
                                 case 'TEXTBOX':
@@ -320,6 +341,11 @@ function CreateItemGroup(props) {
                                             removeItem={removeItem}
                                             updateItemPlacement={updateItemPlacement}
                                             insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
                                         />
                                     );
                                 case 'RANGE':
@@ -332,6 +358,12 @@ function CreateItemGroup(props) {
                                             updateItem={updateItem}
                                             removeItem={removeItem}
                                             updateItemPlacement={updateItemPlacement}
+                                            insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
                                         />
                                     );
                                 case 'SELECT':
@@ -345,6 +377,11 @@ function CreateItemGroup(props) {
                                             removeItem={removeItem}
                                             updateItemPlacement={updateItemPlacement}
                                             insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
                                         />
                                     );
                                 case 'RADIO':
@@ -358,6 +395,11 @@ function CreateItemGroup(props) {
                                             removeItem={removeItem}
                                             updateItemPlacement={updateItemPlacement}
                                             insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
                                         />
                                     );
                                 case 'CHECKBOX':
@@ -371,6 +413,11 @@ function CreateItemGroup(props) {
                                             removeItem={removeItem}
                                             updateItemPlacement={updateItemPlacement}
                                             insertItemValidation={insertItemValidation}
+                                            moveItemBetweenPages={moveItemBetweenPages}
+                                            moveItemBetweenItemGroups={moveItemBetweenItemGroups}
+                                            pagesQty={pagesQty}
+                                            groupsQty={groupsQty}
+                                            itemsQty={group.items.length}
                                         />
                                     );
                                 default:
@@ -390,8 +437,8 @@ function CreateItemGroup(props) {
                                     pageIndex={itemTarget.page}
                                     groupIndex={itemTarget.group}
                                     itemIndex={itemIndex}
-                                    key={'item-validation-' + validation.tempId}
-                                    updateValidation={updateItemValidation}
+                                    key={'item-validation-' + validation.tempId + '-' + validationIndex}
+                                    updateItemValidation={updateItemValidation}
                                     removeValidation={removeItemValidation}
                                     item={item}
                                 />

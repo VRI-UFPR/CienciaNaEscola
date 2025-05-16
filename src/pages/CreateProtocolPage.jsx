@@ -16,7 +16,6 @@ import NavBar from '../components/Navbar';
 import TextButton from '../components/TextButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import baseUrl from '../contexts/RouteContext';
 import SplashPage from './SplashPage';
 import Sidebar from '../components/Sidebar';
 import { defaultNewDependency, defaultNewInput, defaultNewItemGroup, defaultNewPage, defaultNewProtocol } from '../utils/constants';
@@ -51,29 +50,30 @@ const CreateProtocolStyles = `
     }
 
     .bg-light-grey,
-    .bg-light-grey:focus,
-    .bg-light-grey:active {
+    .light-grey-input,
+    .light-grey-input:focus,
+    .light-grey-input:active {
         background-color: #D9D9D9;
         border-color: #D9D9D9;
     }
 
-    .bg-light-grey:focus,
-    .bg-light-grey:active,
-    .bg-light-pastel-blue:focus,
-    .bg-light-pastel-blue:active {
+    .light-grey-input:focus,
+    .light-grey-input:active,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
         box-shadow: inset 0px 4px 4px 0px #00000040;
     }
 
-    .bg-light-grey:disabled,
-    .bg-light-pastel-blue:disabled{
+    .light-grey-input:disabled,
+    .pastel-blue-input:disabled{
         background-color: hsl(0,0%,85%) !important;
         border-color: hsl(0,0%,60%);
         box-shadow: none;
     }
 
-    .bg-light-pastel-blue,
-    .bg-light-pastel-blue:focus,
-    .bg-light-pastel-blue:active {
+    .pastel-blue-input,
+    .pastel-blue-input:focus,
+    .pastel-blue-input:active {
         background-color: #b8d7e3;
         border-color: #b8d7e3;
     }
@@ -130,6 +130,11 @@ const CreateProtocolStyles = `
     .scrollbar-none::-webkit-scrollbar {
         width: 0px;
         height: 0px;
+    }
+
+    .border-bottom.border-steel-blue:focus,
+    .border-bottom.border-steel-blue:active {
+        box-shadow: inset 0 -8px 8px -9px #00000040;
     }
 `;
 
@@ -200,22 +205,16 @@ function CreateProtocolPage(props) {
      * @param {number|string} group - Índice ou ID do grupo.
     */
     const insertItem = (type, page, group) => {
-        if (page === '') {
-            showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.' });
-            return;
-        }
-        if (group === '') {
-            showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar o item.' });
-            return;
-        }
+        if (page === '')
+            return showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.' });
+
+        if (group === '')
+            return showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar o item.' });
+
         const groupType = protocol.pages[page].itemGroups[group].type;
-        if (groupType !== 'ONE_DIMENSIONAL' && type !== 'TABLEROW') {
-            showAlert({
-                title: 'Selecione um grupo que não seja do tipo tabela.',
-                dismissible: true,
-            });
-            return;
-        }
+        if (groupType !== 'ONE_DIMENSIONAL' && type !== 'TABLEROW')
+            return showAlert({ title: 'Selecione um grupo que não seja do tipo tabela.', dismissible: true });
+
         const newProtocol = { ...protocol };
         const newInput = {
             ...defaultNewInput(
@@ -257,9 +256,7 @@ function CreateProtocolPage(props) {
         (index) => {
             const newProtocol = { ...protocol };
             newProtocol.pages.splice(index, 1);
-            for (const [i, page] of newProtocol.pages.entries()) {
-                if (i >= index) page.placement--;
-            }
+            for (const [i, page] of newProtocol.pages.entries()) if (i >= index) page.placement--;
             setProtocol(newProtocol);
         },
         [protocol]
@@ -272,10 +269,8 @@ function CreateProtocolPage(props) {
     */
     const insertItemGroup = useCallback(
         (type, page) => {
-            if (page === '') {
-                showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.' });
-                return;
-            }
+            if (page === '')
+                return showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o grupo.' });
             const newProtocol = { ...protocol };
             newProtocol.pages[page].itemGroups.push(defaultNewItemGroup(type, newProtocol.pages[page].itemGroups.length + 1));
             setProtocol(newProtocol);
@@ -291,14 +286,16 @@ function CreateProtocolPage(props) {
     */
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
-            if (pageIndex === '') {
-                showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar a dependência.' });
-                return;
-            }
-            if (groupIndex !== undefined && groupIndex === '') {
-                showAlert({ headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar a dependência.' });
-                return;
-            }
+            if (pageIndex === '')
+                return showAlert({
+                    headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar a dependência.',
+                });
+
+            if (groupIndex !== undefined && groupIndex === '')
+                return showAlert({
+                    headerText: 'Nenhum grupo selecionado. Selecione ou crie o grupo onde deseja adicionar a dependência.',
+                });
+
             const newProtocol = { ...protocol };
             if (groupIndex === undefined) newProtocol.pages[pageIndex].dependencies.push(defaultNewDependency());
             else newProtocol.pages[pageIndex].itemGroups[groupIndex].dependencies.push(defaultNewDependency());
@@ -339,89 +336,138 @@ function CreateProtocolPage(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const placedProtocol = {
+        const processedProtocol = {
             ...protocol,
-            creatorId: user.id,
-            owners: [],
+            creatorId: undefined,
+            pages: protocol.pages.map(({ tempId, dependencies, ...rest }) => ({
+                ...rest,
+                itemGroups: rest.itemGroups.map(({ tempId, items, dependencies, ...rest }) => ({
+                    ...rest,
+                    items: items.map(({ itemValidations, itemOptions, files, ...rest }) => ({
+                        ...rest,
+                        itemValidations: itemValidations.map(({ tempId, ...rest }) => rest),
+                        itemOptions: itemOptions.map(({ tempId, files, ...rest }) => ({
+                            ...rest,
+                            files: files?.map(({ path, ...rest }) => rest),
+                        })),
+                        files: files.map(({ path, ...rest }) => rest),
+                    })),
+                    dependencies: dependencies.map(({ tempId, itemId, ...rest }) => rest),
+                })),
+                dependencies: dependencies.map(({ tempId, itemId, ...rest }) => rest),
+            })),
         };
 
-        const formData = serialize(placedProtocol, { indices: true });
+        const formData = serialize(processedProtocol, { indices: true });
 
         if (isEditing) {
             axios
-                .put(baseUrl + 'api/protocol/updateProtocol/' + protocolId, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                .put(process.env.REACT_APP_API_URL + 'api/protocol/updateProtocol/' + protocolId, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) => {
                     clearLocalApplications();
-                    showAlert({ headerText: 'Formulário atualizado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
+                    showAlert({ headerText: 'Protocolo atualizado com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') });
                 })
-                .catch((error) => {
-                    showAlert({ headerText: 'Erro ao atualizar protocolo.', bodyText: error.response?.data.message || '' });
-                });
+                .catch((error) => showAlert({ headerText: 'Erro ao atualizar protocolo', bodyText: error.response?.data.message || '' }));
         } else {
             axios
-                .post(baseUrl + 'api/protocol/createProtocol', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${user.token}`,
-                    },
+                .post(process.env.REACT_APP_API_URL + 'api/protocol/createProtocol', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${user.token}` },
                 })
                 .then((response) =>
-                    showAlert({ headerText: 'Protocolo criado com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') })
+                    showAlert({ headerText: 'Protocolo criado com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') })
                 )
-                .catch((error) => showAlert({ headerText: 'Erro ao criar protocolo.', bodyText: error.response?.data.message || '' }));
+                .catch((error) => showAlert({ headerText: 'Erro ao criar protocolo', bodyText: error.response?.data.message || '' }));
         }
     };
 
     /** Deleta o protocolo atual. */
     const deleteProtocol = () => {
         axios
-            .delete(`${baseUrl}api/protocol/deleteProtocol/${protocolId}`, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+            .delete(`${process.env.REACT_APP_API_URL}api/protocol/deleteProtocol/${protocolId}`, {
+                headers: { Authorization: `Bearer ${user.token}` },
             })
             .then((response) => {
                 clearLocalApplications();
-                showAlert({ headerText: 'Protocolo excluído com sucesso.', onPrimaryBtnClick: () => navigate('/dash/protocols') });
+                showAlert({ headerText: 'Protocolo excluído com sucesso', onPrimaryBtnClick: () => navigate('/dash/protocols') });
             })
-            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo.', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao excluir protocolo', bodyText: error.response?.data.message }));
     };
+
+    const moveItemBetweenPages = useCallback(
+        (newPage, oldPage, groupIndex, itemIndex) => {
+            if (newPage === oldPage) return;
+            const newProtocol = { ...protocol };
+            // Find the item
+            const item = newProtocol.pages[oldPage].itemGroups[groupIndex].items[itemIndex];
+            // Remove the item from the old page, update the placements of the remaining items and sort them (just in case)
+            newProtocol.pages[oldPage].itemGroups[groupIndex].items.splice(itemIndex, 1);
+            for (const [i, item] of newProtocol.pages[oldPage].itemGroups[groupIndex].items.entries()) item.placement = i + 1;
+            newProtocol.pages[oldPage].itemGroups[groupIndex].items.sort((a, b) => a.placement - b.placement);
+            // Find the last group of the new page that is 'ONE_DIMENSIONAL'
+            const lastGroup = newProtocol.pages[newPage].itemGroups
+                .slice()
+                .reverse()
+                .find((g) => g.type === 'ONE_DIMENSIONAL');
+            if (lastGroup) {
+                // If the new page has a group of type 'ONE_DIMENSIONAL', add the item to it and sort the items (just in case)
+                item.placement = lastGroup.items.length + 1;
+                lastGroup.items.push(item);
+            } else {
+                // If the new page has no group of type 'ONE_DIMENSIONAL', create a new group and add the item to it
+                item.placement = 1;
+                newProtocol.pages[newPage].itemGroups.push(
+                    defaultNewItemGroup('ONE_DIMENSIONAL', newProtocol.pages[newPage].itemGroups.length + 1)
+                );
+                newProtocol.pages[newPage].itemGroups[newProtocol.pages[newPage].itemGroups.length - 1].items.push(item);
+            }
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
+
+    const moveGroupBetweenPages = useCallback(
+        (newPage, oldPage, groupIndex) => {
+            if (newPage === oldPage) return;
+            const newProtocol = { ...protocol };
+            // Find and update the group
+            const group = newProtocol.pages[oldPage].itemGroups[groupIndex];
+            group.placement = newProtocol.pages[newPage].itemGroups.length + 1;
+            // Remove the group from the old page, update the placements of the remaining groups and sort them (just in case)
+            newProtocol.pages[oldPage].itemGroups.splice(groupIndex, 1);
+            for (const [i, group] of newProtocol.pages[oldPage].itemGroups.entries()) group.placement = i + 1;
+            newProtocol.pages[oldPage].itemGroups.sort((a, b) => a.placement - b.placement);
+            // Add the group to the new page
+            newProtocol.pages[newPage].itemGroups.push(group);
+            setProtocol(newProtocol);
+        },
+        [protocol]
+    );
 
     useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             const promises = [];
-            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
+            if (!isEditing && (user.role === 'USER' || user.role === 'APPLIER' || user.role === 'GUEST')) {
                 setError({
                     text: 'Operação não permitida',
                     description: 'Você não tem permissão para criar protocolos',
                 });
                 return;
-            } else if (isEditing && (user.role === 'USER' || user.role === 'APPLIER')) {
-                setError({ text: 'Operação não permitida', description: 'Você não tem permissão para editar este protocolo' });
-                return;
             }
             if (isEditing) {
                 promises.push(
                     axios
-                        .get(`${baseUrl}api/protocol/getProtocol/${protocolId}`, {
-                            headers: {
-                                Authorization: `Bearer ${user.token}`,
-                            },
+                        .get(`${process.env.REACT_APP_API_URL}api/protocol/getProtocol/${protocolId}`, {
+                            headers: { Authorization: `Bearer ${user.token}` },
                         })
                         .then((response) => {
                             const d = response.data.data;
-                            if (user.id !== d.creator.id && user.role !== 'ADMIN') {
-                                setError({
+                            if (d.actions.toUpdate !== true)
+                                return setError({
                                     text: 'Operação não permitida',
                                     description: 'Você não tem permissão para editar este protocolo',
                                 });
-                                return;
-                            }
                             const tempIdMap = {};
                             setProtocol({
                                 id: d.id,
@@ -459,7 +505,7 @@ function CreateProtocolPage(props) {
                                                     tempId: Math.floor(Date.now() + Math.random() * 1000),
                                                     placement: o.placement,
                                                     text: o.text,
-                                                    files: o.files.map((f) => ({ id: f.id, path: f.path })),
+                                                    files: o.files.map(({ id, path }) => ({ id, path })),
                                                 })),
                                                 files: i.files.map((f) => ({ id: f.id, path: f.path })),
                                                 itemValidations: i.itemValidations.map((v) => ({
@@ -468,13 +514,7 @@ function CreateProtocolPage(props) {
                                                 })),
                                             };
                                         }),
-                                        tableColumns: g.tableColumns.map((c) => {
-                                            return {
-                                                id: c.id,
-                                                text: c.text,
-                                                placement: c.placement,
-                                            };
-                                        }),
+                                        tableColumns: g.tableColumns.map(({ id, text, placement }) => ({ id, text, placement })),
                                         dependencies: g.dependencies.map((dep) => ({
                                             ...dep,
                                             itemTempId: tempIdMap[dep.itemId],
@@ -487,42 +527,36 @@ function CreateProtocolPage(props) {
                                         tempId: Math.floor(Date.now() + Math.random() * 1000),
                                     })),
                                 })),
-                                viewersUser: d.viewersUser.map((u) => u.id),
-                                viewersClassroom: d.viewersClassroom.map((c) => c.id),
-                                answersViewersUser: d.answersViewersUser.map((u) => u.id),
-                                answersViewersClassroom: d.answersViewersClassroom.map((c) => c.id),
-                                appliers: d.appliers.map((u) => u.id),
+                                viewersUser: d.viewersUser.map(({ id }) => id),
+                                viewersClassroom: d.viewersClassroom.map(({ id }) => id),
+                                answersViewersUser: d.answersViewersUser.map(({ id }) => id),
+                                answersViewersClassroom: d.answersViewersClassroom.map(({ id }) => id),
+                                appliers: d.appliers.map(({ id }) => id),
                             });
                             setSearchedOptions({
-                                viewersUser: d.viewersUser.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })),
-                                viewersClassroom: d.viewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })),
-                                answersViewersUser: d.answersViewersUser.map((u) => ({
-                                    id: u.id,
-                                    username: u.username,
-                                    classrooms: u.classrooms,
+                                viewersUser: d.viewersUser.map(({ id, username, classrooms }) => ({ id, username, classrooms })),
+                                viewersClassroom: d.viewersClassroom.map(({ id, name, users }) => ({ id, name, users })),
+                                answersViewersUser: d.answersViewersUser.map(({ id, username, classrooms }) => ({
+                                    id,
+                                    username,
+                                    classrooms,
                                 })),
-                                answersViewersClassroom: d.answersViewersClassroom.map((c) => ({ id: c.id, name: c.name, users: c.users })),
-                                appliers: d.appliers.map((u) => ({ id: u.id, username: u.username, classrooms: u.classrooms })),
+                                answersViewersClassroom: d.answersViewersClassroom.map(({ id, name, users }) => ({ id, name, users })),
+                                appliers: d.appliers.map(({ id, username, classrooms }) => ({ id, username, classrooms })),
                             });
                         })
-                        .catch((error) => {
-                            setError({ text: 'Erro ao carregar criação do protocolo', description: error.response?.data.message || '' });
-                        })
+                        .catch((error) =>
+                            setError({ text: 'Erro ao obter informações do protocolo', description: error.response?.data.message || '' })
+                        )
                 );
             }
-            Promise.all(promises).then(() => {
-                setIsLoading(false);
-            });
+            Promise.all(promises).then(() => setIsLoading(false));
         }
     }, [isLoading, user.token, isEditing, protocolId, user.institutionId, user.status, user.role, user.id]);
 
-    if (error) {
-        return <ErrorPage text={error.text} description={error.description} />;
-    }
+    if (error) return <ErrorPage text={error.text} description={error.description} />;
 
-    if (isLoading) {
-        return <SplashPage text="Carregando criação de protocolo..." />;
-    }
+    if (isLoading) return <SplashPage text={`Carregando ${isEditing ? 'edição' : 'criação'} de protocolo...`} />;
 
     return (
         <div className="d-flex flex-column vh-100 overflow-hidden">
@@ -558,9 +592,9 @@ function CreateProtocolPage(props) {
                                     </div>
                                     <div className="row justify-content-center font-barlow flex-grow-1 overflow-hidden g-0">
                                         <div className="col col-md-10 h-100">
-                                            <div className="d-flex flex-column h-100 overflow-y-scroll scrollbar-none">
+                                            <div className="d-flex flex-column h-100">
                                                 <form
-                                                    className="d-flex flex-column justify-content-between flex-grow-1 p-4 pt-0"
+                                                    className="d-flex flex-column justify-content-between h-100 p-4 pt-0"
                                                     ref={formRef}
                                                     action="/submit"
                                                     onSubmit={(e) => handleSubmit(e)}
@@ -585,6 +619,9 @@ function CreateProtocolPage(props) {
                                                             protocol={protocol}
                                                             updatePage={updatePage}
                                                             insertItem={insertItem}
+                                                            moveItemBetweenPages={moveItemBetweenPages}
+                                                            moveGroupBetweenPages={moveGroupBetweenPages}
+                                                            pagesQty={protocol.pages.length}
                                                         />
                                                     )}
                                                     {!currentPage && creationMode === 'children' && (
@@ -602,26 +639,24 @@ function CreateProtocolPage(props) {
                                                                     hsl={[97, 43, 70]}
                                                                     text={'Adicionar itens'}
                                                                     onClick={() => {
-                                                                        if (String(protocol.title).length < 3) {
+                                                                        if (String(protocol.title).length < 3)
                                                                             showAlert({
                                                                                 headerText: 'Insira pelo menos 3 caracteres no título',
                                                                             });
-                                                                        } else if (protocol.visibility === '') {
+                                                                        else if (protocol.visibility === '')
                                                                             showAlert({
                                                                                 headerText: 'Selecione uma opção válida em Visibilidade',
                                                                             });
-                                                                        } else if (protocol.applicability === '') {
+                                                                        else if (protocol.applicability === '')
                                                                             showAlert({
                                                                                 headerText: 'Selecione uma opção válida em Aplicabilidade',
                                                                             });
-                                                                        } else if (protocol.answersVisibility === '') {
+                                                                        else if (protocol.answersVisibility === '')
                                                                             showAlert({
                                                                                 headerText:
                                                                                     'Selecione uma opção válida em Visibilidade das respostas',
                                                                             });
-                                                                        } else {
-                                                                            setCreationMode('children');
-                                                                        }
+                                                                        else setCreationMode('children');
                                                                     }}
                                                                 />
                                                             </div>
@@ -635,7 +670,7 @@ function CreateProtocolPage(props) {
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
                                                                     text={isEditing ? 'Editar' : 'Concluir'}
-                                                                    onClick={() => {
+                                                                    onClick={() =>
                                                                         showAlert({
                                                                             headerText: `Tem certeza que deseja ${
                                                                                 isEditing ? 'editar' : 'criar'
@@ -645,8 +680,8 @@ function CreateProtocolPage(props) {
                                                                             secondaryBtnHsl: [97, 43, 70],
                                                                             secondaryBtnLabel: 'Sim',
                                                                             onSecondaryBtnClick: () => formRef.current.requestSubmit(),
-                                                                        });
-                                                                    }}
+                                                                        })
+                                                                    }
                                                                 />
                                                             </div>
                                                             <div className="col-4 col-xl-2">
@@ -654,9 +689,7 @@ function CreateProtocolPage(props) {
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
                                                                     text={'Voltar'}
-                                                                    onClick={() => {
-                                                                        setCreationMode('properties');
-                                                                    }}
+                                                                    onClick={() => setCreationMode('properties')}
                                                                 />
                                                             </div>
                                                             {isEditing && (
@@ -664,7 +697,7 @@ function CreateProtocolPage(props) {
                                                                     <TextButton
                                                                         text={'Excluir'}
                                                                         hsl={[355, 78, 66]}
-                                                                        onClick={() => {
+                                                                        onClick={() =>
                                                                             showAlert({
                                                                                 headerText: `Tem certeza que deseja excluir o protocolo?`,
                                                                                 primaryBtnHsl: [97, 43, 70],
@@ -672,8 +705,8 @@ function CreateProtocolPage(props) {
                                                                                 secondaryBtnHsl: [355, 78, 66],
                                                                                 secondaryBtnLabel: 'Sim',
                                                                                 onSecondaryBtnClick: () => deleteProtocol(),
-                                                                            });
-                                                                        }}
+                                                                            })
+                                                                        }
                                                                     />
                                                                 </div>
                                                             )}
@@ -688,7 +721,7 @@ function CreateProtocolPage(props) {
                             {creationMode === 'children' && (
                                 <div className="col-auto position-lg-sticky h-100 mh-100">
                                     <div
-                                        className="offcanvas-lg bg-pastel-blue d-flex overflow-y-scroll offcanvas-end h-100 w-auto"
+                                        className="offcanvas-lg bg-pastel-blue d-flex overflow-y-auto offcanvas-end h-100 w-auto"
                                         tabIndex="-1"
                                         id="addbar"
                                     >
