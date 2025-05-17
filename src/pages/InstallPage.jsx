@@ -16,8 +16,11 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import { useNavigate } from 'react-router-dom';
 import TextButton from '../components/TextButton';
-import logoFA from '../assets/images/logoFA.png';
-import logoUFPR from '../assets/images/logoUFPR.svg';
+import logoRedeClubes from '../assets/images/logoClubes.png';
+import logoNAPI from '../assets/images/logoNAPI.png';
+import logoFA from '../assets/images/logoFA1.png';
+import logoGovernoParana from '../assets/images/logoPR.png';
+import logoGovernoFederal from '../assets/images/logoGF.png';
 import HomeQRCode from '../assets/images/HomeQRCode.png';
 import SafariShareIcon from '../assets/images/SafariShareIcon.png';
 import SafariPlusIcon from '../assets/images/SafariPlusIcon.png';
@@ -198,12 +201,32 @@ function InstallPage(props) {
                         </div>
                     </div>
                 </div>
-                <div className="row justify-content-between g-0 w-100 pb-3 px-3">
-                    <div className="col-3 justify-content-start d-flex align-items-center">
-                        <img className="h-auto mw-115 w-100" src={logoUFPR} alt="Logomarca da Universidade Federal do Paraná" />
+                <div
+                    className="row justify-content-center g-0 w-auto mx-auto bg-white rounded align-items-center mb-3 px-0 py-0"
+                    style={{ border: '1px solid #91CAD6' }}
+                >
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img
+                            src={logoRedeClubes}
+                            alt="Logomarca da Rede de Clubes Paraná faz Ciência"
+                            style={{ maxHeight: '40px', height: 'auto' }}
+                        />
                     </div>
-                    <div className="col-4 justify-content-end d-flex align-items-center">
-                        <img className="h-auto mw-150 w-100" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" style={{ maxHeight: '20px', height: 'auto' }} />
+                    </div>
+                    <div className="col-auto d-flex align-items-center justify-content-center px-2">
+                        <img src={logoFA} alt="Logomarca da Fundação Araucária" style={{ maxHeight: '70px', height: 'auto' }} />
+                    </div>
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img
+                            src={logoGovernoParana}
+                            alt="Logomarca do Governo do Estado do Paraná"
+                            style={{ maxHeight: '90px', height: 'auto' }}
+                        />
+                    </div>
+                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
+                        <img src={logoGovernoFederal} alt="Logomarca do Governo Federal" style={{ maxHeight: '90px', height: 'auto' }} />
                     </div>
                 </div>
             </div>

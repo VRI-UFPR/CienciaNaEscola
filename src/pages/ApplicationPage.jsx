@@ -127,6 +127,9 @@ function ApplicationPage(props) {
             const item = findItem(dependency.itemId);
             const answer = findAnswer(dependency.itemId);
             switch (dependency.type) {
+                case 'IS_ANSWERED':
+                    if (!answer) dependencyAttended = false;
+                    break;
                 case 'EXACT_ANSWER':
                     if (item.type === 'TEXTBOX' || item.type === 'NUMBERBOX' || item.type === 'RANGE') {
                         if (!answer || answer.text !== dependency.argument) dependencyAttended = false;

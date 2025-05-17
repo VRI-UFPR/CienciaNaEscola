@@ -45,6 +45,18 @@ const ProtocolListStyles = (hue, sat, lig) => {
         .button-list-${'hsl-' + hue + '-' + sat + '-' + lig}::-webkit-scrollbar-thumb:hover {
             background: hsl(${hue}, ${sat}%, ${lig * 0.6}%);
         }
+
+        .bg-light,
+        .bg-light:focus,
+        .bg-light:active {
+            background-color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        .bg-light:focus,
+        .bg-light:active {
+            box-shadow: inset 0px 4px 4px 0px #00000040;
+        }
     `;
 };
 
@@ -83,7 +95,7 @@ function ProtocolList(props) {
                         value={search}
                         id="list-search"
                         placeholder="Buscar pelo título"
-                        className="form-control form-control-sm color-grey bg-light-grey fw-medium rounded-4 border-0"
+                        className="form-control form-control-sm color-grey bg-light fw-medium rounded-4 border-0"
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
