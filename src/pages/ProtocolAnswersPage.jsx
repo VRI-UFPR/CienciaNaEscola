@@ -186,8 +186,8 @@ function ProtocolAnswersPage(props) {
                                         hsl={[0, 0, 85]}
                                         size={32}
                                         icon="expand_content"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#applicationCollapse"
+                                        dataBsToggle="collapse"
+                                        dataBsTarget="#applicationCollapse"
                                         aria-controls="applicationCollapse"
                                         className="color-dark-gray"
                                     />
@@ -215,8 +215,8 @@ function ProtocolAnswersPage(props) {
                                                         hsl={[0, 0, 100]}
                                                         size={20}
                                                         icon="expand_content"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target={'#answerCollapse' + application.id}
+                                                        dataBsToggle="collapse"
+                                                        dataBsTarget={'#answerCollapse' + application.id}
                                                         aria-controls={'answerCollapse' + application.id}
                                                         className="color-dark-gray"
                                                     />
@@ -271,8 +271,8 @@ function ProtocolAnswersPage(props) {
                                         hsl={[0, 0, 85]}
                                         size={32}
                                         icon="expand_content"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#locationCollapse"
+                                        dataBsToggle="collapse"
+                                        dataBsTarget="#locationCollapse"
                                         aria-controls="locationCollapse"
                                         className="color-dark-gray"
                                     />
@@ -350,8 +350,8 @@ function ProtocolAnswersPage(props) {
                                                                             hsl={[0, 0, 85]}
                                                                             size={32}
                                                                             icon="expand_content"
-                                                                            data-bs-toggle="collapse"
-                                                                            data-bs-target={'#itemCollapse' + item.id}
+                                                                            dataBsToggle="collapse"
+                                                                            dataBsTarget={'#itemCollapse' + item.id}
                                                                             aria-controls={'itemCollapse' + item.id}
                                                                             className="color-dark-gray"
                                                                         />

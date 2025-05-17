@@ -86,7 +86,7 @@ function ImageInput(props) {
 
     /**
      * Insere uma imagem selecionada.
-     * @param {Event} e - Evento do input de arquivo. 
+     * @param {Event} e - Evento do input de arquivo.
      */
     const insertImage = async (e) => {
         if (e.target?.files[0]) {
@@ -148,7 +148,7 @@ function ImageInput(props) {
                             icon="upload_file"
                             size={41}
                             alt={'Selecionar imagem'}
-                            data-bs-toggle="dropdown"
+                            dataBsToggle="dropdown"
                             disabled={disabled || disableUpload}
                         />
                         <ul className="dropdown-menu image-input-dropdown rounded-4 overflow-hidden font-barlow fs-6 lh-sm shadow ms-1">
