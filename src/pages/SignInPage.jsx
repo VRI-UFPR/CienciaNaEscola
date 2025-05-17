@@ -33,6 +33,8 @@ import logoFA from '../assets/images/logoFA1.png';
 import logoGovernoParana from '../assets/images/logoPR.png';
 import logoGovernoFederal from '../assets/images/logoGF.png';
 import RoundedButton from '../components/RoundedButton';
+// components
+import InfiniteLooper from '../components/InfiniteLooper';
 
 const styles = `
     .font-century-gothic {
@@ -95,6 +97,15 @@ const styles = `
 
     .mw-240 {
         max-width: 240px;
+    }
+
+    .mh-4 {
+        height: auto;
+        max-height: 4rem;
+    }
+
+    .logos-container {
+        border: 2px solid #91CAD6;
     }
 `;
 
@@ -168,7 +179,7 @@ function SignInPage(props) {
 
     return (
         <div className="background-style font-century-gothic overflow-y-scroll vh-100">
-            <div className="container d-flex flex-column h-100 g-0">
+            <div className="container d-flex flex-column align-items-center h-100 g-0">
                 <div className="row justify-content-center align-items-center flex-grow-1 w-100 g-0 py-5">
                     <div className="col-9 col-lg-8">
                         <div className="d-flex flex-column text-center align-items-center">
@@ -242,33 +253,24 @@ function SignInPage(props) {
                         </div>
                     </div>
                 </div>
-                <div
-                    className="row justify-content-center g-0 w-auto mx-auto bg-white rounded align-items-center mb-3 px-0 py-0"
-                    style={{ border: '1px solid #91CAD6' }}
-                >
-                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
-                        <img
-                            src={logoRedeClubes}
-                            alt="Logomarca da Rede de Clubes Paraná faz Ciência"
-                            style={{ maxHeight: '40px', height: 'auto' }}
-                        />
-                    </div>
-                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
-                        <img src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" style={{ maxHeight: '20px', height: 'auto' }} />
-                    </div>
-                    <div className="col-auto d-flex align-items-center justify-content-center px-2">
-                        <img src={logoFA} alt="Logomarca da Fundação Araucária" style={{ maxHeight: '70px', height: 'auto' }} />
-                    </div>
-                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
-                        <img
-                            src={logoGovernoParana}
-                            alt="Logomarca do Governo do Estado do Paraná"
-                            style={{ maxHeight: '90px', height: 'auto' }}
-                        />
-                    </div>
-                    <div className="col-auto d-flex align-items-center justify-content-center px-1">
-                        <img src={logoGovernoFederal} alt="Logomarca do Governo Federal" style={{ maxHeight: '90px', height: 'auto' }} />
-                    </div>
+                <div className="row justify-content-center align-items-center logos-container rounded bg-white w-75 mb-3 py-2 g-0">
+                    <InfiniteLooper>
+                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
+                            <img className="mh-4" src={logoRedeClubes} alt="Logomarca da Rede de Clubes Paraná faz Ciência" />
+                        </div>
+                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
+                            <img className="mh-4 py-2" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
+                        </div>
+                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
+                            <img className="mh-4" src={logoFA} alt="Logomarca da Fundação Araucária" />
+                        </div>
+                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
+                            <img className="mh-4" src={logoGovernoParana} alt="Logomarca do Governo do Estado do Paraná" />
+                        </div>
+                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
+                            <img className="mh-4" src={logoGovernoFederal} alt="Logomarca do Governo Federal" />
+                        </div>
+                    </InfiniteLooper>
                 </div>
             </div>
             <style> {styles}</style>
