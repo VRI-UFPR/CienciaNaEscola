@@ -690,9 +690,9 @@ function CreateUserPage(props) {
                                             onClick={() => {
                                                 showAlert({
                                                     headerText: `Tem certeza que deseja excluir o usuário?`,
-                                                    primaryBtnHsl: [97, 43, 70],
+                                                    primaryBtnHsl: [355, 78, 66],
                                                     primaryBtnLabel: 'Não',
-                                                    secondaryBtnHsl: [355, 78, 66],
+                                                    secondaryBtnHsl: [97, 43, 70],
                                                     secondaryBtnLabel: 'Sim',
                                                     onSecondaryBtnClick: () => deleteUser(),
                                                 });
