@@ -142,7 +142,7 @@ const CreateProtocolStyles = `
  * Página de criação e edição de protocolos.
  * @param {Object} props - Propriedades do componente.
  * @param {boolean} props.isEditing - Indica se está editando um protocolo existente.
-*/
+ */
 function CreateProtocolPage(props) {
     const { protocolId } = useParams();
     const { isEditing = false } = props;
@@ -181,7 +181,7 @@ function CreateProtocolPage(props) {
      * @param {number} newPlacement - Novo índice da página.
      * @param {number} oldPlacement - Índice anterior da página.
      * @param {number} pageIndex - Índice da página no array.
-    */
+     */
     const updatePagePlacement = useCallback(
         (newPlacement, oldPlacement, pageIndex) => {
             if (newPlacement < 1 || newPlacement > protocol.pages.length) return;
@@ -203,7 +203,7 @@ function CreateProtocolPage(props) {
      * @param {string} type - Tipo do item.
      * @param {number|string} page - Índice ou ID da página.
      * @param {number|string} group - Índice ou ID do grupo.
-    */
+     */
     const insertItem = (type, page, group) => {
         if (page === '')
             return showAlert({ headerText: 'Nenhuma página selecionada. Selecione ou crie a página onde deseja adicionar o item.' });
@@ -239,7 +239,7 @@ function CreateProtocolPage(props) {
      * Atualiza uma página existente.
      * @param {Object} page - Página atualizada.
      * @param {number} pageIndex - Índice da página.
-    */
+     */
     const updatePage = useCallback((page, pageIndex) => {
         setProtocol((prev) => {
             const newProtocol = { ...prev };
@@ -251,7 +251,7 @@ function CreateProtocolPage(props) {
     /**
      * Remove uma página do protocolo.
      * @param {number} index - Índice da página a ser removida.
-    */
+     */
     const removePage = useCallback(
         (index) => {
             const newProtocol = { ...protocol };
@@ -266,7 +266,7 @@ function CreateProtocolPage(props) {
      * Insere um novo grupo de itens.
      * @param {string} type - Tipo do grupo.
      * @param {number|string} page - Índice ou ID da página.
-    */
+     */
     const insertItemGroup = useCallback(
         (type, page) => {
             if (page === '')
@@ -283,7 +283,7 @@ function CreateProtocolPage(props) {
      * Insere uma nova dependência.
      * @param {number|string} pageIndex - Índice da página.
      * @param {number|string} groupIndex - Índice do grupo.
-    */
+     */
     const insertDependency = useCallback(
         (pageIndex, groupIndex) => {
             if (pageIndex === '')
@@ -308,7 +308,7 @@ function CreateProtocolPage(props) {
      * Insere uma tabela no protocolo.
      * @param {string} type - Tipo da tabela.
      * @param {number|string} page - Índice da página.
-    */
+     */
     const insertTable = useCallback(
         (type, page) => {
             const newProtocol = { ...protocol };
@@ -332,7 +332,7 @@ function CreateProtocolPage(props) {
     /**
      * Submete o formulário de criação ou edição do protocolo.
      * @param {Event} event - Evento de envio do formulário.
-    */
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -633,7 +633,7 @@ function CreateProtocolPage(props) {
                                                     )}
                                                     {creationMode === 'properties' && (
                                                         <div className="row justify-content-center">
-                                                            <div className="col-7 col-md-5 col-xl-3">
+                                                            <div className="col-6 col-md-5 col-xl-3">
                                                                 <TextButton
                                                                     type="button"
                                                                     hsl={[97, 43, 70]}
@@ -660,6 +660,25 @@ function CreateProtocolPage(props) {
                                                                     }}
                                                                 />
                                                             </div>
+                                                            {isEditing && (
+                                                                <div className="col-6 col-md-5 col-xl-3">
+                                                                    <TextButton
+                                                                        type="button"
+                                                                        hsl={[97, 43, 70]}
+                                                                        text={'Salvar'}
+                                                                        onClick={() =>
+                                                                            showAlert({
+                                                                                headerText: `Tem certeza que deseja editar o protocolo?`,
+                                                                                primaryBtnHsl: [355, 78, 66],
+                                                                                primaryBtnLabel: 'Não',
+                                                                                secondaryBtnHsl: [97, 43, 70],
+                                                                                secondaryBtnLabel: 'Sim',
+                                                                                onSecondaryBtnClick: () => formRef.current.requestSubmit(),
+                                                                            })
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
 
@@ -673,9 +692,9 @@ function CreateProtocolPage(props) {
                                                                         onClick={() =>
                                                                             showAlert({
                                                                                 headerText: `Tem certeza que deseja excluir o protocolo?`,
-                                                                                primaryBtnHsl: [97, 43, 70],
+                                                                                primaryBtnHsl: [355, 78, 66],
                                                                                 primaryBtnLabel: 'Não',
-                                                                                secondaryBtnHsl: [355, 78, 66],
+                                                                                secondaryBtnHsl: [97, 43, 70],
                                                                                 secondaryBtnLabel: 'Sim',
                                                                                 onSecondaryBtnClick: () => deleteProtocol(),
                                                                             })

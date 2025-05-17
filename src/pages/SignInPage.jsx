@@ -243,8 +243,8 @@ function SignInPage(props) {
                     </div>
                 </div>
                 <div
-                    className="row justify-content-center g-0 w-auto mx-auto bg-white rounded align-items-center px-0 py-0"
-                    style={{ border: '1px solid #91CAD6', marginBottom: '16px' }}
+                    className="row justify-content-center g-0 w-auto mx-auto bg-white rounded align-items-center mb-3 px-0 py-0"
+                    style={{ border: '1px solid #91CAD6' }}
                 >
                     <div className="col-auto d-flex align-items-center justify-content-center px-1">
                         <img

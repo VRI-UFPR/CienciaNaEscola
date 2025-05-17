@@ -125,6 +125,7 @@ function CreateDependencyInput(props) {
                             setDependency((prev) => {
                                 const newDependency = { ...prev };
                                 newDependency.type = event.target.value;
+                                newDependency.argument = '';
                                 return newDependency;
                             });
                         }}
