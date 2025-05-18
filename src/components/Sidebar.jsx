@@ -69,7 +69,7 @@ const styles = `
  * Componente de barra lateral (Sidebar).
  * @param {Object} props - Propriedades do componente.
  * @param {boolean} props.showExitButton - Define se o botão de saída será exibido.
-*/
+ */
 function Sidebar(props) {
     const { showExitButton = true } = props;
     const { user, logout } = useContext(AuthContext);
@@ -119,7 +119,7 @@ function Sidebar(props) {
                     <div className="rounded-circle">
                         <img
                             className="profile-image rounded-circle"
-                            src={user.profileImage ? process.env.REACT_APP_API_URL + user.profileImage : PerfilImg}
+                            src={user.profileImage ? process.env.REACT_APP_API_URL + 'api/' + user.profileImage : PerfilImg}
                             alt="Perfil"
                         />
                     </div>

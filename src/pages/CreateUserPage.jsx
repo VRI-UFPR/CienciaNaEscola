@@ -128,6 +128,7 @@ function CreateUserPage(props) {
     const [classroomSearchTerm, setClassroomSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [updateUserInstitution, setUpdateUserInstitution] = useState(true);
 
     const navigate = useNavigate();
 
@@ -172,6 +173,7 @@ function CreateUserPage(props) {
                                 actions,
                             });
                             setSearchedClassrooms(classrooms.map(({ id, name, users }) => ({ id, name, users })));
+                            if (!user.institutionId || user.role === 'ADMIN' || user.username === username) setUpdateUserInstitution(false);
                         })
                         .catch((error) =>
                             Promise.reject(
@@ -186,10 +188,13 @@ function CreateUserPage(props) {
                 );
             }
             Promise.all(promises)
-                .then(() => setIsLoading(false))
+                .then(() => {
+                    if (!user.institutionId || user.role === 'ADMIN') setUpdateUserInstitution(false);
+                    setIsLoading(false);
+                })
                 .catch((error) => setError(error));
         }
-    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId]);
+    }, [userId, isEditing, isLoading, user.token, user.status, user.role, user.id, user.institutionId, user.username]);
 
     /**
      * Busca salas por nome a partir do termo digitado.
@@ -260,7 +265,7 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        const processedUser = { ...newUser, actions: undefined, hashValidation: undefined, profileImage: undefined };
+        const processedUser = { ...newUser, actions: undefined, hashValidation: undefined };
         const formData = newUser.hash
             ? serialize({ ...processedUser, hash: hashSync(processedUser.hash, salt) })
             : serialize({ ...processedUser });
@@ -346,8 +351,8 @@ function CreateUserPage(props) {
                                             src={
                                                 !newUser.profileImage
                                                     ? BlankProfilePic
-                                                    : newUser.profileImageId
-                                                    ? process.env.REACT_APP_API_URL + newUser.profileImage.path
+                                                    : newUser.profileImage.id
+                                                    ? process.env.REACT_APP_API_URL + 'api/' + newUser.profileImage.path
                                                     : URL.createObjectURL(newUser.profileImage)
                                             }
                                             className="rounded-circle h-100 w-100"
@@ -496,7 +501,7 @@ function CreateUserPage(props) {
                                                 </select>
                                             </div>
                                         )}
-                                        {user.institutionId && user.role !== 'ADMIN' && newUser.role !== 'COORDINATOR' && (
+                                        {updateUserInstitution && (
                                             <div className="mb-3">
                                                 <div className="form-check form-switch fs-5">
                                                     <input
@@ -505,7 +510,7 @@ function CreateUserPage(props) {
                                                         role="switch"
                                                         name="institution"
                                                         id="institution"
-                                                        checked={newUser.institutionId === user.institutionId}
+                                                        checked={Boolean(newUser.institutionId)}
                                                         onChange={(event) => {
                                                             setNewUser((prev) => ({
                                                                 ...prev,
@@ -513,14 +518,14 @@ function CreateUserPage(props) {
                                                                 classrooms: event.target.checked
                                                                     ? prev.classrooms
                                                                     : prev.classrooms.filter(
-                                                                          (c) => !institutionClassrooms.map(({ id }) => id).includes(c)
+                                                                          (c) => !institutionClassrooms?.map(({ id }) => id).includes(c)
                                                                       ),
                                                             }));
                                                             setSearchedClassrooms((prev) =>
                                                                 event.target.checked
                                                                     ? prev
                                                                     : prev.filter(
-                                                                          (c) => !institutionClassrooms.map(({ id }) => id).includes(c.id)
+                                                                          (c) => !institutionClassrooms?.map(({ id }) => id).includes(c.id)
                                                                       )
                                                             );
                                                         }}
