@@ -88,7 +88,10 @@ function ProtocolPage(props) {
 
     /** Avança para a próxima página do protocolo, se existir. */
     const nextPage = () => {
-        if (hasNextPage()) setCurrentPageIndex(currentPageIndex + 1);
+        if (hasNextPage()) {
+            setCurrentPageIndex(currentPageIndex + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     /** Volta para a página anterior do protocolo, se existir. */
@@ -135,7 +138,7 @@ function ProtocolPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
-                                <div className="row justify-content-center g-2 mb-4">
+                                <div className="row justify-content-center g-2 m-0 pb-4">
                                     {protocol.actions.toUpdate && (
                                         <div className="col">
                                             <TextButton
@@ -167,9 +170,11 @@ function ProtocolPage(props) {
                                         </div>
                                     )}
                                 </div>
-                                <div className="row justify-content-center m-0">
-                                    <ProtocolInfo title={protocol.title} description={protocol.description} />
-                                </div>
+                                {currentPageIndex === 0 && (
+                                    <div className="row justify-content-center m-0 pb-3">
+                                        <ProtocolInfo title={protocol.title} description={protocol.description} />
+                                    </div>
+                                )}
                                 {protocol.pages[currentPageIndex].itemGroups.map((itemGroup, itemGroupIndex) => {
                                     if (
                                         itemGroup.type !== 'TEXTBOX_TABLE' &&
@@ -183,7 +188,7 @@ function ProtocolPage(props) {
                                                         switch (item.type) {
                                                             case 'RANGE':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <RangeInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -204,7 +209,7 @@ function ProtocolPage(props) {
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <SimpleTextInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -223,7 +228,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'CHECKBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <CheckBoxInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -240,7 +245,7 @@ function ProtocolPage(props) {
 
                                                             case 'RADIO':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <RadioButtonInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -257,7 +262,7 @@ function ProtocolPage(props) {
 
                                                             case 'SELECT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <SelectInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -273,7 +278,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'DATEBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <DateInput
                                                                             item={item}
                                                                             answer={{
@@ -291,7 +296,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'TIMEBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <TimeInput
                                                                             item={item}
                                                                             answer={{
@@ -309,7 +314,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'LOCATIONBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <LocationInput
                                                                             item={item}
                                                                             answer={{
@@ -327,7 +332,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'UPLOAD':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <ImageInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -346,7 +351,7 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'TEXT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pt-3">
+                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
                                                                         <TextImageInput item={item} galleryModalRef={galleryModalRef} />
                                                                     </div>
                                                                 );
@@ -358,7 +363,7 @@ function ProtocolPage(props) {
                                         );
                                     } else {
                                         return (
-                                            <div key={'group' + itemGroupIndex} className="row justify-content-center m-0 pt-3">
+                                            <div key={'group' + itemGroupIndex} className="row justify-content-center m-0 pb-3">
                                                 <TableInput
                                                     group={itemGroup}
                                                     answer={{
@@ -371,7 +376,7 @@ function ProtocolPage(props) {
                                         );
                                     }
                                 })}
-                                <div className="row justify-content-center m-0 pt-3">
+                                <div className="row justify-content-center m-0 pb-4">
                                     <TextImageInput
                                         item={{
                                             text:
@@ -385,12 +390,12 @@ function ProtocolPage(props) {
                                     />
                                 </div>
                                 {hasPreviousPage() && (
-                                    <div className="col-4 align-self-center pt-4">
+                                    <div className="col-4 align-self-center pb-3">
                                         <TextButton type="button" hsl={[97, 43, 70]} text="Página anterior" onClick={previousPage} />
                                     </div>
                                 )}
                                 {hasNextPage() && (
-                                    <div className="col-4 align-self-center pt-4">
+                                    <div className="col-4 align-self-center pb-3">
                                         <TextButton type="button" hsl={[97, 43, 70]} text="Próxima página" onClick={nextPage} />
                                     </div>
                                 )}

@@ -39,8 +39,12 @@ const styles = `
 
     .h-100px {
         height: 100px;
-        min-heigth: 100px;
+        min-height: 100px;
         max-height: 100px;
+    }
+
+    .minh-100px {
+        min-height: 100px;
     }
 
     .icon-check{
@@ -67,7 +71,7 @@ function HomeButton(props) {
 
     return (
         <div
-            className={`custom-btn rounded-4 row g-1 align-items-center font-barlow w-100 p-3 ${isCollapsed ? 'h-100px' : ''}`}
+            className={`custom-btn rounded-4 row g-1 align-items-center font-barlow w-100 p-3 ${isCollapsed ? 'h-100px' : 'minh-100px'}`}
             onClick={viewFunction}
         >
             <div className="col home-btn-title">
@@ -91,7 +95,7 @@ function HomeButton(props) {
                             />
                         )}
                     </div>
-                    <div className="col-12 col-lg-auto">
+                    <div className="col-12 col-lg-auto order-lg-3">
                         {allowEdit && (
                             <RoundedButton
                                 hsl={[197, 43, 52]}
@@ -105,7 +109,7 @@ function HomeButton(props) {
                             />
                         )}
                     </div>
-                    <div className="col-12 col-lg-auto">
+                    <div className="col-12 col-lg-auto order-lg-2">
                         {allowDelete && !isCollapsed && (
                             <RoundedButton
                                 hsl={[355, 78, 66]}
