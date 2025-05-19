@@ -105,6 +105,10 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
+        setIsLoading(true);
+    }, [protocolId]);
+
+    useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (user.role === 'USER')
                 return setError({
@@ -146,7 +150,7 @@ function ProtocolPage(props) {
                         navigate(isDashboard ? `/dash/protocols/${response.data.data.id}` : `/protocols/${response.data.data.id}`),
                 })
             )
-            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
+            .catch((error) => showAlert({ headerText: 'Erro ao replicar protocolo.', bodyText: error.response?.data.message }));
     };
 
     if (error) return <ErrorPage text={error.text} description={error.description} />;
