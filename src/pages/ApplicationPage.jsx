@@ -413,20 +413,20 @@ function ApplicationPage(props) {
                                 )}
                                 {currentPageIndex === 0 && (
                                     <>
-                                        <div className="row justify-content-center m-0 pb-3">
+                                        <div className="d-flex flex-column justify-content-center pb-3">
                                             <ProtocolInfo
                                                 title={application.protocol.title}
                                                 description={application.protocol.description}
                                             />
                                         </div>
-                                        <div className="row justify-content-center m-0 pb-3">
+                                        <div className="d-flex flex-column justify-content-center pb-3">
                                             <DateInput answer={answerDate || ''} onAnswerChange={(newDate) => setAnswerDate(newDate)} />
                                         </div>
-                                        <div className="row justify-content-center m-0 pb-3">
+                                        <div className="d-flex flex-column justify-content-center pb-3">
                                             <TimeInput answer={answerTime || ''} onAnswerChange={(newTime) => setAnswerTime(newTime)} />
                                         </div>
                                         {application.keepLocation && (
-                                            <div className="row justify-content-center m-0 pb-3">
+                                            <div className="d-flex flex-column justify-content-center pb-3">
                                                 <LocationInput
                                                     answer={answerLocation || { latitude: 0.0, longitude: 0.0 }}
                                                     onAnswerChange={(newLocation) => setAnswerLocation(newLocation)}
@@ -445,7 +445,10 @@ function ApplicationPage(props) {
                                                         switch (item.type) {
                                                             case 'RANGE':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <RangeInput
                                                                                 item={item}
@@ -466,7 +469,10 @@ function ApplicationPage(props) {
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <SimpleTextInput
                                                                                 item={item}
@@ -486,7 +492,10 @@ function ApplicationPage(props) {
 
                                                             case 'CHECKBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <CheckBoxInput
                                                                                 item={item}
@@ -505,7 +514,10 @@ function ApplicationPage(props) {
 
                                                             case 'RADIO':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <RadioButtonInput
                                                                                 item={item}
@@ -524,7 +536,10 @@ function ApplicationPage(props) {
 
                                                             case 'SELECT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <SelectInput
                                                                                 item={item}
@@ -542,7 +557,10 @@ function ApplicationPage(props) {
                                                                 );
                                                             case 'UPLOAD':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {
                                                                             <ImageInput
                                                                                 item={item}
@@ -561,7 +579,10 @@ function ApplicationPage(props) {
                                                                 );
                                                             case 'TEXT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         {<TextImageInput item={item} galleryModalRef={galleryModalRef} />}
                                                                     </div>
                                                                 );
@@ -573,7 +594,10 @@ function ApplicationPage(props) {
                                             );
                                         else
                                             return (
-                                                <div key={'group' + itemGroupIndex} className="row justify-content-center m-0 pb-3">
+                                                <div
+                                                    key={'group' + itemGroupIndex}
+                                                    className="d-flex flex-column justify-content-center pb-3"
+                                                >
                                                     <TableInput
                                                         group={itemGroup}
                                                         answers={itemGroup.items.map((i) => ({
@@ -585,7 +609,7 @@ function ApplicationPage(props) {
                                                 </div>
                                             );
                                     })}
-                                <div className="row justify-content-center m-0 pb-4">
+                                <div className="d-flex flex-column justify-content-center pb-4">
                                     <TextImageInput
                                         item={{
                                             text:
