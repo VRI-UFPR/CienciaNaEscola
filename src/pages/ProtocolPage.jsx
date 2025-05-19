@@ -105,6 +105,10 @@ function ProtocolPage(props) {
     };
 
     useEffect(() => {
+        setIsLoading(true);
+    }, [protocolId]);
+
+    useEffect(() => {
         if (isLoading && user.status !== 'loading') {
             if (user.role === 'USER')
                 return setError({
