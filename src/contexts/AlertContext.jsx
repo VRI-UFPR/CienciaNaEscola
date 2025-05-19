@@ -75,7 +75,7 @@ export const AlertProvider = ({ children }) => {
     return (
         <AlertContext.Provider value={{ showAlert, hideAlert, isAlertVisible, isClosable: alert?.isClosable }}>
             {children}
-            <div className="modal fade" id="alert-modal" tabIndex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div className="modal fade" id="alert-modal" tabIndex="-1" data-bs-backdrop="static">
                 <div className="modal-dialog modal-dialog-centered p-5">
                     <div className="modal-content bg-transparent border-0">
                         <div className="d-flex flex-column shadow text-break bg-white rounded-4 w-100 mx-0 p-4 py-5 p-md-5">

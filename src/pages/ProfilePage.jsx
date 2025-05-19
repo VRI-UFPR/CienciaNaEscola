@@ -144,7 +144,7 @@ function ProfilePage(props) {
                                         <img
                                             src={
                                                 curUser.profileImage
-                                                    ? process.env.REACT_APP_API_URL + curUser.profileImage.path
+                                                    ? process.env.REACT_APP_API_URL + 'api/' + curUser.profileImage.path
                                                     : BlankProfilePic
                                             }
                                             className="rounded-circle h-100 w-100"
