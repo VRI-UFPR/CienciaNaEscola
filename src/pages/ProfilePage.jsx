@@ -140,7 +140,7 @@ function ProfilePage(props) {
                             </div>
                             <div className="row bg-pastel-blue align-items-center rounded-4 p-4 p-lg-5 m-0">
                                 <div className="col-12 col-lg-3 d-flex flex-column align-items-center p-0">
-                                    <div className="profile-figure ratio ratio-1x1 rounded-circle shadow-sm w-100">
+                                    <div className="profile-figure ratio ratio-1x1 rounded-circle bg-white shadow-sm w-100">
                                         <img
                                             src={
                                                 curUser.profileImage

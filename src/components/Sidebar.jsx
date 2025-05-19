@@ -116,7 +116,7 @@ function Sidebar(props) {
                     </div>
                 )}
                 <div className="container d-flex flex-column align-items-center py-3 px-5">
-                    <div className="rounded-circle">
+                    <div className="rounded-circle bg-white">
                         <img
                             className="profile-image rounded-circle"
                             src={user.profileImage ? process.env.REACT_APP_API_URL + 'api/' + user.profileImage : PerfilImg}
