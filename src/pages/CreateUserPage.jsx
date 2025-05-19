@@ -10,7 +10,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../contexts/AuthContext';
@@ -212,11 +212,25 @@ function CreateUserPage(props) {
             .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos.', bodyText: error.response?.data.message }));
     };
 
+    const removeInstitutionClassrooms = useCallback(() => {
+        if (newUser.institutionId === undefined && institutionClassrooms !== undefined) {
+            setNewUser((prev) => ({
+                ...prev,
+                classrooms: prev.classrooms.filter((c) => !institutionClassrooms?.map(({ id }) => id).includes(c)),
+            }));
+            setSearchedClassrooms((prev) => prev.filter((c) => !institutionClassrooms?.map(({ id }) => id).includes(c.id)));
+        }
+    }, [institutionClassrooms, newUser.institutionId]);
+
+    useEffect(() => {
+        removeInstitutionClassrooms();
+    }, [removeInstitutionClassrooms, institutionClassrooms]);
+
     /** Busca grupos da instituição do usuário. */
-    const searchInstitutionGroups = async () => {
+    const searchInstitutionClassrooms = async () => {
         if ((!newUser.institutionId && !user.institutionId) || user.role === 'USER') return;
         if (institutionClassrooms === undefined)
-            axios
+            await axios
                 .get(`${process.env.REACT_APP_API_URL}api/institution/getInstitution/${newUser.institutionId || user.institutionId}`, {
                     headers: { Authorization: `Bearer ${user.token}` },
                 })
@@ -243,6 +257,9 @@ function CreateUserPage(props) {
                         onSecondaryBtnClick: () => navigate('/dash/applications'),
                     })
                 );
+        else {
+            concatenateClassrooms(institutionClassrooms);
+        }
     };
 
     /** Concatena as salas de aula filtradas com as salas de aula do usuário. */
@@ -516,23 +533,12 @@ function CreateUserPage(props) {
                                                         name="institution"
                                                         id="institution"
                                                         checked={Boolean(newUser.institutionId)}
-                                                        onChange={(event) => {
+                                                        onChange={async (event) => {
+                                                            if (institutionClassrooms === undefined) searchInstitutionClassrooms();
                                                             setNewUser((prev) => ({
                                                                 ...prev,
                                                                 institutionId: event.target.checked ? user.institutionId : undefined,
-                                                                classrooms: event.target.checked
-                                                                    ? prev.classrooms
-                                                                    : prev.classrooms.filter(
-                                                                          (c) => !institutionClassrooms?.map(({ id }) => id).includes(c)
-                                                                      ),
                                                             }));
-                                                            setSearchedClassrooms((prev) =>
-                                                                event.target.checked
-                                                                    ? prev
-                                                                    : prev.filter(
-                                                                          (c) => !institutionClassrooms?.map(({ id }) => id).includes(c.id)
-                                                                      )
-                                                            );
                                                         }}
                                                     />
                                                     <label className="form-check-label color-steel-blue fs-5 fw-medium" htmlFor="enabled">
@@ -648,7 +654,7 @@ function CreateUserPage(props) {
                                                             className="fs-6 w-auto p-2 py-0"
                                                             hsl={[190, 46, 70]}
                                                             text={`Ver grupos da instituição`}
-                                                            onClick={searchInstitutionGroups}
+                                                            onClick={searchInstitutionClassrooms}
                                                         />
                                                     </div>
                                                 )}
