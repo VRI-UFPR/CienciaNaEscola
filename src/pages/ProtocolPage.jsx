@@ -32,6 +32,9 @@ import { AuthContext } from '../contexts/AuthContext';
 import ErrorPage from './ErrorPage';
 import TableInput from '../components/inputs/answers/TableInput';
 import RangeInput from '../components/inputs/answers/RangeInput';
+import { serialize } from 'object-to-formdata';
+import { AlertContext } from '../contexts/AlertContext';
+import { LayoutContext } from '../contexts/LayoutContext';
 
 const styles = `
     .bg-yellow-orange {
@@ -70,6 +73,8 @@ function ProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, logout } = useContext(AuthContext);
+    const { showAlert } = useContext(AlertContext);
+    const { isDashboard } = useContext(LayoutContext);
 
     const { protocolId } = useParams();
     const [protocol, setProtocol] = useState(undefined);
@@ -120,6 +125,30 @@ function ProtocolPage(props) {
         }
     }, [protocolId, user.status, logout, navigate, user.token, isLoading, user.role, user.id]);
 
+    const replicateProtocol = () => {
+        const formData = serialize({ id: protocolId });
+        axios
+            .post(`${process.env.REACT_APP_API_URL}api/protocol/replicateProtocol`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) =>
+                showAlert({
+                    headerText: 'O protocolo foi replicado com sucesso. Deseja ir para o novo protocolo?',
+                    primaryBtnLabel: 'Ficar',
+                    primaryBtnHsl: [355, 78, 66],
+                    secondaryBtnLabel: 'Ir',
+                    secondaryBtnHsl: [97, 43, 70],
+                    onPrimaryBtnClick: () => {},
+                    onSecondaryBtnClick: () =>
+                        navigate(isDashboard ? `/dash/protocols/${response.data.data.id}` : `/protocols/${response.data.data.id}`),
+                })
+            )
+            .catch((error) => showAlert({ headerText: 'Erro ao buscar grupos', bodyText: error.response?.data.message }));
+    };
+
     if (error) return <ErrorPage text={error.text} description={error.description} />;
 
     if (isLoading) return <SplashPage text="Carregando protocolo..." />;
@@ -156,6 +185,16 @@ function ProtocolPage(props) {
                                                 hsl={[197, 43, 61]}
                                                 text="Aplicar"
                                                 onClick={() => navigate('apply')}
+                                            />
+                                        </div>
+                                    )}
+                                    {protocol.replicable && (
+                                        <div className="col">
+                                            <TextButton
+                                                type="submit"
+                                                hsl={[197, 43, 61]}
+                                                text="Replicar"
+                                                onClick={() => replicateProtocol()}
                                             />
                                         </div>
                                     )}
