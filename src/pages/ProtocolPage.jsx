@@ -167,7 +167,7 @@ function ProtocolPage(props) {
                     <div className="row d-flex align-items-center justify-content-center h-100 p-0 m-0">
                         <div className="col col-md-10 d-flex flex-column h-100 p-4 px-lg-5">
                             <div className="d-flex flex-column flex-grow-1">
-                                <div className="row justify-content-center g-2 m-0 pb-4">
+                                <div className="row justify-content-center g-2 pb-4">
                                     {protocol.actions.toUpdate && (
                                         <div className="col">
                                             <TextButton
@@ -210,7 +210,7 @@ function ProtocolPage(props) {
                                     )}
                                 </div>
                                 {currentPageIndex === 0 && (
-                                    <div className="row justify-content-center m-0 pb-3">
+                                    <div className="d-flex flex-column justify-content-center pb-3">
                                         <ProtocolInfo title={protocol.title} description={protocol.description} />
                                     </div>
                                 )}
@@ -227,7 +227,10 @@ function ProtocolPage(props) {
                                                         switch (item.type) {
                                                             case 'RANGE':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <RangeInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -248,7 +251,10 @@ function ProtocolPage(props) {
                                                             case 'TEXTBOX':
                                                             case 'NUMBERBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <SimpleTextInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -267,7 +273,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'CHECKBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <CheckBoxInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -284,7 +293,10 @@ function ProtocolPage(props) {
 
                                                             case 'RADIO':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <RadioButtonInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -301,7 +313,10 @@ function ProtocolPage(props) {
 
                                                             case 'SELECT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <SelectInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -317,7 +332,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'DATEBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <DateInput
                                                                             item={item}
                                                                             answer={{
@@ -335,7 +353,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'TIMEBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <TimeInput
                                                                             item={item}
                                                                             answer={{
@@ -353,7 +374,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'LOCATIONBOX':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <LocationInput
                                                                             item={item}
                                                                             answer={{
@@ -371,7 +395,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'UPLOAD':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <ImageInput
                                                                             item={item}
                                                                             galleryModalRef={galleryModalRef}
@@ -390,7 +417,10 @@ function ProtocolPage(props) {
                                                                 );
                                                             case 'TEXT':
                                                                 return (
-                                                                    <div key={item.id} className="row justify-content-center m-0 pb-3">
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="d-flex flex-column justify-content-center pb-3"
+                                                                    >
                                                                         <TextImageInput item={item} galleryModalRef={galleryModalRef} />
                                                                     </div>
                                                                 );
@@ -402,7 +432,7 @@ function ProtocolPage(props) {
                                         );
                                     } else {
                                         return (
-                                            <div key={'group' + itemGroupIndex} className="row justify-content-center m-0 pb-3">
+                                            <div key={'group' + itemGroupIndex} className="d-flex flex-column justify-content-center pb-3">
                                                 <TableInput
                                                     group={itemGroup}
                                                     answer={{
@@ -415,7 +445,7 @@ function ProtocolPage(props) {
                                         );
                                     }
                                 })}
-                                <div className="row justify-content-center m-0 pb-4">
+                                <div className="d-flex flex-column justify-content-center pb-4">
                                     <TextImageInput
                                         item={{
                                             text:
