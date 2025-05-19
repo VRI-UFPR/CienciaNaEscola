@@ -265,7 +265,12 @@ function CreateUserPage(props) {
     const submitNewUser = (e) => {
         e.preventDefault();
         const salt = process.env.REACT_APP_SALT;
-        const processedUser = { ...newUser, actions: undefined, hashValidation: undefined };
+        const processedUser = {
+            ...(user.username === newUser.username ? (({ role, ...r }) => r)(newUser) : newUser),
+            actions: undefined,
+            hashValidation: undefined,
+            profileImage: newUser.profileImage ? newUser.profileImage : undefined,
+        };
         const formData = newUser.hash
             ? serialize({ ...processedUser, hash: hashSync(processedUser.hash, salt) })
             : serialize({ ...processedUser });
