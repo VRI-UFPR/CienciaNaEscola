@@ -10,22 +10,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 of the GNU General Public License along with CienciaNaEscola.  If not, see <https://www.gnu.org/licenses/>
 */
 
+// react
 import { useState, useEffect } from 'react';
+// third-party libraries
+import { useNavigate } from 'react-router-dom';
+// assets
 import picceTitle from '../assets/images/picceTitle.svg';
+import HomeQRCode from '../assets/images/HomeQRCode.png';
 import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
-import { useNavigate } from 'react-router-dom';
-import TextButton from '../components/TextButton';
-import logoRedeClubes from '../assets/images/logoClubes.png';
-import logoNAPI from '../assets/images/logoNAPI.png';
+import SafariPlusIcon from '../assets/images/SafariPlusIcon.png';
+import SafariShareIcon from '../assets/images/SafariShareIcon.png';
+import SafariAddToHome from '../assets/images/SafariAddToHome.png';
+// logos
 import logoFA from '../assets/images/logoFA1.png';
+import logoNAPI from '../assets/images/logoNAPI.png';
 import logoGovernoParana from '../assets/images/logoPR.png';
 import logoGovernoFederal from '../assets/images/logoGF.png';
-import HomeQRCode from '../assets/images/HomeQRCode.png';
-import SafariShareIcon from '../assets/images/SafariShareIcon.png';
-import SafariPlusIcon from '../assets/images/SafariPlusIcon.png';
-import SafariAddToHome from '../assets/images/SafariAddToHome.png';
 // components
+import TextButton from '../components/TextButton';
 import InfiniteLooper from '../components/InfiniteLooper';
 
 const styles = `
@@ -214,9 +217,6 @@ function InstallPage(props) {
                 </div>
                 <div className="row justify-content-center align-items-center logos-container rounded bg-white w-75 mb-3 py-2 g-0">
                     <InfiniteLooper>
-                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
-                            <img className="mh-4" src={logoRedeClubes} alt="Logomarca da Rede de Clubes Paraná faz Ciência" />
-                        </div>
                         <div className="col-auto d-flex align-items-center justify-content-center mx-3">
                             <img className="mh-4 py-2" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
                         </div>

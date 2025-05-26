@@ -12,9 +12,6 @@ of the GNU General Public License along with CienciaNaEscola.  If not, see <http
 
 import logoVRI from '../assets/images/logoVRI.png';
 
-
-
-
 export const defaultNewInput = (type, tempId, placement) => {
     return {
         tempId: tempId,
@@ -85,7 +82,6 @@ export const defaultNewProtocol = () => ({
     pages: [],
 });
 
-
 export const version = '2.0.159 (2bc6ade)';
 
 export const aboutPICCE = `
@@ -134,7 +130,7 @@ Este projeto conta com a colaboração de pesquisadores e estudantes do [Laborat
 - Tiago Mendes Bottamedi  
 - Yuri Junqueira Tobias  
 
-<img src="${logoVRI}" alt="Logo do VRI" style="max-width: 25%; height: auto;" />
+<div className="row w-25"><img src="${logoVRI}" alt="Logo do VRI" /></div>
 
 Versão do aplicativo: ${version}
 `;

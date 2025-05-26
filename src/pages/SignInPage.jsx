@@ -27,7 +27,6 @@ import Background from '../assets/images/loginPageBackground.png';
 import BackgroundWeb from '../assets/images/loginPageBackgroundWeb.png';
 import TextButton from '../components/TextButton';
 // logos
-import logoRedeClubes from '../assets/images/logoClubes.png';
 import logoNAPI from '../assets/images/logoNAPI.png';
 import logoFA from '../assets/images/logoFA1.png';
 import logoGovernoParana from '../assets/images/logoPR.png';
@@ -255,9 +254,6 @@ function SignInPage(props) {
                 </div>
                 <div className="row justify-content-center align-items-center logos-container rounded bg-white w-75 mb-3 py-2 g-0">
                     <InfiniteLooper>
-                        <div className="col-auto d-flex align-items-center justify-content-center mx-3">
-                            <img className="mh-4" src={logoRedeClubes} alt="Logomarca da Rede de Clubes Paraná faz Ciência" />
-                        </div>
                         <div className="col-auto d-flex align-items-center justify-content-center mx-3">
                             <img className="mh-4 py-2" src={logoNAPI} alt="Logomarca NAPI Paraná faz Ciência" />
                         </div>
