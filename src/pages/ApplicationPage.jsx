@@ -190,12 +190,18 @@ function ApplicationPage(props) {
                 let dependencyAttended = isDependenciesAttended(application.protocol.pages[i].dependencies);
                 if (dependencyAttended === true) return i;
             }
-            return undefined;
         }
+        return undefined;
     };
 
     /** Verifica se há uma página anterior. */
-    const hasPreviousPage = () => currentPageIndex > 0;
+    const hasPreviousPage = () => {
+        for (let i = currentPageIndex - 1; i >= 0; i--) {
+            let dependencyAttended = isDependenciesAttended(application.protocol.pages[i].dependencies);
+            if (dependencyAttended) return true;
+        }
+        return false;
+    };
 
     /** Verifica se há uma próxima página. */
     const hasNextPage = () => getNextPage() !== undefined;
@@ -210,7 +216,15 @@ function ApplicationPage(props) {
 
     /** Navega para a página anterior. */
     const goToPreviousPage = () => {
-        if (hasPreviousPage()) setCurrentPageIndex(currentPageIndex - 1);
+        if (hasPreviousPage()) {
+            for (let i = currentPageIndex - 1; i >= 0; i--) {
+                let dependencyAttended = isDependenciesAttended(application.protocol.pages[i].dependencies);
+                if (dependencyAttended) {
+                    setCurrentPageIndex(i);
+                    return;
+                }
+            }
+        }
     };
 
     /**
