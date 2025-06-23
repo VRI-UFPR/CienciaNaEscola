@@ -34,7 +34,7 @@ const TableInputStyles = `
 
 /**
  * Componente responsável por exibir e gerenciar entradas em formato de tabela.
- * @param {Object} props - Propriedades do componente. 
+ * @param {Object} props - Propriedades do componente.
  * @param {Function} props.onAnswerChange - Função chamada quando uma célula da tabela é atualizada.
  * @param {string} props.applicationAnswerId - ID da resposta da aplicação.
  * @param {Object} props.group - Objeto representando o grupo de perguntas da tabela.
@@ -59,8 +59,8 @@ function TableInput(props) {
 
     /**
      * Gerencia a atualização de uma célula da tabela.
-     * @param {string} itemId - ID do item da tabela. 
-     * @param {number} columnId - ID da coluna. 
+     * @param {string} itemId - ID do item da tabela.
+     * @param {number} columnId - ID da coluna.
      * @param {boolean} updatedText - Novo valor da célula.
      */
     const handleTableUpdate = (itemId, columnId, updatedText) => {
@@ -79,7 +79,7 @@ function TableInput(props) {
         <div className="rounded-4 shadow bg-white p-3">
             <div className="row px-2 m-0">
                 <div className="col d-flex justify-content-start p-0">
-                    <h1 className="font-century-gothic text-steel-blue fs-3 fw-bold p-0 m-0">
+                    <h1 className="p-0 m-0">
                         {(() => {
                             switch (group.type) {
                                 case 'TEXTBOX_TABLE':
@@ -110,7 +110,9 @@ function TableInput(props) {
                                         scope="col"
                                         className="align-middle overflow-auto min-w-150 mw-150 mh-134"
                                     >
-                                        <div className="overflow-auto text-break text-center mh-134">{column.text}</div>
+                                        <div className="overflow-auto text-break text-center font-barlow fw-medium fs-6 color-dark-gray mh-134">
+                                            {column.text}
+                                        </div>
                                     </th>
                                 );
                             })}
@@ -121,7 +123,9 @@ function TableInput(props) {
                             return (
                                 <tr key={'item-line-' + itemIndex}>
                                     <th scope="row" className="min-w-150 mw-150 mh-134">
-                                        <div className="overflow-auto text-break mh-134">{item.text}</div>
+                                        <div className="overflow-auto text-break font-barlow fw-medium fs-6 color-dark-gray mh-134">
+                                            {item.text}
+                                        </div>
                                     </th>
                                     {!answersPage &&
                                         group.tableColumns?.map((column, columnIndex) => {
@@ -130,7 +134,7 @@ function TableInput(props) {
                                                     {group.type === 'TEXTBOX_TABLE' && (
                                                         <textarea
                                                             type="text"
-                                                            className="column-input border border-0 w-100"
+                                                            className="column-input border border-0 font-barlow fw-medium fs-6 color-dark-gray w-100"
                                                             id="columntext"
                                                             onChange={(e) => handleTableUpdate(item.id, column.id, e.target.value, true)}
                                                             disabled={disabled}
@@ -138,7 +142,7 @@ function TableInput(props) {
                                                     )}
                                                     {group.type === 'RADIO_TABLE' && (
                                                         <input
-                                                            className={`column-input w-100`}
+                                                            className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                             type="radio"
                                                             name={'column-option-for-item-' + itemIndex}
                                                             id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
@@ -148,7 +152,7 @@ function TableInput(props) {
                                                     )}
                                                     {group.type === 'CHECKBOX_TABLE' && (
                                                         <input
-                                                            className={`column-input w-100`}
+                                                            className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                             type="checkbox"
                                                             name={'column-option-for-item-' + itemIndex}
                                                             id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
@@ -178,7 +182,7 @@ function TableInput(props) {
                                                                 {group.type === 'TEXTBOX_TABLE' && (
                                                                     <textarea
                                                                         type="text"
-                                                                        className="column-input border border-0 w-100"
+                                                                        className="column-input border border-0 font-barlow fw-medium fs-6 color-dark-gray w-100"
                                                                         id="columntext"
                                                                         value={value ? value : ''}
                                                                         disabled={disabled}
@@ -186,7 +190,7 @@ function TableInput(props) {
                                                                 )}
                                                                 {group.type === 'RADIO_TABLE' && (
                                                                     <input
-                                                                        className={`column-input w-100`}
+                                                                        className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                                         type="radio"
                                                                         name={`column-option-for-item-${itemIndex}-column-${column.id}-application-${applicationAnsId}`}
                                                                         id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
@@ -196,7 +200,7 @@ function TableInput(props) {
                                                                 )}
                                                                 {group.type === 'CHECKBOX_TABLE' && (
                                                                     <input
-                                                                        className={`column-input w-100`}
+                                                                        className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                                         type="checkbox"
                                                                         name={'column-option-for-item-' + itemIndex}
                                                                         id={'columnOption-' + columnIndex + '-of-' + itemIndex + '-item-'}
@@ -223,7 +227,7 @@ function TableInput(props) {
                                                     {group.type === 'TEXTBOX_TABLE' && (
                                                         <textarea
                                                             type="text"
-                                                            className="column-input border border-0 w-100"
+                                                            className="column-input border border-0 font-barlow fw-medium fs-6 color-dark-gray w-100"
                                                             id="columntext"
                                                             value={tableAnswer ? tableAnswer.text : ''}
                                                             disabled={disabled}
@@ -231,7 +235,7 @@ function TableInput(props) {
                                                     )}
                                                     {group.type === 'RADIO_TABLE' && (
                                                         <input
-                                                            className={`column-input w-100`}
+                                                            className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                             type="radio"
                                                             name={`column-option-for-item-${itemIndex}-column-${
                                                                 tableColumn.id
@@ -243,7 +247,7 @@ function TableInput(props) {
                                                     )}
                                                     {group.type === 'CHECKBOX_TABLE' && (
                                                         <input
-                                                            className={`column-input w-100`}
+                                                            className={`column-input font-barlow fw-medium fs-6 color-dark-gray w-100`}
                                                             type="checkbox"
                                                             name={'column-option-for-item-' + itemIndex}
                                                             id={'columnOption-' + tableColumn.id + '-of-' + itemIndex + '-item-'}
