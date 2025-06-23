@@ -154,7 +154,7 @@ function CreateProtocolPage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [creationMode, setCreationMode] = useState('properties');
     const [error, setError] = useState(null);
-    const formRef = useRef();
+    const formRef = useRef(null);
     const currentPage = protocol.pages[itemTarget.page];
 
     const [searchedOptions, setSearchedOptions] = useState({
