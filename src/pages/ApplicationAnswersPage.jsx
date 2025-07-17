@@ -386,42 +386,42 @@ function AnswerPage(props) {
                             {Object.entries(answer.answers).length > 0 && (
                                 <div className="bg-light-gray rounded-4 mb-3 p-3 pb-1">
                                     <h2 className="color-dark-gray fw-medium fs-5 m-0 mb-3">Quem respondeu?</h2>
-                                    {Object.entries(answer.answers)
-                                        .filter(([_, value]) => value.coordinate)
-                                        .map(([key, value]) => {
-                                            return (
-                                                <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
-                                                    <div className="row gx-2 justify-content-between align-items-center">
-                                                        <div className="col-auto">
-                                                            <a
-                                                                className="color-dark-gray fw-bold fs-6"
-                                                                href="#answerTab"
-                                                                onClick={() => {
-                                                                    setVisualization(key, undefined);
+                                    {Object.entries(answer.answers).map(([key, value]) => {
+                                        return (
+                                            <div key={'answer-' + key} className="bg-white rounded-4 mb-3 p-2 px-3">
+                                                <div className="row gx-2 justify-content-between align-items-center">
+                                                    <div className="col-auto">
+                                                        <a
+                                                            className="color-dark-gray fw-bold fs-6"
+                                                            href="#answerTab"
+                                                            onClick={() => {
+                                                                setVisualization(key, undefined);
+                                                                if (value.coordinate) {
                                                                     mapRef.current.setView([
                                                                         value.coordinate.latitude,
                                                                         value.coordinate.longitude,
                                                                     ]);
-                                                                }}
-                                                            >
-                                                                {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
-                                                            </a>
-                                                        </div>
-                                                        {value.approved !== true && answer.actions.toApproveAnswers === true && (
-                                                            <div className="col-auto">
-                                                                <RoundedButton
-                                                                    hsl={[97, 43, 70]}
-                                                                    className="text-white"
-                                                                    size={24}
-                                                                    onClick={() => approveAnswer(key)}
-                                                                    icon="check"
-                                                                />
-                                                            </div>
-                                                        )}
+                                                                }
+                                                            }}
+                                                        >
+                                                            {value.user.username + ' - ' + new Date(value.date).toLocaleDateString()}
+                                                        </a>
                                                     </div>
+                                                    {value.approved !== true && answer.actions.toApproveAnswers === true && (
+                                                        <div className="col-auto">
+                                                            <RoundedButton
+                                                                hsl={[97, 43, 70]}
+                                                                className="text-white"
+                                                                size={24}
+                                                                onClick={() => approveAnswer(key)}
+                                                                icon="check"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            );
-                                        })}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             )}
 
